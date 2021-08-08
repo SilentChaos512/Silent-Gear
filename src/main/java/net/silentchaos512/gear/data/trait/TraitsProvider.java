@@ -321,7 +321,7 @@ public class TraitsProvider implements DataProvider {
         );
 
         // Block fillers
-        ret.add(new BlockFillerTraitBuilder(Const.Traits.ROAD_MAKER, 1, Blocks.GRASS_PATH, 0.5f)
+        ret.add(new BlockFillerTraitBuilder(Const.Traits.ROAD_MAKER, 1, Blocks.DIRT_PATH, 0.5f)
                 .target(Blocks.GRASS_BLOCK)
                 .fillRange(1, 0, 1, false)
         );

@@ -18,44 +18,44 @@
 
 package net.silentchaos512.gear.block.salvager;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.silentchaos512.gear.block.ModContainerBlock;
+import net.silentchaos512.gear.init.ModBlockEntities;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
-public class SalvagerBlock extends BaseEntityBlock {
+public class SalvagerBlock extends ModContainerBlock<SalvagerTileEntity> {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final VoxelShape SHAPE = box(1, 0, 1, 15, 16, 15);
 
     public SalvagerBlock(Properties builder) {
-        super(builder);
+        super(SalvagerTileEntity::new, builder);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH).setValue(LIT, false));
     }
 
@@ -64,13 +64,6 @@ public class SalvagerBlock extends BaseEntityBlock {
         builder.add(FACING, LIT);
     }
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockGetter worldIn) {
-        return new SalvagerTileEntity();
-    }
-
-    @SuppressWarnings("deprecation")
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
@@ -86,12 +79,6 @@ public class SalvagerBlock extends BaseEntityBlock {
         tooltip.add(new TranslatableComponent("block.silentgear.salvager.desc"));
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.MODEL;
-    }
-
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -103,5 +90,11 @@ public class SalvagerBlock extends BaseEntityBlock {
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, ModBlockEntities.SALVAGER.get(), SalvagerTileEntity::tick);
     }
 }

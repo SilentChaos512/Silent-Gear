@@ -4,13 +4,12 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.Serializer;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.silentchaos512.gear.init.ModLootStuff;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -53,7 +52,7 @@ public class HasTraitCondition extends GearLootCondition {
         return ModLootStuff.HAS_TRAIT;
     }
 
-    public static class Serializer implements Serializer<HasTraitCondition> {
+    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<HasTraitCondition> {
         @Override
         public void serialize(JsonObject json, HasTraitCondition value, JsonSerializationContext context) {
             json.addProperty("trait", value.traitId.toString());

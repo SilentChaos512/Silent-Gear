@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.charger;
 
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -8,7 +9,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.inventory.ContainerData;
@@ -22,7 +22,7 @@ import net.silentchaos512.gear.block.INamedContainerExtraData;
 import net.silentchaos512.gear.init.GearEnchantments;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
-import net.silentchaos512.gear.init.ModTileEntities;
+import net.silentchaos512.gear.init.ModBlockEntities;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class ChargerTileEntity extends LockableSidedInventoryTileEntity implements TickableBlockEntity, INamedContainerExtraData {
+public class ChargerTileEntity extends LockableSidedInventoryTileEntity implements INamedContainerExtraData {
     static final int INVENTORY_SIZE = 3;
     private static final int CHARGE_RATE = 30 * (SilentGear.isDevBuild() ? 10 : 1);
     private static final int UPDATE_FREQUENCY = TimeUtils.ticksFromSeconds(15);
@@ -100,13 +100,13 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         }
     };
 
-    public ChargerTileEntity(BlockEntityType<?> tileEntityTypeIn, Supplier<Enchantment> enchantment) {
-        super(tileEntityTypeIn, INVENTORY_SIZE);
+    public ChargerTileEntity(BlockEntityType<?> tileEntityTypeIn, Supplier<Enchantment> enchantment, BlockPos pos, BlockState state) {
+        super(tileEntityTypeIn, INVENTORY_SIZE, pos, state);
         this.enchantment = enchantment;
     }
 
-    public static ChargerTileEntity createStarlightCharger() {
-        return new ChargerTileEntity(ModTileEntities.STARLIGHT_CHARGER.get(), GearEnchantments.STAR_CHARGED);
+    public static ChargerTileEntity createStarlightCharger(BlockPos pos, BlockState state) {
+        return new ChargerTileEntity(ModBlockEntities.STARLIGHT_CHARGER.get(), GearEnchantments.STAR_CHARGED, pos, state);
     }
 
     protected int getMaxCharge() {
@@ -136,7 +136,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
 
     public static int getStarlightChargerCatalystTier(ItemStack catalyst) {
         for (int i = ModTags.Items.STARLIGHT_CHARGER_TIERS.size() - 1; i >= 0; --i) {
-            if (catalyst.getItem().is(ModTags.Items.STARLIGHT_CHARGER_TIERS.get(i))) {
+            if (catalyst.is(ModTags.Items.STARLIGHT_CHARGER_TIERS.get(i))) {
                 return i + 1;
             }
         }
@@ -154,37 +154,31 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         EnchantmentHelper.setEnchantments(enchantments, output);
     }
 
-    @Override
-    public void tick() {
-        if (level == null || level.isClientSide) {
-            return;
-        }
+    public static void tick(Level level, BlockPos pos, BlockState state, ChargerTileEntity blockEntity) {
+        blockEntity.gatherEnergy();
 
-        gatherEnergy();
-
-        if (++updateTimer > UPDATE_FREQUENCY) {
-            if (checkStructureLevel()) {
+        if (++blockEntity.updateTimer > UPDATE_FREQUENCY) {
+            if (blockEntity.checkStructureLevel()) {
                 SilentGear.LOGGER.info("{}} at {}: structure level updated to {}",
-                        this.getBlockState().getBlock().getRegistryName(), this.worldPosition, this.structureLevel);
+                        blockEntity.getBlockState().getBlock().getRegistryName(), blockEntity.worldPosition, blockEntity.structureLevel);
             }
-            updateTimer = 0;
+            blockEntity.updateTimer = 0;
             //sendUpdate();
         }
 
-        ItemStack input = getItem(0);
-        ItemStack catalyst = getItem(1);
+        ItemStack input = blockEntity.getItem(0);
+        ItemStack catalyst = blockEntity.getItem(1);
         if (input.isEmpty() || catalyst.isEmpty() || !(GearApi.isMaterial(input))) {
             return;
         }
 
-        int currentLevel = getMaterialChargeLevel(input);
+        int currentLevel = blockEntity.getMaterialChargeLevel(input);
 
-        if (currentLevel < this.structureLevel) {
-            handleCharging(input, catalyst);
-        } else if (progress > 0) {
-            progress = 0;
-            workTime = 100;
-            //sendUpdate();
+        if (currentLevel < blockEntity.structureLevel) {
+            blockEntity.handleCharging(input, catalyst);
+        } else if (blockEntity.progress > 0) {
+            blockEntity.progress = 0;
+            blockEntity.workTime = 100;
         }
     }
 
@@ -294,13 +288,13 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
         if (index == 0) return GearApi.isMaterial(stack);
-        if (index == 1) return stack.getItem().is(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS);
+        if (index == 1) return stack.is(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS);
         return false;
     }
 
     @Override
-    public void load(BlockState stateIn, CompoundTag tags) {
-        super.load(stateIn, tags);
+    public void load(CompoundTag tags) {
+        super.load(tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 

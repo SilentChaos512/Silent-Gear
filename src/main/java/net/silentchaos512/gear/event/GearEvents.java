@@ -19,42 +19,41 @@
 package net.silentchaos512.gear.event;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Chicken;
-import net.minecraft.world.entity.animal.Rabbit;
-import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.animal.Cod;
-import net.minecraft.world.entity.animal.Pufferfish;
-import net.minecraft.world.entity.animal.Salmon;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.util.*;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.TickEvent;
@@ -82,12 +81,6 @@ import net.silentchaos512.lib.util.EntityHelper;
 
 import java.util.*;
 import java.util.function.Function;
-
-import net.minecraft.Util;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 
 @Mod.EventBusSubscriber
 public final class GearEvents {
@@ -220,7 +213,7 @@ public final class GearEvents {
 
             if (event.getEntityLiving() instanceof Player) {
                 // Damage player's armor
-                ((Player) event.getEntityLiving()).inventory.hurtArmor(event.getSource(), event.getAmount());
+                ((Player) event.getEntityLiving()).getInventory().hurtArmor(event.getSource(), event.getAmount(), Inventory.ALL_ARMOR_SLOTS);
             }
 
             event.setAmount(event.getAmount() * scale);
@@ -533,8 +526,8 @@ public final class GearEvents {
                 if (bounce > 0) {
                     SilentGear.LOGGER.debug("knockback");
                     ((LivingEntity) source).knockback(2 * bounce,
-                            -Mth.sin(source.yRot * ((float)Math.PI / 180F)),
-                            Mth.cos(source.yRot * ((float)Math.PI / 180F)));
+                            -Mth.sin(source.getYRot() * ((float)Math.PI / 180F)),
+                            Mth.cos(source.getYRot() * ((float)Math.PI / 180F)));
                 }
             }
         }

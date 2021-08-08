@@ -48,7 +48,7 @@ def gpr_creds = { // Credentials for GitHub Packages, since this is used multipl
     password = property('gpr.token')
 }
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
     mappings channel: 'official', version: mc_version
@@ -58,7 +58,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-            arg "-mixin.config=${mod_id}.mixins.json".toString()
+//            arg "-mixin.config=${mod_id}.mixins.json".toString()
 
             property 'forge.logging.console.level', 'debug'
 
@@ -75,7 +75,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-            arg "-mixin.config=${mod_id}.mixins.json".toString()
+//            arg "-mixin.config=${mod_id}.mixins.json".toString()
 
             property 'forge.logging.console.level', 'debug'
 
@@ -154,10 +154,7 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 
-    compileOnly fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
-        exclude module: "forge"
-    }
-    runtimeOnly fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
+    implementation fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }
 
@@ -181,15 +178,15 @@ dependencies {
 
     // Curios
     if (project.hasProperty('curios_version')) {
-        runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}")
-        compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}:api")
+//        runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}")
+//        compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}:api")
     }
 
     // Caelus
     if (project.hasProperty('caelus_version')) {
         // FIXME: Crashes with Mixin apply failed
-        //runtimeOnly ("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}")
-        compileOnly("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}:api")
+//        runtimeOnly ("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}")
+//        compileOnly("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}:api")
     }
 
     // compile('com.robertx22:mine-and-slash-1.14.4:2.+') {
@@ -227,7 +224,7 @@ jar {
                     "Implementation-Vendor"   : "SilentChaos512",
                     "Implementation-Version"  : version_short,
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "MixinConfigs"            : "${mod_id}.mixins.json"])
+                    /*"MixinConfigs"            : "${mod_id}.mixins.json"*/])
     }
 }
 
@@ -263,8 +260,6 @@ curseforge {
             changelog = file(project.cf_changelog_filename)
             releaseType = project.cf_release_type
             addGameVersion(project.mc_version)
-            addGameVersion("1.16.4")
-            addGameVersion("1.16.3")
             mainArtifact(jar) {
 //                displayName = "$project.description $display_version"
                 relations {

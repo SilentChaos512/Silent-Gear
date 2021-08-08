@@ -163,7 +163,7 @@ public class TargetEffectTrait extends SimpleTrait {
 
             JsonObject json = jsonElement.getAsJsonObject();
             ResourceLocation effectId = new ResourceLocation(GsonHelper.getAsString(json, "effect"));
-            MobEffect effect = ForgeRegistries.POTIONS.getValue(effectId);
+            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
             if (effect == null) {
                 throw new JsonParseException("Unknown effect ID: " + effectId);
             }
@@ -184,7 +184,7 @@ public class TargetEffectTrait extends SimpleTrait {
 
                 for (int j = 0; j < listSize; ++j) {
                     ResourceLocation effectId = buffer.readResourceLocation();
-                    MobEffect effect = ForgeRegistries.POTIONS.getValue(effectId);
+                    MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
                     if (effect == null) {
                         throw new JsonParseException("Unknown effect ID: " + effectId);
                     }

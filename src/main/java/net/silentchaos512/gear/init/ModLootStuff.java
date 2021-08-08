@@ -18,13 +18,12 @@
 
 package net.silentchaos512.gear.init;
 
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.core.Registry;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.loot.condition.HasPartCondition;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
 import net.silentchaos512.gear.loot.function.SetPartsFunction;
@@ -34,7 +33,6 @@ import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
 import java.util.function.Supplier;
 
 public final class ModLootStuff {
-    public static final LootItemConditionType HAS_PART = new LootItemConditionType(HasPartCondition.SERIALIZER);
     public static final LootItemConditionType HAS_TRAIT = new LootItemConditionType(HasTraitCondition.SERIALIZER);
     public static final LootItemFunctionType SELECT_TIER = new LootItemFunctionType(SelectGearTierLootFunction.SERIALIZER);
     public static final LootItemFunctionType SET_PARTS = new LootItemFunctionType(SetPartsFunction.SERIALIZER);
@@ -45,7 +43,6 @@ public final class ModLootStuff {
     private ModLootStuff() {}
 
     public static void init() {
-        Registry.register(Registry.LOOT_CONDITION_TYPE, SilentGear.getId("has_part"), HAS_PART);
         Registry.register(Registry.LOOT_CONDITION_TYPE, SilentGear.getId("has_trait"), HAS_TRAIT);
         Registry.register(Registry.LOOT_FUNCTION_TYPE, SilentGear.getId("select_tier"), SELECT_TIER);
         Registry.register(Registry.LOOT_FUNCTION_TYPE, SilentGear.getId("set_parts"), SET_PARTS);

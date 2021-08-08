@@ -1,24 +1,24 @@
 package net.silentchaos512.gear.block;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.init.ModTags;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class FluffyBlock extends Block {
     static {
@@ -39,7 +39,7 @@ public class FluffyBlock extends Block {
     }
 
     @Override
-    public void fallOn(Level world, BlockPos pos, Entity entity, float distance) {
+    public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float distance) {
         if (distance < 2 || world.isClientSide) return;
 
         // Count the number of fluffy blocks that are stacked up.
@@ -52,7 +52,7 @@ public class FluffyBlock extends Block {
         // Reduce fall distance per stacked block
         float newDistance = distance - Math.min(8 * stackedBlocks, distance);
         entity.fallDistance = 0f;
-        entity.causeFallDamage(newDistance, 1f);
+        entity.causeFallDamage(newDistance, 1f, DamageSource.FALL);
     }
 
     @Override

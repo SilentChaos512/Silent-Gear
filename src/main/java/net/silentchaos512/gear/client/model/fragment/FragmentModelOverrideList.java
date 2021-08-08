@@ -2,13 +2,16 @@ package net.silentchaos512.gear.client.model.fragment;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableList;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.silentchaos512.gear.SilentGear;
@@ -27,13 +30,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-
-import net.minecraft.client.renderer.block.model.ItemOverride;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelState;
 
 public class FragmentModelOverrideList extends ItemOverrides {
     private final Cache<CacheKey, BakedModel> bakedModelCache = CacheBuilder.newBuilder()
@@ -65,7 +61,7 @@ public class FragmentModelOverrideList extends ItemOverrides {
 
     @Nullable
     @Override
-    public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn) {
+    public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn, int p_173469_) {
         CacheKey key = getKey(model, stack, worldIn, entityIn);
         try {
             return bakedModelCache.get(key, () -> getOverrideModel(stack, worldIn, entityIn));
@@ -95,11 +91,6 @@ public class FragmentModelOverrideList extends ItemOverrides {
 
     private static CacheKey getKey(BakedModel model, ItemStack stack, @Nullable Level world, @Nullable LivingEntity entity) {
         return new CacheKey(model, FragmentItem.getModelKey(stack));
-    }
-
-    @Override
-    public ImmutableList<ItemOverride> getOverrides() {
-        return super.getOverrides();
     }
 
     public void clearCache() {

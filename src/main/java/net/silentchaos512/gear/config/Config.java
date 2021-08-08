@@ -1,11 +1,10 @@
 package net.silentchaos512.gear.config;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -442,18 +441,5 @@ public final class Config {
     public static void init() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Common.spec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Client.spec);
-    }
-
-    public static void sync() {
-    }
-
-    @SubscribeEvent
-    public static void sync(ModConfig.Loading event) {
-        sync();
-    }
-
-    @SubscribeEvent
-    public static void sync(ModConfig.Reloading event) {
-        sync();
     }
 }

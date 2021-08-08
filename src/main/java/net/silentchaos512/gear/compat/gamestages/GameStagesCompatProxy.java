@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.compat.gamestages;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -75,7 +75,7 @@ public final class GameStagesCompatProxy {
             }
             ServerPlayer foundPlayer = null;
             for (ServerPlayer player : manager.getPlayers()) {
-                if (player.containerMenu == container && container.stillValid(player) && container.isSynched(player)) {
+                if (player.containerMenu == container && container.stillValid(player) /*&& container.isSynched(player)*/) { // FIXME?
                     if (foundPlayer != null) {
                         return null;
                     }

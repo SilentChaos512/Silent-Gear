@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.charger;
 
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
@@ -23,7 +24,7 @@ public class ChargerContainer extends AbstractContainerMenu {
     private final ContainerData fields;
 
     public ChargerContainer(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf data) {
-        this(type, id, inv, ChargerTileEntity.createStarlightCharger(), new SimpleContainerData(data.readByte()));
+        this(type, id, inv, new SimpleContainer(ChargerTileEntity.INVENTORY_SIZE), new SimpleContainerData(data.readByte()));
     }
 
     public ChargerContainer(MenuType<?> type, int id, Inventory inv, Container blockInv, ContainerData fields) {

@@ -1,42 +1,35 @@
 package net.silentchaos512.gear.block;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-import java.util.function.BiFunction;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+public class ModContainerBlock<T extends BlockEntity> extends BaseEntityBlock {
+    private final BlockEntityType.BlockEntitySupplier<T> tileFactory;
 
-public class ModContainerBlock<T extends BlockEntity & INamedContainerExtraData> extends Block {
-    private final BiFunction<BlockState, BlockGetter, ? extends T> tileFactory;
-
-    public ModContainerBlock(BiFunction<BlockState, BlockGetter, ? extends T> tileFactory, Properties properties) {
+    public ModContainerBlock(BlockEntityType.BlockEntitySupplier<T> tileFactory, Properties properties) {
         super(properties);
         this.tileFactory = tileFactory;
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-        return tileFactory.apply(state, world);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return tileFactory.create(pos, state);
     }
 
     @SuppressWarnings("deprecation")
@@ -63,5 +56,10 @@ public class ModContainerBlock<T extends BlockEntity & INamedContainerExtraData>
             }
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 }

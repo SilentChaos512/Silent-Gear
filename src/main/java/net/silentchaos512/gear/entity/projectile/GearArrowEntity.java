@@ -10,7 +10,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.ModEntities;
 import net.silentchaos512.gear.util.GearData;
@@ -19,8 +19,6 @@ import net.silentchaos512.gear.util.GearHelper;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-
-import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 
 public class GearArrowEntity extends Arrow {
     private static final Cache<UUID, ItemStack> STACK_CACHE = CacheBuilder.newBuilder()
@@ -68,7 +66,7 @@ public class GearArrowEntity extends Arrow {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         Entity shooter = getOwner();
-        if (shooter instanceof Player && !((Player) shooter).abilities.instabuild) {
+        if (shooter instanceof Player && !((Player) shooter).getAbilities().instabuild) {
             // Correct pickup status. Gear arrows are "infinite" so vanilla makes this creative only
             this.pickup = Pickup.ALLOWED;
         }
@@ -85,14 +83,14 @@ public class GearArrowEntity extends Arrow {
     @Override
     public void playerTouch(Player entityIn) {
         if (!this.level.isClientSide && (this.inGround || this.isNoPhysics()) && this.shakeTime <= 0) {
-            boolean flag = this.pickup == AbstractArrow.Pickup.ALLOWED || this.pickup == AbstractArrow.Pickup.CREATIVE_ONLY && entityIn.abilities.instabuild || this.isNoPhysics() && this.getOwner().getUUID() == entityIn.getUUID();
+            boolean flag = this.pickup == AbstractArrow.Pickup.ALLOWED || this.pickup == AbstractArrow.Pickup.CREATIVE_ONLY && entityIn.getAbilities().instabuild || this.isNoPhysics() && this.getOwner().getUUID() == entityIn.getUUID();
             if (this.pickup == Pickup.ALLOWED && (!GearHelper.isGear(arrowStack) || !addArrowToPlayerInventory(entityIn))) {
                 flag = false;
             }
 
             if (flag) {
                 entityIn.take(this, 1);
-                this.remove();
+                this.discard();
             }
         }
     }
@@ -100,13 +98,13 @@ public class GearArrowEntity extends Arrow {
     private boolean addArrowToPlayerInventory(Player player) {
         UUID uuid = GearData.getUUID(arrowStack);
 
-        for (ItemStack stack : player.inventory.offhand) {
+        for (ItemStack stack : player.getInventory().offhand) {
             if (isSameArrowStack(uuid, stack)) {
                 stack.setDamageValue(stack.getDamageValue() - 1);
                 return true;
             }
         }
-        for (ItemStack stack : player.inventory.items) {
+        for (ItemStack stack : player.getInventory().items) {
             if (isSameArrowStack(uuid, stack)) {
                 stack.setDamageValue(stack.getDamageValue() - 1);
                 return true;

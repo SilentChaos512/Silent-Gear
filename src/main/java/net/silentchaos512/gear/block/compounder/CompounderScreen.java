@@ -30,12 +30,12 @@ public class CompounderScreen extends AbstractContainerScreen<CompounderContaine
             this.menu.toggleWorkEnabled();
             b.setMessage(getWorkEnabledButtonTitle());
         });
-        this.addButton(this.workButton);
+        this.addWidget(this.workButton);
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    protected void containerTick() {
+        super.containerTick();
 
         if (this.menu.getWorkEnabled() != lastWorkEnabledValue) {
             lastWorkEnabledValue = this.menu.getWorkEnabled();
@@ -60,8 +60,8 @@ public class CompounderScreen extends AbstractContainerScreen<CompounderContaine
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
-        RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.clearColor(1, 1, 1, 1);
+        minecraft.getTextureManager().getTexture(TEXTURE);
 
         int posX = (this.width - this.imageWidth) / 2;
         int posY = (this.height - this.imageHeight) / 2;

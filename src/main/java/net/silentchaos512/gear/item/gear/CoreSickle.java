@@ -2,26 +2,31 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import net.minecraft.block.*;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.item.*;
-import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.ToolType;
@@ -38,20 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.DiggerItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.SweetBerryBushBlock;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class CoreSickle extends DiggerItem implements ICoreTool {
     public static final ToolType TOOL_TYPE = ToolType.get("sickle");
@@ -85,7 +76,7 @@ public class CoreSickle extends DiggerItem implements ICoreTool {
     }
 
     public CoreSickle() {
-        super(0, 0, Tiers.DIAMOND, ImmutableSet.of(), GearHelper.getBuilder(TOOL_TYPE));
+        super(0, 0, Tiers.DIAMOND, BlockTags.LEAVES, GearHelper.getBuilder(TOOL_TYPE));
     }
 
     @Override
@@ -212,7 +203,7 @@ public class CoreSickle extends DiggerItem implements ICoreTool {
         boolean canceled = xpDropped == -1;
         if (canceled) return false;
 
-        if (playerMP.abilities.instabuild) {
+        if (playerMP.getAbilities().instabuild) {
             block.playerWillDestroy(world, pos, state, player);
             if (block.removedByPlayer(state, world, pos, playerMP, false, state.getFluidState())) {
                 block.destroy(world, pos, state);

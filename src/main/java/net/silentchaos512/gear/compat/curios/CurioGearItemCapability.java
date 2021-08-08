@@ -1,38 +1,8 @@
 package net.silentchaos512.gear.compat.curios;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ElytraItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.silentchaos512.gear.item.gear.CoreElytra;
-import net.silentchaos512.gear.util.GearHelper;
-import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.api.type.capability.ICurio;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.function.Consumer;
-
-import top.theillusivec4.curios.api.type.capability.ICurio.DropRule;
-
 public class CurioGearItemCapability {
     public static void register() {
-        CapabilityManager.INSTANCE.register(CurioGearItemWrapper.class, new Capability.IStorage<CurioGearItemWrapper>() {
+        /*CapabilityManager.INSTANCE.register(CurioGearItemWrapper.class, new Capability.IStorage<CurioGearItemWrapper>() {
             @Override
             public Tag writeNBT(Capability<CurioGearItemWrapper> capability, CurioGearItemWrapper instance, Direction side) {
                 return new CompoundTag();
@@ -41,10 +11,10 @@ public class CurioGearItemCapability {
             @Override
             public void readNBT(Capability<CurioGearItemWrapper> capability, CurioGearItemWrapper instance, Direction side, Tag nbt) {
             }
-        }, CurioGearItemWrapper::new);
+        }, CurioGearItemWrapper::new);*/
     }
 
-    public static ICapabilityProvider createProvider(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
+    /*public static ICapabilityProvider createProvider(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
         return new CurioGearItemCapability.Provider(new CurioGearItemWrapper(stack, extraAttributes));
     }
 
@@ -140,5 +110,5 @@ public class CurioGearItemCapability {
         public void playRightClickEquipSound(LivingEntity livingEntity) {
             livingEntity.level.playSound(null, new BlockPos(livingEntity.position()), SoundEvents.ARMOR_EQUIP_GOLD, SoundSource.NEUTRAL, 1.0F, 1.0F);
         }
-    }
+    }*/
 }

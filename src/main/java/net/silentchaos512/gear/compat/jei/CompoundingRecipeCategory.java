@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -106,3 +107,4 @@ public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements I
         arrow.draw(matrixStack, 93 - GUI_START_X, 34 - GUI_START_Y);
     }
 }
+*/

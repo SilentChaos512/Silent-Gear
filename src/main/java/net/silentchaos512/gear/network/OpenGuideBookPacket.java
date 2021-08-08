@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.Util;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

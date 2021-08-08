@@ -1,21 +1,28 @@
 package net.silentchaos512.gear.world;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.Features;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.blockplacers.SimpleBlockPlacer;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.ReplaceBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.ForkingTrunkPlacer;
+import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
-import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
-import net.minecraft.world.level.levelgen.feature.configurations.RangeDecoratorConfiguration;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.ForkingTrunkPlacer;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.RegistryEvent;
@@ -26,24 +33,10 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.util.ModResourceLocation;
-import net.silentchaos512.gear.world.feature.NetherwoodTreeFeature;
 
-import javax.annotation.Nonnull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import net.minecraft.data.worldgen.Features;
-import net.minecraft.util.UniformInt;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.CountConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.ReplaceBlockConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
-import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class ModWorldFeatures {
@@ -51,14 +44,15 @@ public final class ModWorldFeatures {
 
     public static final Lazy<TreeConfiguration> NETHERWOOD_TREE_CONFIG = Lazy.of(() -> new TreeConfiguration.TreeConfigurationBuilder(
             new SimpleStateProvider(ModBlocks.NETHERWOOD_LOG.asBlockState()),
-            new SimpleStateProvider(ModBlocks.NETHERWOOD_LEAVES.asBlockState()),
-            new AcaciaFoliagePlacer(UniformInt.fixed(2), UniformInt.fixed(0)),
             new ForkingTrunkPlacer(5, 2, 2),
+            new SimpleStateProvider(ModBlocks.NETHERWOOD_LEAVES.asBlockState()),
+            new SimpleStateProvider(ModBlocks.NETHERWOOD_SAPLING.asBlockState()),
+            new AcaciaFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0)),
             new TwoLayersFeatureSize(1, 0, 2))
             .ignoreVines()
             .build());
 
-    public static final Lazy<NetherwoodTreeFeature> NETHERWOOD_TREE_FEATURE = Lazy.of(() -> new NetherwoodTreeFeature(TreeConfiguration.CODEC));
+//    public static final Lazy<NetherwoodTreeFeature> NETHERWOOD_TREE_FEATURE = Lazy.of(() -> new NetherwoodTreeFeature(TreeConfiguration.CODEC));
 
     private static boolean configuredFeaturesRegistered = false;
 
@@ -66,27 +60,27 @@ public final class ModWorldFeatures {
     public static final class Configured {
         static final Map<String, Lazy<ConfiguredFeature<?, ?>>> TO_REGISTER = new LinkedHashMap<>();
 
-        public static final Lazy<ConfiguredFeature<?, ?>> BORT_ORE_VEINS = createLazy("bort_ore_veins", () -> Feature.EMERALD_ORE
+        public static final Lazy<ConfiguredFeature<?, ?>> BORT_ORE_VEINS = createLazy("bort_ore_veins", () -> Feature.REPLACE_SINGLE_BLOCK
                 .configured(new ReplaceBlockConfiguration(Blocks.STONE.defaultBlockState(), ModBlocks.BORT_ORE.asBlockState()))
-                .decorated(FeatureDecorator.RANGE.configured(topSolidRange(4, 20)))
+                .rangeUniform(VerticalAnchor.aboveBottom(4), VerticalAnchor.absolute(20))
                 .squared()
                 .count(Config.Common.bortCount.get()));
 
         public static final Lazy<ConfiguredFeature<?, ?>> CRIMSON_IRON_ORE_VEINS = createLazy("crimson_iron_ore_veins", () -> Feature.ORE
                 .configured(new OreConfiguration(OreConfiguration.Predicates.NETHER_ORE_REPLACEABLES, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
-                .decorated(FeatureDecorator.RANGE.configured(topSolidRange(24, 120)))
+                .rangeTriangle(VerticalAnchor.aboveBottom(24), VerticalAnchor.belowTop(8))
                 .squared()
                 .count(Config.Common.crimsonIronCount.get()));
 
         public static final Lazy<ConfiguredFeature<?, ?>> DOUBLE_CRIMSON_IRON_ORE_VEINS = createLazy("double_crimson_iron_ore_veins", () -> Feature.ORE
                 .configured(new OreConfiguration(OreConfiguration.Predicates.NETHER_ORE_REPLACEABLES, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))
-                .decorated(FeatureDecorator.RANGE.configured(topSolidRange(24, 120)))
+                .rangeTriangle(VerticalAnchor.aboveBottom(24), VerticalAnchor.belowTop(8))
                 .squared()
                 .count(2 * Config.Common.crimsonIronCount.get()));
 
         public static final Lazy<ConfiguredFeature<?, ?>> AZURE_SILVER_ORE_VEINS = createLazy("azure_silver_ore_veins", () -> Feature.ORE
                 .configured(new OreConfiguration(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6))
-                .decorated(FeatureDecorator.RANGE.configured(topSolidRange(16, 92)))
+                .rangeUniform(VerticalAnchor.absolute(16), VerticalAnchor.absolute(92))
                 .squared()
                 .count(Config.Common.azureSilverCount.get()));
 
@@ -108,7 +102,7 @@ public final class ModWorldFeatures {
                 .decorated(Features.Decorators.HEIGHTMAP_SQUARE)
                 .count(Config.Common.wildFluffyPatchCount.get()));
 
-        public static final Lazy<ConfiguredFeature<?, ?>> NETHERWOOD_TREES = createLazy("netherwood_trees", () -> Feature.RANDOM_SELECTOR
+        /*public static final Lazy<ConfiguredFeature<?, ?>> NETHERWOOD_TREES = createLazy("netherwood_trees", () -> Feature.RANDOM_SELECTOR
                 .configured(new RandomFeatureConfiguration(
                         ImmutableList.of(
                                 NETHERWOOD_TREE_FEATURE.get()
@@ -120,7 +114,7 @@ public final class ModWorldFeatures {
                 ))
                 .decorated(FeatureDecorator.COUNT_MULTILAYER.configured(new CountConfiguration(8)))
                 .range(128)
-                .chance(2));
+                .chance(2));*/
 
         private static Lazy<ConfiguredFeature<?, ?>> createLazy(String name, Supplier<ConfiguredFeature<?, ?>> supplier) {
             if (TO_REGISTER.containsKey(name)) {
@@ -132,18 +126,13 @@ public final class ModWorldFeatures {
             return lazy;
         }
 
-        @Nonnull
-        private static RangeDecoratorConfiguration topSolidRange(int bottom, int top) {
-            return new RangeDecoratorConfiguration(bottom, 0, top - bottom);
-        }
-
         private Configured() {}
     }
 
     private ModWorldFeatures() {}
 
     public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
-        event.getRegistry().register(NETHERWOOD_TREE_FEATURE.get().setRegistryName(SilentGear.getId("netherwood_tree")));
+//        event.getRegistry().register(NETHERWOOD_TREE_FEATURE.get().setRegistryName(SilentGear.getId("netherwood_tree")));
     }
 
     private static void registerConfiguredFeatures() {
@@ -196,7 +185,7 @@ public final class ModWorldFeatures {
     }
 
     private static void addNetherwoodTrees(BiomeLoadingEvent biome) {
-        biome.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES.get());
+//        biome.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES.get());
     }
 
     private static void addBortOre(BiomeLoadingEvent biome) {

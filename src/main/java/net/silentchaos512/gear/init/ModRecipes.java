@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.init;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.*;
 import net.silentchaos512.gear.crafting.recipe.*;
@@ -15,8 +15,8 @@ import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
+import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.CompoundPartSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;

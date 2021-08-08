@@ -1,21 +1,25 @@
 package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.item.*;
-import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
@@ -29,19 +33,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
-
-import net.minecraft.core.NonNullList;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.item.ArrowItem;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Rarity;
 
 public class CoreBow extends BowItem implements ICoreRangedWeapon {
     private static final int MIN_DRAW_DELAY = 10;
@@ -100,7 +91,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
         InteractionResultHolder<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, world, player, hand, flag);
         if (ret != null) return ret;
 
-        if (!player.abilities.instabuild && !flag) {
+        if (!player.getAbilities().instabuild && !flag) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
         } else {
             player.startUsingItem(hand);
@@ -116,7 +107,7 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
         if (entityLiving instanceof Player) {
             Player player = (Player) entityLiving;
-            boolean infiniteAmmo = player.abilities.instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
+            boolean infiniteAmmo = player.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
             ItemStack ammoItem = player.getProjectile(stack);
 
             int i = this.getUseDuration(stack) - timeLeft;
@@ -130,12 +121,12 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
 
                 float f = getArrowVelocity(stack, i);
                 if (!((double) f < 0.1D)) {
-                    boolean flag1 = player.abilities.instabuild || (ammoItem.getItem() instanceof ArrowItem && ((ArrowItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
+                    boolean flag1 = player.getAbilities().instabuild || (ammoItem.getItem() instanceof ArrowItem && ((ArrowItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
                     if (!worldIn.isClientSide) {
                         ArrowItem arrowitem = (ArrowItem) (ammoItem.getItem() instanceof ArrowItem ? ammoItem.getItem() : Items.ARROW);
                         AbstractArrow arrowEntity = arrowitem.createArrow(worldIn, ammoItem, player);
                         arrowEntity.setBaseDamage(arrowEntity.getBaseDamage() - 2 + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
-                        arrowEntity.shootFromRotation(player, player.xRot, player.yRot, 0.0F, f * 3.0F, 1.0F);
+                        arrowEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);
                         if (MathUtils.floatsEqual(f, 1f)) {
                             arrowEntity.setCritArrow(true);
                         }
@@ -155,18 +146,18 @@ public class CoreBow extends BowItem implements ICoreRangedWeapon {
                         }
 
                         stack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(p.getUsedItemHand()));
-                        if (flag1 || player.abilities.instabuild && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
+                        if (flag1 || player.getAbilities().instabuild && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
                             arrowEntity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
                         worldIn.addFreshEntity(arrowEntity);
                     }
 
-                    worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                    if (!flag1 && !player.abilities.instabuild) {
+                    worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    if (!flag1 && !player.getAbilities().instabuild) {
                         ammoItem.shrink(1);
                         if (ammoItem.isEmpty()) {
-                            player.inventory.removeItem(ammoItem);
+                            player.getInventory().removeItem(ammoItem);
                         }
                     }
 

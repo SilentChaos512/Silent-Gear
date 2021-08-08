@@ -1,18 +1,18 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class Registration {
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = create(ForgeRegistries.BLOCK_ENTITIES);
     public static final DeferredRegister<Block> BLOCKS = create(ForgeRegistries.BLOCKS);
     public static final DeferredRegister<MenuType<?>> CONTAINERS = create(ForgeRegistries.CONTAINERS);
     public static final DeferredRegister<Enchantment> ENCHANTMENTS = create(ForgeRegistries.ENCHANTMENTS);
@@ -33,12 +34,12 @@ public final class Registration {
     public static final DeferredRegister<PoiType> POINTS_OF_INTEREST = create(ForgeRegistries.POI_TYPES);
     public static final DeferredRegister<VillagerProfession> PROFESSIONS = create(ForgeRegistries.PROFESSIONS);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = create(ForgeRegistries.RECIPE_SERIALIZERS);
-    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = create(ForgeRegistries.TILE_ENTITIES);
 
     private Registration() {throw new IllegalAccessError("Utility class");}
 
     public static void register() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        BLOCK_ENTITIES.register(modEventBus);
         BLOCKS.register(modEventBus);
         CONTAINERS.register(modEventBus);
         ENCHANTMENTS.register(modEventBus);
@@ -48,8 +49,8 @@ public final class Registration {
         POINTS_OF_INTEREST.register(modEventBus);
         PROFESSIONS.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
-        TILE_ENTITIES.register(modEventBus);
 
+        ModBlockEntities.register();
         ModBlocks.register();
         ModContainers.register();
         GearEnchantments.register();
@@ -57,7 +58,6 @@ public final class Registration {
         ModItems.register();
         ModLootStuff.init();
         ModRecipes.register();
-        ModTileEntities.register();
         GearVillages.register();
     }
 

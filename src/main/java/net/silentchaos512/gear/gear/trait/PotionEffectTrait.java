@@ -257,7 +257,7 @@ public class PotionEffectTrait extends SimpleTrait {
         MobEffectInstance getEffect(int traitLevel, int pieceCount, boolean hasFullSet) {
             if (this.type == LevelType.FULL_SET_ONLY && !hasFullSet) return null;
 
-            MobEffect potion = ForgeRegistries.POTIONS.getValue(effectId);
+            MobEffect potion = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
             if (potion == null) return null;
 
             int effectLevel = getEffectLevel(traitLevel, pieceCount, hasFullSet);
@@ -285,7 +285,7 @@ public class PotionEffectTrait extends SimpleTrait {
                 levelsText[i] = Integer.toString(levels[i]);
             }
 
-            MobEffect effect = ForgeRegistries.POTIONS.getValue(effectId);
+            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
             String effectName;
             if (effect != null) {
                 effectName = effect.getDisplayName().getString();

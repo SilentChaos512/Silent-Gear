@@ -1,16 +1,19 @@
 package net.silentchaos512.gear.block.charger;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.silentchaos512.gear.block.ModContainerBlock;
+import net.silentchaos512.gear.init.ModBlockEntities;
 
-import java.util.function.BiFunction;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import javax.annotation.Nullable;
 
 public class StarlightChargerBlock extends ModContainerBlock<ChargerTileEntity> {
     private static final VoxelShape SHAPE;
@@ -24,7 +27,7 @@ public class StarlightChargerBlock extends ModContainerBlock<ChargerTileEntity> 
         SHAPE = Shapes.or(base4, top);
     }
 
-    public StarlightChargerBlock(BiFunction<BlockState, BlockGetter, ? extends ChargerTileEntity> tileFactory, Properties properties) {
+    public StarlightChargerBlock(BlockEntityType.BlockEntitySupplier<ChargerTileEntity> tileFactory, Properties properties) {
         super(tileFactory, properties);
     }
 
@@ -32,5 +35,11 @@ public class StarlightChargerBlock extends ModContainerBlock<ChargerTileEntity> 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, ModBlockEntities.STARLIGHT_CHARGER.get(), ChargerTileEntity::tick);
     }
 }

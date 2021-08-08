@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.command.MaterialsCommand;
 import net.silentchaos512.gear.command.TraitsCommand;

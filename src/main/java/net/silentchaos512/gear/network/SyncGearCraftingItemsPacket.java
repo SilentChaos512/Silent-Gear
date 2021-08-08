@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.Util;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;

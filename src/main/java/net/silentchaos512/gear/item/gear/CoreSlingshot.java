@@ -84,7 +84,7 @@ public class CoreSlingshot extends CoreBow {
 
         if (entityLiving instanceof Player) {
             Player player = (Player) entityLiving;
-            boolean infiniteAmmo = player.abilities.instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
+            boolean infiniteAmmo = player.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
             ItemStack ammoItem = player.getProjectile(stack);
 
             int i = this.getUseDuration(stack) - timeLeft;
@@ -98,12 +98,12 @@ public class CoreSlingshot extends CoreBow {
 
                 float f = getPowerForTime(i);
                 if (!((double) f < 0.1D)) {
-                    boolean flag1 = player.abilities.instabuild || (ammoItem.getItem() instanceof SlingshotAmmoItem && ((SlingshotAmmoItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
+                    boolean flag1 = player.getAbilities().instabuild || (ammoItem.getItem() instanceof SlingshotAmmoItem && ((SlingshotAmmoItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
                     if (!worldIn.isClientSide) {
                         SlingshotAmmoItem slingshotAmmoItem = (SlingshotAmmoItem) (ammoItem.getItem() instanceof SlingshotAmmoItem ? ammoItem.getItem() : ModItems.PEBBLE.get());
                         AbstractArrow shot = slingshotAmmoItem.createArrow(worldIn, ammoItem, player);
                         shot.setBaseDamage(shot.getBaseDamage() + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
-                        shot.shootFromRotation(player, player.xRot, player.yRot, 0.0F, f * 3.0F, 1.0F);
+                        shot.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);
                         if (MathUtils.floatsEqual(f, 1.0f)) {
                             shot.setCritArrow(true);
                         }
@@ -123,18 +123,18 @@ public class CoreSlingshot extends CoreBow {
                         }
 
                         stack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(p.getUsedItemHand()));
-                        if (flag1 || player.abilities.instabuild && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
+                        if (flag1 || player.getAbilities().instabuild && (ammoItem.getItem() == Items.SPECTRAL_ARROW || ammoItem.getItem() == Items.TIPPED_ARROW)) {
                             shot.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
                         EntityHelper.spawnWithClientPacket(worldIn, shot);
                     }
 
-                    worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                    if (!flag1 && !player.abilities.instabuild) {
+                    worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    if (!flag1 && !player.getAbilities().instabuild) {
                         ammoItem.shrink(1);
                         if (ammoItem.isEmpty()) {
-                            player.inventory.removeItem(ammoItem);
+                            player.getInventory().removeItem(ammoItem);
                         }
                     }
 

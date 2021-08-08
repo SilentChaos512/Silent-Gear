@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.jei;
 
 import com.google.common.collect.ImmutableList;
@@ -102,3 +103,4 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     public static class GraderRecipe {
     }
 }
+*/

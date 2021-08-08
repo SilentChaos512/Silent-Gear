@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.mixin;
 
 import net.minecraft.world.entity.item.ItemEntity;
@@ -30,3 +31,4 @@ public class MixinItemEntity {
         throw new IllegalStateException("Mixin failed to shadow getItem()");
     }
 }
+*/

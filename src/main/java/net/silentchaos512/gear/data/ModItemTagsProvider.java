@@ -2,20 +2,21 @@ package net.silentchaos512.gear.data;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeItemTagsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
@@ -28,9 +29,9 @@ import net.silentchaos512.gear.util.Const;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class ModItemTagsProvider extends ForgeItemTagsProvider {
+public class ModItemTagsProvider extends ItemTagsProvider {
     public ModItemTagsProvider(DataGenerator generatorIn, BlockTagsProvider blocks, ExistingFileHelper existingFileHelper) {
-        super(generatorIn, blocks, existingFileHelper);
+        super(generatorIn, blocks, SilentGear.MOD_ID, existingFileHelper);
     }
 
     @Override

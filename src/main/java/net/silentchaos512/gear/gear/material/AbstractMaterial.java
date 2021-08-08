@@ -10,6 +10,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.VanillaIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
@@ -457,14 +459,28 @@ public abstract class AbstractMaterial implements IMaterial {
             }
         }
 
+        private Ingredient tempReadIngredientFix(FriendlyByteBuf buffer) {
+            if (buffer.readBoolean()) {
+                buffer.readVarInt(); // Burn Forge's -1 marker...
+                return CraftingHelper.getIngredient(buffer.readResourceLocation(), buffer);
+            }
+            return Ingredient.fromNetwork(buffer);
+        }
+
+        private void tempWriteIngredientFix(FriendlyByteBuf buffer, Ingredient ingredient) {
+            boolean custom = ingredient.getSerializer() != VanillaIngredientSerializer.INSTANCE;
+            buffer.writeBoolean(custom);
+            CraftingHelper.write(buffer, ingredient);
+        }
+
         private void readCraftingItems(FriendlyByteBuf buffer, T material) {
-            material.ingredient = Ingredient.fromNetwork(buffer);
+            material.ingredient = tempReadIngredientFix(buffer);
 
             // Part subs
             int subCount = buffer.readByte();
             for (int i = 0; i < subCount; ++i) {
                 PartType partType = PartType.get(buffer.readResourceLocation());
-                Ingredient ingredient = Ingredient.fromNetwork(buffer);
+                Ingredient ingredient = tempReadIngredientFix(buffer);
                 material.partSubstitutes.put(partType, ingredient);
             }
         }
@@ -550,13 +566,13 @@ public abstract class AbstractMaterial implements IMaterial {
         }
 
         private void writeCraftingItems(FriendlyByteBuf buffer, T material) {
-            material.ingredient.toNetwork(buffer);
+            tempWriteIngredientFix(buffer, material.ingredient);
 
             // Part subs
             buffer.writeByte(material.partSubstitutes.size());
             material.partSubstitutes.forEach((type, ing) -> {
                 buffer.writeResourceLocation(type.getName());
-                ing.toNetwork(buffer);
+                tempWriteIngredientFix(buffer, ing);
             });
         }
 

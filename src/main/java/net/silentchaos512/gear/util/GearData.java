@@ -754,7 +754,7 @@ public final class GearData {
         @SubscribeEvent
         public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
             Player player = event.getPlayer();
-            StackList.from(player.inventory)
+            StackList.from(player.getInventory())
                     .stream()
                     .filter(s -> s.getItem() instanceof ICoreItem)
                     .forEach(s -> recalculateStats(s, player));

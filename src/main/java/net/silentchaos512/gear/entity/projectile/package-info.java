@@ -2,6 +2,6 @@
 @MethodsReturnNonnullByDefault
 package net.silentchaos512.gear.entity.projectile;
 
-import mezz.jei.api.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

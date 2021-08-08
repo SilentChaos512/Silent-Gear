@@ -2,15 +2,15 @@ package net.silentchaos512.gear.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
 
@@ -18,8 +18,8 @@ public class RenderSlingshotProjectile extends EntityRenderer<SlingshotProjectil
     private static final ResourceLocation PEBBLE_TEXTURE = SilentGear.getId("textures/item/pebble.png");
     private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(PEBBLE_TEXTURE);
 
-    public RenderSlingshotProjectile(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderSlingshotProjectile(EntityRendererProvider.Context context) {
+        super(context);
     }
 
     @Override

@@ -2,7 +2,7 @@ package net.silentchaos512.gear.data;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.data.client.CompoundModelsProvider;
 import net.silentchaos512.gear.data.client.ModBlockStateProvider;

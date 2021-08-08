@@ -35,8 +35,8 @@ public class GuideBookScreen extends Screen {
     private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
-        RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.clearColor(1, 1, 1, 1);
+        minecraft.getTextureManager().getTexture(TEXTURE);
 
         int posX = (this.width - 176) / 2;
         int posY = (this.height - 166) / 2;

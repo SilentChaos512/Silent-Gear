@@ -34,7 +34,7 @@ public class CoreSaw extends CoreAxe {
 
             if (isLog(state) && detectTree(world, pos.getX(), pos.getY(), pos.getZ(), state.getBlock())) {
                 // Don't allow in creative mode.
-                if (player.abilities.instabuild) {
+                if (player.getAbilities().instabuild) {
                     return false;
                 }
 
@@ -167,7 +167,7 @@ public class CoreSaw extends CoreAxe {
                                 if (cancel) {
                                     breakTree(result, world, localPos, startPos, recursionDepth + 1);
                                 } else {
-                                    if (!result.player.abilities.instabuild) {
+                                    if (!result.player.getAbilities().instabuild) {
                                         localBlock.playerDestroy(world, result.player, pos, localState, world.getBlockEntity(pos), result.tool);
                                         mineBlock(result.tool, world, localState, localPos, result.player);
                                         ++result.blocksBroken;

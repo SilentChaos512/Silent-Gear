@@ -16,52 +16,51 @@ public final class ModItemModelProperties {
 
     @SuppressWarnings("OverlyComplexMethod")
     public static void register(FMLClientSetupEvent event) {
-        // These are mostly just copies from vanilla decomp code, so excuse the formatting and naming...
-        ItemProperties.register(ModItems.BOW.get(), new ResourceLocation("pull"), (p_239429_0_, p_239429_1_, p_239429_2_) -> {
-            if (p_239429_2_ == null) {
+        ItemProperties.register(ModItems.BOW.get(), new ResourceLocation("pull"), (stack, level, entity, par4) -> {
+            if (entity == null) {
                 return 0.0F;
             } else {
-                return p_239429_2_.getUseItem() != p_239429_0_ ? 0.0F : (float)(p_239429_0_.getUseDuration() - p_239429_2_.getUseItemRemainingTicks()) / 20.0F;
+                return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F;
             }
         });
-        ItemProperties.register(ModItems.BOW.get(), new ResourceLocation("pulling"), (p_239428_0_, p_239428_1_, p_239428_2_) -> {
-            return p_239428_2_ != null && p_239428_2_.isUsingItem() && p_239428_2_.getUseItem() == p_239428_0_ ? 1.0F : 0.0F;
+        ItemProperties.register(ModItems.BOW.get(), new ResourceLocation("pulling"), (stack, level, entity, par4) -> {
+            return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
         });
 
-        ItemProperties.register(ModItems.SLINGSHOT.get(), new ResourceLocation("pull"), (p_239429_0_, p_239429_1_, p_239429_2_) -> {
-            if (p_239429_2_ == null) {
+        ItemProperties.register(ModItems.SLINGSHOT.get(), new ResourceLocation("pull"), (stack, level, entity, par4) -> {
+            if (entity == null) {
                 return 0.0F;
             } else {
-                return p_239429_2_.getUseItem() != p_239429_0_ ? 0.0F : (float)(p_239429_0_.getUseDuration() - p_239429_2_.getUseItemRemainingTicks()) / 20.0F;
+                return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F;
             }
         });
-        ItemProperties.register(ModItems.SLINGSHOT.get(), new ResourceLocation("pulling"), (p_239428_0_, p_239428_1_, p_239428_2_) -> {
-            return p_239428_2_ != null && p_239428_2_.isUsingItem() && p_239428_2_.getUseItem() == p_239428_0_ ? 1.0F : 0.0F;
+        ItemProperties.register(ModItems.SLINGSHOT.get(), new ResourceLocation("pulling"), (stack, level, entity, par4) -> {
+            return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
         });
 
-        ItemProperties.register(ModItems.CROSSBOW.get(), new ResourceLocation("pull"), (p_239427_0_, p_239427_1_, p_239427_2_) -> {
-            if (p_239427_2_ == null) {
+        ItemProperties.register(ModItems.CROSSBOW.get(), new ResourceLocation("pull"), (stack, level, entity, par4) -> {
+            if (entity == null) {
                 return 0.0F;
             } else {
-                return CrossbowItem.isCharged(p_239427_0_) ? 0.0F : (float)(p_239427_0_.getUseDuration() - p_239427_2_.getUseItemRemainingTicks()) / (float)CrossbowItem.getChargeDuration(p_239427_0_);
+                return CrossbowItem.isCharged(stack) ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / (float) CrossbowItem.getChargeDuration(stack);
             }
         });
-        ItemProperties.register(ModItems.CROSSBOW.get(), new ResourceLocation("pulling"), (p_239426_0_, p_239426_1_, p_239426_2_) -> {
-            return p_239426_2_ != null && p_239426_2_.isUsingItem() && p_239426_2_.getUseItem() == p_239426_0_ && !CrossbowItem.isCharged(p_239426_0_) ? 1.0F : 0.0F;
+        ItemProperties.register(ModItems.CROSSBOW.get(), new ResourceLocation("pulling"), (stack, level, entity, par4) -> {
+            return entity != null && entity.isUsingItem() && entity.getUseItem() == stack && !CrossbowItem.isCharged(stack) ? 1.0F : 0.0F;
         });
-        ItemProperties.register(ModItems.CROSSBOW.get(), new ResourceLocation("charged"), (p_239425_0_, p_239425_1_, p_239425_2_) -> {
-            return p_239425_2_ != null && CrossbowItem.isCharged(p_239425_0_) ? 1.0F : 0.0F;
+        ItemProperties.register(ModItems.CROSSBOW.get(), new ResourceLocation("charged"), (stack, level, entity, par4) -> {
+            return entity != null && CrossbowItem.isCharged(stack) ? 1.0F : 0.0F;
         });
-        ItemProperties.register(ModItems.CROSSBOW.get(), new ResourceLocation("firework"), (p_239424_0_, p_239424_1_, p_239424_2_) -> {
-            return p_239424_2_ != null && CrossbowItem.isCharged(p_239424_0_) && CrossbowItem.containsChargedProjectile(p_239424_0_, Items.FIREWORK_ROCKET) ? 1.0F : 0.0F;
+        ItemProperties.register(ModItems.CROSSBOW.get(), new ResourceLocation("firework"), (stack, level, entity, par4) -> {
+            return entity != null && CrossbowItem.isCharged(stack) && CrossbowItem.containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.0F : 0.0F;
         });
 
-        ItemProperties.register(ModItems.SHIELD.get(), new ResourceLocation("blocking"), (p_239421_0_, p_239421_1_, p_239421_2_) -> {
-            return p_239421_2_ != null && p_239421_2_.isUsingItem() && p_239421_2_.getUseItem() == p_239421_0_ ? 1.0F : 0.0F;
+        ItemProperties.register(ModItems.SHIELD.get(), new ResourceLocation("blocking"), (stack, level, entity, par4) -> {
+            return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
         });
 
         Registration.getItems(ICoreItem.class).forEach(item -> {
-            ItemProperties.register(item.asItem(), Const.BROKEN_PROPERTY, (stack, world, entity) -> {
+            ItemProperties.register(item.asItem(), Const.BROKEN_PROPERTY, (stack, level, entity, par4) -> {
                 return GearHelper.isBroken(stack) ? 0 : 1;
             });
         });

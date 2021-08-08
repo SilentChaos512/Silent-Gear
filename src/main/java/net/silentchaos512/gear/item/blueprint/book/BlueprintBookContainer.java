@@ -97,19 +97,23 @@ public class BlueprintBookContainer extends AbstractContainerMenu {
         else
             slot.setChanged();
 
-        return slot.onTake(playerIn, newStack);
+        slot.onTake(playerIn, newStack);
+        return newStack;
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-        if (slotId < 0 || slotId > slots.size())
-            return super.clicked(slotId, dragType, clickTypeIn, player);
+    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+        if (slotId < 0 || slotId > slots.size()) {
+            super.clicked(slotId, dragType, clickTypeIn, player);
+            return;
+        }
 
         Slot slot = slots.get(slotId);
-        if (!canTake(slotId, slot, dragType, player, clickTypeIn))
-            return slot.getItem();
+        if (!canTake(slotId, slot, dragType, player, clickTypeIn)) {
+            return;
+        }
 
-        return super.clicked(slotId, dragType, clickTypeIn, player);
+        super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
     @Override
@@ -119,7 +123,7 @@ public class BlueprintBookContainer extends AbstractContainerMenu {
     }
 
     public boolean canTake(int slotId, Slot slot, int button, Player player, ClickType clickType) {
-        if (slotId == bookSlot || slotId <= itemHandler.getSlots() - 1 && isContainerItem(player.inventory.getCarried()))
+        if (slotId == bookSlot || slotId <= itemHandler.getSlots() - 1 && isContainerItem(player.getInventory().getSelected()))
             return false;
 
         // Hotbar swapping via number keys

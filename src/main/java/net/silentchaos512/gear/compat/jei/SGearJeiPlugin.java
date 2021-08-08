@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.IModPlugin;
@@ -201,3 +202,4 @@ public class SGearJeiPlugin implements IModPlugin {
         return "jei." + name.getNamespace() + "." + name.getPath() + ".desc";
     }
 }
+*/

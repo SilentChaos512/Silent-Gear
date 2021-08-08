@@ -2,6 +2,6 @@
 @MethodsReturnNonnullByDefault
 package net.silentchaos512.gear.crafting.ingredient;
 
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

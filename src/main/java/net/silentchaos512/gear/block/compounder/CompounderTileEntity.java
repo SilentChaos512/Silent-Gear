@@ -1,21 +1,22 @@
 package net.silentchaos512.gear.block.compounder;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.core.NonNullList;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -37,7 +38,7 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("WeakerAccess")
-public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableSidedInventoryTileEntity implements TickableBlockEntity, IDroppableInventory {
+public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableSidedInventoryTileEntity implements IDroppableInventory {
     public static final int STANDARD_INPUT_SLOTS = 4;
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
@@ -80,8 +81,8 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         }
     };
 
-    public CompounderTileEntity(CompounderInfo<R> info) {
-        super(info.getTileEntityType(), info.getInputSlotCount() + 2);
+    public CompounderTileEntity(CompounderInfo<R> info, BlockPos pos, BlockState state) {
+        super(info.getBlockEntityType(), info.getInputSlotCount() + 2, pos, state);
         this.info = info;
         this.allSlots = IntStream.range(0, this.items.size()).toArray();
     }
@@ -137,27 +138,26 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
         return true;
     }
 
-    @Override
-    public void tick() {
-        if (level == null || level.isClientSide || areInputsEmpty()) {
-            // No point in doing anything on the client or when input slots are empty
-            updateOutputHint(ItemStack.EMPTY);
+    public static <R extends CompoundingRecipe> void tick(Level level, BlockPos pos, BlockState state, CompounderTileEntity<R> blockEntity) {
+        if (blockEntity.areInputsEmpty()) {
+            // No point in doing anything when input slots are empty
+            blockEntity.updateOutputHint(ItemStack.EMPTY);
             return;
         }
 
-        R recipe = getRecipe();
+        R recipe = blockEntity.getRecipe();
         if (recipe != null) {
             // Inputs match a custom recipe
-            doWork(recipe, MaterialList.empty());
+            blockEntity.doWork(recipe, MaterialList.empty());
         } else {
             // No recipe, but we might be able to make a generic compound
-            MaterialList materials = getInputs();
-            if (!hasMultipleMaterials(materials) || !canCompoundMaterials(materials)) {
+            MaterialList materials = blockEntity.getInputs();
+            if (!hasMultipleMaterials(materials) || !blockEntity.canCompoundMaterials(materials)) {
                 // Not a valid combination
-                stopWork(true);
+                blockEntity.stopWork(true);
                 return;
             }
-            doWork(null, materials);
+            blockEntity.doWork(null, materials);
         }
     }
 
@@ -330,8 +330,8 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tags) {
-        super.load(state, tags);
+    public void load(CompoundTag tags) {
+        super.load(tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 

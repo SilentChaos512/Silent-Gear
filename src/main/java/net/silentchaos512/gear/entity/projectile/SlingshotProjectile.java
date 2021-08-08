@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
 import net.silentchaos512.gear.init.ModEntities;
 import net.silentchaos512.gear.init.ModItems;
 
@@ -43,7 +43,7 @@ public class SlingshotProjectile extends AbstractArrow {
     public void tick() {
         super.tick();
         if (inGround) {
-            this.remove();
+            this.discard();
         }
     }
 }

@@ -62,11 +62,11 @@ public interface ICoreRangedWeapon extends ICoreTool {
     default int getAnimationFrame(ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
         ItemPropertyFunction pullingProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pulling"));
         if (pullingProperty != null) {
-            float pulling = pullingProperty.call(stack, world, entity);
+            float pulling = pullingProperty.call(stack, world, entity, 0);
             if (pulling > 0) {
                 ItemPropertyFunction pullProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pull"));
                 if (pullProperty != null) {
-                    float pull = pullProperty.call(stack, world, entity);
+                    float pull = pullProperty.call(stack, world, entity, 0);
 
                     if (pull > 0.9f)
                         return 3;

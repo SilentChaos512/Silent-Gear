@@ -1,14 +1,15 @@
 package net.silentchaos512.gear.data;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeBlockTagsProvider;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FluffyBlock;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
@@ -17,9 +18,9 @@ import net.silentchaos512.lib.block.IBlockProvider;
 
 import java.util.Arrays;
 
-public class ModBlockTagsProvider extends ForgeBlockTagsProvider {
+public class ModBlockTagsProvider extends BlockTagsProvider {
     public ModBlockTagsProvider(DataGenerator generatorIn, ExistingFileHelper existingFileHelper) {
-        super(generatorIn, existingFileHelper);
+        super(generatorIn, SilentGear.MOD_ID, existingFileHelper);
     }
 
     @Override

@@ -1,25 +1,25 @@
 package net.silentchaos512.gear.client.event;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tesselator;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
 
-public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadListener {
+public final class ExtraBlockBreakHandler extends SimpleJsonResourceReloadListener {
     public static final ExtraBlockBreakHandler INSTANCE = new ExtraBlockBreakHandler(Minecraft.getInstance());
 
     private final Map<Integer, DestroyExtraBlocksProgress> extraDamagedBlocks = new HashMap<>();
@@ -28,6 +28,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
 //    private final TextureAtlasSprite[] destroyBlockIcons = new TextureAtlasSprite[10];
 
     private ExtraBlockBreakHandler(Minecraft mcIn) {
+        super(new GsonBuilder().create(), "extra_block_break_handler");
         this.mc = mcIn;
 //        this.renderEngine = mcIn.getTextureManager();
 //        ((IReloadableResourceManager) mc.getResourceManager()).addReloadListener(this);
@@ -55,23 +56,23 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
     }
 
     private static void preRenderDamagedBlocks() {
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+/*        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         RenderSystem.enableBlend();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.5F);
         RenderSystem.polygonOffset(-3.0F, -3.0F);
         RenderSystem.enablePolygonOffset();
         RenderSystem.alphaFunc(516, 0.1F);
         RenderSystem.enableAlphaTest();
-        RenderSystem.pushMatrix();
+        RenderSystem.pushMatrix();*/
     }
 
     private static void postRenderDamagedBlocks() {
-        RenderSystem.disableAlphaTest();
+/*        RenderSystem.alpha();
         RenderSystem.polygonOffset(0.0F, 0.0F);
         RenderSystem.disablePolygonOffset();
         RenderSystem.enableAlphaTest();
         RenderSystem.depthMask(true);
-        RenderSystem.popMatrix();
+        RenderSystem.popMatrix();*/
     }
 
     private void drawBlockDamageTexture(Tesselator tessellatorIn, BufferBuilder bufferBuilderIn, Entity entityIn, float partialTicks) {
@@ -139,7 +140,7 @@ public final class ExtraBlockBreakHandler implements ISelectiveResourceReloadLis
     }
 
     @Override
-    public void onResourceManagerReload(ResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+    protected void apply(Map<ResourceLocation, JsonElement> p_10793_, ResourceManager p_10794_, ProfilerFiller p_10795_) {
 /*        AtlasTexture texturemap = this.mc.getTextureMap();
         if (texturemap == null) return;
 

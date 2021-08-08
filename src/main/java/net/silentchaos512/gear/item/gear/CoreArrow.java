@@ -3,22 +3,22 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.item.*;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -38,14 +38,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import net.minecraft.world.item.Item.Properties;
-
-import net.minecraft.world.item.ArrowItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.context.UseOnContext;
 
 public class CoreArrow extends ArrowItem implements ICoreItem {
     private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
@@ -133,7 +125,7 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
         arrow.setArrowStack(stack);
         arrow.setBaseDamage(GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
 
-        if (shooter instanceof Player && !((Player) shooter).abilities.instabuild) {
+        if (shooter instanceof Player && !((Player) shooter).getAbilities().instabuild) {
             // Consume an arrow
             stack.setDamageValue(stack.getDamageValue() + 1);
         }
@@ -153,7 +145,7 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
         // Merge partial arrow stacks
         boolean used = false;
         if (usedStack.getDamageValue() > 0) {
-            for (ItemStack stack : playerIn.inventory.items) {
+            for (ItemStack stack : playerIn.getInventory().items) {
                 if (stack.getItem() == this && stack.getDamageValue() > 0 && GearHelper.isEquivalent(usedStack, stack)) {
                     int count = stack.getMaxDamage() - stack.getDamageValue();
                     int merged = Math.min(usedStack.getDamageValue(), count);
@@ -162,7 +154,7 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
                     used |= usedStack.getDamageValue() != stack.getDamageValue();
 
                     if (stack.getDamageValue() >= stack.getMaxDamage()) {
-                        playerIn.inventory.removeItem(stack);
+                        playerIn.getInventory().removeItem(stack);
                     }
                     if (usedStack.getDamageValue() <= 0) {
                         break;

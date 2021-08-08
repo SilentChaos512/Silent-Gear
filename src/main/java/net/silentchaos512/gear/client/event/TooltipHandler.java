@@ -1,8 +1,12 @@
 package net.silentchaos512.gear.client.event;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.text.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -32,12 +36,6 @@ import net.silentchaos512.utils.Color;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public final class TooltipHandler {
     public static final TooltipHandler INSTANCE = new TooltipHandler();

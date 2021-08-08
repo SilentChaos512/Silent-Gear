@@ -1,15 +1,14 @@
 package net.silentchaos512.gear;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -19,9 +18,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -35,7 +34,6 @@ import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
 import net.silentchaos512.gear.client.model.gear.GearModelLoader;
 import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
-import net.silentchaos512.gear.client.renderer.entity.GearElytraLayer;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.compat.curios.CurioGearItemCapability;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
@@ -193,16 +191,15 @@ class SideProxy implements IProxy {
         private static void clientSetup(FMLClientSetupEvent event) {
             KeyTracker.register(event);
             ModBlocks.registerRenderTypes(event);
-            ModEntities.registerRenderers(event);
-            ModTileEntities.registerRenderers(event);
+            ModBlockEntities.registerRenderers(event);
             ModContainers.registerScreens(event);
             ModItemModelProperties.register(event);
         }
 
         private static void postSetup(FMLLoadCompleteEvent event) {
-            EntityRenderDispatcher rendererManager = Minecraft.getInstance().getEntityRenderDispatcher();
+            /*EntityRenderDispatcher rendererManager = Minecraft.getInstance().getEntityRenderDispatcher();
             rendererManager.getSkinMap().values().forEach(renderer ->
-                    renderer.addLayer(new GearElytraLayer<>(renderer)));
+                    renderer.addLayer(new GearElytraLayer<>(renderer)));*/
         }
 
         private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {

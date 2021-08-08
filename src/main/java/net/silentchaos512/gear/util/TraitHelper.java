@@ -200,7 +200,7 @@ public final class TraitHelper {
 
     public static int getHighestLevelArmor(Player player, DataResource<ITrait> trait) {
         int max = 0;
-        for (ItemStack stack : player.inventory.armor) {
+        for (ItemStack stack : player.getInventory().armor) {
             max = Math.max(max, getTraitLevel(stack, trait));
         }
         return max;
@@ -225,7 +225,7 @@ public final class TraitHelper {
     }
 
     public static boolean hasTraitArmor(Player player, DataResource<ITrait> trait) {
-        for (ItemStack stack : player.inventory.armor) {
+        for (ItemStack stack : player.getInventory().armor) {
             if (hasTrait(stack, trait)) {
                 return true;
             }

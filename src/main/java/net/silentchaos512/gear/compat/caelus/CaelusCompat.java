@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.caelus;
 
 import com.google.common.collect.Multimap;
@@ -15,3 +16,4 @@ public final class CaelusCompat {
         }
     }
 }
+*/

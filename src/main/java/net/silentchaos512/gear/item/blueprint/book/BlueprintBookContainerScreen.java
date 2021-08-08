@@ -68,8 +68,8 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
-        RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.clearColor(1, 1, 1, 1);
+        minecraft.getTextureManager().getTexture(TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
         blit(matrixStack, i, j, 0, 0, this.imageWidth, this.inventoryRows * 18 + 17);

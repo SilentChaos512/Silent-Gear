@@ -2,6 +2,8 @@ package net.silentchaos512.gear.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -27,10 +29,11 @@ import javax.annotation.Nonnull;
 public class GearElytraLayer<T extends Player, M extends EntityModel<T>> extends ElytraLayer<T, M> {
     private static final ResourceLocation TEXTURE = SilentGear.getId("textures/entity/elytra.png");
 
-    private final ElytraModel<T> modelElytra = new ElytraModel<>();
+    private final ElytraModel<T> modelElytra;
 
-    public GearElytraLayer(RenderLayerParent<T, M> rendererIn) {
-        super(rendererIn);
+    public GearElytraLayer(RenderLayerParent<T, M> parent, EntityModelSet modelSet) {
+        super(parent, modelSet);
+        this.modelElytra = new ElytraModel<>(modelSet.bakeLayer(ModelLayers.ELYTRA));
     }
 
     @Override

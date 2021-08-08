@@ -44,7 +44,7 @@ public class UpgradeSmithingRecipe extends GearSmithingRecipe {
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<UpgradeSmithingRecipe> {
         @Override
         public UpgradeSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            ItemStack gearItem = ShapedRecipe.itemFromJson(GsonHelper.getAsJsonObject(json, "gear"));
+            ItemStack gearItem = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "gear"));
             Ingredient upgradeItem = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "addition"));
             return new UpgradeSmithingRecipe(recipeId, gearItem, upgradeItem);
         }

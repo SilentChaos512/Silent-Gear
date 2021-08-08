@@ -1,9 +1,14 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.item.*;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
@@ -16,13 +21,8 @@ import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.TimeUtils;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
-
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 
 @SuppressWarnings({"unused", "OverlyCoupledClass"})
 public final class ModItems {
@@ -273,7 +273,7 @@ public final class ModItems {
     public static final ItemRegistryObject<Item> NETHERWOOD_CHARCOAL = register("netherwood_charcoal", () ->
             new Item(baseProps()) {
                 @Override
-                public int getBurnTime(ItemStack itemStack) {
+                public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
                     return Config.Common.netherwoodCharcoalBurnTime.get();
                 }
             });

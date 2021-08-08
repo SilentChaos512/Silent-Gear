@@ -19,21 +19,23 @@
 package net.silentchaos512.gear.block.salvager;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
-import net.silentchaos512.gear.init.ModRecipes;
-import net.silentchaos512.gear.init.ModTileEntities;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.ModBlockEntities;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.TimeUtils;
@@ -43,7 +45,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
-public class SalvagerTileEntity extends LockableSidedInventoryTileEntity implements TickableBlockEntity {
+public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
     static final int BASE_WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
     private static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
@@ -70,8 +72,8 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         }
     };
 
-    public SalvagerTileEntity() {
-        super(ModTileEntities.SALVAGER.get(), INVENTORY_SIZE);
+    public SalvagerTileEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.SALVAGER.get(), INVENTORY_SIZE, pos, state);
     }
 
     @Nullable
@@ -85,35 +87,32 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity impleme
         return INVENTORY_SIZE;
     }
 
-    @Override
-    public void tick() {
-        if (level == null || level.isClientSide) return;
-
-        ItemStack input = getItem(0);
-        SalvagingRecipe recipe = getRecipe();
+    public static void tick(Level level, BlockPos pos, BlockState state, SalvagerTileEntity blockEntity) {
+        ItemStack input = blockEntity.getItem(0);
+        SalvagingRecipe recipe = blockEntity.getRecipe();
         if (recipe != null) {
-            if (progress < BASE_WORK_TIME) {
-                ++progress;
+            if (blockEntity.progress < BASE_WORK_TIME) {
+                ++blockEntity.progress;
             }
 
-            if (progress >= BASE_WORK_TIME && areAllOutputSlotsFree()) {
-                for (ItemStack stack : getSalvagedPartsWithChance(recipe, input)) {
-                    int slot = getFreeOutputSlot();
+            if (blockEntity.progress >= BASE_WORK_TIME && blockEntity.areAllOutputSlotsFree()) {
+                for (ItemStack stack : blockEntity.getSalvagedPartsWithChance(recipe, input)) {
+                    int slot = blockEntity.getFreeOutputSlot();
                     if (slot > 0) {
-                        setItem(slot, stack);
+                        blockEntity.setItem(slot, stack);
                     } else {
                         SilentGear.LOGGER.warn("Item lost in salvager: {}", stack);
                     }
                 }
 
-                progress = 0;
+                blockEntity.progress = 0;
                 input.shrink(1);
                 if (input.isEmpty()) {
-                    setItem(0, ItemStack.EMPTY);
+                    blockEntity.setItem(0, ItemStack.EMPTY);
                 }
             }
         } else {
-            progress = 0;
+            blockEntity.progress = 0;
         }
     }
 

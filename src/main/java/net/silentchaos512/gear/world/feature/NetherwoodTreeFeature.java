@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.world.feature;
 
 import com.google.common.collect.Lists;
@@ -81,9 +82,11 @@ public class NetherwoodTreeFeature extends Feature<TreeConfiguration> {
         return isAirOrLeavesAt(p_236404_0_, p_236404_1_) || isTallPlantAt(p_236404_0_, p_236404_1_) || isWaterAt(p_236404_0_, p_236404_1_);
     }
 
-    /**
+    */
+/**
      * Called when placing the tree feature.
-     */
+     *//*
+
     private boolean place(LevelSimulatedRW generationReader, Random rand, BlockPos positionIn, Set<BlockPos> p_225557_4_, Set<BlockPos> p_225557_5_, BoundingBox boundingBoxIn, TreeConfiguration configIn) {
         int i = configIn.trunkPlacer.getTreeHeight(rand);
         int j = configIn.foliagePlacer.foliageHeight(rand, i, configIn);
@@ -250,3 +253,4 @@ public class NetherwoodTreeFeature extends Feature<TreeConfiguration> {
         return voxelshapepart;
     }
 }
+*/

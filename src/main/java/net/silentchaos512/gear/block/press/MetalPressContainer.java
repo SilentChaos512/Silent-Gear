@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.press;
 
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
@@ -18,7 +19,7 @@ public class MetalPressContainer extends AbstractContainerMenu {
     private final ContainerData fields;
 
     public MetalPressContainer(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, new MetalPressTileEntity(), new SimpleContainerData(buffer.readByte()));
+        this(id, playerInventory, new SimpleContainer(2), new SimpleContainerData(buffer.readByte()));
     }
 
     public MetalPressContainer(int id, Inventory playerInventory, Container inventory, ContainerData fields) {

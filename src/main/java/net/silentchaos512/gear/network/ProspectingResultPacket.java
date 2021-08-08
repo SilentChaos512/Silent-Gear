@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.NameUtils;

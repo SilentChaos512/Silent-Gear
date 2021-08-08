@@ -67,7 +67,7 @@ public class GraderContainer extends AbstractContainerMenu {
     @Override
     public void addSlotListener(ContainerListener listener) {
         super.addSlotListener(listener);
-        listener.refreshContainer(this, getItems());
+//        listener.refreshContainer(this, getItems()); // FIXME?
     }
 
     @Override

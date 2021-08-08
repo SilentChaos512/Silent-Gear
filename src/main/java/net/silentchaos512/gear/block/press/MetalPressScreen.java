@@ -26,8 +26,8 @@ public class MetalPressScreen extends AbstractContainerScreen<MetalPressContaine
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
-        RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.clearColor(1, 1, 1, 1);
+        minecraft.getTextureManager().getTexture(TEXTURE);
 
         int posX = (this.width - this.imageWidth) / 2;
         int posY = (this.height - this.imageHeight) / 2;

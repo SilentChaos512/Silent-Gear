@@ -35,7 +35,7 @@ public class CancelEffectsTrait extends SimpleTrait {
     private static void deserialize(CancelEffectsTrait trait, JsonObject json) {
         JsonArray array = json.getAsJsonArray("effects");
         for (JsonElement element : array) {
-            MobEffect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(element.getAsString()));
+            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(element.getAsString()));
             if (effect != null) {
                 trait.effects.add(effect);
             }
@@ -45,7 +45,7 @@ public class CancelEffectsTrait extends SimpleTrait {
     private static void decode(CancelEffectsTrait trait, FriendlyByteBuf buffer) {
         int count = buffer.readByte();
         for (int i = 0; i < count; ++i) {
-            MobEffect effect = ForgeRegistries.POTIONS.getValue(buffer.readResourceLocation());
+            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(buffer.readResourceLocation());
             if (effect != null) {
                 trait.effects.add(effect);
             }

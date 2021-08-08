@@ -20,7 +20,7 @@ public final class ModelPropertiesHelper {
     public static float getValue(ItemStack stack, ResourceLocation id, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
         ItemPropertyFunction prop = get(stack, id);
         if (prop != null) {
-            return prop.call(stack, world, entity);
+            return prop.call(stack, world, entity, 0);
         }
         return 0;
     }

@@ -1,18 +1,19 @@
 package net.silentchaos512.gear.block.press;
 
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
-import net.minecraft.core.Direction;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
 import net.silentchaos512.gear.init.ModRecipes;
-import net.silentchaos512.gear.init.ModTileEntities;
+import net.silentchaos512.gear.init.ModBlockEntities;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -21,7 +22,7 @@ import net.silentchaos512.lib.util.TimeUtils;
 
 import javax.annotation.Nullable;
 
-public class MetalPressTileEntity extends LockableSidedInventoryTileEntity implements TickableBlockEntity {
+public class MetalPressTileEntity extends LockableSidedInventoryTileEntity {
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
     @SyncVariable(name = "Progress")
@@ -53,8 +54,8 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
         }
     };
 
-    public MetalPressTileEntity() {
-        super(ModTileEntities.METAL_PRESS.get(), 2);
+    public MetalPressTileEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.METAL_PRESS.get(), 2, pos, state);
     }
 
     @Nullable
@@ -72,17 +73,12 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity imple
         return ItemStack.EMPTY;
     }
 
-    @Override
-    public void tick() {
-        if (level == null || level.isClientSide) {
-            return;
-        }
-
-        PressingRecipe recipe = getRecipe();
+    public static void tick(Level level, BlockPos pos, BlockState state, MetalPressTileEntity blockEntity) {
+        PressingRecipe recipe = blockEntity.getRecipe();
         if (recipe != null) {
-            doWork(recipe);
+            blockEntity.doWork(recipe);
         } else {
-            stopWork();
+            blockEntity.stopWork();
         }
     }
 

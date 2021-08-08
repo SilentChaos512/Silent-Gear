@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import net.silentchaos512.gear.block.compounder.CompounderContainer;
 
 import javax.annotation.Nullable;

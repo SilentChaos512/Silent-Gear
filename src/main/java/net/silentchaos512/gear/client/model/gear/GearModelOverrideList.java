@@ -2,15 +2,18 @@ package net.silentchaos512.gear.client.model.gear;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableList;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -39,13 +42,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-
-import net.minecraft.client.renderer.block.model.ItemOverride;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelState;
 
 public class GearModelOverrideList extends ItemOverrides {
     private final Cache<CacheKey, BakedModel> bakedModelCache = CacheBuilder.newBuilder()
@@ -81,7 +77,7 @@ public class GearModelOverrideList extends ItemOverrides {
 
     @Nullable
     @Override
-    public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn) {
+    public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn, int p_173469_) {
         int animationFrame = getAnimationFrame(stack, worldIn, entityIn);
         CacheKey key = getKey(model, stack, worldIn, entityIn, animationFrame);
         try {
@@ -196,8 +192,8 @@ public class GearModelOverrideList extends ItemOverrides {
         ItemPropertyFunction fireworkProperty = ItemProperties.getProperty(stack.getItem(), new ResourceLocation("firework"));
 
         if (chargedProperty != null && fireworkProperty != null) {
-            boolean charged = chargedProperty.call(stack, world, entity) > 0;
-            boolean firework = fireworkProperty.call(stack, world, entity) > 0;
+            boolean charged = chargedProperty.call(stack, world, entity, 0) > 0;
+            boolean firework = fireworkProperty.call(stack, world, entity, 0) > 0;
             if (charged) {
                 if (firework) {
                     return Optional.of(new MaterialLayer(PartTextures.CHARGED_FIREWORK, Color.VALUE_WHITE));
@@ -215,11 +211,6 @@ public class GearModelOverrideList extends ItemOverrides {
                 .map(l -> ";" + l.getTextureId().getPath())
                 .orElse("");
         return new CacheKey(model, GearData.getModelKey(stack, animationFrame) + brokenSuffix + chargeSuffix);
-    }
-
-    @Override
-    public ImmutableList<ItemOverride> getOverrides() {
-        return super.getOverrides();
     }
 
     public void clearCache() {

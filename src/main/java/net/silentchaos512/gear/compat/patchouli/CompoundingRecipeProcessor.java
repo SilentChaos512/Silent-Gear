@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.patchouli;
 
 import net.minecraft.client.Minecraft;
@@ -41,3 +42,4 @@ public class CompoundingRecipeProcessor implements IComponentProcessor {
         return null;
     }
 }
+*/

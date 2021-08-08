@@ -1,12 +1,14 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.block.*;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.item.*;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
@@ -23,37 +25,18 @@ import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.registry.BlockRegistryObject;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.StandingAndWallBlockItem;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.FenceBlock;
-import net.minecraft.world.level.block.FenceGateBlock;
-import net.minecraft.world.level.block.FlowerPotBlock;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.OreBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.TorchBlock;
-import net.minecraft.world.level.block.TrapDoorBlock;
-import net.minecraft.world.level.block.WallTorchBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModBlocks {
@@ -102,24 +85,24 @@ public final class ModBlocks {
                     .strength(5, 30)));
 
     public static final BlockRegistryObject<StarlightChargerBlock> STARLIGHT_CHARGER = register("starlight_charger", () ->
-            new StarlightChargerBlock((state, world) -> ChargerTileEntity.createStarlightCharger(),
+            new StarlightChargerBlock(ChargerTileEntity::createStarlightCharger,
                     BlockBehaviour.Properties.of(Material.METAL)
                             .strength(5, 30)));
 
-    public static final BlockRegistryObject<CompounderBlock> METAL_ALLOYER = register("metal_alloyer", () ->
-            new CompounderBlock(Const.METAL_COMPOUNDER_INFO,
+    public static final BlockRegistryObject<CompounderBlock<MetalCompoundingRecipe>> METAL_ALLOYER = register("metal_alloyer", () ->
+            new CompounderBlock<>(Const.METAL_COMPOUNDER_INFO,
                     BlockBehaviour.Properties.of(Material.METAL)
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
-    public static final BlockRegistryObject<CompounderBlock> RECRYSTALLIZER = register("recrystallizer", () ->
-            new CompounderBlock(Const.GEM_COMPOUNDER_INFO,
+    public static final BlockRegistryObject<CompounderBlock<GemCompoundingRecipe>> RECRYSTALLIZER = register("recrystallizer", () ->
+            new CompounderBlock<>(Const.GEM_COMPOUNDER_INFO,
                     BlockBehaviour.Properties.of(Material.METAL)
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
-    public static final BlockRegistryObject<CompounderBlock> REFABRICATOR = register("refabricator", () ->
-            new CompounderBlock(Const.FABRIC_COMPOUNDER_INFO,
+    public static final BlockRegistryObject<CompounderBlock<FabricCompoundingRecipe>> REFABRICATOR = register("refabricator", () ->
+            new CompounderBlock<>(Const.FABRIC_COMPOUNDER_INFO,
                     BlockBehaviour.Properties.of(Material.METAL)
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
@@ -130,7 +113,7 @@ public final class ModBlocks {
                     .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<ModCropBlock> FLAX_PLANT = registerNoItem("flax_plant", () ->
-            new ModCropBlock(() -> ModItems.FLAX_SEEDS.get(), BlockBehaviour.Properties.of(Material.PLANT)
+            new ModCropBlock(ModItems.FLAX_SEEDS::get, BlockBehaviour.Properties.of(Material.PLANT)
                     .strength(0)
                     .noCollission()
                     .randomTicks()
@@ -141,7 +124,7 @@ public final class ModBlocks {
                     .noCollission()
                     .sound(SoundType.CROP)));
     public static final BlockRegistryObject<ModCropBlock> FLUFFY_PLANT = registerNoItem("fluffy_plant", () ->
-            new ModCropBlock(() -> ModItems.FLUFFY_SEEDS.get(), BlockBehaviour.Properties.of(Material.PLANT)
+            new ModCropBlock(ModItems.FLUFFY_SEEDS::get, BlockBehaviour.Properties.of(Material.PLANT)
                     .strength(0)
                     .noCollission()
                     .randomTicks()
@@ -192,7 +175,7 @@ public final class ModBlocks {
                     .strength(5, 6)),
             bro -> () -> new BlockItem(bro.get(), new Item.Properties().tab(SilentGear.ITEM_GROUP)) {
                 @Override
-                public int getBurnTime(ItemStack itemStack) {
+                public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
                     return 10 * Config.Common.netherwoodCharcoalBurnTime.get();
                 }
             });

@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -161,3 +162,4 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
         matrixStack.popPose();
     }
 }
+*/

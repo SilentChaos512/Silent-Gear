@@ -1,22 +1,20 @@
 package net.silentchaos512.gear.data.loot;
 
 import net.minecraft.data.loot.EntityLoot;
-import net.minecraft.loot.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.silentchaos512.gear.init.GearVillages;
 import net.silentchaos512.gear.init.LootInjector;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
 
 import java.util.function.BiConsumer;
-
-import net.minecraft.world.level.storage.loot.ConstantIntValue;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
 
 public class ModEntityLootTables extends EntityLoot {
     @Override
@@ -41,7 +39,7 @@ public class ModEntityLootTables extends EntityLoot {
     private static LootTable.Builder addFineSilk(float baseChance, float lootingBonus) {
         return LootTable.lootTable()
                 .withPool(LootPool.lootPool()
-                        .setRolls(ConstantIntValue.exactly(1))
+                        .setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(CraftingItems.FINE_SILK)
                                 .when(LootItemKilledByPlayerCondition.killedByPlayer())
                                 .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(baseChance, lootingBonus))
@@ -51,7 +49,7 @@ public class ModEntityLootTables extends EntityLoot {
 
     private static void heroOfTheVillage(BiConsumer<ResourceLocation, LootTable.Builder> consumer, ResourceLocation tableName, ItemLike... items) {
         LootPool.Builder pool = LootPool.lootPool()
-                .setRolls(ConstantIntValue.exactly(1));
+                .setRolls(ConstantValue.exactly(1));
         for (ItemLike item : items) {
             pool.add(LootItem.lootTableItem(item));
         }

@@ -20,32 +20,27 @@ package net.silentchaos512.gear.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.RenderType;
+import com.mojang.math.Matrix4f;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import com.mojang.math.Matrix4f;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.GearApi;
@@ -70,7 +65,7 @@ public interface IAoeTool {
     }
 
     /**
-     * Call {@link net.minecraft.item.Item}'s {@code rayTrace} method inside this.
+     * Call {@link net.minecraft.world.item.Item}'s {@code rayTrace} method inside this.
      *
      * @param world  The world
      * @param player The player
@@ -140,7 +135,7 @@ public interface IAoeTool {
 
     /**
      * Handles actual AOE block breaking. Call {@link #onBlockStartBreak(ItemStack, BlockPos,
-     * PlayerEntity)} inside the {@code onBlockStartBreak} method of the tool's item.
+     * Player)} inside the {@code onBlockStartBreak} method of the tool's item.
      */
     final class BreakHandler {
         private BreakHandler() {}
@@ -164,7 +159,7 @@ public interface IAoeTool {
                     if (!world.hasChunkAt(pos2) || !player.mayUseItemAt(pos2, side, tool) || !(state.canHarvestBlock(world, pos2, player)))
                         continue;
 
-                    if (player.abilities.instabuild) {
+                    if (player.getAbilities().instabuild) {
                         if (state.removedByPlayer(world, pos2, player, true, state.getFluidState()))
                             state.getBlock().destroy(world, pos2, state);
                     } else {
@@ -228,7 +223,7 @@ public interface IAoeTool {
     final class HighlightHandler {
         private HighlightHandler() {}
 
-        @SubscribeEvent
+        /*@SubscribeEvent
         public static void onDrawBlockHighlight(DrawHighlightEvent event) {
             Camera info = event.getInfo();
             Entity entity = info.getEntity();
@@ -253,7 +248,7 @@ public interface IAoeTool {
                     }
                 }
             }
-        }
+        }*/
 
         // Copied from WorldRenderer
         @SuppressWarnings("MethodWithTooManyParameters")

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
@@ -14,7 +15,7 @@ import java.util.function.Supplier;
 
 public class CompounderInfo<R extends CompoundingRecipe> {
     private final Supplier<CompounderBlock> block;
-    private final Supplier<BlockEntityType<? extends CompounderTileEntity>> tileEntityType;
+    private final Supplier<BlockEntityType<CompounderTileEntity<R>>> blockEntityType;
     private final Supplier<MenuType<? extends CompounderContainer>> containerType;
     private final Supplier<RecipeType<R>> recipeType;
     private final Supplier<CompoundMaterialItem> outputItem;
@@ -27,13 +28,14 @@ public class CompounderInfo<R extends CompoundingRecipe> {
     public CompounderInfo(Collection<IMaterialCategory> categories,
                           int inputSlotCount,
                           Supplier<CompoundMaterialItem> outputItem,
-                          Supplier<CompounderBlock> block, Supplier<BlockEntityType<? extends CompounderTileEntity>> tileEntityType,
+                          Supplier<CompounderBlock> block,
+                          Supplier<BlockEntityType<CompounderTileEntity<R>>> blockEntityType,
                           Supplier<MenuType<? extends CompounderContainer>> containerType,
                           Supplier<RecipeSerializer<?>> recipeSerializer,
                           Supplier<RecipeType<R>> recipeType,
                           Class<R> recipeClass) {
         this.block = block;
-        this.tileEntityType = tileEntityType;
+        this.blockEntityType = blockEntityType;
         this.containerType = containerType;
         this.recipeType = recipeType;
         this.outputItem = outputItem;
@@ -47,8 +49,12 @@ public class CompounderInfo<R extends CompoundingRecipe> {
         return block.get();
     }
 
-    public BlockEntityType<? extends CompounderTileEntity> getTileEntityType() {
-        return tileEntityType.get();
+    public BlockEntityType<CompounderTileEntity<R>> getBlockEntityType() {
+        return blockEntityType.get();
+    }
+
+    public BlockEntityTicker<? super CompounderTileEntity<R>> getServerBlockEntityTicker() {
+        return CompounderTileEntity::tick;
     }
 
     public MenuType<? extends CompounderContainer> getContainerType() {

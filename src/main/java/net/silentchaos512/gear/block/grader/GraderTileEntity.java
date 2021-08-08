@@ -1,24 +1,25 @@
 package net.silentchaos512.gear.block.grader;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.init.ModTags;
-import net.silentchaos512.gear.init.ModTileEntities;
+import net.silentchaos512.gear.init.ModBlockEntities;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.InventoryUtils;
@@ -28,7 +29,7 @@ import net.silentchaos512.utils.EnumUtils;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class GraderTileEntity extends LockableSidedInventoryTileEntity implements TickableBlockEntity {
+public class GraderTileEntity extends LockableSidedInventoryTileEntity {
     static final int BASE_ANALYZE_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 1 : 5);
 
     static final int INPUT_SLOT = 0;
@@ -74,38 +75,35 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
         }
     };
 
-    public GraderTileEntity() {
-        super(ModTileEntities.MATERIAL_GRADER.get(), INVENTORY_SIZE);
+    public GraderTileEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.MATERIAL_GRADER.get(), INVENTORY_SIZE, pos, state);
     }
 
-    @Override
-    public void tick() {
-        if (level == null) return;
-
+    public static void tick(Level level, BlockPos pos, BlockState state, GraderTileEntity blockEntity) {
         // Don't waste time if there is no input or no free output slots
-        ItemStack input = getInputStack();
+        ItemStack input = blockEntity.getInputStack();
         if (input.isEmpty()) return;
 
-        int outputSlot = getFreeOutputSlot();
+        int outputSlot = blockEntity.getFreeOutputSlot();
         if (outputSlot < 0) return;
 
-        ItemStack catalyst = getCatalystStack();
+        ItemStack catalyst = blockEntity.getCatalystStack();
         int catalystTier = getCatalystTier(catalyst);
         if (catalystTier < 1) return;
 
         MaterialInstance material = MaterialInstance.from(input);
         if (material != null && material.getGrade() != MaterialGrade.getMax()) {
-            if (progress < BASE_ANALYZE_TIME) {
-                ++progress;
+            if (blockEntity.progress < BASE_ANALYZE_TIME) {
+                ++blockEntity.progress;
             }
 
-            if (progress >= BASE_ANALYZE_TIME && !level.isClientSide) {
-                progress = 0;
+            if (blockEntity.progress >= BASE_ANALYZE_TIME && !level.isClientSide) {
+                blockEntity.progress = 0;
                 catalyst.shrink(1);
-                tryGradeItem(input, catalystTier, material);
+                blockEntity.tryGradeItem(input, catalystTier, material);
             }
         } else {
-            progress = 0;
+            blockEntity.progress = 0;
         }
 
 //        if (requireClientSync) {
@@ -165,7 +163,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     public static int getCatalystTier(ItemStack stack) {
         if (!stack.isEmpty()) {
             for (int i = ModTags.Items.GRADER_CATALYSTS_TIERS.size() - 1; i >= 0; --i) {
-                if (stack.getItem().is(ModTags.Items.GRADER_CATALYSTS_TIERS.get(i))) {
+                if (stack.is(ModTags.Items.GRADER_CATALYSTS_TIERS.get(i))) {
                     return i + 1;
                 }
             }
@@ -174,8 +172,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity implement
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tags) {
-        super.load(state, tags);
+    public void load(CompoundTag tags) {
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 
