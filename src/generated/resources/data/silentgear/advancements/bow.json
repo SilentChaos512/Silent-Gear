@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "silentgear:bow",
-      "nbt": "{SGear_Data:{Properties:{}},Damage:0}"
+      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
     },
     "title": {
       "translate": "advancements.silentgear.bow.title"
@@ -22,7 +22,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:bow"
+            "items": [
+              "silentgear:bow"
+            ]
           }
         ]
       }

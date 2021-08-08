@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:leather_scrap"
+            "items": [
+              "silentgear:leather_scrap"
+            ]
           }
         ]
       }

@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "silentgear:boots",
-      "nbt": "{SGear_Data:{Construction:{Parts:[{Item:{id:\"silentgear:boot_plates\",Count:1b,tag:{Materials:[{ID:\"silentgear:azure_silver\"}]}},ID:\"silentgear:armor_body\"}]},Properties:{}},Damage:0}"
+      "nbt": "{Damage:0,SGear_Data:{Construction:{Parts:[{ID:\"silentgear:armor_body\",Item:{Count:1b,id:\"silentgear:boot_plates\",tag:{Materials:[{ID:\"silentgear:azure_silver\"}]}}}]},Properties:{}}}"
     },
     "title": {
       "translate": "advancements.silentgear.moonwalker.title"

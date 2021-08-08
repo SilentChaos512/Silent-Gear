@@ -10,7 +10,7 @@
   "target": {
     "block": "minecraft:grass_block"
   },
-  "fill_block": "minecraft:grass_path",
+  "fill_block": "minecraft:dirt_path",
   "replace_tile_entities": false,
   "fill_spread_x": 1,
   "fill_spread_y": 0,

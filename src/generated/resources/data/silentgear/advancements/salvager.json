@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:salvager"
+            "items": [
+              "silentgear:salvager"
+            ]
           }
         ]
       }

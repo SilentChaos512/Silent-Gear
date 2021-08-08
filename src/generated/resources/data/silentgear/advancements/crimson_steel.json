@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:crimson_steel_ingot"
+            "items": [
+              "silentgear:crimson_steel_ingot"
+            ]
           }
         ]
       }

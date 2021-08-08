@@ -22,7 +22,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:tip"
+            "items": [
+              "silentgear:tip"
+            ]
           }
         ]
       }

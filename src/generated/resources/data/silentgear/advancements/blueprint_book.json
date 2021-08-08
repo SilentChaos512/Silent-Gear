@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:blueprint_book"
+            "items": [
+              "silentgear:blueprint_book"
+            ]
           }
         ]
       }

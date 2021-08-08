@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:template_board"
+            "items": [
+              "silentgear:template_board"
+            ]
           }
         ]
       }

@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "silentgear:sickle",
-      "nbt": "{SGear_Data:{Properties:{}},Damage:0}"
+      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
     },
     "title": {
       "translate": "advancements.silentgear.sickle.title"
@@ -22,7 +22,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:sickle"
+            "items": [
+              "silentgear:sickle"
+            ]
           }
         ]
       }

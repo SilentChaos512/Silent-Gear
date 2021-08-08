@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:flax_seeds"
+            "items": [
+              "silentgear:flax_seeds"
+            ]
           }
         ]
       }
@@ -31,7 +33,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:flax_fiber"
+            "items": [
+              "silentgear:flax_fiber"
+            ]
           }
         ]
       }
@@ -41,7 +45,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:fluffy_seeds"
+            "items": [
+              "silentgear:fluffy_seeds"
+            ]
           }
         ]
       }
@@ -51,7 +57,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:fluffy_puff"
+            "items": [
+              "silentgear:fluffy_puff"
+            ]
           }
         ]
       }

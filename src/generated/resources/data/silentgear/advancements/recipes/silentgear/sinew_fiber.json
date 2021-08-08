@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:sinew"
+            "items": [
+              "silentgear:sinew"
+            ]
           }
         ]
       }

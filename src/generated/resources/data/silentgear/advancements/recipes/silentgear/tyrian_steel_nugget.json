@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:tyrian_steel_ingot"
+            "items": [
+              "silentgear:tyrian_steel_ingot"
+            ]
           }
         ]
       }

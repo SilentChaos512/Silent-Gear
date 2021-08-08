@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "silentgear:knife",
-      "nbt": "{SGear_Data:{Properties:{}},Damage:0}"
+      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
     },
     "title": {
       "translate": "advancements.silentgear.survival_tool.title"
@@ -22,7 +22,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:knife"
+            "items": [
+              "silentgear:knife"
+            ]
           }
         ]
       }
@@ -32,7 +34,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:dagger"
+            "items": [
+              "silentgear:dagger"
+            ]
           }
         ]
       }

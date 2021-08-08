@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:nether_banana"
+            "items": [
+              "silentgear:nether_banana"
+            ]
           }
         ]
       }
@@ -31,7 +33,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:netherwood_sapling"
+            "items": [
+              "silentgear:netherwood_sapling"
+            ]
           }
         ]
       }

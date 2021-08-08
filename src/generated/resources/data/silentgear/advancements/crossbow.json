@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "silentgear:crossbow",
-      "nbt": "{SGear_Data:{Properties:{}},Damage:0}"
+      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
     },
     "title": {
       "translate": "advancements.silentgear.crossbow.title"
@@ -22,7 +22,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:crossbow"
+            "items": [
+              "silentgear:crossbow"
+            ]
           }
         ]
       }

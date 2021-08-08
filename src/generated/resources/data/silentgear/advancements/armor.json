@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "silentgear:helmet",
-      "nbt": "{SGear_Data:{Properties:{}},Damage:0}"
+      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
     },
     "title": {
       "translate": "advancements.silentgear.armor.title"
@@ -22,7 +22,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:helmet"
+            "items": [
+              "silentgear:helmet"
+            ]
           }
         ]
       }
@@ -32,7 +34,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:chestplate"
+            "items": [
+              "silentgear:chestplate"
+            ]
           }
         ]
       }
@@ -42,7 +46,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:leggings"
+            "items": [
+              "silentgear:leggings"
+            ]
           }
         ]
       }
@@ -52,7 +58,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:boots"
+            "items": [
+              "silentgear:boots"
+            ]
           }
         ]
       }

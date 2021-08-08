@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:netherwood_charcoal"
+            "items": [
+              "silentgear:netherwood_charcoal"
+            ]
           }
         ]
       }

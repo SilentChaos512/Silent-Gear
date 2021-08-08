@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:flax_fiber"
+            "items": [
+              "silentgear:flax_fiber"
+            ]
           }
         ]
       }

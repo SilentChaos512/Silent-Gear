@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "silentgear:hammer",
-      "nbt": "{SGear_Data:{Properties:{}},Damage:0}"
+      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
     },
     "title": {
       "translate": "advancements.silentgear.big_job_tools.title"
@@ -22,7 +22,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:hammer"
+            "items": [
+              "silentgear:hammer"
+            ]
           }
         ]
       }
@@ -32,7 +34,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:excavator"
+            "items": [
+              "silentgear:excavator"
+            ]
           }
         ]
       }
@@ -42,7 +46,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:saw"
+            "items": [
+              "silentgear:saw"
+            ]
           }
         ]
       }

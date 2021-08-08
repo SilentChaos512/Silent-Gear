@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "silentgear:sword",
-      "nbt": "{SGear_Data:{Properties:{}},Damage:0}"
+      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
     },
     "title": {
       "translate": "advancements.silentgear.swords.title"
@@ -22,7 +22,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:sword"
+            "items": [
+              "silentgear:sword"
+            ]
           }
         ]
       }
@@ -32,7 +34,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:katana"
+            "items": [
+              "silentgear:katana"
+            ]
           }
         ]
       }
@@ -42,7 +46,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:machete"
+            "items": [
+              "silentgear:machete"
+            ]
           }
         ]
       }

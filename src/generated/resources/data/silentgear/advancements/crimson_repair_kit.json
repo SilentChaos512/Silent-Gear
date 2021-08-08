@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:crimson_repair_kit"
+            "items": [
+              "silentgear:crimson_repair_kit"
+            ]
           }
         ]
       }

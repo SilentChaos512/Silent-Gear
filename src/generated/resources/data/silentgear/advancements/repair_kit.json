@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:very_crude_repair_kit"
+            "items": [
+              "silentgear:very_crude_repair_kit"
+            ]
           }
         ]
       }
@@ -31,7 +33,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:crude_repair_kit"
+            "items": [
+              "silentgear:crude_repair_kit"
+            ]
           }
         ]
       }
@@ -41,7 +45,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:sturdy_repair_kit"
+            "items": [
+              "silentgear:sturdy_repair_kit"
+            ]
           }
         ]
       }
@@ -51,7 +57,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:crimson_repair_kit"
+            "items": [
+              "silentgear:crimson_repair_kit"
+            ]
           }
         ]
       }
@@ -61,7 +69,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:azure_repair_kit"
+            "items": [
+              "silentgear:azure_repair_kit"
+            ]
           }
         ]
       }

@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:upgrade_base"
+            "items": [
+              "silentgear:upgrade_base"
+            ]
           }
         ]
       }

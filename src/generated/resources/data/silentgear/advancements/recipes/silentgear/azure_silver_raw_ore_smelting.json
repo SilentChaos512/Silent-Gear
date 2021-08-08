@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:raw_azure_silver"
+            "items": [
+              "silentgear:raw_azure_silver"
+            ]
           }
         ]
       }

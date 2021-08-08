@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "silentgear:raw_crimson_iron"
+            "items": [
+              "silentgear:raw_crimson_iron"
+            ]
           }
         ]
       }
