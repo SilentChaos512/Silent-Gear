@@ -188,9 +188,9 @@ public final class Config {
                 builder.push("gear");
 
                 allowClassicMaterialMixing = builder
-                        .comment("Allow parts to be crafted with mixed materials in a crafting grid, just like all recent versions.",
-                                "In 1.17, mixing will only be allowed in compound-crafting blocks.")
-                        .define("allowClassicMaterialMixing", true);
+                        .comment("Allow parts to be crafted with mixed materials in a crafting grid, like earlier versions.",
+                                "In 1.17, mixing is normally only allowed in compound-crafting blocks.")
+                        .define("allowClassicMaterialMixing", false);
 
                 allowConversionRecipes = builder
                         .comment("If set to false all conversion recipes (type 'silentgear:conversion') will be disabled",

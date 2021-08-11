@@ -1,13 +1,4 @@
 {
-  "conditions": [
-    {
-      "value": {
-        "tag": "forge:ingots/copper",
-        "type": "forge:tag_empty"
-      },
-      "type": "forge:not"
-    }
-  ],
   "availability": {
     "tier": 2,
     "categories": [
@@ -19,7 +10,7 @@
   },
   "crafting_items": {
     "main": {
-      "tag": "forge:ingots/copper"
+      "item": "minecraft:copper_ingot"
     }
   },
   "name": {

@@ -10,17 +10,11 @@
   },
   "stats": {
     "melee_damage": {
-      "add": 4.0
+      "add": 2.0
     },
     "attack_speed": {
-      "add": -2.6
+      "add": -2.2
     },
-    "repair_efficiency": 1.0,
-    "durability": {
-      "mul1": 0.2
-    },
-    "enchantability": {
-      "mul1": -0.1
-    }
+    "repair_efficiency": 1.0
   }
 }

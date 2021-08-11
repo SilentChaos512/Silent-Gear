@@ -405,7 +405,7 @@ public class MaterialsProvider implements DataProvider {
 
     private void addVanillaMetals(Collection<MaterialBuilder> ret) {
         // Copper
-        ret.add(extraMetal("copper", 2, forgeId("ingots/copper"))
+        ret.add(new MaterialBuilder(modId("copper"), 2, Items.COPPER_INGOT)
                 .categories(MaterialCategories.METAL)
                 .mainStatsCommon(151, 12, 15, 12)
                 .mainStatsHarvest(1, 5)
@@ -701,6 +701,18 @@ public class MaterialsProvider implements DataProvider {
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD4CABA)
                 .displayTip(PartTextures.TIP_SHARP, 0xD4CABA)
                 .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
+        );
+        // Amethyst
+        ret.add(new MaterialBuilder(modId("amethyst"), 2, Items.AMETHYST_SHARD)
+                .categories(MaterialCategories.GEM)
+                .mainStatsCommon(210, 10, 16, 35, 1.3f)
+                .mainStatsHarvest(2, 6)
+                .mainStatsMelee(1, 3, 0)
+                .mainStatsArmor(3, 5, 4, 3, 0, 10) //15
+                .mainStatsRanged(1, 0)
+                .mainStatsProjectile(1, 1)
+                .noStats(PartType.ADORNMENT)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xA31DE6)
         );
     }
 

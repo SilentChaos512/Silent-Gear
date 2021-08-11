@@ -1,0 +1,44 @@
+{
+  "availability": {
+    "tier": 2,
+    "categories": [
+      "gem"
+    ],
+    "visible": true,
+    "gear_blacklist": [],
+    "can_salvage": true
+  },
+  "crafting_items": {
+    "main": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "name": {
+    "translate": "material.silentgear.amethyst"
+  },
+  "stats": {
+    "main": {
+      "durability": 210.0,
+      "armor_durability": 10.0,
+      "enchantability": 16.0,
+      "rarity": 35.0,
+      "chargeability": 1.3,
+      "harvest_level": 2.0,
+      "harvest_speed": 6.0,
+      "melee_damage": 1.0,
+      "magic_damage": 3.0,
+      "attack_speed": 0.0,
+      "armor": 15.0,
+      "armor/helmet": 3.0,
+      "armor/chestplate": 5.0,
+      "armor/leggings": 4.0,
+      "armor/boots": 3.0,
+      "magic_armor": 10.0,
+      "ranged_damage": 1.0,
+      "ranged_speed": 0.0,
+      "projectile_speed": 1.0,
+      "projectile_accuracy": 1.0
+    },
+    "adornment": {}
+  }
+}
