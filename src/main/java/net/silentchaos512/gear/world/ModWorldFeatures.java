@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.world;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.Features;
@@ -60,11 +61,16 @@ public final class ModWorldFeatures {
     public static final class Configured {
         static final Map<String, Lazy<ConfiguredFeature<?, ?>>> TO_REGISTER = new LinkedHashMap<>();
 
-        public static final Lazy<ConfiguredFeature<?, ?>> BORT_ORE_VEINS = createLazy("bort_ore_veins", () -> Feature.REPLACE_SINGLE_BLOCK
-                .configured(new ReplaceBlockConfiguration(Blocks.STONE.defaultBlockState(), ModBlocks.BORT_ORE.asBlockState()))
-                .rangeUniform(VerticalAnchor.aboveBottom(4), VerticalAnchor.absolute(20))
-                .squared()
-                .count(Config.Common.bortCount.get()));
+        public static final Lazy<ConfiguredFeature<?, ?>> BORT_ORE_VEINS = createLazy("bort_ore_veins", () -> {
+            ImmutableList<OreConfiguration.TargetBlockState> targetList = ImmutableList.of(
+                    OreConfiguration.target(OreConfiguration.Predicates.STONE_ORE_REPLACEABLES, ModBlocks.BORT_ORE.get().defaultBlockState()),
+                    OreConfiguration.target(OreConfiguration.Predicates.DEEPSLATE_ORE_REPLACEABLES, ModBlocks.DEEPSLATE_BORT_ORE.get().defaultBlockState()));
+            return Feature.REPLACE_SINGLE_BLOCK
+                    .configured(new ReplaceBlockConfiguration(targetList))
+                    .rangeUniform(VerticalAnchor.aboveBottom(4), VerticalAnchor.absolute(20))
+                    .squared()
+                    .count(Config.Common.bortCount.get());
+        });
 
         public static final Lazy<ConfiguredFeature<?, ?>> CRIMSON_IRON_ORE_VEINS = createLazy("crimson_iron_ore_veins", () -> Feature.ORE
                 .configured(new OreConfiguration(OreConfiguration.Predicates.NETHER_ORE_REPLACEABLES, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8))

@@ -383,11 +383,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addIngredient(PartMaterialIngredient.of(PartType.ADORNMENT))
                 .build(consumer, SilentGear.getId("part/adornment"));
 
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.ADORNMENT)
-                .addIngredient(BlueprintIngredient.of(ModItems.JEWELER_TOOLS.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.ADORNMENT))
-                .build(consumer, SilentGear.getId("part/adornment_old"));
-
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.ROD, 4)
                 .addIngredient(BlueprintIngredient.of(ModItems.ROD_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.ROD), 2)
