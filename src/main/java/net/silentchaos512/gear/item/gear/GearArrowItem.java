@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class CoreArrow extends ArrowItem implements ICoreItem {
+public class GearArrowItem extends ArrowItem implements ICoreItem {
     private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.REPAIR_EFFICIENCY,
@@ -67,7 +67,7 @@ public class CoreArrow extends ArrowItem implements ICoreItem {
             PartType.FLETCHING
     );
 
-    public CoreArrow(Properties builder) {
+    public GearArrowItem(Properties builder) {
         super(builder);
     }
 

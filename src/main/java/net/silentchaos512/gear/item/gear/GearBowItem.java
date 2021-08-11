@@ -34,13 +34,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class CoreBow extends BowItem implements ICoreRangedWeapon {
+public class GearBowItem extends BowItem implements ICoreRangedWeapon {
     private static final int MIN_DRAW_DELAY = 10;
     private static final int MAX_DRAW_DELAY = 100;
 
-    public CoreBow() {
+    public GearBowItem() {
         // Max damage doesn't matter, just needs to be greater than zero
-        super(GearHelper.getBuilder(null).defaultDurability(100));
+        super(GearHelper.getBaseItemProperties().defaultDurability(100));
 /*        this.addPropertyOverride(new ResourceLocation("pull"), (stack, world, entity) -> {
             if (entity == null) {
                 return 0.0F;

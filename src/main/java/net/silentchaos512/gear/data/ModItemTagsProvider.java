@@ -23,7 +23,7 @@ import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
-import net.silentchaos512.gear.item.gear.CoreCurio;
+import net.silentchaos512.gear.item.gear.GearCurioItem;
 import net.silentchaos512.gear.util.Const;
 
 import java.util.Arrays;
@@ -214,7 +214,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         });
 
         // Curios
-        Registration.getItems(CoreCurio.class).forEach(item ->
+        Registration.getItems(GearCurioItem.class).forEach(item ->
                 builder(makeWrapper(Const.CURIOS, item.getSlot()), item));
 
         builder(makeWrapper(Const.CURIOS, "back"), ModItems.ELYTRA);

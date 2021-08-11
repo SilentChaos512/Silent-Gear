@@ -26,6 +26,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -40,26 +41,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.config.Config;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface IAoeTool {
-    /**
-     * The tool class of the item (pickaxe, shovel, axe)
-     *
-     * @return The tool type
-     */
-    @Nonnull
-    ToolType getAoeToolType();
-
     default int getAoeRadius(ItemStack stack) {
         return 1 + GearApi.getTraitLevel(stack, Const.Traits.WIDEN);
     }
@@ -83,7 +74,7 @@ public interface IAoeTool {
         BlockPos pos = rt.getBlockPos();
         BlockState state = world.getBlockState(pos);
 
-        if (isEffectiveOnBlock(stack, world, pos, state, player)) {
+        if (isEffectiveOnBlock(stack, state, player)) {
             Direction dir1, dir2;
             switch (rt.getDirection().getAxis()) {
                 case Y:
@@ -104,7 +95,7 @@ public interface IAoeTool {
             for (int i = -r; i <= r; ++i) {
                 for (int j = -r; j <= r; ++j) {
                     if (!(i == 0 && j == 0)) {
-                        attemptAddExtraBlock(world, state, pos.relative(dir1, i).relative(dir2, j), stack, positions);
+                        attemptAddExtraBlock(world, state, pos.relative(dir1, i).relative(dir2, j), stack, player, positions);
                     }
                 }
             }
@@ -113,18 +104,18 @@ public interface IAoeTool {
         return positions;
     }
 
-    default boolean isEffectiveOnBlock(ItemStack stack, Level world, BlockPos pos, BlockState state, Player player) {
-        return stack.getItem().canHarvestBlock(stack, state) || ForgeHooks.canHarvestBlock(state, player, world, pos);
+    default boolean isEffectiveOnBlock(ItemStack stack, BlockState state, Player player) {
+        return stack.getItem().isCorrectToolForDrops(stack, state) || ForgeHooks.isCorrectToolForDrops(state, player);
     }
 
-    default void attemptAddExtraBlock(Level world, BlockState state, BlockPos pos, ItemStack stack, List<BlockPos> list) {
+    default void attemptAddExtraBlock(Level world, BlockState state, BlockPos pos, ItemStack stack, Player player, List<BlockPos> list) {
         final BlockState state1 = world.getBlockState(pos);
         // Prevent breaking of unbreakable blocks, like bedrock
         if (state1.getDestroySpeed(world, pos) < 0) return;
 
         if (!world.isEmptyBlock(pos)
                 && BreakHandler.areBlocksSimilar(state, state1)
-                && (state1.getBlock().isToolEffective(state1, getAoeToolType()) || stack.getItem().canHarvestBlock(stack, state1))) {
+                && isEffectiveOnBlock(stack, state1, player)) {
             list.add(pos);
         }
     }
@@ -149,7 +140,7 @@ public interface IAoeTool {
             HitResult rt = item.rayTraceBlocks(world, player);
             BlockState stateOriginal = world.getBlockState(pos);
 
-            if (rt != null && rt.getType() == HitResult.Type.BLOCK && item.isEffectiveOnBlock(tool, world, pos, stateOriginal, player)) {
+            if (rt != null && rt.getType() == HitResult.Type.BLOCK && item.isEffectiveOnBlock(tool, stateOriginal, player)) {
                 BlockHitResult brt = (BlockHitResult) rt;
                 Direction side = brt.getDirection();
                 List<BlockPos> extraBlocks = item.getExtraBlocks(world, brt, player, tool);
@@ -209,13 +200,21 @@ public interface IAoeTool {
                 return false;
 
             // Otherwise, anything with same or lower harvest level should be okay
-            int level1 = block1.getHarvestLevel(state1);
-            int level2 = block2.getHarvestLevel(state2);
+            int level1 = guessHarvestLevel(state1);
+            int level2 = guessHarvestLevel(state2);
             return level1 >= level2 || level2 == 0;
         }
 
         private static boolean isOre(BlockState state) {
             return state.is(Tags.Blocks.ORES);
+        }
+
+        private static int guessHarvestLevel(BlockState state) {
+            if (state.is(Tags.Blocks.NEEDS_NETHERITE_TOOL)) return 4;
+            if (state.is(BlockTags.NEEDS_DIAMOND_TOOL)) return 3;
+            if (state.is(BlockTags.NEEDS_IRON_TOOL)) return 2;
+            if (state.is(BlockTags.NEEDS_STONE_TOOL)) return 1;
+            return 0;
         }
     }
 

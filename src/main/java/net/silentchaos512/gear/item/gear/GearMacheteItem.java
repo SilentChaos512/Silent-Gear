@@ -20,33 +20,27 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.BlockPos;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearHelper;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 
-public class CoreMachete extends CoreSword {
+public class GearMacheteItem extends GearSwordItem {
     private static final int BREAK_RANGE = 2;
     private static final Set<Material> EFFECTIVE_MATERIALS = Sets.union(
-            CoreSickle.EFFECTIVE_MATERIALS,
+            GearSickleItem.EFFECTIVE_MATERIALS,
             ImmutableSet.of(Material.BAMBOO)
     );
 
-    public CoreMachete(GearType gearType) {
-        super(gearType, ToolType.AXE);
-    }
-
-    @Override
-    public GearType getGearType() {
-        return GearType.MACHETE;
+    public GearMacheteItem(GearType gearType) {
+        super(gearType);
     }
 
     @Override
@@ -58,21 +52,15 @@ public class CoreMachete extends CoreSword {
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable Player player, @Nullable BlockState blockState) {
-        return GearHelper.getHarvestLevel(stack, tool, blockState, null);
+    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
+        return GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_AXE, GearAxeItem.AXE_EFFECTIVE_MATERIALS);
     }
-
-//    @Override
-//    public void setHarvestLevel(String toolClass, int level) {
-//        super.setHarvestLevel(toolClass, level);
-//        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
-//    }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        float speed = GearHelper.getDestroySpeed(stack, state, CoreAxe.EXTRA_EFFECTIVE_MATERIALS);
+        float speed = GearHelper.getDestroySpeed(stack, state, GearAxeItem.AXE_EFFECTIVE_MATERIALS);
         // Slower on materials normally harvested with axes
-        if (CoreAxe.BASE_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
+        if (GearAxeItem.AXE_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
             return speed * 0.4f;
         return speed;
     }

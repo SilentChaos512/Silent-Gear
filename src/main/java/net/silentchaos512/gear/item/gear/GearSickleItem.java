@@ -1,22 +1,17 @@
 package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -29,24 +24,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 
-public class CoreSickle extends DiggerItem implements ICoreTool {
-    public static final ToolType TOOL_TYPE = ToolType.get("sickle");
-
+public class GearSickleItem extends GearDiggerItem {
     private static final int DURABILITY_USAGE = 3;
     private static final int BREAK_RANGE = 4;
     private static final int HARVEST_RANGE = 2;
@@ -75,13 +60,8 @@ public class CoreSickle extends DiggerItem implements ICoreTool {
         HARVEST_STATES.put(block, state);
     }
 
-    public CoreSickle() {
-        super(0, 0, Tiers.DIAMOND, BlockTags.LEAVES, GearHelper.getBuilder(TOOL_TYPE));
-    }
-
-    @Override
-    public GearType getGearType() {
-        return GearType.SICKLE;
+    public GearSickleItem(GearType gearType) {
+        super(gearType, BlockTags.LEAVES, EFFECTIVE_MATERIALS, GearHelper.getBaseItemProperties());
     }
 
     //region Sickle harvesting
@@ -239,106 +219,6 @@ public class CoreSickle extends DiggerItem implements ICoreTool {
     @Override
     public int getDamageOnBlockBreak(ItemStack gear, Level world, BlockState state, BlockPos pos) {
         return DURABILITY_USAGE;
-    }
-
-    //endregion
-
-    //region Standard tool overrides
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(BlockState state) {
-        return state.getMaterial() == Material.WEB;
-    }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        return GearHelper.getAttributeModifiers(slot, stack);
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, EFFECTIVE_MATERIALS);
-    }
-
-    @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable Player player, @Nullable BlockState blockState) {
-        return GearHelper.getHarvestLevel(stack, tool, blockState, EFFECTIVE_MATERIALS);
-    }
-
-//    @Override
-//    public void setHarvestLevel(String toolClass, int level) {
-//        super.setHarvestLevel(toolClass, level);
-//        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
-//    }
-
-    @Override
-    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public int getItemEnchantability(ItemStack stack) {
-        return GearHelper.getEnchantability(stack);
-    }
-
-    @Override
-    public Component getName(ItemStack stack) {
-        return GearHelper.getDisplayName(stack);
-    }
-
-    @Override
-    public void setDamage(ItemStack stack, int damage) {
-        GearHelper.setDamage(stack, damage, super::setDamage);
-    }
-
-    @Override
-    public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, ItemStats.DURABILITY);
-    }
-
-    @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        return GearHelper.damageItem(stack, amount, entity, onBroken);
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return GearHelper.getRarity(stack);
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        GearHelper.fillItemGroup(this, group, items);
-    }
-
-    @Override
-    public boolean isFoil(ItemStack stack) {
-        return GearClientHelper.hasEffect(stack);
-    }
-
-    @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hitEntity(stack, target, attacker);
-    }
-
-    @Override
-    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-    }
-
-    @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
     }
 
     //endregion

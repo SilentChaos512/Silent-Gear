@@ -30,6 +30,16 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     public void addTags() {
+        // Harvesting
+        tag(Tags.Blocks.NEEDS_NETHERITE_TOOL)
+                .addTag(ModTags.Blocks.ORES_AZURE_SILVER);
+        tag(BlockTags.NEEDS_IRON_TOOL)
+                .addTag(ModTags.Blocks.ORES_BORT)
+                .addTag(ModTags.Blocks.ORES_CRIMSON_IRON);
+        tag(BlockTags.NEEDS_STONE_TOOL)
+                .add(ModBlocks.RAW_AZURE_SILVER_BLOCK.get())
+                .add(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get());
+
         // Silent Gear
         getBuilder(ModTags.Blocks.FLUFFY_BLOCKS)
                 .add(Registration.getBlocks(FluffyBlock.class).toArray(new Block[0]));

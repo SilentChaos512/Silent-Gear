@@ -27,7 +27,7 @@ import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
-import net.silentchaos512.gear.item.gear.CoreArmor;
+import net.silentchaos512.gear.item.gear.GearArmorItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.lib.data.recipe.ExtendedShapedRecipeBuilder;
@@ -1340,7 +1340,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
 
-    private void armorRecipes(Consumer<FinishedRecipe> consumer, int mainCount, CoreArmor armor, ItemLike plates, GearBlueprintItem blueprintItem) {
+    private void armorRecipes(Consumer<FinishedRecipe> consumer, int mainCount, GearArmorItem armor, ItemLike plates, GearBlueprintItem blueprintItem) {
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), plates)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, armor.getGearType()), mainCount)

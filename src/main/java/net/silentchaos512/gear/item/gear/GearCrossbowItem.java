@@ -49,15 +49,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
+public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon {
     private static final int MIN_CHARGE_TIME = 5;
     private static final int MAX_CHARGE_TIME = 50;
 
     private boolean startSoundPlayed = false;
     private boolean midLoadSoundPlayed = false;
 
-    public CoreCrossbow() {
-        super(GearHelper.getBuilder(null).defaultDurability(100));
+    public GearCrossbowItem() {
+        super(GearHelper.getBaseItemProperties().defaultDurability(100));
     }
 
     @Override
@@ -156,12 +156,12 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
 
     private static boolean isAmmoInvalid(ItemStack ammo) {
         // Temp fix for https://github.com/SilentChaos512/Silent-Gear/issues/270
-        return ammo.isEmpty() || (ammo.getItem() instanceof CoreArrow && GearHelper.isBroken(ammo));
+        return ammo.isEmpty() || (ammo.getItem() instanceof GearArrowItem && GearHelper.isBroken(ammo));
     }
 
     private static ItemStack splitOneAmmo(ItemStack ammo) {
         // Temp fix for https://github.com/SilentChaos512/Silent-Gear/issues/270
-        if (ammo.getItem() instanceof CoreArrow) {
+        if (ammo.getItem() instanceof GearArrowItem) {
             ItemStack copy = ammo.copy();
             ammo.setDamageValue(ammo.getDamageValue() + 1);
             copy.setDamageValue(copy.getMaxDamage() - 1);
@@ -370,7 +370,7 @@ public class CoreCrossbow extends CrossbowItem implements ICoreRangedWeapon {
     }
 
     private static float getShootingPower(ItemStack stack) {
-        return stack.getItem() instanceof CoreCrossbow && containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
+        return stack.getItem() instanceof GearCrossbowItem && containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
     }
 
     //endregion

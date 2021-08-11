@@ -278,41 +278,41 @@ public final class ModItems {
                 }
             });
 
-    public static final ItemRegistryObject<CoreSword> SWORD = register("sword", () -> new CoreSword(GearType.SWORD));
-    public static final ItemRegistryObject<CoreSword> KATANA = register("katana", () -> new CoreSword(GearType.KATANA));
-    public static final ItemRegistryObject<CoreMachete> MACHETE = register("machete", () -> new CoreMachete(GearType.MACHETE));
-    public static final ItemRegistryObject<CoreSword> SPEAR = register("spear", () -> new CoreSword(GearType.SPEAR));
-    public static final ItemRegistryObject<CoreDagger> KNIFE = register("knife", () -> new CoreDagger(GearType.KNIFE));
-    public static final ItemRegistryObject<CoreDagger> DAGGER = register("dagger", () -> new CoreDagger(GearType.DAGGER));
-    public static final ItemRegistryObject<CorePickaxe> PICKAXE = register("pickaxe", () -> new CorePickaxe());
-    public static final ItemRegistryObject<CoreShovel> SHOVEL = register("shovel", () -> new CoreShovel());
-    public static final ItemRegistryObject<CoreAxe> AXE = register("axe", () -> new CoreAxe());
-    public static final ItemRegistryObject<CorePaxel> PAXEL = register("paxel", () -> new CorePaxel());
-    public static final ItemRegistryObject<CoreHammer> HAMMER = register("hammer", () -> new CoreHammer());
-    public static final ItemRegistryObject<CoreExcavator> EXCAVATOR = register("excavator", () -> new CoreExcavator());
-    public static final ItemRegistryObject<CoreSaw> SAW = register("saw", () -> new CoreSaw());
-    public static final ItemRegistryObject<CoreProspectorHammer> PROSPECTOR_HAMMER = register("prospector_hammer", () -> new CoreProspectorHammer());
-    public static final ItemRegistryObject<CoreMattock> MATTOCK = register("mattock", () -> new CoreMattock());
-    public static final ItemRegistryObject<CoreSickle> SICKLE = register("sickle", () -> new CoreSickle());
-    public static final ItemRegistryObject<CoreShears> SHEARS = register("shears", () -> new CoreShears());
+    public static final ItemRegistryObject<GearSwordItem> SWORD = register("sword", () -> new GearSwordItem(GearType.SWORD));
+    public static final ItemRegistryObject<GearSwordItem> KATANA = register("katana", () -> new GearSwordItem(GearType.KATANA));
+    public static final ItemRegistryObject<GearMacheteItem> MACHETE = register("machete", () -> new GearMacheteItem(GearType.MACHETE));
+    public static final ItemRegistryObject<GearSwordItem> SPEAR = register("spear", () -> new GearSwordItem(GearType.SPEAR));
+    public static final ItemRegistryObject<GearDaggerItem> KNIFE = register("knife", () -> new GearDaggerItem(GearType.KNIFE));
+    public static final ItemRegistryObject<GearDaggerItem> DAGGER = register("dagger", () -> new GearDaggerItem(GearType.DAGGER));
+    public static final ItemRegistryObject<GearPickaxeItem> PICKAXE = register("pickaxe", () -> new GearPickaxeItem(GearType.PICKAXE));
+    public static final ItemRegistryObject<GearShovelItem> SHOVEL = register("shovel", () -> new GearShovelItem(GearType.SHOVEL));
+    public static final ItemRegistryObject<GearAxeItem> AXE = register("axe", () -> new GearAxeItem(GearType.AXE));
+    public static final ItemRegistryObject<GearPaxelItem> PAXEL = register("paxel", () -> new GearPaxelItem(GearType.PAXEL));
+    public static final ItemRegistryObject<GearHammerItem> HAMMER = register("hammer", () -> new GearHammerItem(GearType.HAMMER));
+    public static final ItemRegistryObject<GearExcavatorItem> EXCAVATOR = register("excavator", () -> new GearExcavatorItem(GearType.EXCAVATOR));
+    public static final ItemRegistryObject<GearSawItem> SAW = register("saw", () -> new GearSawItem(GearType.SAW));
+    public static final ItemRegistryObject<GearProspectorHammerItem> PROSPECTOR_HAMMER = register("prospector_hammer", () -> new GearProspectorHammerItem(GearType.PROSPECTOR_HAMMER));
+    public static final ItemRegistryObject<GearMattockItem> MATTOCK = register("mattock", () -> new GearMattockItem());
+    public static final ItemRegistryObject<GearSickleItem> SICKLE = register("sickle", () -> new GearSickleItem(GearType.SICKLE));
+    public static final ItemRegistryObject<GearShearsItem> SHEARS = register("shears", () -> new GearShearsItem());
     public static final ItemRegistryObject<GearFishingRod> FISHING_ROD = register("fishing_rod", GearFishingRod::new);
-    public static final ItemRegistryObject<CoreBow> BOW = register("bow", () -> new CoreBow());
-    public static final ItemRegistryObject<CoreCrossbow> CROSSBOW = register("crossbow", () -> new CoreCrossbow());
-    public static final ItemRegistryObject<CoreSlingshot> SLINGSHOT = register("slingshot", () -> new CoreSlingshot());
-    public static final ItemRegistryObject<CoreShield> SHIELD = register("shield", () -> new CoreShield());
-    public static final ItemRegistryObject<CoreArrow> ARROW = register("arrow", () -> new CoreArrow(unstackableProps()));
+    public static final ItemRegistryObject<GearBowItem> BOW = register("bow", () -> new GearBowItem());
+    public static final ItemRegistryObject<GearCrossbowItem> CROSSBOW = register("crossbow", () -> new GearCrossbowItem());
+    public static final ItemRegistryObject<GearSlingshot> SLINGSHOT = register("slingshot", () -> new GearSlingshot());
+    public static final ItemRegistryObject<GearShield> SHIELD = register("shield", () -> new GearShield());
+    public static final ItemRegistryObject<GearArrowItem> ARROW = register("arrow", () -> new GearArrowItem(unstackableProps()));
 
-    public static final ItemRegistryObject<CoreArmor> HELMET = register("helmet", () -> new CoreArmor(EquipmentSlot.HEAD));
-    public static final ItemRegistryObject<CoreArmor> CHESTPLATE = register("chestplate", () -> new CoreArmor(EquipmentSlot.CHEST));
-    public static final ItemRegistryObject<CoreArmor> LEGGINGS = register("leggings", () -> new CoreArmor(EquipmentSlot.LEGS));
-    public static final ItemRegistryObject<CoreArmor> BOOTS = register("boots", () -> new CoreArmor(EquipmentSlot.FEET));
+    public static final ItemRegistryObject<GearArmorItem> HELMET = register("helmet", () -> new GearArmorItem(EquipmentSlot.HEAD));
+    public static final ItemRegistryObject<GearArmorItem> CHESTPLATE = register("chestplate", () -> new GearArmorItem(EquipmentSlot.CHEST));
+    public static final ItemRegistryObject<GearArmorItem> LEGGINGS = register("leggings", () -> new GearArmorItem(EquipmentSlot.LEGS));
+    public static final ItemRegistryObject<GearArmorItem> BOOTS = register("boots", () -> new GearArmorItem(EquipmentSlot.FEET));
 
-    public static final ItemRegistryObject<CoreElytra> ELYTRA = register("elytra", () -> new CoreElytra(unstackableProps()));
+    public static final ItemRegistryObject<GearElytraItem> ELYTRA = register("elytra", () -> new GearElytraItem(unstackableProps()));
 
-    public static final ItemRegistryObject<CoreCurio> RING = register("ring", () ->
-            new CoreCurio(GearType.RING, "ring", unstackableProps()));
-    public static final ItemRegistryObject<CoreCurio> BRACELET = register("bracelet", () ->
-            new CoreCurio(GearType.BRACELET, "bracelet", unstackableProps()));
+    public static final ItemRegistryObject<GearCurioItem> RING = register("ring", () ->
+            new GearCurioItem(GearType.RING, "ring", unstackableProps()));
+    public static final ItemRegistryObject<GearCurioItem> BRACELET = register("bracelet", () ->
+            new GearCurioItem(GearType.BRACELET, "bracelet", unstackableProps()));
 
     private ModItems() {}
 

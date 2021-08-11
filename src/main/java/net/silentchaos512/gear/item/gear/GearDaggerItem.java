@@ -4,8 +4,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 
-public class CoreDagger extends CoreSword {
-    public CoreDagger(GearType gearType) {
+public class GearDaggerItem extends GearSwordItem {
+    public GearDaggerItem(GearType gearType) {
         super(gearType);
     }
 

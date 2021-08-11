@@ -18,9 +18,11 @@
 
 package net.silentchaos512.gear.client;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -28,21 +30,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.ChatFormatting;
-import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.client.util.ModelPropertiesHelper;
-import net.silentchaos512.gear.event.GearEvents;
-import net.silentchaos512.gear.item.gear.CoreCrossbow;
-import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.gear.item.gear.GearCrossbowItem;
 import net.silentchaos512.lib.client.gui.DebugRenderOverlay;
 
 import javax.annotation.Nonnull;
@@ -70,7 +64,7 @@ public class DebugOverlay extends DebugRenderOverlay {
         Item item = heldItem.getItem();
 
         // Crossbow debugging
-        if (item instanceof CoreCrossbow) {
+        if (item instanceof GearCrossbowItem) {
             float pull = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("pull"), mc.level, player);
             float pulling = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("pulling"), mc.level, player);
             float charged = ModelPropertiesHelper.getValue(heldItem, new ResourceLocation("charged"), mc.level, player);
@@ -79,7 +73,7 @@ public class DebugOverlay extends DebugRenderOverlay {
             list.add(String.format("pulling=%.1f", pulling));
             list.add(String.format("charged=%.1f", charged));
             list.add(String.format("firework=%.1f", firework));
-            list.add(String.format("chargeTime=%d", CoreCrossbow.getChargeTime(heldItem)));
+            list.add(String.format("chargeTime=%d", GearCrossbowItem.getChargeTime(heldItem)));
             return list;
         }
 
@@ -92,7 +86,7 @@ public class DebugOverlay extends DebugRenderOverlay {
                 BlockPos pos = brt.getBlockPos();
                 BlockState state = renderViewEntity.level.getBlockState(pos);
 
-                if (item instanceof ICoreTool) {
+                /*if (item instanceof ICoreTool) {
                     ToolType toolClass = state.getBlock().getHarvestTool(state);
                     final int blockLevel = state.getBlock().getHarvestLevel(state);
                     final int toolLevel = item.getHarvestLevel(heldItem, toolClass, player, state);
@@ -111,7 +105,7 @@ public class DebugOverlay extends DebugRenderOverlay {
                     } else {
                         list.add(String.format("speed = %.1f", destroySpeed));
                     }
-                }
+                }*/
             }
         } else if (rt != null && rt.getType() == HitResult.Type.ENTITY) {
             EntityHitResult ert = (EntityHitResult) rt;

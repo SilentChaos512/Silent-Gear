@@ -3,11 +3,11 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,14 +16,14 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -34,47 +34,39 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class GearFishingRod extends FishingRodItem implements ICoreTool {
+public class GearShield extends ShieldItem implements ICoreItem {
+    private static final float DURABILITY_MULTI = 337f / 15f;
+
     private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
-            ItemStats.REPAIR_EFFICIENCY,
             ItemStats.ENCHANTABILITY
     );
 
-    private static final Collection<PartType> REQUIRED_PARTS = ImmutableSet.of(
-            PartType.MAIN,
-            PartType.ROD,
-            PartType.BOWSTRING
-    );
-
-    private static final ImmutableList<PartType> RENDER_PARTS = ImmutableList.of(
-            PartType.ROD,
-            PartType.BOWSTRING,
-            PartType.MAIN
-    );
-
     private static final Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
-            ItemStats.ARMOR_DURABILITY,
-            ItemStats.REPAIR_VALUE,
             ItemStats.HARVEST_LEVEL,
             ItemStats.HARVEST_SPEED,
+            ItemStats.REACH_DISTANCE,
+            ItemStats.MELEE_DAMAGE,
+            ItemStats.MAGIC_DAMAGE,
+            ItemStats.ATTACK_SPEED,
+            ItemStats.ATTACK_REACH,
             ItemStats.RANGED_DAMAGE,
-            ItemStats.RANGED_SPEED,
-            ItemStats.PROJECTILE_ACCURACY,
-            ItemStats.PROJECTILE_SPEED,
-            ItemStats.ARMOR,
-            ItemStats.ARMOR_TOUGHNESS,
-            ItemStats.MAGIC_ARMOR,
-            ItemStats.KNOCKBACK_RESISTANCE
+            ItemStats.RANGED_SPEED
     );
 
-    public GearFishingRod() {
+    public GearShield() {
         super(GearHelper.getBaseItemProperties().durability(100));
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.FISHING_ROD;
+        return GearType.SHIELD;
+    }
+
+    @Override
+    public boolean isValidSlot(String slot) {
+        return EquipmentSlot.MAINHAND.getName().equalsIgnoreCase(slot)
+                || EquipmentSlot.OFFHAND.getName().equalsIgnoreCase(slot);
     }
 
     @Override
@@ -82,42 +74,31 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
         return RELEVANT_STATS;
     }
 
+
     @Override
     public Set<ItemStat> getExcludedStats(ItemStack stack) {
         return EXCLUDED_STATS;
     }
 
     @Override
+    public ItemStat getDurabilityStat() {
+        return ItemStats.ARMOR_DURABILITY;
+    }
+
+    @Override
+    public float getRepairModifier(ItemStack stack) {
+        return DURABILITY_MULTI;
+    }
+
+    @Override
     public Collection<PartType> getRequiredParts() {
-        return REQUIRED_PARTS;
+        return ImmutableList.of(PartType.MAIN, PartType.ROD);
     }
 
     @Override
-    public Collection<PartType> getRenderParts() {
-        return RENDER_PARTS;
+    public ItemColor getItemColors() {
+        return ColorHandlers::getShieldColor;
     }
-
-    @Override
-    public int getDamageOnHitEntity(ItemStack gear, LivingEntity target, LivingEntity attacker) {
-        return 0;
-    }
-
-    @Override
-    public boolean hasTexturesFor(PartType partType) {
-        return REQUIRED_PARTS.contains(partType) || partType.isUpgrade();
-    }
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
-        // Broken fishing rods cannot be used
-        if (GearHelper.isBroken(stack)) {
-            return InteractionResultHolder.pass(stack);
-        }
-        return super.use(worldIn, playerIn, handIn);
-    }
-
-    //region Standard tool overrides
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
@@ -140,18 +121,31 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
     }
 
     @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public Component getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
-        GearHelper.setDamage(stack, damage, super::setDamage);
+        super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
+        if (GearHelper.isBroken(stack)) {
+            GearData.recalculateStats(stack, null);
+        }
     }
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, ItemStats.DURABILITY);
+        return Math.round(DURABILITY_MULTI * GearData.getStat(stack, ItemStats.ARMOR_DURABILITY));
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override
@@ -190,14 +184,27 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        return GearHelper.onItemUse(context);
+    public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
+        return !GearHelper.isBroken(stack);
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        return GearHelper.damageItem(stack, amount, entity, onBroken);
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return GearHelper.isBroken(stack) ? UseAnim.NONE : super.getUseAnimation(stack);
     }
 
-    //endregion
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
+        if (GearHelper.isBroken(stack)) {
+            return InteractionResultHolder.pass(stack);
+        }
+        return super.use(worldIn, playerIn, handIn);
+    }
+
+    @Override
+    public boolean hasTexturesFor(PartType partType) {
+        // FIXME: Shields not compatible with new model system
+        return false;
+    }
 }

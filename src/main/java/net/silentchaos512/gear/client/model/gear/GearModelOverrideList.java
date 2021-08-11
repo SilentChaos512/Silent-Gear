@@ -30,7 +30,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.item.gear.CoreCrossbow;
+import net.silentchaos512.gear.item.gear.GearCrossbowItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.utils.Color;
@@ -114,7 +114,7 @@ public class GearModelOverrideList extends ItemOverrides {
         }
 
         // TODO: Make this not a special case...
-        if (stack.getItem() instanceof CoreCrossbow) {
+        if (stack.getItem() instanceof GearCrossbowItem) {
             getCrossbowCharge(stack, worldIn, entityIn).ifPresent(layers::add);
         }
 

@@ -1,18 +1,19 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LeavesBlock;
+import com.google.common.collect.ImmutableSet;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.world.BlockEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -20,10 +21,9 @@ import net.silentchaos512.gear.config.Config;
 
 import javax.annotation.Nullable;
 
-public class CoreSaw extends CoreAxe {
-    @Override
-    public GearType getGearType() {
-        return GearType.SAW;
+public class GearSawItem extends GearAxeItem {
+    public GearSawItem(GearType gearType) {
+        super(gearType, ImmutableSet.of(Material.WOOD));
     }
 
     @Override
@@ -150,10 +150,9 @@ public class CoreSaw extends CoreAxe {
                             result.firstFoliage = localBlock;
                         }
 
-                        int harvestLevel = localBlock.getHarvestLevel(localState);
                         float localHardness = localState.getDestroySpeed(world, localPos);
 
-                        if (harvestLevel <= getHarvestLevel(result.tool, ToolType.AXE, result.player, localState) && localHardness >= 0) {
+                        if (isCorrectToolForDrops(result.tool, localState) && localHardness >= 0) {
                             // Block break event
                             BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, localPos, localState, result.player);
                             MinecraftForge.EVENT_BUS.post(event);

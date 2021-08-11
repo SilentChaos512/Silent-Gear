@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -43,18 +42,18 @@ public final class ModBlocks {
     private static final Map<Block, Block> STRIPPED_WOOD = new HashMap<>();
 
     public static final BlockRegistryObject<OreBlock> BORT_ORE = register("bort_ore", () ->
-            getOre(2, SoundType.STONE));
+            getOre(SoundType.STONE));
     public static final BlockRegistryObject<OreBlock> DEEPSLATE_BORT_ORE = register("deepslate_bort_ore", () ->
-            getOre(2, SoundType.STONE));
+            getOre(SoundType.STONE));
     public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
-            getOre(2, SoundType.NETHER_GOLD_ORE));
+            getOre(SoundType.NETHER_GOLD_ORE));
     public static final BlockRegistryObject<OreBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
-            getOre(4, SoundType.STONE));
+            getOre(SoundType.STONE));
 
     public static final BlockRegistryObject<Block> RAW_CRIMSON_IRON_BLOCK = register("raw_crimson_iron_block", () ->
-            getRawOreBlock(1, SoundType.NETHER_GOLD_ORE));
+            getRawOreBlock(SoundType.NETHER_GOLD_ORE));
     public static final BlockRegistryObject<Block> RAW_AZURE_SILVER_BLOCK = register("raw_azure_silver_block", () ->
-            getRawOreBlock(1, SoundType.STONE));
+            getRawOreBlock(SoundType.STONE));
 
     public static final BlockRegistryObject<Block> BORT_BLOCK = register("bort_block",
             ModBlocks::getStorageBlock);
@@ -251,27 +250,23 @@ public final class ModBlocks {
         STRIPPED_WOOD.put(NETHERWOOD_WOOD.get(), STRIPPED_NETHERWOOD_WOOD.get());
     }
 
-    private static OreBlock getOre(int harvestLevel, SoundType soundType) {
+    private static OreBlock getOre(SoundType soundType) {
         return new ModOreBlock(BlockBehaviour.Properties.of(Material.STONE)
                 .strength(4, 10)
                 .requiresCorrectToolForDrops()
-                .harvestLevel(harvestLevel)
-                .harvestTool(ToolType.PICKAXE)
                 .sound(soundType));
     }
 
-    private static Block getRawOreBlock(int harvestLevel, SoundType soundType) {
+    private static Block getRawOreBlock(SoundType soundType) {
         return new ModOreBlock(BlockBehaviour.Properties.of(Material.STONE)
                 .strength(4, 20)
                 .requiresCorrectToolForDrops()
-                .harvestLevel(harvestLevel)
-                .harvestTool(ToolType.PICKAXE)
                 .sound(soundType));
     }
 
     private static Block getStorageBlock() {
         return new Block(BlockBehaviour.Properties.of(Material.METAL)
-                .strength(3.0f, 6.0f)
+                .strength(3, 6)
                 .sound(SoundType.METAL));
     }
 
@@ -311,7 +306,6 @@ public final class ModBlocks {
 
     private static BlockBehaviour.Properties netherWoodProps(float hardnessIn, float resistanceIn) {
         return BlockBehaviour.Properties.of(Material.NETHER_WOOD)
-                .harvestTool(ToolType.AXE)
                 .strength(hardnessIn, resistanceIn)
                 .sound(SoundType.WOOD);
     }

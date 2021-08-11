@@ -1,14 +1,15 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,57 +17,41 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class CoreShield extends ShieldItem implements ICoreItem {
-    private static final float DURABILITY_MULTI = 337f / 15f;
-
-    private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
+public class GearShearsItem extends ShearsItem implements ICoreTool {
+    public static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
-            ItemStats.ENCHANTABILITY
+            ItemStats.REPAIR_EFFICIENCY,
+            ItemStats.ENCHANTABILITY,
+            ItemStats.HARVEST_SPEED
     );
 
-    private static final Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
-            ItemStats.HARVEST_LEVEL,
-            ItemStats.HARVEST_SPEED,
-            ItemStats.REACH_DISTANCE,
-            ItemStats.MELEE_DAMAGE,
-            ItemStats.MAGIC_DAMAGE,
-            ItemStats.ATTACK_SPEED,
-            ItemStats.ATTACK_REACH,
-            ItemStats.RANGED_DAMAGE,
-            ItemStats.RANGED_SPEED
-    );
-
-    public CoreShield() {
-        super(GearHelper.getBuilder(null).durability(100));
+    public GearShearsItem() {
+        super(GearHelper.getBaseItemProperties().durability(100));
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.SHIELD;
-    }
-
-    @Override
-    public boolean isValidSlot(String slot) {
-        return EquipmentSlot.MAINHAND.getName().equalsIgnoreCase(slot)
-                || EquipmentSlot.OFFHAND.getName().equalsIgnoreCase(slot);
+        return GearType.SHEARS;
     }
 
     @Override
@@ -74,30 +59,35 @@ public class CoreShield extends ShieldItem implements ICoreItem {
         return RELEVANT_STATS;
     }
 
-
     @Override
-    public Set<ItemStat> getExcludedStats(ItemStack stack) {
-        return EXCLUDED_STATS;
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
+        if (GearHelper.isBroken(stack)) {
+            return 0f;
+        }
+
+        float speed = getStat(stack, ItemStats.HARVEST_SPEED);
+
+        if (!state.is(Blocks.COBWEB) && !state.is(BlockTags.LEAVES)) {
+            return state.is(BlockTags.WOOL) ? speed - 1 : 1;
+        } else {
+            return 2.5f * speed;
+        }
     }
 
     @Override
-    public ItemStat getDurabilityStat() {
-        return ItemStats.ARMOR_DURABILITY;
+    public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
+        if (GearHelper.isBroken(stack)) {
+            return InteractionResult.PASS;
+        }
+        return super.interactLivingEntity(stack, playerIn, entity, hand);
     }
 
     @Override
-    public float getRepairModifier(ItemStack stack) {
-        return DURABILITY_MULTI;
-    }
-
-    @Override
-    public Collection<PartType> getRequiredParts() {
-        return ImmutableList.of(PartType.MAIN, PartType.ROD);
-    }
-
-    @Override
-    public ItemColor getItemColors() {
-        return ColorHandlers::getShieldColor;
+    public int getDamageOnBlockBreak(ItemStack gear, Level world, BlockState state, BlockPos pos) {
+        if (!state.is(BlockTags.FIRE)) {
+            return 1;
+        }
+        return ICoreTool.super.getDamageOnBlockBreak(gear, world, state, pos);
     }
 
     @Override
@@ -140,7 +130,7 @@ public class CoreShield extends ShieldItem implements ICoreItem {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return Math.round(DURABILITY_MULTI * GearData.getStat(stack, ItemStats.ARMOR_DURABILITY));
+        return GearData.getStatInt(stack, ItemStats.DURABILITY);
     }
 
     @Override
@@ -184,27 +174,40 @@ public class CoreShield extends ShieldItem implements ICoreItem {
     }
 
     @Override
-    public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-        return !GearHelper.isBroken(stack);
-    }
+    public InteractionResult useOn(UseOnContext context) {
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        BlockState state = world.getBlockState(pos);
+        Player player = context.getPlayer();
 
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return GearHelper.isBroken(stack) ? UseAnim.NONE : super.getUseAnimation(stack);
-    }
+        if (player != null && getHoneyLevel(state) >= 5) {
+            world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
+            BeehiveBlock.dropHoneycomb(world, pos);
+            context.getItemInHand().hurtAndBreak(1, player, (playerEntity) -> {
+                playerEntity.broadcastBreakEvent(context.getHand());
+            });
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
-        if (GearHelper.isBroken(stack)) {
-            return InteractionResultHolder.pass(stack);
+            BeehiveBlock block = (BeehiveBlock) state.getBlock();
+            if (!CampfireBlock.isSmokeyPos(world, pos)) {
+                if (block.hiveContainsBees(world, pos)) {
+                    block.angerNearbyBees(world, pos);
+                }
+
+                block.releaseBeesAndResetHoneyLevel(world, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+            } else {
+                block.resetHoneyLevel(world, state, pos);
+            }
+
+            return InteractionResult.sidedSuccess(world.isClientSide);
         }
-        return super.use(worldIn, playerIn, handIn);
+
+        return GearHelper.onItemUse(context);
     }
 
-    @Override
-    public boolean hasTexturesFor(PartType partType) {
-        // FIXME: Shields not compatible with new model system
-        return false;
+    private static int getHoneyLevel(BlockState state) {
+        if (state.getBlock() instanceof BeehiveBlock && state.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
+            return state.getValue(BeehiveBlock.HONEY_LEVEL);
+        }
+        return 0;
     }
 }

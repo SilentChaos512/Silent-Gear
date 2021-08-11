@@ -3,20 +3,16 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.ModList;
@@ -38,9 +34,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import net.minecraft.world.item.Item.Properties;
-
-public class CoreCurio extends Item implements ICoreItem {
+public class GearCurioItem extends Item implements ICoreItem {
     private static final Collection<PartType> REQUIRED_PARTS = ImmutableList.of(
             PartType.MAIN,
             PartType.ADORNMENT
@@ -55,7 +49,7 @@ public class CoreCurio extends Item implements ICoreItem {
     private final GearType gearType;
     private final String slot;
 
-    public CoreCurio(GearType gearType, String slot, Properties properties) {
+    public GearCurioItem(GearType gearType, String slot, Properties properties) {
         super(properties);
         this.gearType = gearType;
         this.slot = slot;

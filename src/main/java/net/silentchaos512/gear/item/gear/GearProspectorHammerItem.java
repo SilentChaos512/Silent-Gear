@@ -5,8 +5,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.fmllegacy.network.NetworkDirection;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
@@ -18,10 +20,15 @@ import net.silentchaos512.gear.util.GearHelper;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CoreProspectorHammer extends CorePickaxe {
+public class GearProspectorHammerItem extends GearPickaxeItem {
+    public GearProspectorHammerItem(GearType gearType) {
+        super(gearType);
+    }
+
     @Override
-    public GearType getGearType() {
-        return GearType.PROSPECTOR_HAMMER;
+    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
+        // TODO: Add a prospecting action?
+        return getGearType().canPerformAction(toolAction);
     }
 
     @Override

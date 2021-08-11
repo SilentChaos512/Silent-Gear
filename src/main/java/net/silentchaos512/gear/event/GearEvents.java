@@ -55,7 +55,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -74,7 +73,7 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.item.gear.CoreArmor;
+import net.silentchaos512.gear.item.gear.GearArmorItem;
 import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.advancements.LibTriggers;
 import net.silentchaos512.lib.util.EntityHelper;
@@ -223,8 +222,8 @@ public final class GearEvents {
     private static float getTotalMagicArmor(LivingEntity entity) {
         float total = 0f;
         for (ItemStack stack : entity.getArmorSlots()) {
-            if (stack.getItem() instanceof CoreArmor) {
-                total += ((CoreArmor) stack.getItem()).getArmorMagicProtection(stack);
+            if (stack.getItem() instanceof GearArmorItem) {
+                total += ((GearArmorItem) stack.getItem()).getArmorMagicProtection(stack);
             }
         }
         return total;
@@ -248,13 +247,8 @@ public final class GearEvents {
 
         if (tool.getItem() instanceof ICoreItem) {
             final BlockState state = event.getState();
-            ToolType toolClass = state.getBlock().getHarvestTool(state);
-//            if (toolClass == null) toolClass = "";
-            final int blockLevel = state.getBlock().getHarvestLevel(state);
-            final int toolLevel = tool.getItem().getHarvestLevel(tool, toolClass, player, state);
-            final boolean canHarvest = toolLevel >= blockLevel;
 
-            if (canHarvest) {
+            if (tool.isCorrectToolForDrops(state)) {
                 int level = TraitHelper.getTraitLevel(tool, Const.Traits.LUSTROUS);
                 int light = getLightForLustrousTrait(player.level, player.blockPosition());
                 //use getNewSpeed() instead of getOriginalSpeed() to support other mods that are changing the break speed with this event.

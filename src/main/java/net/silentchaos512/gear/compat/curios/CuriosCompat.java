@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.item.gear.CoreElytra;
+import net.silentchaos512.gear.item.gear.GearElytraItem;
 import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public final class CuriosCompat {
 //        return CurioGearItemCapability.createProvider(stack, extraAttributes);
     }
 
-    public static ICapabilityProvider createElytraProvider(ItemStack stack, CoreElytra item) {
+    public static ICapabilityProvider createElytraProvider(ItemStack stack, GearElytraItem item) {
         return null;
 //        return CurioGearItemCapability.createElytraProvider(stack, item);
     }

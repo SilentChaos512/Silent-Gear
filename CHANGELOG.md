@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+Requires Forge 37.0.31 or higher!
+### Changed
+- Updated for Forge's new harvest tool system (37.0.31+ required)
+- Stat modifiers for katana and machetes switched (with small changes). Katana now deal more damage and are slower, while machetes deal less damage and are faster. This change was made to give both sword types a purpose.
+### Fixed
+- Deepslate bort ores not spawning
+
 ## [2.7.0] - 2021-08-08
 ### Changed
 - Updated for Minecraft 1.17.1. This version is _not_ complete! Some changes for 1.17 still need to be done and the mod has not been tested. Use with caution!

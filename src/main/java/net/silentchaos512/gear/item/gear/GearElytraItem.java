@@ -44,7 +44,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class CoreElytra extends ElytraItem implements ICoreArmor {
+public class GearElytraItem extends ElytraItem implements ICoreArmor {
     private static final int DURABILITY_MULTIPLIER = 25;
     private static final UUID ARMOR_UUID = UUID.fromString("f099f401-82f6-4565-a0b5-fd464f2dc72c");
 
@@ -72,7 +72,7 @@ public class CoreElytra extends ElytraItem implements ICoreArmor {
             ItemStats.RANGED_SPEED
     );
 
-    public CoreElytra(Properties builder) {
+    public GearElytraItem(Properties builder) {
         super(builder.durability(100));
     }
 

@@ -22,7 +22,7 @@ import net.silentchaos512.utils.MathUtils;
 
 import java.util.function.Predicate;
 
-public class CoreSlingshot extends CoreBow {
+public class GearSlingshot extends GearBowItem {
     /**
      * Extra damage added by "power" enchantment. Bows are 0.5.
      */

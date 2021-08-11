@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.item.gear.CoreElytra;
+import net.silentchaos512.gear.item.gear.GearElytraItem;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
@@ -42,7 +42,7 @@ public class GearElytraLayer<T extends Player, M extends EntityModel<T>> extends
                        float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack stack = entityIn.getItemBySlot(EquipmentSlot.CHEST);
 
-        if (stack.getItem() instanceof CoreElytra) {
+        if (stack.getItem() instanceof GearElytraItem) {
             ResourceLocation resourcelocation;
 
             if (entityIn instanceof AbstractClientPlayer) {

@@ -11,7 +11,7 @@ authors="SilentChaos512"
     modId="silentgear"
     version="${file.jarVersion}"
     displayName="Silent Gear"
-    updateJSONURL="https://raw.githubusercontent.com/SilentChaos512/Silent-Gear/1.16.x/update.json"
+    updateJSONURL="https://raw.githubusercontent.com/SilentChaos512/Silent-Gear/1.17.x/update.json"
     description='''
     Modular and upgradeable tools, weapons, and armor. Allows full customization of materials and parts used in gear crafting, even user-defined ones!
     '''
@@ -19,7 +19,7 @@ authors="SilentChaos512"
 [[dependencies.silentgear]]
     modId="forge"
     mandatory=true
-    versionRange="[37.0.8,)"
+    versionRange="[37.0.31,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]

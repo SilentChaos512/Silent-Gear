@@ -2,6 +2,7 @@ package net.silentchaos512.gear.util;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -11,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -22,13 +24,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
@@ -36,7 +36,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.TierSortingRegistry;
+import net.minecraftforge.common.ToolAction;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -62,6 +63,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Contains various methods used by gear items. Many are delegates for item overrides, to cut down
@@ -356,10 +359,8 @@ public final class GearHelper {
 
     //endregion
 
-    public static Item.Properties getBuilder(@Nullable ToolType toolType) {
-        Item.Properties b = new Item.Properties().stacksTo(1).tab(SilentGear.ITEM_GROUP);
-        if (toolType != null) b.addToolType(toolType, 3);
-        return b;
+    public static Item.Properties getBaseItemProperties() {
+        return new Item.Properties().stacksTo(1).tab(SilentGear.ITEM_GROUP);
     }
 
     public static GearType getType(ItemStack gear) {
@@ -406,11 +407,43 @@ public final class GearHelper {
         return parts2.isEmpty();
     }
 
-    public static int getHarvestLevel(ItemStack stack, ToolType toolClass, @Nullable BlockState state, @Nullable Set<Material> effectiveMaterials) {
-        if (isBroken(stack) || !stack.getItem().getToolTypes(stack).contains(toolClass))
+    public static int getHarvestLevel(ItemStack stack, @Nullable BlockState state) {
+        if (isBroken(stack))
             return -1;
 
         return GearData.getStatInt(stack, ItemStats.HARVEST_LEVEL);
+    }
+
+    @Nullable
+    public static Tier getTier(ItemStack stack) {
+        switch (getHarvestLevel(stack, null)) {
+            case -1:
+                // Broken or invalid tool
+                return null;
+            case 0:
+                return Tiers.WOOD;
+            case 1:
+                return Tiers.STONE;
+            case 2:
+                return Tiers.IRON;
+            case 3:
+                return Tiers.DIAMOND;
+            case 4:
+                return Tiers.NETHERITE;
+            default:
+                return Tiers.NETHERITE;
+        }
+    }
+
+    public static boolean isCorrectToolForDrops(ItemStack stack, BlockState state, @Nullable Tag<Block> blocksForTool, Set<Material> extraMaterials) {
+        Tier tier = getTier(stack);
+        if (tier != null) {
+            boolean isInToolTag = blocksForTool == null || state.is(blocksForTool);
+            boolean isExtraMaterial = extraMaterials.contains(state.getMaterial());
+            return (isInToolTag || isExtraMaterial) && TierSortingRegistry.isCorrectTierForDrops(tier, state);
+        }
+        // Tool is likely broken
+        return false;
     }
 
     public static float getDestroySpeed(ItemStack stack, BlockState state, @Nullable Set<Material> extraMaterials) {
@@ -420,15 +453,8 @@ public final class GearHelper {
         float speed = GearData.getStat(stack, ItemStats.HARVEST_SPEED);
 
         // Tool effective on block?
-        if (stack.getItem().canHarvestBlock(stack, state)) {
+        if (stack.getItem().isCorrectToolForDrops(stack, state)) {
             return speed;
-        }
-
-        // Check tool classes
-        for (ToolType type : stack.getItem().getToolTypes(stack)) {
-            if (state.getBlock().isToolEffective(state, type)) {
-                return speed;
-            }
         }
 
         // Check extra materials
@@ -708,5 +734,9 @@ public final class GearHelper {
         }
 
         return map.values();
+    }
+
+    public static Set<ToolAction> makeToolActionSet(ToolAction... actions) {
+        return Stream.of(actions).collect(Collectors.toCollection(Sets::newIdentityHashSet));
     }
 }

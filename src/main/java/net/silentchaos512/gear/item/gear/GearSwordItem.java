@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -11,84 +10,33 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.ToolType;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.ICoreWeapon;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
-public class CoreShovel extends ShovelItem implements ICoreTool {
-    private static final Set<Material> BASE_EFFECTIVE_MATERIALS = ImmutableSet.of(
-            Material.CLAY,
-            Material.SNOW,
-            Material.GRASS,
-            Material.DIRT,
-            Material.SAND,
-            Material.TOP_SNOW
-    );
+public class GearSwordItem extends SwordItem implements ICoreWeapon {
+    private final GearType gearType;
 
-    public CoreShovel() {
-        super(Tiers.DIAMOND, 0, 0, GearHelper.getBuilder(ToolType.SHOVEL));
+    public GearSwordItem(GearType gearType) {
+        super(Tiers.DIAMOND, 0, 0, GearHelper.getBaseItemProperties());
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.SHOVEL;
+        return this.gearType;
     }
-
-    //region Harvest tool overrides
-
-    @Override
-    public boolean canHarvestBlock(ItemStack stack, BlockState state) {
-        // Forge ItemStack-sensitive version
-        return canHarvestBlock(state, getStatInt(stack, ItemStats.HARVEST_LEVEL));
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(BlockState state) {
-        // Vanilla version... Not good because we can't get the actual harvest level.
-        // Assume a very high level since we can't get the actual value.
-        return canHarvestBlock(state, 10);
-    }
-
-    private boolean canHarvestBlock(BlockState state, int toolLevel) {
-        // Wrong harvest level?
-        if (state.getBlock().getHarvestLevel(state) > toolLevel)
-            return false;
-        // Included in base or extra materials?
-        if (BASE_EFFECTIVE_MATERIALS.contains(state.getMaterial()))
-            return true;
-        return super.isCorrectToolForDrops(state);
-    }
-
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        // No action if broken or player is sneaking
-        if (GearHelper.isBroken(context.getItemInHand()) || context.getPlayer() != null && context.getPlayer().isCrouching())
-            return InteractionResult.PASS;
-        // Try to let traits do their thing first
-        InteractionResult result = GearHelper.onItemUse(context);
-        // Make paths or whatever
-        if (result == InteractionResult.PASS)
-            return GearHelper.useAndCheckBroken(context, super::useOn);
-        return result;
-    }
-
-    //endregion
 
     //region Standard tool overrides
 
@@ -100,29 +48,6 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, null);
-    }
-
-    @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable Player player, @Nullable BlockState blockState) {
-        return GearHelper.getHarvestLevel(stack, tool, blockState, BASE_EFFECTIVE_MATERIALS);
-    }
-
-//    @Override
-//    public void setHarvestLevel(String toolClass, int level) {
-//        super.setHarvestLevel(toolClass, level);
-//        GearHelper.setHarvestLevel(this, toolClass, level, this.toolClasses);
-//    }
-
-    @Override
-    public Set<ToolType> getToolTypes(ItemStack stack) {
-        if (GearHelper.isBroken(stack))
-            return Collections.emptySet();
-        return super.getToolTypes(stack);
     }
 
     @Override
@@ -148,11 +73,6 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     @Override
     public int getMaxDamage(ItemStack stack) {
         return GearData.getStatInt(stack, ItemStats.DURABILITY);
-    }
-
-    @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override
@@ -188,6 +108,16 @@ public class CoreShovel extends ShovelItem implements ICoreTool {
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        return GearHelper.onItemUse(context);
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
     //endregion

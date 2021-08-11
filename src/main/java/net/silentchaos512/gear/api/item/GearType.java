@@ -2,16 +2,20 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.ToolAction;
+import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -42,25 +46,41 @@ public final class GearType {
     public static final GearType WEAPON = getOrCreate("weapon", TOOL);
     // Harvest tools
     public static final GearType HARVEST_TOOL = getOrCreate("harvest_tool", TOOL);
-    public static final GearType AXE = getOrCreate("axe", HARVEST_TOOL);
-    public static final GearType PICKAXE = getOrCreate("pickaxe", HARVEST_TOOL);
-    public static final GearType SHOVEL = getOrCreate("shovel", HARVEST_TOOL);
-    public static final GearType EXCAVATOR = getOrCreate("excavator", SHOVEL);
-    public static final GearType HAMMER = getOrCreate("hammer", PICKAXE);
-    public static final GearType SAW = getOrCreate("saw", AXE);
-    public static final GearType MATTOCK = getOrCreate("mattock", HARVEST_TOOL);
-    public static final GearType PAXEL = getOrCreate("paxel", HARVEST_TOOL);
-    public static final GearType PROSPECTOR_HAMMER = getOrCreate("prospector_hammer", PICKAXE);
+    public static final GearType AXE = getOrCreate("axe", HARVEST_TOOL, b ->
+            b.toolActions(ToolActions.DEFAULT_AXE_ACTIONS));
+    public static final GearType PICKAXE = getOrCreate("pickaxe", HARVEST_TOOL, b ->
+            b.toolActions(ToolActions.DEFAULT_PICKAXE_ACTIONS));
+    public static final GearType SHOVEL = getOrCreate("shovel", HARVEST_TOOL, b ->
+            b.toolActions(ToolActions.DEFAULT_SHOVEL_ACTIONS));
+    public static final GearType EXCAVATOR = getOrCreate("excavator", SHOVEL, b ->
+            b.toolActions(ToolActions.SHOVEL_DIG));
+    public static final GearType HAMMER = getOrCreate("hammer", PICKAXE, b ->
+            b.toolActions(ToolActions.PICKAXE_DIG));
+    public static final GearType SAW = getOrCreate("saw", AXE, b ->
+            b.toolActions(ToolActions.AXE_DIG));
+    public static final GearType MATTOCK = getOrCreate("mattock", HARVEST_TOOL, b ->
+            b.toolActions(ToolActions.AXE_DIG, ToolActions.HOE_DIG, ToolActions.SHOVEL_DIG));
+    public static final GearType PAXEL = getOrCreate("paxel", HARVEST_TOOL, b ->
+            b.toolActions(ToolActions.AXE_DIG, ToolActions.PICKAXE_DIG, ToolActions.SHOVEL_DIG));
+    public static final GearType PROSPECTOR_HAMMER = getOrCreate("prospector_hammer", PICKAXE, b ->
+            b.toolActions(ToolActions.DEFAULT_PICKAXE_ACTIONS));
     public static final GearType SHEARS = getOrCreate("shears", HARVEST_TOOL);
-    public static final GearType SICKLE = getOrCreate("sickle", HARVEST_TOOL);
+    public static final GearType SICKLE = getOrCreate("sickle", HARVEST_TOOL, b ->
+            b.toolActions(ToolActions.HOE_DIG));
     // Melee weapons (swords)
     public static final GearType MELEE_WEAPON = getOrCreate("melee_weapon", WEAPON);
-    public static final GearType DAGGER = getOrCreate("dagger", MELEE_WEAPON);
-    public static final GearType KATANA = getOrCreate("katana", MELEE_WEAPON);
-    public static final GearType KNIFE = getOrCreate("knife", MELEE_WEAPON);
-    public static final GearType MACHETE = getOrCreate("machete", MELEE_WEAPON);
-    public static final GearType SPEAR = getOrCreate("spear", MELEE_WEAPON);
-    public static final GearType SWORD = getOrCreate("sword", MELEE_WEAPON);
+    public static final GearType DAGGER = getOrCreate("dagger", MELEE_WEAPON, b ->
+            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
+    public static final GearType KATANA = getOrCreate("katana", MELEE_WEAPON, b ->
+            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
+    public static final GearType KNIFE = getOrCreate("knife", MELEE_WEAPON, b ->
+            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
+    public static final GearType MACHETE = getOrCreate("machete", MELEE_WEAPON, b ->
+            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
+    public static final GearType SPEAR = getOrCreate("spear", MELEE_WEAPON, b ->
+            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
+    public static final GearType SWORD = getOrCreate("sword", MELEE_WEAPON, b ->
+            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
     // Ranged weapons (bows)
     public static final GearType RANGED_WEAPON = getOrCreate("ranged_weapon", WEAPON);
     public static final GearType BOW = getOrCreate("bow", RANGED_WEAPON);
@@ -68,9 +88,11 @@ public final class GearType {
     public static final GearType SLINGSHOT = getOrCreate("slingshot", RANGED_WEAPON);
     // Other
     public static final GearType FISHING_ROD = getOrCreate("fishing_rod", TOOL);
-    public static final GearType SHIELD = getOrCreate("shield", TOOL, () -> ItemStats.ARMOR_DURABILITY);
+    public static final GearType SHIELD = getOrCreate("shield", TOOL, b ->
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
     // Armor
-    public static final GearType ARMOR = getOrCreate("armor", ALL, () -> ItemStats.ARMOR_DURABILITY);
+    public static final GearType ARMOR = getOrCreate("armor", ALL, b ->
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
     public static final GearType BOOTS = getOrCreate("boots", ARMOR);
     public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR);
     public static final GearType ELYTRA = getOrCreate("elytra", ARMOR);
@@ -104,49 +126,22 @@ public final class GearType {
      * @throws IllegalArgumentException if the name is invalid
      */
     public static GearType getOrCreate(String name) {
-        return getOrCreate(name, null);
+        return getOrCreate(name, null, b -> {});
     }
 
     public static GearType getOrCreate(String name, @Nullable GearType parent) {
-        return getOrCreate(name, parent, 1);
+        return getOrCreate(name, parent, b -> {});
     }
 
-    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames) {
-        Supplier<ItemStat> durabilityStat = () -> parent != null ? parent.durabilityStat.get() : ItemStats.DURABILITY;
-        return getOrCreate(name, parent, animationFrames, durabilityStat);
-    }
-
-    @Deprecated
-    public static GearType getOrCreate(String name, @Nullable GearType parent, ItemStat durabilityStat) {
-        return getOrCreate(name, parent, () -> durabilityStat);
-    }
-
-    public static GearType getOrCreate(String name, @Nullable GearType parent, Supplier<ItemStat> durabilityStat) {
-        return getOrCreate(name, parent, 1, durabilityStat);
-    }
-
-    @Deprecated
-    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames, ItemStat durabilityStat) {
-        return getOrCreate(name, parent, animationFrames, () -> durabilityStat);
-    }
-
-    /**
-     * Gets or creates a new gear type with the given parent. If the gear type already exists, the
-     * existing instance is not modified in any way.
-     *
-     * @param name            The gear type name. Must be unique and contain only lowercase letters
-     *                        and underscores.
-     * @param parent          The parent gear type. This will typically be harvest_tool,
-     *                        melee_weapon, or ranged_weapon, but it could be any existing type.
-     * @param animationFrames Number of animation frames (bow pulling, etc) the gear has
-     * @param durabilityStat  The stat used to calculate the items durability
-     * @return The newly created gear type, or the existing instance if it already exists
-     * @throws IllegalArgumentException if the name is invalid
-     */
-    public static GearType getOrCreate(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat) {
-        if (VALID_NAME.matcher(name).find())
+    public static GearType getOrCreate(String name, @Nullable GearType parent, Consumer<Builder> propertiesBuilder) {
+        if (VALID_NAME.matcher(name).find()) {
             throw new IllegalArgumentException("Invalid name: " + name);
-        return VALUES.computeIfAbsent(name, k -> new GearType(name, parent, animationFrames, durabilityStat));
+        }
+        return VALUES.computeIfAbsent(name, s -> {
+            Builder builder = Builder.of(name, parent);
+            propertiesBuilder.accept(builder);
+            return builder.build();
+        });
     }
 
     public static GearType fromJson(JsonObject json, String key) {
@@ -162,12 +157,14 @@ public final class GearType {
     @Nullable private final GearType parent;
     private final int animationFrames;
     private final Supplier<ItemStat> durabilityStat;
+    private final Set<ToolAction> toolActions;
 
-    private GearType(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat) {
+    private GearType(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat, Set<ToolAction> toolActions) {
         this.name = name;
         this.parent = parent;
         this.animationFrames = animationFrames;
         this.durabilityStat = durabilityStat;
+        this.toolActions = toolActions;
     }
 
     public String getName() {
@@ -190,6 +187,10 @@ public final class GearType {
 
     public ItemStat getDurabilityStat() {
         return durabilityStat.get();
+    }
+
+    public boolean canPerformAction(ToolAction action) {
+        return toolActions.contains(action);
     }
 
     /**
@@ -286,5 +287,50 @@ public final class GearType {
                 "name='" + name + '\'' +
                 ", parent=" + parent +
                 '}';
+    }
+
+    public static class Builder {
+        private final String name;
+        @Nullable private final GearType parent;
+        private int animationFrames = 1;
+        private Supplier<ItemStat> durabilityStat = () -> ItemStats.DURABILITY;
+        private Set<ToolAction> toolActions = Collections.emptySet();
+
+        private Builder(String name, @Nullable GearType parent) {
+            this.name = name;
+            this.parent = parent;
+        }
+
+        public static Builder of(String name) {
+            return of(name, null);
+        }
+
+        public static Builder of(String name, @Nullable GearType parent) {
+            return new Builder(name, parent);
+        }
+
+        public GearType build() {
+            return new GearType(name, parent, animationFrames, durabilityStat, toolActions);
+        }
+
+        public Builder animationFrames(int animationFrames) {
+            this.animationFrames = animationFrames;
+            return this;
+        }
+
+        public Builder durabilityStat(Supplier<ItemStat> durabilityStat) {
+            this.durabilityStat = durabilityStat;
+            return this;
+        }
+
+        public Builder toolActions(ToolAction... actions) {
+            this.toolActions = GearHelper.makeToolActionSet(actions);
+            return this;
+        }
+
+        public Builder toolActions(Set<ToolAction> actions) {
+            this.toolActions = Collections.unmodifiableSet(actions);
+            return this;
+        }
     }
 }

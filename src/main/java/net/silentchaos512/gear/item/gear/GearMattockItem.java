@@ -5,28 +5,20 @@ import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BeehiveBlock;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.common.ToolAction;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
@@ -37,58 +29,52 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class CoreShears extends ShearsItem implements ICoreTool {
-    public static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            ItemStats.DURABILITY,
-            ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.ENCHANTABILITY,
-            ItemStats.HARVEST_SPEED
+public class GearMattockItem extends HoeItem implements ICoreTool {
+    private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
+            Material.LEAVES,
+            Material.PLANT,
+            Material.REPLACEABLE_PLANT,
+            Material.GRASS,
+            Material.DIRT,
+            Material.CLAY,
+            Material.SAND,
+            Material.TOP_SNOW,
+            Material.VEGETABLE,
+            Material.WOOD
     );
 
-    public CoreShears() {
-        super(GearHelper.getBuilder(null).durability(100));
+    public GearMattockItem() {
+        super(Tiers.DIAMOND, 0, 0f, GearHelper.getBaseItemProperties());
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.SHEARS;
+        return GearType.MATTOCK;
     }
 
     @Override
-    public Set<ItemStat> getRelevantStats(ItemStack stack) {
-        return RELEVANT_STATS;
+    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
+        return getGearType().canPerformAction(toolAction);
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (GearHelper.isBroken(stack)) {
-            return 0f;
-        }
+    public InteractionResult useOn(UseOnContext context) {
+        ItemStack stack = context.getItemInHand();
+        if (GearHelper.isBroken(stack)) return InteractionResult.PASS;
 
-        float speed = getStat(stack, ItemStats.HARVEST_SPEED);
-
-        if (!state.is(Blocks.COBWEB) && !state.is(BlockTags.LEAVES)) {
-            return state.is(BlockTags.WOOL) ? speed - 1 : 1;
-        } else {
-            return 2.5f * speed;
-        }
+        // Try to let traits do their thing first
+        InteractionResult result = GearHelper.onItemUse(context);
+        if (result == InteractionResult.PASS)
+            return super.useOn(context);
+        return result;
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
-        if (GearHelper.isBroken(stack)) {
-            return InteractionResult.PASS;
-        }
-        return super.interactLivingEntity(stack, playerIn, entity, hand);
+    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
+        return GearHelper.isCorrectToolForDrops(stack, state, null, EFFECTIVE_MATERIALS);
     }
 
-    @Override
-    public int getDamageOnBlockBreak(ItemStack gear, Level world, BlockState state, BlockPos pos) {
-        if (!state.is(BlockTags.FIRE)) {
-            return 1;
-        }
-        return ICoreTool.super.getDamageOnBlockBreak(gear, world, state, pos);
-    }
+    //region Standard tool overrides
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
@@ -98,6 +84,11 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         return GearHelper.getAttributeModifiers(slot, stack);
+    }
+
+    @Override
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
+        return GearHelper.getDestroySpeed(stack, state, EFFECTIVE_MATERIALS);
     }
 
     @Override
@@ -111,21 +102,13 @@ public class CoreShears extends ShearsItem implements ICoreTool {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
-
-    @Override
     public Component getName(ItemStack stack) {
         return GearHelper.getDisplayName(stack);
     }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
-        super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
-        if (GearHelper.isBroken(stack)) {
-            GearData.recalculateStats(stack, null);
-        }
+        GearHelper.setDamage(stack, damage, super::setDamage);
     }
 
     @Override
@@ -173,41 +156,5 @@ public class CoreShears extends ShearsItem implements ICoreTool {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
     }
 
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Level world = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        BlockState state = world.getBlockState(pos);
-        Player player = context.getPlayer();
-
-        if (player != null && getHoneyLevel(state) >= 5) {
-            world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
-            BeehiveBlock.dropHoneycomb(world, pos);
-            context.getItemInHand().hurtAndBreak(1, player, (playerEntity) -> {
-                playerEntity.broadcastBreakEvent(context.getHand());
-            });
-
-            BeehiveBlock block = (BeehiveBlock) state.getBlock();
-            if (!CampfireBlock.isSmokeyPos(world, pos)) {
-                if (block.hiveContainsBees(world, pos)) {
-                    block.angerNearbyBees(world, pos);
-                }
-
-                block.releaseBeesAndResetHoneyLevel(world, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
-            } else {
-                block.resetHoneyLevel(world, state, pos);
-            }
-
-            return InteractionResult.sidedSuccess(world.isClientSide);
-        }
-
-        return GearHelper.onItemUse(context);
-    }
-
-    private static int getHoneyLevel(BlockState state) {
-        if (state.getBlock() instanceof BeehiveBlock && state.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
-            return state.getValue(BeehiveBlock.HONEY_LEVEL);
-        }
-        return 0;
-    }
+    //endregion
 }
