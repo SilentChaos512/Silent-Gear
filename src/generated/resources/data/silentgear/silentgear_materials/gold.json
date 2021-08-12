@@ -37,7 +37,7 @@
       "projectile_speed": 1.1,
       "projectile_accuracy": 1.0,
       "rarity": 50.0,
-      "silentgems:chargeability": 1.2
+      "chargeability": 1.2
     },
     "rod": {
       "durability": {
@@ -87,7 +87,8 @@
         "level": 1,
         "conditions": [
           {
-            "type": "silentgear:primary_material"
+            "type": "silentgear:material_ratio",
+            "ratio": 0.7
           }
         ]
       },

@@ -23,6 +23,7 @@
       "armor_durability": 5.0,
       "enchantability": 8.0,
       "rarity": 11.0,
+      "chargeability": 0.8,
       "repair_value": -0.2,
       "harvest_level": 1.0,
       "harvest_speed": 5.0,
@@ -38,8 +39,7 @@
       "armor/boots": 1.0,
       "magic_armor": 4.0,
       "projectile_speed": 0.8,
-      "projectile_accuracy": 1.0,
-      "silentgems:chargeability": 0.8
+      "projectile_accuracy": 1.0
     },
     "rod": {
       "durability": {

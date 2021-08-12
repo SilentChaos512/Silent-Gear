@@ -2,26 +2,17 @@ package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.util.Mth;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 
 public enum MaterialGrade {
     NONE(0), E(1), D(2), C(3), B(4), A(5), S(10), SS(15), SSS(25), MAX(30);
@@ -105,23 +96,6 @@ public enum MaterialGrade {
 
     public MutableComponent getDisplayName() {
         return new TranslatableComponent("stat.silentgear.grade." + name());
-    }
-
-    @Deprecated
-    public static class Argument implements ArgumentType<MaterialGrade> {
-        @Override
-        public MaterialGrade parse(StringReader reader) {
-            return MaterialGrade.fromString(reader.readUnquotedString());
-        }
-
-        @Override
-        public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-            return SharedSuggestionProvider.suggest(Arrays.stream(values()).map(MaterialGrade::name), builder);
-        }
-
-        public static MaterialGrade getGrade(CommandContext<CommandSourceStack> context, String name) {
-            return context.getArgument(name, MaterialGrade.class);
-        }
     }
 
     public static class Range {

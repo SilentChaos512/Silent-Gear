@@ -165,7 +165,7 @@ public final class ModBlocks {
                     .strength(0)
                     .lightLevel(state -> 14)
                     .sound(SoundType.STONE)
-                    .dropsLike(STONE_TORCH.get()),
+                    .lootFrom(STONE_TORCH::get),
                     ParticleTypes.FLAME));
 
     public static final BlockRegistryObject<Block> NETHERWOOD_CHARCOAL_BLOCK = register("netherwood_charcoal_block",

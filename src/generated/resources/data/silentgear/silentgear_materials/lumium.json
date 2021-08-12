@@ -46,7 +46,7 @@
       "ranged_damage": 2.0,
       "ranged_speed": 0.0,
       "rarity": 75.0,
-      "silentgems:chargeability": 1.3
+      "chargeability": 1.3
     },
     "rod": {
       "harvest_speed": {

@@ -39,7 +39,7 @@
       "projectile_speed": 0.7,
       "projectile_accuracy": 0.7,
       "rarity": 10.0,
-      "silentgems:chargeability": 0.6
+      "chargeability": 0.6
     },
     "rod": {
       "harvest_speed": {

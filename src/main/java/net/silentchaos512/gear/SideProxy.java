@@ -1,8 +1,6 @@
 package net.silentchaos512.gear;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
@@ -21,7 +19,6 @@ import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
 import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
-import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.ColorHandlers;
@@ -80,8 +77,6 @@ class SideProxy implements IProxy {
         MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
-
-        ArgumentTypes.register("material_grade", MaterialGrade.Argument.class, new EmptyArgumentSerializer<>(MaterialGrade.Argument::new));
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {

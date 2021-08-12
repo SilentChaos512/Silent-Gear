@@ -36,7 +36,7 @@
       "projectile_speed": 1.0,
       "projectile_accuracy": 1.0,
       "rarity": 6.0,
-      "silentgems:chargeability": 0.8
+      "chargeability": 0.8
     },
     "rod": {
       "durability": {

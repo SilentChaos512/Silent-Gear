@@ -34,6 +34,7 @@ public class BakedWrapper implements BakedModel {
         this.overrideList = overrideList;
     }
 
+    @SuppressWarnings("deprecated")
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
         return Collections.emptyList();
@@ -59,6 +60,7 @@ public class BakedWrapper implements BakedModel {
         return false;
     }
 
+    @SuppressWarnings("deprecated")
     @Override
     public TextureAtlasSprite getParticleIcon() {
         return particleTexture;

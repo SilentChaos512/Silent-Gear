@@ -31,7 +31,6 @@ public final class TraitSerializers {
         registerCondition(GearTypeTraitCondition.SERIALIZER);
         registerCondition(MaterialCountTraitCondition.SERIALIZER);
         registerCondition(MaterialRatioTraitCondition.SERIALIZER);
-        registerCondition(PrimaryMaterialTraitCondition.SERIALIZER);
 
         register(SimpleTrait.SERIALIZER);
         register(DamageTypeTrait.SERIALIZER);

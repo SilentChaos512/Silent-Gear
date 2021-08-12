@@ -1,15 +1,15 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Constants;
 import net.silentchaos512.gear.SilentGear;
@@ -32,8 +32,6 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class CompoundPartItem extends Item {
     private static final String NBT_CRAFTED_COUNT = "CraftedCount";
@@ -172,7 +170,7 @@ public class CompoundPartItem extends Item {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (!allowdedIn(group) || this == ModItems.ARMOR_BODY.get() || this == ModItems.SHIELD_PLATE.get()) {
+        if (!allowdedIn(group) || this == ModItems.SHIELD_PLATE.get()) {
             return;
         }
         items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));

@@ -243,8 +243,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.RANGED_DAMAGE, -0.75f, StatInstance.Operation.MUL1);
 
         // Armor
-        if (isMainPart(builder, ModItems.ARMOR_BODY)
-                || isMainPart(builder, ModItems.HELMET_PLATES)
+        if (isMainPart(builder, ModItems.HELMET_PLATES)
                 || isMainPart(builder, ModItems.CHESTPLATE_PLATES)
                 || isMainPart(builder, ModItems.LEGGING_PLATES)
                 || isMainPart(builder, ModItems.BOOT_PLATES))

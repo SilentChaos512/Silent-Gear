@@ -17,7 +17,6 @@ public class MaterialLayerList implements IMaterialLayerList {
     public static final MaterialLayerList DEFAULT = new MaterialLayerList();
 
     private final List<MaterialLayer> layers;
-    private PartTextureSet oldTextureType = PartTextureSet.ABSENT;
 
     public MaterialLayerList() {
         this.layers = new ArrayList<>();
@@ -31,7 +30,6 @@ public class MaterialLayerList implements IMaterialLayerList {
                     return new MaterialLayer(tex, partType, c, false);
                 })
                 .collect(Collectors.toList()));
-        this.oldTextureType = texture;
     }
 
     public MaterialLayerList(MaterialLayer... layers) {
@@ -45,20 +43,6 @@ public class MaterialLayerList implements IMaterialLayerList {
     @Override
     public List<MaterialLayer> getLayers() {
         return Collections.unmodifiableList(layers);
-    }
-
-    @Deprecated
-    @Override
-    public PartTextureSet getTexture() {
-        return oldTextureType;
-    }
-
-    @Override
-    public int getPrimaryColor() {
-        if (!layers.isEmpty()) {
-            return layers.get(0).getColor();
-        }
-        return Color.VALUE_WHITE;
     }
 
     public JsonElement serialize() {

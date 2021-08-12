@@ -23,14 +23,14 @@
       "armor_durability": 14.0,
       "enchantability": 14.0,
       "rarity": 40.0,
+      "chargeability": 0.9,
       "armor_durability/elytra": 18.0,
       "armor": 6.0,
       "armor/helmet": 1.0,
       "armor/chestplate": 2.0,
       "armor/leggings": 2.0,
       "armor/boots": 1.0,
-      "magic_armor": 14.0,
-      "silentgems:chargeability": 0.9
+      "magic_armor": 14.0
     },
     "grip": {
       "repair_efficiency": {

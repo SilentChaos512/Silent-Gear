@@ -26,6 +26,7 @@
       "armor_durability": 36.0,
       "enchantability": 12.0,
       "rarity": 80.0,
+      "chargeability": 0.7,
       "harvest_level": 3.0,
       "harvest_speed": 9.0,
       "melee_damage": 3.0,
@@ -41,8 +42,7 @@
       "armor_toughness": 10.0,
       "magic_armor": 10.0,
       "projectile_speed": 1.0,
-      "projectile_accuracy": 1.2,
-      "silentgems:chargeability": 0.7
+      "projectile_accuracy": 1.2
     },
     "rod": {
       "durability": {

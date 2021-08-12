@@ -258,7 +258,8 @@ public class MaterialBuilder {
         this.display.put(PartGearKey.of(gearType, partType), layers);
         if (partType == PartType.MAIN && !this.display.containsKey(PartGearKey.of(GearType.FRAGMENT, partType))) {
             // Generate fragment model info if missing
-            displayFragment(PartTextures.METAL, layers.getPrimaryColor());
+            int color = layers.getLayers().isEmpty() ? Color.VALUE_WHITE : layers.getLayers().get(0).getColor();
+            displayFragment(PartTextures.METAL, color);
         }
         return this;
     }

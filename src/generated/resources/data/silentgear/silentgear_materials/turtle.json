@@ -24,7 +24,7 @@
       "rarity": 20.0,
       "armor/helmet": 2.0,
       "magic_armor": 4.0,
-      "silentgems:chargeability": 0.5
+      "chargeability": 0.5
     }
   },
   "traits": {

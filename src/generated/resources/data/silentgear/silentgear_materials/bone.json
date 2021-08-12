@@ -42,7 +42,7 @@
       "projectile_speed": 0.9,
       "projectile_accuracy": 1.0,
       "rarity": 8.0,
-      "silentgems:chargeability": 0.9
+      "chargeability": 0.9
     },
     "rod": {
       "melee_damage": {
