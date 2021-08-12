@@ -105,7 +105,8 @@ public interface IAoeTool {
     }
 
     default boolean isEffectiveOnBlock(ItemStack stack, BlockState state, Player player) {
-        return stack.getItem().isCorrectToolForDrops(stack, state) || ForgeHooks.isCorrectToolForDrops(state, player);
+        boolean isCorrectTool = stack.getItem().isCorrectToolForDrops(stack, state) || ForgeHooks.isCorrectToolForDrops(state, player);
+        return isCorrectTool && stack.getDestroySpeed(state) > 1f;
     }
 
     default void attemptAddExtraBlock(Level world, BlockState state, BlockPos pos, ItemStack stack, Player player, List<BlockPos> list) {
