@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:ores/bort",
+    "#forge:ores/crimson_iron",
+    "#forge:ores/azure_silver",
+    "silentgear:raw_crimson_iron_block",
+    "silentgear:raw_azure_silver_block",
+    "#forge:storage_blocks/azure_silver",
+    "#forge:storage_blocks/azure_electrum",
+    "#forge:storage_blocks/bort",
+    "#forge:storage_blocks/blaze_gold",
+    "#forge:storage_blocks/crimson_iron",
+    "#forge:storage_blocks/crimson_steel",
+    "#forge:storage_blocks/tyrian_steel",
+    "silentgear:material_grader",
+    "silentgear:salvager",
+    "silentgear:starlight_charger",
+    "silentgear:metal_alloyer",
+    "silentgear:recrystallizer",
+    "silentgear:refabricator",
+    "silentgear:metal_press",
+    "silentgear:netherwood_charcoal_block"
+  ]
+}

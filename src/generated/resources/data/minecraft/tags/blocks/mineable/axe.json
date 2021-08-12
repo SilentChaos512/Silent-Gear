@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#silentgear:netherwood_logs",
+    "silentgear:gear_smithing_table",
+    "silentgear:netherwood_planks",
+    "silentgear:netherwood_slab",
+    "silentgear:netherwood_stairs",
+    "silentgear:netherwood_fence",
+    "silentgear:netherwood_fence_gate",
+    "silentgear:netherwood_door",
+    "silentgear:netherwood_trapdoor"
+  ]
+}

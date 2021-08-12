@@ -8,8 +8,10 @@ Requires Forge 37.0.31 or higher!
 ### Changed
 - Updated for Forge's new harvest tool system (37.0.31+ required)
 - Stat modifiers for katana and machetes switched (with small changes). Katana now deal more damage and are slower, while machetes deal less damage and are faster. This change was made to give both sword types a purpose.
+- Classic mixing is now disabled by default. The config was renamed to "allowLegacyMaterialMixing" to force it to reset.
 ### Fixed
 - Deepslate bort ores not spawning
+- Blocks missing their "mineable with" tags and not being affected by vanilla tools
 
 ## [2.7.0] - 2021-08-08
 ### Changed

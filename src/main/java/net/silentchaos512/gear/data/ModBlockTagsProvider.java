@@ -40,6 +40,40 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(ModBlocks.RAW_AZURE_SILVER_BLOCK.get())
                 .add(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get());
 
+        tag(BlockTags.MINEABLE_WITH_AXE)
+                .addTag(ModTags.Blocks.NETHERWOOD_LOGS)
+                .add(ModBlocks.GEAR_SMITHING_TABLE.get())
+                .add(ModBlocks.NETHERWOOD_PLANKS.get())
+                .add(ModBlocks.NETHERWOOD_SLAB.get())
+                .add(ModBlocks.NETHERWOOD_STAIRS.get())
+                .add(ModBlocks.NETHERWOOD_FENCE.get())
+                .add(ModBlocks.NETHERWOOD_FENCE_GATE.get())
+                .add(ModBlocks.NETHERWOOD_DOOR.get())
+                .add(ModBlocks.NETHERWOOD_TRAPDOOR.get());
+        tag(BlockTags.MINEABLE_WITH_HOE)
+                .add(ModBlocks.NETHERWOOD_LEAVES.get());
+        tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .addTag(ModTags.Blocks.ORES_BORT)
+                .addTag(ModTags.Blocks.ORES_CRIMSON_IRON)
+                .addTag(ModTags.Blocks.ORES_AZURE_SILVER)
+                .add(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get())
+                .add(ModBlocks.RAW_AZURE_SILVER_BLOCK.get())
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_BORT)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_TYRIAN_STEEL)
+                .add(ModBlocks.MATERIAL_GRADER.get())
+                .add(ModBlocks.SALVAGER.get())
+                .add(ModBlocks.STARLIGHT_CHARGER.get())
+                .add(ModBlocks.METAL_ALLOYER.get())
+                .add(ModBlocks.RECRYSTALLIZER.get())
+                .add(ModBlocks.REFABRICATOR.get())
+                .add(ModBlocks.METAL_PRESS.get())
+                .add(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
+
         // Silent Gear
         getBuilder(ModTags.Blocks.FLUFFY_BLOCKS)
                 .add(Registration.getBlocks(FluffyBlock.class).toArray(new Block[0]));
