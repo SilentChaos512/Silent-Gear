@@ -58,7 +58,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
                 // If classic mixing is disabled, all materials must be the same
                 if (first == null) {
                     first = mat.get();
-                } else if (!Config.Common.allowClassicMaterialMixing.get() && first != mat.get()) {
+                } else if (!Config.Common.allowLegacyMaterialMixing.get() && first != mat.get()) {
                     return false;
                 }
             }
