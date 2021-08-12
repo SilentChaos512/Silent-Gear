@@ -3,12 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.7.1] - 2021-08-12
 Requires Forge 37.0.31 or higher!
 ### Changed
 - Updated for Forge's new harvest tool system (37.0.31+ required)
 - Stat modifiers for katana and machetes switched (with small changes). Katana now deal more damage and are slower, while machetes deal less damage and are faster. This change was made to give both sword types a purpose.
 - Classic mixing is now disabled by default. The config was renamed to "allowLegacyMaterialMixing" to force it to reset.
+- All materials now use the Silent Gear Chargeability stat, instead of referencing the old Silent's Gems stat
 ### Fixed
 - Deepslate bort ores not spawning
 - Blocks missing their "mineable with" tags and not being affected by vanilla tools
