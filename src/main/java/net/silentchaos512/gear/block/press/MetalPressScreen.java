@@ -27,7 +27,7 @@ public class MetalPressScreen extends AbstractContainerScreen<MetalPressContaine
         if (minecraft == null) return;
 
         RenderSystem.clearColor(1, 1, 1, 1);
-        minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
 
         int posX = (this.width - this.imageWidth) / 2;
         int posY = (this.height - this.imageHeight) / 2;

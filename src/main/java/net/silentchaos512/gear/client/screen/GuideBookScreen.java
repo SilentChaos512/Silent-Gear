@@ -36,7 +36,7 @@ public class GuideBookScreen extends Screen {
         if (minecraft == null) return;
 
         RenderSystem.clearColor(1, 1, 1, 1);
-        minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
 
         int posX = (this.width - 176) / 2;
         int posY = (this.height - 166) / 2;

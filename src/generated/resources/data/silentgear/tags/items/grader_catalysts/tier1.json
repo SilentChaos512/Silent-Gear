@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "silentgear:glowing_dust",
-    "#forge:dusts/glowstone"
+    "silentgear:glowing_dust"
   ]
 }

@@ -44,7 +44,7 @@ public class GearHudOverlay extends GuiComponent {
         // Renders an attack indicator if an entity is within extra reach distance of a gear weapon
 
 //        RenderSystem.defaultAlphaFunc();
-        this.mc.getTextureManager().getTexture(GUI_ICONS_LOCATION);
+        RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
 //        RenderSystem.enableBlend();
 //        RenderSystem.enableAlphaTest();
 
