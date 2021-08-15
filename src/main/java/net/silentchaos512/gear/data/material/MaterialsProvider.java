@@ -768,7 +768,7 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.ROD, Const.Traits.CHIPPING, 2)
                 .display(PartType.MAIN,
                         new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x4F4B4F),
-                        new MaterialLayer(PartTextures.HIGHLIGHT, 0x3A3B48))
+                        new MaterialLayer(PartTextures.SPLOTCHES, 0x32333D))
                 .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
         );
@@ -800,10 +800,8 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.ROD, Const.Traits.JAGGED, 2)
                 .trait(PartType.ROD, Const.Traits.HARD, 1)
                 .display(PartType.MAIN,
-                        // TODO: highlight does not work as intended here. Maybe a new texture with
-                        //  no transparent pixels scattered over the tool head would work?
                         new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x3C3947),
-                        new MaterialLayer(PartTextures.HIGHLIGHT, 0x1F121B))
+                        new MaterialLayer(PartTextures.SPLOTCHES, 0x1F121B))
                 .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x3C3947)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x3C3947)
         );

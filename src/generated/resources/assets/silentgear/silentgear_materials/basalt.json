@@ -5,8 +5,8 @@
       "color": "#4F4B4F"
     },
     {
-      "texture": "silentgear:_highlight",
-      "color": "#3A3B48"
+      "texture": "silentgear:main_splotches",
+      "color": "#32333D"
     }
   ],
   "main/fragment": [

@@ -12,6 +12,7 @@ import java.util.List;
 
 public enum PartTextures {
     HIGHLIGHT("_highlight", PartType.MISC_UPGRADE, GearType.TOOL, true),
+    SPLOTCHES("main_splotches", PartType.MAIN, GearType.TOOL, true),
     MAIN_GENERIC_LC("main_generic_lc", PartType.MAIN, GearType.TOOL, true),
     MAIN_GENERIC_HC("main_generic_hc", PartType.MAIN, GearType.TOOL, true),
     ROD_GENERIC_LC("rod_generic_lc", PartType.ROD, GearType.TOOL, true),

@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- A "splotches" texture for main parts, used by basalt and blackstone
+
 ## [2.7.1] - 2021-08-12
 Requires Forge 37.0.31 or higher!
 ### Changed
