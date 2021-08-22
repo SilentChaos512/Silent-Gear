@@ -38,7 +38,7 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nullable;
 import java.util.*;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "OverlyComplexClass"})
 public class MaterialBuilder {
     final ResourceLocation id;
     private final int tier;
@@ -76,7 +76,6 @@ public class MaterialBuilder {
         this.id = id;
         this.tier = tier;
         this.ingredient = ingredient;
-        //noinspection DynamicRegexReplaceableByCompiledPattern
         this.name = new TranslatableComponent(String.format("material.%s.%s",
                 this.id.getNamespace(),
                 this.id.getPath().replace("/", ".")));

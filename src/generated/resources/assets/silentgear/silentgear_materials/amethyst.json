@@ -14,6 +14,24 @@
       "color": "#A31DE6"
     }
   ],
+  "tip/all": [
+    {
+      "texture": "silentgear:tip_sharp",
+      "color": "#A31DE6"
+    }
+  ],
+  "tip/part": [
+    {
+      "texture": "silentgear:tip_base"
+    },
+    {
+      "texture": "silentgear:tip",
+      "color": "#A31DE6"
+    },
+    {
+      "texture": "silentgear:tip_shine"
+    }
+  ],
   "adornment/all": [
     {
       "texture": "silentgear:adornment_generic",

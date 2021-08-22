@@ -56,7 +56,7 @@
     "main": [
       {
         "name": "silentgear:renew",
-        "level": 1,
+        "level": 2,
         "conditions": [
           {
             "type": "silentgear:material_ratio",

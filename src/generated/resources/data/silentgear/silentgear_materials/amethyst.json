@@ -39,6 +39,43 @@
       "projectile_speed": 1.0,
       "projectile_accuracy": 1.0
     },
+    "tip": {
+      "durability": {
+        "mul2": -0.25
+      }
+    },
     "adornment": {}
+  },
+  "traits": {
+    "main": [
+      {
+        "name": "silentgear:renew",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.7
+          }
+        ]
+      }
+    ],
+    "tip": [
+      {
+        "name": "silentgear:silky",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:material_ratio",
+            "ratio": 0.66
+          }
+        ]
+      }
+    ],
+    "adornment": [
+      {
+        "name": "silentgear:cursed",
+        "level": 4
+      }
+    ]
   }
 }
