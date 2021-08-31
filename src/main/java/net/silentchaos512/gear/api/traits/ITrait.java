@@ -18,6 +18,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
@@ -104,7 +105,7 @@ public interface ITrait {
         tooltip.add(affixFirst.apply(displayName));
 
         // Description (usually not shown)
-        if (KeyTracker.isDisplayTraitsDown()) {
+        if (KeyTracker.isDisplayTraitsDown() && !Config.Common.vanillaStyleTooltips.get()) {
             ITextComponent description = TextUtil.withColor(this.getDescription(level), TextFormatting.DARK_GRAY);
             tooltip.add(new StringTextComponent("    ").append(description));
         }

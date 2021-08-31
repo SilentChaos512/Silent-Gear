@@ -83,27 +83,31 @@ public final class GearClientHelper {
             tooltip.add(TextUtil.withColor(misc("lockedStats"), Color.YELLOW));
         }
 
-        // Let parts add information if they need to
-        Collections.reverse(constructionParts);
-        for (PartData data : constructionParts) {
-            data.get().addInformation(data, stack, tooltip, flag);
+        if (!Config.Common.vanillaStyleTooltips.get()) {
+            // Let parts add information if they need to
+            Collections.reverse(constructionParts);
+            for (PartData data : constructionParts) {
+                data.get().addInformation(data, stack, tooltip, flag);
+            }
         }
 
         // Traits
         addTraitsInfo(stack, tooltip, flag);
 
-        // Stats
-        addStatsInfo(stack, tooltip, flag, item);
+        if (!Config.Common.vanillaStyleTooltips.get()) {
+            // Stats
+            addStatsInfo(stack, tooltip, flag, item);
 
-        // Tool construction
-        if (KeyTracker.isDisplayConstructionDown() && flag.showConstruction) {
-            tooltip.add(TextUtil.withColor(misc("tooltip.construction"), Color.GOLD));
-            Collections.reverse(constructionParts);
-            tooltipListParts(stack, tooltip, constructionParts, flag);
-        } else if (flag.showConstruction) {
-            tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.construction"), Color.GOLD)
-                    .append(new StringTextComponent(" ")
-                            .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_CONSTRUCTION), TextFormatting.GRAY))));
+            // Tool construction
+            if (KeyTracker.isDisplayConstructionDown() && flag.showConstruction) {
+                tooltip.add(TextUtil.withColor(misc("tooltip.construction"), Color.GOLD));
+                Collections.reverse(constructionParts);
+                tooltipListParts(stack, tooltip, constructionParts, flag);
+            } else if (flag.showConstruction) {
+                tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.construction"), Color.GOLD)
+                        .append(new StringTextComponent(" ")
+                                .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_CONSTRUCTION), TextFormatting.GRAY))));
+            }
         }
     }
 
@@ -163,9 +167,12 @@ public final class GearClientHelper {
         }
 
         int traitIndex = getTraitDisplayIndex(visibleTraits.size(), flag);
+
         IFormattableTextComponent textTraits = TextUtil.withColor(misc("tooltip.traits"), Color.GOLD);
         if (traitIndex < 0) {
-            tooltip.add(textTraits);
+            if (!Config.Common.vanillaStyleTooltips.get()) {
+                tooltip.add(textTraits);
+            }
         }
 
         int i = 0;
@@ -173,6 +180,9 @@ public final class GearClientHelper {
             if (traitIndex < 0 || traitIndex == i) {
                 final int level = traits.get(trait);
                 trait.addInformation(level, tooltip, flag, text -> {
+                    if(Config.Common.vanillaStyleTooltips.get()) {
+                        return TextUtil.withColor(new StringTextComponent(TextListBuilder.VANILLA_BULLET + " "), Color.GRAY).append(text);
+                    }
                     if (traitIndex >= 0) {
                         return textTraits
                                 .append(TextUtil.withColor(new StringTextComponent(": "), TextFormatting.GRAY)
@@ -186,7 +196,7 @@ public final class GearClientHelper {
     }
 
     private static int getTraitDisplayIndex(int numTraits, GearTooltipFlag flag) {
-        if (KeyTracker.isDisplayTraitsDown() || numTraits == 0)
+        if (Config.Common.vanillaStyleTooltips.get() || KeyTracker.isDisplayTraitsDown() || numTraits == 0)
             return -1;
         return ClientTicks.ticksInGame() / 20 % numTraits;
     }
