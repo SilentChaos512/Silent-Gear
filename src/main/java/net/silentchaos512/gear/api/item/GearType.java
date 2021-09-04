@@ -93,11 +93,16 @@ public final class GearType {
     // Armor
     public static final GearType ARMOR = getOrCreate("armor", ALL, b ->
             b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
-    public static final GearType BOOTS = getOrCreate("boots", ARMOR);
-    public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR);
-    public static final GearType ELYTRA = getOrCreate("elytra", ARMOR);
-    public static final GearType HELMET = getOrCreate("helmet", ARMOR);
-    public static final GearType LEGGINGS = getOrCreate("leggings", ARMOR);
+    public static final GearType BOOTS = getOrCreate("boots", ARMOR, b ->
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+    public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR, b ->
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+    public static final GearType ELYTRA = getOrCreate("elytra", ARMOR, b ->
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+    public static final GearType HELMET = getOrCreate("helmet", ARMOR, b ->
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+    public static final GearType LEGGINGS = getOrCreate("leggings", ARMOR, b ->
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
     // Projectiles
     public static final GearType ARROW = getOrCreate("arrow", PROJECTILE);
 

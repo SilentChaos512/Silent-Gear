@@ -2,35 +2,10 @@
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/silent-gear",
     "changelog": "https://github.com/SilentChaos512/Silent-Gear/blob/1.17.x/CHANGELOG.md",
     "1.17.1": {
-        "2.7.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.17.x/CHANGELOG.md"
-    },
-    "1.16.5": {
-        "2.6.29": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md"
-    },
-    "1.16.1": {
-        "2.1.1": "https://github.com/SilentChaos512/Silent-Gear/blob/1.16.x/CHANGELOG.md"
-    },
-    "1.15.2": {
-        "1.11.0": "https://github.com/SilentChaos512/Silent-Gear/blob/1.15/CHANGELOG.md"
-    },
-    "1.14.4": {
-        "1.4.6": "https://github.com/SilentChaos512/Silent-Gear/blob/1.14/CHANGELOG.md"
-    },
-    "1.14.3": {
-        "1.2.4": "https://github.com/SilentChaos512/Silent-Gear/blob/1.14/CHANGELOG.md"
+        "2.7.3": "https://github.com/SilentChaos512/Silent-Gear/blob/1.17.x/CHANGELOG.md"
     },
     "promos": {
-        "1.14.4-latest": "1.4.6",
-        "1.14.4-recommended": "1.4.6",
-        "1.14.3-latest": "1.2.4",
-        "1.14.3-recommended": "1.2.4",
-        "1.15.2-latest": "1.10.3",
-        "1.15.2-recommended": "1.10.3",
-        "1.16.1-latest": "2.1.1",
-        "1.16.1-recommended": "2.1.1",
-        "1.16.5-latest": "2.6.29",
-        "1.16.5-recommended": "2.6.29",
-        "1.17.1-latest": "2.7.1",
-        "1.17.1-recommended": "2.7.1"
+        "1.17.1-latest": "2.7.3",
+        "1.17.1-recommended": "2.7.3"
     }
 }
