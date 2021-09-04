@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Crash on launch in `NerfedGear` [#427]
+- Mattocks being effective on stone [#420]
 
 ## [2.7.2] - 2021-08-22
 ### Added

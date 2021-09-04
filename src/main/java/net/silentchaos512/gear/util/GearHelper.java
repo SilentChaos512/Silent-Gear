@@ -438,7 +438,7 @@ public final class GearHelper {
     public static boolean isCorrectToolForDrops(ItemStack stack, BlockState state, @Nullable Tag<Block> blocksForTool, Set<Material> extraMaterials) {
         Tier tier = getTier(stack);
         if (tier != null) {
-            boolean isInToolTag = blocksForTool == null || state.is(blocksForTool);
+            boolean isInToolTag = blocksForTool != null && state.is(blocksForTool);
             boolean isExtraMaterial = extraMaterials.contains(state.getMaterial());
             return (isInToolTag || isExtraMaterial) && TierSortingRegistry.isCorrectTierForDrops(tier, state);
         }
