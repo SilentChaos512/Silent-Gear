@@ -15,6 +15,8 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 
+import java.util.Collection;
+
 public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implements IGearRecipe {
     private final ICoreItem item;
     private final Lazy<ItemStack> exampleOutput;
@@ -46,11 +48,16 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
         if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
 
         GearType gearType = item.getGearType();
-        for (PartData part : getParts(inv)) {
+        Collection<PartData> parts = getParts(inv);
+
+        if (parts.isEmpty()) return false;
+
+        for (PartData part : parts) {
             if (!part.isCraftingAllowed(gearType, inv)) {
                 return false;
             }
         }
+
         return true;
     }
 

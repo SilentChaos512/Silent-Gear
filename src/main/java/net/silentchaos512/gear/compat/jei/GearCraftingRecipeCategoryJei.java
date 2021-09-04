@@ -21,6 +21,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.common.util.Size2i;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.TextUtil;
@@ -103,14 +104,17 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
 
     private static List<ItemStack> shiftIngredients(List<ItemStack> list, int amount) {
         List<ItemStack> ret = new ArrayList<>(list);
-        if (ret.isEmpty()) {
+
+        if (ret.isEmpty() || !Config.Common.allowLegacyMaterialMixing.get()) {
             return ret;
         }
+
         for (int i = 0; i < amount; ++i) {
             ItemStack stack = ret.get(ret.size() - 1);
             ret.remove(ret.size() - 1);
             ret.add(0, stack);
         }
+
         return ret;
     }
 

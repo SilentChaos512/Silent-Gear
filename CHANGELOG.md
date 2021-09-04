@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Crash on launch in `NerfedGear` [#427]
 - Mattocks being effective on stone [#420]
+- Some recipes not respecting the `allowLegacyMaterialMixing` config and allowing mixing anyway
 
 ## [2.7.2] - 2021-08-22
 ### Added
