@@ -28,12 +28,12 @@ public final class NerfedGear {
     private NerfedGear() {}
 
     public static void init() {
-        Field itemDamageField;
+        Field maxDamageField;
         try {
-            itemDamageField = ObfuscationReflectionHelper.findField(Item.class, "maxDamage");
-            itemDamageField.setAccessible(true);
+            maxDamageField = ObfuscationReflectionHelper.findField(Item.class, "f_41371_");
+            maxDamageField.setAccessible(true);
         } catch (Exception ex) {
-            SilentGear.LOGGER.error("Field to get Item damage field via reflection");
+            SilentGear.LOGGER.error("Field to get Item maxDamage field via reflection");
             SilentGear.LOGGER.catching(ex);
             return;
         }
@@ -42,9 +42,9 @@ public final class NerfedGear {
             if (isNerfedItem(item)) {
                 SilentGear.LOGGER.debug("Try nerf durability of {}", item.getRegistryName());
                 try {
-                    int maxDamage = (int) itemDamageField.get(item);
+                    int maxDamage = (int) maxDamageField.get(item);
                     int newMax = Mth.clamp((int) (maxDamage * Config.Common.nerfedItemDurabilityMulti.get()), 1, maxDamage);
-                    itemDamageField.set(item, newMax);
+                    maxDamageField.set(item, newMax);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
