@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class GearFishingRod extends FishingRodItem implements ICoreTool {
+public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
     private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.REPAIR_EFFICIENCY,
@@ -68,7 +68,7 @@ public class GearFishingRod extends FishingRodItem implements ICoreTool {
             ItemStats.KNOCKBACK_RESISTANCE
     );
 
-    public GearFishingRod() {
+    public GearFishingRodItem() {
         super(GearHelper.getBaseItemProperties().durability(100));
     }
 

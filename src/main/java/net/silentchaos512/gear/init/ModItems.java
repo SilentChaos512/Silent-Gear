@@ -293,11 +293,11 @@ public final class ModItems {
     public static final ItemRegistryObject<GearMattockItem> MATTOCK = register("mattock", () -> new GearMattockItem());
     public static final ItemRegistryObject<GearSickleItem> SICKLE = register("sickle", () -> new GearSickleItem(GearType.SICKLE));
     public static final ItemRegistryObject<GearShearsItem> SHEARS = register("shears", () -> new GearShearsItem());
-    public static final ItemRegistryObject<GearFishingRod> FISHING_ROD = register("fishing_rod", GearFishingRod::new);
+    public static final ItemRegistryObject<GearFishingRodItem> FISHING_ROD = register("fishing_rod", GearFishingRodItem::new);
     public static final ItemRegistryObject<GearBowItem> BOW = register("bow", () -> new GearBowItem());
     public static final ItemRegistryObject<GearCrossbowItem> CROSSBOW = register("crossbow", () -> new GearCrossbowItem());
-    public static final ItemRegistryObject<GearSlingshot> SLINGSHOT = register("slingshot", () -> new GearSlingshot());
-    public static final ItemRegistryObject<GearShield> SHIELD = register("shield", () -> new GearShield());
+    public static final ItemRegistryObject<GearSlingshotItem> SLINGSHOT = register("slingshot", () -> new GearSlingshotItem());
+    public static final ItemRegistryObject<GearShieldItem> SHIELD = register("shield", () -> new GearShieldItem());
     public static final ItemRegistryObject<GearArrowItem> ARROW = register("arrow", () -> new GearArrowItem(unstackableProps()));
 
     public static final ItemRegistryObject<GearArmorItem> HELMET = register("helmet", () -> new GearArmorItem(EquipmentSlot.HEAD));

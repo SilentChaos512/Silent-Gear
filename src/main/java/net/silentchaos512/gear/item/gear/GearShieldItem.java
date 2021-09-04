@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class GearShield extends ShieldItem implements ICoreItem {
+public class GearShieldItem extends ShieldItem implements ICoreItem {
     private static final float DURABILITY_MULTI = 337f / 15f;
 
     private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
@@ -54,7 +54,7 @@ public class GearShield extends ShieldItem implements ICoreItem {
             ItemStats.RANGED_SPEED
     );
 
-    public GearShield() {
+    public GearShieldItem() {
         super(GearHelper.getBaseItemProperties().durability(100));
     }
 
