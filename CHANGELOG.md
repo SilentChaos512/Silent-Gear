@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- JEI support is back!
 ### Fixed
 - Crash on launch in `NerfedGear` [#427]
 - Mattocks being effective on stone [#420]

@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,6 +9,7 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
@@ -34,14 +34,14 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated arrow;
-    private final String localizedName;
+    private final Component localizedName;
 
     public SalvagingRecipeCategoryJei(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(SalvagerScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
         icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.SALVAGER));
         arrow = guiHelper.drawableBuilder(SalvagerScreen.TEXTURE, 176, 14, 24, 17)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
-        localizedName = TextUtil.translate("jei", "category.salvaging").getString();
+        localizedName = TextUtil.translate("jei", "category.salvaging");
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     }
 
     @Override
-    public String getTitle() {
+    public Component getTitle() {
         return localizedName;
     }
 
@@ -97,4 +97,3 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
         arrow.draw(matrixStack, 32 - GUI_START_X, 34 - GUI_START_Y);
     }
 }
-*/

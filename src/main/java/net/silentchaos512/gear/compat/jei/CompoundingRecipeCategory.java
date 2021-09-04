@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,6 +9,7 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
@@ -33,7 +33,7 @@ public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements I
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated arrow;
-    private final String localizedName;
+    private final Component localizedName;
 
     public CompoundingRecipeCategory(CompounderInfo<R> info, String categoryName, IGuiHelper guiHelper) {
         this.info = info;
@@ -41,7 +41,7 @@ public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements I
         icon = guiHelper.createDrawableIngredient(new ItemStack(info.getBlock()));
         arrow = guiHelper.drawableBuilder(CompounderScreen.TEXTURE, 176, 14, 24, 17)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
-        localizedName = TextUtil.translate("jei", "category.compounding." + categoryName).getString();
+        localizedName = TextUtil.translate("jei", "category.compounding." + categoryName);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements I
     }
 
     @Override
-    public String getTitle() {
+    public Component getTitle() {
         return localizedName;
     }
 
@@ -107,4 +107,3 @@ public class CompoundingRecipeCategory<R extends CompoundingRecipe> implements I
         arrow.draw(matrixStack, 93 - GUI_START_X, 34 - GUI_START_Y);
     }
 }
-*/

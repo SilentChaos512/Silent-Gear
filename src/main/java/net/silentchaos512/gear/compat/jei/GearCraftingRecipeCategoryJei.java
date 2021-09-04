@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -12,19 +11,19 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.common.util.Size2i;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -36,14 +35,14 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
     public static final int HEIGHT = 132;
     private final IDrawable background;
     private final IDrawable icon;
-    private final String localizedName;
+    private final Component localizedName;
     private final ICraftingGridHelper craftingGridHelper;
 
     public GearCraftingRecipeCategoryJei(IGuiHelper guiHelper) {
         ResourceLocation location = SilentGear.getId("textures/gui/gear_crafting_jei.png");
         this.background = guiHelper.createDrawable(location, 0, 0, WIDTH, HEIGHT);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.BLUEPRINT_PACKAGE));
-        this.localizedName = I18n.get("gui.silentgear.category.gearCrafting");
+        this.localizedName = TextUtil.translate("gui", "category.gearCrafting");
         this.craftingGridHelper = guiHelper.createCraftingGridHelper(1);
     }
 
@@ -58,7 +57,7 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
     }
 
     @Override
-    public String getTitle() {
+    public Component getTitle() {
         return this.localizedName;
     }
 
@@ -162,4 +161,3 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
         matrixStack.popPose();
     }
 }
-*/

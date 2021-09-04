@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.IModPlugin;
@@ -6,16 +5,17 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
+import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.*;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -47,12 +47,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
 
 @JeiPlugin
 public class SGearJeiPlugin implements IModPlugin {
@@ -168,12 +162,12 @@ public class SGearJeiPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration reg) {
-        reg.registerSubtypeInterpreter(ModItems.FRAGMENT.get(), stack -> {
+        reg.registerSubtypeInterpreter(ModItems.FRAGMENT.get(), (stack, context) -> {
             IMaterialInstance material = FragmentItem.getMaterial(stack);
             return material != null ? material.getId().toString() : "";
         });
 
-        ISubtypeInterpreter customMaterials = stack -> {
+        IIngredientSubtypeInterpreter<ItemStack> customMaterials = (stack, context) -> {
             IMaterialInstance material = CustomMaterialItem.getMaterial(stack);
             return material != null ? material.getId().toString() : "";
         };
@@ -184,22 +178,21 @@ public class SGearJeiPlugin implements IModPlugin {
     private static void addInfoPage(IRecipeRegistration reg, ItemLike item) {
         String key = getDescKey(Objects.requireNonNull(item.asItem().getRegistryName()));
         ItemStack stack = new ItemStack(item);
-        reg.addIngredientInfo(stack, VanillaTypes.ITEM, key);
+        reg.addIngredientInfo(stack, VanillaTypes.ITEM, new TranslatableComponent(key));
     }
 
     private static void addInfoPage(IRecipeRegistration reg, String name, Collection<ItemLike> items) {
         String key = getDescKey(SilentGear.getId(name));
         List<ItemStack> stacks = items.stream().map(ItemStack::new).collect(Collectors.toList());
-        reg.addIngredientInfo(stacks, VanillaTypes.ITEM, key);
+        reg.addIngredientInfo(stacks, VanillaTypes.ITEM, new TranslatableComponent(key));
     }
 
     private static void addInfoPage(IRecipeRegistration reg, ItemLike item, Stream<ItemStack> variants) {
         String key = getDescKey(Objects.requireNonNull(item.asItem().getRegistryName()));
-        reg.addIngredientInfo(variants.collect(Collectors.toList()), VanillaTypes.ITEM, key);
+        reg.addIngredientInfo(variants.collect(Collectors.toList()), VanillaTypes.ITEM, new TranslatableComponent(key));
     }
 
     private static String getDescKey(ResourceLocation name) {
         return "jei." + name.getNamespace() + "." + name.getPath() + ".desc";
     }
 }
-*/

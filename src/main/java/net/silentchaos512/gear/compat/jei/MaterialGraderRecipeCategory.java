@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.compat.jei;
 
 import com.google.common.collect.ImmutableList;
@@ -9,6 +8,7 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -32,12 +32,12 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
 
     private final IDrawable background;
     private final IDrawable icon;
-    private final String localizedName;
+    private final Component localizedName;
 
     public MaterialGraderRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(GraderScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
         icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.MATERIAL_GRADER));
-        localizedName = TextUtil.translate("jei", "category.grading").getString();
+        localizedName = TextUtil.translate("jei", "category.grading");
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     }
 
     @Override
-    public String getTitle() {
+    public Component getTitle() {
         return localizedName;
     }
 
@@ -103,4 +103,3 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     public static class GraderRecipe {
     }
 }
-*/
