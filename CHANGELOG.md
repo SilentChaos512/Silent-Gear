@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.6.31] - 2021-09-12
 ### Changed
 - Updated to official Mojang mappings. This requires Silent Lib 4.10.x!
+- Items with missing stats will now attempt to recalculate whenever possible. This should make generating gear their alternative means easier, because stats and traits can be omitted from NBt.
 
 ## [2.6.30] - 2021-07-12
 This version _does NOT_ load with Silent Lib 4.10.x! Continue using 4.9.6 for now.
