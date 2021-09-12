@@ -7,6 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -149,6 +150,12 @@ class SideProxy implements IProxy {
 
     @Nullable
     @Override
+    public Level getClientLevel() {
+        return null;
+    }
+
+    @Nullable
+    @Override
     public MinecraftServer getServer() {
         return server;
     }
@@ -217,6 +224,12 @@ class SideProxy implements IProxy {
         @Override
         public Player getClientPlayer() {
             return Minecraft.getInstance().player;
+        }
+
+        @Nullable
+        @Override
+        public Level getClientLevel() {
+            return Minecraft.getInstance().level;
         }
     }
 

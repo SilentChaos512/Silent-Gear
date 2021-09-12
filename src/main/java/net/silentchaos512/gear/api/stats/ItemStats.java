@@ -170,6 +170,17 @@ public final class ItemStats {
         return id != null ? REGISTRY.get().getValue(id) : null;
     }
 
+    /**
+     * Gets a stat by registry name
+     *
+     * @param id The stat's registry name
+     * @return The stat, or null if it does not exist
+     */
+    @Nullable
+    public static ItemStat byName(ResourceLocation id) {
+        return REGISTRY.get().getValue(id);
+    }
+
     @Nullable
     public static ItemStat get(IItemStat stat) {
         return REGISTRY.get().getValue(stat.getStatId());

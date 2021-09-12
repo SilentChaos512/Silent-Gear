@@ -98,6 +98,27 @@ public final class GearHelper {
         return stack.getItem() instanceof ICoreItem;
     }
 
+    /**
+     * Check if the item is a Silent Gear item and has all the parts it requires to function.
+     *
+     * @param stack The item
+     * @return True if {@code stack} is a gear item with no missing required parts
+     */
+    public static boolean isValidGear(ItemStack stack) {
+        if (!isGear(stack)) {
+            return false;
+        }
+
+        ICoreItem item = (ICoreItem) stack.getItem();
+        for (PartType type : item.getRequiredParts()) {
+            if (!GearData.hasPartOfType(stack, type)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     //region Attribute modifiers
 
     public static float getMeleeDamageModifier(ItemStack stack) {
@@ -155,7 +176,7 @@ public final class GearHelper {
 
             // Reach distance
             ForgeMod.REACH_DISTANCE.ifPresent(attr -> {
-                float reachStat = GearData.getStat(stack, ItemStats.REACH_DISTANCE);
+                float reachStat = GearData.getStat(stack, ItemStats.REACH_DISTANCE, false);
                 AttributeModifier mod = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, AttributeModifier.Operation.ADDITION);
                 map.put(attr, mod);
             });

@@ -10,6 +10,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,6 +35,8 @@ import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.EnchantmentTrait;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.RecalculateStatsPacket;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
@@ -74,7 +77,7 @@ public final class GearData {
      * Recalculate gear stats and setup NBT.
      *
      * @param stack The gear item
-     * @deprecated Prefer using {@link #recalculateStats(ItemStack, PlayerEntity)}
+     * @deprecated Prefer using {@link #recalculateStats(ItemStack, Player)}
      */
     @Deprecated
     public static void recalculateStats(ItemStack stack) {
@@ -162,6 +165,13 @@ public final class GearData {
                 propertiesCompound.remove(statId.getPath()); // Remove old keys
                 statsCompound.putFloat(statId.toString(), stat.clampValue(value));
             }
+            // Put missing relevant stats in the map to avoid recalculate stats packet spam
+            for (ItemStat stat : item.getRelevantStats(gear)) {
+                String statKey = stat.getStatId().toString();
+                if (!statsCompound.contains(statKey)) {
+                    statsCompound.putFloat(statKey, stat.getDefaultValue());
+                }
+            }
             propertiesCompound.put(NBT_STATS, statsCompound);
 
             if (player != null) {
@@ -200,7 +210,7 @@ public final class GearData {
         // Get current stats from the item, this is used for logging stat changes
         if (Config.Common.statsDebugLogging.get()) {
             Map<ItemStat, Float> map = new HashMap<>();
-            ItemStats.allStatsOrdered().forEach(stat -> map.put(stat, getStat(stack, stat)));
+            ItemStats.allStatsOrdered().forEach(stat -> map.put(stat, getStat(stack, stat, false)));
             return map;
         }
         return null;
@@ -284,13 +294,41 @@ public final class GearData {
     }
 
     public static float getStat(ItemStack stack, IItemStat stat) {
+        return getStat(stack, stat, true);
+    }
+
+    public static float getStat(ItemStack stack, IItemStat stat, boolean calculateIfMissing) {
         CompoundTag tags = getData(stack, NBT_ROOT_PROPERTIES).getCompound(NBT_STATS);
         String key = stat.getStatId().toString();
-        return tags.contains(key) ? tags.getFloat(key) : stat.getDefaultValue();
+        if (tags.contains(key)) {
+            return tags.getFloat(key);
+        }
+
+        if (calculateIfMissing) {
+            // Stat is missing, notify server to recalculate
+            Level level = SilentGear.PROXY.getClientLevel();
+
+            if (level != null && GearHelper.isValidGear(stack) && ((ICoreItem) stack.getItem()).getRelevantStats(stack).contains(stat)) {
+                SilentGear.LOGGER.debug("Sending recalculate stats packet for item with missing {} stat: {}", stat.getStatId(), stack.getHoverName().getString());
+                Network.channel.sendToServer(new RecalculateStatsPacket(level, stack, stat));
+                // Prevent the packet from being spammed...
+                putStatInNbtIfMissing(stack, stat);
+            }
+        }
+
+        return stat.getDefaultValue();
     }
 
     public static int getStatInt(ItemStack stack, IItemStat stat) {
         return Math.round(getStat(stack, stat));
+    }
+
+    public static void putStatInNbtIfMissing(ItemStack stack, IItemStat stat) {
+        CompoundTag tags = getData(stack, NBT_ROOT_PROPERTIES).getCompound(NBT_STATS);
+        String key = stat.getStatId().toString();
+        if (!tags.contains(key)) {
+            tags.putFloat(key, stat.getDefaultValue());
+        }
     }
 
     public static boolean hasLockedStats(ItemStack stack) {
