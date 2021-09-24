@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public final class Network {
-    public static final String VERSION = "sgear-net-11";
+    public static final String VERSION = "sgear-net-12";
     private static final Pattern NET_VERSION_PATTERN = Pattern.compile("sgear-net-\\d+$");
     private static final Pattern MOD_VERSION_PATTERN = Pattern.compile("^\\d+\\.\\d+\\.\\d+$");
 
@@ -116,6 +116,11 @@ public final class Network {
                 .encoder((pkt, buf) -> {})
                 .decoder(buf -> new OpenGuideBookPacket())
                 .consumer(OpenGuideBookPacket::handle)
+                .add();
+        channel.messageBuilder(RecalculateStatsPacket.class, 16, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(RecalculateStatsPacket::decode)
+                .encoder(RecalculateStatsPacket::encode)
+                .consumer(RecalculateStatsPacket::handle)
                 .add();
     }
 
