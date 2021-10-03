@@ -49,5 +49,19 @@
         "level": 1
       }
     ]
+  },
+  "model": {
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_hc",
+        "color": "#FFC600"
+      }
+    ],
+    "rod/part": [
+      {
+        "texture": "silentgear:rod",
+        "color": "#FFC600"
+      }
+    ]
   }
 }

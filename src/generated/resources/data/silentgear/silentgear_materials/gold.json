@@ -133,5 +133,70 @@
         "level": 3
       }
     ]
+  },
+  "model": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#FDFF70"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:metal",
+        "color": "#FDFF70"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#FDFF70"
+      }
+    ],
+    "rod/part": [
+      {
+        "texture": "silentgear:rod",
+        "color": "#FDFF70"
+      }
+    ],
+    "tip/all": [
+      {
+        "texture": "silentgear:tip_smooth",
+        "color": "#FDFF70"
+      }
+    ],
+    "tip/part": [
+      {
+        "texture": "silentgear:tip_base"
+      },
+      {
+        "texture": "silentgear:tip",
+        "color": "#FDFF70"
+      },
+      {
+        "texture": "silentgear:tip_shine"
+      }
+    ],
+    "coating/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#FDFF70"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "coating/part": [
+      {
+        "texture": "silentgear:coating_material",
+        "color": "#FDFF70"
+      },
+      {
+        "texture": "silentgear:coating_jar"
+      }
+    ]
   }
 }

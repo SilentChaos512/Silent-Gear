@@ -7,5 +7,31 @@
   },
   "name": {
     "translate": "material.silentgear.wood.spruce"
+  },
+  "model": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#82613A"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:wood",
+        "color": "#82613A"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#82613A"
+      }
+    ],
+    "rod/part": [
+      {
+        "texture": "silentgear:rod",
+        "color": "#82613A"
+      }
+    ]
   }
 }

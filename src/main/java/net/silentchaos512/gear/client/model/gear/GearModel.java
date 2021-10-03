@@ -132,7 +132,7 @@ public class GearModel extends LayeredModel<GearModel> {
     private void buildFakeModel(Function<Material, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, Transformation rotation, IMaterial material) {
         // This method will display an example tool for items with no data (ie, for advancements)
         MaterialInstance mat = MaterialInstance.of(material);
-        IMaterialDisplay model = MaterialDisplayManager.get(mat);
+        IMaterialDisplay model = mat.getDisplayProperties();
         if (!gearType.isArmor()) {
             MaterialLayer exampleRod = model.getLayerList(this.gearType, PartType.ROD, mat).getFirstLayer();
             if (exampleRod != null) {

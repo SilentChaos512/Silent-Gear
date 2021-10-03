@@ -25,5 +25,31 @@
         "level": 1
       }
     ]
+  },
+  "model": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#398382"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:wood",
+        "color": "#398382"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#398382"
+      }
+    ],
+    "rod/part": [
+      {
+        "texture": "silentgear:rod",
+        "color": "#398382"
+      }
+    ]
   }
 }

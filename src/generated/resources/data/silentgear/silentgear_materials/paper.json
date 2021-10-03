@@ -21,5 +21,17 @@
       "projectile_speed": 1.1,
       "projectile_accuracy": 0.9
     }
+  },
+  "model": {
+    "fletching/all": [
+      {
+        "texture": "silentgear:fletching_generic"
+      }
+    ],
+    "fletching/part": [
+      {
+        "texture": "silentgear:fletching"
+      }
+    ]
   }
 }

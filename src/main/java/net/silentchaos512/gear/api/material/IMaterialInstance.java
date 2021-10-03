@@ -63,8 +63,8 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
     }
 
     /**
-     * Gets the tier of the material. Shortcut for {@link IMaterial#getTier(IMaterialInstance, PartType)}.
-     *
+     * Gets the tier of the material. Shortcut for {@link IMaterial#getTier(IMaterialInstance,
+     * PartType)}.
      *
      * @param partType The part type
      * @return The tier
@@ -147,6 +147,8 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
     CompoundTag write(CompoundTag nbt);
 
     String getModelKey();
+
+    IMaterialDisplay getDisplayProperties();
 
     default MutableComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
         MutableComponent displayName = getDisplayName(partType, gear).copy();

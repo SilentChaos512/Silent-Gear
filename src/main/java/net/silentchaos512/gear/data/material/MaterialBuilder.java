@@ -503,6 +503,8 @@ public class MaterialBuilder {
             json.add("traits", traitsJson);
         }
 
+        json.add("model", serializeModel());
+
         return json;
     }
 }

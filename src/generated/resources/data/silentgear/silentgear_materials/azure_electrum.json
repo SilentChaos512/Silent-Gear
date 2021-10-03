@@ -123,5 +123,52 @@
         "level": 3
       }
     ]
+  },
+  "model": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#4575E3"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:metal",
+        "color": "#4575E3"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#4575E3"
+      }
+    ],
+    "rod/part": [
+      {
+        "texture": "silentgear:rod",
+        "color": "#4575E3"
+      }
+    ],
+    "tip/all": [
+      {
+        "texture": "silentgear:tip_sharp",
+        "color": "#4575E3"
+      }
+    ],
+    "tip/part": [
+      {
+        "texture": "silentgear:tip_base"
+      },
+      {
+        "texture": "silentgear:tip",
+        "color": "#4575E3"
+      },
+      {
+        "texture": "silentgear:tip_shine"
+      }
+    ]
   }
 }

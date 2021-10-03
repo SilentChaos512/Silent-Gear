@@ -17,7 +17,6 @@ import net.minecraftforge.client.model.IModelConfiguration;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.ModelErrorLogging;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -89,7 +88,7 @@ public class CompoundPartModelOverrideList extends ItemOverrides {
 
     @SuppressWarnings("TypeMayBeWeakened")
     private void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
-        IMaterialDisplay materialModel = MaterialDisplayManager.get(material);
+        IMaterialDisplay materialModel = material.getDisplayProperties();
 
         List<MaterialLayer> layers = materialModel.getLayerList(this.model.gearType, part, material).getLayers();
         for (int i = 0; i < layers.size(); i++) {

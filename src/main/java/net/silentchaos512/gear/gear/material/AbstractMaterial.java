@@ -2,14 +2,14 @@ package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.Sets;
 import com.google.gson.*;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.VanillaIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
@@ -21,6 +21,8 @@ import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.client.material.DefaultMaterialDisplay;
+import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
@@ -50,6 +52,7 @@ public abstract class AbstractMaterial implements IMaterial {
 
     protected Component displayName;
     @Nullable protected Component namePrefix = null;
+    protected IMaterialDisplay displayProperties = DefaultMaterialDisplay.INSTANCE;
 
     protected AbstractMaterial(ResourceLocation materialId, String packName) {
         this.materialId = materialId;
@@ -212,9 +215,18 @@ public abstract class AbstractMaterial implements IMaterial {
 
     @Override
     public int getNameColor(IMaterialInstance material, PartType partType, GearType gearType) {
-        IMaterialDisplay model = MaterialDisplayManager.get(material);
+        IMaterialDisplay model = material.getDisplayProperties();
         int color = model.getLayerColor(gearType, partType, material, 0);
         return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
+    }
+
+    @Override
+    public IMaterialDisplay getDisplayProperties(IMaterialInstance material) {
+        IMaterialDisplay override = MaterialDisplayManager.get(material);
+        if (override != null) {
+            return override;
+        }
+        return displayProperties;
     }
 
     @Override
@@ -261,6 +273,7 @@ public abstract class AbstractMaterial implements IMaterial {
             deserializeTraits(json, ret);
             deserializeCraftingItems(json, ret);
             deserializeNames(json, ret);
+            deserializeDisplayProperties(json, ret);
             deserializeAvailability(json, ret);
 
             return ret;
@@ -425,6 +438,19 @@ public abstract class AbstractMaterial implements IMaterial {
             return Objects.requireNonNull(Component.Serializer.fromJson(json));
         }
 
+        private void deserializeDisplayProperties(JsonObject json, T ret) {
+            JsonElement element = json.get("model");
+            if (element != null) {
+                if (element.isJsonObject()) {
+                    ret.displayProperties = MaterialDisplay.deserialize(this.name, element.getAsJsonObject());
+                } else {
+                    throw new JsonParseException("Expected 'model' to be an object");
+                }
+            } else {
+                SilentGear.LOGGER.warn("Material '{}' has no model in the data file. This may be an outdated data pack or mod.", ret.materialId);
+            }
+        }
+
         //endregion
 
         @Override
@@ -433,6 +459,7 @@ public abstract class AbstractMaterial implements IMaterial {
 
             readBasics(buffer, material);
             readCraftingItems(buffer, material);
+            readDisplayProperties(buffer, material);
             readRestrictions(buffer, material);
             readStats(buffer, material);
             readTraits(buffer, material);
@@ -482,6 +509,12 @@ public abstract class AbstractMaterial implements IMaterial {
                 PartType partType = PartType.get(buffer.readResourceLocation());
                 Ingredient ingredient = tempReadIngredientFix(buffer);
                 material.partSubstitutes.put(partType, ingredient);
+            }
+        }
+
+        private void readDisplayProperties(FriendlyByteBuf buf, T material) {
+            if (buf.readBoolean()) {
+                material.displayProperties = MaterialDisplay.fromNetwork(material.materialId, buf);
             }
         }
 
@@ -538,6 +571,7 @@ public abstract class AbstractMaterial implements IMaterial {
 
             writeBasics(buffer, material);
             writeCraftingItems(buffer, material);
+            writeDisplayProperties(buffer, material);
             writeRestrictions(buffer, material);
             writeStats(buffer, material);
             writeTraits(buffer, material);
@@ -574,6 +608,14 @@ public abstract class AbstractMaterial implements IMaterial {
                 buffer.writeResourceLocation(type.getName());
                 tempWriteIngredientFix(buffer, ing);
             });
+        }
+
+        private void writeDisplayProperties(FriendlyByteBuf buf, T material) {
+            boolean canWrite = material.displayProperties instanceof MaterialDisplay;
+            buf.writeBoolean(canWrite);
+            if (canWrite) {
+                ((MaterialDisplay) material.displayProperties).toNetwork(buf);
+            }
         }
 
         private void writeRestrictions(FriendlyByteBuf buffer, T material) {

@@ -4,14 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -26,7 +26,10 @@ import net.silentchaos512.gear.crafting.ingredient.CustomCompoundIngredient;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
-import net.silentchaos512.gear.gear.trait.condition.*;
+import net.silentchaos512.gear.gear.trait.condition.MaterialCountTraitCondition;
+import net.silentchaos512.gear.gear.trait.condition.MaterialRatioTraitCondition;
+import net.silentchaos512.gear.gear.trait.condition.NotTraitCondition;
+import net.silentchaos512.gear.gear.trait.condition.OrTraitCondition;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
@@ -2300,6 +2303,7 @@ public class MaterialsProvider implements DataProvider {
             }
 
             // Model data
+            // Not really necessary anymore. Might create the files just to help resource pack makers?
             try {
                 JsonObject json = builder.serializeModel();
                 if (json.entrySet().isEmpty()) {

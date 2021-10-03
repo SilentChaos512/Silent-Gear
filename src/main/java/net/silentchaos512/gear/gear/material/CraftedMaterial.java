@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.gear.material;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
@@ -13,7 +13,6 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.item.CraftedMaterialItem;
 import net.silentchaos512.gear.util.ModResourceLocation;
 
@@ -77,8 +76,7 @@ public class CraftedMaterial extends AbstractMaterial {
     @Nullable
     @Override
     public IMaterialDisplay getDisplayOverride(IMaterialInstance material) {
-        IMaterialInstance base = getBaseMaterial(material);
-        return MaterialDisplayManager.get(base);
+        return getBaseMaterial(material).getDisplayProperties();
     }
 
     @Override

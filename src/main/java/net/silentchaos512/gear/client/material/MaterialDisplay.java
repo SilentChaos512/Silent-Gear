@@ -2,6 +2,7 @@ package net.silentchaos512.gear.client.material;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
@@ -71,5 +72,24 @@ public class MaterialDisplay implements IMaterialDisplay {
             ret.map.put(key, MaterialLayerList.deserialize(key, value, MaterialLayerList.DEFAULT));
         });
         return ret;
+    }
+
+    public static MaterialDisplay fromNetwork(ResourceLocation materialId, FriendlyByteBuf buf) {
+        Map<PartGearKey, MaterialLayerList> map = new LinkedHashMap<>();
+        int count = buf.readVarInt();
+        for (int i = 0; i < count; ++i) {
+            PartGearKey key = PartGearKey.fromNetwork(buf);
+            MaterialLayerList layerList = MaterialLayerList.read(buf);
+            map.put(key, layerList);
+        }
+        return of(materialId, map);
+    }
+
+    public void toNetwork(FriendlyByteBuf buf) {
+        buf.writeVarInt(map.size());
+        map.forEach((key, list) -> {
+            key.toNetwork(buf);
+            list.write(buf);
+        });
     }
 }

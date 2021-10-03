@@ -7,5 +7,37 @@
   },
   "name": {
     "translate": "material.silentgear.wool.purple"
+  },
+  "model": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc",
+        "color": "#792AAC"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:cloth",
+        "color": "#792AAC"
+      }
+    ],
+    "grip/all": [
+      {
+        "texture": "silentgear:grip_wool",
+        "color": "#792AAC"
+      }
+    ],
+    "grip/part": [
+      {
+        "texture": "silentgear:grip",
+        "color": "#792AAC"
+      }
+    ],
+    "lining/part": [
+      {
+        "texture": "silentgear:lining_cloth",
+        "color": "#792AAC"
+      }
+    ]
   }
 }

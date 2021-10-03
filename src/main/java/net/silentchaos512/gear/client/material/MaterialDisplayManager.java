@@ -147,6 +147,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
      * @param material The material
      * @return A material model (possibly a default one)
      */
+    @Nullable
     public static IMaterialDisplay get(IMaterialInstance material) {
         IMaterial mat = material.get();
         if (mat != null) {
@@ -165,6 +166,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
      * @deprecated Use {@link #get(IMaterialInstance)} instead
      */
     @Deprecated
+    @Nullable
     public static IMaterialDisplay get(IMaterial material) {
         return getMaterial(material.getId());
     }
@@ -175,9 +177,10 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
      * @deprecated Internal use only, use {@link #get(IMaterialInstance)} instead
      */
     @Deprecated
+    @Nullable
     public static IMaterialDisplay getMaterial(ResourceLocation materialId) {
         synchronized (MATERIALS) {
-            return MATERIALS.getOrDefault(materialId, DefaultMaterialDisplay.INSTANCE);
+            return MATERIALS.get(materialId);
         }
     }
 

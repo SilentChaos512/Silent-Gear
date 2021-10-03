@@ -120,7 +120,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
     private void buildFakeModel(Function<Material, TextureAtlasSprite> spriteGetter, ImmutableList.Builder<BakedQuad> builder, Transformation rotation, IMaterial material) {
         // This method will display an example item for items with no data (ie, for advancements)
         MaterialInstance mat = MaterialInstance.of(material);
-        IMaterialDisplay model = MaterialDisplayManager.get(mat);
+        IMaterialDisplay model = mat.getDisplayProperties();
         MaterialLayer exampleMain = model.getLayerList(this.gearType, this.partType, mat).getFirstLayer();
         if (exampleMain != null) {
             builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, exampleMain.getTexture(this.texturePath, 0))), rotation, exampleMain.getColor()));

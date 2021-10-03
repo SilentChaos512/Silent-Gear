@@ -75,5 +75,50 @@
         ]
       }
     ]
+  },
+  "model": {
+    "coating/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#91C5B7"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "coating/part": [
+      {
+        "texture": "silentgear:coating_material",
+        "color": "#91C5B7"
+      },
+      {
+        "texture": "silentgear:coating_jar"
+      }
+    ],
+    "adornment/all": [
+      {
+        "texture": "silentgear:adornment_generic",
+        "color": "#91C5B7"
+      },
+      {
+        "texture": "silentgear:adornment_highlight",
+        "color": "#91C5B7"
+      }
+    ],
+    "adornment/part": [
+      {
+        "texture": "silentgear:adornment",
+        "color": "#91C5B7"
+      },
+      {
+        "texture": "silentgear:adornment_highlight"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:dust",
+        "color": "#91C5B7"
+      }
+    ]
   }
 }

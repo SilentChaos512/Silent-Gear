@@ -28,5 +28,19 @@
       },
       "rarity": 4.0
     }
+  },
+  "model": {
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc",
+        "color": "#9AC162"
+      }
+    ],
+    "rod/part": [
+      {
+        "texture": "silentgear:rod",
+        "color": "#9AC162"
+      }
+    ]
   }
 }

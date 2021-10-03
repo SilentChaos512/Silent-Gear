@@ -28,5 +28,19 @@
         "mul1": 0.03
       }
     }
+  },
+  "model": {
+    "binding/all": [
+      {
+        "texture": "silentgear:binding_generic",
+        "color": "#007F0E"
+      }
+    ],
+    "binding/part": [
+      {
+        "texture": "silentgear:binding",
+        "color": "#007F0E"
+      }
+    ]
   }
 }

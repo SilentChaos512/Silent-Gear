@@ -229,7 +229,9 @@ class SideProxy implements IProxy {
         @Nullable
         @Override
         public Level getClientLevel() {
-            return Minecraft.getInstance().level;
+            Minecraft mc = Minecraft.getInstance();
+            //noinspection ConstantConditions -- mc can be null during runData
+            return mc != null ? mc.level : null;
         }
     }
 

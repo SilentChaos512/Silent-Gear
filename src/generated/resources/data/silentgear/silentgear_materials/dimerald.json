@@ -138,5 +138,71 @@
         "level": 1
       }
     ]
+  },
+  "model": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#1ACE82"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:metal",
+        "color": "#1ACE82"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_hc",
+        "color": "#1ACE82"
+      }
+    ],
+    "rod/part": [
+      {
+        "texture": "silentgear:rod",
+        "color": "#1ACE82"
+      }
+    ],
+    "tip/all": [
+      {
+        "texture": "silentgear:tip_sharp",
+        "color": "#1ACE82"
+      }
+    ],
+    "tip/part": [
+      {
+        "texture": "silentgear:tip_base"
+      },
+      {
+        "texture": "silentgear:tip",
+        "color": "#1ACE82"
+      },
+      {
+        "texture": "silentgear:tip_shine"
+      }
+    ],
+    "adornment/all": [
+      {
+        "texture": "silentgear:adornment_generic",
+        "color": "#1ACE82"
+      },
+      {
+        "texture": "silentgear:adornment_highlight",
+        "color": "#1ACE82"
+      }
+    ],
+    "adornment/part": [
+      {
+        "texture": "silentgear:adornment",
+        "color": "#1ACE82"
+      },
+      {
+        "texture": "silentgear:adornment_highlight"
+      }
+    ]
   }
 }

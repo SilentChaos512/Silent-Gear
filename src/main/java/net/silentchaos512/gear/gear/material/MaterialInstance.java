@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.gear.material;
 
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.enchantment.IStatModifierEnchantment;
@@ -23,7 +23,6 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
@@ -258,7 +257,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     public int getPrimaryColor(GearType gearType, PartType partType) {
-        IMaterialDisplay model = MaterialDisplayManager.get(this);
+        IMaterialDisplay model = getDisplayProperties();
         MaterialLayer layer = model.getLayerList(gearType, partType, this).getFirstLayer();
         if (layer != null) {
             return layer.getColor();
@@ -269,6 +268,11 @@ public final class MaterialInstance implements IMaterialInstance {
     @Override
     public Component getDisplayName(PartType partType, ItemStack gear) {
         return material.getDisplayName(this, partType, gear);
+    }
+
+    @Override
+    public IMaterialDisplay getDisplayProperties() {
+        return this.material.getDisplayProperties(this);
     }
 
     @Override

@@ -19,7 +19,6 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -65,7 +64,7 @@ public class CraftedMaterialItem extends Item implements IColoredMaterialItem {
     @Override
     public int getColor(ItemStack stack, int layer) {
         IMaterialInstance material = getMaterial(stack);
-        IMaterialDisplay model = MaterialDisplayManager.get(material);
+        IMaterialDisplay model = material.getDisplayProperties();
         return model.getLayerColor(GearType.ALL, PartType.MAIN, material, layer);
     }
 

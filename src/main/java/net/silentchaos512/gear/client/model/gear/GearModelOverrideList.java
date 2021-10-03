@@ -139,9 +139,8 @@ public class GearModelOverrideList extends ItemOverrides {
         return ret;
     }
 
-    @SuppressWarnings("TypeMayBeWeakened")
     private static void addWithBlendedColor(List<MaterialLayer> list, PartData part, MaterialInstance material, ItemStack stack) {
-        IMaterialDisplay model = MaterialDisplayManager.get(material);
+        IMaterialDisplay model = material.getDisplayProperties();
         GearType gearType = GearHelper.getType(stack);
         List<MaterialLayer> layers = model.getLayerList(gearType, part, material).getLayers();
         addColorBlendedLayers(list, part, stack, layers);

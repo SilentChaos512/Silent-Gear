@@ -31,5 +31,22 @@
         "level": 1
       }
     ]
+  },
+  "model": {
+    "lining/part": [
+      {
+        "texture": "silentgear:lining_slime",
+        "color": "#8CD782"
+      },
+      {
+        "texture": "silentgear:lining_slime_highlight"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:dust",
+        "color": "#8CD782"
+      }
+    ]
   }
 }

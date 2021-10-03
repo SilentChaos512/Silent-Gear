@@ -7,7 +7,6 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.utils.Color;
@@ -25,7 +24,7 @@ public final class ColorUtils {
 
         int i = 0;
         for (IMaterialInstance mat : materials) {
-            IMaterialDisplay model = MaterialDisplayManager.get(mat);
+            IMaterialDisplay model = mat.getDisplayProperties();
             int color = model.getLayerColor(item.getGearType(), part, mat, layer);
             int r = (color >> 16) & 0xFF;
             int g = (color >> 8) & 0xFF;
@@ -51,7 +50,7 @@ public final class ColorUtils {
 
         int i = 0;
         for (IMaterialInstance mat : materials) {
-            IMaterialDisplay model = MaterialDisplayManager.get(mat);
+            IMaterialDisplay model = mat.getDisplayProperties();
             List<MaterialLayer> layers = model.getLayerList(item.getGearType(), item.getPartType(), mat).getLayers();
             if (layers.size() > layer) {
                 int color = model.getLayerColor(item.getGearType(), item.getPartType(), mat, layer);
@@ -80,7 +79,7 @@ public final class ColorUtils {
 
         int i = 0;
         for (IMaterialInstance mat : materials) {
-            IMaterialDisplay model = MaterialDisplayManager.get(mat);
+            IMaterialDisplay model = mat.getDisplayProperties();
             List<MaterialLayer> layers = model.getLayerList(GearType.ALL, PartType.MAIN, mat).getLayers();
             if (layers.size() > layer) {
                 int color = layers.get(layer).getColor();

@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.gson.*;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
@@ -20,7 +20,6 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.CompoundMaterialDisplay;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
@@ -279,7 +278,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
 
     @Override
     public int getNameColor(IMaterialInstance material, PartType partType, GearType gearType) {
-        IMaterialDisplay model = MaterialDisplayManager.get(material);
+        IMaterialDisplay model = material.getDisplayProperties();
         int color = model.getLayerColor(gearType, partType, material, 0);
         return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
     }

@@ -59,5 +59,35 @@
         "level": 1
       }
     ]
+  },
+  "model": {
+    "binding/all": [
+      {
+        "texture": "silentgear:binding_generic"
+      }
+    ],
+    "binding/part": [
+      {
+        "texture": "silentgear:binding"
+      }
+    ],
+    "bowstring/all": [
+      {
+        "texture": "silentgear:bowstring_string"
+      },
+      {
+        "texture": "silentgear:arrow"
+      }
+    ],
+    "bowstring/part": [
+      {
+        "texture": "silentgear:bowstring"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:cloth"
+      }
+    ]
   }
 }

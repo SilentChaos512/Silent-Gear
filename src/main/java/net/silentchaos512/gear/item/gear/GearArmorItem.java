@@ -24,7 +24,6 @@ import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
 import net.silentchaos512.gear.client.model.ModelErrorLogging;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
@@ -224,7 +223,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
         // New material-based armor
         MaterialInstance material = GearData.getPrimaryArmorMaterial(stack);
         if (material != null) {
-            IMaterialDisplay materialModel = MaterialDisplayManager.get(material);
+            IMaterialDisplay materialModel = material.getDisplayProperties();
             PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
             MaterialLayer materialLayer = materialModel.getLayerList(this.getGearType(), partType, material).getFirstLayer();
             if (materialLayer != null) {

@@ -42,5 +42,117 @@
     "bowstring": {},
     "fletching": {},
     "adornment": {}
+  },
+  "model": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_lc"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:metal"
+      }
+    ],
+    "rod/all": [
+      {
+        "texture": "silentgear:rod_generic_lc"
+      }
+    ],
+    "rod/part": [
+      {
+        "texture": "silentgear:rod"
+      }
+    ],
+    "tip/all": [
+      {
+        "texture": "silentgear:tip_sharp"
+      }
+    ],
+    "tip/part": [
+      {
+        "texture": "silentgear:tip_base"
+      },
+      {
+        "texture": "silentgear:tip"
+      },
+      {
+        "texture": "silentgear:tip_shine"
+      }
+    ],
+    "coating/all": [
+      {
+        "texture": "silentgear:main_generic_lc"
+      }
+    ],
+    "coating/part": [
+      {
+        "texture": "silentgear:coating_material"
+      },
+      {
+        "texture": "silentgear:coating_jar"
+      }
+    ],
+    "grip/all": [
+      {
+        "texture": "silentgear:grip_wool"
+      }
+    ],
+    "grip/part": [
+      {
+        "texture": "silentgear:grip"
+      }
+    ],
+    "binding/all": [
+      {
+        "texture": "silentgear:binding_generic"
+      }
+    ],
+    "binding/part": [
+      {
+        "texture": "silentgear:binding"
+      }
+    ],
+    "lining/part": [
+      {
+        "texture": "silentgear:lining_cloth"
+      }
+    ],
+    "bowstring/all": [
+      {
+        "texture": "silentgear:bowstring_string"
+      },
+      {
+        "texture": "silentgear:arrow"
+      }
+    ],
+    "bowstring/part": [
+      {
+        "texture": "silentgear:bowstring"
+      }
+    ],
+    "fletching/all": [
+      {
+        "texture": "silentgear:fletching_generic"
+      }
+    ],
+    "fletching/part": [
+      {
+        "texture": "silentgear:fletching"
+      }
+    ],
+    "adornment/all": [
+      {
+        "texture": "silentgear:adornment_generic"
+      }
+    ],
+    "adornment/part": [
+      {
+        "texture": "silentgear:adornment"
+      },
+      {
+        "texture": "silentgear:adornment_highlight"
+      }
+    ]
   }
 }

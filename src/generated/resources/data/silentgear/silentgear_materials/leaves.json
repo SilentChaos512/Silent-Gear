@@ -21,5 +21,25 @@
       "projectile_speed": 1.1,
       "projectile_accuracy": 0.9
     }
+  },
+  "model": {
+    "fletching/all": [
+      {
+        "texture": "silentgear:fletching_generic",
+        "color": "#4A8F28"
+      }
+    ],
+    "fletching/part": [
+      {
+        "texture": "silentgear:fletching",
+        "color": "#4A8F28"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:cloth",
+        "color": "#4A8F28"
+      }
+    ]
   }
 }

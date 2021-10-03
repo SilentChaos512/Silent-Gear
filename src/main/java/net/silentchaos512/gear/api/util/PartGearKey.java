@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.util;
 
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.network.FriendlyByteBuf;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IPartData;
@@ -72,6 +73,17 @@ public final class PartGearKey {
         }
 
         return new PartGearKey(gearType, partType);
+    }
+
+    public static PartGearKey fromNetwork(FriendlyByteBuf buf) {
+        GearType gearType = GearType.get(buf.readUtf());
+        PartType partType = Objects.requireNonNull(PartType.get(buf.readResourceLocation()));
+        return of(gearType, partType);
+    }
+
+    public void toNetwork(FriendlyByteBuf buf) {
+        buf.writeUtf(gearType.getName());
+        buf.writeResourceLocation(partType.getName());
     }
 
     @Override

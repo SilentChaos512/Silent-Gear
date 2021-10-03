@@ -51,5 +51,40 @@
         "level": 1
       }
     ]
+  },
+  "model": {
+    "binding/all": [
+      {
+        "texture": "silentgear:binding_generic",
+        "color": "#D8995B"
+      }
+    ],
+    "binding/part": [
+      {
+        "texture": "silentgear:binding",
+        "color": "#D8995B"
+      }
+    ],
+    "bowstring/all": [
+      {
+        "texture": "silentgear:bowstring_string",
+        "color": "#7E6962"
+      },
+      {
+        "texture": "silentgear:arrow"
+      }
+    ],
+    "bowstring/part": [
+      {
+        "texture": "silentgear:bowstring",
+        "color": "#7E6962"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:cloth",
+        "color": "#7E6962"
+      }
+    ]
   }
 }

@@ -57,5 +57,40 @@
         "level": 2
       }
     ]
+  },
+  "model": {
+    "binding/all": [
+      {
+        "texture": "silentgear:binding_generic",
+        "color": "#CCFFFF"
+      }
+    ],
+    "binding/part": [
+      {
+        "texture": "silentgear:binding",
+        "color": "#CCFFFF"
+      }
+    ],
+    "bowstring/all": [
+      {
+        "texture": "silentgear:bowstring_string",
+        "color": "#CCFFFF"
+      },
+      {
+        "texture": "silentgear:arrow"
+      }
+    ],
+    "bowstring/part": [
+      {
+        "texture": "silentgear:bowstring",
+        "color": "#CCFFFF"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:cloth",
+        "color": "#CCFFFF"
+      }
+    ]
   }
 }

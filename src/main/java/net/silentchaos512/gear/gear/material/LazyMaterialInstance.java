@@ -9,9 +9,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.client.material.DefaultMaterialDisplay;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.utils.EnumUtils;
 
@@ -92,6 +94,12 @@ public class LazyMaterialInstance implements IMaterialInstance {
     @Override
     public String getModelKey() {
         return "null";
+    }
+
+    @Override
+    public IMaterialDisplay getDisplayProperties() {
+        IMaterial mat = get();
+        return mat != null ? mat.getDisplayProperties(this) : DefaultMaterialDisplay.INSTANCE;
     }
 
     public static LazyMaterialInstance deserialize(JsonObject json) {
