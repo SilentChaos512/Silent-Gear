@@ -2303,7 +2303,9 @@ public class MaterialsProvider implements DataProvider {
             }
 
             // Model data
-            // Not really necessary anymore. Might create the files just to help resource pack makers?
+            // Unfortunately, these files still need to exist to allow models to find all the
+            // textures. There may be some way to work around the issue and reduce data duplication
+            // in the future.
             try {
                 JsonObject json = builder.serializeModel();
                 if (json.entrySet().isEmpty()) {

@@ -24,6 +24,8 @@ import net.silentchaos512.gear.api.part.PartDisplay;
 import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
 import net.silentchaos512.gear.client.model.gear.GearModelLoader;
 import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.util.IEarlySelectiveReloadListener;
 import net.silentchaos512.gear.util.TextUtil;
 import org.apache.commons.io.IOUtils;
@@ -131,7 +133,13 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
 
     public static Collection<IMaterialDisplay> getMaterials() {
         synchronized (MATERIALS) {
-            return MATERIALS.values();
+            Collection<IMaterialDisplay> ret = new ArrayList<>();
+            for (IMaterial material : MaterialManager.getValues()) {
+                MaterialInstance mat = MaterialInstance.of(material);
+                ret.add(mat.getDisplayProperties());
+            }
+            ret.addAll(MATERIALS.values());
+            return ret;
         }
     }
 
