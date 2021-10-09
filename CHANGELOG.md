@@ -3,8 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.7.4] - 2021-10-09
 Requires Forge 37.0.59 or higher
+### Changed
+- Materials can now specify rendering information in the data file, making the assets file optional. This will only work with built-in textures.
 ### Fixed
 - Blueprint book not allowing items to be taken or moved [#436]
 - Harvestability issues with the spoon upgrade and paxels [#429]
