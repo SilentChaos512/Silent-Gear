@@ -4,9 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+Requires Forge 37.0.59 or higher
 ### Fixed
 - Blueprint book not allowing items to be taken or moved [#436]
 - Harvestability issues with the spoon upgrade and paxels [#429]
+- Fireproof trait now works again
 
 ## [2.7.3] - 2021-09-04
 ### Added

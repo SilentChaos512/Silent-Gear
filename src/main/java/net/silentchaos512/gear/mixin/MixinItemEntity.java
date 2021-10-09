@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.mixin;
 
 import net.minecraft.world.entity.item.ItemEntity;
@@ -15,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemEntity.class)
 public class MixinItemEntity {
-    @Inject(at = @At("HEAD"), method = "hurt(Lnet/minecraft/util/DamageSource;F)Z", cancellable = true)
-    private void attackEntityFrom(DamageSource source, float amount, CallbackInfoReturnable<Boolean> callback) {
+    @Inject(at = @At("HEAD"), method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", cancellable = true)
+    private void hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> callback) {
         if (source.isFire() && isFireproof(getItem())) {
             callback.setReturnValue(false);
         }
@@ -31,4 +30,3 @@ public class MixinItemEntity {
         throw new IllegalStateException("Mixin failed to shadow getItem()");
     }
 }
-*/

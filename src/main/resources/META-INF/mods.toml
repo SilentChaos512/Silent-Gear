@@ -19,7 +19,7 @@ authors="SilentChaos512"
 [[dependencies.silentgear]]
     modId="forge"
     mandatory=true
-    versionRange="[37.0.31,)"
+    versionRange="[37.0.59,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]
