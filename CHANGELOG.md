@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Blueprint book not allowing items to be taken or moved [#436]
 - Harvestability issues with the spoon upgrade and paxels [#429]
 
 ## [2.7.3] - 2021-09-04

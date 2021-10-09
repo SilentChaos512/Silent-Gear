@@ -123,7 +123,7 @@ public class BlueprintBookContainer extends AbstractContainerMenu {
     }
 
     public boolean canTake(int slotId, Slot slot, int button, Player player, ClickType clickType) {
-        if (slotId == bookSlot || slotId <= itemHandler.getSlots() - 1 && isContainerItem(player.getInventory().getSelected()))
+        if (slotId == bookSlot)
             return false;
 
         // Hotbar swapping via number keys
