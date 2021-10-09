@@ -30,7 +30,7 @@ public final class NerfedGear {
     public static void init() {
         Field itemDamageField;
         try {
-            itemDamageField = ObfuscationReflectionHelper.findField(Item.class, "maxDamage");
+            itemDamageField = ObfuscationReflectionHelper.findField(Item.class, "field_77699_b");
             itemDamageField.setAccessible(true);
         } catch (Exception ex) {
             SilentGear.LOGGER.error("Field to get Item damage field via reflection");
