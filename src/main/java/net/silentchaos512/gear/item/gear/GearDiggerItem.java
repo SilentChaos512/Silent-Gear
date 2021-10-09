@@ -1,9 +1,11 @@
 package net.silentchaos512.gear.item.gear;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
+import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -27,10 +30,18 @@ import net.silentchaos512.gear.util.GearHelper;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
 public class GearDiggerItem extends DiggerItem implements ICoreTool {
+    private static final Map<ToolAction, Tag<Block>> TOOL_TYPES = ImmutableMap.<ToolAction, Tag<Block>>builder()
+            .put(ToolActions.AXE_DIG, BlockTags.MINEABLE_WITH_AXE)
+            .put(ToolActions.HOE_DIG, BlockTags.MINEABLE_WITH_HOE)
+            .put(ToolActions.PICKAXE_DIG, BlockTags.MINEABLE_WITH_PICKAXE)
+            .put(ToolActions.SHOVEL_DIG, BlockTags.MINEABLE_WITH_SHOVEL)
+            .build();
+
     private final Tag<Block> blocks;
     private final GearType gearType;
     private final Set<Material> extraMaterials;
@@ -58,7 +69,16 @@ public class GearDiggerItem extends DiggerItem implements ICoreTool {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return GearHelper.isCorrectToolForDrops(stack, state, blocks, extraMaterials);
+        for (Map.Entry<ToolAction, Tag<Block>> entry : TOOL_TYPES.entrySet()) {
+            ToolAction action = entry.getKey();
+            Tag<Block> tag = entry.getValue();
+
+            if (canPerformAction(stack, action) && GearHelper.isCorrectToolForDrops(stack, state, tag, extraMaterials)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
