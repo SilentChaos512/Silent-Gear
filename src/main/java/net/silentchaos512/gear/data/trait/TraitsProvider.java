@@ -178,7 +178,7 @@ public class TraitsProvider implements DataProvider {
                             ForgeMod.ENTITY_GRAVITY.get(),
                             AttributeModifier.Operation.MULTIPLY_BASE,
                             values)
-                    .withGearTypeCondition(GearType.BOOTS)
+                    .withGearTypeCondition(GearType.BOOTS, GearType.CURIO)
             );
         }
         ret.add(new AttributeTraitBuilder(Const.Traits.REACH, 5)

@@ -3,8 +3,17 @@
   "max_level": 5,
   "conditions": [
     {
-      "type": "silentgear:gear_type",
-      "gear_type": "boots"
+      "type": "silentgear:or",
+      "values": [
+        {
+          "type": "silentgear:gear_type",
+          "gear_type": "boots"
+        },
+        {
+          "type": "silentgear:gear_type",
+          "gear_type": "curio"
+        }
+      ]
     }
   ],
   "name": {
