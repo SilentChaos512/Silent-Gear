@@ -53,6 +53,7 @@ public class CompounderScreen extends AbstractContainerScreen<CompounderContaine
     public void render(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
+        this.workButton.render(matrix, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrix, mouseX, mouseY);
     }
 
