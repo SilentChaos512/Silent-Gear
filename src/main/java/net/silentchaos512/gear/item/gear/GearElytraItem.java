@@ -29,6 +29,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.compat.caelus.CaelusCompat;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -200,7 +201,7 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
             multimap.put(Attributes.ARMOR, new AttributeModifier(ARMOR_UUID, "Elytra armor modifier", armor, AttributeModifier.Operation.ADDITION));
         }
         GearHelper.getAttributeModifiers(slot, stack, multimap, false);
-//        CaelusCompat.tryAddFlightAttribute(multimap); // FIXME: Uncomment when Caelus API updates
+        CaelusCompat.tryAddFlightAttribute(multimap);
     }
 
     @Override
