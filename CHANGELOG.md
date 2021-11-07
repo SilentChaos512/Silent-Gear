@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.7.6] - 2021-11-07
 ### Added
 - New config options for material and part tooltips, found in the client config (Rimevel) [#421]
+### Changed
+- Removed WIP labels from compound materials and compounder blocks
 
 ## [2.7.5] - 2021-11-01
 ### Changed

@@ -1,15 +1,15 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Constants;
 import net.silentchaos512.gear.SilentGear;
@@ -31,8 +31,6 @@ import net.silentchaos512.lib.util.NameUtils;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     public CompoundMaterialItem(Properties properties) {
@@ -136,8 +134,6 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(Config.Client.showMaterialTooltips.get()) {
-            TextUtil.addWipText(tooltip);
-
             Collection<IMaterialInstance> materials = getSubMaterials(stack);
 
             TextListBuilder statsBuilder = new TextListBuilder();

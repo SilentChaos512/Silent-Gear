@@ -77,8 +77,6 @@ public class CompounderBlock<R extends CompoundingRecipe> extends ModContainerBl
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        TextUtil.addWipText(tooltip);
-
         Set<String> catNameSet = this.info.getCategories().stream().map(IMaterialCategory::getName).collect(Collectors.toSet());
         String catStr = String.join(", ", catNameSet);
         tooltip.add(TextUtil.translate("block", "compounder.desc", catStr));
