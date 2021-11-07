@@ -83,7 +83,7 @@ public final class GearClientHelper {
             tooltip.add(TextUtil.withColor(misc("lockedStats"), Color.YELLOW));
         }
 
-        if (!Config.Common.vanillaStyleTooltips.get()) {
+        if (!Config.Client.vanillaStyleTooltips.get()) {
             // Let parts add information if they need to
             Collections.reverse(constructionParts);
             for (PartData data : constructionParts) {
@@ -94,7 +94,7 @@ public final class GearClientHelper {
         // Traits
         addTraitsInfo(stack, tooltip, flag);
 
-        if (!Config.Common.vanillaStyleTooltips.get()) {
+        if (!Config.Client.vanillaStyleTooltips.get()) {
             // Stats
             addStatsInfo(stack, tooltip, flag, item);
 
@@ -170,7 +170,7 @@ public final class GearClientHelper {
 
         IFormattableTextComponent textTraits = TextUtil.withColor(misc("tooltip.traits"), Color.GOLD);
         if (traitIndex < 0) {
-            if (!Config.Common.vanillaStyleTooltips.get()) {
+            if (!Config.Client.vanillaStyleTooltips.get()) {
                 tooltip.add(textTraits);
             }
         }
@@ -180,7 +180,7 @@ public final class GearClientHelper {
             if (traitIndex < 0 || traitIndex == i) {
                 final int level = traits.get(trait);
                 trait.addInformation(level, tooltip, flag, text -> {
-                    if(Config.Common.vanillaStyleTooltips.get()) {
+                    if(Config.Client.vanillaStyleTooltips.get()) {
                         return TextUtil.withColor(new StringTextComponent(TextListBuilder.VANILLA_BULLET + " "), Color.GRAY).append(text);
                     }
                     if (traitIndex >= 0) {
@@ -196,7 +196,7 @@ public final class GearClientHelper {
     }
 
     private static int getTraitDisplayIndex(int numTraits, GearTooltipFlag flag) {
-        if (Config.Common.vanillaStyleTooltips.get() || KeyTracker.isDisplayTraitsDown() || numTraits == 0)
+        if (Config.Client.vanillaStyleTooltips.get() || KeyTracker.isDisplayTraitsDown() || numTraits == 0)
             return -1;
         return ClientTicks.ticksInGame() / 20 % numTraits;
     }

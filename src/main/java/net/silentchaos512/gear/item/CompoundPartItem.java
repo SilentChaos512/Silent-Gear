@@ -159,7 +159,7 @@ public class CompoundPartItem extends Item {
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         PartData part = PartData.from(stack);
 
-        if (part != null && Config.Common.showPartTooltips.get()) {
+        if (part != null && Config.Client.showPartTooltips.get()) {
             float synergy = SynergyUtils.getSynergy(this.partType, getMaterials(stack), part.getTraits());
             tooltip.add(SynergyUtils.getDisplayText(synergy));
 

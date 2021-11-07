@@ -85,10 +85,6 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
         public static final ForgeConfigSpec.BooleanValue modelAndTextureLogging;
         public static final ForgeConfigSpec.BooleanValue worldGenLogging;
-        //Tooltip
-        public static final ForgeConfigSpec.BooleanValue showMaterialTooltips;
-        public static final ForgeConfigSpec.BooleanValue showPartTooltips;
-        public static final ForgeConfigSpec.BooleanValue vanillaStyleTooltips;
         // Other
         public static final ForgeConfigSpec.BooleanValue showWipText;
 
@@ -370,18 +366,6 @@ public final class Config {
                     .comment("Log details about certain features being adding to biomes and other world generator details")
                     .define("debug.logging.worldGen", true);
 
-            showMaterialTooltips = builder
-                    .comment("Show SGear Material tooltips on items that can be used as materials.")
-                    .define("tooltip.showMaterialTooltips", true);
-
-            showPartTooltips = builder
-                    .comment("Show tooltips on parts and items that can be used as parts.")
-                    .define("tooltip.showPartTooltips", true);
-
-            vanillaStyleTooltips = builder
-                    .comment("Tooltips are replaced with a simpler variant similar to vanilla and contains about as much information.")
-                    .define("tooltip.vanillaStyleTooltips", false);
-
             // Other random stuff
             showWipText = builder
                     .comment("Shows a \"WIP\" (work in progress) label in the tooltip of certain unfinished, but usable blocks and items")
@@ -430,6 +414,10 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue allowEnchantedEffect;
         public static final ForgeConfigSpec.BooleanValue playKachinkSound;
         //public static final ForgeConfigSpec.BooleanValue useLiteModels;
+        //Tooltip
+        public static final ForgeConfigSpec.BooleanValue showMaterialTooltips;
+        public static final ForgeConfigSpec.BooleanValue showPartTooltips;
+        public static final ForgeConfigSpec.BooleanValue vanillaStyleTooltips;
 
         static {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -446,6 +434,18 @@ public final class Config {
                     .comment("Use 'lite' gear models. These should be easier on some systems, but do not allow unique textures for different materials.",
                             "Currently, this option has no effect, as the normal model system is not working yet (lite models are used)")
                     .define("gear.useLiteModels", false);*/
+
+            showMaterialTooltips = builder
+                    .comment("Show SGear Material tooltips on items that can be used as materials.")
+                    .define("tooltip.showMaterialTooltips", true);
+
+            showPartTooltips = builder
+                    .comment("Show tooltips on parts and items that can be used as parts.")
+                    .define("tooltip.showPartTooltips", true);
+
+            vanillaStyleTooltips = builder
+                    .comment("Tooltips are replaced with a simpler variant similar to vanilla and contains about as much information.")
+                    .define("tooltip.vanillaStyleTooltips", false);
 
             spec = builder.build();
         }

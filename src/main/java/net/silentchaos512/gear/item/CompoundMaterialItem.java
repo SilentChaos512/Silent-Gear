@@ -135,7 +135,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        if(Config.Common.showMaterialTooltips.get()) {
+        if(Config.Client.showMaterialTooltips.get()) {
             TextUtil.addWipText(tooltip);
 
             Collection<IMaterialInstance> materials = getSubMaterials(stack);

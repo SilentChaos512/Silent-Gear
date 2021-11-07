@@ -107,7 +107,7 @@ public final class TooltipHandler {
             event.getToolTip().add(new StringTextComponent("Material data pack: " + material.get().getPackName()).withStyle(TextFormatting.DARK_GRAY));
         }
 
-        if(!Config.Common.showMaterialTooltips.get()) {
+        if(!Config.Client.showMaterialTooltips.get()) {
             return;
         }
 
@@ -204,7 +204,7 @@ public final class TooltipHandler {
             event.getToolTip().add(new StringTextComponent("* Part data pack: " + part.get().getPackName()).withStyle(TextFormatting.DARK_GRAY));
         }
 
-        if(!Config.Common.showPartTooltips.get()) {
+        if(!Config.Client.showPartTooltips.get()) {
             return;
         }
 

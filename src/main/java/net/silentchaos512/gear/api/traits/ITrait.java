@@ -105,7 +105,7 @@ public interface ITrait {
         tooltip.add(affixFirst.apply(displayName));
 
         // Description (usually not shown)
-        if (KeyTracker.isDisplayTraitsDown() && !Config.Common.vanillaStyleTooltips.get()) {
+        if (KeyTracker.isDisplayTraitsDown() && !Config.Client.vanillaStyleTooltips.get()) {
             ITextComponent description = TextUtil.withColor(this.getDescription(level), TextFormatting.DARK_GRAY);
             tooltip.add(new StringTextComponent("    ").append(description));
         }
