@@ -106,6 +106,15 @@ public final class TooltipHandler {
     private static void onMaterialTooltip(ItemTooltipEvent event, ItemStack stack, MaterialInstance material) {
         boolean keyHeld = KeyTracker.isDisplayStatsDown();
 
+        if (event.getFlags().isAdvanced()) {
+            event.getToolTip().add(new TextComponent("Material ID: " + material.getId()).withStyle(ChatFormatting.DARK_GRAY));
+            event.getToolTip().add(new TextComponent("Material data pack: " + material.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
+        }
+
+        if(!Config.Client.showMaterialTooltips.get()) {
+            return;
+        }
+
         if (keyHeld) {
             event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tooltip.material"), Color.GOLD));
         } else {
@@ -198,13 +207,18 @@ public final class TooltipHandler {
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData part) {
-        // Type, tier
-        event.getToolTip().add(TextUtil.withColor(part.getType().getDisplayName(part.getTier()), Color.AQUAMARINE));
 
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
             event.getToolTip().add(new TextComponent("* Part ID: " + part.getId()).withStyle(ChatFormatting.DARK_GRAY));
             event.getToolTip().add(new TextComponent("* Part data pack: " + part.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
         }
+
+        if(!Config.Client.showPartTooltips.get()) {
+            return;
+        }
+
+        // Type, tier
+        event.getToolTip().add(TextUtil.withColor(part.getType().getDisplayName(part.getTier()), Color.AQUAMARINE));
 
         // Traits
         List<TraitInstance> traits = new ArrayList<>();

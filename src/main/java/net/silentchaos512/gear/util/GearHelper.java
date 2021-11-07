@@ -661,8 +661,11 @@ public final class GearHelper {
     public static Rarity getRarity(ItemStack stack) {
         int rarity = GearData.getStatInt(stack, ItemStats.RARITY);
         if (stack.isEnchanted())
-            rarity += 20;
-
+            if(Config.Client.vanillaStyleTooltips.get()) {
+                rarity += 80;
+            } else {
+                rarity += 20;
+            }
         if (rarity < 40)
             return Rarity.COMMON;
         if (rarity < 80)
