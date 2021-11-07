@@ -20,6 +20,7 @@ import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -134,16 +135,18 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        TextUtil.addWipText(tooltip);
+        if(Config.Common.showMaterialTooltips.get()) {
+            TextUtil.addWipText(tooltip);
 
-        Collection<IMaterialInstance> materials = getSubMaterials(stack);
+            Collection<IMaterialInstance> materials = getSubMaterials(stack);
 
-        TextListBuilder statsBuilder = new TextListBuilder();
-        for (IMaterialInstance material : materials) {
-            int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
-            statsBuilder.add(TextUtil.withColor(material.getDisplayName(PartType.MAIN).copy(), nameColor));
+            TextListBuilder statsBuilder = new TextListBuilder();
+            for (IMaterialInstance material : materials) {
+                int nameColor = material.getNameColor(PartType.MAIN, GearType.ALL);
+                statsBuilder.add(TextUtil.withColor(material.getDisplayName(PartType.MAIN).copy(), nameColor));
+            }
+            tooltip.addAll(statsBuilder.build());
         }
-        tooltip.addAll(statsBuilder.build());
     }
 
     @Override

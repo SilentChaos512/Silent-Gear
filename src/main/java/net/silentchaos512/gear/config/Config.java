@@ -85,6 +85,10 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
         public static final ForgeConfigSpec.BooleanValue modelAndTextureLogging;
         public static final ForgeConfigSpec.BooleanValue worldGenLogging;
+        //Tooltip
+        public static final ForgeConfigSpec.BooleanValue showMaterialTooltips;
+        public static final ForgeConfigSpec.BooleanValue showPartTooltips;
+        public static final ForgeConfigSpec.BooleanValue vanillaStyleTooltips;
         // Other
         public static final ForgeConfigSpec.BooleanValue showWipText;
 
@@ -365,6 +369,18 @@ public final class Config {
             worldGenLogging = builder
                     .comment("Log details about certain features being adding to biomes and other world generator details")
                     .define("debug.logging.worldGen", true);
+
+            showMaterialTooltips = builder
+                    .comment("Show SGear Material tooltips on items that can be used as materials.")
+                    .define("tooltip.showMaterialTooltips", true);
+
+            showPartTooltips = builder
+                    .comment("Show tooltips on parts and items that can be used as parts.")
+                    .define("tooltip.showPartTooltips", true);
+
+            vanillaStyleTooltips = builder
+                    .comment("Tooltips are replaced with a simpler variant similar to vanilla and contains about as much information.")
+                    .define("tooltip.vanillaStyleTooltips", false);
 
             // Other random stuff
             showWipText = builder

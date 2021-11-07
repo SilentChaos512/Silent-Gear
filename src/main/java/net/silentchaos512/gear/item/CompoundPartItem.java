@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -157,7 +158,8 @@ public class CompoundPartItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         PartData part = PartData.from(stack);
-        if (part != null) {
+
+        if (part != null && Config.Common.showPartTooltips.get()) {
             float synergy = SynergyUtils.getSynergy(this.partType, getMaterials(stack), part.getTraits());
             tooltip.add(SynergyUtils.getDisplayText(synergy));
 

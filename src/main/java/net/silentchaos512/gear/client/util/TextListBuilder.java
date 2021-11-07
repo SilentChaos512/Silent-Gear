@@ -10,6 +10,7 @@ import java.util.List;
 
 public class TextListBuilder {
     static final String[] BULLETS = {"\u2022", "\u25e6", "\u25aa"}; // •◦▪
+    static final String VANILLA_BULLET = "\u2666";
 
     private final List<ITextComponent> list = new ArrayList<>();
     private int indent = 0;
