@@ -28,4 +28,8 @@ public interface IItemStat {
     default boolean doesSynergyApply() {
         return false;
     }
+
+    default boolean isAffectedByGrades() {
+        return false;
+    }
 }

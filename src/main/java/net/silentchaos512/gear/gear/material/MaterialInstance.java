@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.gear.material;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -14,6 +15,7 @@ import net.silentchaos512.gear.api.enchantment.IStatModifierEnchantment;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ChargedProperties;
@@ -24,7 +26,6 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.RepairContext;
-import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -34,14 +35,14 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public final class MaterialInstance implements IMaterialInstance {
     private static final Map<ResourceLocation, MaterialInstance> QUICK_CACHE = new HashMap<>();
 
     private final IMaterial material;
-    private final MaterialGrade grade;
+    @Deprecated private final MaterialGrade grade;
     private final ItemStack item;
+    private ImmutableList<IMaterialModifier> modifiers = ImmutableList.of(); // Start empty, build when needed
 
     private MaterialInstance(IMaterial material) {
         this(material, MaterialGrade.NONE, material.getDisplayItem(PartType.MAIN, 0));
@@ -110,6 +111,14 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
+    public Collection<IMaterialModifier> getModifiers() {
+        if (modifiers.isEmpty()) {
+            modifiers = ImmutableList.copyOf(MaterialModifiers.readFromMaterial(this));
+        }
+        return modifiers;
+    }
+
+    @Override
     public MaterialList getMaterials() {
         return material.getMaterials(this);
     }
@@ -145,25 +154,21 @@ public final class MaterialInstance implements IMaterialInstance {
             return mods;
         }
 
-        if (stat.isAffectedByGrades() && grade != MaterialGrade.NONE) {
-            // Apply grade bonus to all modifiers. Makes it easier to see the effect on rods and such.
-            float bonus = grade.bonusPercent / 100f;
-            mods = mods.stream().map(m -> {
-                float value = m.getValue();
-                // Taking the abs of value times bonus makes negative mods become less negative
-                return m.copySetValue(value + Math.abs(value) * bonus);
-            }).collect(Collectors.toList());
-        }
+//        getEnchantmentModifiedStats(mods, key);
 
-        getEnchantmentModifiedStats(mods, key);
+        // Material modifiers (grades, starcharged, etc.)
+        for (IMaterialModifier materialModifier : getModifiers()) {
+            mods = materialModifier.modifyStats(partType, key, mods);
+        }
 
         GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getModifiers();
     }
 
+    @Deprecated
     private void getEnchantmentModifiedStats(List<StatInstance> mods, StatGearKey key) {
-        if (key.getStat() == ItemStats.CHARGEABILITY || key.getStat() == Const.SGEMS_CHARGEABILITY) {
+        if (key.getStat() == ItemStats.CHARGEABILITY) {
             return;
         }
 
@@ -190,9 +195,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     private float getChargeability() {
-        // TODO: Remove SGems chargeability stat reference
-        return Math.max(getStat(PartType.MAIN, ItemStats.CHARGEABILITY),
-                getStat(PartType.MAIN, Const.SGEMS_CHARGEABILITY));
+        return getStat(PartType.MAIN, ItemStats.CHARGEABILITY);
     }
 
     @Override
@@ -314,6 +317,7 @@ public final class MaterialInstance implements IMaterialInstance {
         return null;
     }
 
+    @Deprecated
     public static String writeShorthand(IMaterialInstance material) {
         String id = SilentGear.shortenId(material.getId());
         if (material.getGrade() != MaterialGrade.NONE) {

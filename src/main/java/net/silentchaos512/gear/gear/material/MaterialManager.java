@@ -40,7 +40,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
     public static final Marker MARKER = MarkerManager.getMarker("MaterialManager");
 
     private static final String DATA_PATH = "silentgear_materials";
-    private static final Map<ResourceLocation, IMaterial> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
+    private static final Map<ResourceLocation, IMaterial> MATERIALS = Collections.synchronizedMap(new LinkedHashMap<>());
     private static final Collection<String> ERROR_LIST = new ArrayList<>();
     private static final Collection<String> INGREDIENT_CONFLICT_LIST = new ArrayList<>();
 
@@ -52,8 +52,8 @@ public class MaterialManager implements ResourceManagerReloadListener {
         Multimap<String, IMaterial> ingredientConflicts = HashMultimap.create();
         Collection<ResourceLocation> skippedList = new ArrayList<>();
 
-        synchronized (MAP) {
-            MAP.clear();
+        synchronized (MATERIALS) {
+            MATERIALS.clear();
             ERROR_LIST.clear();
             SilentGear.LOGGER.info(MARKER, "Reloading material files");
 
@@ -74,7 +74,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
                     } else {
                         // Attempt to deserialize the material
                         IMaterial material = MaterialSerializers.deserialize(name, packName, json);
-                        MAP.put(material.getId(), material);
+                        MATERIALS.put(material.getId(), material);
                         addIngredientChecks(ingredientConflicts, material, json);
                     }
                 } catch (IllegalArgumentException | JsonParseException ex) {
@@ -126,9 +126,9 @@ public class MaterialManager implements ResourceManagerReloadListener {
     }
 
     public static List<IMaterial> getValues(boolean includeChildren) {
-        synchronized (MAP) {
+        synchronized (MATERIALS) {
             List<IMaterial> list = new ArrayList<>();
-            for (IMaterial m : MAP.values()) {
+            for (IMaterial m : MATERIALS.values()) {
                 if (includeChildren || m.getParent() == null) {
                     list.add(m);
                 }
@@ -138,9 +138,9 @@ public class MaterialManager implements ResourceManagerReloadListener {
     }
 
     public static List<IMaterial> getChildren(IMaterial material) {
-        synchronized (MAP) {
+        synchronized (MATERIALS) {
             List<IMaterial> list = new ArrayList<>();
-            for (IMaterial m : MAP.values()) {
+            for (IMaterial m : MATERIALS.values()) {
                 if (m.getParent() == material) {
                     list.add(m);
                 }
@@ -153,8 +153,8 @@ public class MaterialManager implements ResourceManagerReloadListener {
     public static IMaterial get(@Nullable ResourceLocation id) {
         if (id == null) return null;
 
-        synchronized (MAP) {
-            return MAP.get(id);
+        synchronized (MATERIALS) {
+            return MATERIALS.get(id);
         }
     }
 
@@ -172,14 +172,14 @@ public class MaterialManager implements ResourceManagerReloadListener {
     }
 
     public static void handleSyncPacket(SyncMaterialsPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        synchronized (MAP) {
-            Map<ResourceLocation, IMaterial> oldMaterials = ImmutableMap.copyOf(MAP);
-            MAP.clear();
+        synchronized (MATERIALS) {
+            Map<ResourceLocation, IMaterial> oldMaterials = ImmutableMap.copyOf(MATERIALS);
+            MATERIALS.clear();
             for (IMaterial mat : msg.getMaterials()) {
                 mat.retainData(oldMaterials.get(mat.getId()));
-                MAP.put(mat.getId(), mat);
+                MATERIALS.put(mat.getId(), mat);
             }
-            SilentGear.LOGGER.info("Read {} materials from server", MAP.size());
+            SilentGear.LOGGER.info("Read {} materials from server", MATERIALS.size());
         }
         ctx.get().setPacketHandled(true);
     }

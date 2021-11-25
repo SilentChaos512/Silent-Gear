@@ -228,7 +228,7 @@ public final class GearClientHelper {
                     builder.indent();
                     for (IMaterialInstance material : CompoundPartItem.getMaterials(part.getItem())) {
                         int nameColor = material.getNameColor(part.getType(), GearType.ALL);
-                        builder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType(), ItemStack.EMPTY), nameColor));
+                        builder.add(TextUtil.withColor(material.getDisplayNameWithModifiers(part.getType(), ItemStack.EMPTY), nameColor));
                     }
                     builder.unindent();
                 }

@@ -15,7 +15,7 @@ import net.minecraftforge.common.crafting.VanillaIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
-import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -121,7 +121,9 @@ public abstract class AbstractMaterial implements IMaterial {
 
     public static IMaterialInstance removeEnhancements(IMaterialInstance material) {
         ItemStack stack = material.getItem().copy();
-        MaterialGrade.NONE.setGradeOnStack(stack);
+        for (IMaterialModifierType modifierType : MaterialModifiers.getTypes()) {
+            modifierType.removeModifier(stack);
+        }
         EnchantmentHelper.setEnchantments(Collections.emptyMap(), stack);
 
         IMaterial iMaterial = material.get();

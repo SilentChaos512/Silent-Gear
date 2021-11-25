@@ -265,6 +265,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
         return synergyApplies;
     }
 
+    @Override
     public boolean isAffectedByGrades() {
         return affectedByGrades;
     }

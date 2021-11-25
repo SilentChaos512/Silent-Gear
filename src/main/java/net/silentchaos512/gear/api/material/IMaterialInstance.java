@@ -1,13 +1,14 @@
 package net.silentchaos512.gear.api.material;
 
 import com.google.gson.JsonObject;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.IItemStat;
@@ -16,7 +17,6 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.IGearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
-import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -44,7 +44,12 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
      *
      * @return The grade
      */
+    @Deprecated
     MaterialGrade getGrade();
+
+    default Collection<IMaterialModifier> getModifiers() {
+        return Collections.emptyList();
+    }
 
     @Override
     default MaterialList getMaterials() {
@@ -150,13 +155,12 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
 
     IMaterialDisplay getDisplayProperties();
 
-    default MutableComponent getDisplayNameWithGrade(PartType partType, ItemStack gear) {
-        MutableComponent displayName = getDisplayName(partType, gear).copy();
-        MaterialGrade grade = getGrade();
-        if (grade != MaterialGrade.NONE) {
-            displayName.append(TextUtil.translate("misc", "spaceBrackets", grade.getDisplayName()));
+    default MutableComponent getDisplayNameWithModifiers(PartType partType, ItemStack gear) {
+        MutableComponent name = getDisplayName(partType, gear).copy();
+        for (IMaterialModifier modifier : getModifiers()) {
+            name = modifier.modifyMaterialName(name);
         }
-        return displayName;
+        return name;
     }
 
     default JsonObject serialize() {

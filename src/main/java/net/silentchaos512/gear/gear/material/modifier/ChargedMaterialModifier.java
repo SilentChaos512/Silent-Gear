@@ -1,0 +1,68 @@
+package net.silentchaos512.gear.gear.material.modifier;
+
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.fmllegacy.RegistryObject;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
+import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.stats.ChargedProperties;
+import net.silentchaos512.gear.api.stats.ItemStats;
+
+import javax.annotation.Nullable;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
+
+public abstract class ChargedMaterialModifier implements IMaterialModifier {
+    protected final IMaterialInstance material;
+    protected final int level;
+
+    protected ChargedMaterialModifier(IMaterialInstance material, int level) {
+        this.material = material;
+        this.level = level;
+    }
+
+    public boolean causesFoilEffect() {
+        return true;
+    }
+
+    public ChargedProperties getChargedProperties() {
+        return new ChargedProperties(level, material.getStat(PartType.MAIN, ItemStats.CHARGEABILITY));
+    }
+
+    public static class Type<T extends ChargedMaterialModifier> implements IMaterialModifierType {
+        private final BiFunction<IMaterialInstance, Integer, T> factory;
+        private final String nbtTagName;
+        private final Supplier<RegistryObject<Enchantment>> legacyEnchantment;
+
+        public Type(BiFunction<IMaterialInstance, Integer, T> factory, String nbtTagName, Supplier<RegistryObject<Enchantment>> legacyEnchantment) {
+            this.factory = factory;
+            this.nbtTagName = nbtTagName;
+            this.legacyEnchantment = legacyEnchantment;
+        }
+
+        @Override
+        public void removeModifier(ItemStack stack) {
+            stack.getOrCreateTag().remove(nbtTagName);
+        }
+
+        @Nullable
+        @Override
+        public IMaterialModifier read(IMaterialInstance material) {
+            int level = material.getItem().getOrCreateTag().getShort(nbtTagName);
+
+            if (level == 0) {
+                // look for the legacy enchantment
+                level = EnchantmentHelper.getItemEnchantmentLevel(legacyEnchantment.get().get(), material.getItem());
+            }
+
+            if (level == 0) {
+                return null;
+            }
+
+            return factory.apply(material, level);
+        }
+    }
+}

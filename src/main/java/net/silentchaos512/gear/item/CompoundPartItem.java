@@ -164,7 +164,7 @@ public class CompoundPartItem extends Item {
             TextListBuilder matsBuilder = new TextListBuilder();
             getMaterials(stack).forEach(material -> {
                 int nameColor = material.getNameColor(part.getType(), this.getGearType());
-                matsBuilder.add(TextUtil.withColor(material.getDisplayNameWithGrade(part.getType(), ItemStack.EMPTY), nameColor));
+                matsBuilder.add(TextUtil.withColor(material.getDisplayNameWithModifiers(part.getType(), ItemStack.EMPTY), nameColor));
             });
             tooltip.addAll(matsBuilder.build());
         }

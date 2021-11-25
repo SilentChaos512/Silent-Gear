@@ -11,7 +11,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -111,7 +111,7 @@ public final class TooltipHandler {
             event.getToolTip().add(new TextComponent("Material data pack: " + material.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
-        if(!Config.Client.showMaterialTooltips.get()) {
+        if (!Config.Client.showMaterialTooltips.get()) {
             return;
         }
 
@@ -129,7 +129,7 @@ public final class TooltipHandler {
         }
 
         if (keyHeld) {
-            getGradeLine(event, material.getGrade());
+            getMaterialModifierLines(event, material);
 
             getMaterialCategoriesLine(material).ifPresent(t -> event.getToolTip().add(t));
 
@@ -146,9 +146,7 @@ public final class TooltipHandler {
                 getMaterialStatLines(event, partType, material);
             }
         } else {
-            if (material.getGrade() != MaterialGrade.NONE) {
-                getGradeLine(event, material.getGrade());
-            }
+            getMaterialModifierLines(event, material);
 
             if (event.getFlags().isAdvanced()) {
                 addJeiSearchTerms(event, material);
@@ -213,7 +211,7 @@ public final class TooltipHandler {
             event.getToolTip().add(new TextComponent("* Part data pack: " + part.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
-        if(!Config.Client.showPartTooltips.get()) {
+        if (!Config.Client.showPartTooltips.get()) {
             return;
         }
 
@@ -268,9 +266,10 @@ public final class TooltipHandler {
         return ClientTicks.ticksInGame() / 20 % numTraits;
     }
 
-    private static void getGradeLine(ItemTooltipEvent event, MaterialGrade grade) {
-        Component text = TextUtil.withColor(grade.getDisplayName(), Color.DEEPSKYBLUE);
-        event.getToolTip().add(new TranslatableComponent("part.silentgear.gradeOnPart", text));
+    private static void getMaterialModifierLines(ItemTooltipEvent event, MaterialInstance material) {
+        for (IMaterialModifier modifier : material.getModifiers()) {
+            modifier.appendTooltip(event.getToolTip());
+        }
     }
 
     private static void getMaterialTraitLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {

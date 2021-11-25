@@ -24,8 +24,6 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class RepairKitItem extends Item {
     private static final String NBT_STORAGE = "Storage";
 
@@ -196,7 +194,7 @@ public class RepairKitItem extends Item {
 
         for (Map.Entry<MaterialInstance, Float> entry : storedMaterials.entrySet()) {
             tooltip.add(TextUtil.translate("item", "repair_kit.material",
-                    entry.getKey().getDisplayNameWithGrade(PartType.MAIN, ItemStack.EMPTY),
+                    entry.getKey().getDisplayNameWithModifiers(PartType.MAIN, ItemStack.EMPTY),
                     format(entry.getValue())));
         }
     }

@@ -175,6 +175,7 @@
   "container.silentgear.recrystallizer": "Recrystallizer",
   "container.silentgear.refabricator": "Refabricator",
   "enchantment.silentgear.star_charged": "Star Charged",
+  "materialModifier.silentgear.starcharged": "Starcharged",
   "enchantment.silentgear.star_charged.desc": "Enhances material stats substantially. Applied to material items by the Starlight Charger.",
   "entity.minecraft.villager.silentgear.gear_smith": "Gear Smith",
   "gearType.silentgear.all": "All Gear Types",
