@@ -417,6 +417,7 @@ public final class Config {
         public static final ForgeConfigSpec.BooleanValue showMaterialTooltips;
         public static final ForgeConfigSpec.BooleanValue showPartTooltips;
         public static final ForgeConfigSpec.BooleanValue vanillaStyleTooltips;
+        public static final ForgeConfigSpec.BooleanValue showJeiHints;
 
         static {
             ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -445,6 +446,11 @@ public final class Config {
             vanillaStyleTooltips = builder
                     .comment("Tooltips are replaced with a simpler variant similar to vanilla and contains about as much information.")
                     .define("tooltip.vanillaStyleTooltips", false);
+
+            showJeiHints = builder
+                    .comment("Show tooltips on certain items (like blueprints) reminding the player of JEI functionality,",
+                            "or encouraging the player to install JEI (Just Enough Items) if the mod is missing.")
+                    .define("tooltip.jeiHints", true);
 
             spec = builder.build();
         }

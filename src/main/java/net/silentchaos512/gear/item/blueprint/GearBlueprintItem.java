@@ -29,8 +29,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final GearType gearType;
     private Tag.Named<Item> itemTag;
@@ -75,28 +73,30 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flags) {
         String itemClass = this.gearType.getName();
 
         // Flavor text
         if (!gearType.isArmor()) {
             String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
-            list.add(new TranslatableComponent(key).withStyle(ChatFormatting.ITALIC));
+            tooltip.add(new TranslatableComponent(key).withStyle(ChatFormatting.ITALIC));
         }
+
+        super.appendHoverText(stack, level, tooltip, flags);
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
-            list.add(new TranslatableComponent("item.silentgear.blueprint.disabled").withStyle(ChatFormatting.DARK_RED));
+            tooltip.add(new TranslatableComponent("item.silentgear.blueprint.disabled").withStyle(ChatFormatting.DARK_RED));
         } else if (this.singleUse) {
-            list.add(new TranslatableComponent("item.silentgear.blueprint.singleUse").withStyle(ChatFormatting.RED));
+            tooltip.add(new TranslatableComponent("item.silentgear.blueprint.singleUse").withStyle(ChatFormatting.RED));
         } else {
-            list.add(new TranslatableComponent("item.silentgear.blueprint.multiUse").withStyle(ChatFormatting.GREEN));
+            tooltip.add(new TranslatableComponent("item.silentgear.blueprint.multiUse").withStyle(ChatFormatting.GREEN));
         }
 
-        addInformationSupportedPartTypes(list);
+        appendSupportedTypesText(tooltip);
     }
 
-    private void addInformationSupportedPartTypes(Collection<Component> list) {
+    private void appendSupportedTypesText(Collection<Component> list) {
         if (KeyTracker.isDisplayStatsDown()) {
             Optional<ICoreItem> itemOptional = this.gearType.getItem();
 
