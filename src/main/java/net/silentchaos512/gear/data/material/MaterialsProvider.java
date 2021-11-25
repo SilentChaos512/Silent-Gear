@@ -2226,8 +2226,7 @@ public class MaterialsProvider implements DataProvider {
     @SuppressWarnings("WeakerAccess")
     protected MaterialBuilder compoundBuilder(ResourceLocation id, ItemLike item) {
         return new MaterialBuilder(id, -1, item)
-                .type(MaterialSerializers.COMPOUND, false)
-                .categories(MaterialCategories.GEM);
+                .type(MaterialSerializers.COMPOUND, false);
     }
 
     @SuppressWarnings("WeakerAccess")
