@@ -3,8 +3,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.7.7] - 2021-11-25
 ### Added
+- Config options to control the starlight charger's energy charge rate and max stored energy [#446]
 - Some tips regarding JEI to blueprints
 
 ## [2.7.6] - 2021-11-07

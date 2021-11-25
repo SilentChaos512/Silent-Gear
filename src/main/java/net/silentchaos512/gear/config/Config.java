@@ -71,6 +71,9 @@ public final class Config {
         // Salvager
         public static final ForgeConfigSpec.DoubleValue salvagerMinLossRate;
         public static final ForgeConfigSpec.DoubleValue salvagerMaxLossRate;
+        // Starlight Charger
+        public static final ForgeConfigSpec.IntValue starlightChargerChargeRate;
+        public static final ForgeConfigSpec.IntValue starlightChargerMaxCharge;
         // World
         public static final ForgeConfigSpec.IntValue azureSilverCount;
         public static final ForgeConfigSpec.IntValue bortCount;
@@ -317,6 +320,18 @@ public final class Config {
                         .comment("Maximum rate of part loss when salvaging items. 0 = no loss, 1 = complete loss.",
                                 "Rate depends on remaining durability.")
                         .defineInRange("partLossRate.max", 0.5, 0, 1);
+                builder.pop();
+            }
+
+            {
+                builder.comment("Settings for the starlight charger");
+                builder.push("starlightCharger");
+                starlightChargerChargeRate = builder
+                        .comment("The rate at which the starlight charger gathers energy during the night")
+                        .defineInRange("chargeRate", 50, 0, Integer.MAX_VALUE);
+                starlightChargerMaxCharge = builder
+                        .comment("The maximum amount of energy the starlight charger can store")
+                        .defineInRange("maxCharge", 1_000_000, 0, Integer.MAX_VALUE);
                 builder.pop();
             }
 

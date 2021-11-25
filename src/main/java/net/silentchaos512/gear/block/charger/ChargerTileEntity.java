@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.block.INamedContainerExtraData;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.init.GearEnchantments;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
@@ -35,7 +36,6 @@ import java.util.function.Supplier;
 
 public class ChargerTileEntity extends LockableSidedInventoryTileEntity implements INamedContainerExtraData {
     static final int INVENTORY_SIZE = 3;
-    private static final int CHARGE_RATE = 30 * (SilentGear.isDevBuild() ? 10 : 1);
     private static final int UPDATE_FREQUENCY = TimeUtils.ticksFromSeconds(15);
 
     private final Supplier<Enchantment> enchantment;
@@ -110,7 +110,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     protected int getMaxCharge() {
-        return 1_000_000;
+        return Config.Common.starlightChargerMaxCharge.get();
     }
 
     @Override
@@ -185,7 +185,13 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     protected void gatherEnergy() {
         assert level != null;
         if (charge < getMaxCharge() && level.isNight() && level.canSeeSkyFromBelowWater(worldPosition.above())) {
-            charge += CHARGE_RATE;
+            // Charge up, but watch for overflows since the config allows any value for charge rate and max charge.
+            final int newCharge = charge + Config.Common.starlightChargerChargeRate.get();
+            if (newCharge < 0 || newCharge > getMaxCharge()) {
+                charge = getMaxCharge();
+            } else {
+                charge = newCharge;
+            }
         }
     }
 
