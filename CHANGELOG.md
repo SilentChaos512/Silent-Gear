@@ -3,15 +3,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.7.7] - 2021-11-25
+## [Unreleased]
 ### Added
-- Config options to control the starlight charger's energy charge rate and max stored energy [#446]
 - Material modifiers, a new system for altering materials. This is used for grades and starcharging. [#433]
-- Some tips regarding JEI to blueprints
 ### Changed
 - The starcharged effect applied by the starlight charger is no longer an enchantment, it is a material modifier. The old enchantment still exists for backwards compatibility (for now) [#433]
 - Grades are now a material modifier. The NBT used by grades is still the same, this is just an internal change.
 - Materials listed in gear tooltips will display their starcharged level now
+
+## [2.7.7] - 2021-11-25
+### Added
+- Config options to control the starlight charger's energy charge rate and max stored energy [#446]
+- Some tips regarding JEI to blueprints
 
 ## [2.7.6] - 2021-11-07
 ### Added
