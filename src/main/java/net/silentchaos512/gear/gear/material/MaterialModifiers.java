@@ -18,9 +18,12 @@ import java.util.Map;
 public class MaterialModifiers {
     private static final Map<ResourceLocation, IMaterialModifierType> MODIFIERS = new LinkedHashMap<>();
 
+    public static final GradeMaterialModifier.Type GRADE = new GradeMaterialModifier.Type();
+    public static final ChargedMaterialModifier.Type<StarchargedMaterialModifier> STARCHARGED = new ChargedMaterialModifier.Type<>(StarchargedMaterialModifier::new, "SG_Starcharged", () -> GearEnchantments.STAR_CHARGED);
+
     static {
-        registerType(SilentGear.getId("grade"), new GradeMaterialModifier.Type());
-        registerType(SilentGear.getId("starcharged"), new ChargedMaterialModifier.Type<>(StarchargedMaterialModifier::new, "SG_Starcharged", () -> GearEnchantments.STAR_CHARGED));
+        registerType(SilentGear.getId("grade"), GRADE);
+        registerType(SilentGear.getId("starcharged"), STARCHARGED);
     }
 
     public static void registerType(ResourceLocation id, IMaterialModifierType type) {

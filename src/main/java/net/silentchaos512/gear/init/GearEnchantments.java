@@ -9,6 +9,8 @@ import net.silentchaos512.gear.enchantment.StatModifierEnchantment;
 import java.util.function.Supplier;
 
 public final class GearEnchantments {
+    // TODO: Remove in 1.18
+    @Deprecated
     public static final RegistryObject<Enchantment> STAR_CHARGED = register("star_charged", () ->
             new StatModifierEnchantment(Enchantment.Rarity.VERY_RARE, EnchantmentCategory.VANISHABLE, new EquipmentSlot[0]));
 

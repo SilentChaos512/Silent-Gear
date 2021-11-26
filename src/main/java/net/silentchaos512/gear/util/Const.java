@@ -51,6 +51,7 @@ public final class Const {
 
     // Random
     public static final ResourceLocation NULL_ID = new ResourceLocation("null");
+    public static final String NBT_IS_FOIL = "SG_IsFoil";
 
     // Compound-crafting block info
     public static final CompounderInfo<MetalCompoundingRecipe> METAL_COMPOUNDER_INFO = new CompounderInfo<>(

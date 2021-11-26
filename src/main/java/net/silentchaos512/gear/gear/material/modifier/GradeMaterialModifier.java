@@ -63,7 +63,7 @@ public class GradeMaterialModifier implements IMaterialModifier {
         return name;
     }
 
-    public static class Type implements IMaterialModifierType {
+    public static class Type implements IMaterialModifierType<GradeMaterialModifier> {
         @Override
         public void removeModifier(ItemStack stack) {
             MaterialGrade.NONE.setGradeOnStack(stack);
@@ -71,9 +71,14 @@ public class GradeMaterialModifier implements IMaterialModifier {
 
         @Nullable
         @Override
-        public IMaterialModifier read(IMaterialInstance material) {
+        public GradeMaterialModifier read(IMaterialInstance material) {
             MaterialGrade grade = MaterialGrade.fromStack(material.getItem());
             return new GradeMaterialModifier(grade);
+        }
+
+        @Override
+        public void write(GradeMaterialModifier modifier, ItemStack stack) {
+            modifier.grade.setGradeOnStack(stack);
         }
     }
 }

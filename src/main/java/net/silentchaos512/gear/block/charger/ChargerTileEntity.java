@@ -1,29 +1,29 @@
 package net.silentchaos512.gear.block.charger;
 
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.core.Direction;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.block.INamedContainerExtraData;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.init.GearEnchantments;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialModifiers;
+import net.silentchaos512.gear.gear.material.modifier.ChargedMaterialModifier;
+import net.silentchaos512.gear.init.ModBlockEntities;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
-import net.silentchaos512.gear.init.ModBlockEntities;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -31,14 +31,12 @@ import net.silentchaos512.lib.util.TimeUtils;
 import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.function.Supplier;
 
 public class ChargerTileEntity extends LockableSidedInventoryTileEntity implements INamedContainerExtraData {
     static final int INVENTORY_SIZE = 3;
     private static final int UPDATE_FREQUENCY = TimeUtils.ticksFromSeconds(15);
 
-    private final Supplier<Enchantment> enchantment;
+    private final ChargedMaterialModifier.Type materialModifier;
 
     @SyncVariable(name = "Progress")
     private int progress = 0;
@@ -100,13 +98,13 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         }
     };
 
-    public ChargerTileEntity(BlockEntityType<?> tileEntityTypeIn, Supplier<Enchantment> enchantment, BlockPos pos, BlockState state) {
+    public ChargerTileEntity(BlockEntityType<?> tileEntityTypeIn, ChargedMaterialModifier.Type materialModifier, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, INVENTORY_SIZE, pos, state);
-        this.enchantment = enchantment;
+        this.materialModifier = materialModifier;
     }
 
     public static ChargerTileEntity createStarlightCharger(BlockPos pos, BlockState state) {
-        return new ChargerTileEntity(ModBlockEntities.STARLIGHT_CHARGER.get(), GearEnchantments.STAR_CHARGED, pos, state);
+        return new ChargerTileEntity(ModBlockEntities.STARLIGHT_CHARGER.get(), MaterialModifiers.STARCHARGED, pos, state);
     }
 
     protected int getMaxCharge() {
@@ -145,13 +143,12 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     protected int getMaterialChargeLevel(ItemStack stack) {
-        return EnchantmentHelper.getItemEnchantmentLevel(this.enchantment.get(), stack);
+        return materialModifier.checkLevel(stack);
     }
 
     protected void chargeMaterial(ItemStack output, int level) {
-        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(output);
-        enchantments.put(this.enchantment.get(), level);
-        EnchantmentHelper.setEnchantments(enchantments, output);
+        ChargedMaterialModifier mod = materialModifier.create(MaterialInstance.from(output), level);
+        materialModifier.write(mod, output);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, ChargerTileEntity blockEntity) {

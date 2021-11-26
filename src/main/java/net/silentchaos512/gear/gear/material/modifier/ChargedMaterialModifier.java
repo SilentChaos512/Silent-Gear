@@ -10,6 +10,7 @@ import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ChargedProperties;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.util.Const;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
@@ -24,15 +25,11 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
         this.level = level;
     }
 
-    public boolean causesFoilEffect() {
-        return true;
-    }
-
     public ChargedProperties getChargedProperties() {
         return new ChargedProperties(level, material.getStat(PartType.MAIN, ItemStats.CHARGEABILITY));
     }
 
-    public static class Type<T extends ChargedMaterialModifier> implements IMaterialModifierType {
+    public static class Type<T extends ChargedMaterialModifier> implements IMaterialModifierType<T> {
         private final BiFunction<IMaterialInstance, Integer, T> factory;
         private final String nbtTagName;
         private final Supplier<RegistryObject<Enchantment>> legacyEnchantment;
@@ -43,9 +40,21 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
             this.legacyEnchantment = legacyEnchantment;
         }
 
+        public int checkLevel(ItemStack stack) {
+            return stack.getOrCreateTag().getShort(nbtTagName);
+        }
+
+        public T create(IMaterialInstance material, int level) {
+            return factory.apply(material, level);
+        }
+
         @Override
         public void removeModifier(ItemStack stack) {
             stack.getOrCreateTag().remove(nbtTagName);
+        }
+
+        boolean causesFoilEffect() {
+            return true;
         }
 
         @Nullable
@@ -63,6 +72,14 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
             }
 
             return factory.apply(material, level);
+        }
+
+        @Override
+        public void write(T modifier, ItemStack stack) {
+            stack.getOrCreateTag().putShort(nbtTagName, (short) modifier.level);
+            if (causesFoilEffect()) {
+                stack.getOrCreateTag().putBoolean(Const.NBT_IS_FOIL, true);
+            }
         }
     }
 }
