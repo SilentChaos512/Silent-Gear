@@ -148,7 +148,7 @@ public final class GearData {
             int maxDamage = gear.getMaxDamage() > 0 ? gear.getMaxDamage() : 1;
             final float damageRatio = MathHelper.clamp((float) gear.getDamageValue() / maxDamage, 0f, 1f);
             CompoundNBT statsCompound = new CompoundNBT();
-            for (ItemStat stat : stats.getStats()) {
+            for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(gear))) {
                 StatGearKey key = StatGearKey.of(stat, item.getGearType());
                 Collection<StatInstance> modifiers = stats.get(key);
                 GearType statGearType = stats.getMostSpecificKey(key).getGearType();
@@ -160,10 +160,11 @@ public final class GearData {
                     return trait.onGetStat(context, stat, val, damageRatio);
                 });
                 final float value = Config.Common.getStatWithMultiplier(stat, withTraits);
-                // SilentGear.log.debug(stat, value);
-                ResourceLocation statId = Objects.requireNonNull(stat.getRegistryName());
-                propertiesCompound.remove(statId.getPath()); // Remove old keys
-                statsCompound.putFloat(statId.toString(), stat.clampValue(value));
+                if (!MathHelper.equal(value, 0f) || stats.containsKey(key)) {
+                    ResourceLocation statId = Objects.requireNonNull(stat.getRegistryName());
+                    propertiesCompound.remove(statId.getPath()); // Remove old keys
+                    statsCompound.putFloat(statId.toString(), stat.clampValue(value));
+                }
             }
             // Put missing relevant stats in the map to avoid recalculate stats packet spam
             for (ItemStat stat : item.getRelevantStats(gear)) {

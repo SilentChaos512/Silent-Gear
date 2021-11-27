@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.34] - 2021-11-26
+### Fixed
+- Some stats like reach distance being missing from gear
+
 ## [2.6.33] - 2021-11-07
 ### Added
 - New config options for material and part tooltips, found in the client config (Rimevel) [#421]
