@@ -144,6 +144,13 @@ public final class GearData {
             // For debugging
             Map<ItemStat, Float> oldStatValues = getCurrentStatsForDebugging(gear);
 
+            // Cache traits in properties compound as well
+            ListNBT traitList = new ListNBT();
+            traits.forEach((trait, level) -> traitList.add(trait.write(level)));
+            propertiesCompound.put("Traits", traitList);
+
+            propertiesCompound.remove(NBT_SYNERGY);
+
             // Calculate and write stats
             int maxDamage = gear.getMaxDamage() > 0 ? gear.getMaxDamage() : 1;
             final float damageRatio = MathHelper.clamp((float) gear.getDamageValue() / maxDamage, 0f, 1f);
@@ -178,13 +185,6 @@ public final class GearData {
             if (player != null) {
                 printStatsForDebugging(gear, stats, oldStatValues);
             }
-
-            // Cache traits in properties compound as well
-            ListNBT traitList = new ListNBT();
-            traits.forEach((trait, level) -> traitList.add(trait.write(level)));
-            propertiesCompound.put("Traits", traitList);
-
-            propertiesCompound.remove(NBT_SYNERGY);
 
             // Remove enchantments if mod is configured to. Must be done before traits add enchantments!
             if (gear.getOrCreateTag().contains("Enchantments") && Config.Common.forceRemoveEnchantments.get()) {
