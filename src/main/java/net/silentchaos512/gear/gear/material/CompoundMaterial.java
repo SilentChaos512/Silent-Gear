@@ -156,6 +156,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
         // Get the materials and all the stat modifiers they provide for this stat
         Collection<IMaterialInstance> materials = getMaterials(material);
         List<StatInstance> statMods = materials.stream()
+                .map(AbstractMaterial::removeEnhancements)
                 .flatMap(m -> m.getStatModifiers(partType, key).stream())
                 .collect(Collectors.toList());
 

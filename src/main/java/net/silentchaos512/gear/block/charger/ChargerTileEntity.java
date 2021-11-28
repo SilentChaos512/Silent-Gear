@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.block.INamedContainerExtraData;
 import net.silentchaos512.gear.config.Config;
@@ -146,6 +147,22 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         return materialModifier.checkLevel(stack);
     }
 
+    private static boolean canCharge(ItemStack stack) {
+        MaterialInstance material = MaterialInstance.from(stack);
+
+        if (material == null) {
+            return false;
+        }
+
+        for (IMaterialModifier modifier : material.getModifiers()) {
+            if (modifier instanceof ChargedMaterialModifier) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected void chargeMaterial(ItemStack output, int level) {
         ChargedMaterialModifier mod = materialModifier.create(MaterialInstance.from(output), level);
         materialModifier.write(mod, output);
@@ -197,7 +214,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         int chargeLevel = getChargingAgentTier(catalyst);
         int drainRate = getDrainRate(input, chargeLevel);
 
-        if (chargeLevel > getMaterialChargeLevel(input) && chargeLevel <= this.structureLevel && this.charge >= drainRate) {
+        if (canCharge(input) && chargeLevel > getMaterialChargeLevel(input) && chargeLevel <= this.structureLevel && this.charge >= drainRate) {
             if (wouldFitInOutputSlot(input, chargeLevel)) {
                 ++this.progress;
                 this.charge -= drainRate;

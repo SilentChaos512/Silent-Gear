@@ -21,6 +21,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.gear.material.AbstractMaterial;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -31,6 +32,7 @@ import net.silentchaos512.lib.util.NameUtils;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     public CompoundMaterialItem(Properties properties) {
@@ -67,7 +69,10 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
 
     public ItemStack create(MaterialList materials, int craftedCount) {
         ItemStack result = new ItemStack(this, craftedCount);
-        result.getOrCreateTag().put(NBT_MATERIALS, materials.serializeNbt());
+        MaterialList materialsWithoutEnhancements = MaterialList.of(materials.stream()
+                .map(AbstractMaterial::removeEnhancements)
+                .collect(Collectors.toList()));
+        result.getOrCreateTag().put(NBT_MATERIALS, materialsWithoutEnhancements.serializeNbt());
         return result;
     }
 

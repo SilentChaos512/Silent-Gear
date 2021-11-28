@@ -51,6 +51,7 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
         @Override
         public void removeModifier(ItemStack stack) {
             stack.getOrCreateTag().remove(nbtTagName);
+            stack.getOrCreateTag().remove(Const.NBT_IS_FOIL);
         }
 
         boolean causesFoilEffect() {

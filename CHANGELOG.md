@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.7.10] - 2021-11-28
 ### Fixed
+- Compound materials (alloys) now ignore grades and other enhancements of their component materials.
 - Stat modifier traits not applying stat modifiers when first added to an existing item (via an upgrade)
 
 ## [2.7.9] - 2021-11-26
