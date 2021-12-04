@@ -18,7 +18,7 @@ public enum PartTextureSet {
             .put(PartType.BINDING, ImmutableList.of(PartTextures.BINDING_GENERIC))
             .put(PartType.GRIP, ImmutableList.of(PartTextures.GRIP_WOOL))
             .put(PartType.LINING, ImmutableList.of(PartTextures.LINING_CLOTH))
-            .put(PartType.BOWSTRING, ImmutableList.of(PartTextures.BOWSTRING_STRING))
+            .put(PartType.CORD, ImmutableList.of(PartTextures.BOWSTRING_STRING))
             .put(PartType.FLETCHING, ImmutableList.of(PartTextures.FLETCHING_GENERIC))
             .put(PartType.ADORNMENT, ImmutableList.of(PartTextures.ADORNMENT_GENERIC))
             .build()),
@@ -29,7 +29,7 @@ public enum PartTextureSet {
             .put(PartType.BINDING, ImmutableList.of(PartTextures.BINDING_GENERIC))
             .put(PartType.GRIP, ImmutableList.of(PartTextures.GRIP_WOOL))
             .put(PartType.LINING, ImmutableList.of(PartTextures.LINING_CLOTH))
-            .put(PartType.BOWSTRING, ImmutableList.of(PartTextures.BOWSTRING_STRING))
+            .put(PartType.CORD, ImmutableList.of(PartTextures.BOWSTRING_STRING))
             .put(PartType.FLETCHING, ImmutableList.of(PartTextures.FLETCHING_GENERIC))
             .put(PartType.ADORNMENT, ImmutableList.of(PartTextures.ADORNMENT_GENERIC))
             .build()),
@@ -40,7 +40,7 @@ public enum PartTextureSet {
             .put(PartType.BINDING, ImmutableList.of(PartTextures.BINDING_GENERIC))
             .put(PartType.GRIP, ImmutableList.of(PartTextures.GRIP_WOOL))
             .put(PartType.LINING, ImmutableList.of(PartTextures.LINING_SLIME, PartTextures.LINING_SLIME_HIGHLIGHT))
-            .put(PartType.BOWSTRING, ImmutableList.of(PartTextures.BOWSTRING_STRING))
+            .put(PartType.CORD, ImmutableList.of(PartTextures.BOWSTRING_STRING))
             .put(PartType.FLETCHING, ImmutableList.of(PartTextures.FLETCHING_GENERIC))
             .put(PartType.ADORNMENT, ImmutableList.of(PartTextures.ADORNMENT_GENERIC, PartTextures.ADORNMENT_HIGHLIGHT))
             .build());

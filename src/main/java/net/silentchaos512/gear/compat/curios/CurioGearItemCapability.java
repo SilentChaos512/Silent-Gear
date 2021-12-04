@@ -13,7 +13,6 @@ import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -29,10 +28,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CurioGearItemCapability {
-    public static void register() {
-        CapabilityManager.INSTANCE.register(CurioGearItemWrapper.class);
-    }
-
     public static ICapabilityProvider createProvider(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
         return new CurioGearItemCapability.Provider(new CurioGearItemWrapper(stack, extraAttributes));
     }

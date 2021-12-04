@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.FMLHandshakeHandler;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.HandshakeHandler;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.simple.SimpleChannel;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartManager;
@@ -34,7 +34,7 @@ public final class Network {
                 .decoder(SyncTraitsPacket::fromBytes)
                 .encoder(SyncTraitsPacket::toBytes)
                 .markAsLoginPacket()
-                .consumer(FMLHandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
+                .consumer(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
                     TraitManager.handleTraitSyncPacket(msg, ctx);
                     channel.reply(new LoginPacket.Reply(), ctx.get());
                 }))
@@ -44,7 +44,7 @@ public final class Network {
                 .decoder(SyncGearPartsPacket::fromBytes)
                 .encoder(SyncGearPartsPacket::toBytes)
                 .markAsLoginPacket()
-                .consumer(FMLHandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
+                .consumer(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
                     PartManager.handlePartSyncPacket(msg, ctx);
                     channel.reply(new LoginPacket.Reply(), ctx.get());
                 }))
@@ -53,7 +53,7 @@ public final class Network {
                 .loginIndex(LoginPacket::getLoginIndex, LoginPacket::setLoginIndex)
                 .decoder(buffer -> new LoginPacket.Reply())
                 .encoder((msg, buffer) -> {})
-                .consumer(FMLHandshakeHandler.indexFirst((hh, msg, ctx) -> msg.handle(ctx)))
+                .consumer(HandshakeHandler.indexFirst((hh, msg, ctx) -> msg.handle(ctx)))
                 .add();
         channel.messageBuilder(SyncGearCraftingItemsPacket.class, 4)
                 .encoder(SyncGearCraftingItemsPacket::toBytes)
@@ -66,16 +66,16 @@ public final class Network {
                 .decoder(SyncMaterialsPacket::fromBytes)
                 .encoder(SyncMaterialsPacket::toBytes)
                 .markAsLoginPacket()
-                .consumer(FMLHandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
+                .consumer(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
                     MaterialManager.handleSyncPacket(msg, ctx);
                     channel.reply(new LoginPacket.Reply(), ctx.get());
                 }))
                 .add();
         // uwu
-        channel.messageBuilder(FMLPlayMessages.SpawnEntity.class, 7)
-                .encoder(FMLPlayMessages.SpawnEntity::encode)
-                .decoder(FMLPlayMessages.SpawnEntity::decode)
-                .consumer(FMLPlayMessages.SpawnEntity::handle)
+        channel.messageBuilder(PlayMessages.SpawnEntity.class, 7)
+                .encoder(PlayMessages.SpawnEntity::encode)
+                .decoder(PlayMessages.SpawnEntity::decode)
+                .consumer(PlayMessages.SpawnEntity::handle)
                 .add();
         channel.messageBuilder(SyncMaterialCraftingItemsPacket.class, 8)
                 .decoder(SyncMaterialCraftingItemsPacket::decode)

@@ -245,16 +245,16 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(ModTags.Items.TEMPLATE_BOARDS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(ModItems.BOWSTRING_BLUEPRINT)
+        ShapedRecipeBuilder.shaped(ModItems.CORD_BLUEPRINT)
                 .group("silentgear:blueprints/bowstring")
                 .define('#', ModTags.Items.BLUEPRINT_PAPER)
-                .define('/', PartMaterialIngredient.of(PartType.BOWSTRING, GearType.TOOL))
+                .define('/', PartMaterialIngredient.of(PartType.CORD, GearType.TOOL))
                 .pattern("#/")
                 .pattern("#/")
                 .pattern("#/")
                 .unlockedBy("has_item", has(ModTags.Items.BLUEPRINT_PAPER))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(ModItems.BOWSTRING_BLUEPRINT)
+        ShapedRecipeBuilder.shaped(ModItems.CORD_BLUEPRINT)
                 .group("silentgear:blueprints/bowstring")
                 .define('#', ModTags.Items.BLUEPRINT_PAPER)
                 .define('/', Tags.Items.STRING)
@@ -263,10 +263,10 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#/")
                 .unlockedBy("has_item", has(ModTags.Items.BLUEPRINT_PAPER))
                 .save(consumer, SilentGear.getId("bowstring_blueprint_alt"));
-        ShapedRecipeBuilder.shaped(ModItems.BOWSTRING_TEMPLATE)
+        ShapedRecipeBuilder.shaped(ModItems.CORD_TEMPLATE)
                 .group("silentgear:blueprints/bowstring")
                 .define('#', ModTags.Items.TEMPLATE_BOARDS)
-                .define('/', PartMaterialIngredient.of(PartType.BOWSTRING, GearType.TOOL))
+                .define('/', PartMaterialIngredient.of(PartType.CORD, GearType.TOOL))
                 .pattern("#/")
                 .pattern("#/")
                 .pattern("#/")
@@ -403,9 +403,9 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addIngredient(PartMaterialIngredient.of(PartType.BINDING), 2)
                 .build(consumer, SilentGear.getId("part/binding2"));
 
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.BOWSTRING, 1)
-                .addIngredient(BlueprintIngredient.of(ModItems.BOWSTRING_BLUEPRINT.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.BOWSTRING), 3)
+        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.CORD, 1)
+                .addIngredient(BlueprintIngredient.of(ModItems.CORD_BLUEPRINT.get()))
+                .addIngredient(PartMaterialIngredient.of(PartType.CORD), 3)
                 .build(consumer, SilentGear.getId("part/bowstring"));
 
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.FLETCHING, 1)
@@ -1307,14 +1307,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), tool)
                 .addIngredient(toolHead)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
-                .addIngredient(GearPartIngredient.of(PartType.BOWSTRING))
+                .addIngredient(GearPartIngredient.of(PartType.CORD))
                 .build(consumer, SilentGear.getId("gear/" + name));
         // Quick tool (main materials, rod, and bowstring, skipping main part)
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.SHAPELESS_GEAR.get(), tool)
                 .addIngredient(BlueprintIngredient.of(blueprintItem))
                 .addIngredient(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .addIngredient(GearPartIngredient.of(PartType.ROD))
-                .addIngredient(GearPartIngredient.of(PartType.BOWSTRING))
+                .addIngredient(GearPartIngredient.of(PartType.CORD))
                 .build(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
 

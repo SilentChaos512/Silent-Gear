@@ -11,7 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -60,7 +59,7 @@ public class CompoundPartItem extends Item {
 
         // Crafted count not stored... Base the value on the default recipes.
         if (this == ModItems.BINDING.get()) return getMaterials(stack).size();
-        if (this == ModItems.BOWSTRING.get()) return 1;
+        if (this == ModItems.CORD.get()) return 1;
         if (this == ModItems.COATING.get()) return getMaterials(stack).size();
         if (this == ModItems.FLETCHING.get()) return getMaterials(stack).size();
         if (this == ModItems.GRIP.get()) return getMaterials(stack).size();
@@ -103,7 +102,7 @@ public class CompoundPartItem extends Item {
     }
 
     public static MaterialList getMaterials(ItemStack stack) {
-        ListTag materialListNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_COMPOUND);
+        ListTag materialListNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Tag.TAG_COMPOUND);
         return MaterialList.deserializeNbt(materialListNbt);
     }
 

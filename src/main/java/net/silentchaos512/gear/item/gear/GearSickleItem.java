@@ -185,7 +185,7 @@ public class GearSickleItem extends GearDiggerItem {
 
         if (playerMP.getAbilities().instabuild) {
             block.playerWillDestroy(world, pos, state, player);
-            if (block.removedByPlayer(state, world, pos, playerMP, false, state.getFluidState())) {
+            if (block.onDestroyedByPlayer(state, world, pos, playerMP, false, state.getFluidState())) {
                 block.destroy(world, pos, state);
             }
             if (!world.isClientSide) {
@@ -197,7 +197,7 @@ public class GearSickleItem extends GearDiggerItem {
         if (!world.isClientSide && world instanceof ServerLevel) {
             block.playerWillDestroy(world, pos, state, playerMP);
 
-            if (block.removedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
+            if (block.onDestroyedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
                 block.destroy(world, pos, state);
                 block.playerDestroy(world, player, pos, state, null, sickle);
                 block.popExperience((ServerLevel) world, pos, xpDropped);
@@ -206,7 +206,7 @@ public class GearSickleItem extends GearDiggerItem {
             playerMP.connection.send(new ClientboundBlockUpdatePacket(world, pos));
         } else {
             world.levelEvent(2001, pos, Block.getId(state));
-            if (block.removedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
+            if (block.onDestroyedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
                 block.destroy(world, pos, state);
             }
 

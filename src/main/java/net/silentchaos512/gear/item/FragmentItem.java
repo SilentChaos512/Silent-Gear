@@ -1,17 +1,17 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -22,8 +22,6 @@ import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class FragmentItem extends Item {
     private static final String NBT_MATERIAL = "Material";
@@ -40,7 +38,7 @@ public class FragmentItem extends Item {
 
     @Nullable
     public static IMaterialInstance getMaterial(ItemStack stack) {
-        if (stack.getOrCreateTag().contains(NBT_MATERIAL, Constants.NBT.TAG_COMPOUND)) {
+        if (stack.getOrCreateTag().contains(NBT_MATERIAL, Tag.TAG_COMPOUND)) {
             return MaterialInstance.read(stack.getOrCreateTag().getCompound(NBT_MATERIAL));
         }
 
@@ -54,7 +52,7 @@ public class FragmentItem extends Item {
     }
 
     public static String getModelKey(ItemStack stack) {
-        if (stack.getOrCreateTag().contains(NBT_MATERIAL, Constants.NBT.TAG_COMPOUND)) {
+        if (stack.getOrCreateTag().contains(NBT_MATERIAL, Tag.TAG_COMPOUND)) {
             MaterialInstance material = MaterialInstance.read(stack.getOrCreateTag().getCompound(NBT_MATERIAL));
             if (material != null) {
                 return material.getModelKey();

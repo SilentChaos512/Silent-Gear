@@ -200,18 +200,18 @@ public class RepairKitItem extends Item {
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        return 1.0 - getStoredMaterialAmount(stack) / getKitCapacity();
+    public int getBarWidth(ItemStack stack) {
+        return Math.round(13f - getStoredMaterialAmount(stack) * 13f / getKitCapacity());
     }
 
     @Override
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return Mth.hsvToRgb(Math.max(0.0F, (float) (1.0F - getDurabilityForDisplay(stack))) / 3f + 0.5f, 1f, 1f);
+    public int getBarColor(ItemStack stack) {
+        return Mth.hsvToRgb(Math.max(0f, 13f - getBarWidth(stack)) / 3f + 0.5f, 1f, 1f);
     }
 
     private static String format(float f) {

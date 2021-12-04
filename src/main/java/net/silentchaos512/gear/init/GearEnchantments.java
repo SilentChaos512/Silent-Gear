@@ -1,19 +1,11 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraftforge.fmllegacy.RegistryObject;
-import net.silentchaos512.gear.enchantment.StatModifierEnchantment;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
 public final class GearEnchantments {
-    // TODO: Remove in 1.18
-    @Deprecated
-    public static final RegistryObject<Enchantment> STAR_CHARGED = register("star_charged", () ->
-            new StatModifierEnchantment(Enchantment.Rarity.VERY_RARE, EnchantmentCategory.VANISHABLE, new EquipmentSlot[0]));
-
     private GearEnchantments() {}
 
     public static void register() {}

@@ -53,7 +53,7 @@ public class PartsProvider implements DataProvider {
 
         ret.add(part("adornment", GearType.CURIO, PartType.ADORNMENT, ModItems.ADORNMENT));
         ret.add(part("binding", GearType.TOOL, PartType.BINDING, ModItems.BINDING));
-        ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.BOWSTRING, ModItems.BOWSTRING));
+        ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.CORD, ModItems.CORD));
         ret.add(part("coating", GearType.ALL, PartType.COATING, ModItems.COATING)
                 .blacklistGearType(GearType.ELYTRA)
         );

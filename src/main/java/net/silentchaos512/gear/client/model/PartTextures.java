@@ -24,7 +24,7 @@ public enum PartTextures {
     LINING_CLOTH("lining_cloth", PartType.LINING, GearType.NONE, true),
     LINING_SLIME("lining_slime", PartType.LINING, GearType.NONE, true),
     LINING_SLIME_HIGHLIGHT("lining_slime_highlight", PartType.LINING, GearType.NONE, true),
-    BOWSTRING_STRING("bowstring_string", PartType.BOWSTRING, GearType.RANGED_WEAPON, true),
+    BOWSTRING_STRING("bowstring_string", PartType.CORD, GearType.RANGED_WEAPON, true),
     ARROW("arrow", PartType.MISC_UPGRADE, GearType.RANGED_WEAPON, true),
     CHARGED_ARROW("charged_arrow", PartType.MISC_UPGRADE, GearType.CROSSBOW, false),
     CHARGED_FIREWORK("charged_firework", PartType.MISC_UPGRADE, GearType.CROSSBOW, false),

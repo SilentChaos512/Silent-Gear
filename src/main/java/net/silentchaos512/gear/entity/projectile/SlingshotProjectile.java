@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.network.PlayMessages;
 import net.silentchaos512.gear.init.ModEntities;
 import net.silentchaos512.gear.init.ModItems;
 
@@ -26,7 +26,7 @@ public class SlingshotProjectile extends AbstractArrow {
         super(ModEntities.SLINGSHOT_PROJECTILE.get(), entityIn, worldIn);
     }
 
-    public SlingshotProjectile(FMLPlayMessages.SpawnEntity message, Level world) {
+    public SlingshotProjectile(PlayMessages.SpawnEntity message, Level world) {
         super(ModEntities.SLINGSHOT_PROJECTILE.get(), world);
     }
 

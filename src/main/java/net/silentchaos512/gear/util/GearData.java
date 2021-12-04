@@ -11,7 +11,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -344,7 +343,7 @@ public final class GearData {
         if (!GearHelper.isGear(stack)) return PartDataList.empty();
 
         CompoundTag tags = getData(stack, NBT_ROOT_CONSTRUCTION);
-        ListTag tagList = tags.getList(NBT_CONSTRUCTION_PARTS, Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = tags.getList(NBT_CONSTRUCTION_PARTS, Tag.TAG_COMPOUND);
         PartDataList list = PartDataList.of();
 
         for (Tag nbt : tagList) {
@@ -489,7 +488,7 @@ public final class GearData {
     @Nullable
     public static PartData getPartOfType(ItemStack stack, PartType type) {
         CompoundTag tags = getData(stack, NBT_ROOT_CONSTRUCTION);
-        ListTag tagList = tags.getList(NBT_CONSTRUCTION_PARTS, Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = tags.getList(NBT_CONSTRUCTION_PARTS, Tag.TAG_COMPOUND);
 
         for (int i = 0; i < tagList.size(); ++i) {
             CompoundTag nbt = tagList.getCompound(i);
@@ -512,7 +511,7 @@ public final class GearData {
      */
     public static boolean hasPartOfType(ItemStack stack, PartType type) {
         CompoundTag tags = getData(stack, NBT_ROOT_CONSTRUCTION);
-        ListTag tagList = tags.getList(NBT_CONSTRUCTION_PARTS, Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = tags.getList(NBT_CONSTRUCTION_PARTS, Tag.TAG_COMPOUND);
 
         for (int i = 0; i < tagList.size(); ++i) {
             CompoundTag nbt = tagList.getCompound(i);
@@ -605,7 +604,7 @@ public final class GearData {
 
     private static boolean hasPart(ItemStack gear, String partId) {
         CompoundTag tags = getData(gear, NBT_ROOT_CONSTRUCTION);
-        ListTag tagList = tags.getList(NBT_CONSTRUCTION_PARTS, Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = tags.getList(NBT_CONSTRUCTION_PARTS, Tag.TAG_COMPOUND);
 
         for (Tag nbt : tagList) {
             if (nbt instanceof CompoundTag) {

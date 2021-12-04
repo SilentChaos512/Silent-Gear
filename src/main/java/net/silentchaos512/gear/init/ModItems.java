@@ -69,7 +69,7 @@ public final class ModItems {
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartType.GRIP, false);
     public static final ItemRegistryObject<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartType.BINDING, false);
     public static final ItemRegistryObject<PartBlueprintItem> LINING_BLUEPRINT = registerPartBlueprint(PartType.LINING, false);
-    public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_BLUEPRINT = registerPartBlueprint(PartType.BOWSTRING, false);
+    public static final ItemRegistryObject<PartBlueprintItem> CORD_BLUEPRINT = registerPartBlueprint(PartType.CORD, false);
     public static final ItemRegistryObject<PartBlueprintItem> FLETCHING_BLUEPRINT = registerPartBlueprint(PartType.FLETCHING, false);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_BLUEPRINT = registerGearBlueprint(GearType.SWORD, false);
     public static final ItemRegistryObject<GearBlueprintItem> KATANA_BLUEPRINT = registerGearBlueprint(GearType.KATANA, false);
@@ -108,7 +108,7 @@ public final class ModItems {
     public static final ItemRegistryObject<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartType.GRIP, true);
     public static final ItemRegistryObject<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartType.BINDING, true);
     public static final ItemRegistryObject<PartBlueprintItem> LINING_TEMPLATE = registerPartBlueprint(PartType.LINING, true);
-    public static final ItemRegistryObject<PartBlueprintItem> BOWSTRING_TEMPLATE = registerPartBlueprint(PartType.BOWSTRING, true);
+    public static final ItemRegistryObject<PartBlueprintItem> CORD_TEMPLATE = registerPartBlueprint(PartType.CORD, true);
     public static final ItemRegistryObject<PartBlueprintItem> FLETCHING_TEMPLATE = registerPartBlueprint(PartType.FLETCHING, true);
     public static final ItemRegistryObject<GearBlueprintItem> SWORD_TEMPLATE = registerGearBlueprint(GearType.SWORD, true);
     public static final ItemRegistryObject<GearBlueprintItem> KATANA_TEMPLATE = registerGearBlueprint(GearType.KATANA, true);
@@ -219,8 +219,8 @@ public final class ModItems {
             new CompoundPartItem(PartType.BINDING, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> LINING = registerCompoundPart("lining", () ->
             new CompoundPartItem(PartType.LINING, baseProps()));
-    public static final ItemRegistryObject<CompoundPartItem> BOWSTRING = registerCompoundPart("bowstring", () ->
-            new CompoundPartItem(PartType.BOWSTRING, baseProps()));
+    public static final ItemRegistryObject<CompoundPartItem> CORD = registerCompoundPart("cord", () ->
+            new CompoundPartItem(PartType.CORD, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> FLETCHING = registerCompoundPart("fletching", () ->
             new CompoundPartItem(PartType.FLETCHING, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> ADORNMENT = registerCompoundPart("adornment", () ->

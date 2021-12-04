@@ -44,12 +44,12 @@ public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
     private static final Collection<PartType> REQUIRED_PARTS = ImmutableSet.of(
             PartType.MAIN,
             PartType.ROD,
-            PartType.BOWSTRING
+            PartType.CORD
     );
 
     private static final ImmutableList<PartType> RENDER_PARTS = ImmutableList.of(
             PartType.ROD,
-            PartType.BOWSTRING,
+            PartType.CORD,
             PartType.MAIN
     );
 

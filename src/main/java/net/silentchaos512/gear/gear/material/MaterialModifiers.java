@@ -8,7 +8,6 @@ import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.gear.material.modifier.ChargedMaterialModifier;
 import net.silentchaos512.gear.gear.material.modifier.GradeMaterialModifier;
 import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifier;
-import net.silentchaos512.gear.init.GearEnchantments;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +18,7 @@ public class MaterialModifiers {
     private static final Map<ResourceLocation, IMaterialModifierType> MODIFIERS = new LinkedHashMap<>();
 
     public static final GradeMaterialModifier.Type GRADE = new GradeMaterialModifier.Type();
-    public static final ChargedMaterialModifier.Type<StarchargedMaterialModifier> STARCHARGED = new ChargedMaterialModifier.Type<>(StarchargedMaterialModifier::new, "SG_Starcharged", () -> GearEnchantments.STAR_CHARGED);
+    public static final ChargedMaterialModifier.Type<StarchargedMaterialModifier> STARCHARGED = new ChargedMaterialModifier.Type<>(StarchargedMaterialModifier::new, "SG_Starcharged");
 
     static {
         registerType(SilentGear.getId("grade"), GRADE);

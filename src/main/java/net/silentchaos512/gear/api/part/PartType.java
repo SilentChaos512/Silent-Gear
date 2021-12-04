@@ -63,14 +63,14 @@ public final class PartType {
             .defaultTexture(PartTextures.BINDING_GENERIC)
             .isRemovable(true)
     );
-    public static final PartType BOWSTRING = create(Builder.builder(SilentGear.getId("bowstring")) // TODO: Rename to "cord"
-            .compoundPartItem(() -> ModItems.BOWSTRING.orElseThrow(IllegalStateException::new))
-            .defaultTexture(PartTextures.BOWSTRING_STRING)
-    );
     public static final PartType COATING = create(Builder.builder(SilentGear.getId("coating"))
             .compoundPartItem(() -> ModItems.COATING.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.MAIN_GENERIC_HC)
             .isRemovable(true)
+    );
+    public static final PartType CORD = create(Builder.builder(SilentGear.getId("cord"))
+            .compoundPartItem(() -> ModItems.CORD.orElseThrow(IllegalStateException::new))
+            .defaultTexture(PartTextures.BOWSTRING_STRING)
     );
     public static final PartType FLETCHING = create(Builder.builder(SilentGear.getId("fletching"))
             .compoundPartItem(() -> ModItems.FLETCHING.orElseThrow(IllegalStateException::new))

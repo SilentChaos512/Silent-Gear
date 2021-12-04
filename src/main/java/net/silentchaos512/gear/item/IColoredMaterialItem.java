@@ -1,9 +1,8 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.ListTag;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -17,7 +16,7 @@ public interface IColoredMaterialItem {
 
     @Nullable
     default IMaterialInstance getPrimarySubMaterial(ItemStack stack) {
-        ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
+        ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Tag.TAG_STRING);
         for (Tag nbt : listNbt) {
             IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getAsString()));
             if (mat != null) {

@@ -17,7 +17,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.block.IBlockProvider;

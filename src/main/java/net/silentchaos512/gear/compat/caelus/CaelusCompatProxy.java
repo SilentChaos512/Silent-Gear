@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.caelus;
 
 import com.google.common.collect.Multimap;
@@ -20,3 +21,4 @@ final class CaelusCompatProxy {
         map.put(CaelusApi.getInstance().getFlightAttribute(), ELYTRA_MOD);
     }
 }
+*/

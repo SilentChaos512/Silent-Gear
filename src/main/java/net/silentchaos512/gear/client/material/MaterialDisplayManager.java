@@ -4,16 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.VanillaResourceType;
+import net.minecraft.world.entity.player.Player;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
@@ -34,7 +32,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.Predicate;
 
 // TODO: Rename to GearDisplayManager?
 public final class MaterialDisplayManager implements IEarlySelectiveReloadListener {
@@ -51,16 +48,14 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
     private MaterialDisplayManager() {}
 
     @Override
-    public void onResourceManagerReload(ResourceManager resourceManager, Predicate<IResourceType> predicate) {
-        if (predicate.test(VanillaResourceType.MODELS)) {
-            CompoundPartModelLoader.clearCaches();
-            FragmentModelLoader.clearCaches();
-            GearModelLoader.clearCaches();
+    public void onResourceManagerReload(ResourceManager resourceManager) {
+        CompoundPartModelLoader.clearCaches();
+        FragmentModelLoader.clearCaches();
+        GearModelLoader.clearCaches();
 
-            ERROR_LIST.clear();
-            reloadMaterials(resourceManager);
-            reloadParts(resourceManager);
-        }
+        ERROR_LIST.clear();
+        reloadMaterials(resourceManager);
+        reloadParts(resourceManager);
     }
 
     private static void reloadMaterials(ResourceManager resourceManager) {

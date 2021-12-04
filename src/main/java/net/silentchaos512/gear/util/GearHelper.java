@@ -724,7 +724,7 @@ public final class GearHelper {
             ICoreItem item = (ICoreItem) gear.getItem();
             if (item.requiresPartOfType(PartType.ROD) && GearData.getPartOfType(gear, PartType.ROD) == null) {
                 result = new TranslatableComponent(gear.getDescriptionId() + ".noRod", gearName);
-            } else if (item.requiresPartOfType(PartType.BOWSTRING) && GearData.getPartOfType(gear, PartType.BOWSTRING) == null) {
+            } else if (item.requiresPartOfType(PartType.CORD) && GearData.getPartOfType(gear, PartType.CORD) == null) {
                 result = new TranslatableComponent(gear.getDescriptionId() + ".unstrung", gearName);
             }
         }

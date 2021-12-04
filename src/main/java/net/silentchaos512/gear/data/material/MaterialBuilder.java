@@ -160,7 +160,7 @@ public class MaterialBuilder {
 
             if (partType == PartType.ADORNMENT)
                 displayAdornment(targetTexture, color);
-            else if (partType == PartType.BOWSTRING)
+            else if (partType == PartType.CORD)
                 displayBowstring(color);
             else if (partType == PartType.TIP)
                 displayTip(targetTexture.getLayers(partType).get(0), color);
@@ -184,11 +184,11 @@ public class MaterialBuilder {
     }
 
     public MaterialBuilder displayBowstring(int color) {
-        display(PartType.BOWSTRING,
+        display(PartType.CORD,
                 new MaterialLayer(PartTextures.BOWSTRING_STRING, color),
                 new MaterialLayer(PartTextures.ARROW, Color.VALUE_WHITE) // FIXME: Doesn't quite make sense to have this here
         );
-        display(PartType.BOWSTRING, GearType.PART,
+        display(PartType.CORD, GearType.PART,
                 new MaterialLayer(SilentGear.getId("bowstring"), color)
         );
         return this;

@@ -9,8 +9,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fmllegacy.RegistryObject;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.renderer.entity.GearArrowRenderer;
 import net.silentchaos512.gear.client.renderer.entity.RenderSlingshotProjectile;
@@ -33,7 +33,7 @@ public final class ModEntities {
 
     static void register() {}
 
-    private static <T extends Entity> RegistryObject<EntityType<T>> register(String name, EntityType.EntityFactory<T> factory, MobCategory type, BiFunction<FMLPlayMessages.SpawnEntity, Level, T> customClientFactory) {
+    private static <T extends Entity> RegistryObject<EntityType<T>> register(String name, EntityType.EntityFactory<T> factory, MobCategory type, BiFunction<PlayMessages.SpawnEntity, Level, T> customClientFactory) {
         return Registration.ENTITIES.register(name, () -> EntityType.Builder.of(factory, type)
                 .setCustomClientFactory(customClientFactory)
                 .build(SilentGear.getId(name).toString()));

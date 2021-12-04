@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.ToolAction;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
@@ -184,11 +185,6 @@ public class GearShieldItem extends ShieldItem implements ICoreItem {
     }
 
     @Override
-    public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-        return !GearHelper.isBroken(stack);
-    }
-
-    @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return GearHelper.isBroken(stack) ? UseAnim.NONE : super.getUseAnimation(stack);
     }
@@ -206,5 +202,13 @@ public class GearShieldItem extends ShieldItem implements ICoreItem {
     public boolean hasTexturesFor(PartType partType) {
         // FIXME: Shields not compatible with new model system
         return false;
+    }
+
+    @Override
+    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
+        if (GearHelper.isBroken(stack)) {
+            return false;
+        }
+        return super.canPerformAction(stack, toolAction);
     }
 }

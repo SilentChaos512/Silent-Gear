@@ -1,9 +1,6 @@
 package net.silentchaos512.gear.gear.material.modifier;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
@@ -14,7 +11,6 @@ import net.silentchaos512.gear.util.Const;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 public abstract class ChargedMaterialModifier implements IMaterialModifier {
     protected final IMaterialInstance material;
@@ -32,12 +28,10 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
     public static class Type<T extends ChargedMaterialModifier> implements IMaterialModifierType<T> {
         private final BiFunction<IMaterialInstance, Integer, T> factory;
         private final String nbtTagName;
-        private final Supplier<RegistryObject<Enchantment>> legacyEnchantment;
 
-        public Type(BiFunction<IMaterialInstance, Integer, T> factory, String nbtTagName, Supplier<RegistryObject<Enchantment>> legacyEnchantment) {
+        public Type(BiFunction<IMaterialInstance, Integer, T> factory, String nbtTagName) {
             this.factory = factory;
             this.nbtTagName = nbtTagName;
-            this.legacyEnchantment = legacyEnchantment;
         }
 
         public int checkLevel(ItemStack stack) {
@@ -62,11 +56,6 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
         @Override
         public IMaterialModifier read(IMaterialInstance material) {
             int level = material.getItem().getOrCreateTag().getShort(nbtTagName);
-
-            if (level == 0) {
-                // look for the legacy enchantment
-                level = EnchantmentHelper.getItemEnchantmentLevel(legacyEnchantment.get().get(), material.getItem());
-            }
 
             if (level == 0) {
                 return null;

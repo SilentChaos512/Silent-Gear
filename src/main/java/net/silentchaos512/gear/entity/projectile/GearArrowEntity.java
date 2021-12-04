@@ -10,7 +10,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.network.PlayMessages;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.ModEntities;
 import net.silentchaos512.gear.util.GearData;
@@ -40,7 +40,7 @@ public class GearArrowEntity extends Arrow {
         super(worldIn, shooter);
     }
 
-    public GearArrowEntity(FMLPlayMessages.SpawnEntity message, Level world) {
+    public GearArrowEntity(PlayMessages.SpawnEntity message, Level world) {
         this(ModEntities.ARROW.get(), world);
     }
 

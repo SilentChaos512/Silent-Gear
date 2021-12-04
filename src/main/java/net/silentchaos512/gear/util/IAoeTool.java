@@ -152,7 +152,7 @@ public interface IAoeTool {
                         continue;
 
                     if (player.getAbilities().instabuild) {
-                        if (state.removedByPlayer(world, pos2, player, true, state.getFluidState()))
+                        if (state.onDestroyedByPlayer(world, pos2, player, true, state.getFluidState()))
                             state.getBlock().destroy(world, pos2, state);
                     } else {
                         int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos2);
@@ -160,7 +160,7 @@ public interface IAoeTool {
                         tool.getItem().mineBlock(tool, world, state, pos2, player);
                         BlockEntity tileEntity = world.getBlockEntity(pos2);
 
-                        if (state.removedByPlayer(world, pos2, player, true, state.getFluidState())) {
+                        if (state.onDestroyedByPlayer(world, pos2, player, true, state.getFluidState())) {
                             state.getBlock().destroy(world, pos2, state);
                             state.getBlock().playerDestroy(world, player, pos2, state, tileEntity, tool);
                             state.getBlock().popExperience((ServerLevel) world, pos2, xp);

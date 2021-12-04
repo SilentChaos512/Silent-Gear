@@ -50,7 +50,7 @@ public interface ICoreRangedWeapon extends ICoreTool {
 
     @Override
     default Collection<PartType> getRequiredParts() {
-        return ImmutableList.of(PartType.MAIN, PartType.ROD, PartType.BOWSTRING);
+        return ImmutableList.of(PartType.MAIN, PartType.ROD, PartType.CORD);
     }
 
     @Override

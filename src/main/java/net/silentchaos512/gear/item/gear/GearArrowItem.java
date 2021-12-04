@@ -209,7 +209,7 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return stack.getDamageValue() > 0;
     }
 

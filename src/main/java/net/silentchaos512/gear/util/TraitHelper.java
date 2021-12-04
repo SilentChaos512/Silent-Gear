@@ -19,17 +19,16 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
@@ -72,7 +71,7 @@ public final class TraitHelper {
             return inputValue;
         }
 
-        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
         float value = inputValue;
 
         for (Tag nbt : tagList) {
@@ -127,7 +126,7 @@ public final class TraitHelper {
      */
     public static int getTraitLevel(ItemStack gear, ResourceLocation traitId) {
         if (GearHelper.isGear(gear)) {
-            ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+            ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
 
             for (Tag nbt : tagList) {
                 if (nbt instanceof CompoundTag) {
@@ -169,7 +168,7 @@ public final class TraitHelper {
      */
     public static boolean hasTrait(ItemStack gear, ResourceLocation traitId) {
         if (GearHelper.isGear(gear)) {
-            ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+            ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
 
             for (Tag nbt : tagList) {
                 if (nbt instanceof CompoundTag) {
@@ -237,7 +236,7 @@ public final class TraitHelper {
         if (!GearHelper.isGear(gear)) return ImmutableMap.of();
 
         Map<ITrait, Integer> result = new LinkedHashMap<>();
-        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
 
         for (Tag nbt : tagList) {
             if (nbt instanceof CompoundTag) {
@@ -360,7 +359,7 @@ public final class TraitHelper {
     }
 
     static void tickTraits(Level world, @Nullable Player player, ItemStack gear, boolean isEquipped) {
-        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
 
         for (int i = 0; i < tagList.size(); ++i) {
             CompoundTag tagCompound = tagList.getCompound(i);

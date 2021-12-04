@@ -11,7 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -42,7 +41,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     public static MaterialList getSubMaterials(ItemStack stack) {
         MaterialList ret = MaterialList.empty();
 
-        ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
+        ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Tag.TAG_STRING);
         if (!listNbt.isEmpty()) {
             for (Tag nbt : listNbt) {
                 IMaterial mat = MaterialManager.get(SilentGear.getIdWithDefaultNamespace(nbt.getAsString()));
@@ -51,7 +50,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
                 }
             }
         } else {
-            ListTag list = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_COMPOUND);
+            ListTag list = stack.getOrCreateTag().getList(NBT_MATERIALS, Tag.TAG_COMPOUND);
             return MaterialList.deserializeNbt(list);
         }
 
@@ -59,7 +58,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     }
 
     public int getCraftedCount(ItemStack stack) {
-        ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
+        ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Tag.TAG_STRING);
         return listNbt.size();
     }
 
@@ -78,13 +77,13 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
 
     @Nullable
     private static IMaterialInstance getPrimaryMaterial(ItemStack stack) {
-        IMaterialInstance first = MaterialList.deserializeFirst(stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_COMPOUND));
+        IMaterialInstance first = MaterialList.deserializeFirst(stack.getOrCreateTag().getList(NBT_MATERIALS, Tag.TAG_COMPOUND));
         if (first != null) {
             return first;
         }
 
         // Read old style
-        ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Constants.NBT.TAG_STRING);
+        ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Tag.TAG_STRING);
         if (!listNbt.isEmpty()) {
             Tag nbt = listNbt.get(0);
             ResourceLocation id = ResourceLocation.tryParse(nbt.getAsString());

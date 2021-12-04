@@ -140,7 +140,7 @@ public interface ICoreItem extends ItemLike, IStatItem {
                 PartType.COATING,
                 PartType.BINDING,
                 PartType.GRIP,
-                PartType.BOWSTRING,
+                PartType.CORD,
                 PartType.TIP,
                 PartType.MISC_UPGRADE
         );

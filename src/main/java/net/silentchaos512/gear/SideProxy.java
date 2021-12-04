@@ -9,17 +9,17 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.ColorHandlers;
@@ -66,13 +66,13 @@ class SideProxy implements IProxy {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGenerators::gatherData);
         modEventBus.addListener(SideProxy::commonSetup);
+        modEventBus.addListener(SideProxy::registerCapabilities);
         modEventBus.addListener(SideProxy::imcEnqueue);
         modEventBus.addListener(SideProxy::imcProcess);
 
         modEventBus.addListener(ItemStats::createRegistry);
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
         modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
-        modEventBus.addGenericListener(FeatureDecorator.class, ModWorldFeatures::registerPlacements);
 
         MinecraftForge.EVENT_BUS.addListener(ModCommands::registerAll);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
@@ -94,10 +94,6 @@ class SideProxy implements IProxy {
         event.enqueueWork(GearVillages::init);
 
         Greetings.addMessage(SideProxy::detectDataLoadingFailure);
-
-        if (ModList.get().isLoaded(Const.CURIOS)) {
-            CurioGearItemCapability.register();
-        }
     }
 
     private static void registerCompostables() {
@@ -105,6 +101,12 @@ class SideProxy implements IProxy {
         LibHooks.registerCompostable(0.3f, ModItems.FLUFFY_SEEDS);
         LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
         LibHooks.registerCompostable(0.5f, CraftingItems.FLUFFY_PUFF);
+    }
+
+    private static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        if (ModList.get().isLoaded(Const.CURIOS)) {
+            event.register(CurioGearItemCapability.class);
+        }
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {
@@ -125,7 +127,7 @@ class SideProxy implements IProxy {
         }
     }
 
-    private static void serverStarted(FMLServerStartedEvent event) {
+    private static void serverStarted(ServerStartedEvent event) {
         server = event.getServer();
         SilentGear.LOGGER.info(TraitManager.MARKER, "Traits loaded: {}", TraitManager.getValues().size());
         SilentGear.LOGGER.info(PartManager.MARKER, "Parts loaded: {}", PartManager.getValues().size());
@@ -138,7 +140,7 @@ class SideProxy implements IProxy {
                 .filter(mat -> mat.getSerializer() == MaterialSerializers.STANDARD).count());
     }
 
-    private static void serverStopping(FMLServerStoppingEvent event) {
+    private static void serverStopping(ServerStoppingEvent event) {
         server = null;
     }
 

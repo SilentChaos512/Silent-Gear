@@ -27,8 +27,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 
 import javax.annotation.Nullable;
@@ -54,12 +54,10 @@ public enum CraftingItems implements ItemLike {
     AZURE_ELECTRUM_NUGGET,
     TYRIAN_STEEL_NUGGET,
     RAW_CRIMSON_IRON,
-    CRIMSON_IRON_CHUNKS, // TODO: Remove in 1.17
     CRIMSON_IRON_DUST,
     CRIMSON_STEEL_DUST,
     BLAZE_GOLD_DUST,
     RAW_AZURE_SILVER,
-    AZURE_SILVER_CHUNKS, // TODO: Remove in 1.17
     AZURE_SILVER_DUST,
     AZURE_ELECTRUM_DUST,
     TYRIAN_STEEL_DUST,

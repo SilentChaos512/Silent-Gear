@@ -167,7 +167,7 @@ public class MaterialsProvider implements DataProvider {
                 .noStats(PartType.GRIP)
                 .noStats(PartType.BINDING)
                 .noStats(PartType.LINING)
-                .noStats(PartType.BOWSTRING)
+                .noStats(PartType.CORD)
                 .noStats(PartType.FLETCHING)
                 .noStats(PartType.ADORNMENT)
                 .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
@@ -1303,10 +1303,10 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.BINDING, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(PartType.BINDING, Const.Traits.LUCKY, 1)
 
-                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, 0.07f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
-                .trait(PartType.BOWSTRING, Const.Traits.FLEXIBLE, 2)
+                .stat(PartType.CORD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, 0.07f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
+                .trait(PartType.CORD, Const.Traits.FLEXIBLE, 2)
 
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xCCFFFF)
                 .displayBowstring(0xCCFFFF)
@@ -1322,10 +1322,10 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, 0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
 
-                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, -0.1f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RARITY, 6, StatInstance.Operation.ADD)
+                .stat(PartType.CORD, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, -0.1f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RARITY, 6, StatInstance.Operation.ADD)
 
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xB3804B)
                 .displayBowstring(0x845E37)
@@ -1341,10 +1341,10 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, -0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
 
-                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, 0.05f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, -0.05f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RARITY, 7, StatInstance.Operation.ADD)
+                .stat(PartType.CORD, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, 0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RANGED_SPEED, -0.05f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RARITY, 7, StatInstance.Operation.ADD)
 
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xFFFAE5)
                 .displayBowstring(0xFFFAE5)
@@ -1358,10 +1358,10 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, -0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 2)
 
-                .stat(PartType.BOWSTRING, ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RANGED_DAMAGE, 0.2f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
-                .trait(PartType.BOWSTRING, Const.Traits.FLEXIBLE, 1)
+                .stat(PartType.CORD, ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, 0.2f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
+                .trait(PartType.CORD, Const.Traits.FLEXIBLE, 1)
 
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xD8995B)
                 .displayBowstring(0x7E6962)
@@ -1381,8 +1381,8 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
 
-                .stat(PartType.BOWSTRING, ItemStats.RANGED_SPEED, 0.1f, StatInstance.Operation.MUL1)
-                .stat(PartType.BOWSTRING, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
+                .stat(PartType.CORD, ItemStats.RANGED_SPEED, 0.1f, StatInstance.Operation.MUL1)
+                .stat(PartType.CORD, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
 
                 .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
                 .displayBowstring(Color.VALUE_WHITE)

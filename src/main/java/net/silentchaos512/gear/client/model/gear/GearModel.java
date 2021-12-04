@@ -146,7 +146,7 @@ public class GearModel extends LayeredModel<GearModel> {
         }
 
         if (gearType.matches(GearType.RANGED_WEAPON)) {
-            MaterialLayer exampleBowstring = model.getLayerList(this.gearType, PartType.BOWSTRING, mat).getFirstLayer();
+            MaterialLayer exampleBowstring = model.getLayerList(this.gearType, PartType.CORD, mat).getFirstLayer();
             if (exampleBowstring != null) {
                 builder.addAll(getQuadsForSprite(0, spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, exampleBowstring.getTexture(gearType, 0))), rotation, exampleBowstring.getColor()));
             }
