@@ -418,11 +418,8 @@ public class MaterialBuilder {
 
         JsonObject json = new JsonObject();
 
-        // TODO: Remove conditions for 'type' and 'simple' after merging into master
-        if (this.serializer != MaterialSerializers.STANDARD)
-            json.addProperty("type", this.serializer.getName().toString());
-        if (!this.simple)
-            json.addProperty("simple", this.simple);
+        json.addProperty("type", this.serializer.getName().toString());
+        json.addProperty("simple", this.simple);
 
         if (this.parent != null) {
             json.addProperty("parent", this.parent.toString());

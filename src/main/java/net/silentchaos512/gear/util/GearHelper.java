@@ -730,9 +730,7 @@ public final class GearHelper {
         }
 
         // Prefixes
-        // TODO: Probably should cache this somehow...
         for (Component t : getNamePrefixes(gear, GearData.getConstructionParts(gear))) {
-            // TODO: Spaces are probably inappropriate for some languages?
             result = t.copy().append(new TextComponent(" ")).append(result);
         }
 

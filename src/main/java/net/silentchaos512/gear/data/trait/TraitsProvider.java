@@ -209,31 +209,31 @@ public class TraitsProvider implements DataProvider {
         // Wielder Effect (Potion)
 
         ret.add(new PotionTraitBuilder(Const.Traits.ADAMANT, 5)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, MobEffects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
+                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.PIECE_COUNT, MobEffects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.AQUATIC, 5)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, MobEffects.WATER_BREATHING, 1)
+                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.FULL_SET_ONLY, MobEffects.WATER_BREATHING, 1)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.FLAME_WARD, 1)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.FULL_SET_ONLY, MobEffects.FIRE_RESISTANCE, 1)
+                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.FULL_SET_ONLY, MobEffects.FIRE_RESISTANCE, 1)
                 .overridesTrait(Const.Traits.FLAMMABLE)
                 .withGearTypeCondition(GearType.ARMOR)
                 .extraWikiLines("  - The item cannot be destroyed by fire or lava")
         );
         ret.add(new PotionTraitBuilder(Const.Traits.KITTY_VISION, 1)
-                .addEffect(GearType.HELMET, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
-                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
+                .addEffect(GearType.HELMET, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
+                .addEffect(GearType.CURIO, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
                 .withGearTypeCondition(GearType.HELMET, GearType.CURIO)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.MIGHTY, 5)
-                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
-                .addEffect(GearType.TOOL, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 1, 2, 3)
-                .addEffect(GearType.CURIO, PotionEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 2, 2, 3)
+                .addEffect(GearType.TOOL, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
+                .addEffect(GearType.TOOL, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 1, 2, 3)
+                .addEffect(GearType.CURIO, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 2, 2, 3)
                 .withGearTypeCondition(GearType.TOOL, GearType.CURIO)
         );
         ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5, StellarTrait.SERIALIZER)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, MobEffects.MOVEMENT_SPEED, 0, 1, 2, 3)
-                .addEffect(GearType.ARMOR, PotionEffectTrait.LevelType.PIECE_COUNT, MobEffects.JUMP, 1, 2, 3, 4)
+                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.PIECE_COUNT, MobEffects.MOVEMENT_SPEED, 0, 1, 2, 3)
+                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.PIECE_COUNT, MobEffects.JUMP, 1, 2, 3, 4)
                 .extraWikiLines(String.format("  - Has a %d%% chance per level to restore 1 durability each second",
                         (int) (100 * Const.Traits.STELLAR_REPAIR_CHANCE)))
         );

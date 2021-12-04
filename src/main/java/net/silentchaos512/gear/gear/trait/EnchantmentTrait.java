@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public final class EnchantmentTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("enchantment_trait");
+    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("enchantment");
     public static final ITraitSerializer<EnchantmentTrait> SERIALIZER = new Serializer<>(
             SERIALIZER_ID,
             EnchantmentTrait::new,

@@ -22,7 +22,7 @@ import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.StaticLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.PartGearKey;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
@@ -142,7 +142,7 @@ public class CompoundPartModel extends LayeredModel<CompoundPartModel> {
         }
 
         // Custom textures
-        for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getMaterials()) {
+        for (IMaterialDisplay materialDisplay : GearDisplayManager.getMaterials()) {
             for (MaterialLayer layer : materialDisplay.getLayerList(this.gearType, this.partType, LazyMaterialInstance.of(materialDisplay.getMaterialId()))) {
                 ret.add(getTexture(layer));
             }

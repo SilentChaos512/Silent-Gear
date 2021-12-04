@@ -23,7 +23,7 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.DefaultMaterialDisplay;
 import net.silentchaos512.gear.client.material.MaterialDisplay;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.utils.Color;
@@ -224,7 +224,7 @@ public abstract class AbstractMaterial implements IMaterial {
 
     @Override
     public IMaterialDisplay getDisplayProperties(IMaterialInstance material) {
-        IMaterialDisplay override = MaterialDisplayManager.get(material);
+        IMaterialDisplay override = GearDisplayManager.get(material);
         if (override != null) {
             return override;
         }

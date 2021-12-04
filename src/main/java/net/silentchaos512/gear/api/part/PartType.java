@@ -37,7 +37,7 @@ import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.item.ToolHeadItem;
+import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.lib.util.NameUtils;
@@ -218,7 +218,7 @@ public final class PartType {
 
     private static Optional<CompoundPartItem> getToolHeadItem(GearType gearType) {
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
-            if (item instanceof ToolHeadItem && gearType == ((ToolHeadItem) item).getGearType()) {
+            if (item instanceof MainPartItem && gearType == ((MainPartItem) item).getGearType()) {
                 return Optional.of((CompoundPartItem) item);
             }
         }

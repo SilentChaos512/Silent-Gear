@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
@@ -12,12 +12,10 @@ import net.silentchaos512.gear.api.part.PartType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.world.item.Item.Properties;
-
-public class ToolHeadItem extends CompoundPartItem { // TODO: Rename to MainPartItem?
+public class MainPartItem extends CompoundPartItem {
     private final GearType gearType;
 
-    public ToolHeadItem(GearType gearType, Properties properties) {
+    public MainPartItem(GearType gearType, Properties properties) {
         super(PartType.MAIN, properties);
         this.gearType = gearType;
     }

@@ -19,7 +19,7 @@ import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.item.ToolHeadItem;
+import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
@@ -64,7 +64,7 @@ public class PartsProvider implements DataProvider {
         ret.add(part("rod", GearType.TOOL, PartType.ROD, ModItems.ROD));
         ret.add(part("tip", GearType.TOOL, PartType.TIP, ModItems.TIP));
 
-        Registration.getItems(ToolHeadItem.class).forEach(item -> {
+        Registration.getItems(MainPartItem.class).forEach(item -> {
             PartBuilder builder = part(NameUtils.fromItem(item).getPath(), item.getGearType(), item.getPartType(), item);
             ret.add(addHeadStats(builder));
         });
@@ -283,7 +283,7 @@ public class PartsProvider implements DataProvider {
     }
 
     private static boolean isMainPart(PartBuilder builder, ItemLike item) {
-        if (!(item.asItem() instanceof ToolHeadItem))
+        if (!(item.asItem() instanceof MainPartItem))
             throw new IllegalArgumentException("Item " + NameUtils.fromItem(item) + " is not a main part item!");
         return builder.id.equals(NameUtils.fromItem(item));
     }

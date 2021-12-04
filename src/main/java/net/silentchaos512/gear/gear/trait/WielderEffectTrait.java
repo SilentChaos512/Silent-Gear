@@ -26,23 +26,22 @@ import net.silentchaos512.utils.EnumUtils;
 import javax.annotation.Nullable;
 import java.util.*;
 
-// TODO: rename to WielderEffectTrait or UserEffectTrait?
-public class PotionEffectTrait extends SimpleTrait {
-    public static final ITraitSerializer<PotionEffectTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("potion_effect_trait"), // TODO: change to "wielder_effect"
-            PotionEffectTrait::new,
-            PotionEffectTrait::deserializeJson,
-            PotionEffectTrait::readFromNetwork,
-            PotionEffectTrait::writeToNetwork
+public class WielderEffectTrait extends SimpleTrait {
+    public static final ITraitSerializer<WielderEffectTrait> SERIALIZER = new Serializer<>(
+            SilentGear.getId("wielder_effect"),
+            WielderEffectTrait::new,
+            WielderEffectTrait::deserializeJson,
+            WielderEffectTrait::readFromNetwork,
+            WielderEffectTrait::writeToNetwork
     );
 
     private final Map<String, List<PotionData>> potions = new HashMap<>();
 
-    private PotionEffectTrait(ResourceLocation id) {
+    private WielderEffectTrait(ResourceLocation id) {
         this(id, SERIALIZER);
     }
 
-    protected PotionEffectTrait(ResourceLocation id, ITraitSerializer<? extends PotionEffectTrait> serializer) {
+    protected WielderEffectTrait(ResourceLocation id, ITraitSerializer<? extends WielderEffectTrait> serializer) {
         super(id, serializer);
     }
 
@@ -88,9 +87,9 @@ public class PotionEffectTrait extends SimpleTrait {
         return count;
     }
 
-    static void deserializeJson(PotionEffectTrait trait, JsonObject json) {
+    static void deserializeJson(WielderEffectTrait trait, JsonObject json) {
         if (!json.has("potion_effects")) {
-            throw new JsonParseException("Potion effect trait '" + trait.getId() + "' is missing 'potion_effects' object");
+            throw new JsonParseException("Wielder effect trait '" + trait.getId() + "' is missing 'potion_effects' object");
         }
 
         // Parse potion effects array
@@ -120,7 +119,7 @@ public class PotionEffectTrait extends SimpleTrait {
         }
     }
 
-    static void readFromNetwork(PotionEffectTrait trait, FriendlyByteBuf buffer) {
+    static void readFromNetwork(WielderEffectTrait trait, FriendlyByteBuf buffer) {
         trait.potions.clear();
         int gearTypeCount = buffer.readByte();
 
@@ -137,7 +136,7 @@ public class PotionEffectTrait extends SimpleTrait {
         }
     }
 
-    static void writeToNetwork(PotionEffectTrait trait, FriendlyByteBuf buffer) {
+    static void writeToNetwork(WielderEffectTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.potions.size());
         for (Map.Entry<String, List<PotionData>> entry : trait.potions.entrySet()) {
             buffer.writeUtf(entry.getKey());
@@ -275,7 +274,7 @@ public class PotionEffectTrait extends SimpleTrait {
                 case FULL_SET_ONLY:
                     return this.levels[0];
                 default:
-                    throw new IllegalArgumentException("Unknown level type for potion effect trait: " + this.type);
+                    throw new IllegalArgumentException("Unknown level type for wielder effect trait: " + this.type);
             }
         }
 

@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
-import net.silentchaos512.gear.gear.trait.PotionEffectTrait;
+import net.silentchaos512.gear.gear.trait.WielderEffectTrait;
 import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;
@@ -16,34 +16,34 @@ import java.util.List;
 import java.util.Map;
 
 public class PotionTraitBuilder extends TraitBuilder {
-    private final Map<GearType, List<PotionEffectTrait.PotionData>> potions = new LinkedHashMap<>();
+    private final Map<GearType, List<WielderEffectTrait.PotionData>> potions = new LinkedHashMap<>();
 
     public PotionTraitBuilder(DataResource<ITrait> trait, int maxLevel) {
         this(trait.getId(), maxLevel);
     }
 
     public PotionTraitBuilder(ResourceLocation traitId, int maxLevel) {
-        super(traitId, maxLevel, PotionEffectTrait.SERIALIZER);
+        super(traitId, maxLevel, WielderEffectTrait.SERIALIZER);
     }
 
-    public PotionTraitBuilder(DataResource<ITrait> trait, int maxLevel, ITraitSerializer<? extends PotionEffectTrait> serializer) {
+    public PotionTraitBuilder(DataResource<ITrait> trait, int maxLevel, ITraitSerializer<? extends WielderEffectTrait> serializer) {
         this(trait.getId(), maxLevel, serializer);
     }
 
-    public PotionTraitBuilder(ResourceLocation traitId, int maxLevel, ITraitSerializer<? extends PotionEffectTrait> serializer) {
+    public PotionTraitBuilder(ResourceLocation traitId, int maxLevel, ITraitSerializer<? extends WielderEffectTrait> serializer) {
         super(traitId, maxLevel, serializer);
     }
 
     @Deprecated
     public PotionTraitBuilder addEffect(GearType gearType, boolean requiresFullSet, MobEffect effect, int... levels) {
         this.potions.computeIfAbsent(gearType, gt -> new ArrayList<>())
-                .add(PotionEffectTrait.PotionData.of(requiresFullSet, effect, levels));
+                .add(WielderEffectTrait.PotionData.of(requiresFullSet, effect, levels));
         return this;
     }
 
-    public PotionTraitBuilder addEffect(GearType gearType, PotionEffectTrait.LevelType type, MobEffect effect, int... levels) {
+    public PotionTraitBuilder addEffect(GearType gearType, WielderEffectTrait.LevelType type, MobEffect effect, int... levels) {
         this.potions.computeIfAbsent(gearType, gt -> new ArrayList<>())
-                .add(PotionEffectTrait.PotionData.of(type, effect, levels));
+                .add(WielderEffectTrait.PotionData.of(type, effect, levels));
         return this;
     }
 

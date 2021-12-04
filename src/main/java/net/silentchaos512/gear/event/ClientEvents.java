@@ -11,7 +11,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.network.GearLeftClickPacket;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.util.GearHelper;
@@ -40,6 +40,6 @@ public final class ClientEvents {
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getPlayer();
-        MaterialDisplayManager.getErrorMessages(player).forEach(text -> player.sendMessage(text, Util.NIL_UUID));
+        GearDisplayManager.getErrorMessages(player).forEach(text -> player.sendMessage(text, Util.NIL_UUID));
     }
 }

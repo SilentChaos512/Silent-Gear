@@ -39,7 +39,7 @@ public final class DurabilityTrait extends SimpleTrait {
     public static final ResourceLocation TRIGGER_BRITTLE = SilentGear.getId("brittle_proc");
 
     public static final ITraitSerializer<DurabilityTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("durability_trait"),
+            SilentGear.getId("durability"),
             DurabilityTrait::new,
             (trait, json) -> {
                 trait.activationChance = GsonHelper.getAsFloat(json, "activation_chance", 1);

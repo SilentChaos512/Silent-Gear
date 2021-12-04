@@ -37,7 +37,7 @@ public final class TraitSerializers {
         register(DurabilityTrait.SERIALIZER);
         register(EnchantmentTrait.SERIALIZER);
         register(NBTTrait.SERIALIZER);
-        register(PotionEffectTrait.SERIALIZER);
+        register(WielderEffectTrait.SERIALIZER);
         register(StatModifierTrait.SERIALIZER);
         register(AttributeTrait.SERIALIZER);
         register(BlockPlacerTrait.SERIALIZER);

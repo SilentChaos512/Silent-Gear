@@ -34,7 +34,7 @@ import java.util.*;
 
 public final class StatModifierTrait extends SimpleTrait {
     public static final ITraitSerializer<StatModifierTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("stat_modifier_trait"),
+            SilentGear.getId("stat_modifier"),
             StatModifierTrait::new,
             StatModifierTrait::readJson,
             StatModifierTrait::readBuffer,

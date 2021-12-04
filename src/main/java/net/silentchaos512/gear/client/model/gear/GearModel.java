@@ -24,7 +24,7 @@ import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.IPartDisplay;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
@@ -171,7 +171,7 @@ public class GearModel extends LayeredModel<GearModel> {
         }
 
         // Custom textures
-        for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getMaterials()) {
+        for (IMaterialDisplay materialDisplay : GearDisplayManager.getMaterials()) {
             for (PartType partType : PartType.getValues()) {
                 if (item.hasTexturesFor(partType)) {
                     for (MaterialLayer layer : materialDisplay.getLayerList(gearType, partType, LazyMaterialInstance.of(materialDisplay.getMaterialId()))) {
@@ -182,7 +182,7 @@ public class GearModel extends LayeredModel<GearModel> {
                 }
             }
         }
-        for (IPartDisplay partDisplay : MaterialDisplayManager.getParts()) {
+        for (IPartDisplay partDisplay : GearDisplayManager.getParts()) {
             for (MaterialLayer layer : partDisplay.getLayers(gearType, FakePartData.of(PartType.NONE))) {
                 int animationFrames = layer.isAnimated() ? item.getAnimationFrames() : 1;
                 ret.addAll(this.getTexturesForAllFrames(layer, animationFrames, false));

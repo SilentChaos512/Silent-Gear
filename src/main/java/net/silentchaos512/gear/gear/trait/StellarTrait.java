@@ -10,13 +10,13 @@ import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.utils.MathUtils;
 
-public class StellarTrait extends PotionEffectTrait {
+public class StellarTrait extends WielderEffectTrait {
     public static final ITraitSerializer<StellarTrait> SERIALIZER = new Serializer<>(
             SilentGear.getId("stellar"),
             StellarTrait::new,
-            PotionEffectTrait::deserializeJson,
-            PotionEffectTrait::readFromNetwork,
-            PotionEffectTrait::writeToNetwork
+            WielderEffectTrait::deserializeJson,
+            WielderEffectTrait::readFromNetwork,
+            WielderEffectTrait::writeToNetwork
     );
 
     public StellarTrait(ResourceLocation id) {

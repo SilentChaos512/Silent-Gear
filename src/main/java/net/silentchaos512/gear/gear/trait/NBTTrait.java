@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class NBTTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("nbt_trait");
+    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("nbt");
     static final ITraitSerializer<NBTTrait> SERIALIZER = new Serializer<>(
             SERIALIZER_ID,
             NBTTrait::new,

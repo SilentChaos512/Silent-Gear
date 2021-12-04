@@ -33,9 +33,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-// TODO: Rename to GearDisplayManager?
-public final class MaterialDisplayManager implements IEarlySelectiveReloadListener {
-    public static final MaterialDisplayManager INSTANCE = new MaterialDisplayManager();
+public final class GearDisplayManager implements IEarlySelectiveReloadListener {
+    public static final GearDisplayManager INSTANCE = new GearDisplayManager();
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
@@ -45,7 +44,7 @@ public final class MaterialDisplayManager implements IEarlySelectiveReloadListen
     private static final Map<ResourceLocation, IPartDisplay> PARTS = Collections.synchronizedMap(new LinkedHashMap<>());
     private static final Collection<String> ERROR_LIST = new ArrayList<>();
 
-    private MaterialDisplayManager() {}
+    private GearDisplayManager() {}
 
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {

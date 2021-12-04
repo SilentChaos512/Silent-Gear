@@ -23,7 +23,7 @@ import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.IPartDisplay;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.model.ModelErrorLogging;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.config.Config;
@@ -147,7 +147,7 @@ public class GearModelOverrideList extends ItemOverrides {
     }
 
     private static void addSimplePartLayers(List<MaterialLayer> list, PartData part, ItemStack stack) {
-        IPartDisplay model = MaterialDisplayManager.get(part.get());
+        IPartDisplay model = GearDisplayManager.get(part.get());
         if (model != null) {
             GearType gearType = GearHelper.getType(stack);
             List<MaterialLayer> layers = model.getLayers(gearType, part).getLayers();

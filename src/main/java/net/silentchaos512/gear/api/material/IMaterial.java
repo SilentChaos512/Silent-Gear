@@ -10,7 +10,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.IGearComponent;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.DefaultMaterialDisplay;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.lib.event.ClientTicks;
@@ -138,7 +138,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
     Collection<StatGearKey> getStatKeys(IMaterialInstance material, PartType type);
 
     default IMaterialDisplay getDisplayProperties(IMaterialInstance material) {
-        IMaterialDisplay display = MaterialDisplayManager.get(material);
+        IMaterialDisplay display = GearDisplayManager.get(material);
         return display != null ? display : DefaultMaterialDisplay.INSTANCE;
     }
 

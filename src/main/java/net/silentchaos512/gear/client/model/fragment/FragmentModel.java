@@ -20,7 +20,7 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.model.BakedPerspectiveModel;
 import net.silentchaos512.gear.client.model.BakedWrapper;
 import net.silentchaos512.gear.client.model.LayeredModel;
@@ -110,7 +110,7 @@ public class FragmentModel extends LayeredModel<FragmentModel> {
         ret.add(getTexture(PartTextures.WOOD.getTexture()));
 
         // Custom textures
-        for (IMaterialDisplay materialDisplay : MaterialDisplayManager.getMaterials()) {
+        for (IMaterialDisplay materialDisplay : GearDisplayManager.getMaterials()) {
             for (MaterialLayer layer : materialDisplay.getLayerList(GearType.FRAGMENT, PartType.MAIN, LazyMaterialInstance.of(materialDisplay.getMaterialId()))) {
                 ret.add(getTexture(layer));
             }

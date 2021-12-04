@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public final class PartData implements IPartData { // TODO: move to api.part package
+public final class PartData implements IPartData {
     private static final Map<ResourceLocation, PartData> CACHE_UNGRADED_PARTS = new HashMap<>();
     public static final String NBT_ID = "ID";
 

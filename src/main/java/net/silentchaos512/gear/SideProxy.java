@@ -28,7 +28,7 @@ import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
-import net.silentchaos512.gear.client.material.MaterialDisplayManager;
+import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
 import net.silentchaos512.gear.client.model.gear.GearModelLoader;
 import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
@@ -185,7 +185,7 @@ class SideProxy implements IProxy {
 
                 ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
                 if (resourceManager instanceof ReloadableResourceManager) {
-                    ((ReloadableResourceManager) resourceManager).registerReloadListener(MaterialDisplayManager.INSTANCE);
+                    ((ReloadableResourceManager) resourceManager).registerReloadListener(GearDisplayManager.INSTANCE);
                 }
             } else {
                 SilentGear.LOGGER.warn("MC instance is null? Must be running data generators! Not registering model loaders...");
