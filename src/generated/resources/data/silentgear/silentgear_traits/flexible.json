@@ -1,5 +1,5 @@
 {
-  "type": "silentgear:durability_trait",
+  "type": "silentgear:durability",
   "max_level": 5,
   "name": {
     "translate": "trait.silentgear.flexible"

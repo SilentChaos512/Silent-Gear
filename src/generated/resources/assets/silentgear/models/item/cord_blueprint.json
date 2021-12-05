@@ -2,6 +2,6 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "silentgear:item/blueprint",
-    "layer1": "silentgear:item/blueprint_bowstring"
+    "layer1": "silentgear:item/blueprint_cord"
   }
 }

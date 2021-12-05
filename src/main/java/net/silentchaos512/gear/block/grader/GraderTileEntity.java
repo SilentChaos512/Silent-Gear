@@ -13,6 +13,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -185,6 +186,10 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity {
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this, this::getTagsForUpdatePacket);
+    }
+
+    private CompoundTag getTagsForUpdatePacket(BlockEntity be) {
         CompoundTag tags = getUpdateTag();
 
         ItemStack input = getInputStack();
@@ -193,7 +198,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity {
             tags.put("input_item", itemTags);
         }
 
-        return new ClientboundBlockEntityDataPacket(worldPosition, 0, tags);
+        return tags;
     }
 
     @Override

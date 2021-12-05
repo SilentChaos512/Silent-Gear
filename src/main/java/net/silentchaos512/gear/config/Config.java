@@ -343,7 +343,7 @@ public final class Config {
                         .defineInRange("azureSilver.count", 8, 0, 1000);
                 bortCount = builder
                         .comment("Attempts to place individual bort ore blocks per chunk.")
-                        .defineInRange("bort.count", 12, 0, 1000);
+                        .defineInRange("bort.count", 6, 0, 1000);
                 crimsonIronCount = builder
                         .comment("Veins of crimson iron ore per chunk")
                         .defineInRange("crimsonIron.count", 14, 0, 1000);

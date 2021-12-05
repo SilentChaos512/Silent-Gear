@@ -1,4 +1,6 @@
 {
+  "type": "silentgear:standard",
+  "simple": true,
   "availability": {
     "tier": 1,
     "categories": [
@@ -43,7 +45,7 @@
         "mul1": 0.05
       }
     },
-    "bowstring": {
+    "cord": {
       "ranged_speed": {
         "mul1": 0.1
       },
@@ -71,7 +73,7 @@
         "texture": "silentgear:binding"
       }
     ],
-    "bowstring/all": [
+    "cord/all": [
       {
         "texture": "silentgear:bowstring_string"
       },
@@ -79,7 +81,7 @@
         "texture": "silentgear:arrow"
       }
     ],
-    "bowstring/part": [
+    "cord/part": [
       {
         "texture": "silentgear:bowstring"
       }

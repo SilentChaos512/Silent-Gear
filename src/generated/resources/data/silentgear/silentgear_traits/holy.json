@@ -1,5 +1,5 @@
 {
-  "type": "silentgear:damage_type_trait",
+  "type": "silentgear:damage_type",
   "max_level": 5,
   "conditions": [
     {

@@ -1,5 +1,5 @@
 {
-  "type": "silentgear:attribute_trait",
+  "type": "silentgear:attribute",
   "max_level": 5,
   "conditions": [
     {

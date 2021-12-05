@@ -1,4 +1,6 @@
 {
+  "type": "silentgear:standard",
+  "simple": true,
   "parent": "silentgear:terracotta",
   "crafting_items": {
     "main": {

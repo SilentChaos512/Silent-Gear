@@ -9,7 +9,7 @@
       "texture": "silentgear:binding"
     }
   ],
-  "bowstring/all": [
+  "cord/all": [
     {
       "texture": "silentgear:bowstring_string"
     },
@@ -17,7 +17,7 @@
       "texture": "silentgear:arrow"
     }
   ],
-  "bowstring/part": [
+  "cord/part": [
     {
       "texture": "silentgear:bowstring"
     }

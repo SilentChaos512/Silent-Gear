@@ -1,5 +1,5 @@
 {
-  "type": "silentgear:potion_effect_trait",
+  "type": "silentgear:wielder_effect",
   "max_level": 5,
   "name": {
     "translate": "trait.silentgear.adamant"

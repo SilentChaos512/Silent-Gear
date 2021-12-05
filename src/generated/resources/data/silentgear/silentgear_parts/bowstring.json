@@ -1,9 +1,9 @@
 {
   "type": "silentgear:compound_part",
   "gear_type": "ranged_weapon",
-  "part_type": "silentgear:bowstring",
+  "part_type": "silentgear:cord",
   "crafting_item": {
-    "item": "silentgear:bowstring"
+    "item": "silentgear:cord"
   },
   "name": {
     "translate": "part.silentgear.bowstring"

@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "silentgear:bowstring_blueprint_alt"
+      "silentgear:cord_blueprint"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "silentgear:bowstring_blueprint_alt"
+        "recipe": "silentgear:cord_blueprint"
       }
     }
   },

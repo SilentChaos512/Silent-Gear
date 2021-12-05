@@ -1,4 +1,6 @@
 {
+  "type": "silentgear:standard",
+  "simple": true,
   "availability": {
     "tier": 1,
     "categories": [
@@ -26,7 +28,7 @@
         "mul1": -0.05
       }
     },
-    "bowstring": {
+    "cord": {
       "durability": {
         "mul1": 0.2
       },
@@ -45,7 +47,7 @@
         "level": 2
       }
     ],
-    "bowstring": [
+    "cord": [
       {
         "name": "silentgear:flexible",
         "level": 1
@@ -65,7 +67,7 @@
         "color": "#D8995B"
       }
     ],
-    "bowstring/all": [
+    "cord/all": [
       {
         "texture": "silentgear:bowstring_string",
         "color": "#7E6962"
@@ -74,7 +76,7 @@
         "texture": "silentgear:arrow"
       }
     ],
-    "bowstring/part": [
+    "cord/part": [
       {
         "texture": "silentgear:bowstring",
         "color": "#7E6962"

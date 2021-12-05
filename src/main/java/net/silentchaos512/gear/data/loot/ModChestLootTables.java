@@ -37,7 +37,7 @@ public class ModChestLootTables extends ChestLoot {
         LootTable.Builder builder = LootTable.lootTable();
         builder.withPool(LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(1))
-                .bonusRolls(0, 1)
+                .setBonusRolls(UniformGenerator.between(0, 1))
                 .add(LootItem.lootTableItem(CraftingItems.BLAZE_GOLD_INGOT)
                         .setWeight(6)
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5)))
@@ -77,7 +77,7 @@ public class ModChestLootTables extends ChestLoot {
     private static LootTable.Builder addNetherFlora(LootTable.Builder builder) {
         builder.withPool(LootPool.lootPool()
                 .setRolls(UniformGenerator.between(1, 2))
-                .bonusRolls(0, 1)
+                .setBonusRolls(UniformGenerator.between(0, 1))
                 .add(EmptyLootItem.emptyItem()
                         .setWeight(10)
                 )

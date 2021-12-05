@@ -1,5 +1,5 @@
 {
-  "type": "silentgear:enchantment_trait",
+  "type": "silentgear:enchantment",
   "max_level": 2,
   "conditions": [
     {

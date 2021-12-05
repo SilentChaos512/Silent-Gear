@@ -1,5 +1,5 @@
 {
-    "type": "silentgear:nbt_trait",
+    "type": "silentgear:nbt",
     "__comment__": "Not tested, just included as a reference for NBT traits for now",
     "max_level": 5,
     "cancels_with": [],

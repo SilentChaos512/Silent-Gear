@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2021-12-05
+- Updated to Minecraft 1.18
+### Removed
+- Ore chunk items removed (deprecated Silent's Mechanisms compatibility)
+### Changed
+- Bort generation
+  - Now spawns between heights -60 and 10 (triangular height placement, so most will be farther down)
+  - Default config changed to 6 ores per chunk
+- Bowstring renamed to "cord" (relevant item IDs, tags, and the name used in material JSON files have changed; data packs must be updated)
+- All trait types have had "_trait" removed from their ID for consistency (data packs must update)
+
 ## [2.7.10] - 2021-11-28
 ### Fixed
 - Compound materials (alloys) now ignore grades and other enhancements of their component materials.

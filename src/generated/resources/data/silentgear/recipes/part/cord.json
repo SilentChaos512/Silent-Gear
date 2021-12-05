@@ -3,22 +3,22 @@
   "ingredients": [
     {
       "type": "silentgear:blueprint",
-      "part_type": "silentgear:bowstring"
+      "part_type": "silentgear:cord"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:bowstring"
+      "part_type": "silentgear:cord"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:bowstring"
+      "part_type": "silentgear:cord"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:bowstring"
+      "part_type": "silentgear:cord"
     }
   ],
   "result": {
-    "item": "silentgear:bowstring"
+    "item": "silentgear:cord"
   }
 }
