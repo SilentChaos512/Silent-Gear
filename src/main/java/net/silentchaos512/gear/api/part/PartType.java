@@ -71,6 +71,7 @@ public final class PartType {
     public static final PartType CORD = create(Builder.builder(SilentGear.getId("cord"))
             .compoundPartItem(() -> ModItems.CORD.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.BOWSTRING_STRING)
+            .alias("bowstring")
     );
     public static final PartType FLETCHING = create(Builder.builder(SilentGear.getId("fletching"))
             .compoundPartItem(() -> ModItems.FLETCHING.orElseThrow(IllegalStateException::new))
@@ -118,6 +119,9 @@ public final class PartType {
 
         PartType type = new PartType(builder);
         VALUES.put(builder.name, type);
+        if (!type.alias.isEmpty()) {
+            VALUES.put(new ModResourceLocation(type.alias), type);
+        }
         return type;
     }
 
@@ -150,6 +154,7 @@ public final class PartType {
     private final Function<GearType, Integer> maxPerItem;
     @Nullable private final Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
     @Nullable private final PartTextures defaultTexture;
+    private final String alias; // Workaround for bowstring being renamed to cord and mods breaking stuff as a result
 
     private PartType(Builder builder) {
         this.name = builder.name;
@@ -158,6 +163,7 @@ public final class PartType {
         this.maxPerItem = builder.maxPerItem;
         this.compoundPartItem = builder.compoundPartItem;
         this.defaultTexture = builder.defaultTexture;
+        this.alias = builder.alias;
     }
 
     public boolean isInvalid() {
@@ -245,6 +251,7 @@ public final class PartType {
         @Nullable private Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
         private Function<GearType, Integer> maxPerItem = gt -> 1;
         @Nullable private PartTextures defaultTexture;
+        private String alias = "";
 
         private Builder(ResourceLocation name) {
             this.name = name;
@@ -284,6 +291,11 @@ public final class PartType {
 
         public Builder defaultTexture(PartTextures texture) {
             this.defaultTexture = texture;
+            return this;
+        }
+
+        public Builder alias(String name) {
+            this.alias = name;
             return this;
         }
     }
