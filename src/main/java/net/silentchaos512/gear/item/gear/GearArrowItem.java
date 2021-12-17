@@ -237,4 +237,14 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
     }
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return GearHelper.getBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return GearHelper.getBarColor(stack);
+    }
 }

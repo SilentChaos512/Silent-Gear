@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.2] - 2021-12-17
+### Fixed
+- Durability bars for gear and repair kits not working correctly [#451]
+
 ## [2.8.1] - 2021-12-16
 ### Fixed
 - Old data packs and some mods making it impossible to load into a world [#450]

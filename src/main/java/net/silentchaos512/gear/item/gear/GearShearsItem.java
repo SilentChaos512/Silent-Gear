@@ -210,4 +210,14 @@ public class GearShearsItem extends ShearsItem implements ICoreTool {
         }
         return 0;
     }
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return GearHelper.getBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return GearHelper.getBarColor(stack);
+    }
 }

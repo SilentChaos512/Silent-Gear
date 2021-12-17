@@ -156,5 +156,15 @@ public class GearMattockItem extends HoeItem implements ICoreTool {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
     }
 
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return GearHelper.getBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return GearHelper.getBarColor(stack);
+    }
+
     //endregion
 }

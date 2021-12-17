@@ -236,5 +236,15 @@ public class GearBowItem extends BowItem implements ICoreRangedWeapon {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
     }
 
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return GearHelper.getBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return GearHelper.getBarColor(stack);
+    }
+
     //endregion
 }

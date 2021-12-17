@@ -474,5 +474,15 @@ public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon 
         return 0;
     }
 
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return GearHelper.getBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return GearHelper.getBarColor(stack);
+    }
+
     //endregion
 }

@@ -216,4 +216,14 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
         }
         GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
     }
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return GearHelper.getBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return GearHelper.getBarColor(stack);
+    }
 }

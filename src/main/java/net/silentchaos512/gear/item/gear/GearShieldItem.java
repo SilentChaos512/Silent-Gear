@@ -211,4 +211,14 @@ public class GearShieldItem extends ShieldItem implements ICoreItem {
         }
         return super.canPerformAction(stack, toolAction);
     }
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return GearHelper.getBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return GearHelper.getBarColor(stack);
+    }
 }

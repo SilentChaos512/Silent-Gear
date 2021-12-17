@@ -120,5 +120,15 @@ public class GearSwordItem extends SwordItem implements ICoreWeapon {
         return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return GearHelper.getBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return GearHelper.getBarColor(stack);
+    }
+
     //endregion
 }

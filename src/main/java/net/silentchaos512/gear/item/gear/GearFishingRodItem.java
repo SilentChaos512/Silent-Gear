@@ -199,5 +199,15 @@ public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
         return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return GearHelper.getBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return GearHelper.getBarColor(stack);
+    }
+
     //endregion
 }

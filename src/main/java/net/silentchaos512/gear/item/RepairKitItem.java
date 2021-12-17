@@ -206,12 +206,12 @@ public class RepairKitItem extends Item {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return Math.round(13f - getStoredMaterialAmount(stack) * 13f / getKitCapacity());
+        return Math.round(13f * getStoredMaterialAmount(stack) / getKitCapacity());
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return Mth.hsvToRgb(Math.max(0f, 13f - getBarWidth(stack)) / 3f + 0.5f, 1f, 1f);
+        return Mth.hsvToRgb(Math.max(0f, (13f - getBarWidth(stack)) / 13f) / 3f + 0.5f, 1f, 1f);
     }
 
     private static String format(float f) {

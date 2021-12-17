@@ -761,4 +761,13 @@ public final class GearHelper {
     public static Set<ToolAction> makeToolActionSet(ToolAction... actions) {
         return Stream.of(actions).collect(Collectors.toCollection(Sets::newIdentityHashSet));
     }
+
+    public static int getBarWidth(ItemStack stack) {
+        return Math.round(13f - 13f * stack.getDamageValue() / stack.getMaxDamage());
+    }
+
+    public static int getBarColor(ItemStack stack) {
+        float f = Math.max(0f, (float) (stack.getMaxDamage() - stack.getDamageValue()) / stack.getMaxDamage());
+        return Mth.hsvToRgb(f / 3f, 1f, 1f);
+    }
 }
