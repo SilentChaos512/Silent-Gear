@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.util;
 
+import com.google.common.primitives.Floats;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
@@ -40,6 +41,8 @@ import net.silentchaos512.gear.network.RecalculateStatsPacket;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
+import net.silentchaos512.utils.MathUtils;
+import org.lwjgl.system.MathUtil;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -167,7 +170,7 @@ public final class GearData {
                     return trait.onGetStat(context, stat, val, damageRatio);
                 });
                 final float value = Config.Common.getStatWithMultiplier(stat, withTraits);
-                if (!MathHelper.equal(value, 0f) || stats.containsKey(key)) {
+                if (!MathUtils.floatsEqual(value, 0f) || stats.containsKey(key)) {
                     ResourceLocation statId = Objects.requireNonNull(stat.getRegistryName());
                     propertiesCompound.remove(statId.getPath()); // Remove old keys
                     statsCompound.putFloat(statId.toString(), stat.clampValue(value));

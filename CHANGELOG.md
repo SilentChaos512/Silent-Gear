@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.36] - 2021-12-29
+### Fixed
+- Crafting issues and potential crashes/kicks caused by missing MathHelper method (servers only) [#453, #456, #465]
+
 ## [2.6.35] - 2021-11-28
 ### Fixed
 - Stat modifier traits not applying stat modifiers when first added to an existing item (via an upgrade)
