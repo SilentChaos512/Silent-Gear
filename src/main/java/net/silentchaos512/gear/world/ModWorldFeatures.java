@@ -72,10 +72,14 @@ public final class ModWorldFeatures {
                 .configured(new OreConfiguration(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6)));
 
         public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLAX_PATCHES = createLazy("wild_flax_patches", () -> Feature.FLOWER
-                .configured(grassPatch(BlockStateProvider.simple(ModBlocks.WILD_FLAX_PLANT.get()), Config.Common.wildFlaxPatchCount.get())));
+                .configured(new RandomPatchConfiguration(32, 6, 2, () -> {
+                    return Feature.SIMPLE_BLOCK.configured(new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLAX_PLANT.get()))).onlyWhenEmpty();
+                })));
 
         public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLUFFY_PATCHES = createLazy("wild_fluffy_plant_patches", () -> Feature.FLOWER
-                .configured(grassPatch(BlockStateProvider.simple(ModBlocks.WILD_FLUFFY_PLANT.get()), Config.Common.wildFluffyPatchCount.get())));
+                .configured(new RandomPatchConfiguration(32, 6, 2, () -> {
+                    return Feature.SIMPLE_BLOCK.configured(new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLUFFY_PLANT.get()))).onlyWhenEmpty();
+                })));
 
         /*public static final Lazy<ConfiguredFeature<?, ?>> NETHERWOOD_TREES = createLazy("netherwood_trees", () -> Feature.RANDOM_SELECTOR
                 .configured(new RandomFeatureConfiguration(

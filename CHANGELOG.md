@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.3] - 2022-01-07
+### Fixed
+- Wild flax and fluffy plants not generating or being very rare [#457]
+
 ## [2.8.2] - 2021-12-22
 ### Fixed
 - Machetes not working on cobwebs [#452]

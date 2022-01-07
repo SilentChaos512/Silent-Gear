@@ -78,10 +78,10 @@ public final class Config {
         public static final ForgeConfigSpec.IntValue azureSilverCount;
         public static final ForgeConfigSpec.IntValue bortCount;
         public static final ForgeConfigSpec.IntValue crimsonIronCount;
-        public static final ForgeConfigSpec.IntValue wildFlaxTryCount;
+        /*public static final ForgeConfigSpec.IntValue wildFlaxTryCount;
         public static final ForgeConfigSpec.IntValue wildFlaxPatchCount;
         public static final ForgeConfigSpec.IntValue wildFluffyTryCount;
-        public static final ForgeConfigSpec.IntValue wildFluffyPatchCount;
+        public static final ForgeConfigSpec.IntValue wildFluffyPatchCount;*/
         // Debug
         public static final ForgeConfigSpec.BooleanValue extraPartAndTraitLogging;
         public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
@@ -347,7 +347,7 @@ public final class Config {
                 crimsonIronCount = builder
                         .comment("Veins of crimson iron ore per chunk")
                         .defineInRange("crimsonIron.count", 14, 0, 1000);
-                wildFlaxPatchCount = builder
+                /*wildFlaxPatchCount = builder
                         .comment("Number of patches of wild flax to attempt to place per chunk (some biomes only)")
                         .defineInRange("wildFlax.patchCount", 1, 0, 100);
                 wildFlaxTryCount = builder
@@ -358,7 +358,7 @@ public final class Config {
                         .defineInRange("wildFluffy.patchCount", 1, 0, 100);
                 wildFluffyTryCount = builder
                         .comment("Block place attempts per wild fluffy plants cluster")
-                        .defineInRange("wildFluffy.tryCount", 16, 0, 1000);
+                        .defineInRange("wildFluffy.tryCount", 16, 0, 1000);*/
                 builder.pop();
             }
 
