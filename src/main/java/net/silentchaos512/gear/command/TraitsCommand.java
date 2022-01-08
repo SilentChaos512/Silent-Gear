@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 public final class TraitsCommand {
     private static final SuggestionProvider<CommandSourceStack> TRAIT_ID_SUGGESTIONS = (ctx, builder) ->
             SharedSuggestionProvider.suggestResource(TraitManager.getValues().stream().map(ITrait::getId), builder);
-    private static final String TRAITS_DATA_PATH = "https://github.com/SilentChaos512/Silent-Gear/tree/1.16.x/src/generated/resources/data/silentgear/silentgear_traits/";
+    private static final String TRAITS_DATA_PATH = "https://github.com/SilentChaos512/Silent-Gear/tree/1.18.x/src/generated/resources/data/silentgear/silentgear_traits/";
 
     private TraitsCommand() {}
 
