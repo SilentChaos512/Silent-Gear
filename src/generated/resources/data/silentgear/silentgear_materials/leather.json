@@ -86,31 +86,31 @@
     "main/all": [
       {
         "texture": "silentgear:main_generic_lc",
-        "color": "#C65C35"
+        "color": "#805133"
       }
     ],
     "main/fragment": [
       {
         "texture": "silentgear:cloth",
-        "color": "#C65C35"
+        "color": "#805133"
       }
     ],
     "grip/all": [
       {
         "texture": "silentgear:grip_wool",
-        "color": "#C65C35"
+        "color": "#805133"
       }
     ],
     "grip/part": [
       {
         "texture": "silentgear:grip",
-        "color": "#C65C35"
+        "color": "#805133"
       }
     ],
     "lining/part": [
       {
         "texture": "silentgear:lining_cloth",
-        "color": "#C65C35"
+        "color": "#805133"
       }
     ]
   }

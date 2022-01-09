@@ -1245,8 +1245,8 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 1f, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.FLEXIBLE, 2)
 
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC65C35)
-                .displayFragment(PartTextures.CLOTH, 0xC65C35)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0x805133)
+                .displayFragment(PartTextures.CLOTH, 0x805133)
         );
         // Wool
         ExclusionIngredient woolIngredient = ExclusionIngredient.of(ItemTags.WOOL, Items.BLACK_WOOL,
