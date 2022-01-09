@@ -6,6 +6,7 @@
   "refmap": "silentgear.refmap.json",
   "mixins": [
     "MixinItem",
-    "MixinItemEntity"
+    "MixinItemEntity",
+    "MixinPowderSnowBlock"
   ]
 }

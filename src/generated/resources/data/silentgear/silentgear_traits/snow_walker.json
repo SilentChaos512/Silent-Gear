@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:simple_trait",
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.snow_walker"
+  },
+  "description": {
+    "translate": "trait.silentgear.snow_walker.desc"
+  },
+  "extra_wiki_lines": [
+    {
+      "text": "Allows the player to walk on powder snow without sinking. This will work on any armor or curio."
+    }
+  ]
+}

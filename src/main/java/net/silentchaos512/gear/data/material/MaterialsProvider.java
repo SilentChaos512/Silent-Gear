@@ -26,10 +26,7 @@ import net.silentchaos512.gear.crafting.ingredient.CustomCompoundIngredient;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
-import net.silentchaos512.gear.gear.trait.condition.MaterialCountTraitCondition;
-import net.silentchaos512.gear.gear.trait.condition.MaterialRatioTraitCondition;
-import net.silentchaos512.gear.gear.trait.condition.NotTraitCondition;
-import net.silentchaos512.gear.gear.trait.condition.OrTraitCondition;
+import net.silentchaos512.gear.gear.trait.condition.*;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModTags;
@@ -1216,6 +1213,7 @@ public class MaterialsProvider implements DataProvider {
                 .mainStatsCommon(0, 14, 14, 40, 0.9f)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.ELYTRA, 18)
                 .mainStatsArmor(1, 2, 2, 1, 0, 14) //6
+                .trait(PartType.MAIN, Const.Traits.SNOW_WALKER, 1, new GearTypeTraitCondition(GearType.BOOTS))
                 // grip
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.15f, StatInstance.Operation.MUL1)
@@ -1235,6 +1233,7 @@ public class MaterialsProvider implements DataProvider {
                 // main
                 .mainStatsCommon(0, 5, 15, 11, 0.8f)
                 .mainStatsArmor(1, 3, 2, 1, 0, 8) //7
+                .trait(PartType.MAIN, Const.Traits.SNOW_WALKER, 1, new GearTypeTraitCondition(GearType.BOOTS))
                 // grip
                 .stat(PartType.GRIP, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.1f, StatInstance.Operation.MUL1)
@@ -1261,6 +1260,7 @@ public class MaterialsProvider implements DataProvider {
                 // main
                 .mainStatsCommon(0, 4, 7, 7, 0.7f)
                 .mainStatsArmor(0.5f, 2f, 1.0f, 0.5f, 0, 4) //4
+                .trait(PartType.MAIN, Const.Traits.SNOW_WALKER, 1, new GearTypeTraitCondition(GearType.BOOTS))
                 // grip
                 .stat(PartType.GRIP, ItemStats.REPAIR_EFFICIENCY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.GRIP, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL1)

@@ -870,6 +870,8 @@
   "trait.silentgear.sharp.desc": "Gain harvest speed and attack damage as durability is lost",
   "trait.silentgear.silky": "Silky",
   "trait.silentgear.silky.desc": "Adds Silk Touch to harvest tools",
+  "trait.silentgear.snow_walker": "Snow Walker",
+  "trait.silentgear.snow_walker.desc": "Walk on powder snow without sinking",
   "trait.silentgear.soft": "Soft",
   "trait.silentgear.soft.desc": "Reduces harvest speed as tool is damaged (cancels with Hard)",
   "trait.silentgear.spoon": "Spoon",

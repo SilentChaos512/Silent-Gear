@@ -55,6 +55,18 @@
     }
   },
   "traits": {
+    "main": [
+      {
+        "name": "silentgear:snow_walker",
+        "level": 1,
+        "conditions": [
+          {
+            "type": "silentgear:gear_type",
+            "gear_type": "boots"
+          }
+        ]
+      }
+    ],
     "grip": [
       {
         "name": "silentgear:accelerate",

@@ -84,6 +84,8 @@ public class TraitsProvider implements DataProvider {
                 .extraWikiLines("  - This trait has never been coded ~~and has almost achieved meme status~~",
                         "  - Intended effect: mine multiple blocks like vein miner"));
         ret.add(TraitBuilder.simple(Const.Traits.RED_CARD, 1));
+        ret.add(TraitBuilder.simple(Const.Traits.SNOW_WALKER, 1)
+                .extraWikiLines("Allows the player to walk on powder snow without sinking. This will work on any armor or curio."));
         ret.add(TraitBuilder.simple(Const.Traits.SPOON, 1)
                 .withGearTypeCondition(GearType.PICKAXE));
         ret.add(TraitBuilder.simple(Const.Traits.TURTLE, 1)

@@ -212,6 +212,10 @@ public final class TraitHelper {
         return 0;
     }
 
+    public static int getHighestLevelArmorOrCurio(Player player, DataResource<ITrait> trait) {
+        return Math.max(getHighestLevelArmor(player, trait), getHighestLevelCurio(player, trait));
+    }
+
     public static boolean hasTraitEitherHand(Player player, DataResource<ITrait> trait) {
         return hasTraitEitherHand(player, trait.getId());
     }
