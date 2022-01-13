@@ -1156,14 +1156,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void dyeFluffyBlock(Consumer<FinishedRecipe> consumer, ItemLike block, Tag<Item> dye) {
-//        ShapedRecipeBuilder.shapedRecipe(block, 8)
-//                .patternLine("###")
-//                .patternLine("#d#")
-//                .patternLine("###")
-//                .key('#', ModTags.Items.FLUFFY_BLOCKS)
-//                .key('d', dye)
-//                .addCriterion("has_item", hasItem(ModBlocks.WHITE_FLUFFY_BLOCK))
-//                .build(consumer);
+        shapedBuilder(block, 8)
+                .patternLine("###")
+                .patternLine("#d#")
+                .patternLine("###")
+                .key('#', ModTags.Items.FLUFFY_BLOCKS)
+                .key('d', dye)
+                .addCriterion("has_item", has(ModBlocks.WHITE_FLUFFY_BLOCK))
+                .build(consumer);
     }
 
     private void registerSmithing(Consumer<FinishedRecipe> consumer) {

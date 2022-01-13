@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Missing dyed fluffy block recipes
+
 ## [2.8.4] - 2022-01-09
 ### Added
 - Snow Walker trait. It allows the player to walk on powder snow when the trait is on either armor or a curio.
