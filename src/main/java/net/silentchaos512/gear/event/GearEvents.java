@@ -450,9 +450,9 @@ public final class GearEvents {
     public static void onLivingFall(LivingFallEvent event) {
         ItemStack stack = event.getEntityLiving().getItemBySlot(EquipmentSlot.FEET);
 
-        if (event.getDistance() > 3 && GearHelper.isGear(stack) && !GearHelper.isBroken(stack)) {
+        if (event.getDistance() > 3 && event.getEntityLiving() instanceof Player player) {
             // Moonwalker fall damage canceling/reduction
-            int moonwalker = TraitHelper.getTraitLevel(stack, Const.Traits.MOONWALKER);
+            int moonwalker = TraitHelper.getHighestLevelArmorOrCurio(player, Const.Traits.MOONWALKER);
             if (moonwalker > 0) {
                 float gravity = 1 + moonwalker * Const.Traits.MOONWALKER_GRAVITY_MOD;
                 event.setDistance(event.getDistance() * gravity);
@@ -465,7 +465,7 @@ public final class GearEvents {
             // Bounce fall damage nullification and bouncing
             // FIXME: bounce is very unpredictable. Usually it does not work at all. The few times
             //  it does, the bounce height is inconsistent
-            int bounce = TraitHelper.getTraitLevel(stack, Const.Traits.BOUNCE);
+            int bounce = TraitHelper.getHighestLevelArmorOrCurio(player, Const.Traits.BOUNCE);
             if (bounce > 0 && event.getDistance() > 3) {
                 if (!event.getEntity().isSuppressingBounce()) {
 //                    bounceEntity(event.getEntity());

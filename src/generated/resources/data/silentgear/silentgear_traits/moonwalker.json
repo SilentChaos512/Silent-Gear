@@ -23,7 +23,7 @@
     "translate": "trait.silentgear.moonwalker.desc"
   },
   "attribute_modifiers": {
-    "boots/feet": [
+    "all": [
       {
         "attribute": "forge:entity_gravity",
         "operation": 1,

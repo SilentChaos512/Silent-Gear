@@ -3,18 +3,17 @@ package net.silentchaos512.gear.data.trait;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.DataProvider;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.data.HashCache;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.api.item.GearType;
@@ -176,7 +175,7 @@ public class TraitsProvider implements DataProvider {
                 values[i] = Const.Traits.MOONWALKER_GRAVITY_MOD * (i + 1);
             }
             ret.add(new AttributeTraitBuilder(Const.Traits.MOONWALKER, maxLevel)
-                    .addModifier(GearType.BOOTS, EquipmentSlot.FEET,
+                    .addModifierAnySlot(GearType.ALL,
                             ForgeMod.ENTITY_GRAVITY.get(),
                             AttributeModifier.Operation.MULTIPLY_BASE,
                             values)
