@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Empty NBT tag being set on empty `ItemStack`s [#481]
 - Missing dyed fluffy block recipes
 
 ## [2.8.4] - 2022-01-09

@@ -108,6 +108,10 @@ public class CompoundPartItem extends Item {
 
     @Nullable
     public static MaterialInstance getPrimaryMaterial(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return null;
+        }
+
         ListTag listNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, 10);
         if (!listNbt.isEmpty()) {
             Tag nbt = listNbt.get(0);
