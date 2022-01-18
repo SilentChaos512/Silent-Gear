@@ -65,6 +65,7 @@ public final class Config {
         public static final ForgeConfigSpec.DoubleValue missingRepairKitEfficiency;
         public static final ForgeConfigSpec.IntValue sawRecursionDepth;
         public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
+        public static final ForgeConfigSpec.BooleanValue destroySwappedParts;
         private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
         // Other items
         public static final ForgeConfigSpec.IntValue netherwoodCharcoalBurnTime;
@@ -273,6 +274,10 @@ public final class Config {
                     upgradesInAnvilOnly = builder
                             .comment("If true, upgrade parts may only be applied in an anvil.")
                             .define("applyInAnvilOnly", false);
+                    destroySwappedParts = builder
+                            .comment("If true, parts that are replaced (swapped out) of a gear item are not returned to the player and are instead destroyed.")
+                            .comment("This applies to the recipe where placing a gear item and a part into a crafting grid will swap out the part.")
+                            .define("destroySwappedParts", false);
                     builder.pop();
                 }
                 {

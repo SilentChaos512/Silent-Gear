@@ -11,6 +11,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.util.GearData;
@@ -102,7 +103,7 @@ public class GearPartSwapRecipe extends CustomRecipe {
                 list.set(i, ItemStack.EMPTY);
             } else {
                 PartData newPart = PartData.from(stack);
-                if (newPart != null) {
+                if (newPart != null && !Config.Common.destroySwappedParts.get()) {
                     PartType type = newPart.getType();
                     List<PartData> partsOfType = oldParts.getPartsOfType(type);
 

@@ -3,7 +3,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.8.5] - 2022-01-18
+### Added
+- Config to make it so old parts are not returned when swapping (`gear.upgrades.destroySwappedParts`) [#483]
 ### Fixed
 - Empty NBT tag being set on empty `ItemStack`s [#481]
 - Missing dyed fluffy block recipes
