@@ -6,6 +6,9 @@ import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -17,14 +20,17 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.entity.GearFishingHook;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -114,7 +120,32 @@ public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
         if (GearHelper.isBroken(stack)) {
             return InteractionResultHolder.pass(stack);
         }
-        return super.use(worldIn, playerIn, handIn);
+
+        // Rewrite of super to spawn custom fishing hook entity
+        ItemStack itemstack = playerIn.getItemInHand(handIn);
+        if (playerIn.fishing != null) {
+            if (!worldIn.isClientSide) {
+                int i = playerIn.fishing.retrieve(itemstack);
+                itemstack.hurtAndBreak(i, playerIn, (p_41288_) -> {
+                    p_41288_.broadcastBreakEvent(handIn);
+                });
+            }
+
+            worldIn.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (worldIn.getRandom().nextFloat() * 0.4F + 0.8F));
+            worldIn.gameEvent(playerIn, GameEvent.FISHING_ROD_REEL_IN, playerIn);
+        } else {
+            worldIn.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (worldIn.getRandom().nextFloat() * 0.4F + 0.8F));
+            if (!worldIn.isClientSide) {
+                int k = EnchantmentHelper.getFishingSpeedBonus(itemstack);
+                int j = EnchantmentHelper.getFishingLuckBonus(itemstack);
+                worldIn.addFreshEntity(new GearFishingHook(playerIn, worldIn, j, k));
+            }
+
+            playerIn.awardStat(Stats.ITEM_USED.get(this));
+            worldIn.gameEvent(playerIn, GameEvent.FISHING_ROD_CAST, playerIn);
+        }
+
+        return InteractionResultHolder.sidedSuccess(itemstack, worldIn.isClientSide());
     }
 
     //region Standard tool overrides

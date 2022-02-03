@@ -13,7 +13,9 @@ import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.renderer.entity.GearArrowRenderer;
+import net.silentchaos512.gear.client.renderer.entity.GearFishingHookRenderer;
 import net.silentchaos512.gear.client.renderer.entity.RenderSlingshotProjectile;
+import net.silentchaos512.gear.entity.GearFishingHook;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
 import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
 
@@ -24,6 +26,10 @@ public final class ModEntities {
             GearArrowEntity::new,
             MobCategory.MISC,
             GearArrowEntity::new);
+    public static final RegistryObject<EntityType<GearFishingHook>> FISHING_HOOK = register("fishing_hook",
+            GearFishingHook::new,
+            MobCategory.MISC,
+            GearFishingHook::new);
     public static final RegistryObject<EntityType<SlingshotProjectile>> SLINGSHOT_PROJECTILE = register("slingshot_projectile",
             SlingshotProjectile::new,
             MobCategory.MISC,
@@ -45,6 +51,7 @@ public final class ModEntities {
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ARROW.get(), GearArrowRenderer::new); // TODO: custom renderer
+            event.registerEntityRenderer(FISHING_HOOK.get(), GearFishingHookRenderer::new);
             event.registerEntityRenderer(SLINGSHOT_PROJECTILE.get(), RenderSlingshotProjectile::new);
         }
     }

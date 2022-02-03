@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.7] - 2022-02-03
+### Fixed
+- Fishing rods not working at all [#425, #476]
+  - Known bug: The fishing line always renders on the offhand side
+
 ## [2.8.6] - 2022-01-20
 ### Fixed
 - Possible crash when placing netherwood saplings (tag not bound error) [#482]
