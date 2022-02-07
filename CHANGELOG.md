@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.8] - 2022-02-06
+### Fixed
+- The `silentgear:netherwood_soil` tag now uses the `minecraft:dirt` tag instead of the `forge:dirt` tag, which was removed in newer versions of Forge
+
 ## [2.8.7] - 2022-02-03
 ### Fixed
 - Fishing rods not working at all [#425, #476]

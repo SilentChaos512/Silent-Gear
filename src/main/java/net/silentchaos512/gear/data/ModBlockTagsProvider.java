@@ -84,7 +84,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(ModBlocks.STRIPPED_NETHERWOOD_WOOD.get());
         getBuilder(ModTags.Blocks.NETHERWOOD_SOIL)
                 .addTag(Tags.Blocks.NETHERRACK)
-                .addTag(Tags.Blocks.DIRT)
+                .addTag(BlockTags.DIRT)
                 .add(Blocks.FARMLAND);
         getBuilder(ModTags.Blocks.PROSPECTOR_HAMMER_TARGETS)
                 .add(Blocks.ANCIENT_DEBRIS)
