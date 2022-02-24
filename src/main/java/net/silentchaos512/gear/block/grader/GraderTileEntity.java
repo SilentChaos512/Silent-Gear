@@ -174,14 +174,14 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity {
 
     @Override
     public void load(CompoundTag tags) {
+        super.load(tags);
         SyncVariable.Helper.readSyncVars(this, tags);
     }
 
     @Override
-    public CompoundTag save(CompoundTag tags) {
-        CompoundTag compoundTag = super.save(tags);
-        SyncVariable.Helper.writeSyncVars(this, compoundTag, SyncVariable.Type.WRITE);
-        return compoundTag;
+    public void saveAdditional(CompoundTag tags) {
+        super.saveAdditional(tags);
+        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.WRITE);
     }
 
     @Override
