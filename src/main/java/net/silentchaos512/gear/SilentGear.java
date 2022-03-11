@@ -32,7 +32,7 @@ public final class SilentGear {
 
     public SilentGear() {
         INSTANCE = this;
-        PROXY = DistExecutor.safeRunForDist(() -> SideProxy.Client::new, () -> SideProxy.Server::new);
+        PROXY = DistExecutor.unsafeRunForDist(() -> SideProxy.Client::new, () -> SideProxy.Server::new);
     }
 
     public static String getVersion() {
