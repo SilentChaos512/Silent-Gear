@@ -39,6 +39,7 @@
     "#silentgear:blueprints/slingshot",
     "#silentgear:blueprints/spear",
     "#silentgear:blueprints/sword",
-    "#silentgear:blueprints/tip"
+    "#silentgear:blueprints/tip",
+    "#silentgear:blueprints/trident"
   ]
 }

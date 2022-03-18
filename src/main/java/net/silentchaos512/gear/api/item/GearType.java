@@ -82,6 +82,7 @@ public final class GearType {
             b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
     public static final GearType SWORD = getOrCreate("sword", MELEE_WEAPON, b ->
             b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
+    public static final GearType TRIDENT = getOrCreate("trident", MELEE_WEAPON);
     // Ranged weapons (bows)
     public static final GearType RANGED_WEAPON = getOrCreate("ranged_weapon", WEAPON);
     public static final GearType BOW = getOrCreate("bow", RANGED_WEAPON);
