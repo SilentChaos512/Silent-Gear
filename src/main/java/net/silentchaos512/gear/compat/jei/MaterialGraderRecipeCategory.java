@@ -18,6 +18,7 @@ import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.lib.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -85,7 +86,7 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
 
     @Nonnull
     public static List<ItemStack> getCatalysts() {
-        return ModTags.Items.GRADER_CATALYSTS.getValues().stream()
+        return TagUtils.getItemsInTag(ModTags.Items.GRADER_CATALYSTS)
                 .map(ItemStack::new)
                 .collect(Collectors.toList());
     }

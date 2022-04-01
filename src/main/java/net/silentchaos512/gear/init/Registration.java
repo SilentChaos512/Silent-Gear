@@ -9,7 +9,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.*;
@@ -26,7 +25,6 @@ public final class Registration {
     public static final DeferredRegister<Enchantment> ENCHANTMENTS = create(ForgeRegistries.ENCHANTMENTS);
     public static final DeferredRegister<EntityType<?>> ENTITIES = create(ForgeRegistries.ENTITIES);
     public static final DeferredRegister<Item> ITEMS = create(ForgeRegistries.ITEMS);
-    public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIERS = create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS);
     public static final DeferredRegister<PoiType> POINTS_OF_INTEREST = create(ForgeRegistries.POI_TYPES);
     public static final DeferredRegister<VillagerProfession> PROFESSIONS = create(ForgeRegistries.PROFESSIONS);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = create(ForgeRegistries.RECIPE_SERIALIZERS);
@@ -41,7 +39,6 @@ public final class Registration {
         ENCHANTMENTS.register(modEventBus);
         ENTITIES.register(modEventBus);
         ITEMS.register(modEventBus);
-        LOOT_MODIFIERS.register(modEventBus);
         POINTS_OF_INTEREST.register(modEventBus);
         PROFESSIONS.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
@@ -52,7 +49,6 @@ public final class Registration {
         GearEnchantments.register();
         ModEntities.register();
         ModItems.register();
-        ModLootStuff.init();
         ModRecipes.register();
         GearVillages.register();
     }
@@ -82,7 +78,7 @@ public final class Registration {
                 .collect(Collectors.toList());
     }
 
-    private static <T extends IForgeRegistryEntry<T>> DeferredRegister<T> create(IForgeRegistry<T> registry) {
+    static <T extends IForgeRegistryEntry<T>> DeferredRegister<T> create(IForgeRegistry<T> registry) {
         return DeferredRegister.create(registry, SilentGear.MOD_ID);
     }
 }

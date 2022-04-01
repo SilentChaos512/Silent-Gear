@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -35,18 +35,18 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class GearDiggerItem extends DiggerItem implements ICoreTool {
-    private static final Map<ToolAction, Tag<Block>> TOOL_TYPES = ImmutableMap.<ToolAction, Tag<Block>>builder()
+    private static final Map<ToolAction, TagKey<Block>> TOOL_TYPES = ImmutableMap.<ToolAction, TagKey<Block>>builder()
             .put(ToolActions.AXE_DIG, BlockTags.MINEABLE_WITH_AXE)
             .put(ToolActions.HOE_DIG, BlockTags.MINEABLE_WITH_HOE)
             .put(ToolActions.PICKAXE_DIG, BlockTags.MINEABLE_WITH_PICKAXE)
             .put(ToolActions.SHOVEL_DIG, BlockTags.MINEABLE_WITH_SHOVEL)
             .build();
 
-    private final Tag<Block> blocks;
+    private final TagKey<Block> blocks;
     private final GearType gearType;
     private final Set<Material> extraMaterials;
 
-    public GearDiggerItem(GearType gearType, Tag<Block> blocks, Set<Material> extraMaterials, Properties properties) {
+    public GearDiggerItem(GearType gearType, TagKey<Block> blocks, Set<Material> extraMaterials, Properties properties) {
         super(0, 1, Tiers.DIAMOND, blocks, properties);
         this.gearType = gearType;
         this.blocks = blocks;
@@ -69,9 +69,9 @@ public class GearDiggerItem extends DiggerItem implements ICoreTool {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        for (Map.Entry<ToolAction, Tag<Block>> entry : TOOL_TYPES.entrySet()) {
+        for (Map.Entry<ToolAction, TagKey<Block>> entry : TOOL_TYPES.entrySet()) {
             ToolAction action = entry.getKey();
-            Tag<Block> tag = entry.getValue();
+            TagKey<Block> tag = entry.getValue();
 
             if (canPerformAction(stack, action) && GearHelper.isCorrectToolForDrops(stack, state, tag, extraMaterials)) {
                 return true;

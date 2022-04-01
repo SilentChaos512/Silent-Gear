@@ -79,7 +79,7 @@ public final class StatModifierTrait extends SimpleTrait {
         trait.mods.clear();
         int count = buffer.readByte();
         for (int i = 0; i < count; ++i) {
-            ItemStat stat = ItemStats.REGISTRY.get().getValue(buffer.readResourceLocation());
+            ItemStat stat = ItemStats.getRegistry().getValue(buffer.readResourceLocation());
             trait.mods.put(stat, StatMod.read(buffer));
         }
     }

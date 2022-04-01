@@ -1,17 +1,23 @@
 package net.silentchaos512.gear.gear.trait;
 
 import com.google.gson.JsonObject;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.*;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -22,13 +28,6 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
-
 public class BlockFillerTrait extends SimpleTrait {
     private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("block_filler");
     public static final ITraitSerializer<BlockFillerTrait> SERIALIZER = new Serializer<>(SERIALIZER_ID,
@@ -38,7 +37,7 @@ public class BlockFillerTrait extends SimpleTrait {
             BlockFillerTrait::write);
 
     @Nullable private Block targetBlock;
-    @Nullable private Tag.Named<Block> targetBlockTag;
+    @Nullable private TagKey<Block> targetBlockTag;
     private Block fillBlock;
     private boolean replaceTileEntities;
     private int fillRangeX;
@@ -145,7 +144,7 @@ public class BlockFillerTrait extends SimpleTrait {
     private static void readJson(BlockFillerTrait trait, JsonObject json) {
         JsonObject targetJson = GsonHelper.getAsJsonObject(json, "target");
         if (targetJson.has("tag")) {
-            trait.targetBlockTag = BlockTags.bind(GsonHelper.getAsString(targetJson, "tag"));
+            trait.targetBlockTag = BlockTags.create(new ResourceLocation(GsonHelper.getAsString(targetJson, "tag")));
         }
         if (targetJson.has("block")) {
             trait.targetBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(GsonHelper.getAsString(targetJson, "block")));
@@ -166,7 +165,7 @@ public class BlockFillerTrait extends SimpleTrait {
 
     private static void read(BlockFillerTrait trait, FriendlyByteBuf buffer) {
         if (buffer.readBoolean()) {
-            trait.targetBlockTag = BlockTags.bind(buffer.readResourceLocation().toString());
+            trait.targetBlockTag = BlockTags.create(buffer.readResourceLocation());
         }
         if (buffer.readBoolean()) {
             trait.targetBlock = ForgeRegistries.BLOCKS.getValue(buffer.readResourceLocation());
@@ -188,7 +187,7 @@ public class BlockFillerTrait extends SimpleTrait {
     private static void write(BlockFillerTrait trait, FriendlyByteBuf buffer) {
         buffer.writeBoolean(trait.targetBlockTag != null);
         if (trait.targetBlockTag != null) {
-            buffer.writeResourceLocation(trait.targetBlockTag.getName());
+            buffer.writeResourceLocation(trait.targetBlockTag.location());
         }
         buffer.writeBoolean(trait.targetBlock != null);
         if (trait.targetBlock != null) {
@@ -215,7 +214,7 @@ public class BlockFillerTrait extends SimpleTrait {
         ret.add("  - Fills with: " + NameUtils.from(fillBlock));
         ret.add("  - Replaces");
         if (targetBlockTag != null) {
-            ret.add("    - Tag: " + targetBlockTag.getName());
+            ret.add("    - Tag: " + targetBlockTag.location());
         }
         if (targetBlock != null) {
             ret.add("    - Block: " + NameUtils.from(targetBlock));

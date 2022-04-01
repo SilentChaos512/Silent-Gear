@@ -28,10 +28,10 @@ public class ModOreBlock extends OreBlock {
     }
 
     private static int guessHarvestLevel(BlockState state) {
-        if (TagUtils.containsSafe(Tags.Blocks.NEEDS_NETHERITE_TOOL, state.getBlock())) return 4;
-        if (TagUtils.containsSafe(BlockTags.NEEDS_DIAMOND_TOOL, state.getBlock())) return 3;
-        if (TagUtils.containsSafe(BlockTags.NEEDS_IRON_TOOL, state.getBlock())) return 2;
-        if (TagUtils.containsSafe(BlockTags.NEEDS_STONE_TOOL, state.getBlock())) return 1;
+        if (TagUtils.contains(Tags.Blocks.NEEDS_NETHERITE_TOOL, state)) return 4;
+        if (TagUtils.contains(BlockTags.NEEDS_DIAMOND_TOOL, state)) return 3;
+        if (TagUtils.contains(BlockTags.NEEDS_IRON_TOOL, state)) return 2;
+        if (TagUtils.contains(BlockTags.NEEDS_STONE_TOOL, state)) return 1;
         return 0;
     }
 }

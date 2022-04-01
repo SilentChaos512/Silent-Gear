@@ -43,7 +43,7 @@ public class ChargerContainer extends AbstractContainerMenu {
         addSlot(new Slot(inventory, 1, 56, 46) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return TagUtils.containsSafe(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack);
+                return TagUtils.contains(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack);
             }
         });
         addSlot(new SlotOutputOnly(inventory, 2, 116, 35));

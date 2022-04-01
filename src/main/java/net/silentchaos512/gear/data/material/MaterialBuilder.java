@@ -2,14 +2,14 @@ package net.silentchaos512.gear.data.material;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
@@ -26,9 +26,9 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplay;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
@@ -61,10 +61,10 @@ public class MaterialBuilder {
     private boolean hasModels = true;
 
     public MaterialBuilder(ResourceLocation id, int tier, ResourceLocation ingredientTagName) {
-        this(id, tier, Ingredient.of(ItemTags.bind(ingredientTagName.toString())));
+        this(id, tier, Ingredient.of(ItemTags.create(ingredientTagName)));
     }
 
-    public MaterialBuilder(ResourceLocation id, int tier, Tag<Item> ingredient) {
+    public MaterialBuilder(ResourceLocation id, int tier, TagKey<Item> ingredient) {
         this(id, tier, Ingredient.of(ingredient));
     }
 
@@ -115,7 +115,7 @@ public class MaterialBuilder {
         return partSubstitute(partType, Ingredient.of(item));
     }
 
-    public MaterialBuilder partSubstitute(PartType partType, Tag<Item> tag) {
+    public MaterialBuilder partSubstitute(PartType partType, TagKey<Item> tag) {
         return partSubstitute(partType, Ingredient.of(tag));
     }
 

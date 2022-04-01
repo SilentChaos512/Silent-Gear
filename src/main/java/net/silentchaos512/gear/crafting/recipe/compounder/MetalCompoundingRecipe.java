@@ -17,6 +17,6 @@ public class MetalCompoundingRecipe extends CompoundingRecipe {
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipes.COMPOUNDING_METAL_TYPE;
+        return CompoundingRecipe.COMPOUNDING_METAL_TYPE;
     }
 }

@@ -3,13 +3,13 @@ package net.silentchaos512.gear.data.recipes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.SetTag;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.lib.util.NameUtils;
@@ -33,7 +33,7 @@ public final class SalvagingRecipeBuilder {
         return builder(Ingredient.of(ingredient));
     }
 
-    public static SalvagingRecipeBuilder builder(SetTag<Item> ingredient) {
+    public static SalvagingRecipeBuilder builder(TagKey<Item> ingredient) {
         return builder(Ingredient.of(ingredient));
     }
 

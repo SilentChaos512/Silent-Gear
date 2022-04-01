@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.data.trait;
 
 import com.google.gson.JsonObject;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.tags.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.BlockFillerTrait;
 import net.silentchaos512.gear.util.DataResource;
@@ -15,7 +15,7 @@ import java.util.Locale;
 
 public class BlockFillerTraitBuilder extends TraitBuilder {
     @Nullable private Block targetBlock;
-    @Nullable private Tag.Named<Block> targetBlockTag;
+    @Nullable private TagKey<Block> targetBlockTag;
     private final Block fillBlock;
     private boolean replaceTileEntities = false;
     private int fillRangeX = 0;
@@ -40,7 +40,7 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
         this.sound = this.fillBlock.defaultBlockState().getSoundType().getBreakSound();
     }
 
-    public BlockFillerTraitBuilder target(Tag.Named<Block> tag) {
+    public BlockFillerTraitBuilder target(TagKey<Block> tag) {
         this.targetBlockTag = tag;
         return this;
     }
@@ -93,7 +93,7 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
 
         JsonObject targetJson = new JsonObject();
         if (this.targetBlockTag != null) {
-            targetJson.addProperty("tag", this.targetBlockTag.getName().toString());
+            targetJson.addProperty("tag", this.targetBlockTag.location().toString());
         }
         if (this.targetBlock != null) {
             targetJson.addProperty("block", NameUtils.from(this.targetBlock).toString());

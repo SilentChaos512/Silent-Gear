@@ -3,12 +3,12 @@ package net.silentchaos512.gear.data.recipes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.util.DataResource;
@@ -53,11 +53,11 @@ public class CompoundingRecipeBuilder {
         return addIngredient(Ingredient.of(item), count);
     }
 
-    public CompoundingRecipeBuilder addIngredient(Tag<Item> tag) {
+    public CompoundingRecipeBuilder addIngredient(TagKey<Item> tag) {
         return addIngredient(Ingredient.of(tag));
     }
 
-    public CompoundingRecipeBuilder addIngredient(Tag<Item> tag, int count) {
+    public CompoundingRecipeBuilder addIngredient(TagKey<Item> tag, int count) {
         return addIngredient(Ingredient.of(tag), count);
     }
 

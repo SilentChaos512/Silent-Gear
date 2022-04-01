@@ -15,7 +15,7 @@ import net.minecraft.data.HashCache;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -329,7 +329,7 @@ public class ModAdvancementProvider implements DataProvider {
             return InventoryChangeTrigger.TriggerInstance.hasItems(items);
         }
 
-        private static CriterionTriggerInstance getItem(Tag<Item> tag) {
+        private static CriterionTriggerInstance getItem(TagKey<Item> tag) {
             return InventoryChangeTrigger.TriggerInstance.hasItems(new ItemPredicate(tag, null, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, EnchantmentPredicate.NONE, EnchantmentPredicate.NONE, null, NbtPredicate.ANY));
         }
 

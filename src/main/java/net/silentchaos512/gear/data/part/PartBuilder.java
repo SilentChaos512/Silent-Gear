@@ -2,12 +2,12 @@ package net.silentchaos512.gear.data.part;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.SetTag;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
 import net.silentchaos512.gear.api.material.MaterialLayer;
@@ -53,7 +53,7 @@ public class PartBuilder {
         this(id, gearType, partType, Ingredient.of(item));
     }
 
-    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, SetTag<Item> tag) {
+    public PartBuilder(ResourceLocation id, GearType gearType, PartType partType, TagKey<Item> tag) {
         this(id, gearType, partType, Ingredient.of(tag));
     }
 

@@ -15,6 +15,6 @@ public class NetherwoodSapling extends SaplingBlock {
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos) {
-        return TagUtils.containsSafe(ModTags.Blocks.NETHERWOOD_SOIL, state);
+        return TagUtils.contains(ModTags.Blocks.NETHERWOOD_SOIL, state);
     }
 }

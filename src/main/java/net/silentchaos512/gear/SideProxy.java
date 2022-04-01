@@ -7,6 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -73,6 +74,7 @@ class SideProxy implements IProxy {
         modEventBus.addListener(ItemStats::createRegistry);
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
         modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
+        modEventBus.addGenericListener(RecipeSerializer.class, ModRecipes::registerTypes);
 
         MinecraftForge.EVENT_BUS.addListener(ModCommands::registerAll);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
@@ -81,6 +83,8 @@ class SideProxy implements IProxy {
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {
+        ModLootStuff.init();
+
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
             if (Config.Common.spawnWithStarterBlueprints.get())
                 return Collections.singleton(ModItems.BLUEPRINT_PACKAGE.get().getStack());

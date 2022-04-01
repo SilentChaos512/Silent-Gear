@@ -12,7 +12,6 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAoeTool;
@@ -20,7 +19,6 @@ import net.silentchaos512.gear.util.IAoeTool;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class Config {
@@ -286,13 +284,13 @@ public final class Config {
                     builder.push("statMultipliers");
 
                     // FIXME: Does not work, called too early
-                    ItemStats.REGISTRY.get().getValues().forEach(stat -> {
+                    /*ItemStats.getRegistry().getValues().forEach(stat -> {
                         ResourceLocation name = Objects.requireNonNull(stat.getRegistryName());
                         String key = name.getNamespace() + "." + name.getPath();
                         ForgeConfigSpec.DoubleValue config = builder
                                 .defineInRange(key, 1, 0, Double.MAX_VALUE);
                         statMultipliers.put(stat, config);
-                    });
+                    });*/
                     builder.pop();
                 }
                 builder.pop();

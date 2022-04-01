@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
-import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.ModBlockEntities;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
@@ -63,7 +62,7 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity {
         if (level == null || getItem(0).isEmpty()) {
             return null;
         }
-        return level.getRecipeManager().getRecipeFor(ModRecipes.PRESSING_TYPE, this, level).orElse(null);
+        return level.getRecipeManager().getRecipeFor(PressingRecipe.PRESSING_TYPE, this, level).orElse(null);
     }
 
     private ItemStack getWorkOutput(@Nullable PressingRecipe recipe) {

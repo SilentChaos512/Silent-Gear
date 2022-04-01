@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -456,7 +456,7 @@ public final class GearHelper {
         }
     }
 
-    public static boolean isCorrectToolForDrops(ItemStack stack, BlockState state, @Nullable Tag<Block> blocksForTool, Set<Material> extraMaterials) {
+    public static boolean isCorrectToolForDrops(ItemStack stack, BlockState state, @Nullable TagKey<Block> blocksForTool, Set<Material> extraMaterials) {
         Tier tier = getTier(stack);
         if (tier != null) {
             boolean isInToolTag = blocksForTool != null && state.is(blocksForTool);

@@ -9,7 +9,7 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -202,11 +202,11 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item instanceof AbstractBlueprintItem)
                 .map(item -> (AbstractBlueprintItem) item)
-                .sorted(Comparator.comparing(blueprint -> blueprint.getItemTag().getName()))
-                .forEach(item -> blueprints.put(item.getItemTag().getName(), item));
+                .sorted(Comparator.comparing(blueprint -> blueprint.getItemTag().location()))
+                .forEach(item -> blueprints.put(item.getItemTag().location(), item));
         TagsProvider.TagAppender<Item> blueprintsBuilder = getBuilder(ModTags.Items.BLUEPRINTS);
         blueprints.keySet().forEach(tagId -> {
-            Tag.Named<Item> tag = ItemTags.bind(tagId.toString());
+            TagKey<Item> tag = ItemTags.create(tagId);
             getBuilder(tag).add(blueprints.get(tagId).toArray(new Item[0]));
             blueprintsBuilder.addTag(tag);
         });
@@ -218,15 +218,15 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(makeWrapper(Const.CURIOS, "back"), ModItems.ELYTRA);
     }
 
-    private Tag.Named<Item> makeWrapper(String namespace, String path) {
-        return ItemTags.bind(new ResourceLocation(namespace, path).toString());
+    private TagKey<Item> makeWrapper(String namespace, String path) {
+        return ItemTags.create(new ResourceLocation(namespace, path));
     }
 
-    private void builder(Tag.Named<Item> tag, ItemLike... items) {
+    private void builder(TagKey<Item> tag, ItemLike... items) {
         getBuilder(tag).add(Arrays.stream(items).map(ItemLike::asItem).toArray(Item[]::new));
     }
 
-    protected TagsProvider.TagAppender<Item> getBuilder(Tag.Named<Item> tag) {
+    protected TagsProvider.TagAppender<Item> getBuilder(TagKey<Item> tag) {
         return tag(tag);
     }
 }

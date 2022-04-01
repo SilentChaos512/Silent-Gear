@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.item.blueprint;
 
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -31,7 +31,7 @@ import java.util.Optional;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final GearType gearType;
-    private Tag.Named<Item> itemTag;
+    private TagKey<Item> itemTag;
 
     public GearBlueprintItem(GearType gearType, boolean singleUse, Properties properties) {
         super(properties, singleUse);
@@ -53,11 +53,11 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public Tag.Named<Item> getItemTag() {
+    public TagKey<Item> getItemTag() {
         if (itemTag == null) {
             ResourceLocation id = this.getRegistryName();
             if (id != null) {
-                itemTag = ItemTags.bind(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()).toString());
+                itemTag = ItemTags.create(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()));
             }
         }
         return itemTag;

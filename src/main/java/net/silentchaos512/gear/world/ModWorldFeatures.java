@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.world;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.features.FeatureUtils;
@@ -41,45 +42,36 @@ import java.util.function.Supplier;
 public final class ModWorldFeatures {
     public static final RuleTest END_STONE_RULE_TEST = new TagMatchTest(Tags.Blocks.END_STONES);
 
-    public static final Lazy<TreeConfiguration> NETHERWOOD_TREE_CONFIG = Lazy.of(() -> new TreeConfiguration.TreeConfigurationBuilder(
-            BlockStateProvider.simple(ModBlocks.NETHERWOOD_LOG.asBlockState()),
-            new ForkingTrunkPlacer(5, 2, 2),
-            BlockStateProvider.simple(ModBlocks.NETHERWOOD_LEAVES.asBlockState()),
-            new AcaciaFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0)),
-            new TwoLayersFeatureSize(1, 0, 2))
-            .ignoreVines()
-            .build());
-
-//    public static final Lazy<NetherwoodTreeFeature> NETHERWOOD_TREE_FEATURE = Lazy.of(() -> new NetherwoodTreeFeature(TreeConfiguration.CODEC));
-
     private static boolean configuredFeaturesRegistered = false;
 
     @SuppressWarnings("WeakerAccess")
     public static final class Configured {
         static final Map<String, Lazy<ConfiguredFeature<?, ?>>> TO_REGISTER = new LinkedHashMap<>();
 
-        public static final Lazy<ConfiguredFeature<?, ?>> BORT_ORE_VEINS = createLazy("bort_ore_veins", () -> {
-            ImmutableList<OreConfiguration.TargetBlockState> targetList = ImmutableList.of(
-                    OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, ModBlocks.BORT_ORE.get().defaultBlockState()),
-                    OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, ModBlocks.DEEPSLATE_BORT_ORE.get().defaultBlockState()));
-            return Feature.REPLACE_SINGLE_BLOCK.configured(new ReplaceBlockConfiguration(targetList));
-        });
+        private static final ReplaceBlockConfiguration BORT_ORE_VEINS_CONFIG = new ReplaceBlockConfiguration(ImmutableList.of(
+                OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, ModBlocks.BORT_ORE.get().defaultBlockState()),
+                OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, ModBlocks.DEEPSLATE_BORT_ORE.get().defaultBlockState())));
+        private static final OreConfiguration CRIMSON_IRON_ORE_VEINS_CONFIG = new OreConfiguration(OreFeatures.NETHER_ORE_REPLACEABLES, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8);
+        private static final OreConfiguration AZURE_SILVER_ORE_VEINS_CONFIG = new OreConfiguration(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6);
+        private static final RandomPatchConfiguration WILD_FLAX_PATCHES_CONFIG = FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLAX_PLANT.get())), List.of(), 32);
+        private static final RandomPatchConfiguration WILD_FLUFFY_PATCHES_CONFIG = FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLUFFY_PLANT.get())), List.of(), 32);
+        public static final TreeConfiguration NETHERWOOD_TREE_CONFIG = new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(ModBlocks.NETHERWOOD_LOG.asBlockState()),
+                new ForkingTrunkPlacer(5, 2, 2),
+                BlockStateProvider.simple(ModBlocks.NETHERWOOD_LEAVES.asBlockState()),
+                new AcaciaFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0)),
+                new TwoLayersFeatureSize(1, 0, 2))
+                .ignoreVines()
+                .build();
 
-        public static final Lazy<ConfiguredFeature<?, ?>> CRIMSON_IRON_ORE_VEINS = createLazy("crimson_iron_ore_veins", () -> Feature.ORE
-                .configured(new OreConfiguration(OreFeatures.NETHER_ORE_REPLACEABLES, ModBlocks.CRIMSON_IRON_ORE.asBlockState(), 8)));
-
-        public static final Lazy<ConfiguredFeature<?, ?>> AZURE_SILVER_ORE_VEINS = createLazy("azure_silver_ore_veins", () -> Feature.ORE
-                .configured(new OreConfiguration(END_STONE_RULE_TEST, ModBlocks.AZURE_SILVER_ORE.asBlockState(), 6)));
-
-        public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLAX_PATCHES = createLazy("wild_flax_patches", () -> Feature.FLOWER
-                .configured(new RandomPatchConfiguration(32, 6, 2, () -> {
-                    return Feature.SIMPLE_BLOCK.configured(new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLAX_PLANT.get()))).onlyWhenEmpty();
-                })));
-
-        public static final Lazy<ConfiguredFeature<?, ?>> WILD_FLUFFY_PATCHES = createLazy("wild_fluffy_plant_patches", () -> Feature.FLOWER
-                .configured(new RandomPatchConfiguration(32, 6, 2, () -> {
-                    return Feature.SIMPLE_BLOCK.configured(new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLUFFY_PLANT.get()))).onlyWhenEmpty();
-                })));
+        public static final Holder<ConfiguredFeature<ReplaceBlockConfiguration, ?>> BORT_ORE_VEINS = create("bort_ore_veins", Feature.REPLACE_SINGLE_BLOCK, BORT_ORE_VEINS_CONFIG);
+        public static final Holder<ConfiguredFeature<OreConfiguration, ?>> CRIMSON_IRON_ORE_VEINS = create("crimson_iron_ore_veins", Feature.ORE, CRIMSON_IRON_ORE_VEINS_CONFIG);
+        public static final Holder<ConfiguredFeature<OreConfiguration, ?>> AZURE_SILVER_ORE_VEINS = create("azure_silver_ore_veins", Feature.ORE, AZURE_SILVER_ORE_VEINS_CONFIG);
+        public static final Holder<ConfiguredFeature<RandomPatchConfiguration, ?>> WILD_FLAX_PATCHES = create("wild_flax_patches", Feature.FLOWER, WILD_FLAX_PATCHES_CONFIG);
+        public static final Holder<ConfiguredFeature<RandomPatchConfiguration, ?>> WILD_FLUFFY_PATCHES = create("wild_fluffy_patches", Feature.FLOWER, WILD_FLUFFY_PATCHES_CONFIG);
+        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> NETHERWOOD_TREE = create("netherwood_tree", Feature.TREE, NETHERWOOD_TREE_CONFIG);
 
         /*public static final Lazy<ConfiguredFeature<?, ?>> NETHERWOOD_TREES = createLazy("netherwood_trees", () -> Feature.RANDOM_SELECTOR
                 .configured(new RandomFeatureConfiguration(
@@ -95,6 +87,10 @@ public final class ModWorldFeatures {
                 .range(128)
                 .chance(2));*/
 
+        public static <FC extends FeatureConfiguration> Holder<ConfiguredFeature<FC, ?>> create(String name, Feature<FC> feature, FC featureConfig) {
+            return FeatureUtils.register("silentgear:" + name, feature, featureConfig);
+        }
+
         private static Lazy<ConfiguredFeature<?, ?>> createLazy(String name, Supplier<ConfiguredFeature<?, ?>> supplier) {
             if (TO_REGISTER.containsKey(name)) {
                 throw new IllegalArgumentException("Configured feature lazy with name '" + name + "' already created");
@@ -105,38 +101,38 @@ public final class ModWorldFeatures {
             return lazy;
         }
 
-        private static RandomPatchConfiguration grassPatch(BlockStateProvider p_195203_, int p_195204_) {
-            return FeatureUtils.simpleRandomPatchConfiguration(p_195204_, Feature.SIMPLE_BLOCK.configured(new SimpleBlockConfiguration(p_195203_)).onlyWhenEmpty());
-        }
-
         private Configured() {}
     }
 
     public static final class Placed {
-        public static final Lazy<PlacedFeature> ORE_BORT = create("ore_bort", () -> Configured.BORT_ORE_VEINS.get()
-                .placed(commonOrePlacement(Config.Common.bortCount.get(),
-                        HeightRangePlacement.triangle(VerticalAnchor.absolute(-60), VerticalAnchor.absolute(10)))));
+        public static final Holder<PlacedFeature> ORE_BORT = create("ore_bort", Configured.BORT_ORE_VEINS,
+                commonOrePlacement(Config.Common.bortCount.get(),
+                        HeightRangePlacement.triangle(VerticalAnchor.absolute(-60), VerticalAnchor.absolute(10))));
 
-        public static final Lazy<PlacedFeature> ORE_CRIMSON_IRON = create("ore_crimson_iron", () -> Configured.CRIMSON_IRON_ORE_VEINS.get()
-                .placed(commonOrePlacement(Config.Common.crimsonIronCount.get(),
-                        PlacementUtils.RANGE_10_10)));
+        public static final Holder<PlacedFeature> ORE_CRIMSON_IRON = create("ore_crimson_iron", Configured.CRIMSON_IRON_ORE_VEINS,
+                commonOrePlacement(Config.Common.crimsonIronCount.get(),
+                        PlacementUtils.RANGE_10_10));
 
-        public static final Lazy<PlacedFeature> ORE_CRIMSON_IRON_DOUBLE = create("ore_crimson_iron_double", () -> Configured.CRIMSON_IRON_ORE_VEINS.get()
-                .placed(commonOrePlacement(2 * Config.Common.crimsonIronCount.get(),
-                        PlacementUtils.RANGE_10_10)));
+        public static final Holder<PlacedFeature> ORE_CRIMSON_IRON_DOUBLE = create("ore_crimson_iron_double", Configured.CRIMSON_IRON_ORE_VEINS,
+                commonOrePlacement(2 * Config.Common.crimsonIronCount.get(),
+                        PlacementUtils.RANGE_10_10));
 
-        public static final Lazy<PlacedFeature> ORE_AZURE_SILVER = create("ore_azure_silver", () -> Configured.AZURE_SILVER_ORE_VEINS.get()
-        .placed(commonOrePlacement(Config.Common.azureSilverCount.get(),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(16), VerticalAnchor.absolute(92)))));
+        public static final Holder<PlacedFeature> ORE_AZURE_SILVER = create("ore_azure_silver", Configured.AZURE_SILVER_ORE_VEINS,
+                commonOrePlacement(Config.Common.azureSilverCount.get(),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(16), VerticalAnchor.absolute(92))));
 
-        public static final Lazy<PlacedFeature> FLOWER_WILD_FLAX = create("flower_wild_flax", () -> Configured.WILD_FLAX_PATCHES.get()
-        .placed(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+        public static final Holder<PlacedFeature> FLOWER_WILD_FLAX = create("flower_wild_flax", Configured.WILD_FLAX_PATCHES,
+                RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome());
 
-        public static final Lazy<PlacedFeature> FLOWER_WILD_FLUFFY = create("flower_wild_fluffy", () -> Configured.WILD_FLUFFY_PATCHES.get()
-                .placed(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+        public static final Holder<PlacedFeature> FLOWER_WILD_FLUFFY = create("flower_wild_fluffy", Configured.WILD_FLUFFY_PATCHES,
+                RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome());
 
-        private static Lazy<PlacedFeature> create(String name, Supplier<PlacedFeature> supplier) {
-            return Lazy.of(supplier);
+        private static <FC extends FeatureConfiguration> Holder<PlacedFeature> create(String name, Holder<ConfiguredFeature<FC, ?>> configuredFeature, List<PlacementModifier> modifiers) {
+            return PlacementUtils.register("silentgear:" + name, configuredFeature, modifiers);
+        }
+
+        private static <FC extends FeatureConfiguration> Holder<PlacedFeature> create(String name, Holder<ConfiguredFeature<FC, ?>> configuredFeature, PlacementModifier... modifiers) {
+            return PlacementUtils.register("silentgear:" + name, configuredFeature, modifiers);
         }
 
         private static List<PlacementModifier> orePlacement(PlacementModifier p_195347_, PlacementModifier p_195348_) {
@@ -198,35 +194,35 @@ public final class ModWorldFeatures {
 
     private static void addWildFlax(BiomeLoadingEvent biome) {
         debugLog("Add wild flax to " + biome.getName());
-        biome.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Placed.FLOWER_WILD_FLAX.get());
+        biome.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Placed.FLOWER_WILD_FLAX);
     }
 
     private static void addWildFluffyPlants(BiomeLoadingEvent biome) {
         debugLog("Add wild fluffy plants to " + biome.getName());
-        biome.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Placed.FLOWER_WILD_FLUFFY.get());
+        biome.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Placed.FLOWER_WILD_FLUFFY);
     }
 
     private static void addNetherwoodTrees(BiomeLoadingEvent biome) {
-//        biome.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES.get());
+//        biome.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, Configured.NETHERWOOD_TREES);
     }
 
     private static void addBortOre(BiomeLoadingEvent biome) {
-        biome.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Placed.ORE_BORT.get());
+        biome.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Placed.ORE_BORT);
     }
 
     private static void addCrimsonIronOre(BiomeLoadingEvent biome) {
         if (Biomes.BASALT_DELTAS.location().equals(biome.getName()) || Biomes.SOUL_SAND_VALLEY.location().equals(biome.getName())) {
             debugLog("Add double crimson iron ores to " + biome.getName());
-            biome.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Placed.ORE_CRIMSON_IRON_DOUBLE.get());
+            biome.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Placed.ORE_CRIMSON_IRON_DOUBLE);
         } else {
             debugLog("Add crimson iron ores to " + biome.getName());
-            biome.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Placed.ORE_CRIMSON_IRON.get());
+            biome.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Placed.ORE_CRIMSON_IRON);
         }
     }
 
     private static void addAzureSilverOre(BiomeLoadingEvent biome) {
         debugLog("Add azure silver ores to " + biome.getName());
-        biome.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Placed.ORE_AZURE_SILVER.get());
+        biome.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Placed.ORE_AZURE_SILVER);
     }
 
     private static void debugLog(String msg) {

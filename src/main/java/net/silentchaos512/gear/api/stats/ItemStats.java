@@ -4,10 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.lib.util.Lazy;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Stats used by all gear types
@@ -22,10 +23,11 @@ import java.util.List;
 public final class ItemStats {
     static final List<ItemStat> STATS_IN_ORDER = new ArrayList<>();
 
-    public static final Lazy<IForgeRegistry<ItemStat>> REGISTRY = Lazy.of(() -> new RegistryBuilder<ItemStat>()
-            .setType(ItemStat.class)
-            .setName(SilentGear.getId("stat"))
-            .create());
+    private static Supplier<IForgeRegistry<ItemStat>> REGISTRY;
+
+    public static IForgeRegistry<ItemStat> getRegistry() {
+        return REGISTRY.get();
+    }
 
     // Generic
     public static final ItemStat DURABILITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
@@ -167,7 +169,7 @@ public final class ItemStats {
     @Nullable
     public static ItemStat byName(String name) {
         ResourceLocation id = SilentGear.getIdWithDefaultNamespace(name);
-        return id != null ? REGISTRY.get().getValue(id) : null;
+        return id != null ? getRegistry().getValue(id) : null;
     }
 
     /**
@@ -178,18 +180,21 @@ public final class ItemStats {
      */
     @Nullable
     public static ItemStat byName(ResourceLocation id) {
-        return REGISTRY.get().getValue(id);
+        return getRegistry().getValue(id);
     }
 
     @Nullable
     public static ItemStat get(IItemStat stat) {
-        return REGISTRY.get().getValue(stat.getStatId());
+        return getRegistry().getValue(stat.getStatId());
     }
 
     // region Registry creation - other mods should not call these methods!
 
-    public static void createRegistry(RegistryEvent.NewRegistry event) {
-        REGISTRY.get();
+    public static void createRegistry(NewRegistryEvent event) {
+        REGISTRY = event.create(new RegistryBuilder<ItemStat>()
+                .setType(ItemStat.class)
+                .setName(SilentGear.getId("stat"))
+        );
     }
 
     public static void registerStats(RegistryEvent.Register<ItemStat> event) {

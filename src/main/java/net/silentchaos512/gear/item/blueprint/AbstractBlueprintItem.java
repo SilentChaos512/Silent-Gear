@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
@@ -22,7 +22,7 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
         this.singleUse = singleUse;
     }
 
-    public abstract Tag.Named<Item> getItemTag();
+    public abstract TagKey<Item> getItemTag();
 
     protected abstract Component getCraftedName(ItemStack stack);
 

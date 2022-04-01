@@ -67,10 +67,10 @@ public final class TooltipHandler {
 
         ItemStack stack = event.getItemStack();
 
-        if (TagUtils.containsSafe(ModTags.Items.GRADER_CATALYSTS, stack)) {
+        if (TagUtils.contains(ModTags.Items.GRADER_CATALYSTS, stack)) {
             onGraderCatalystTooltip(event);
         }
-        if (TagUtils.containsSafe(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack)) {
+        if (TagUtils.contains(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack)) {
             onStarlightChargerCatalystTooltip(event);
         }
 

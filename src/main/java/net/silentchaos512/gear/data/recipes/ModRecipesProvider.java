@@ -7,7 +7,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
@@ -1155,7 +1155,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .save(consumer);
     }
 
-    private void dyeFluffyBlock(Consumer<FinishedRecipe> consumer, ItemLike block, Tag<Item> dye) {
+    private void dyeFluffyBlock(Consumer<FinishedRecipe> consumer, ItemLike block, TagKey<Item> dye) {
         shapedBuilder(block, 8)
                 .patternLine("###")
                 .patternLine("#d#")
@@ -1553,32 +1553,32 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private static class Metals {
         private final String name;
         private ItemLike ore;
-        private Tag<Item> oreTag;
+        private TagKey<Item> oreTag;
         private ItemLike rawOre;
         private ItemLike rawOreBlock;
         private ItemLike block;
-        private Tag<Item> blockTag;
+        private TagKey<Item> blockTag;
         private final ItemLike ingot;
-        private final Tag<Item> ingotTag;
+        private final TagKey<Item> ingotTag;
         private ItemLike nugget;
-        private Tag<Item> nuggetTag;
+        private TagKey<Item> nuggetTag;
         private ItemLike dust;
-        private Tag<Item> dustTag;
-        private Tag<Item> chunksTag;
+        private TagKey<Item> dustTag;
+        private TagKey<Item> chunksTag;
 
-        public Metals(String name, ItemLike ingot, Tag<Item> ingotTag) {
+        public Metals(String name, ItemLike ingot, TagKey<Item> ingotTag) {
             this.name = name;
             this.ingot = ingot;
             this.ingotTag = ingotTag;
         }
 
-        public Metals ore(ItemLike item, Tag<Item> tag) {
+        public Metals ore(ItemLike item, TagKey<Item> tag) {
             this.ore = item;
             this.oreTag = tag;
             return this;
         }
 
-        public Metals ore(ItemLike oreBlockItem, Tag<Item> oreTag, ItemLike rawOre, ItemLike rawOreBlock) {
+        public Metals ore(ItemLike oreBlockItem, TagKey<Item> oreTag, ItemLike rawOre, ItemLike rawOreBlock) {
             this.ore = oreBlockItem;
             this.oreTag = oreTag;
             this.rawOre = rawOre;
@@ -1586,25 +1586,25 @@ public class ModRecipesProvider extends LibRecipeProvider {
             return this;
         }
 
-        public Metals block(ItemLike item, Tag<Item> tag) {
+        public Metals block(ItemLike item, TagKey<Item> tag) {
             this.block = item;
             this.blockTag = tag;
             return this;
         }
 
-        public Metals nugget(ItemLike item, Tag<Item> tag) {
+        public Metals nugget(ItemLike item, TagKey<Item> tag) {
             this.nugget = item;
             this.nuggetTag = tag;
             return this;
         }
 
-        public Metals dust(ItemLike item, Tag<Item> tag) {
+        public Metals dust(ItemLike item, TagKey<Item> tag) {
             this.dust = item;
             this.dustTag = tag;
             return this;
         }
 
-        public Metals chunks(Tag<Item> tag) {
+        public Metals chunks(TagKey<Item> tag) {
             this.chunksTag = tag;
             return this;
         }

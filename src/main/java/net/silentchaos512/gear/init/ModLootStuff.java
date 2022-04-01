@@ -22,6 +22,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
@@ -33,6 +37,13 @@ import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
 import java.util.function.Supplier;
 
 public final class ModLootStuff {
+    // FIXME: This mess...
+    private static final Lazy<DeferredRegister<GlobalLootModifierSerializer<?>>> LOOT_MODIFIER_REGISTER = Lazy.of(() -> {
+        DeferredRegister<GlobalLootModifierSerializer<?>> reg = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS.get(), SilentGear.MOD_ID);
+        FMLJavaModLoadingContext.get().getModEventBus().register(reg);
+        return reg;
+    });
+
     public static final LootItemConditionType HAS_TRAIT = new LootItemConditionType(HasTraitCondition.SERIALIZER);
     public static final LootItemFunctionType SELECT_TIER = new LootItemFunctionType(SelectGearTierLootFunction.SERIALIZER);
     public static final LootItemFunctionType SET_PARTS = new LootItemFunctionType(SetPartsFunction.SERIALIZER);
@@ -49,6 +60,6 @@ public final class ModLootStuff {
     }
 
     private static <T extends GlobalLootModifierSerializer<?>> RegistryObject<T> register(String name, Supplier<T> serializer) {
-        return Registration.LOOT_MODIFIERS.register(name, serializer);
+        return LOOT_MODIFIER_REGISTER.get().register(name, serializer);
     }
 }
