@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class GearTridentItem extends TridentItem implements ICoreWeapon {
-    public GearTridentItem(Properties properties) {
-        super(properties);
+    public GearTridentItem() {
+        super(GearHelper.getBaseItemProperties());
     }
 
     @Override

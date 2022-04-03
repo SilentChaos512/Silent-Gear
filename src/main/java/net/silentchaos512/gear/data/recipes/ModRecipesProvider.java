@@ -135,6 +135,15 @@ public class ModRecipesProvider extends LibRecipeProvider {
         armorBlueprint(consumer, "leggings", ModItems.LEGGINGS_BLUEPRINT, ModItems.LEGGINGS_TEMPLATE, "###", "# #", "# #");
         armorBlueprint(consumer, "boots", ModItems.BOOTS_BLUEPRINT, ModItems.BOOTS_TEMPLATE, "# #", "# #");
 
+        shapedBuilder(ModItems.TRIDENT_BLUEPRINT)
+                .key('#', ModTags.Items.BLUEPRINT_PAPER)
+                .key('H', Items.HEART_OF_THE_SEA)
+                .key('T', Items.TRIDENT)
+                .patternLine("#H#")
+                .patternLine("#T#")
+                .patternLine(" # ")
+                .build(consumer);
+
         ShapedRecipeBuilder.shaped(ModItems.ELYTRA_BLUEPRINT)
                 .define('#', ModTags.Items.BLUEPRINT_PAPER)
                 .define('/', Tags.Items.INGOTS_NETHERITE)
