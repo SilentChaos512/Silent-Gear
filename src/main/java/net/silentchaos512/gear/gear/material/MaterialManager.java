@@ -15,7 +15,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -68,10 +67,10 @@ public class MaterialManager implements ResourceManagerReloadListener {
                     if (json == null) {
                         // Something is very wrong or the JSON is somehow empty
                         SilentGear.LOGGER.error(MARKER, "Could not load material {} as it's null or empty", name);
-                    } else if (!CraftingHelper.processConditions(json, "conditions")) {
+                    } /*else if (!CraftingHelper.processConditions(json, "conditions")) {
                         // Conditions not met, so do not load the material
                         skippedList.add(name);
-                    } else {
+                    }*/ else {
                         // Attempt to deserialize the material
                         IMaterial material = MaterialSerializers.deserialize(name, packName, json);
                         MATERIALS.put(material.getId(), material);

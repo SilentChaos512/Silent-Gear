@@ -1,15 +1,6 @@
 {
   "type": "silentgear:standard",
   "simple": true,
-  "conditions": [
-    {
-      "value": {
-        "tag": "forge:ingots/refined_iron",
-        "type": "forge:tag_empty"
-      },
-      "type": "forge:not"
-    }
-  ],
   "availability": {
     "tier": 2,
     "categories": [

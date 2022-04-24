@@ -2236,7 +2236,7 @@ public class MaterialsProvider implements DataProvider {
     }
 
     private static MaterialBuilder extraMetal(String name, int tier, ResourceLocation tag) {
-        return new MaterialBuilder(SilentGear.getId(name), tier, tag).loadConditionTagExists(tag);
+        return new MaterialBuilder(SilentGear.getId(name), tier, tag)/*.loadConditionTagExists(tag)*/;
     }
 
     private static MaterialBuilder terracotta(ResourceLocation parent, String suffix, ItemLike item, int color) {
