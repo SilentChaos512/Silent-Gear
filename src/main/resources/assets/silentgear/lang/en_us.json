@@ -673,7 +673,7 @@
   "misc.silentgear.harvestLevel.3": "Obsidian",
   "misc.silentgear.harvestLevel.4": "Azure Silver",
   "misc.silentgear.invalidParts": "Seems to contain invalid parts",
-  "misc.silentgear.jeiNotInstalled.": "JEI is not installed? Please consider installing the Just Enough Items (JEI) mod.",
+  "misc.silentgear.jeiNotInstalled": "JEI is not installed? Please consider installing the Just Enough Items (JEI) mod.",
   "misc.silentgear.key": "[%s]",
   "misc.silentgear.lockedStats": "Stats are locked",
   "misc.silentgear.materialCategories": "Categories: %s",
