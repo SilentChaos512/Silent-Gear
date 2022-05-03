@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+@Deprecated
 public class GearDiggerItem extends DiggerItem implements ICoreTool {
     private static final Map<ToolAction, TagKey<Block>> TOOL_TYPES = ImmutableMap.<ToolAction, TagKey<Block>>builder()
             .put(ToolActions.AXE_DIG, BlockTags.MINEABLE_WITH_AXE)

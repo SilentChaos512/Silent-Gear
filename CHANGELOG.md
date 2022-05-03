@@ -3,9 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.10.2] - 2022-05-02
 ### Fixed
 - Amethyst clusters not dropping the correct number of items with gear mining tools [#484]
+- Axes not disabling shields [#467]
+- Possibly some other issues related to pickaxes, shovels, and axes not behaving quite like their vanilla counterparts
 
 ## [2.10.1] - 2022-04-25
 ### Fixed
