@@ -170,6 +170,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 CraftingItems.BLAZE_GOLD_DUST,
                 CraftingItems.BLAZE_GOLD_INGOT);
 
+        builder(ItemTags.CLUSTER_MAX_HARVESTABLES, ModItems.PICKAXE, ModItems.PAXEL, ModItems.PROSPECTOR_HAMMER);
+
         // Silent Gear
 
         copy(ModTags.Blocks.FLUFFY_BLOCKS, ModTags.Items.FLUFFY_BLOCKS);
