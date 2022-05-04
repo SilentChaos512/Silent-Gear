@@ -20,7 +20,7 @@ authors="SilentChaos512"
     modId="forge"
     mandatory=true
     versionRange="[40.0.18,)"
-    ordering="NONE"
+    ordering="AFTER"
     side="BOTH"
 [[dependencies.silentgear]]
     modId="minecraft"
