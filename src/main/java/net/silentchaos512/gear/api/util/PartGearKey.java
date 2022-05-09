@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.util;
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IPartData;
@@ -54,6 +55,10 @@ public final class PartGearKey {
 
     public PartType getPartType() {
         return partType;
+    }
+
+    public Component getDisplayName() {
+        return partType.getDisplayName(0).append(" / ").append(gearType.getDisplayName());
     }
 
     public static PartGearKey read(String key) {

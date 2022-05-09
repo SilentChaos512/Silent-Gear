@@ -42,6 +42,18 @@ public final class TextUtil {
         return withColor(text, colorCode);
     }
 
+    public static MutableComponent separatedList(Collection<Component> list) {
+        MutableComponent ret = null;
+        for (Component c : list) {
+            if (ret == null) {
+                ret = c.copy();
+            } else {
+                ret.append(", ").append(c.copy());
+            }
+        }
+        return ret;
+    }
+
     public static void addWipText(Collection<Component> tooltip) {
         if (Config.Common.showWipText.get()) {
             tooltip.add(withColor(misc("wip"), ChatFormatting.RED));

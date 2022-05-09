@@ -22,14 +22,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -64,7 +63,7 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
 
     @Override
     public Optional<Component> getJeiHint() {
-        MutableComponent typeText = new TextComponent(this.type.getShortName());
+        MutableComponent typeText = this.type.getDisplayName(0);
         MutableComponent text = TextUtil.withColor(typeText, Color.GOLD);
         return Optional.of(TextUtil.translate("jei", "partType", text));
     }

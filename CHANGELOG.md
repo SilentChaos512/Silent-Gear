@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Translation keys for issue [#508]
+  - Material categories
+  - JEI gear crafting recipe handler (material categories, part types, and gear types text)
+  - Translation key for the Fully-Loaded Blueprint Book
+### Fixed
+- Missing translation for refined glowstone material [#508]
+
 ## [2.10.3] - 2022-05-08
 ### Added
 - Korean translation (gjeodnd12165) [#507]

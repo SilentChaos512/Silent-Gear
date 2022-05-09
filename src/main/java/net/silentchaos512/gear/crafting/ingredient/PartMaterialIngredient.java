@@ -1,15 +1,14 @@
 package net.silentchaos512.gear.crafting.ingredient;
 
 import com.google.gson.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -83,18 +82,18 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
     public Optional<Component> getJeiHint() {
         MutableComponent text;
         if (!this.categories.isEmpty()) {
-            MutableComponent cats = new TextComponent(categories.stream()
-                    .map(IMaterialCategory::getName)
-                    .collect(Collectors.joining(", "))
+            MutableComponent cats = TextUtil.separatedList(categories.stream()
+                    .map(IMaterialCategory::getDisplayName)
+                    .collect(Collectors.toList())
             );
             text = TextUtil.withColor(cats, Color.INDIANRED);
         } else {
-            MutableComponent any = new TextComponent("any");
+            MutableComponent any = TextUtil.translate("material.category", "any");
             text = TextUtil.withColor(any, Color.LIGHTGREEN);
         }
 
         PartGearKey key = PartGearKey.of(this.gearType, this.partType);
-        text.append(TextUtil.misc("spaceBrackets", key.toString()).withStyle(ChatFormatting.GRAY));
+        text.append(TextUtil.misc("spaceBrackets", key.getDisplayName()).withStyle(ChatFormatting.GRAY));
 
         return Optional.of(TextUtil.translate("jei", "materialType", text));
     }

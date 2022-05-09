@@ -3,7 +3,6 @@ package net.silentchaos512.gear.item.blueprint.book;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -138,7 +137,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
                 inventory.insertItem(i, new ItemStack(blueprints.get(i)), false);
             }
             this.saveInventory(filled, inventory);
-            filled.setHoverName(new TextComponent("Fully-Loaded Blueprint Book"));
+            filled.setHoverName(TextUtil.translate("item", "blueprint_book.fully_loaded"));
             items.add(filled);
         }
     }

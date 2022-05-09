@@ -183,7 +183,7 @@ public final class TooltipHandler {
     private static Optional<Component> getMaterialCategoriesLine(MaterialInstance material) {
         Collection<IMaterialCategory> categories = material.getCategories();
         if (!categories.isEmpty()) {
-            Component text = new TextComponent(categories.stream().map(IMaterialCategory::getName).collect(Collectors.joining(", ")))
+            Component text = TextUtil.separatedList(categories.stream().map(IMaterialCategory::getDisplayName).collect(Collectors.toList()))
                     .withStyle(ChatFormatting.ITALIC);
             return Optional.of(TextUtil.misc("materialCategories", text));
         }
