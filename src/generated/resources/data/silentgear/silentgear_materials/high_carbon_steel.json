@@ -18,26 +18,30 @@
     }
   },
   "name": {
-    "text": "High-Carbon Steel (Test)"
+    "translate": "material.silentgear.high_carbon_steel"
   },
   "stats": {
     "main": {
       "durability": 420.0,
       "armor_durability": 24.0,
-      "repair_value": 0.05,
       "enchantability": 11.0,
+      "rarity": 40.0,
+      "chargeability": 0.8,
+      "repair_value": 0.05,
       "harvest_level": 2.0,
       "harvest_speed": 6.0,
       "melee_damage": 4.0,
       "magic_damage": 1.0,
       "attack_speed": -0.2,
       "armor": 20.0,
+      "armor/helmet": 3.0,
+      "armor/chestplate": 8.0,
+      "armor/leggings": 6.0,
+      "armor/boots": 3.0,
       "armor_toughness": 2.0,
       "magic_armor": 6.0,
       "ranged_damage": 2.0,
-      "ranged_speed": -0.2,
-      "rarity": 40.0,
-      "silentgems:chargeability": 0.8
+      "ranged_speed": -0.2
     }
   },
   "traits": {
@@ -45,6 +49,23 @@
       {
         "name": "silentgear:malleable",
         "level": 3
+      }
+    ]
+  },
+  "model": {
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#848484"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:metal",
+        "color": "#848484"
       }
     ]
   }

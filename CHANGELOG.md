@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Material categories
   - JEI gear crafting recipe handler (material categories, part types, and gear types text)
   - Translation key for the Fully-Loaded Blueprint Book
+### Changed
+- High-Carbon Steel is now a permanent material and has a translation key [#508]
 ### Fixed
 - Missing translation for refined glowstone material [#508]
 

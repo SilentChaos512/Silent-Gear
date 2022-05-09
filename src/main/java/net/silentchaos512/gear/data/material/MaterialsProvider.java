@@ -1485,6 +1485,19 @@ public class MaterialsProvider implements DataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0x1ACE82)
                 .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
         );
+
+        // High-Carbon Steel
+        ret.add(customCompoundBuilder(modId("high_carbon_steel"), 2, ModItems.CUSTOM_INGOT.get())
+                .categories(MaterialCategories.METAL)
+                .mainStatsCommon(420, 24, 11, 40, 0.8f)
+                .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.05f)
+                .mainStatsHarvest(2, 6)
+                .mainStatsMelee(4, 1, -0.2f)
+                .mainStatsArmor(3, 8, 6, 3, 2, 6)
+                .mainStatsRanged(2, -0.2f)
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x848484)
+        );
     }
 
     private void addSimpleRods(Collection<MaterialBuilder> ret) {
