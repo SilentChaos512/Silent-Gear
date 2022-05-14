@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.10.5] - 2022-05-13
 ### Fixed
 - Mattocks not tilling dirt [#502]
+- Shears mining all blocks faster [#411]
 
 ## [2.10.4] - 2022-05-13
 ### Added
