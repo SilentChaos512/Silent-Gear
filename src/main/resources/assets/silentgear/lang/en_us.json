@@ -843,6 +843,8 @@
   "trait.silentgear.floatstoner.desc": "Creates and places end stone at the cost of durability",
   "trait.silentgear.gold_digger": "Gold Digger",
   "trait.silentgear.gold_digger.desc": "Sometimes increases nugget drops when mining",
+  "trait.silentgear.greedy": "Greedy",
+  "trait.silentgear.greedy.desc": "Increases the mining speed for ores",
   "trait.silentgear.hard": "Hard",
   "trait.silentgear.hard.desc": "Increases harvest speed or decreases ranged damage as item is damaged (cancels with Soft)",
   "trait.silentgear.heavy": "Heavy",

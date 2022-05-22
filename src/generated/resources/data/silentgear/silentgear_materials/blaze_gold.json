@@ -114,12 +114,12 @@
         ]
       },
       {
-        "name": "silentgear:malleable",
+        "name": "silentgear:greedy",
         "level": 3
       },
       {
-        "name": "silentgear:soft",
-        "level": 1
+        "name": "silentgear:malleable",
+        "level": 3
       }
     ],
     "rod": [

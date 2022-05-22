@@ -342,6 +342,8 @@ public class TraitsProvider implements DataProvider {
         ret.add(damageTypeTrait(Const.Traits.HOLY, 5, "holy", 2)
                 .withGearTypeCondition(GearType.WEAPON));
 
+        ret.add(new BlockMiningSpeedTraitBuilder(Const.Traits.GREEDY, 5, 0.2f, Tags.Blocks.ORES));
+
         return ret;
     }
 
