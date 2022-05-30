@@ -83,8 +83,6 @@ class SideProxy implements IProxy {
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {
-        ModLootStuff.init();
-
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
             if (Config.Common.spawnWithStarterBlueprints.get())
                 return Collections.singleton(ModItems.BLUEPRINT_PACKAGE.get().getStack());

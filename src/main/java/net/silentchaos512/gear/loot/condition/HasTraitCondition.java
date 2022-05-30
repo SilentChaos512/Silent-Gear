@@ -49,7 +49,7 @@ public class HasTraitCondition extends GearLootCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootStuff.HAS_TRAIT;
+        return ModLootStuff.HAS_TRAIT.get();
     }
 
     public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<HasTraitCondition> {

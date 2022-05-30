@@ -18,16 +18,10 @@
 
 package net.silentchaos512.gear.init;
 
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
 import net.silentchaos512.gear.loot.function.SetPartsFunction;
@@ -37,29 +31,35 @@ import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
 import java.util.function.Supplier;
 
 public final class ModLootStuff {
-    // FIXME: This mess...
-    private static final Lazy<DeferredRegister<GlobalLootModifierSerializer<?>>> LOOT_MODIFIER_REGISTER = Lazy.of(() -> {
-        DeferredRegister<GlobalLootModifierSerializer<?>> reg = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS.get(), SilentGear.MOD_ID);
-        FMLJavaModLoadingContext.get().getModEventBus().register(reg);
-        return reg;
-    });
+    // Conditions
+    public static final RegistryObject<LootItemConditionType> HAS_TRAIT =
+            registerCondition("has_trait", () -> new LootItemConditionType(HasTraitCondition.SERIALIZER));
 
-    public static final LootItemConditionType HAS_TRAIT = new LootItemConditionType(HasTraitCondition.SERIALIZER);
-    public static final LootItemFunctionType SELECT_TIER = new LootItemFunctionType(SelectGearTierLootFunction.SERIALIZER);
-    public static final LootItemFunctionType SET_PARTS = new LootItemFunctionType(SetPartsFunction.SERIALIZER);
+    // Functions
+    public static final RegistryObject<LootItemFunctionType> SELECT_TIER =
+            registerFunction("select_tier", () -> new LootItemFunctionType(SelectGearTierLootFunction.SERIALIZER));
+    public static final RegistryObject<LootItemFunctionType> SET_PARTS =
+            registerFunction("set_parts", () -> new LootItemFunctionType(SetPartsFunction.SERIALIZER));
 
-    public static final RegistryObject<GlobalLootModifierSerializer<?>> BONUS_DROPS_TRAIT = register("bonus_drops_trait", BonusDropsTraitLootModifier.Serializer::new);
-    public static final RegistryObject<GlobalLootModifierSerializer<?>> MAGMATIC_SMELTING = register("magmatic_smelting", MagmaticTraitLootModifier.Serializer::new);
+    // Global Loot Modifiers
+    public static final RegistryObject<GlobalLootModifierSerializer<?>> BONUS_DROPS_TRAIT =
+            registerGlobalModifier("bonus_drops_trait", BonusDropsTraitLootModifier.Serializer::new);
+    public static final RegistryObject<GlobalLootModifierSerializer<?>> MAGMATIC_SMELTING =
+            registerGlobalModifier("magmatic_smelting", MagmaticTraitLootModifier.Serializer::new);
 
     private ModLootStuff() {}
 
-    public static void init() {
-        Registry.register(Registry.LOOT_CONDITION_TYPE, SilentGear.getId("has_trait"), HAS_TRAIT);
-        Registry.register(Registry.LOOT_FUNCTION_TYPE, SilentGear.getId("select_tier"), SELECT_TIER);
-        Registry.register(Registry.LOOT_FUNCTION_TYPE, SilentGear.getId("set_parts"), SET_PARTS);
+    public static void init() {}
+
+    private static <T extends LootItemConditionType> RegistryObject<T> registerCondition(String name, Supplier<T> condition) {
+        return Registration.LOOT_CONDITIONS.register(name, condition);
     }
 
-    private static <T extends GlobalLootModifierSerializer<?>> RegistryObject<T> register(String name, Supplier<T> serializer) {
-        return LOOT_MODIFIER_REGISTER.get().register(name, serializer);
+    private static <T extends LootItemFunctionType> RegistryObject<T> registerFunction(String name, Supplier<T> condition) {
+        return Registration.LOOT_FUNCTIONS.register(name, condition);
+    }
+
+    private static <T extends GlobalLootModifierSerializer<?>> RegistryObject<T> registerGlobalModifier(String name, Supplier<T> serializer) {
+        return Registration.LOOT_MODIFIERS.register(name, serializer);
     }
 }

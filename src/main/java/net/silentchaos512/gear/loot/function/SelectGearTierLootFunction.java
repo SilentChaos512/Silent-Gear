@@ -52,7 +52,7 @@ public final class SelectGearTierLootFunction extends LootItemConditionalFunctio
 
     @Override
     public LootItemFunctionType getType() {
-        return ModLootStuff.SELECT_TIER;
+        return ModLootStuff.SELECT_TIER.get();
     }
 
     public static class Serializer extends LootItemConditionalFunction.Serializer<SelectGearTierLootFunction> {
