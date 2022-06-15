@@ -3,9 +3,38 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.10.3] - 2022-05-04
+## [2.10.7] - 2022-05-30
 ### Fixed
-- Hang on load issue on some systems (CephalonRho) [#510, #438, #466]
+- Imperial and Gold Digger traits not working [#509]
+- Magmatic not working [#504]
+
+## [2.10.6] - 2022-05-22
+### Added
+- Block mining speed traits (`silentgear:block_mining_speed`) which increase the mining speed for blocks in given tags
+- Greedy trait, which increases the mining speed on ores (`forge:ores`)
+- Replaced Soft with Greedy on Blaze Gold main material
+
+## [2.10.5] - 2022-05-13
+### Fixed
+- Mattocks not tilling dirt [#502]
+- Shears mining all blocks faster [#411]
+
+## [2.10.4] - 2022-05-13
+### Added
+- Translation keys for issue [#508]
+  - Material categories
+  - JEI gear crafting recipe handler (material categories, part types, and gear types text)
+  - Fully-Loaded Blueprint Book name
+  - Unimplemented guide book item messages
+### Changed
+- High-Carbon Steel is now a permanent material and has a translation key [#508]
+- Unimplemented warning message for guide book [#415]
+### Fixed
+- Missing translation for refined glowstone material [#508]
+
+## [2.10.3] - 2022-05-08
+### Added
+- Korean translation (gjeodnd12165) [#507]
 
 ## [2.10.2] - 2022-05-02
 ### Fixed

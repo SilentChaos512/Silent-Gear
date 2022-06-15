@@ -1,0 +1,14 @@
+{
+  "type": "silentgear:block_mining_speed",
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.greedy"
+  },
+  "description": {
+    "translate": "trait.silentgear.greedy.desc"
+  },
+  "speed_multiplier": 0.2,
+  "blocks": [
+    "forge:ores"
+  ]
+}

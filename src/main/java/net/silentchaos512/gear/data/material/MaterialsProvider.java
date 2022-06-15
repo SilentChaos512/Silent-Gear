@@ -287,8 +287,8 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, -0.05f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
                 .trait(PartType.MAIN, Const.Traits.BRILLIANT, 1, new MaterialRatioTraitCondition(0.7f))
+                .trait(PartType.MAIN, Const.Traits.GREEDY, 3)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.MAIN, Const.Traits.SOFT, 1)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, Const.Traits.SYNERGISTIC, 2)
                 .trait(PartType.TIP, Const.Traits.SOFT, 2)
@@ -1484,6 +1484,19 @@ public class MaterialsProvider implements DataProvider {
                 .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x1ACE82)
                 .displayTip(PartTextures.TIP_SHARP, 0x1ACE82)
                 .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
+        );
+
+        // High-Carbon Steel
+        ret.add(customCompoundBuilder(modId("high_carbon_steel"), 2, ModItems.CUSTOM_INGOT.get())
+                .categories(MaterialCategories.METAL)
+                .mainStatsCommon(420, 24, 11, 40, 0.8f)
+                .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.05f)
+                .mainStatsHarvest(2, 6)
+                .mainStatsMelee(4, 1, -0.2f)
+                .mainStatsArmor(3, 8, 6, 3, 2, 6)
+                .mainStatsRanged(2, -0.2f)
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x848484)
         );
     }
 

@@ -4,15 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -105,7 +104,7 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
     @Override
     public Optional<Component> getJeiHint() {
         PartGearKey key = PartGearKey.of(this.gearType, this.partType);
-        MutableComponent keyText = new TextComponent(key.toString());
+        MutableComponent keyText = key.getDisplayName().copy();
         Component text = TextUtil.withColor(keyText, Color.DODGERBLUE);
         return Optional.of(TextUtil.translate("jei", "blueprintType", text));
     }

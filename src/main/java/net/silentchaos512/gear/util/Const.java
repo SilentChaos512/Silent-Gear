@@ -158,6 +158,7 @@ public final class Const {
         public static final DataResource<ITrait> FLEXIBLE = DataResource.trait("flexible");
         public static final DataResource<ITrait> FLOATSTONER = DataResource.trait("floatstoner");
         public static final DataResource<ITrait> GOLD_DIGGER = DataResource.trait("gold_digger");
+        public static final DataResource<ITrait> GREEDY = DataResource.trait("greedy");
         public static final DataResource<ITrait> HARD = DataResource.trait("hard");
         public static final DataResource<ITrait> HEAVY = DataResource.trait("heavy");
         public static final DataResource<ITrait> HOLY = DataResource.trait("holy");

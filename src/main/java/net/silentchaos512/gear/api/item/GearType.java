@@ -59,12 +59,13 @@ public final class GearType {
     public static final GearType SAW = getOrCreate("saw", AXE, b ->
             b.toolActions(ToolActions.AXE_DIG));
     public static final GearType MATTOCK = getOrCreate("mattock", HARVEST_TOOL, b ->
-            b.toolActions(ToolActions.AXE_DIG, ToolActions.HOE_DIG, ToolActions.SHOVEL_DIG));
+            b.toolActions(ToolActions.AXE_DIG, ToolActions.HOE_DIG, ToolActions.HOE_TILL, ToolActions.SHOVEL_DIG));
     public static final GearType PAXEL = getOrCreate("paxel", HARVEST_TOOL, b ->
             b.toolActions(ToolActions.AXE_DIG, ToolActions.PICKAXE_DIG, ToolActions.SHOVEL_DIG));
     public static final GearType PROSPECTOR_HAMMER = getOrCreate("prospector_hammer", PICKAXE, b ->
             b.toolActions(ToolActions.DEFAULT_PICKAXE_ACTIONS));
-    public static final GearType SHEARS = getOrCreate("shears", HARVEST_TOOL);
+    public static final GearType SHEARS = getOrCreate("shears", HARVEST_TOOL, b ->
+            b.toolActions(ToolActions.DEFAULT_SHEARS_ACTIONS));
     public static final GearType SICKLE = getOrCreate("sickle", HARVEST_TOOL, b ->
             b.toolActions(ToolActions.HOE_DIG));
     // Melee weapons (swords)

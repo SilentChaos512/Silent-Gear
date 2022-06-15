@@ -44,7 +44,7 @@ public final class SetPartsFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType getType() {
-        return ModLootStuff.SET_PARTS;
+        return ModLootStuff.SET_PARTS.get();
     }
 
     public static class Serializer extends LootItemConditionalFunction.Serializer<SetPartsFunction> {

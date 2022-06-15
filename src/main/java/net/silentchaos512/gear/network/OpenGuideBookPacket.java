@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.network.NetworkEvent;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.function.Supplier;
 
@@ -23,8 +24,8 @@ public class OpenGuideBookPacket {
         Minecraft mc = Minecraft.getInstance();
 //        mc.displayGuiScreen(new GuideBookScreen(new StringTextComponent("Guide Book Temp")));
         if (mc.player != null) {
-            mc.player.sendMessage(new TextComponent("Guide book is work-in-progress (probably gonna take a long time...)"), Util.NIL_UUID);
-            mc.player.sendMessage(new TextComponent("Check the wiki instead: ")
+            mc.player.sendMessage(TextUtil.translate("item", "guide_book.unimplemented1"), Util.NIL_UUID);
+            mc.player.sendMessage(TextUtil.translate("item", "guide_book.check_wiki")
                     .append(new TextComponent(WIKI_URL)
                             .withStyle(ChatFormatting.UNDERLINE)
                             .withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
