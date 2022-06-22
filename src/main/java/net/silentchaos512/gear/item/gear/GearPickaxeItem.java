@@ -54,7 +54,7 @@ public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
     }
 
     public GearPickaxeItem(GearType gearType, Set<Material> extraMaterials) {
-        super(Tiers.DIAMOND, 0, 0f, GearHelper.getBaseItemProperties());
+        super(GearHelper.DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
         this.extraMaterials = Collections.unmodifiableSet(extraMaterials);
     }

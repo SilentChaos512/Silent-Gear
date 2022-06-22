@@ -48,7 +48,7 @@ public class GearDiggerItem extends DiggerItem implements ICoreTool {
     private final Set<Material> extraMaterials;
 
     public GearDiggerItem(GearType gearType, TagKey<Block> blocks, Set<Material> extraMaterials, Properties properties) {
-        super(0, 1, Tiers.DIAMOND, blocks, properties);
+        super(0, 1, GearHelper.DUMMY_TIER, blocks, properties);
         this.gearType = gearType;
         this.blocks = blocks;
         this.extraMaterials = Collections.unmodifiableSet(extraMaterials);

@@ -44,7 +44,7 @@ public class GearMattockItem extends HoeItem implements ICoreTool {
     );
 
     public GearMattockItem() {
-        super(Tiers.DIAMOND, 0, 0f, GearHelper.getBaseItemProperties());
+        super(GearHelper.DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
     }
 
     @Override

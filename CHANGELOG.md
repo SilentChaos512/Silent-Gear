@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.8] - 2022-06-21
+### Changed
+- All gear items have had their dummy item tiers changed from "diamond" to "wood" or "leather". This is to test the Minecolonies compatibility issue [#328]
+
 ## [2.10.7] - 2022-05-30
 ### Fixed
 - Imperial and Gold Digger traits not working [#509]
