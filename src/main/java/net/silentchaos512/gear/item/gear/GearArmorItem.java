@@ -56,7 +56,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
             .build();
 
     public GearArmorItem(EquipmentSlot slot) {
-        super(ArmorMaterials.DIAMOND, slot, GearHelper.getBaseItemProperties());
+        super(GearHelper.DUMMY_ARMOR_MATERIAL, slot, GearHelper.getBaseItemProperties());
     }
 
     @Deprecated

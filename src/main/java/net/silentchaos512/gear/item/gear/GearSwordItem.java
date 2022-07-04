@@ -29,7 +29,7 @@ public class GearSwordItem extends SwordItem implements ICoreWeapon {
     private final GearType gearType;
 
     public GearSwordItem(GearType gearType) {
-        super(Tiers.DIAMOND, 0, 0, GearHelper.getBaseItemProperties());
+        super(GearHelper.DUMMY_TIER, 0, 0, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
     }
 

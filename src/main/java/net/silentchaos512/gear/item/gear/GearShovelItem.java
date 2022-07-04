@@ -42,7 +42,7 @@ public class GearShovelItem extends ShovelItem implements ICoreTool {
     private final GearType gearType;
 
     public GearShovelItem(GearType gearType) {
-        super(Tiers.DIAMOND, 0, 0f, GearHelper.getBaseItemProperties());
+        super(GearHelper.DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
     }
 

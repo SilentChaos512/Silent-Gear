@@ -49,7 +49,7 @@ public class GearAxeItem extends AxeItem implements ICoreTool {
     }
 
     public GearAxeItem(GearType gearType, Set<Material> extraMaterials) {
-        super(Tiers.DIAMOND, 0f, 0f, GearHelper.getBaseItemProperties());
+        super(GearHelper.DUMMY_TIER, 0f, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
         this.extraMaterials = Collections.unmodifiableSet(extraMaterials);
     }

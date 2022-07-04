@@ -161,8 +161,11 @@ public class CompoundPartItem extends Item {
         PartData part = PartData.from(stack);
 
         if (part != null && Config.Client.showPartTooltips.get()) {
-            float synergy = SynergyUtils.getSynergy(this.partType, getMaterials(stack), part.getTraits());
-            tooltip.add(SynergyUtils.getDisplayText(synergy));
+            // Synergy (only relevant to legacy material mixing)
+            if (Config.Common.allowLegacyMaterialMixing.get()) {
+                float synergy = SynergyUtils.getSynergy(this.partType, getMaterials(stack), part.getTraits());
+                tooltip.add(SynergyUtils.getDisplayText(synergy));
+            }
 
             TextListBuilder matsBuilder = new TextListBuilder();
             getMaterials(stack).forEach(material -> {
