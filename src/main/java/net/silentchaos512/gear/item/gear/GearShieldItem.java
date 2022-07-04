@@ -36,8 +36,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class GearShieldItem extends ShieldItem implements ICoreItem {
-    private static final float DURABILITY_MULTI = 337f / 15f;
-
     private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.ENCHANTABILITY
@@ -88,7 +86,7 @@ public class GearShieldItem extends ShieldItem implements ICoreItem {
 
     @Override
     public float getRepairModifier(ItemStack stack) {
-        return DURABILITY_MULTI;
+        return getGearType().getArmorDurabilityMultiplier();
     }
 
     @Override
@@ -141,7 +139,7 @@ public class GearShieldItem extends ShieldItem implements ICoreItem {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return Math.round(DURABILITY_MULTI * GearData.getStat(stack, ItemStats.ARMOR_DURABILITY));
+        return Math.round(getGearType().getArmorDurabilityMultiplier() * GearData.getStat(stack, ItemStats.ARMOR_DURABILITY));
     }
 
     @Override

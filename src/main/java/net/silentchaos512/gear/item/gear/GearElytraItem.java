@@ -46,7 +46,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class GearElytraItem extends ElytraItem implements ICoreArmor {
-    private static final int DURABILITY_MULTIPLIER = 25;
     private static final UUID ARMOR_UUID = UUID.fromString("f099f401-82f6-4565-a0b5-fd464f2dc72c");
 
     private static final List<PartType> REQUIRED_PARTS = ImmutableList.of(
@@ -119,7 +118,7 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
 
     @Override
     public float getRepairModifier(ItemStack stack) {
-        return DURABILITY_MULTIPLIER;
+        return getGearType().getArmorDurabilityMultiplier();
     }
 
     @Nullable
@@ -130,7 +129,7 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return DURABILITY_MULTIPLIER * getStatInt(stack, getDurabilityStat());
+        return (int) getGearType().getArmorDurabilityMultiplier() * getStatInt(stack, getDurabilityStat());
     }
 
     @Override

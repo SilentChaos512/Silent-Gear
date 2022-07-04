@@ -48,8 +48,6 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
     private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     // sum = 1, starts with boots
     private static final float[] ABSORPTION_RATIO_BY_SLOT = {3f / 20f, 6f / 20f, 8f / 20f, 3f / 20f};
-    // Same values as in ArmorItem.
-    private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
 
     // Caches armor colors by model key to speed up armor rendering
     private static final Cache<String, Integer> ARMOR_COLORS = CacheBuilder.newBuilder()
@@ -91,7 +89,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public float getRepairModifier(ItemStack stack) {
-        return MAX_DAMAGE_ARRAY[this.getSlot().getIndex()];
+        return getGearType().getArmorDurabilityMultiplier();
     }
 
     public double getArmorProtection(ItemStack stack) {
@@ -150,7 +148,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
     @Override
     public int getMaxDamage(ItemStack stack) {
         int maxDamageFactor = GearData.getStatInt(stack, getDurabilityStat());
-        return MAX_DAMAGE_ARRAY[this.getSlot().getIndex()] * maxDamageFactor;
+        return (int) getGearType().getArmorDurabilityMultiplier() * maxDamageFactor;
     }
 
     @Override

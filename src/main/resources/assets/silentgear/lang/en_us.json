@@ -250,6 +250,7 @@
   "item.silentgear.blazing_dust": "Blazing Dust",
   "item.silentgear.blueprint": "%s Blueprint",
   "item.silentgear.blueprint.altForRecipe": "<Hold Alt for tool recipe>",
+  "item.silentgear.blueprint.armorDurability": "Armor Durability: %dx",
   "item.silentgear.blueprint.arrow.desc": "Ammo for bows and crossbows",
   "item.silentgear.blueprint.axe.desc": "Standard tree chopper",
   "item.silentgear.blueprint.bow.desc": "Classic ranged weapon",

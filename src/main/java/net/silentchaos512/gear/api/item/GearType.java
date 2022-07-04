@@ -90,20 +90,20 @@ public final class GearType {
     // Other
     public static final GearType FISHING_ROD = getOrCreate("fishing_rod", TOOL);
     public static final GearType SHIELD = getOrCreate("shield", TOOL, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(337f / 15f));
     // Armor
     public static final GearType ARMOR = getOrCreate("armor", ALL, b ->
             b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
     public static final GearType BOOTS = getOrCreate("boots", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(13));
     public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(16));
     public static final GearType ELYTRA = getOrCreate("elytra", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(25));
     public static final GearType HELMET = getOrCreate("helmet", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(11));
     public static final GearType LEGGINGS = getOrCreate("leggings", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
+            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(15));
     // Projectiles
     public static final GearType ARROW = getOrCreate("arrow", PROJECTILE);
 
@@ -132,11 +132,13 @@ public final class GearType {
      * @throws IllegalArgumentException if the name is invalid
      */
     public static GearType getOrCreate(String name) {
-        return getOrCreate(name, null, b -> {});
+        return getOrCreate(name, null, b -> {
+        });
     }
 
     public static GearType getOrCreate(String name, @Nullable GearType parent) {
-        return getOrCreate(name, parent, b -> {});
+        return getOrCreate(name, parent, b -> {
+        });
     }
 
     public static GearType getOrCreate(String name, @Nullable GearType parent, Consumer<Builder> propertiesBuilder) {
@@ -160,16 +162,19 @@ public final class GearType {
     }
 
     private final String name;
-    @Nullable private final GearType parent;
+    @Nullable
+    private final GearType parent;
     private final int animationFrames;
     private final Supplier<ItemStat> durabilityStat;
+    private final float armorDurabilityMultiplier;
     private final Set<ToolAction> toolActions;
 
-    private GearType(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat, Set<ToolAction> toolActions) {
+    private GearType(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat, float armorDurabilityMultiplier, Set<ToolAction> toolActions) {
         this.name = name;
         this.parent = parent;
         this.animationFrames = animationFrames;
         this.durabilityStat = durabilityStat;
+        this.armorDurabilityMultiplier = armorDurabilityMultiplier;
         this.toolActions = toolActions;
     }
 
@@ -193,6 +198,10 @@ public final class GearType {
 
     public ItemStat getDurabilityStat() {
         return durabilityStat.get();
+    }
+
+    public float getArmorDurabilityMultiplier() {
+        return armorDurabilityMultiplier;
     }
 
     public boolean canPerformAction(ToolAction action) {
@@ -297,9 +306,11 @@ public final class GearType {
 
     public static class Builder {
         private final String name;
-        @Nullable private final GearType parent;
+        @Nullable
+        private final GearType parent;
         private int animationFrames = 1;
         private Supplier<ItemStat> durabilityStat = () -> ItemStats.DURABILITY;
+        private float armorDurabilityMultiplier = 1f;
         private Set<ToolAction> toolActions = Collections.emptySet();
 
         private Builder(String name, @Nullable GearType parent) {
@@ -316,7 +327,7 @@ public final class GearType {
         }
 
         public GearType build() {
-            return new GearType(name, parent, animationFrames, durabilityStat, toolActions);
+            return new GearType(name, parent, animationFrames, durabilityStat, armorDurabilityMultiplier, toolActions);
         }
 
         public Builder animationFrames(int animationFrames) {
@@ -326,6 +337,11 @@ public final class GearType {
 
         public Builder durabilityStat(Supplier<ItemStat> durabilityStat) {
             this.durabilityStat = durabilityStat;
+            return this;
+        }
+
+        public Builder armorDurabilityMultiplier(float amount) {
+            this.armorDurabilityMultiplier = amount;
             return this;
         }
 

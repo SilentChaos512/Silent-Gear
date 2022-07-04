@@ -23,6 +23,7 @@ import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
+import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -80,6 +81,12 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         if (!gearType.isArmor()) {
             String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
             tooltip.add(new TranslatableComponent(key).withStyle(ChatFormatting.ITALIC));
+        }
+
+        // Armor durability text
+        if (!MathUtils.floatsEqual(gearType.getArmorDurabilityMultiplier(), 1f)) {
+            tooltip.add(TextUtil.translate("item", "blueprint.armorDurability", gearType.getArmorDurabilityMultiplier())
+                    .withStyle(ChatFormatting.ITALIC));
         }
 
         super.appendHoverText(stack, level, tooltip, flags);
