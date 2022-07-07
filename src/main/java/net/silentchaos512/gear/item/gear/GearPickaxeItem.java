@@ -6,12 +6,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -78,6 +80,19 @@ public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
     @Override
     public GearType getGearType() {
         return gearType;
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        // No action if broken or player is sneaking
+        if (GearHelper.isBroken(context.getItemInHand()) || context.getPlayer() != null && context.getPlayer().isCrouching())
+            return InteractionResult.PASS;
+        // Try to let traits do their thing first
+        InteractionResult result = GearHelper.onItemUse(context);
+        // Do nothing or whatever
+        if (result == InteractionResult.PASS)
+            return GearHelper.useAndCheckBroken(context, super::useOn);
+        return result;
     }
 
     @Override

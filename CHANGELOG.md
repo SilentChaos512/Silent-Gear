@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Blueprints for armor, elytra, and shields now display their armor durability modifier [#521]
+### Fixed
+- Block placer traits not working on pickaxes, paxels, and hammers [#515]
 
 ## [2.10.8] - 2022-06-21
 ### Changed
