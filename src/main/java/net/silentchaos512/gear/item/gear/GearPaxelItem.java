@@ -2,9 +2,11 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.init.ModItems;
 
 import java.util.Set;
 
@@ -28,5 +30,12 @@ public class GearPaxelItem extends GearPickaxeItem {
     @Override
     public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
         return getGearType().canPerformAction(toolAction);
+    }
+
+    @Override
+    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
+        return super.isCorrectToolForDrops(stack, state)
+                || ModItems.SHOVEL.get().isCorrectToolForDrops(stack, state)
+                || ModItems.AXE.get().isCorrectToolForDrops(stack, state);
     }
 }
