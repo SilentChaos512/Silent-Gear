@@ -82,12 +82,12 @@ dependencies {
     // The "exclude module" lines will prevent import errors in some cases
     compile fg.deobf("net.silentchaos512:silent-gear:VERSION") {
         exclude module: 'forge'
-        exclude module: 'jei-1.16.3'
-        exclude module: 'silent-lib-1.16.3'
+        exclude module: 'jei-1.18.2'
+        exclude module: 'silent-lib'
         exclude module: 'curios-forge'
     }
 
-    // Same as before, VERSION is in the form "MC_VERSION-MOD_VERSION" (eg, 1.16.3-4.+)
+    // Same as before, VERSION is in the form "MC_VERSION-MOD_VERSION" (eg, 1.18.2-6.+)
     // https://github.com/SilentChaos512/silentlib/packages
     compile fg.deobf("net.silentchaos512:silent-lib:VERSION") {
         exclude module: "forge"
