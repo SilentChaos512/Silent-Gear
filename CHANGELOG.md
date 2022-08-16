@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.12] - 2022-08-16
+### Added
+- Tridents
+
 ## [2.10.11] - 2022-08-15
 ### Changed
 - Main part items (tool heads, etc.) now store durability. When swapping parts, the main part item now retains the gear's damage. Fixes some repair exploits.
