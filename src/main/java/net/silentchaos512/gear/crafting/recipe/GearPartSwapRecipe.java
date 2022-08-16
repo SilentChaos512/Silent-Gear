@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.collection.StackList;
@@ -62,6 +63,7 @@ public class GearPartSwapRecipe extends CustomRecipe {
 
         ItemStack result = gear.copy();
         PartDataList parts = GearData.getConstructionParts(result);
+        PartDataList newParts = PartDataList.of();
 
         for (ItemStack stack : others) {
             PartData part = PartData.from(stack);
@@ -80,12 +82,14 @@ public class GearPartSwapRecipe extends CustomRecipe {
             }
 
             parts.add(part);
-            part.onAddToGear(result);
+            newParts.add(part);
         }
 
         GearData.writeConstructionParts(result, parts);
         GearData.removeExcessParts(result);
         GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer());
+        newParts.forEach(p -> p.onAddToGear(result));
+
         return result;
     }
 
@@ -110,9 +114,15 @@ public class GearPartSwapRecipe extends CustomRecipe {
                     if (partsOfType.size() >= type.getMaxPerItem(GearHelper.getType(gear))) {
                         int index = removedCount.getOrDefault(type, 0);
                         if (index < partsOfType.size()) {
+                            // Return old part
                             PartData oldPart = partsOfType.get(index);
                             oldPart.onRemoveFromGear(gear);
-                            list.set(i, oldPart.getItem());
+                            ItemStack oldPartItem = oldPart.getItem();
+                            // Store gear damage on main part item
+                            if (oldPartItem.getItem() instanceof MainPartItem) {
+                                oldPartItem.setDamageValue(gear.getDamageValue());
+                            }
+                            list.set(i, oldPartItem);
                             removedCount.merge(type, 1, Integer::sum);
                         }
                     } else {

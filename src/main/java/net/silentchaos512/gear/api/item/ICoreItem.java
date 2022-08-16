@@ -34,8 +34,8 @@ public interface ICoreItem extends ItemLike, IStatItem {
     default ItemStack construct(Collection<? extends IPartData> parts) {
         ItemStack result = new ItemStack(this);
         GearData.writeConstructionParts(result, parts);
-        parts.forEach(p -> p.onAddToGear(result));
         GearData.recalculateStats(result, null);
+        parts.forEach(p -> p.onAddToGear(result));
         // Allow traits to make any needed changes (must be done after a recalculate)
         TraitHelper.activateTraits(result, 0, (trait, level, nothing) -> {
             trait.onGearCrafted(new TraitActionContext(null, level, result));

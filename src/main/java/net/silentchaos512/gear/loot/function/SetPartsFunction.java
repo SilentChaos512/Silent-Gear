@@ -32,9 +32,9 @@ public final class SetPartsFunction extends LootItemConditionalFunction {
         if (!(stack.getItem() instanceof ICoreItem)) return stack;
         ItemStack result = stack.copy();
         List<PartData> parts = LazyPartData.createPartList(this.parts);
-        parts.forEach(p -> p.onAddToGear(result));
         GearData.writeConstructionParts(result, parts);
         GearData.recalculateStats(result, null);
+        parts.forEach(p -> p.onAddToGear(result));
         return result;
     }
 

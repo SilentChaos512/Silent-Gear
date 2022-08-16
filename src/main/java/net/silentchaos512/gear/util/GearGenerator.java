@@ -92,7 +92,6 @@ public final class GearGenerator {
         }
 
         ItemStack result = stack.copy();
-        parts.forEach(p -> p.onAddToGear(result));
         GearData.writeConstructionParts(result, parts);
 
         // Apply some random upgrades?
@@ -102,6 +101,8 @@ public final class GearGenerator {
         }
 
         GearData.recalculateStats(result, null);
+        parts.forEach(p -> p.onAddToGear(result));
+
         return result;
     }
 }
