@@ -487,6 +487,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         toolRecipes(consumer, "katana", 3, ModItems.KATANA, ModItems.KATANA_BLADE, ModItems.KATANA_BLUEPRINT.get());
         toolRecipes(consumer, "machete", 3, ModItems.MACHETE, ModItems.MACHETE_BLADE, ModItems.MACHETE_BLUEPRINT.get());
         toolRecipes(consumer, "spear", 1, ModItems.SPEAR, ModItems.SPEAR_TIP, ModItems.SPEAR_BLUEPRINT.get());
+        toolRecipes(consumer, "trident", 3, ModItems.TRIDENT, ModItems.TRIDENT_PRONGS, ModItems.TRIDENT_BLUEPRINT.get());
         toolRecipes(consumer, "knife", 1, ModItems.KNIFE, ModItems.KNIFE_BLADE, ModItems.KNIFE_BLUEPRINT.get());
         toolRecipes(consumer, "dagger", 1, ModItems.DAGGER, ModItems.DAGGER_BLADE, ModItems.DAGGER_BLUEPRINT.get());
         toolRecipes(consumer, "pickaxe", 3, ModItems.PICKAXE, ModItems.PICKAXE_HEAD, ModItems.PICKAXE_BLUEPRINT.get());
