@@ -220,6 +220,11 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.4f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
+        if (isMainPart(builder, ModItems.TRIDENT_PRONGS))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, 4, StatInstance.Operation.ADD)
+                    .stat(ItemStats.ATTACK_SPEED, -2.9f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
 
         // Ranged weapons
         if (isMainPart(builder, ModItems.BOW_LIMBS))

@@ -2,7 +2,7 @@
   "display": {
     "icon": {
       "item": "silentgear:pickaxe",
-      "nbt": "{Damage:0,SGear_Data:{Construction:{Parts:[{ID:\"silentgear:pickaxe_head\",Item:{Count:1b,id:\"silentgear:pickaxe_head\",tag:{Materials:[{ID:\"silentgear:crimson_steel\"}]}}},{ID:\"silentgear:rod\",Item:{Count:1b,id:\"silentgear:rod\",tag:{Materials:[{ID:\"silentgear:blaze_gold\"}]}}},{ID:\"silentgear:tip\",Item:{Count:1b,id:\"silentgear:tip\",tag:{Materials:[{ID:\"silentgear:azure_electrum\"}]}}},{ID:\"silentgear:grip\",Item:{Count:1b,id:\"silentgear:grip\",tag:{Materials:[{ID:\"silentgear:wool/black\"}]}}},{ID:\"silentgear:binding\",Item:{Count:1b,id:\"silentgear:binding\",tag:{Materials:[{ID:\"silentgear:string\"}]}}}]},Properties:{}}}"
+      "nbt": "{Damage:0,SGear_Data:{Construction:{Parts:[{ID:\"silentgear:pickaxe_head\",Item:{Count:1b,id:\"silentgear:pickaxe_head\",tag:{Damage:0,Materials:[{ID:\"silentgear:crimson_steel\"}]}}},{ID:\"silentgear:rod\",Item:{Count:1b,id:\"silentgear:rod\",tag:{Materials:[{ID:\"silentgear:blaze_gold\"}]}}},{ID:\"silentgear:tip\",Item:{Count:1b,id:\"silentgear:tip\",tag:{Materials:[{ID:\"silentgear:azure_electrum\"}]}}},{ID:\"silentgear:grip\",Item:{Count:1b,id:\"silentgear:grip\",tag:{Materials:[{ID:\"silentgear:wool/black\"}]}}},{ID:\"silentgear:binding\",Item:{Count:1b,id:\"silentgear:binding\",tag:{Materials:[{ID:\"silentgear:string\"}]}}}]},Properties:{}}}"
     },
     "title": {
       "translate": "advancements.silentgear.root.title"

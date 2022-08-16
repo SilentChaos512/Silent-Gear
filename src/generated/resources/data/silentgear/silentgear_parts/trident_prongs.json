@@ -1,0 +1,20 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "trident",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:trident_prongs"
+  },
+  "name": {
+    "translate": "part.silentgear.trident_prongs"
+  },
+  "stats": {
+    "melee_damage": {
+      "add": 4.0
+    },
+    "attack_speed": {
+      "add": -2.9
+    },
+    "repair_efficiency": 1.0
+  }
+}
