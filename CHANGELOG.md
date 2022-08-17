@@ -3,7 +3,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.10.13] - 2022-08-16
+### Added
+- Raw material tags [#527]
 ### Fixed
 - Possible lag issues with broken items when using some mods [#419]
 - Poison damaging armor. No magic damage sources will damage armor anymore. [#408]

@@ -22,6 +22,9 @@ public final class ModTags {
         public static final TagKey<Block> ORES_CRIMSON_IRON = forge("ores/crimson_iron");
         public static final TagKey<Block> ORES_AZURE_SILVER = forge("ores/azure_silver");
 
+        public static final TagKey<Block> STORAGE_BLOCKS_RAW_CRIMSON_IRON = forge("storage_blocks/raw_crimson_iron");
+        public static final TagKey<Block> STORAGE_BLOCKS_RAW_AZURE_SILVER = forge("storage_blocks/raw_azure_silver");
+
         public static final TagKey<Block> STORAGE_BLOCKS_BORT = forge("storage_blocks/bort");
         public static final TagKey<Block> STORAGE_BLOCKS_BLAZE_GOLD = forge("storage_blocks/blaze_gold");
         public static final TagKey<Block> STORAGE_BLOCKS_CRIMSON_IRON = forge("storage_blocks/crimson_iron");
@@ -59,6 +62,12 @@ public final class ModTags {
         public static final TagKey<Item> STORAGE_BLOCKS_AZURE_SILVER = forge("storage_blocks/azure_silver");
         public static final TagKey<Item> STORAGE_BLOCKS_AZURE_ELECTRUM = forge("storage_blocks/azure_electrum");
         public static final TagKey<Item> STORAGE_BLOCKS_TYRIAN_STEEL = forge("storage_blocks/tyrian_steel");
+
+        public static final TagKey<Item> STORAGE_BLOCKS_RAW_CRIMSON_IRON = forge("storage_blocks/raw_crimson_iron");
+        public static final TagKey<Item> STORAGE_BLOCKS_RAW_AZURE_SILVER = forge("storage_blocks/raw_azure_silver");
+
+        public static final TagKey<Item> RAW_MATERIALS_CRIMSON_IRON = forge("raw_materials/crimson_iron");
+        public static final TagKey<Item> RAW_MATERIALS_AZURE_SILVER = forge("raw_materials/azure_silver");
 
         public static final TagKey<Item> DUSTS_BLAZE_GOLD = forge("dusts/blaze_gold");
         public static final TagKey<Item> DUSTS_CRIMSON_IRON = forge("dusts/crimson_iron");

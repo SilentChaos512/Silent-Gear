@@ -4,7 +4,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -99,6 +98,9 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(ModTags.Blocks.ORES_BORT)
                 .addTag(ModTags.Blocks.ORES_CRIMSON_IRON)
                 .addTag(ModTags.Blocks.ORES_AZURE_SILVER);
+
+        builder(ModTags.Blocks.STORAGE_BLOCKS_RAW_CRIMSON_IRON, ModBlocks.RAW_CRIMSON_IRON_BLOCK);
+        builder(ModTags.Blocks.STORAGE_BLOCKS_RAW_AZURE_SILVER, ModBlocks.RAW_AZURE_SILVER_BLOCK);
 
         builder(ModTags.Blocks.STORAGE_BLOCKS_BORT, ModBlocks.BORT_BLOCK);
         builder(ModTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_BLOCK);
