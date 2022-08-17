@@ -39,7 +39,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.DyeColor;
@@ -208,13 +207,6 @@ public final class GearEvents {
         if (event.getSource().isMagic()) {
             float magicArmor = getTotalMagicArmor(event.getEntityLiving());
             float scale = 1f - getReducedMagicDamageScale(magicArmor);
-            //SilentGear.LOGGER.debug("magic damage: {} x {} -> {}", event.getAmount(), scale, event.getAmount() * scale);
-
-            if (event.getEntityLiving() instanceof Player) {
-                // Damage player's armor
-                ((Player) event.getEntityLiving()).getInventory().hurtArmor(event.getSource(), event.getAmount(), Inventory.ALL_ARMOR_SLOTS);
-            }
-
             event.setAmount(event.getAmount() * scale);
         }
     }
