@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Possible lag issues with broken items when using some mods [#419]
 - Poison damaging armor. No magic damage sources will damage armor anymore. [#408]
 
 ## [2.10.12] - 2022-08-16

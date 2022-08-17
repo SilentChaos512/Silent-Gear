@@ -346,13 +346,14 @@ public final class GearHelper {
     }
 
     public static void setDamage(ItemStack stack, int damage, BiConsumer<ItemStack, Integer> superFunction) {
+        boolean alreadyBroken = GearHelper.isBroken(stack);
         int newDamage = GearHelper.calcDamageClamped(stack, damage);
         int diff = newDamage - stack.getDamageValue();
         if (diff > 0 && !GearHelper.isBroken(stack)) {
             GearHelper.damageParts(stack, diff);
         }
         superFunction.accept(stack, newDamage);
-        if (GearHelper.isBroken(stack)) {
+        if (!alreadyBroken && GearHelper.isBroken(stack)) {
             GearData.recalculateStats(stack, null);
         }
     }
