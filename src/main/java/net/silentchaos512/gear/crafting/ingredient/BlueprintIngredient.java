@@ -27,9 +27,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class BlueprintIngredient extends Ingredient implements IGearIngredient {
+public final class BlueprintIngredient extends Ingredient implements IGearIngredient {
     private final PartType partType;
     private final GearType gearType;
+
+    @Nullable
+    private ItemStack[] itemStacks;
 
     private BlueprintIngredient(PartType partType, GearType gearType) {
         super(Stream.of());
@@ -42,25 +45,37 @@ public class BlueprintIngredient extends Ingredient implements IGearIngredient {
         return new BlueprintIngredient(item.getPartType(stack), item.getGearType(stack));
     }
 
-    @Override
-    public boolean test(@Nullable ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
+    private void dissolve() {
+        if (this.itemStacks == null) {
+            this.itemStacks = ForgeRegistries.ITEMS.getValues().stream()
+                    .filter(item -> item instanceof IBlueprint)
+                    .map(ItemStack::new)
+                    .filter(this::testBlueprint)
+                    .toArray(ItemStack[]::new);
+        }
+    }
 
+    private boolean testBlueprint(ItemStack stack) {
         if (stack.getItem() instanceof IBlueprint) {
             IBlueprint item = (IBlueprint) stack.getItem();
             return item.getGearType(stack) == this.gearType && item.getPartType(stack) == this.partType;
         }
-
         return false;
     }
 
     @Override
+    public boolean test(@Nullable ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+
+        this.dissolve();
+        return this.testBlueprint(stack);
+    }
+
+    @Override
     public ItemStack[] getItems() {
-        return ForgeRegistries.ITEMS.getValues().stream()
-                .filter(item -> item instanceof IBlueprint)
-                .map(ItemStack::new)
-                .filter(this)
-                .toArray(ItemStack[]::new);
+        this.dissolve();
+        //noinspection AssignmentOrReturnOfFieldWithMutableType,ConstantConditions
+        return this.itemStacks;
     }
 
     @Override
