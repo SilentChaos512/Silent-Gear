@@ -81,6 +81,9 @@ public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon 
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
+        if (GearHelper.isBroken(itemstack)) {
+            return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
+        }
         if (isCharged(itemstack)) {
             fireProjectiles(worldIn, playerIn, handIn, itemstack, getShootingPower(itemstack), 1.0F);
             setCharged(itemstack, false);

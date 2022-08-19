@@ -86,6 +86,9 @@ public class GearBowItem extends BowItem implements ICoreRangedWeapon {
     public InteractionResultHolder<ItemStack> use(@Nonnull Level world, Player player, @Nonnull InteractionHand hand) {
         // Same as vanilla bow, except it can be fired without arrows with infinity.
         ItemStack itemstack = player.getItemInHand(hand);
+        if (GearHelper.isBroken(itemstack)) {
+            return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
+        }
         boolean flag = !player.getProjectile(itemstack).isEmpty() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemstack) > 0;
 
         InteractionResultHolder<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, world, player, hand, flag);
