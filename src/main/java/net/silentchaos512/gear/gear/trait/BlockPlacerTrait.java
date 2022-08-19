@@ -1,13 +1,19 @@
 package net.silentchaos512.gear.gear.trait;
 
 import com.google.gson.JsonObject;
-import net.minecraft.world.level.block.Block;
+import com.google.gson.JsonParseException;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.*;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -18,12 +24,6 @@ import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.Collection;
 import java.util.Objects;
-
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
 
 public class BlockPlacerTrait extends SimpleTrait {
     private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("block_placer");
@@ -73,10 +73,18 @@ public class BlockPlacerTrait extends SimpleTrait {
     }
 
     private static void readJson(BlockPlacerTrait trait, JsonObject json) {
-        trait.block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "block")));
+        ResourceLocation blockId = new ResourceLocation(GsonHelper.getAsString(json, "block"));
+        trait.block = ForgeRegistries.BLOCKS.getValue(blockId);
+        if (trait.block == null) {
+            throw new JsonParseException("Unknown block: " + blockId);
+        }
         trait.damageOnUse = GsonHelper.getAsInt(json, "damage_on_use");
         trait.cooldown = GsonHelper.getAsInt(json, "cooldown", 0);
-        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "sound")));
+        ResourceLocation soundId = new ResourceLocation(GsonHelper.getAsString(json, "sound"));
+        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(soundId);
+        if (trait.sound == null) {
+            throw new JsonParseException("Unknown sound: " + soundId);
+        }
         trait.soundVolume = GsonHelper.getAsFloat(json, "sound_volume");
         trait.soundPitch = GsonHelper.getAsFloat(json, "sound_pitch");
     }

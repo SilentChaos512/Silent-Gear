@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Possible TPS issues with certain mods [#529]
+- Invalid sound ID in block placer traits causing world loading to fail [#523]
 
 ## [2.10.13] - 2022-08-16
 ### Added
