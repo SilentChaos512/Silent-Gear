@@ -311,7 +311,7 @@ public class TraitsProvider implements DataProvider {
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.RACKER, 1, Blocks.NETHERRACK, 3)
                 .withGearTypeCondition(GearType.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.REFRACTIVE, 1, ModBlocks.PHANTOM_LIGHT.get(), 5)
-                .sound(SoundEvents.ITEM_PICKUP, 0.75f, 0.5f)
+                .sound(SoundEvents.AMETHYST_BLOCK_STEP, 0.75f, 0.5f)
                 .withGearTypeCondition(GearType.TOOL)
         );
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.TERMINUS, 1, Blocks.STONE, 3)
