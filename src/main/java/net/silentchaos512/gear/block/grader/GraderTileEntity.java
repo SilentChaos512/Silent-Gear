@@ -6,7 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -19,8 +18,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.init.ModBlockEntities;
+import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.InventoryUtils;
@@ -275,7 +274,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity {
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent("container.silentgear.material_grader");
+        return Component.translatable("container.silentgear.material_grader");
     }
 
     @Override

@@ -5,7 +5,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.util.TextUtil;
@@ -14,7 +14,7 @@ import net.silentchaos512.lib.util.TagUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ModOreBlock extends OreBlock {
+public class ModOreBlock extends DropExperienceBlock {
     public ModOreBlock(Properties properties) {
         super(properties);
     }

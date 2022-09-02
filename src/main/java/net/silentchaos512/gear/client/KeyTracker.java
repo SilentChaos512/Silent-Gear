@@ -33,6 +33,7 @@ public class KeyTracker {
     private static int materialCycleCount = 0;
 
     public static void register(FMLClientSetupEvent event) {
+        // RegisterKeyMappingsEvent?
         ClientRegistry.registerKeyBinding(CYCLE_BACK);
         ClientRegistry.registerKeyBinding(CYCLE_NEXT);
         ClientRegistry.registerKeyBinding(DISPLAY_STATS);
@@ -58,7 +59,7 @@ public class KeyTracker {
     }
 
     @SubscribeEvent
-    public static void onKeyInput(InputEvent.KeyInputEvent event) {
+    public static void onKeyInput(InputEvent.Key event) {
         if (event.getAction() == GLFW.GLFW_RELEASE && (event.getKey() == DISPLAY_STATS.getKey().getValue())) {
             materialCycleCount = 0;
         }

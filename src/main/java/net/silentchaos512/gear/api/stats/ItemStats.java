@@ -2,10 +2,9 @@ package net.silentchaos512.gear.api.stats;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.NewRegistryEvent;
-import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraftforge.registries.*;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.utils.Color;
@@ -24,98 +23,99 @@ public final class ItemStats {
     static final List<ItemStat> STATS_IN_ORDER = new ArrayList<>();
 
     private static Supplier<IForgeRegistry<ItemStat>> REGISTRY;
+    private static Lazy<DeferredRegister<ItemStat>> DEFERRED_REGISTER = Lazy.of(() -> DeferredRegister.create(REGISTRY.get(), SilentGear.MOD_ID));
 
     public static IForgeRegistry<ItemStat> getRegistry() {
         return REGISTRY.get();
     }
 
     // Generic
-    public static final ItemStat DURABILITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
+    public static final RegistryObject<ItemStat> DURABILITY = DEFERRED_REGISTER.get().register("durability", () -> new ItemStat(0f, 0f,Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
             .affectedByGrades(true)
             .synergyApplies()
-    );
-    public static final ItemStat ARMOR_DURABILITY = new ItemStat(0f, 0f, Integer.MAX_VALUE / 16, Color.STEELBLUE, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> ARMOR_DURABILITY = DEFERRED_REGISTER.get().register("armor_durability", () -> new ItemStat(0f, 0f, Integer.MAX_VALUE / 16, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
             .displayFormat(ItemStat.DisplayFormat.MULTIPLIER)
             .affectedByGrades(true)
             .synergyApplies()
-    );
-    public static final ItemStat REPAIR_EFFICIENCY = new ItemStat(1f, 0f, 1000f, Color.STEELBLUE, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> REPAIR_EFFICIENCY = DEFERRED_REGISTER.get().register("repair_efficiency", () -> new ItemStat(1f, 0f, 1000f, Color.STEELBLUE, new ItemStat.Properties()
             .displayFormat(ItemStat.DisplayFormat.PERCENTAGE)
             .affectedByGrades(false)
-    );
-    public static final ItemStat REPAIR_VALUE = new ItemStat(1f, 0f, 1000f, Color.STEELBLUE, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> REPAIR_VALUE = DEFERRED_REGISTER.get().register("repair_value", () -> new ItemStat(1f, 0f, 1000f, Color.STEELBLUE, new ItemStat.Properties()
             .displayFormat(ItemStat.DisplayFormat.PERCENTAGE)
             .affectedByGrades(false)
-    );
-    public static final ItemStat ENCHANTABILITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> ENCHANTABILITY = DEFERRED_REGISTER.get().register("enchantability", () -> new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
             .affectedByGrades(true)
             .synergyApplies()
-    );
-    public static final ItemStat CHARGEABILITY = new ItemStat(1f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> CHARGEABILITY = DEFERRED_REGISTER.get().register("chargeability", () -> new ItemStat(1f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .affectedByGrades(false)
-    );
-    public static final ItemStat RARITY = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> RARITY = DEFERRED_REGISTER.get().register("rarity", () -> new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
             .affectedByGrades(false)
-    );
+    ));
 
     // Harvesting Tools
-    public static final ItemStat HARVEST_LEVEL = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
+    public static final RegistryObject<ItemStat> HARVEST_LEVEL = DEFERRED_REGISTER.get().register("harvest_level", () -> new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
             .defaultOp(StatInstance.Operation.MAX)
             .displayAsInt()
             .affectedByGrades(false)
-    );
-    public static final ItemStat HARVEST_SPEED = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> HARVEST_SPEED = DEFERRED_REGISTER.get().register("harvest_speed", () -> new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
-    );
-    public static final ItemStat REACH_DISTANCE = new ItemStat(0f, -100f, 100f, Color.SEAGREEN, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> REACH_DISTANCE = DEFERRED_REGISTER.get().register("reach_distance", () -> new ItemStat(0f, -100f, 100f, Color.SEAGREEN, new ItemStat.Properties()
             .affectedByGrades(false)
-    );
+    ));
 
     // Melee Weapons
-    public static final ItemStat MELEE_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
+    public static final RegistryObject<ItemStat> MELEE_DAMAGE = DEFERRED_REGISTER.get().register("melee_damage", () -> new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
-    );
-    public static final ItemStat MAGIC_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> MAGIC_DAMAGE = DEFERRED_REGISTER.get().register("magic_damage", () -> new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
             .hidden()
-    );
-    public static final ItemStat ATTACK_SPEED = new ItemStat(0f, -3.9f, 4f, Color.SANDYBROWN, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> ATTACK_SPEED = DEFERRED_REGISTER.get().register("attack_speed", () -> new ItemStat(0f, -3.9f, 4f, Color.SANDYBROWN, new ItemStat.Properties()
             .affectedByGrades(false)
-    );
-    public static final ItemStat ATTACK_REACH = new ItemStat(3f, 0f, 100f, Color.SANDYBROWN, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> ATTACK_REACH = DEFERRED_REGISTER.get().register("attack_reach", () -> new ItemStat(3f, 0f, 100f, Color.SANDYBROWN, new ItemStat.Properties()
             .baseValue(3f)
             .affectedByGrades(false)
-    );
+    ));
 
     // Ranged Weapons
-    public static final ItemStat RANGED_DAMAGE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SKYBLUE, new ItemStat.Properties()
+    public static final RegistryObject<ItemStat> RANGED_DAMAGE = DEFERRED_REGISTER.get().register("ranged_damage", () -> new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.SKYBLUE, new ItemStat.Properties()
             .displayFormat(ItemStat.DisplayFormat.MULTIPLIER)
             .affectedByGrades(true)
             .synergyApplies()
-    );
-    public static final ItemStat RANGED_SPEED = new ItemStat(0f, -10f, 10f, Color.SKYBLUE, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> RANGED_SPEED = DEFERRED_REGISTER.get().register("ranged_speed", () -> new ItemStat(0f, -10f, 10f, Color.SKYBLUE, new ItemStat.Properties()
             .displayFormat(ItemStat.DisplayFormat.MULTIPLIER)
             .affectedByGrades(false)
-    );
-    public static final ItemStat PROJECTILE_SPEED = new ItemStat(1f, 0f, Integer.MAX_VALUE, Color.SKYBLUE, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> PROJECTILE_SPEED = DEFERRED_REGISTER.get().register("projectile_speed", () -> new ItemStat(1f, 0f, Integer.MAX_VALUE, Color.SKYBLUE, new ItemStat.Properties()
             .displayFormat(ItemStat.DisplayFormat.MULTIPLIER)
             .affectedByGrades(false)
             .synergyApplies()
-    );
-    public static final ItemStat PROJECTILE_ACCURACY = new ItemStat(1f, 0f, 10000f, Color.SKYBLUE, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> PROJECTILE_ACCURACY = DEFERRED_REGISTER.get().register("projectile_accuracy", () -> new ItemStat(1f, 0f, 10000f, Color.SKYBLUE, new ItemStat.Properties()
             .displayFormat(ItemStat.DisplayFormat.PERCENTAGE)
             .affectedByGrades(false)
-    );
+    ));
 
     // Armor
-    public static final ItemStat ARMOR = new SplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+    public static final RegistryObject<ItemStat> ARMOR = DEFERRED_REGISTER.get().register("armor", () -> new SplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
             ImmutableMap.of(
                     GearType.HELMET, 3f,
                     GearType.CHESTPLATE, 8f,
@@ -125,23 +125,23 @@ public final class ItemStats {
             new ItemStat.Properties()
                     .affectedByGrades(true)
                     .synergyApplies()
-    );
-    public static final ItemStat ARMOR_TOUGHNESS = new EvenSplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+    ));
+    public static final RegistryObject<ItemStat> ARMOR_TOUGHNESS = DEFERRED_REGISTER.get().register("armor_toughness", () -> new EvenSplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
             4,
             new ItemStat.Properties()
                     .affectedByGrades(true)
                     .synergyApplies()
-    );
-    public static final ItemStat KNOCKBACK_RESISTANCE = new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
+    ));
+    public static final RegistryObject<ItemStat> KNOCKBACK_RESISTANCE = DEFERRED_REGISTER.get().register("knockback_resistance", () -> new ItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()
-    );
-    public static final ItemStat MAGIC_ARMOR = new EvenSplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
+    ));
+    public static final RegistryObject<ItemStat> MAGIC_ARMOR = DEFERRED_REGISTER.get().register("magic_armor", () -> new EvenSplitItemStat(0f, 0f, Integer.MAX_VALUE, Color.VIOLET,
             4,
             new ItemStat.Properties()
                     .affectedByGrades(true)
                     .synergyApplies()
-    );
+    ));
 
     private ItemStats() {}
 
@@ -192,7 +192,6 @@ public final class ItemStats {
 
     public static void createRegistry(NewRegistryEvent event) {
         REGISTRY = event.create(new RegistryBuilder<ItemStat>()
-                .setType(ItemStat.class)
                 .setName(SilentGear.getId("stat"))
         );
     }

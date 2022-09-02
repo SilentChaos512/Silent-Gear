@@ -135,7 +135,7 @@ repositories {
     maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
+        url = "https://modmaven.dev"
     }
     // Curios, Caelus
     maven {
@@ -165,9 +165,10 @@ dependencies {
     // JEI
     if (project.hasProperty('jei_version')) {
         // compile against the JEI API but do not include it at runtime
-        compileOnly fg.deobf("mezz.jei:jei-${project.jei_version}:api")
-        // at runtime, use the full JEI jar
-        runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
+        compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
+        compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+        // at runtime, use the full JEI jar for Forge
+        runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
     }
 
     if (project.hasProperty('silmech_version')) {

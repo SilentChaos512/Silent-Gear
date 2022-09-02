@@ -5,15 +5,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.TooltipFlag;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
@@ -102,7 +101,7 @@ public final class TraitInstance implements ITraitInstance {
         // Description (usually not shown)
         if (KeyTracker.isAltDown()) {
             Component description = TextUtil.withColor(this.trait.getDescription(level), ChatFormatting.DARK_GRAY);
-            tooltip.add(new TextComponent("    ").append(description));
+            tooltip.add(Component.literal("    ").append(description));
         }
     }
 

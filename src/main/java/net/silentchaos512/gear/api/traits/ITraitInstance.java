@@ -2,10 +2,10 @@ package net.silentchaos512.gear.api.traits;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.util.IGearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
@@ -58,6 +58,6 @@ public interface ITraitInstance {
         return getConditions().stream()
                 .map(ITraitCondition::getDisplayText)
                 .reduce((t1, t2) -> t1.append(TextUtil.translate("trait.condition", "and")).append(t2))
-                .orElseGet(() -> new TextComponent(""));
+                .orElseGet(() -> Component.literal(""));
     }
 }

@@ -3,10 +3,8 @@ package net.silentchaos512.gear.client.material;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -58,7 +56,7 @@ public final class GearDisplayManager implements IEarlySelectiveReloadListener {
     }
 
     private static void reloadMaterials(ResourceManager resourceManager) {
-        Collection<ResourceLocation> resources = resourceManager.listResources(PATH_MATERIALS, s -> s.endsWith(".json"));
+        Map<ResourceLocation, Resource> resources = resourceManager.listResources(PATH_MATERIALS, s -> s.toString().endsWith(".json"));
         if (resources.isEmpty()) return;
 
         synchronized (MATERIALS) {
@@ -66,13 +64,21 @@ public final class GearDisplayManager implements IEarlySelectiveReloadListener {
             MATERIALS.clear();
 
             String packName = "ERROR";
-            for (ResourceLocation id : resources) {
+            for (ResourceLocation id : resources.keySet()) {
                 String path = id.getPath().substring(PATH_MATERIALS.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
-                try (Resource iresource = resourceManager.getResource(id)) {
-                    packName = iresource.getSourceName();
-                    JsonObject json = GsonHelper.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                Optional<Resource> resourceOptional = resourceManager.getResource(id);
+                if (resourceOptional.isPresent()) {
+                    Resource iresource = resourceOptional.get();
+                    packName = iresource.sourcePackId();
+                    JsonObject json = null;
+                    try {
+                        json = GsonHelper.fromJson(GSON, IOUtils.toString(iresource.open(), StandardCharsets.UTF_8), JsonObject.class);
+                    } catch (IOException ex) {
+                        SilentGear.LOGGER.error("Could not read material model {}", name, ex);
+                        ERROR_LIST.add(String.format("material:%s (%s)", name, packName));
+                    }
 
                     if (json == null) {
                         SilentGear.LOGGER.error("Could not load material model {} as it's null or empty", name);
@@ -80,19 +86,13 @@ public final class GearDisplayManager implements IEarlySelectiveReloadListener {
                         IMaterialDisplay model = MaterialDisplay.deserialize(name, json);
                         MATERIALS.put(name, model);
                     }
-                } catch (IllegalArgumentException | JsonParseException ex) {
-                    SilentGear.LOGGER.error("Parsing error loading material model {}", name, ex);
-                    ERROR_LIST.add(String.format("material:%s (%s)", name, packName));
-                } catch (IOException ex) {
-                    SilentGear.LOGGER.error("Could not read material model {}", name, ex);
-                    ERROR_LIST.add(String.format("material:%s (%s)", name, packName));
                 }
             }
         }
     }
 
     private static void reloadParts(ResourceManager resourceManager) {
-        Collection<ResourceLocation> resources = resourceManager.listResources(PATH_PARTS, s -> s.endsWith(".json"));
+        Map<ResourceLocation, Resource> resources = resourceManager.listResources(PATH_PARTS, s -> s.toString().endsWith(".json"));
         if (resources.isEmpty()) return;
 
         synchronized (PARTS) {
@@ -100,13 +100,21 @@ public final class GearDisplayManager implements IEarlySelectiveReloadListener {
             PARTS.clear();
 
             String packName = "ERROR";
-            for (ResourceLocation id : resources) {
+            for (ResourceLocation id : resources.keySet()) {
                 String path = id.getPath().substring(PATH_PARTS.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
-                try (Resource iresource = resourceManager.getResource(id)) {
-                    packName = iresource.getSourceName();
-                    JsonObject json = GsonHelper.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                Optional<Resource> resourceOptional = resourceManager.getResource(id);
+                if (resourceOptional.isPresent()) {
+                    Resource iresource = resourceOptional.get();
+                    packName = iresource.sourcePackId();
+                    JsonObject json = null;
+                    try {
+                        json = GsonHelper.fromJson(GSON, IOUtils.toString(iresource.open(), StandardCharsets.UTF_8), JsonObject.class);
+                    } catch (IOException ex) {
+                        SilentGear.LOGGER.error("Could not read part model {}", name, ex);
+                        ERROR_LIST.add(String.format("part:%s (%s)", name, packName));
+                    }
 
                     if (json == null) {
                         SilentGear.LOGGER.error("Could not load part model {} as it's null or empty", name);
@@ -114,12 +122,6 @@ public final class GearDisplayManager implements IEarlySelectiveReloadListener {
                         IPartDisplay model = PartDisplay.deserialize(name, json);
                         PARTS.put(name, model);
                     }
-                } catch (IllegalArgumentException | JsonParseException ex) {
-                    SilentGear.LOGGER.error("Parsing error loading part model {}", name, ex);
-                    ERROR_LIST.add(String.format("part:%s (%s)", name, packName));
-                } catch (IOException ex) {
-                    SilentGear.LOGGER.error("Could not read part model {}", name, ex);
-                    ERROR_LIST.add(String.format("part:%s (%s)", name, packName));
                 }
             }
         }
@@ -202,9 +204,9 @@ public final class GearDisplayManager implements IEarlySelectiveReloadListener {
         Collection<Component> ret = new ArrayList<>();
         if (!ERROR_LIST.isEmpty()) {
             String listStr = String.join(", ", ERROR_LIST);
-            ret.add(TextUtil.withColor(new TextComponent("[Silent Gear] The following part/material models failed to load, check your log file:"),
+            ret.add(TextUtil.withColor(Component.literal("[Silent Gear] The following part/material models failed to load, check your log file:"),
                     ChatFormatting.RED));
-            ret.add(new TextComponent(listStr));
+            ret.add(Component.literal(listStr));
         }
         return ret;
     }

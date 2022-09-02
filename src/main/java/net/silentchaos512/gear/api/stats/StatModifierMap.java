@@ -8,9 +8,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.util.StatGearKey;
@@ -37,7 +37,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
         }
 
         // Sort modifiers by operation
-        MutableComponent result = new TextComponent("");
+        MutableComponent result = Component.literal("");
         List<StatInstance> toSort = new ArrayList<>(mods);
         toSort.sort(Comparator.comparing(inst -> inst.getOp().ordinal()));
 

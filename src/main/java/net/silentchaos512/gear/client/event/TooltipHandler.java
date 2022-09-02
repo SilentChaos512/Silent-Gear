@@ -89,7 +89,7 @@ public final class TooltipHandler {
         // Nerfed gear?
         if (Config.Common.isNerfedItem(stack.getItem())) {
             List<Component> toolTip = event.getToolTip();
-            toolTip.add(Math.min(1, toolTip.size()), new TranslatableComponent("misc.silentgear.poorlyMade").withStyle(ChatFormatting.RED));
+            toolTip.add(Math.min(1, toolTip.size()), Component.translatable("misc.silentgear.poorlyMade").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -107,8 +107,8 @@ public final class TooltipHandler {
         boolean keyHeld = KeyTracker.isDisplayStatsDown();
 
         if (event.getFlags().isAdvanced()) {
-            event.getToolTip().add(new TextComponent("Material ID: " + material.getId()).withStyle(ChatFormatting.DARK_GRAY));
-            event.getToolTip().add(new TextComponent("Material data pack: " + material.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
+            event.getToolTip().add(Component.literal("Material ID: " + material.getId()).withStyle(ChatFormatting.DARK_GRAY));
+            event.getToolTip().add(Component.literal("Material data pack: " + material.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         if (!Config.Client.showMaterialTooltips.get()) {
@@ -119,13 +119,13 @@ public final class TooltipHandler {
             event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tooltip.material"), Color.GOLD));
         } else {
             event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tooltip.material"), Color.GOLD)
-                    .append(new TextComponent(" ")
+                    .append(Component.literal(" ")
                             .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), ChatFormatting.GRAY))));
         }
 
         if (event.getFlags().isAdvanced()) {
-            event.getToolTip().add(new TextComponent("Material ID: " + material.getId()).withStyle(ChatFormatting.DARK_GRAY));
-            event.getToolTip().add(new TextComponent("Material data pack: " + material.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
+            event.getToolTip().add(Component.literal("Material ID: " + material.getId()).withStyle(ChatFormatting.DARK_GRAY));
+            event.getToolTip().add(Component.literal("Material data pack: " + material.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         if (keyHeld) {
@@ -142,7 +142,7 @@ public final class TooltipHandler {
 
                 getMaterialTraitLines(event, partType, material);
 
-                event.getToolTip().add(new TranslatableComponent("misc.silentgear.tooltip.stats").withStyle(ChatFormatting.GOLD));
+                event.getToolTip().add(Component.translatable("misc.silentgear.tooltip.stats").withStyle(ChatFormatting.GOLD));
                 getMaterialStatLines(event, partType, material);
             }
         } else {
@@ -177,7 +177,7 @@ public final class TooltipHandler {
             b.append(str).append(" ");
         }
 
-        event.getToolTip().add(new TextComponent(b.toString().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC));
+        event.getToolTip().add(Component.literal(b.toString().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC));
     }
 
     private static Optional<Component> getMaterialCategoriesLine(MaterialInstance material) {
@@ -191,7 +191,7 @@ public final class TooltipHandler {
     }
 
     private static Component buildPartTypeHeader(Collection<PartType> types, PartType selectedType) {
-        MutableComponent ret = new TextComponent("| ").withStyle(ChatFormatting.GRAY);
+        MutableComponent ret = Component.literal("| ").withStyle(ChatFormatting.GRAY);
         for (PartType type : types) {
             Color color = type == selectedType ? Color.AQUAMARINE : MC_DARK_GRAY;
             Component text = TextUtil.withColor(type.getDisplayName(-1), color);
@@ -207,8 +207,8 @@ public final class TooltipHandler {
     private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartData part) {
 
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
-            event.getToolTip().add(new TextComponent("* Part ID: " + part.getId()).withStyle(ChatFormatting.DARK_GRAY));
-            event.getToolTip().add(new TextComponent("* Part data pack: " + part.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
+            event.getToolTip().add(Component.literal("* Part ID: " + part.getId()).withStyle(ChatFormatting.DARK_GRAY));
+            event.getToolTip().add(Component.literal("* Part data pack: " + part.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         if (!Config.Client.showPartTooltips.get()) {
@@ -238,14 +238,14 @@ public final class TooltipHandler {
 
         // Stats
         if (KeyTracker.isControlDown()) {
-            event.getToolTip().add(new TranslatableComponent("misc.silentgear.tooltip.stats")
+            event.getToolTip().add(Component.translatable("misc.silentgear.tooltip.stats")
                     .withStyle(ChatFormatting.GOLD)
-                    .append(new TextComponent(" (Silent Gear)")
+                    .append(Component.literal(" (Silent Gear)")
                             .withStyle(ChatFormatting.RESET)
                             .withStyle(ChatFormatting.ITALIC)));
             getPartStatLines(event, stack, part);
         } else {
-            event.getToolTip().add(new TranslatableComponent("misc.silentgear.tooltip.ctrlForStats").withStyle(ChatFormatting.GOLD));
+            event.getToolTip().add(Component.translatable("misc.silentgear.tooltip.ctrlForStats").withStyle(ChatFormatting.GOLD));
         }
 
         // Gear type blacklist?
@@ -255,7 +255,7 @@ public final class TooltipHandler {
                 int index = (ClientTicks.ticksInGame() / 20) % blacklist.size();
                 GearType gearType = blacklist.get(index);
                 Component blacklistedType = gearType.getDisplayName();
-                event.getToolTip().add(new TranslatableComponent("misc.silentgear.tooltip.blacklist", blacklistedType).withStyle(ChatFormatting.RED));
+                event.getToolTip().add(Component.translatable("misc.silentgear.tooltip.blacklist", blacklistedType).withStyle(ChatFormatting.RED));
             }
         }
     }
@@ -403,7 +403,7 @@ public final class TooltipHandler {
                         ? harvestLevelWithHint(statListText, inst.getValue())
                         : statListText;
 
-                return Optional.of(new TranslatableComponent("stat.silentgear.displayFormat", nameStr, textWithAdditions));
+                return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, textWithAdditions));
             }
         }
 
@@ -426,7 +426,7 @@ public final class TooltipHandler {
                         ? harvestLevelWithHint(statListText, inst.getValue())
                         : statListText;
 
-                return Optional.of(new TranslatableComponent("stat.silentgear.displayFormat", nameStr, textWithAdditions));
+                return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, textWithAdditions));
             }
         }
 
@@ -436,7 +436,7 @@ public final class TooltipHandler {
     public static MutableComponent harvestLevelWithHint(MutableComponent statValueText, float statValue) {
         String key = "misc.silentgear.harvestLevel." + Math.round(statValue);
         if (I18n.exists(key)) {
-            return statValueText.append(TextUtil.misc("spaceBrackets", new TranslatableComponent(key)));
+            return statValueText.append(TextUtil.misc("spaceBrackets", Component.translatable(key)));
         }
         return statValueText;
     }

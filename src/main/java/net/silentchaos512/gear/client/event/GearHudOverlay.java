@@ -1,20 +1,20 @@
 package net.silentchaos512.gear.client.event;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Options;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
-import net.minecraft.client.AttackIndicatorStatus;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -31,12 +31,12 @@ public class GearHudOverlay extends GuiComponent {
     }
 
     @SubscribeEvent
-    public void renderOverlay(RenderGameOverlayEvent.Post event) {
+    public void renderOverlay(RenderGuiOverlayEvent.Post event) {
         this.scaledWidth = this.mc.getWindow().getGuiScaledWidth();
         this.scaledHeight = this.mc.getWindow().getGuiScaledHeight();
 
         if (!this.mc.options.hideGui) {
-            renderAttackIndicator(event.getMatrixStack());
+            renderAttackIndicator(event.getPoseStack());
         }
     }
 
@@ -55,9 +55,9 @@ public class GearHudOverlay extends GuiComponent {
                 LocalPlayer player = this.mc.player;
                 if (player == null) return;
 
-                if (!gamesettings.renderDebug || gamesettings.hideGui || player.isReducedDebugInfo() || gamesettings.reducedDebugInfo) {
+                if (!gamesettings.renderDebug || gamesettings.hideGui || player.isReducedDebugInfo() || gamesettings.reducedDebugInfo().get()) {
 //                    RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                    if (this.mc.options.attackIndicator == AttackIndicatorStatus.CROSSHAIR) {
+                    if (this.mc.options.attackIndicator().get() == AttackIndicatorStatus.CROSSHAIR) {
                         float f = player.getAttackStrengthScale(0.0F);
                         boolean flag = false;
                         Entity entity = GearHelper.getAttackTargetWithExtraReach(player);

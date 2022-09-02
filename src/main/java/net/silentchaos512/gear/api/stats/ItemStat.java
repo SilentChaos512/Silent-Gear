@@ -1,12 +1,10 @@
 package net.silentchaos512.gear.api.stats;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.utils.Color;
@@ -18,7 +16,7 @@ import java.util.function.Function;
 /**
  * A stat that any ICoreItem can use. See {@link ItemStats} for stats that can be used.
  */
-public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat {
+public class ItemStat implements IItemStat {
     public enum DisplayFormat {
         UNIT, MULTIPLIER, PERCENTAGE
     }
@@ -68,7 +66,7 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
 
     @Override
     public ResourceLocation getStatId() {
-        return Objects.requireNonNull(getRegistryName());
+        return Objects.requireNonNull(ItemStats.getRegistry().getKey(this));
     }
 
     @Override
@@ -277,14 +275,12 @@ public class ItemStat extends ForgeRegistryEntry<ItemStat> implements IItemStat 
     }
 
     public String toString() {
-        return String.format("ItemStat{%s}", getRegistryName());
+        return String.format("ItemStat{%s}", getStatId());
     }
 
     public MutableComponent getDisplayName() {
-        ResourceLocation name = getRegistryName();
-        if (name == null)
-            return new TextComponent("Unregistered stat: " + this);
-        return new TranslatableComponent("stat." + name.getNamespace() + "." + name.getPath());
+        ResourceLocation name = getStatId();
+        return Component.translatable("stat." + name.getNamespace() + "." + name.getPath());
     }
 
     @SuppressWarnings("WeakerAccess")

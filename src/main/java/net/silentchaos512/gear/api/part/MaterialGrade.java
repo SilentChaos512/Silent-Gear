@@ -2,8 +2,8 @@ package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -95,7 +95,7 @@ public enum MaterialGrade {
     }
 
     public MutableComponent getDisplayName() {
-        return new TranslatableComponent("stat.silentgear.grade." + name());
+        return Component.translatable("stat.silentgear.grade." + name());
     }
 
     public static class Range {

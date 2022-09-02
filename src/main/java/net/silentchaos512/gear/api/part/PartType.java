@@ -20,12 +20,12 @@ package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -191,13 +191,13 @@ public final class PartType {
     }
 
     public MutableComponent getDisplayName(int tier) {
-        return new TranslatableComponent("part." + name.getNamespace() + ".type." + name.getPath());
+        return Component.translatable("part." + name.getNamespace() + ".type." + name.getPath());
     }
 
     @SuppressWarnings("WeakerAccess")
     public ResourceLocation getCompoundPartId(GearType gearType) {
         return getCompoundPartItem(gearType)
-                .map(NameUtils::from)
+                .map(NameUtils::fromItem)
                 .orElseGet(() -> SilentGear.getId("invalid"));
     }
 

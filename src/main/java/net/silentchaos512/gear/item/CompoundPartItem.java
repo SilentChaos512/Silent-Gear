@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -149,7 +149,7 @@ public class CompoundPartItem extends Item {
         PartData part = PartData.from(stack);
         MaterialInstance material = getPrimaryMaterial(stack);
         if (part != null && material != null) {
-            TranslatableComponent nameText = new TranslatableComponent(this.getDescriptionId() + ".nameProper", material.getDisplayName(partType, ItemStack.EMPTY));
+            MutableComponent nameText = Component.translatable(this.getDescriptionId() + ".nameProper", material.getDisplayName(partType, ItemStack.EMPTY));
             int nameColor = Color.blend(part.getColor(ItemStack.EMPTY), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
             return TextUtil.withColor(nameText, nameColor);
         }
@@ -178,7 +178,7 @@ public class CompoundPartItem extends Item {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (!allowdedIn(group) || this == ModItems.SHIELD_PLATE.get()) {
+        if (!allowedIn(group) || this == ModItems.SHIELD_PLATE.get()) {
             return;
         }
         items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));

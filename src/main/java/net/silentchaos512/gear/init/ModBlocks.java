@@ -1,7 +1,5 @@
 package net.silentchaos512.gear.init;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
@@ -28,12 +26,12 @@ import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecip
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.ModUtils;
 import net.silentchaos512.lib.registry.BlockRegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -41,13 +39,13 @@ import java.util.function.Supplier;
 public final class ModBlocks {
     private static final Map<Block, Block> STRIPPED_WOOD = new HashMap<>();
 
-    public static final BlockRegistryObject<OreBlock> BORT_ORE = register("bort_ore", () ->
+    public static final BlockRegistryObject<DropExperienceBlock> BORT_ORE = register("bort_ore", () ->
             getOre(SoundType.STONE));
-    public static final BlockRegistryObject<OreBlock> DEEPSLATE_BORT_ORE = register("deepslate_bort_ore", () ->
+    public static final BlockRegistryObject<DropExperienceBlock> DEEPSLATE_BORT_ORE = register("deepslate_bort_ore", () ->
             getOre(SoundType.STONE));
-    public static final BlockRegistryObject<OreBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
+    public static final BlockRegistryObject<DropExperienceBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
             getOre(SoundType.NETHER_GOLD_ORE));
-    public static final BlockRegistryObject<OreBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
+    public static final BlockRegistryObject<DropExperienceBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
             getOre(SoundType.STONE));
 
     public static final BlockRegistryObject<Block> RAW_CRIMSON_IRON_BLOCK = register("raw_crimson_iron_block", () ->
@@ -226,7 +224,7 @@ public final class ModBlocks {
 
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderTypes(FMLClientSetupEvent event) {
-        ItemBlockRenderTypes.setRenderLayer(FLAX_PLANT.get(), RenderType.cutout());
+        /*ItemBlockRenderTypes.setRenderLayer(FLAX_PLANT.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(FLUFFY_PLANT.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(MATERIAL_GRADER.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(METAL_ALLOYER.get(), RenderType.cutout());
@@ -241,7 +239,7 @@ public final class ModBlocks {
         ItemBlockRenderTypes.setRenderLayer(STONE_TORCH.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(WALL_STONE_TORCH.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(WILD_FLAX_PLANT.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(WILD_FLUFFY_PLANT.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(WILD_FLUFFY_PLANT.get(), RenderType.cutout());*/
     }
 
     @SubscribeEvent
@@ -250,7 +248,7 @@ public final class ModBlocks {
         STRIPPED_WOOD.put(NETHERWOOD_WOOD.get(), STRIPPED_NETHERWOOD_WOOD.get());
     }
 
-    private static OreBlock getOre(SoundType soundType) {
+    private static DropExperienceBlock getOre(SoundType soundType) {
         return new ModOreBlock(BlockBehaviour.Properties.of(Material.STONE)
                 .strength(4, 10)
                 .requiresCorrectToolForDrops()
@@ -298,8 +296,8 @@ public final class ModBlocks {
 
     @SuppressWarnings("SameParameterValue")
     private static FlowerPotBlock makePottedPlant(Supplier<? extends Block> flower) {
-        FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT.delegate.get(), flower, Block.Properties.of(Material.DECORATION).strength(0));
-        ResourceLocation flowerId = Objects.requireNonNull(flower.get().getRegistryName());
+        FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, Block.Properties.of(Material.DECORATION).strength(0));
+        ResourceLocation flowerId = ModUtils.getBlockId(flower.get());
         ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(flowerId, () -> potted);
         return potted;
     }

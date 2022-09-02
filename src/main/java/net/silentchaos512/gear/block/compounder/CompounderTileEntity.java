@@ -8,8 +8,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -316,7 +317,8 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableS
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent(Util.makeDescriptionId("container", this.info.getBlock().getRegistryName()));
+        ResourceLocation key = ForgeRegistries.BLOCKS.getKey(this.info.getBlock());
+        return Component.translatable(Util.makeDescriptionId("container", key));
     }
 
     @Override

@@ -8,11 +8,9 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -69,12 +67,12 @@ public final class PartsCommand {
         String listStr = PartManager.getValues().stream()
                 .map(part -> part.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendSuccess(new TextComponent(listStr), true);
+        context.getSource().sendSuccess(Component.literal(listStr), true);
 
         for (PartType type : PartType.getValues()) {
             int count = PartManager.getPartsOfType(type).size();
             String str = String.format("%s: %d", type.getName(), count);
-            context.getSource().sendSuccess(new TextComponent(str), true);
+            context.getSource().sendSuccess(Component.literal(str), true);
         }
 
         return 1;
@@ -86,7 +84,7 @@ public final class PartsCommand {
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            context.getSource().sendFailure(new TextComponent("Could not create directory: " + output.getParent()));
+            context.getSource().sendFailure(Component.literal("Could not create directory: " + output.getParent()));
             return 0;
         }
 
@@ -102,7 +100,7 @@ public final class PartsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            context.getSource().sendSuccess(new TextComponent("Wrote to " + output.getAbsolutePath()), true);
+            context.getSource().sendSuccess(Component.literal("Wrote to " + output.getAbsolutePath()), true);
         }
 
         return 1;
@@ -147,6 +145,6 @@ public final class PartsCommand {
     }
 
     private static Component text(String key, Object... args) {
-        return new TranslatableComponent("command.silentgear.parts." + key, args);
+        return Component.translatable("command.silentgear.parts." + key, args);
     }
 }

@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[43,)"
 license="MIT"
 issueTrackerURL="https://github.com/SilentChaos512/Silent-Gear/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/silent-gear"
@@ -11,7 +11,7 @@ authors="SilentChaos512"
     modId="silentgear"
     version="${file.jarVersion}"
     displayName="Silent Gear"
-    updateJSONURL="https://raw.githubusercontent.com/SilentChaos512/Silent-Gear/1.18.x/update.json"
+    updateJSONURL="https://raw.githubusercontent.com/SilentChaos512/Silent-Gear/1.19.x/update.json"
     description='''
     Modular and upgradeable tools, weapons, and armor. Allows full customization of materials and parts used in gear crafting, even user-defined ones!
     '''
@@ -19,18 +19,18 @@ authors="SilentChaos512"
 [[dependencies.silentgear]]
     modId="forge"
     mandatory=true
-    versionRange="[40.0.18,)"
+    versionRange="[43.1,)"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.silentgear]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2,1.19)"
+    versionRange="[1.19.2,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.silentgear]]
     modId="silentlib"
     mandatory=true
-    versionRange="[6.2,7)"
+    versionRange="[7.0.1,)"
     ordering="NONE"
     side="BOTH"

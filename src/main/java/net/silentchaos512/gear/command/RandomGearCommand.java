@@ -10,23 +10,22 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.util.GearGenerator;
+import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.lib.util.PlayerUtils;
 
 import java.util.Collection;
 
 public final class RandomGearCommand {
     private static final SuggestionProvider<CommandSourceStack> itemIdSuggestions = (context, builder) ->
-            SharedSuggestionProvider.suggestResource(ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof ICoreItem).map(ForgeRegistryEntry::getRegistryName), builder);
+            SharedSuggestionProvider.suggestResource(ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof ICoreItem).map(NameUtils::fromItem), builder);
 
     private RandomGearCommand() {}
 
@@ -58,14 +57,14 @@ public final class RandomGearCommand {
     private static int run(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, ResourceLocation itemId, int tier) throws CommandSyntaxException {
         Item item = ForgeRegistries.ITEMS.getValue(itemId);
         if (!(item instanceof ICoreItem)) {
-            context.getSource().sendFailure(new TranslatableComponent("command.silentgear.randomGear.invalidItem"));
+            context.getSource().sendFailure(Component.translatable("command.silentgear.randomGear.invalidItem"));
             return 0;
         }
 
         for (ServerPlayer player : players) {
             ItemStack stack = GearGenerator.create((ICoreItem) item, tier);
             if (!stack.isEmpty()) {
-                context.getSource().sendSuccess(new TranslatableComponent("commands.give.success.single", 1, stack.getDisplayName(), player.getDisplayName()), true);
+                context.getSource().sendSuccess(Component.translatable("commands.give.success.single", 1, stack.getDisplayName(), player.getDisplayName()), true);
                 PlayerUtils.giveItem(player, stack.copy());
             }
         }

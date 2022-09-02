@@ -4,7 +4,7 @@ import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -26,7 +26,7 @@ public final class ColorHandlers {
 
     private ColorHandlers() {}
 
-    public static void onItemColors(ColorHandlerEvent.Item event) {
+    public static void onItemColors(RegisterColorHandlersEvent.Item event) {
         ItemColors itemColors = event.getItemColors();
         if (itemColors == null) {
             SilentGear.LOGGER.error("ItemColors is null?", new IllegalStateException("wat?"));

@@ -1,9 +1,8 @@
 package net.silentchaos512.gear.client.util;
 
-import net.minecraft.util.Mth;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class TextListBuilder {
 
         String bullet = BULLETS[Mth.clamp(this.indent, 0, BULLETS.length - 1)];
         builder.append(bullet).append(" ");
-        return new TextComponent(builder.toString());
+        return Component.literal(builder.toString());
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType") // list not used after build

@@ -11,7 +11,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashMap;
@@ -45,12 +45,12 @@ public final class ExtraBlockBreakHandler extends SimpleJsonResourceReloadListen
     }*/
 
     @SubscribeEvent
-    public void worldUnload(WorldEvent.Unload event) {
+    public void worldUnload(LevelEvent.Unload event) {
         this.extraDamagedBlocks.clear();
     }
 
     @SubscribeEvent
-    public void worldLoad(WorldEvent.Load event) {
+    public void worldLoad(LevelEvent.Load event) {
         this.extraDamagedBlocks.clear();
     }
 

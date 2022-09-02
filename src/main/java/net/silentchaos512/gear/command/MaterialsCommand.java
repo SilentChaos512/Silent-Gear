@@ -7,14 +7,11 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkDirection;
@@ -74,7 +71,7 @@ public final class MaterialsCommand {
         String listStr = MaterialManager.getValues().stream()
                 .map(mat -> mat.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendSuccess(new TextComponent(listStr), true);
+        context.getSource().sendSuccess(Component.literal(listStr), true);
 
         return 1;
     }
@@ -99,7 +96,7 @@ public final class MaterialsCommand {
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            player.sendMessage(new TextComponent("Could not create directory: " + output.getParent()), Util.NIL_UUID);
+            player.sendSystemMessage(Component.literal("Could not create directory: " + output.getParent()));
             return;
         }
 
@@ -123,9 +120,9 @@ public final class MaterialsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            Component fileNameText = (new TextComponent(output.getAbsolutePath())).withStyle(ChatFormatting.UNDERLINE).withStyle(style ->
+            Component fileNameText = (Component.literal(output.getAbsolutePath())).withStyle(ChatFormatting.UNDERLINE).withStyle(style ->
                     style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
-            player.sendMessage(new TextComponent("Wrote materials info to ").append(fileNameText), Util.NIL_UUID);
+            player.sendSystemMessage(Component.literal("Wrote materials info to ").append(fileNameText));
         }
     }
 
@@ -168,6 +165,6 @@ public final class MaterialsCommand {
     }
 
     private static Component text(String key, Object... args) {
-        return new TranslatableComponent("command.silentgear.parts." + key, args);
+        return Component.translatable("command.silentgear.parts." + key, args);
     }
 }

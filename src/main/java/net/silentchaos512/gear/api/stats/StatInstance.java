@@ -5,9 +5,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -193,7 +193,7 @@ public class StatInstance {
         String format = "%s" + ("%." + decimalPlaces + "f");
         Color color = getFormattedColor(this.value, 0f, addColor);
         String text = trimNumber(String.format(format, this.value < 0 ? "" : "+", this.value));
-        return TextUtil.withColor(new TextComponent(text), color);
+        return TextUtil.withColor(Component.literal(text), color);
     }
 
     private MutableComponent formatAvg(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
@@ -207,20 +207,20 @@ public class StatInstance {
             String ret = trimNumber(String.format(format, "", this.value, ""));
             text = stat.getDisplayFormat() == ItemStat.DisplayFormat.MULTIPLIER ? ret + "x" : ret;
         }
-        return TextUtil.withColor(new TextComponent(text), color);
+        return TextUtil.withColor(Component.literal(text), color);
     }
 
     private MutableComponent formatMax(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         String format = "%s" + ("%." + decimalPlaces + "f");
         String text = trimNumber(String.format(format, "\u2191", this.value));
-        return TextUtil.withColor(new TextComponent(text), Color.WHITE);
+        return TextUtil.withColor(Component.literal(text), Color.WHITE);
     }
 
     private MutableComponent formatMul1(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
         int percent = Math.round(100 * this.value);
         Color color = getFormattedColor(percent, 0f, addColor);
         String text = trimNumber(String.format("%s%d%%", percent < 0 ? "" : "+", percent));
-        return TextUtil.withColor(new TextComponent(text), color);
+        return TextUtil.withColor(Component.literal(text), color);
     }
 
     private MutableComponent formatMul2(ItemStat stat, @Nonnegative int decimalPlaces, boolean addColor) {
@@ -228,7 +228,7 @@ public class StatInstance {
         float val = 1f + this.value;
         Color color = getFormattedColor(val, 1f, addColor);
         String text = trimNumber(String.format(format, "x", val));
-        return TextUtil.withColor(new TextComponent(text), color);
+        return TextUtil.withColor(Component.literal(text), color);
     }
 
     private static String trimNumber(CharSequence str) {

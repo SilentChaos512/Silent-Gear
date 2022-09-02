@@ -110,7 +110,7 @@ public final class GearClientHelper {
             tooltipListParts(stack, tooltip, constructionParts, flag);
         } else if (flag.showConstruction) {
             tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.construction"), Color.GOLD)
-                    .append(new TextComponent(" ")
+                    .append(Component.literal(" ")
                             .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_CONSTRUCTION), ChatFormatting.GRAY))));
         }
     }
@@ -156,7 +156,7 @@ public final class GearClientHelper {
             tooltip.addAll(builder.build());
         } else if (flag.showStats) {
             tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.stats"), Color.GOLD)
-                    .append(new TextComponent(" ")
+                    .append(Component.literal(" ")
                             .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), ChatFormatting.GRAY))));
         }
     }
@@ -184,14 +184,14 @@ public final class GearClientHelper {
                 final int level = traits.get(trait);
                 trait.addInformation(level, tooltip, flag, text -> {
                     if(Config.Client.vanillaStyleTooltips.get()) {
-                        return TextUtil.withColor(new TextComponent(TextListBuilder.VANILLA_BULLET + " "), Color.GRAY).append(text);
+                        return TextUtil.withColor(Component.literal(TextListBuilder.VANILLA_BULLET + " "), Color.GRAY).append(text);
                     }
                     if (traitIndex >= 0) {
                         return textTraits
-                                .append(TextUtil.withColor(new TextComponent(": "), ChatFormatting.GRAY)
+                                .append(TextUtil.withColor(Component.literal(": "), ChatFormatting.GRAY)
                                         .append(text));
                     }
-                    return new TextComponent(TextListBuilder.BULLETS[0] + " ").append(text);
+                    return Component.literal(TextListBuilder.BULLETS[0] + " ").append(text);
                 });
             }
             ++i;
@@ -205,11 +205,11 @@ public final class GearClientHelper {
     }
 
     private static MutableComponent misc(String key, Object... formatArgs) {
-        return new TranslatableComponent("misc.silentgear." + key, formatArgs);
+        return Component.translatable("misc.silentgear." + key, formatArgs);
     }
 
     private static MutableComponent statText(String key, Object... formatArgs) {
-        return new TranslatableComponent("stat.silentgear." + key, formatArgs);
+        return Component.translatable("stat.silentgear." + key, formatArgs);
     }
 
     public static void tooltipListParts(ItemStack gear, List<Component> tooltip, Collection<PartData> parts, GearTooltipFlag flag) {

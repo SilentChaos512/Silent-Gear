@@ -3,14 +3,13 @@ package net.silentchaos512.gear.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -111,9 +110,9 @@ public final class StatsCommand {
             boolean locked = !GearData.hasLockedStats(stack);
             GearData.setLockedStats(stack, locked);
             String translationKey = "command.silentgear.lock_stats." + (locked ? "locked" : "unlocked");
-            context.getSource().sendSuccess(new TranslatableComponent(translationKey, stack.getHoverName()), true);
+            context.getSource().sendSuccess(Component.translatable(translationKey, stack.getHoverName()), true);
         } else {
-            context.getSource().sendFailure(new TranslatableComponent("command.silentgear.lock_stats.invalid"));
+            context.getSource().sendFailure(Component.translatable("command.silentgear.lock_stats.invalid"));
         }
         return 1;
     }
@@ -125,7 +124,7 @@ public final class StatsCommand {
                     GearData.recalculateStats(stack, player);
                 }
             }
-            context.getSource().sendSuccess(new TranslatableComponent("command.silentgear.recalculate", player.getScoreboardName()), true);
+            context.getSource().sendSuccess(Component.translatable("command.silentgear.recalculate", player.getScoreboardName()), true);
         }
         return 1;
     }

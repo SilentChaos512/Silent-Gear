@@ -3,18 +3,17 @@ package net.silentchaos512.gear.crafting.recipe.salvage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
@@ -132,7 +131,7 @@ public class SalvagingRecipe implements Recipe<Container> {
         return Collections.singletonList(part.getItem());
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SalvagingRecipe> {
+    public static class Serializer implements RecipeSerializer<SalvagingRecipe> {
         @Override
         public SalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             SalvagingRecipe recipe = new SalvagingRecipe(recipeId);

@@ -5,15 +5,12 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -74,15 +71,15 @@ public final class TraitsCommand {
     private static int runDescribe(CommandContext<CommandSourceStack> context, ResourceLocation traitId) {
         ITrait trait = TraitManager.get(traitId);
         if (trait == null) {
-            context.getSource().sendFailure(new TranslatableComponent("command.silentgear.traits.traitNotFound", traitId));
+            context.getSource().sendFailure(Component.translatable("command.silentgear.traits.traitNotFound", traitId));
             return 0;
         }
 
         context.getSource().sendSuccess(trait.getDisplayName(0), true);
         context.getSource().sendSuccess(trait.getDescription(1), true);
-        context.getSource().sendSuccess(new TranslatableComponent("command.silentgear.traits.maxLevel", trait.getMaxLevel()), true);
-        context.getSource().sendSuccess(new TextComponent("Object: " + trait), true);
-        context.getSource().sendSuccess(new TextComponent("Serializer: " + trait.getSerializer()), true);
+        context.getSource().sendSuccess(Component.translatable("command.silentgear.traits.maxLevel", trait.getMaxLevel()), true);
+        context.getSource().sendSuccess(Component.literal("Object: " + trait), true);
+        context.getSource().sendSuccess(Component.literal("Serializer: " + trait.getSerializer()), true);
 
         return 1;
     }
@@ -91,8 +88,8 @@ public final class TraitsCommand {
         String listStr = TraitManager.getValues().stream()
                 .map(trait -> trait.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendSuccess(new TextComponent(listStr), true);
-        context.getSource().sendSuccess(new TextComponent("Total: " + TraitManager.getValues().size()), true);
+        context.getSource().sendSuccess(Component.literal(listStr), true);
+        context.getSource().sendSuccess(Component.literal("Total: " + TraitManager.getValues().size()), true);
 
         return 1;
     }
@@ -117,7 +114,7 @@ public final class TraitsCommand {
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            player.sendMessage(new TextComponent("Could not create directory: " + output.getParent()), Util.NIL_UUID);
+            player.sendSystemMessage(Component.literal("Could not create directory: " + output.getParent()));
             return;
         }
 
@@ -192,9 +189,9 @@ public final class TraitsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            Component fileNameText = (new TextComponent(output.getAbsolutePath())).withStyle(ChatFormatting.UNDERLINE).withStyle(style ->
+            Component fileNameText = (Component.literal(output.getAbsolutePath())).withStyle(ChatFormatting.UNDERLINE).withStyle(style ->
                     style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
-            player.sendMessage(new TextComponent("Wrote to ").append(fileNameText), Util.NIL_UUID);
+            player.sendSystemMessage(Component.literal("Wrote to ").append(fileNameText));
         }
     }
 

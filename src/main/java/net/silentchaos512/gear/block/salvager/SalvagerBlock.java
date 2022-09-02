@@ -21,7 +21,6 @@ package net.silentchaos512.gear.block.salvager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -76,7 +75,7 @@ public class SalvagerBlock extends ModContainerBlock<SalvagerTileEntity> {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("block.silentgear.salvager.desc"));
+        tooltip.add(Component.translatable("block.silentgear.salvager.desc"));
     }
 
     @Nullable

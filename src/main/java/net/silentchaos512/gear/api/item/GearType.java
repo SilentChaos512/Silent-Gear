@@ -3,7 +3,6 @@ package net.silentchaos512.gear.api.item;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ToolAction;
@@ -257,7 +256,7 @@ public final class GearType {
     }
 
     public Component getDisplayName() {
-        return new TranslatableComponent("gearType.silentgear." + this.name);
+        return Component.translatable("gearType.silentgear." + this.name);
     }
 
     public Optional<ICoreItem> getItem() {
