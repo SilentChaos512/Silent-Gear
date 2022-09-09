@@ -1,12 +1,14 @@
 package net.silentchaos512.gear.data.trait;
 
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import cpw.mods.modlauncher.api.LamdbaExceptionUtils;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
@@ -25,17 +27,14 @@ import net.silentchaos512.gear.gear.trait.*;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
-import net.silentchaos512.lib.util.NameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public class TraitsProvider implements DataProvider {
@@ -389,24 +388,17 @@ public class TraitsProvider implements DataProvider {
     @Override
     public void run(CachedOutput cache) {
         Path outputFolder = this.generator.getOutputFolder();
+        Set<ResourceLocation> entries = Sets.newHashSet();
 
-        for (TraitBuilder builder : getTraits()) {
-            try {
-                String jsonStr = GSON.toJson(builder.serialize());
-                String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
-                Path path = outputFolder.resolve(String.format("data/%s/silentgear_traits/%s.json", builder.traitId.getNamespace(), builder.traitId.getPath()));
-                if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
-                    Files.createDirectories(path.getParent());
-
-                    try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-                        writer.write(jsonStr);
-                    }
-                }
-
-                cache.putNew(path, hashStr);
-            } catch (IOException ex) {
-                LOGGER.error("Could not save traits to {}", outputFolder, ex);
+        //noinspection OverlyLongLambda
+        getTraits().forEach(LamdbaExceptionUtils.rethrowConsumer(builder -> {
+            if (entries.contains(builder.traitId)) {
+                throw new IllegalStateException("Duplicate trait: " + builder.traitId);
             }
-        }
+
+            entries.add(builder.traitId);
+            Path path = outputFolder.resolve(String.format("data/%s/silentgear_traits/%s.json", builder.traitId.getNamespace(), builder.traitId.getPath()));
+            DataProvider.saveStable(cache, builder.serialize(), path);
+        }));
     }
 }

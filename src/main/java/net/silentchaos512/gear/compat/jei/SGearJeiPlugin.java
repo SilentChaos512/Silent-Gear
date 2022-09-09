@@ -30,7 +30,6 @@ import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -104,13 +103,13 @@ public class SGearJeiPlugin implements IModPlugin {
 
         // Compounders
         reg.addRecipes(recipeManager.getRecipes().stream()
-                .filter(r -> r.getType() == CompoundingRecipe.COMPOUNDING_FABRIC_TYPE)
+                .filter(r -> r.getType() == ModRecipes.COMPOUNDING_FABRIC_TYPE.get())
                 .collect(Collectors.toList()), Const.COMPOUNDING_FABRIC);
         reg.addRecipes(recipeManager.getRecipes().stream()
-                .filter(r -> r.getType() == CompoundingRecipe.COMPOUNDING_GEM_TYPE)
+                .filter(r -> r.getType() == ModRecipes.COMPOUNDING_GEM_TYPE.get())
                 .collect(Collectors.toList()), Const.COMPOUNDING_GEM);
         reg.addRecipes(recipeManager.getRecipes().stream()
-                .filter(r -> r.getType() == CompoundingRecipe.COMPOUNDING_METAL_TYPE)
+                .filter(r -> r.getType() == ModRecipes.COMPOUNDING_METAL_TYPE.get())
                 .collect(Collectors.toList()), Const.COMPOUNDING_METAL);
 
         for (int i = 2; i <= 4; ++i) {
@@ -127,7 +126,7 @@ public class SGearJeiPlugin implements IModPlugin {
 
         // Salvaging
         reg.addRecipes(recipeManager.getRecipes().stream()
-                .filter(r -> r.getType() == SalvagingRecipe.SALVAGING_TYPE)
+                .filter(r -> r.getType() == ModRecipes.SALVAGING_TYPE.get())
                 .collect(Collectors.toList()), Const.SALVAGING);
 
         addInfoPage(reg, CraftingItems.RED_CARD_UPGRADE);

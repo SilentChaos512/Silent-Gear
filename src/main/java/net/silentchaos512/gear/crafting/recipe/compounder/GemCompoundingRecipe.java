@@ -17,6 +17,6 @@ public class GemCompoundingRecipe extends CompoundingRecipe {
 
     @Override
     public RecipeType<?> getType() {
-        return CompoundingRecipe.COMPOUNDING_GEM_TYPE;
+        return ModRecipes.COMPOUNDING_GEM_TYPE;
     }
 }

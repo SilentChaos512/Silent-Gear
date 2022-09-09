@@ -1,12 +1,14 @@
 package net.silentchaos512.gear.data.part;
 
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import cpw.mods.util.LambdaExceptionUtils;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -26,13 +28,10 @@ import net.silentchaos512.utils.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Set;
 
 public class PartsProvider implements DataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -296,45 +295,21 @@ public class PartsProvider implements DataProvider {
     @Override
     public void run(CachedOutput cache) {
         Path outputFolder = this.generator.getOutputFolder();
+        Set<ResourceLocation> entries = Sets.newHashSet();
 
-        for (PartBuilder builder : getParts()) {
-            try {
-                String jsonStr = GSON.toJson(builder.serialize());
-                String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
-                Path path = outputFolder.resolve(String.format("data/%s/silentgear_parts/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-                if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
-                    Files.createDirectories(path.getParent());
-
-                    try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-                        writer.write(jsonStr);
-                    }
-                }
-
-                cache.putNew(path, hashStr);
-            } catch (IOException ex) {
-                LOGGER.error("Could not save parts to {}", outputFolder, ex);
+        //noinspection OverlyLongLambda
+        getParts().forEach(LambdaExceptionUtils.rethrowConsumer(builder -> {
+            if (entries.contains(builder.id)) {
+                throw new IllegalStateException("Duplicate part: " + builder.id);
             }
 
-            // Model data
-            try {
-                JsonObject modelJson = builder.serializeModel();
-                if (!modelJson.entrySet().isEmpty()) {
-                    String jsonStr = GSON.toJson(modelJson);
-                    String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
-                    // TODO: change path?
-                    Path path = outputFolder.resolve(String.format("assets/%s/silentgear_parts/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-                    if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
-                        Files.createDirectories(path.getParent());
+            // Part
+            entries.add(builder.id);
+            Path path = outputFolder.resolve(String.format("data/%s/silentgear_parts/%s.json", builder.id.getNamespace(), builder.id.getPath()));
+            DataProvider.saveStable(cache, builder.serialize(), path);
 
-                        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-                            writer.write(jsonStr);
-                        }
-                    }
-                    cache.putNew(path, hashStr);
-                }
-            } catch (IOException ex) {
-                LOGGER.error("Could not save part models to {}", outputFolder, ex);
-            }
-        }
+            // Model
+            // TODO
+        }));
     }
 }

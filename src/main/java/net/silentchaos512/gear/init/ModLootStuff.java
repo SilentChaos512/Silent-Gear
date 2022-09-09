@@ -18,9 +18,10 @@
 
 package net.silentchaos512.gear.init;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
@@ -41,11 +42,11 @@ public final class ModLootStuff {
     public static final RegistryObject<LootItemFunctionType> SET_PARTS =
             registerFunction("set_parts", () -> new LootItemFunctionType(SetPartsFunction.SERIALIZER));
 
-    // Global Loot Modifiers
-    public static final RegistryObject<GlobalLootModifierSerializer<?>> BONUS_DROPS_TRAIT =
-            registerGlobalModifier("bonus_drops_trait", BonusDropsTraitLootModifier.Serializer::new);
-    public static final RegistryObject<GlobalLootModifierSerializer<?>> MAGMATIC_SMELTING =
-            registerGlobalModifier("magmatic_smelting", MagmaticTraitLootModifier.Serializer::new);
+    // Modifiers
+    public static final RegistryObject<Codec<BonusDropsTraitLootModifier>> BONUS_DROPS_TRAIT =
+            registerModifier("bonus_drops_trait", BonusDropsTraitLootModifier.CODEC);
+    public static final RegistryObject<Codec<MagmaticTraitLootModifier>> MAGMATIC_SMELTING =
+            registerModifier("magmatic_smelting", MagmaticTraitLootModifier.CODEC);
 
     private ModLootStuff() {}
 
@@ -59,7 +60,7 @@ public final class ModLootStuff {
         return Registration.LOOT_FUNCTIONS.register(name, condition);
     }
 
-    private static <T extends GlobalLootModifierSerializer<?>> RegistryObject<T> registerGlobalModifier(String name, Supplier<T> serializer) {
-        return Registration.LOOT_MODIFIERS.register(name, serializer);
+    private static <T extends IGlobalLootModifier> RegistryObject<Codec<T>> registerModifier(String name, Supplier<Codec<T>> codec) {
+        return Registration.LOOT_MODIFIERS.register(name, codec);
     }
 }

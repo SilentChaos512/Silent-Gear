@@ -1,24 +1,27 @@
 package net.silentchaos512.gear.loot.modifier;
 
-import com.google.gson.JsonObject;
+import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Supplier;
 
 public class BonusDropsTraitLootModifier extends LootModifier {
+    public static final Supplier<Codec<BonusDropsTraitLootModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.create(inst ->
+                    codecStart(inst).apply(inst, BonusDropsTraitLootModifier::new)));
+
     public BonusDropsTraitLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
@@ -44,15 +47,8 @@ public class BonusDropsTraitLootModifier extends LootModifier {
         return ret;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<BonusDropsTraitLootModifier> {
-        @Override
-        public BonusDropsTraitLootModifier read(ResourceLocation name, JsonObject json, LootItemCondition[] conditionsIn) {
-            return new BonusDropsTraitLootModifier(conditionsIn);
-        }
-
-        @Override
-        public JsonObject write(BonusDropsTraitLootModifier instance) {
-            return new JsonObject();
-        }
+    @Override
+    public Codec<? extends IGlobalLootModifier> codec() {
+        return CODEC.get();
     }
 }

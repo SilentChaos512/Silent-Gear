@@ -25,7 +25,6 @@ import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CustomMaterialItem;
-import net.silentchaos512.gear.util.Const;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -35,10 +34,6 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
-    public static final RecipeType<CompoundingRecipe> COMPOUNDING_TYPE = ModRecipes.registerType(Const.COMPOUNDING);
-    public static final RecipeType<FabricCompoundingRecipe> COMPOUNDING_FABRIC_TYPE = ModRecipes.registerType(Const.COMPOUNDING_FABRIC);
-    public static final RecipeType<GemCompoundingRecipe> COMPOUNDING_GEM_TYPE = ModRecipes.registerType(Const.COMPOUNDING_GEM);
-    public static final RecipeType<MetalCompoundingRecipe> COMPOUNDING_METAL_TYPE = ModRecipes.registerType(Const.COMPOUNDING_METAL);
 
     private final ResourceLocation recipeId;
     final List<Ingredient> ingredients = new ArrayList<>();
@@ -128,7 +123,7 @@ public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
 
     @Override
     public RecipeType<?> getType() {
-        return COMPOUNDING_TYPE;
+        return ModRecipes.COMPOUNDING_TYPE.get();
     }
 
     public static class Serializer<T extends CompoundingRecipe> implements RecipeSerializer<T> {

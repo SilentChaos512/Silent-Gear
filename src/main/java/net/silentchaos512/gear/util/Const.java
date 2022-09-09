@@ -7,7 +7,6 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
-import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
@@ -55,6 +54,7 @@ public final class Const {
     public static final String NBT_IS_FOIL = "SG_IsFoil";
 
     // Compound-crafting block info
+    @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
     public static final CompounderInfo<MetalCompoundingRecipe> METAL_COMPOUNDER_INFO = new CompounderInfo<>(
             ImmutableList.of(
                     MaterialCategories.METAL,
@@ -66,8 +66,10 @@ public final class Const {
             () -> ModBlockEntities.METAL_ALLOYER.get(),
             () -> ModContainers.METAL_ALLOYER.get(),
             () -> ModRecipes.COMPOUNDING_METAL.get(),
-            () -> CompoundingRecipe.COMPOUNDING_METAL_TYPE,
+            () -> ModRecipes.COMPOUNDING_METAL_TYPE.get(),
             MetalCompoundingRecipe.class);
+
+    @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
     public static final CompounderInfo<GemCompoundingRecipe> GEM_COMPOUNDER_INFO = new CompounderInfo<>(
             ImmutableList.of(
                     MaterialCategories.GEM,
@@ -79,8 +81,10 @@ public final class Const {
             () -> ModBlockEntities.RECRYSTALLIZER.get(),
             () -> ModContainers.RECRYSTALLIZER.get(),
             () -> ModRecipes.COMPOUNDING_GEM.get(),
-            () -> CompoundingRecipe.COMPOUNDING_GEM_TYPE,
+            () -> ModRecipes.COMPOUNDING_GEM_TYPE.get(),
             GemCompoundingRecipe.class);
+
+    @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
     public static final CompounderInfo<FabricCompoundingRecipe> FABRIC_COMPOUNDER_INFO = new CompounderInfo<>(
             ImmutableList.of(
                     MaterialCategories.CLOTH,
@@ -93,7 +97,7 @@ public final class Const {
             () -> ModBlockEntities.REFABRICATOR.get(),
             () -> ModContainers.REFABRICATOR.get(),
             () -> ModRecipes.COMPOUNDING_FABRIC.get(),
-            () -> CompoundingRecipe.COMPOUNDING_FABRIC_TYPE,
+            () -> ModRecipes.COMPOUNDING_FABRIC_TYPE.get(),
             FabricCompoundingRecipe.class);
 
     private Const() {}

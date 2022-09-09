@@ -44,7 +44,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
-        Collection<ResourceLocation> resources = resourceManager.listResources(DATA_PATH, s -> s.endsWith(".json"));
+        Map<ResourceLocation, Resource> resources = resourceManager.listResources(DATA_PATH, s -> s.toString().endsWith(".json"));
         if (resources.isEmpty()) return;
 
         Multimap<String, IMaterial> ingredientConflicts = HashMultimap.create();
@@ -55,32 +55,32 @@ public class MaterialManager implements ResourceManagerReloadListener {
             ERROR_LIST.clear();
             SilentGear.LOGGER.info(MARKER, "Reloading material files");
 
-            for (ResourceLocation id : resources) {
+            String packName = "ERROR";
+            for (ResourceLocation id : resources.keySet()) {
                 String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
-                String packName = "ERROR";
-                try (Resource iresource = resourceManager.getResource(id)) {
-                    packName = iresource.getSourceName();
-                    JsonObject json = GsonHelper.fromJson(GSON, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                Optional<Resource> resourceOptional = resourceManager.getResource(id);
+                if (resourceOptional.isPresent()) {
+                    Resource iresource = resourceOptional.get();
+                    packName = iresource.sourcePackId();
+                    JsonObject json = null;
+                    try {
+                        json = GsonHelper.fromJson(GSON, IOUtils.toString(iresource.open(), StandardCharsets.UTF_8), JsonObject.class);
+                    } catch (IOException ex) {
+                        SilentGear.LOGGER.error(MARKER, "Could not read material {}", name, ex);
+                        ERROR_LIST.add(String.format("%s (%s)", name, packName));
+                    }
+
                     if (json == null) {
                         // Something is very wrong or the JSON is somehow empty
                         SilentGear.LOGGER.error(MARKER, "Could not load material {} as it's null or empty", name);
-                    } /*else if (!CraftingHelper.processConditions(json, "conditions")) {
-                        // Conditions not met, so do not load the material
-                        skippedList.add(name);
-                    }*/ else {
+                    } else {
                         // Attempt to deserialize the material
                         IMaterial material = MaterialSerializers.deserialize(name, packName, json);
                         MATERIALS.put(material.getId(), material);
                         addIngredientChecks(ingredientConflicts, material, json);
                     }
-                } catch (IllegalArgumentException | JsonParseException ex) {
-                    SilentGear.LOGGER.error(MARKER, "Parsing error loading material {}", name, ex);
-                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
-                } catch (IOException ex) {
-                    SilentGear.LOGGER.error(MARKER, "Could not read material {}", name, ex);
-                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
                 }
             }
         }

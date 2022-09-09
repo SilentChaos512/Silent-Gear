@@ -17,6 +17,6 @@ public class FabricCompoundingRecipe extends CompoundingRecipe {
 
     @Override
     public RecipeType<?> getType() {
-        return CompoundingRecipe.COMPOUNDING_FABRIC_TYPE;
+        return ModRecipes.COMPOUNDING_FABRIC_TYPE.get();
     }
 }

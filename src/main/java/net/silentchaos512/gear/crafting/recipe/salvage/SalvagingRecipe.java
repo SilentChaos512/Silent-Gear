@@ -21,13 +21,11 @@ import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.util.Const;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class SalvagingRecipe implements Recipe<Container> {
-    public static final RecipeType<SalvagingRecipe> SALVAGING_TYPE = ModRecipes.registerType(Const.SALVAGING);
 
     private final ResourceLocation recipeId;
     protected Ingredient ingredient;
@@ -81,7 +79,7 @@ public class SalvagingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeType<?> getType() {
-        return SALVAGING_TYPE;
+        return ModRecipes.SALVAGING_TYPE.get();
     }
 
     @Override

@@ -21,19 +21,19 @@ public final class DataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         ModBlockTagsProvider blocks = new ModBlockTagsProvider(gen, existingFileHelper);
-        gen.addProvider(true, blocks);
-        gen.addProvider(true, new ModItemTagsProvider(gen, blocks, existingFileHelper));
+        gen.addProvider(event.includeServer(), blocks);
+        gen.addProvider(event.includeServer(), new ModItemTagsProvider(gen, blocks, existingFileHelper));
 
-        gen.addProvider(true, new TraitsProvider(gen));
-        gen.addProvider(true, new MaterialsProvider(gen, SilentGear.MOD_ID));
-        gen.addProvider(true, new PartsProvider(gen));
+        gen.addProvider(event.includeServer(), new TraitsProvider(gen));
+        gen.addProvider(event.includeServer(), new MaterialsProvider(gen, SilentGear.MOD_ID));
+        gen.addProvider(event.includeServer(), new PartsProvider(gen));
 
-        gen.addProvider(true, new ModLootTables(gen));
-        gen.addProvider(true, new ModRecipesProvider(gen));
-        gen.addProvider(true, new ModAdvancementProvider(gen));
+        gen.addProvider(event.includeServer(), new ModLootTables(gen));
+        gen.addProvider(event.includeServer(), new ModRecipesProvider(gen));
+        gen.addProvider(event.includeServer(), new ModAdvancementProvider(gen));
 
-        gen.addProvider(true, new ModBlockStateProvider(gen, existingFileHelper));
-        gen.addProvider(true, new ModItemModelProvider(gen, existingFileHelper));
-        gen.addProvider(true, new CompoundModelsProvider(gen, existingFileHelper));
+        gen.addProvider(event.includeServer(), new ModBlockStateProvider(gen, existingFileHelper));
+        gen.addProvider(event.includeServer(), new ModItemModelProvider(gen, existingFileHelper));
+        gen.addProvider(event.includeServer(), new CompoundModelsProvider(gen, existingFileHelper));
     }
 }

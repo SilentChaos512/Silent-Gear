@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +14,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -39,7 +37,6 @@ public final class PartManager implements ResourceManagerReloadListener {
     public static final Marker MARKER = MarkerManager.getMarker("PartManager");
 
     private static final String DATA_PATH = "silentgear_parts";
-    private static final String DATA_PATH_OLD = "silentgear/parts";
     private static final Map<ResourceLocation, IGearPart> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
     private static int highestMainPartTier = 0;
     private static final Collection<String> ERROR_LIST = new ArrayList<>();
@@ -53,7 +50,7 @@ public final class PartManager implements ResourceManagerReloadListener {
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-        Collection<ResourceLocation> resources = getAllResources(resourceManager);
+        Map<ResourceLocation, Resource> resources = resourceManager.listResources(DATA_PATH, s -> s.toString().endsWith(".json"));
         if (resources.isEmpty()) return;
 
         synchronized (MAP) {
@@ -61,48 +58,42 @@ public final class PartManager implements ResourceManagerReloadListener {
             ERROR_LIST.clear();
             SilentGear.LOGGER.info(MARKER, "Reloading part files");
 
-            for (ResourceLocation id : resources) {
+            String packName = "ERROR";
+            for (ResourceLocation id : resources.keySet()) {
                 String path = id.getPath().substring(DATA_PATH.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
 
-                String packName = "ERROR";
-                try (Resource iresource = resourceManager.getResource(id)) {
-                    packName = iresource.getSourceName();
+                Optional<Resource> resourceOptional = resourceManager.getResource(id);
+                if (resourceOptional.isPresent()) {
+                    Resource iresource = resourceOptional.get();
+                    packName = iresource.sourcePackId();
                     if (SilentGear.LOGGER.isTraceEnabled()) {
                         SilentGear.LOGGER.trace(MARKER, "Found likely part file: {}, trying to read as part {}", id, name);
                     }
 
-                    JsonObject json = GsonHelper.fromJson(gson, IOUtils.toString(iresource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                    JsonObject json = null;
+                    try {
+                        json = GsonHelper.fromJson(gson, IOUtils.toString(iresource.open(), StandardCharsets.UTF_8), JsonObject.class);
+                    } catch (IOException ex) {
+                        SilentGear.LOGGER.error(MARKER, "Could not read gear part {}", name, ex);
+                        ERROR_LIST.add(String.format("%s (%s)", name, packName));
+                    }
+
                     if (json == null) {
                         SilentGear.LOGGER.error(MARKER, "Could not load part {} as it's null or empty", name);
-                    } else if (!CraftingHelper.processConditions(json, "conditions")) {
-                        SilentGear.LOGGER.info("Skipping loading gear part {} as it's conditions were not met", name);
                     } else {
                         IGearPart part = PartSerializers.deserialize(name, json);
                         if (part instanceof AbstractGearPart) {
-                            ((AbstractGearPart) part).packName = iresource.getSourceName();
+                            ((AbstractGearPart) part).packName = iresource.sourcePackId();
                         }
                         addPart(part);
                         highestMainPartTier = Math.max(highestMainPartTier, part.getTier());
                     }
-                } catch (IllegalArgumentException | JsonParseException ex) {
-                    SilentGear.LOGGER.error(MARKER, "Parsing error loading gear part {}", name, ex);
-                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
-                } catch (IOException ex) {
-                    SilentGear.LOGGER.error(MARKER, "Could not read gear part {}", name, ex);
-                    ERROR_LIST.add(String.format("%s (%s)", name, packName));
                 }
             }
 
             SilentGear.LOGGER.info(MARKER, "Registered {} parts", MAP.size());
         }
-    }
-
-    private static Collection<ResourceLocation> getAllResources(ResourceManager resourceManager) {
-        Collection<ResourceLocation> list = new ArrayList<>();
-        list.addAll(resourceManager.listResources(DATA_PATH, s -> s.endsWith(".json")));
-        list.addAll(resourceManager.listResources(DATA_PATH_OLD, s -> s.endsWith(".json")));
-        return list;
     }
 
     private static void addPart(IGearPart part) {

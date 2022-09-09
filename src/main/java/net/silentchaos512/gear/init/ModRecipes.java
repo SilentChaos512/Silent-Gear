@@ -7,12 +7,12 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.*;
 import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
@@ -31,6 +31,15 @@ import net.silentchaos512.lib.crafting.recipe.ExtendedSingleItemRecipe;
 import java.util.function.Supplier;
 
 public final class ModRecipes {
+    // Types
+    public static final RegistryObject<RecipeType<CompoundingRecipe>> COMPOUNDING_TYPE = registerType(Const.COMPOUNDING);
+    public static final RegistryObject<RecipeType<FabricCompoundingRecipe>> COMPOUNDING_FABRIC_TYPE = registerType(Const.COMPOUNDING_FABRIC);
+    public static final RegistryObject<RecipeType<GemCompoundingRecipe>> COMPOUNDING_GEM_TYPE = registerType(Const.COMPOUNDING_GEM);
+    public static final RegistryObject<RecipeType<MetalCompoundingRecipe>> COMPOUNDING_METAL_TYPE = registerType(Const.COMPOUNDING_METAL);
+    public static final RegistryObject<RecipeType<PressingRecipe>> PRESSING_TYPE = registerType(Const.PRESSING);
+    public static final RegistryObject<RecipeType<SalvagingRecipe>> SALVAGING_TYPE = registerType(Const.SALVAGING);
+
+    // Serializers
     public static final RegistryObject<RecipeSerializer<?>> COMBINE_FRAGMENTS = register(Const.COMBINE_FRAGMENTS, () ->
             new SimpleRecipeSerializer<>(CombineFragmentsRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> COMPOUND_PART = register(Const.COMPOUND_PART, () ->
@@ -52,9 +61,9 @@ public final class ModRecipes {
     public static final RegistryObject<RecipeSerializer<?>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART, () ->
             new SimpleRecipeSerializer<>(ModKitRemovePartRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> PRESSING = register(Const.PRESSING, () ->
-            ExtendedSingleItemRecipe.Serializer.basic(PressingRecipe.PRESSING_TYPE, PressingRecipe::new));
+            ExtendedSingleItemRecipe.Serializer.basic(PRESSING_TYPE.get(), PressingRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> PRESSING_MATERIAL = register(Const.PRESSING_MATERIAL, () ->
-            ExtendedSingleItemRecipe.Serializer.basic(PressingRecipe.PRESSING_TYPE, MaterialPressingRecipe::new));
+            ExtendedSingleItemRecipe.Serializer.basic(PRESSING_TYPE.get(), MaterialPressingRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> QUICK_REPAIR = register(Const.QUICK_REPAIR, () ->
             new SimpleRecipeSerializer<>(QuickRepairRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> SALVAGING = register(Const.SALVAGING,
@@ -98,8 +107,8 @@ public final class ModRecipes {
         return Registration.RECIPE_SERIALIZERS.register(id.getPath(), serializer);
     }
 
-    public static <T extends Recipe<?>> RecipeType<T> registerType(ResourceLocation typeName) {
-        return RecipeType.register(typeName.toString());
+    public static <T extends Recipe<?>> RegistryObject<RecipeType<T>> registerType(ResourceLocation name) {
+        return Registration.RECIPE_TYPES.register(name.getPath(), () -> RecipeType.simple(name));
     }
 
     public static boolean isRepairMaterial(ItemStack gear, ItemStack materialItem) {
@@ -109,16 +118,5 @@ public final class ModRecipes {
         }
 
         return false;
-    }
-
-    public static void registerTypes(RegistryEvent.Register<RecipeSerializer<?>> event) {
-        // FIXME...
-        SilentGear.LOGGER.debug("This is a nasty fix to update to 1.18.2! Please excuse the next few lines of the log file...");
-        SilentGear.LOGGER.debug(CompoundingRecipe.COMPOUNDING_TYPE);
-        SilentGear.LOGGER.debug(CompoundingRecipe.COMPOUNDING_FABRIC_TYPE);
-        SilentGear.LOGGER.debug(CompoundingRecipe.COMPOUNDING_GEM_TYPE);
-        SilentGear.LOGGER.debug(CompoundingRecipe.COMPOUNDING_METAL_TYPE);
-        SilentGear.LOGGER.debug(PressingRecipe.PRESSING_TYPE);
-        SilentGear.LOGGER.debug(SalvagingRecipe.SALVAGING_TYPE);
     }
 }
