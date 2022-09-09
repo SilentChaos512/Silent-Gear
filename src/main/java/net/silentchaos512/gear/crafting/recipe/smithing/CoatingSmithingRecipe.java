@@ -9,7 +9,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -53,7 +52,7 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
         return ModRecipes.SMITHING_COATING.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CoatingSmithingRecipe> {
+    public static class Serializer implements RecipeSerializer<CoatingSmithingRecipe> {
         @Override
         public CoatingSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             ItemStack gearItem = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "gear"));

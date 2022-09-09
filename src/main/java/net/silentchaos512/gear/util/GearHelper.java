@@ -3,11 +3,8 @@ package net.silentchaos512.gear.util;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -246,7 +243,7 @@ public final class GearHelper {
         final int preDamageFactor = getDamageFactor(stack, maxDamage);
         if (!canBreakPermanently(stack))
             amount = Math.min(maxDamage - stack.getDamageValue(), amount);
-        stack.hurt(amount, SilentGear.RANDOM, player);
+        stack.hurt(amount, SilentGear.RANDOM_SOURCE, player);
 
         // Recalculate stats occasionally
         if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
@@ -307,7 +304,7 @@ public final class GearHelper {
     private static void notifyPlayerOfBrokenGear(ItemStack stack, Player player) {
         if (Config.Common.sendGearBrokenMessage.get()) {
             // Notify player. Mostly for armor, but might help new players as well.
-            player.sendMessage(new TranslatableComponent("misc.silentgear.notifyOnBreak", stack.getHoverName()), Util.NIL_UUID);
+            player.sendSystemMessage(Component.translatable("misc.silentgear.notifyOnBreak", stack.getHoverName()));
         }
     }
 
@@ -714,27 +711,27 @@ public final class GearHelper {
 
     public static Component getDisplayName(ItemStack gear) {
         PartData part = GearData.getPrimaryPart(gear);
-        if (part == null) return new TranslatableComponent(gear.getDescriptionId());
+        if (part == null) return Component.translatable(gear.getDescriptionId());
 
         Component partName = part.getMaterialName(gear);
         if (TimedEvents.isAprilFools()) {
-            partName = partName.copy().append(new TextComponent(" & Knuckles"));
+            partName = partName.copy().append(Component.literal(" & Knuckles"));
         }
-        Component gearName = new TranslatableComponent(gear.getDescriptionId() + ".nameProper", partName);
+        Component gearName = Component.translatable(gear.getDescriptionId() + ".nameProper", partName);
         Component result = gearName;
 
         if (gear.getItem() instanceof ICoreTool) {
             ICoreItem item = (ICoreItem) gear.getItem();
             if (item.requiresPartOfType(PartType.ROD) && GearData.getPartOfType(gear, PartType.ROD) == null) {
-                result = new TranslatableComponent(gear.getDescriptionId() + ".noRod", gearName);
+                result = Component.translatable(gear.getDescriptionId() + ".noRod", gearName);
             } else if (item.requiresPartOfType(PartType.CORD) && GearData.getPartOfType(gear, PartType.CORD) == null) {
-                result = new TranslatableComponent(gear.getDescriptionId() + ".unstrung", gearName);
+                result = Component.translatable(gear.getDescriptionId() + ".unstrung", gearName);
             }
         }
 
         // Prefixes
         for (Component t : getNamePrefixes(gear, GearData.getConstructionParts(gear))) {
-            result = t.copy().append(new TextComponent(" ")).append(result);
+            result = t.copy().append(Component.literal(" ")).append(result);
         }
 
         return result;

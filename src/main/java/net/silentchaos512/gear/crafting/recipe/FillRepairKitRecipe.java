@@ -26,7 +26,6 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
@@ -118,7 +117,7 @@ public class FillRepairKitRecipe extends CustomRecipe {
         return ModRecipes.FILL_REPAIR_KIT.get();
     }
 
-    public static final class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FillRepairKitRecipe> {
+    public static final class Serializer implements RecipeSerializer<FillRepairKitRecipe> {
         @Override
         public FillRepairKitRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new FillRepairKitRecipe(recipeId);

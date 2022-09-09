@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.Resource;
@@ -180,9 +179,9 @@ public final class PartManager implements ResourceManagerReloadListener {
         if (!ERROR_LIST.isEmpty()) {
             String listStr = String.join(", ", ERROR_LIST);
             return ImmutableList.of(
-                    new TextComponent("[Silent Gear] The following gear parts failed to load, check your log file:")
+                    Component.literal("[Silent Gear] The following gear parts failed to load, check your log file:")
                             .withStyle(ChatFormatting.RED),
-                    new TextComponent(listStr)
+                    Component.literal(listStr)
             );
         }
         return ImmutableList.of();

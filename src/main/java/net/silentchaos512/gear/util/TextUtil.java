@@ -4,7 +4,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.utils.Color;
 
@@ -14,11 +13,11 @@ public final class TextUtil {
     private TextUtil() {throw new IllegalAccessError("Utility class");}
 
     public static MutableComponent translate(String prefix, String suffix) {
-        return new TranslatableComponent(prefix + ".silentgear." + suffix);
+        return Component.translatable(prefix + ".silentgear." + suffix);
     }
 
     public static MutableComponent translate(String prefix, String suffix, Object... args) {
-        return new TranslatableComponent(prefix + ".silentgear." + suffix, args);
+        return Component.translatable(prefix + ".silentgear." + suffix, args);
     }
 
     public static MutableComponent misc(String key, Object... args) {

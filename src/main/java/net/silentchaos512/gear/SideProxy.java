@@ -2,7 +2,6 @@ package net.silentchaos512.gear;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -10,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -30,9 +28,6 @@ import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.material.GearDisplayManager;
-import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
-import net.silentchaos512.gear.client.model.gear.GearModelLoader;
-import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.compat.curios.CurioGearItemCapability;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
@@ -181,9 +176,9 @@ class SideProxy implements IProxy {
 
             //noinspection ConstantConditions
             if (Minecraft.getInstance() != null) {
-                ModelLoaderRegistry.registerLoader(Const.COMPOUND_PART_MODEL_LOADER, new CompoundPartModelLoader());
-                ModelLoaderRegistry.registerLoader(Const.FRAGMENT_MODEL_LOADER, new FragmentModelLoader());
-                ModelLoaderRegistry.registerLoader(Const.GEAR_MODEL_LOADER, new GearModelLoader());
+//                ModelLoaderRegistry.registerLoader(Const.COMPOUND_PART_MODEL_LOADER, new CompoundPartModelLoader());
+//                ModelLoaderRegistry.registerLoader(Const.FRAGMENT_MODEL_LOADER, new FragmentModelLoader());
+//                ModelLoaderRegistry.registerLoader(Const.GEAR_MODEL_LOADER, new GearModelLoader());
 
                 ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
                 if (resourceManager instanceof ReloadableResourceManager) {
@@ -254,7 +249,7 @@ class SideProxy implements IProxy {
         if (MaterialManager.getValues().isEmpty() || PartManager.getValues().isEmpty() || TraitManager.getValues().isEmpty()) {
             String msg = "Materials, parts, and/or traits have not loaded! This may be caused by a broken mod, even those not related to Silent Gear. Search your log for \"Failed to reload data packs\" to find the error.";
             SilentGear.LOGGER.error(msg);
-            return new TextComponent(msg);
+            return Component.literal(msg);
         }
         return null;
     }

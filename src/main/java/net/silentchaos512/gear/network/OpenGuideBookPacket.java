@@ -1,10 +1,9 @@
 package net.silentchaos512.gear.network;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -24,12 +23,12 @@ public class OpenGuideBookPacket {
         Minecraft mc = Minecraft.getInstance();
 //        mc.displayGuiScreen(new GuideBookScreen(new StringTextComponent("Guide Book Temp")));
         if (mc.player != null) {
-            mc.player.sendMessage(TextUtil.translate("item", "guide_book.unimplemented1"), Util.NIL_UUID);
-            mc.player.sendMessage(TextUtil.translate("item", "guide_book.check_wiki")
-                    .append(new TextComponent(WIKI_URL)
+            mc.player.sendSystemMessage(TextUtil.translate("item", "guide_book.unimplemented1"));
+            mc.player.sendSystemMessage(TextUtil.translate("item", "guide_book.check_wiki")
+                    .append(Component.literal(WIKI_URL)
                             .withStyle(ChatFormatting.UNDERLINE)
                             .withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-                                    WIKI_URL)))), Util.NIL_UUID);
+                                    WIKI_URL)))));
         }
     }
 }

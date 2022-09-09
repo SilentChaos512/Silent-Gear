@@ -3,7 +3,6 @@ package net.silentchaos512.gear.util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
@@ -80,7 +79,7 @@ public final class SynergyUtils {
 
     public static Component getDisplayText(float synergy) {
         ChatFormatting color = synergy < 1 ? ChatFormatting.RED : synergy > 1 ? ChatFormatting.GREEN : ChatFormatting.WHITE;
-        Component value = new TextComponent(Math.round(100 * synergy) + "%").withStyle(color);
+        Component value = Component.literal(Math.round(100 * synergy) + "%").withStyle(color);
         return TextUtil.translate("misc", "synergy", value);
     }
 

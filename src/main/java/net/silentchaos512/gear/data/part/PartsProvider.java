@@ -3,11 +3,11 @@ package net.silentchaos512.gear.data.part;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.DataProvider;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
@@ -102,7 +102,7 @@ public class PartsProvider implements DataProvider {
 
     private static PartBuilder part(String name, GearType gearType, PartType partType, ItemLike item) {
         return new PartBuilder(SilentGear.getId(name), gearType, partType, item)
-                .name(new TranslatableComponent("part.silentgear." + name.replace('/', '.')));
+                .name(Component.translatable("part.silentgear." + name.replace('/', '.')));
     }
 
     private static PartBuilder upgradePart(String name, ItemLike item) {
@@ -294,7 +294,7 @@ public class PartsProvider implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) {
+    public void run(CachedOutput cache) {
         Path outputFolder = this.generator.getOutputFolder();
 
         for (PartBuilder builder : getParts()) {

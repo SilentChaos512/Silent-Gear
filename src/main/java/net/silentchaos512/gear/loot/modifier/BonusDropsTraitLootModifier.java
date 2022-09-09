@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.loot.modifier;
 
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -11,6 +12,7 @@ import net.minecraftforge.common.loot.LootModifier;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -21,10 +23,9 @@ public class BonusDropsTraitLootModifier extends LootModifier {
         super(conditionsIn);
     }
 
-    @Nonnull
     @Override
-    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        List<ItemStack> ret = new ArrayList<>(generatedLoot);
+    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+        ObjectArrayList<ItemStack> ret = new ObjectArrayList<>(generatedLoot);
         ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
 
         if (tool != null && GearHelper.isGear(tool)) {

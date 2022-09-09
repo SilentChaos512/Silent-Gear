@@ -18,8 +18,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -92,7 +90,7 @@ public class SimpleTrait implements ITrait {
     public MutableComponent getDisplayName(int level) {
         MutableComponent text = displayName.copy();
         if (level > 0 && maxLevel > 1) {
-            text.append(" ").append(new TranslatableComponent("enchantment.level." + level));
+            text.append(" ").append(Component.translatable("enchantment.level." + level));
         }
         return text;
     }
@@ -305,7 +303,7 @@ public class SimpleTrait implements ITrait {
             if (json.isJsonObject() && json.getAsJsonObject().has("name")) {
                 boolean translate = GsonHelper.getAsBoolean(json.getAsJsonObject(), "translate", false);
                 String name = GsonHelper.getAsString(json.getAsJsonObject(), "name");
-                return translate ? new TranslatableComponent(name) : new TextComponent(name);
+                return translate ? Component.translatable(name) : Component.literal(name);
             }
 
             // Deserialize use vanilla serializer
@@ -319,8 +317,8 @@ public class SimpleTrait implements ITrait {
                 final boolean translate = GsonHelper.getAsBoolean(obj, "translate", false);
                 final String value = GsonHelper.getAsString(obj, "name");
                 return translate
-                        ? new TranslatableComponent(value)
-                        : new TextComponent(value);
+                        ? Component.translatable(value)
+                        : Component.literal(value);
             } else if (element != null) {
                 throw new JsonParseException("Expected '" + name + "' to be an object");
             } else {

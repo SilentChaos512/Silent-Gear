@@ -130,7 +130,7 @@ public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
     }
 
     @Override
-    public int getItemEnchantability(ItemStack stack) {
+    public int getEnchantmentValue(ItemStack stack) {
         return GearHelper.getEnchantability(stack);
     }
 

@@ -6,7 +6,6 @@ import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -174,7 +173,7 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (!KeyTracker.isDisplayStatsDown() && !KeyTracker.isDisplayTraitsDown() && !KeyTracker.isDisplayConstructionDown()) {
-            tooltip.add(new TextComponent("Do not use with vanilla crossbows, see issue #270")
+            tooltip.add(Component.literal("Do not use with vanilla crossbows, see issue #270")
                     .withStyle(ChatFormatting.RED));
         }
 
@@ -189,7 +188,7 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
     }
 
     @Override
-    public int getItemEnchantability(ItemStack stack) {
+    public int getEnchantmentValue(ItemStack stack) {
         return GearHelper.getEnchantability(stack);
     }
 

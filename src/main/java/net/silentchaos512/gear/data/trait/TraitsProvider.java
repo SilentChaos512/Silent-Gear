@@ -3,6 +3,7 @@ package net.silentchaos512.gear.data.trait;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -359,7 +361,7 @@ public class TraitsProvider implements DataProvider {
     protected static TraitBuilder cancelEffectsTrait(DataResource<ITrait> trait, MobEffect... effects) {
         JsonArray array = new JsonArray();
         for (MobEffect effect : effects) {
-            array.add(NameUtils.from(effect).toString());
+            array.add(Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect)).toString());
         }
 
         return new TraitBuilder(trait, 1, CancelEffectsTrait.SERIALIZER)
@@ -385,7 +387,7 @@ public class TraitsProvider implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) {
+    public void run(CachedOutput cache) {
         Path outputFolder = this.generator.getOutputFolder();
 
         for (TraitBuilder builder : getTraits()) {

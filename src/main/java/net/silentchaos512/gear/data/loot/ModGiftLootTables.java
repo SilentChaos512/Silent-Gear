@@ -3,7 +3,6 @@ package net.silentchaos512.gear.data.loot;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.data.loot.GiftLoot;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -55,7 +54,7 @@ public class ModGiftLootTables extends GiftLoot {
                         .add(LootItem.lootTableItem(ModItems.SHIELD_BLUEPRINT))));
 
         for (Item item : Registration.getItems(item -> item instanceof ICoreItem)) {
-            p_accept_1_.accept(SilentGear.getId("random_gear/" + NameUtils.from(item).getPath()), LootTable.lootTable()
+            p_accept_1_.accept(SilentGear.getId("random_gear/" + NameUtils.fromItem(item).getPath()), LootTable.lootTable()
                     .withPool(LootPool.lootPool()
                             .add(LootItem.lootTableItem(item)
                                     .setWeight(3)
@@ -78,10 +77,10 @@ public class ModGiftLootTables extends GiftLoot {
                                         new LazyPartData(SilentGear.getId("main/emerald")),
                                         new LazyPartData(SilentGear.getId("rod/blaze")),
                                         new LazyPartData(SilentGear.getId("tip/redstone")))))
-                                .apply(() -> setName(new TextComponent("Loliberty Defense Force Mallet")))
+                                .apply(() -> setName(Component.literal("Loliberty Defense Force Mallet")))
                                 .apply(() -> setLore(ImmutableList.of(
-                                        new TextComponent("Standard Issue"),
-                                        new TextComponent("Protectors of Free Speech")))))));
+                                        Component.literal("Standard Issue"),
+                                        Component.literal("Protectors of Free Speech")))))));
     }
 
     @Nonnull

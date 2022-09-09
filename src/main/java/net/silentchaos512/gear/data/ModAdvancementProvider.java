@@ -2,18 +2,15 @@ package net.silentchaos512.gear.data;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -48,7 +45,6 @@ import java.util.function.Consumer;
 
 public class ModAdvancementProvider implements DataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private final DataGenerator generator;
 
     public ModAdvancementProvider(DataGenerator generator) {
@@ -56,7 +52,7 @@ public class ModAdvancementProvider implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) {
+    public void run(CachedOutput cache) {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = Sets.newHashSet();
         //noinspection OverlyLongLambda
@@ -67,7 +63,7 @@ public class ModAdvancementProvider implements DataProvider {
                 Path path1 = getPath(path, p_204017_3_);
 
                 try {
-                    DataProvider.save(GSON, cache, p_204017_3_.deconstruct().serializeToJson(), path1);
+                    DataProvider.saveStable(cache, p_204017_3_.deconstruct().serializeToJson(), path1);
                 } catch (IOException ioexception) {
                     LOGGER.error("Couldn't save advancement {}", path1, ioexception);
                 }
@@ -338,11 +334,11 @@ public class ModAdvancementProvider implements DataProvider {
         }
 
         private static Component title(String key) {
-            return new TranslatableComponent("advancements.silentgear." + key + ".title");
+            return Component.translatable("advancements.silentgear." + key + ".title");
         }
 
         private static Component description(String key) {
-            return new TranslatableComponent("advancements.silentgear." + key + ".description");
+            return Component.translatable("advancements.silentgear." + key + ".description");
         }
     }
 }

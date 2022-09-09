@@ -4,10 +4,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
@@ -67,7 +65,7 @@ public final class FakePartData implements IPartData {
 
     @Override
     public Component getDisplayName(PartType type, ItemStack gear) {
-        return new TextComponent("fake part");
+        return Component.literal("fake part");
     }
 
     @Override

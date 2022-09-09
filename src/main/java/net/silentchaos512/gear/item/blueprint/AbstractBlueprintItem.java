@@ -3,7 +3,6 @@ package net.silentchaos512.gear.item.blueprint;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -31,14 +30,14 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     }
 
     @Override
-    public ItemStack getContainerItem(ItemStack itemStack) {
+    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         ItemStack copy = itemStack.copy();
         copy.setCount(1);
         return copy;
     }
 
     @Override
-    public boolean hasContainerItem(ItemStack stack) {
+    public boolean hasCraftingRemainingItem(ItemStack stack) {
         return !this.singleUse;
     }
 
@@ -58,7 +57,7 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     @Override
     public Component getName(ItemStack stack) {
         String key = "item.silentgear." + (this.singleUse ? "template" : "blueprint");
-        return new TranslatableComponent(key, this.getCraftedName(stack));
+        return Component.translatable(key, this.getCraftedName(stack));
     }
 
     @Override

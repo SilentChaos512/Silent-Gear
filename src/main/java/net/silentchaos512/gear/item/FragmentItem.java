@@ -5,7 +5,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -65,14 +64,14 @@ public class FragmentItem extends Item {
     public Component getName(ItemStack stack) {
         IMaterialInstance material = getMaterial(stack);
         if (material == null) {
-            return new TranslatableComponent(this.getDescriptionId(stack) + ".invalid");
+            return Component.translatable(this.getDescriptionId(stack) + ".invalid");
         }
-        return new TranslatableComponent(this.getDescriptionId(stack), material.getDisplayName(PartType.MAIN));
+        return Component.translatable(this.getDescriptionId(stack), material.getDisplayName(PartType.MAIN));
     }
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (!this.allowdedIn(group)) return;
+        if (!this.allowedIn(group)) return;
 
         items.add(new ItemStack(this));
 

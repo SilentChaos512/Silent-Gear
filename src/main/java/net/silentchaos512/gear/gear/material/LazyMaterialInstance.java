@@ -1,13 +1,12 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.gson.JsonObject;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialDisplay;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
@@ -88,7 +87,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     @Override
     public Component getDisplayName(PartType partType, ItemStack gear) {
         IMaterial material = get();
-        return material != null ? material.getDisplayName(this, partType, gear) : new TextComponent("INVALID");
+        return material != null ? material.getDisplayName(this, partType, gear) : Component.literal("INVALID");
     }
 
     @Override

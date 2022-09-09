@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.event;
 
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -70,7 +70,7 @@ public final class RepairHandler {
         }
 
         if (amount > 0) {
-            result.hurt(-Math.round(amount * materialCount), SilentGear.RANDOM, null);
+            result.hurt(-Math.round(amount * materialCount), SilentGear.RANDOM_SOURCE, null);
             GearData.recalculateStats(result, null);
             event.setOutput(result);
             event.setCost(materialCount);
@@ -80,7 +80,7 @@ public final class RepairHandler {
 
     private static void applyName(AnvilUpdateEvent event, ItemStack stack) {
         if (!event.getName().isEmpty()) {
-            stack.setHoverName(new TextComponent(event.getName()));
+            stack.setHoverName(Component.literal(event.getName()));
         }
     }
 

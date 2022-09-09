@@ -3,7 +3,6 @@ package net.silentchaos512.gear.item.blueprint.book;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -87,9 +86,9 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     public static void openContainer(ServerPlayer playerIn, ItemStack stack) {
-        NetworkHooks.openGui(playerIn,
+        NetworkHooks.openScreen(playerIn,
                 new SimpleMenuProvider((id, inv, z) -> new BlueprintBookContainer(id, inv, stack),
-                        new TranslatableComponent("container.silentgear.blueprint_book")),
+                        Component.translatable("container.silentgear.blueprint_book")),
                 buf -> buf.writeItem(stack));
     }
 
@@ -126,7 +125,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowdedIn(group)) {
+        if (allowedIn(group)) {
             super.fillItemCategory(group, items);
 
             // Create a book with all blueprints
@@ -156,12 +155,12 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     @Override
-    public ItemStack getContainerItem(ItemStack itemStack) {
+    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         return itemStack.copy();
     }
 
     @Override
-    public boolean hasContainerItem(ItemStack stack) {
+    public boolean hasCraftingRemainingItem(ItemStack stack) {
         return true;
     }
 }

@@ -1,15 +1,14 @@
 package net.silentchaos512.gear.crafting.recipe.smithing;
 
 import com.google.gson.JsonObject;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -41,7 +40,7 @@ public class UpgradeSmithingRecipe extends GearSmithingRecipe {
         return ModRecipes.SMITHING_UPGRADE.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<UpgradeSmithingRecipe> {
+    public static class Serializer implements RecipeSerializer<UpgradeSmithingRecipe> {
         @Override
         public UpgradeSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             ItemStack gearItem = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "gear"));

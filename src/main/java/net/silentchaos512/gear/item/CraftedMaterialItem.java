@@ -6,8 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -71,12 +69,12 @@ public class CraftedMaterialItem extends Item implements IColoredMaterialItem {
     @Override
     public Component getName(ItemStack stack) {
         IMaterialInstance material = getMaterial(stack);
-        return new TranslatableComponent(this.getDescriptionId(), material.getDisplayName(PartType.MAIN));
+        return Component.translatable(this.getDescriptionId(), material.getDisplayName(PartType.MAIN));
     }
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowdedIn(group)) {
+        if (allowedIn(group)) {
             items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE), 1));
         }
     }
@@ -84,8 +82,8 @@ public class CraftedMaterialItem extends Item implements IColoredMaterialItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (stack.getOrCreateTag().get(NBT_MATERIAL) instanceof StringTag) {
-            tooltip.add(new TextComponent("Has an older NBT format").withStyle(ChatFormatting.RED));
-            tooltip.add(new TextComponent("May not stack with newer items").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.literal("Has an older NBT format").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.literal("May not stack with newer items").withStyle(ChatFormatting.RED));
         }
     }
 }

@@ -8,13 +8,13 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.util.IAoeTool;
+import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -402,15 +402,14 @@ public final class Config {
 
         @SuppressWarnings("TypeMayBeWeakened")
         public static boolean isNerfedItem(Item item) {
-            return nerfedItemsEnabled.get() && isThingInList(item, nerfedItems);
+            return nerfedItemsEnabled.get() && isThingInList(NameUtils.fromItem(item), nerfedItems);
         }
 
         public static boolean isSinewAnimal(LivingEntity entity) {
-            return isThingInList(entity.getType(), sinewAnimals);
+            return isThingInList(NameUtils.fromEntity(entity), sinewAnimals);
         }
 
-        private static boolean isThingInList(IForgeRegistryEntry<?> thing, ForgeConfigSpec.ConfigValue<List<? extends String>> list) {
-            ResourceLocation name = thing.getRegistryName();
+        private static boolean isThingInList(ResourceLocation name, ForgeConfigSpec.ConfigValue<List<? extends String>> list) {
             for (String str : list.get()) {
                 ResourceLocation fromList = ResourceLocation.tryParse(str);
                 if (fromList != null && fromList.equals(name)) {

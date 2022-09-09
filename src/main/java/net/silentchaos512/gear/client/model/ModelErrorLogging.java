@@ -2,6 +2,7 @@ package net.silentchaos512.gear.client.model;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 
@@ -17,7 +18,7 @@ public final class ModelErrorLogging {
             //noinspection ConstantConditions
             if (Minecraft.getInstance() != null && Minecraft.getInstance().player != null) {
                 LocalPlayer player = Minecraft.getInstance().player;
-                player.chat(String.format("Error while rendering %s, please test without Optifine before reporting", modelType));
+                player.sendSystemMessage(Component.literal(String.format("Error while rendering %s, please test without Optifine before reporting", modelType)));
             }
         }
 

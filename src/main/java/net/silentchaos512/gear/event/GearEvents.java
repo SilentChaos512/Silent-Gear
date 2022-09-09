@@ -19,7 +19,6 @@
 package net.silentchaos512.gear.event;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
@@ -58,7 +57,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -103,7 +102,7 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onAttackEntity(LivingAttackEvent event) {
         // Check if already handled
-        LivingEntity attacked = event.getEntityLiving();
+        LivingEntity attacked = event.getEntity();
         if (attacked == null || attacked.level.isClientSide || entityAttackedThisTick.contains(attacked.getUUID()))
             return;
 
@@ -130,7 +129,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
-        LivingEntity attacked = event.getEntityLiving();
+        LivingEntity attacked = event.getEntity();
 
         DamageSource source = event.getSource();
         if (source == null || !"player".equals(source.msgId)) return;
@@ -175,12 +174,12 @@ public final class GearEvents {
 
     private static void damageFlammableItems(LivingDamageEvent event) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            ItemStack stack = event.getEntityLiving().getItemBySlot(slot);
+            ItemStack stack = event.getEntity().getItemBySlot(slot);
             if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
-                GearHelper.attemptDamage(stack, 2, event.getEntityLiving(), slot);
+                GearHelper.attemptDamage(stack, 2, event.getEntity(), slot);
                 if (GearHelper.isBroken(stack)) {
-                    event.getEntityLiving().sendMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getHoverName()), Util.NIL_UUID);
-                    event.getEntityLiving().broadcastBreakEvent(slot);
+                    event.getEntity().sendSystemMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getHoverName()));
+                    event.getEntity().broadcastBreakEvent(slot);
                     stack.shrink(1);
                 }
             }
@@ -205,7 +204,7 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onLivingHurtMagicArmor(LivingHurtEvent event) {
         if (event.getSource().isMagic()) {
-            float magicArmor = getTotalMagicArmor(event.getEntityLiving());
+            float magicArmor = getTotalMagicArmor(event.getEntity());
             float scale = 1f - getReducedMagicDamageScale(magicArmor);
             event.setAmount(event.getAmount() * scale);
         }
@@ -234,7 +233,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        final Player player = event.getPlayer();
+        final Player player = event.getEntity();
         ItemStack tool = player.getMainHandItem();
 
         if (tool.getItem() instanceof ICoreItem) {
@@ -310,9 +309,9 @@ public final class GearEvents {
     public static void onGearCrafted(PlayerEvent.ItemCraftedEvent event) {
         ItemStack result = event.getCrafting();
 
-        if (GearHelper.isGear(result) && event.getPlayer() instanceof ServerPlayer) {
+        if (GearHelper.isGear(result) && event.getEntity() instanceof ServerPlayer) {
             // Try to trigger some advancments
-            ServerPlayer player = (ServerPlayer) event.getPlayer();
+            ServerPlayer player = (ServerPlayer) event.getEntity();
 
             // Crude tool
             if (GearData.hasPart(result, PartType.ROD, p -> p.containsMaterial(Const.Materials.WOOD_ROUGH))) {
@@ -440,17 +439,17 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onLivingFall(LivingFallEvent event) {
-        ItemStack stack = event.getEntityLiving().getItemBySlot(EquipmentSlot.FEET);
+        ItemStack stack = event.getEntity().getItemBySlot(EquipmentSlot.FEET);
 
-        if (event.getDistance() > 3 && event.getEntityLiving() instanceof Player player) {
+        if (event.getDistance() > 3 && event.getEntity() instanceof Player player) {
             // Moonwalker fall damage canceling/reduction
             int moonwalker = TraitHelper.getHighestLevelArmorOrCurio(player, Const.Traits.MOONWALKER);
             if (moonwalker > 0) {
                 float gravity = 1 + moonwalker * Const.Traits.MOONWALKER_GRAVITY_MOD;
                 event.setDistance(event.getDistance() * gravity);
 
-                if (event.getEntityLiving() instanceof ServerPlayer) {
-                    LibTriggers.GENERIC_INT.trigger((ServerPlayer) event.getEntityLiving(), FALL_WITH_MOONWALKER, 1);
+                if (event.getEntity() instanceof ServerPlayer) {
+                    LibTriggers.GENERIC_INT.trigger((ServerPlayer) event.getEntity(), FALL_WITH_MOONWALKER, 1);
                 }
             }
 
@@ -463,7 +462,7 @@ public final class GearEvents {
 //                    bounceEntity(event.getEntity());
                     int damage = (int) (event.getDistance() / 3) - 1;
                     if (damage > 0) {
-                        GearHelper.attemptDamage(stack, damage, event.getEntityLiving(), EquipmentSlot.FEET);
+                        GearHelper.attemptDamage(stack, damage, event.getEntity(), EquipmentSlot.FEET);
                     }
                     event.getEntity().level.playSound(null, event.getEntity().blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundSource.PLAYERS, 1f, 1f);
                     event.setCanceled(true);
@@ -504,10 +503,10 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onPlayerHurt(LivingHurtEvent event) {
-        if (event.getEntityLiving() instanceof Player) {
+        if (event.getEntity() instanceof Player) {
             Entity source = event.getSource().getDirectEntity();
             if (source instanceof LivingEntity) {
-                Player player = (Player) event.getEntityLiving();
+                Player player = (Player) event.getEntity();
                 int bounce = TraitHelper.getHighestLevelArmor(player, Const.Traits.BOUNCE);
                 if (bounce > 0) {
                     SilentGear.LOGGER.debug("knockback");

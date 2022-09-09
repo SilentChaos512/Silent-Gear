@@ -3,7 +3,6 @@ package net.silentchaos512.gear.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.Util;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -21,7 +20,7 @@ public final class ClientEvents {
     private ClientEvents() {}
 
     @SubscribeEvent
-    public static void onClick(InputEvent.ClickInputEvent event) {
+    public static void onClick(InputEvent.InteractionKeyMappingTriggered event) {
         if (event.isAttack()) {
             Minecraft mc = Minecraft.getInstance();
             Player player = mc.player;
@@ -39,7 +38,7 @@ public final class ClientEvents {
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getPlayer();
-        GearDisplayManager.getErrorMessages(player).forEach(text -> player.sendMessage(text, Util.NIL_UUID));
+        Player player = event.getEntity();
+        GearDisplayManager.getErrorMessages(player).forEach(player::sendSystemMessage);
     }
 }

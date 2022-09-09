@@ -1,16 +1,15 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.crafting.recipe.DamageItemRecipe;
@@ -40,7 +39,7 @@ public class SGearDamageItemRecipe extends DamageItemRecipe {
         return true;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SGearDamageItemRecipe> {
+    public static class Serializer implements RecipeSerializer<SGearDamageItemRecipe> {
         @Override
         public SGearDamageItemRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             int tier = GsonHelper.getAsInt(json, "minGearTier", 0);

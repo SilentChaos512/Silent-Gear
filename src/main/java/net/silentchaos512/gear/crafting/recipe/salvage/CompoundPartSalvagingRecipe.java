@@ -8,7 +8,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -54,7 +53,7 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
         return ModRecipes.SALVAGING_COMPOUND_PART.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CompoundPartSalvagingRecipe> {
+    public static class Serializer implements RecipeSerializer<CompoundPartSalvagingRecipe> {
         @Override
         public CompoundPartSalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new CompoundPartSalvagingRecipe(recipeId);

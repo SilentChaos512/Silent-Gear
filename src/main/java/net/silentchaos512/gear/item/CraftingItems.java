@@ -21,7 +21,6 @@ package net.silentchaos512.gear.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -123,7 +122,7 @@ public enum CraftingItems implements ItemLike {
         public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
             String descKey = this.getDescriptionId() + ".desc";
             if (I18n.exists(descKey)) {
-                tooltip.add(new TranslatableComponent(descKey).withStyle(ChatFormatting.ITALIC));
+                tooltip.add(Component.translatable(descKey).withStyle(ChatFormatting.ITALIC));
             }
         }
 

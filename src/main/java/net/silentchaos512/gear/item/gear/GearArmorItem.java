@@ -33,6 +33,7 @@ import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
@@ -76,7 +77,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
             case FEET:
                 return GearType.BOOTS;
             default:
-                throw new IllegalStateException("Don't know the gear type for " + this.getRegistryName());
+                throw new IllegalStateException("Don't know the gear type for " + NameUtils.fromItem(this));
         }
     }
 
@@ -174,7 +175,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
     }
 
     @Override
-    public int getItemEnchantability(ItemStack stack) {
+    public int getEnchantmentValue(ItemStack stack) {
         return GearHelper.getEnchantability(stack);
     }
 

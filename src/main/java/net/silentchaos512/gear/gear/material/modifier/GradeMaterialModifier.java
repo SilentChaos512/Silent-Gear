@@ -2,7 +2,6 @@ package net.silentchaos512.gear.gear.material.modifier;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
@@ -51,7 +50,7 @@ public class GradeMaterialModifier implements IMaterialModifier {
     @Override
     public void appendTooltip(List<Component> tooltip) {
         Component text = TextUtil.withColor(grade.getDisplayName(), Color.DEEPSKYBLUE);
-        tooltip.add(new TranslatableComponent("part.silentgear.gradeOnPart", text));
+        tooltip.add(Component.translatable("part.silentgear.gradeOnPart", text));
     }
 
     @Override

@@ -3,7 +3,6 @@ package net.silentchaos512.gear.item;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -73,7 +72,7 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     public Component getName(ItemStack stack) {
         MaterialInstance material = getMaterial(stack);
         if (material != null) {
-            return new TranslatableComponent(this.getDescriptionId(), material.getDisplayName(PartType.MAIN));
+            return Component.translatable(this.getDescriptionId(), material.getDisplayName(PartType.MAIN));
         }
         return super.getName(stack);
     }
@@ -84,7 +83,7 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowdedIn(group)) {
+        if (allowedIn(group)) {
             items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
 
             for (IMaterial material : MaterialManager.getValues()) {

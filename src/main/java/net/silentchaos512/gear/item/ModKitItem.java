@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
@@ -17,8 +17,6 @@ import net.silentchaos512.utils.Color;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ModKitItem extends Item implements ICycleItem {
     private static final String NBT_SELECTED = "SelectedType";
@@ -78,18 +76,18 @@ public class ModKitItem extends Item implements ICycleItem {
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE)));
 
         if (flagIn.isAdvanced()) {
-            TextComponent text = new TextComponent("Removable types: " + getRemovableTypes().size());
+            MutableComponent text = Component.literal("Removable types: " + getRemovableTypes().size());
             tooltip.add(TextUtil.withColor(text, ChatFormatting.DARK_GRAY));
         }
     }
 
     @Override
-    public ItemStack getContainerItem(ItemStack itemStack) {
+    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         return itemStack.copy();
     }
 
     @Override
-    public boolean hasContainerItem(ItemStack stack) {
+    public boolean hasCraftingRemainingItem(ItemStack stack) {
         return true;
     }
 }

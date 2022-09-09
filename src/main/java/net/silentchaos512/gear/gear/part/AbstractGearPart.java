@@ -6,8 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
@@ -120,13 +118,13 @@ public abstract class AbstractGearPart implements IGearPart {
 
     @Override
     public Component getDisplayName(@Nullable PartData part, ItemStack gear) {
-        if (displayName == null) return new TextComponent("<error: missing name>");
+        if (displayName == null) return Component.literal("<error: missing name>");
         return displayName.copy();
     }
 
     @Override
     public Component getDisplayName(@Nullable IPartData part, PartType type, ItemStack gear) {
-        if (displayName == null) return new TextComponent("<error: missing name>");
+        if (displayName == null) return Component.literal("<error: missing name>");
         return displayName.copy();
     }
 
@@ -141,7 +139,7 @@ public abstract class AbstractGearPart implements IGearPart {
 
     /**
      * List of blacklisted {@link GearType}s, mostly used for part tooltips. To know whether of not
-     * a part may be used in crafting, use {@link #isCraftingAllowed(IPartData, PartType, GearType, IInventory)} instead.
+     * a part may be used in crafting, use {@link #isCraftingAllowed(IPartData, PartType, GearType, Container)} instead.
      *
      * @return The List of GearTypes the part may not be used to craft (may be empty)
      */
@@ -252,7 +250,7 @@ public abstract class AbstractGearPart implements IGearPart {
             if (json.isJsonObject() && json.getAsJsonObject().has("name")) {
                 boolean translate = GsonHelper.getAsBoolean(json.getAsJsonObject(), "translate", false);
                 String name = GsonHelper.getAsString(json.getAsJsonObject(), "name");
-                return translate ? new TranslatableComponent(name) : new TextComponent(name);
+                return translate ? Component.translatable(name) : Component.literal(name);
             }
 
             // Deserialize use vanilla serializer

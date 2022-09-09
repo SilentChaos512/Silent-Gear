@@ -1,5 +1,6 @@
 package net.silentchaos512.gear;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +26,7 @@ public final class SilentGear {
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
 
     public static final Random RANDOM = new Random();
+    public static final RandomSource RANDOM_SOURCE = RandomSource.create();
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     public static SilentGear INSTANCE;

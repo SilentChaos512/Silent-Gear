@@ -3,8 +3,6 @@ package net.silentchaos512.gear.item.blueprint;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -56,21 +54,16 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     @Override
     public TagKey<Item> getItemTag() {
         if (itemTag == null) {
-            ResourceLocation id = this.getRegistryName();
-            if (id != null) {
-                itemTag = ItemTags.create(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()));
-            }
+            ResourceLocation id = NameUtils.fromItem(this);
+            itemTag = ItemTags.create(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()));
         }
         return itemTag;
     }
 
     @Override
     protected Component getCraftedName(ItemStack stack) {
-        ResourceLocation id = this.getRegistryName();
-        if (id == null) {
-            return new TextComponent("ERROR");
-        }
-        return new TranslatableComponent(Util.makeDescriptionId("item", new ResourceLocation(id.getNamespace(), this.gearType.getName())));
+        ResourceLocation id = NameUtils.fromItem(this);
+        return Component.translatable(Util.makeDescriptionId("item", new ResourceLocation(id.getNamespace(), this.gearType.getName())));
     }
 
     @Override
@@ -80,7 +73,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         // Flavor text
         if (!gearType.isArmor()) {
             String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
-            tooltip.add(new TranslatableComponent(key).withStyle(ChatFormatting.ITALIC));
+            tooltip.add(Component.translatable(key).withStyle(ChatFormatting.ITALIC));
         }
 
         // Armor durability text
@@ -93,11 +86,11 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
-            tooltip.add(new TranslatableComponent("item.silentgear.blueprint.disabled").withStyle(ChatFormatting.DARK_RED));
+            tooltip.add(Component.translatable("item.silentgear.blueprint.disabled").withStyle(ChatFormatting.DARK_RED));
         } else if (this.singleUse) {
-            tooltip.add(new TranslatableComponent("item.silentgear.blueprint.singleUse").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("item.silentgear.blueprint.singleUse").withStyle(ChatFormatting.RED));
         } else {
-            tooltip.add(new TranslatableComponent("item.silentgear.blueprint.multiUse").withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable("item.silentgear.blueprint.multiUse").withStyle(ChatFormatting.GREEN));
         }
 
         appendSupportedTypesText(tooltip);

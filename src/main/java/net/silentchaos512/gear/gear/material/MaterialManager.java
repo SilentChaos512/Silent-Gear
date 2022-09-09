@@ -7,7 +7,6 @@ import com.google.gson.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.Resource;
@@ -187,13 +186,13 @@ public class MaterialManager implements ResourceManagerReloadListener {
         Collection<Component> ret = new ArrayList<>();
         if (!ERROR_LIST.isEmpty()) {
             String listStr = String.join(", ", ERROR_LIST);
-            ret.add(TextUtil.withColor(new TextComponent("[Silent Gear] The following materials failed to load, check your log file:"),
+            ret.add(TextUtil.withColor(Component.literal("[Silent Gear] The following materials failed to load, check your log file:"),
                     ChatFormatting.RED));
-            ret.add(new TextComponent(listStr));
+            ret.add(Component.literal(listStr));
         }
         INGREDIENT_CONFLICT_LIST.forEach(line -> {
-            MutableComponent text = TextUtil.withColor(new TextComponent(line), ChatFormatting.YELLOW);
-            ret.add(new TextComponent("[Silent Gear] ").append(text));
+            MutableComponent text = TextUtil.withColor(Component.literal(line), ChatFormatting.YELLOW);
+            ret.add(Component.literal("[Silent Gear] ").append(text));
         });
         return ret;
     }

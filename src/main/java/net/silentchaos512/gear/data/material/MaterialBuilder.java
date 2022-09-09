@@ -3,7 +3,6 @@ package net.silentchaos512.gear.data.material;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -76,7 +75,7 @@ public class MaterialBuilder {
         this.id = id;
         this.tier = tier;
         this.ingredient = ingredient;
-        this.name = new TranslatableComponent(String.format("material.%s.%s",
+        this.name = Component.translatable(String.format("material.%s.%s",
                 this.id.getNamespace(),
                 this.id.getPath().replace("/", ".")));
     }

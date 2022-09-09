@@ -10,7 +10,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -70,8 +69,8 @@ public class AndTraitCondition implements ITraitCondition {
         Component text = Arrays.stream(this.children)
                 .map(ITraitCondition::getDisplayText)
                 .reduce((t1, t2) -> t1.append(TextUtil.translate("trait.condition", "and")).append(t2))
-                .orElseGet(() -> new TextComponent(""));
-        return new TextComponent("(").append(text).append(")");
+                .orElseGet(() -> Component.literal(""));
+        return Component.literal("(").append(text).append(")");
     }
 
     public static class Serializer implements ITraitConditionSerializer<AndTraitCondition> {

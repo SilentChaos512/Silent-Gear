@@ -28,7 +28,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.config.Config;
@@ -165,8 +164,8 @@ public class QuickRepairRecipe extends CustomRecipe {
                 ItemStack copy = stack.copy();
                 item.removeRepairMaterials(copy, item.getRepairMaterials(gear, copy, RepairContext.Type.QUICK));
                 list.set(i, copy);
-            } else if (stack.hasContainerItem()) {
-                list.set(i, stack.getContainerItem());
+            } else if (stack.hasCraftingRemainingItem()) {
+                list.set(i, stack.getCraftingRemainingItem());
             }
         }
 
@@ -188,7 +187,7 @@ public class QuickRepairRecipe extends CustomRecipe {
         return ModRecipes.QUICK_REPAIR.get();
     }
 
-    public static final class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<QuickRepairRecipe> {
+    public static final class Serializer implements RecipeSerializer<QuickRepairRecipe> {
         @Override
         public QuickRepairRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             return new QuickRepairRecipe(recipeId);

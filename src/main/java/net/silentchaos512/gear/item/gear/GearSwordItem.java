@@ -56,7 +56,7 @@ public class GearSwordItem extends SwordItem implements ICoreWeapon {
     }
 
     @Override
-    public int getItemEnchantability(ItemStack stack) {
+    public int getEnchantmentValue(ItemStack stack) {
         return GearHelper.getEnchantability(stack);
     }
 

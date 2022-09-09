@@ -17,9 +17,6 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartDisplay;
 import net.silentchaos512.gear.api.part.PartDisplay;
-import net.silentchaos512.gear.client.model.fragment.FragmentModelLoader;
-import net.silentchaos512.gear.client.model.gear.GearModelLoader;
-import net.silentchaos512.gear.client.model.part.CompoundPartModelLoader;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.util.IEarlySelectiveReloadListener;
@@ -46,9 +43,9 @@ public final class GearDisplayManager implements IEarlySelectiveReloadListener {
 
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
-        CompoundPartModelLoader.clearCaches();
-        FragmentModelLoader.clearCaches();
-        GearModelLoader.clearCaches();
+//        CompoundPartModelLoader.clearCaches();
+//        FragmentModelLoader.clearCaches();
+//        GearModelLoader.clearCaches();
 
         ERROR_LIST.clear();
         reloadMaterials(resourceManager);

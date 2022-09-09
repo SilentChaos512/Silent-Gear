@@ -2,7 +2,7 @@ package net.silentchaos512.gear.data;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.data.client.CompoundModelsProvider;
 import net.silentchaos512.gear.data.client.ModBlockStateProvider;
@@ -21,19 +21,19 @@ public final class DataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         ModBlockTagsProvider blocks = new ModBlockTagsProvider(gen, existingFileHelper);
-        gen.addProvider(blocks);
-        gen.addProvider(new ModItemTagsProvider(gen, blocks, existingFileHelper));
+        gen.addProvider(true, blocks);
+        gen.addProvider(true, new ModItemTagsProvider(gen, blocks, existingFileHelper));
 
-        gen.addProvider(new TraitsProvider(gen));
-        gen.addProvider(new MaterialsProvider(gen, SilentGear.MOD_ID));
-        gen.addProvider(new PartsProvider(gen));
+        gen.addProvider(true, new TraitsProvider(gen));
+        gen.addProvider(true, new MaterialsProvider(gen, SilentGear.MOD_ID));
+        gen.addProvider(true, new PartsProvider(gen));
 
-        gen.addProvider(new ModLootTables(gen));
-        gen.addProvider(new ModRecipesProvider(gen));
-        gen.addProvider(new ModAdvancementProvider(gen));
+        gen.addProvider(true, new ModLootTables(gen));
+        gen.addProvider(true, new ModRecipesProvider(gen));
+        gen.addProvider(true, new ModAdvancementProvider(gen));
 
-        gen.addProvider(new ModBlockStateProvider(gen, existingFileHelper));
-        gen.addProvider(new ModItemModelProvider(gen, existingFileHelper));
-        gen.addProvider(new CompoundModelsProvider(gen, existingFileHelper));
+        gen.addProvider(true, new ModBlockStateProvider(gen, existingFileHelper));
+        gen.addProvider(true, new ModItemModelProvider(gen, existingFileHelper));
+        gen.addProvider(true, new CompoundModelsProvider(gen, existingFileHelper));
     }
 }

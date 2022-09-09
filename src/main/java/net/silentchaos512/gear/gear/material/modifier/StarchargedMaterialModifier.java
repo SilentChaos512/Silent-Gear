@@ -2,7 +2,6 @@ package net.silentchaos512.gear.gear.material.modifier;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ChargedProperties;
@@ -51,7 +50,7 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
 
     private MutableComponent getNameWithLevel() {
         MutableComponent text = TextUtil.translate("materialModifier", "starcharged");
-        text.append(" ").append(new TranslatableComponent("enchantment.level." + level));
+        text.append(" ").append(Component.translatable("enchantment.level." + level));
         return text;
     }
 

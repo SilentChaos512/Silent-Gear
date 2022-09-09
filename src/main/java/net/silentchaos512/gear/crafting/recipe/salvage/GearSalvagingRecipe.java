@@ -7,7 +7,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.init.ModRecipes;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -40,7 +39,7 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
         return ModRecipes.SALVAGING_GEAR.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<GearSalvagingRecipe> {
+    public static class Serializer implements RecipeSerializer<GearSalvagingRecipe> {
         @Override
         public GearSalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             GearSalvagingRecipe recipe = new GearSalvagingRecipe(recipeId);

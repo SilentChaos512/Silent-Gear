@@ -2,12 +2,11 @@ package net.silentchaos512.gear.gear.part;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -90,7 +89,7 @@ public class LazyPartData implements IPartData {
     @Override
     public Component getDisplayName(PartType type, ItemStack gear) {
         IGearPart part = get();
-        return part != null ? part.getDisplayName(this, type, gear) : new TextComponent("INVALID");
+        return part != null ? part.getDisplayName(this, type, gear) : Component.literal("INVALID");
     }
 
     @Override

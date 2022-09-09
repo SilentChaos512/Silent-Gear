@@ -5,8 +5,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -47,8 +45,8 @@ public class TraitBuilder {
         this.type = serializer.getName();
         this.maxLevel = maxLevel;
 
-        this.name = new TranslatableComponent(Util.makeDescriptionId("trait", traitId));
-        this.description = new TranslatableComponent(Util.makeDescriptionId("trait", traitId) + ".desc");
+        this.name = Component.translatable(Util.makeDescriptionId("trait", traitId));
+        this.description = Component.translatable(Util.makeDescriptionId("trait", traitId) + ".desc");
     }
 
     public static TraitBuilder simple(DataResource<ITrait> trait, int maxLevel) {
@@ -109,7 +107,7 @@ public class TraitBuilder {
 
     public TraitBuilder extraWikiLines(String... lines) {
         for (String line : lines) {
-            this.extraWikiLines.add(new TextComponent(line));
+            this.extraWikiLines.add(Component.literal(line));
         }
         return this;
     }
