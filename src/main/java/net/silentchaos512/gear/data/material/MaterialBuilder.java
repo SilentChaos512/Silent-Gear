@@ -340,6 +340,14 @@ public class MaterialBuilder {
         return this;
     }
 
+    public MaterialBuilder mainStatsRanged(float rangedDamage, float rangedSpeed, float projectileSpeed, float projectileAccuracy) {
+        stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, rangedDamage);
+        stat(PartType.MAIN, ItemStats.RANGED_SPEED, rangedSpeed);
+        stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, projectileSpeed);
+        stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, projectileAccuracy);
+        return this;
+    }
+
     public MaterialBuilder mainStatsProjectile(float projectileSpeed, float projectileAccuracy) {
         stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, projectileSpeed);
         stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, projectileAccuracy);

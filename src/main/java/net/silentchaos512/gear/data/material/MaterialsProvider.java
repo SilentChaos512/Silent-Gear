@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.data.material;
 
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import cpw.mods.util.LambdaExceptionUtils;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -40,13 +40,10 @@ import net.silentchaos512.utils.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Set;
 
 public class MaterialsProvider implements DataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -115,26 +112,16 @@ public class MaterialsProvider implements DataProvider {
                 .categories(MaterialCategories.INTANGIBLE)
                 .visible(false)
                 .canSalvage(false)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 1337)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 84)
+                .name(Component.translatable(Items.BARRIER.getDescriptionId()))
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF0000)
+                .mainStatsCommon(1337, 84, 5, 111, 0.5f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -1f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 5)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 0)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 5)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .stat(PartType.MAIN, ItemStats.ARMOR, 20)
-                .stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, 10)
-                .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 10)
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 111)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.5f)
+                .mainStatsHarvest(0, 5)
+                .mainStatsMelee(1, 1, 0f)
+                .mainStatsRanged(1, 0f)
+                .mainStatsArmor(3, 8, 6, 3, 10, 10)
                 .trait(PartType.MAIN, Const.Traits.ADAMANT, 5)
                 .trait(PartType.MAIN, Const.Traits.HOLY, 5)
-                .name(new TranslatableComponent(Items.BARRIER.getDescriptionId()))
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF0000)
         );
 
         // Example
@@ -143,22 +130,12 @@ public class MaterialsProvider implements DataProvider {
                 .visible(false)
                 .canSalvage(false)
                 .blacklistGearType("all")
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 100)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 6)
-                .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -1f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 1)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 0)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 1)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .stat(PartType.MAIN, ItemStats.ARMOR, 1)
-                .stat(PartType.MAIN, ItemStats.ARMOR_TOUGHNESS, 1)
-                .stat(PartType.MAIN, ItemStats.MAGIC_ARMOR, 1)
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 0)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 1f)
+                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
+                .mainStatsCommon(100, 6, 1, 0, 1f)
+                .mainStatsHarvest(0, 1)
+                .mainStatsMelee(1, 1, 0f)
+                .mainStatsRanged(0, 0f)
+                .mainStatsArmor(1, 1, 1, 1, 1, 1)
                 .noStats(PartType.ROD)
                 .noStats(PartType.TIP)
                 .noStats(PartType.COATING)
@@ -168,7 +145,6 @@ public class MaterialsProvider implements DataProvider {
                 .noStats(PartType.CORD)
                 .noStats(PartType.FLETCHING)
                 .noStats(PartType.ADORNMENT)
-                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
         );
     }
 
@@ -176,99 +152,81 @@ public class MaterialsProvider implements DataProvider {
         // Azure Electrum
         ret.add(new MaterialBuilder(modId("azure_electrum"), 4, ModTags.Items.INGOTS_AZURE_ELECTRUM)
                 .categories(MaterialCategories.METAL)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 1259)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 61)
-                .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 37)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 5)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 29)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 7)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 11)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .mainStatsArmor(3, 7, 6, 3, 8, 19) //19
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 3)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 2f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.5f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 109)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 1.5f)
-                .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 5, StatInstance.Operation.ADD)
-                .stat(PartType.ROD, ItemStats.PROJECTILE_SPEED, 1.5f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 67)
-                .stat(PartType.TIP, ItemStats.DURABILITY, 401, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 11, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 5, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 3, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.3f, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.RARITY, 41, StatInstance.Operation.ADD)
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 5)
-                .trait(PartType.MAIN, Const.Traits.ACCELERATE, 3, new MaterialRatioTraitCondition(0.35f))
-                .trait(PartType.MAIN, Const.Traits.LIGHT, 4, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
-                .trait(PartType.ROD, Const.Traits.ACCELERATE, 5, new MaterialRatioTraitCondition(0.66f))
-                .trait(PartType.TIP, Const.Traits.MALLEABLE, 3)
-                //.trait(PartType.TIP, Const.Traits.ACCELERATE, 2)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x4575E3)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x4575E3)
                 .displayTip(PartTextures.TIP_SHARP, 0x4575E3)
+                //main
+                .mainStatsCommon(1259, 61, 37, 109, 1.5f)
+                .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
+                .mainStatsHarvest(5, 29)
+                .mainStatsMelee(7, 11, 0.0f)
+                .mainStatsRanged(3, 0.0f)
+                .mainStatsProjectile(2f, 1.5f)
+                .mainStatsArmor(3, 7, 6, 3, 8, 19) //19
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
+                .trait(PartType.MAIN, Const.Traits.ACCELERATE, 3, new MaterialRatioTraitCondition(0.35f))
+                .trait(PartType.MAIN, Const.Traits.LIGHT, 4, new MaterialRatioTraitCondition(0.5f))
+                //rod
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 3, StatInstance.Operation.ADD)
+                .stat(PartType.ROD, ItemStats.PROJECTILE_SPEED, 1.5f, StatInstance.Operation.MUL2)
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
+                .trait(PartType.ROD, Const.Traits.ACCELERATE, 5, new MaterialRatioTraitCondition(0.66f))
+                //tip
+                .stat(PartType.TIP, ItemStats.DURABILITY, 401, StatInstance.Operation.ADD)
+                .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 11, StatInstance.Operation.ADD)
+                .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 5, StatInstance.Operation.ADD)
+                .trait(PartType.TIP, Const.Traits.MALLEABLE, 3)
         );
         // Azure Silver
         ret.add(new MaterialBuilder(modId("azure_silver"), 3, ModTags.Items.INGOTS_AZURE_SILVER)
                 .categories(MaterialCategories.METAL)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 197)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 17)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xCBBAFF)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xCBBAFF)
+                .displayTip(PartTextures.TIP_SHARP, 0xCBBAFF)
+                //main
+                .mainStatsCommon(197, 17, 29, 83, 1.4f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 29)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 19)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 5)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 7)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .mainStatsHarvest(3, 19)
+                .mainStatsMelee(5, 7, 0.0f)
+                .mainStatsRanged(2, 0.0f)
+                .mainStatsProjectile(1.2f, 1.1f)
                 .mainStatsArmor(2, 5, 4, 2, 0, 13) //13
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.2f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.1f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 83)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 1.4f)
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
+                .trait(PartType.MAIN, Const.Traits.SOFT, 2)
+                .trait(PartType.MAIN, Const.Traits.MOONWALKER, 4, new MaterialRatioTraitCondition(0.5f))
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 3, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.RARITY, 47)
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
+                //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 83, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 3, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 3, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.2f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 31, StatInstance.Operation.ADD)
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.MAIN, Const.Traits.SOFT, 2)
-                .trait(PartType.MAIN, Const.Traits.MOONWALKER, 4, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
-                .trait(PartType.TIP, Const.Traits.MALLEABLE, 3)
+                .trait(PartType.TIP, Const.Traits.MALLEABLE, 2)
                 .trait(PartType.TIP, Const.Traits.SOFT, 2)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xCBBAFF)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xCBBAFF)
-                .displayTip(PartTextures.TIP_SHARP, 0xCBBAFF)
         );
         // Blaze Gold
         ret.add(new MaterialBuilder(modId("blaze_gold"), 3, ModTags.Items.INGOTS_BLAZE_GOLD)
                 .categories(MaterialCategories.METAL)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 69)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 24)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 15)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 5)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xDD8500)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xDD8500)
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
+                //main
+                .mainStatsCommon(69, 9, 24, 45, 1.2f)
+                .mainStatsHarvest(2, 15)
+                .mainStatsMelee(2, 5, 0.1f)
+                .mainStatsRanged(1, 0.2f)
+                .mainStatsProjectile(1.2f, 0.9f)
                 .mainStatsArmor(2, 5, 4, 2, 1, 10) //13
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.2f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.2f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.9f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 45)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 1.2f)
+                .trait(PartType.MAIN, Const.Traits.BRILLIANT, 1, new MaterialRatioTraitCondition(0.7f))
+                .trait(PartType.MAIN, Const.Traits.GREEDY, 3)
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.35f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.ENCHANTABILITY, 0.55f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
@@ -277,6 +235,9 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.MAGIC_DAMAGE, 0.3f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RANGED_DAMAGE, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 55)
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.ROD, Const.Traits.SYNERGISTIC, 2)
+                //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 32, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 3, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
@@ -284,120 +245,102 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 14, StatInstance.Operation.ADD)
+                .trait(PartType.TIP, Const.Traits.SOFT, 2)
+                .trait(PartType.TIP, Const.Traits.FIERY, 4)
+                //coating
                 .stat(PartType.COATING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, -0.05f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
-                .trait(PartType.MAIN, Const.Traits.BRILLIANT, 1, new MaterialRatioTraitCondition(0.7f))
-                .trait(PartType.MAIN, Const.Traits.GREEDY, 3)
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.ROD, Const.Traits.SYNERGISTIC, 2)
-                .trait(PartType.TIP, Const.Traits.SOFT, 2)
-                .trait(PartType.TIP, Const.Traits.FIERY, 4)
                 .trait(PartType.COATING, Const.Traits.BRILLIANT, 1)
                 .trait(PartType.COATING, Const.Traits.SOFT, 2)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xDD8500)
-                .displayTip(PartTextures.TIP_SMOOTH, 0xDD8500)
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
         );
         // Crimson Iron
         ret.add(new MaterialBuilder(modId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)
                 .categories(MaterialCategories.METAL)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 420)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 27)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF6189)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFF6189)
+                .displayTip(PartTextures.TIP_SHARP, 0xFF6189)
+                //main
+                .mainStatsCommon(420, 27, 14, 31, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 14)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 10)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.1f)
+                .mainStatsHarvest(3, 10)
+                .mainStatsMelee(3, 3, -0.1f)
+                .mainStatsRanged(2, -0.1f)
+                .mainStatsProjectile(1, 1.1f)
                 .mainStatsArmor(3, 7, 5, 3, 2, 6) //18
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.1f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 31)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.7f)
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
+                .trait(PartType.MAIN, Const.Traits.HARD, 2)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.ENCHANTABILITY, 1, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.ENCHANTABILITY, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 30)
+                .trait(PartType.ROD, Const.Traits.MALLEABLE, 3, new MaterialRatioTraitCondition(0.5f))
+                //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 224, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 8, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 3, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.MAIN, Const.Traits.HARD, 2)
-                .trait(PartType.ROD, Const.Traits.MALLEABLE, 3, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.TIP, Const.Traits.FIERY, 1)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF6189)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFF6189)
-                .displayTip(PartTextures.TIP_SHARP, 0xFF6189)
         );
         // Crimson Steel
         ret.add(new MaterialBuilder(modId("crimson_steel"), 4, ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .categories(MaterialCategories.METAL)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 2400)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 42)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDC143C)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xDC143C)
+                .displayTip(PartTextures.TIP_SHARP, 0xDC143C)
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 5)
+                .trait(PartType.MAIN, Const.Traits.HARD, 3)
+                .trait(PartType.MAIN, Const.Traits.FLAME_WARD, 1, materialCountOrRatio(3, 0.33f))
+                //main
+                .mainStatsCommon(2400, 42, 19, 83, 0.9f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 19)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 4)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 15)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 6)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 6)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.1f)
+                .mainStatsHarvest(4, 15)
+                .mainStatsMelee(6, 6, -0.1f)
+                .mainStatsRanged(3, -0.1f)
+                .mainStatsProjectile(1f, 1.3f)
                 .mainStatsArmor(4, 8, 6, 4, 10, 10) //22
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 3)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.3f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 83)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.9f)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.5f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RANGED_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.RARITY, 42)
+                .trait(PartType.ROD, Const.Traits.MALLEABLE, 5, new MaterialRatioTraitCondition(0.5f))
+                //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 448, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 16, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 4, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 5)
-                .trait(PartType.MAIN, Const.Traits.HARD, 3)
-                .trait(PartType.MAIN, Const.Traits.FLAME_WARD, 1, materialCountOrRatio(3, 0.33f))
-                .trait(PartType.ROD, Const.Traits.MALLEABLE, 5, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.TIP, Const.Traits.MAGMATIC, 1)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDC143C)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xDC143C)
-                .displayTip(PartTextures.TIP_SHARP, 0xDC143C)
         );
         // Tyrian Steel
         ret.add(new MaterialBuilder(modId("tyrian_steel"), 4, ModTags.Items.INGOTS_TYRIAN_STEEL)
                 .categories(MaterialCategories.METAL)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xB01080)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xB01080)
+                .displayTip(PartTextures.TIP_SHARP, 0xB01080)
+                //main
                 .mainStatsCommon(3652, 81, 16, 100, 1.1f)
                 .mainStatsHarvest(5, 18)
                 .mainStatsMelee(8, 6, 0.0f)
                 .mainStatsRanged(4, 0.0f)
+                .mainStatsProjectile(1.1f, 1.1f)
                 .mainStatsArmor(5, 9, 7, 4, 12, 12) //25
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.1f)
+                .trait(PartType.MAIN, Const.Traits.STURDY, 3, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.MAIN, Const.Traits.VOID_WARD, 1, materialCountOrRatio(3, 0.5f))
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 100)
+                .trait(PartType.ROD, Const.Traits.STURDY, 4, new MaterialRatioTraitCondition(0.5f))
+                //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 251, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 5, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.RARITY, 30, StatInstance.Operation.ADD)
-                .trait(PartType.MAIN, Const.Traits.STURDY, 3, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.MAIN, Const.Traits.VOID_WARD, 1, materialCountOrRatio(3, 0.5f))
-                .trait(PartType.ROD, Const.Traits.STURDY, 4, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.TIP, Const.Traits.IMPERIAL, 3)
                 .trait(PartType.TIP, Const.Traits.GOLD_DIGGER, 3)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xB01080)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xB01080)
-                .displayTip(PartTextures.TIP_SHARP, 0xB01080)
         );
     }
 
@@ -405,87 +348,84 @@ public class MaterialsProvider implements DataProvider {
         // Copper
         ret.add(new MaterialBuilder(modId("copper"), 2, Items.COPPER_INGOT)
                 .categories(MaterialCategories.METAL)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFD804C)
+                //main
                 .mainStatsCommon(151, 12, 15, 12, 1.3f)
                 .mainStatsHarvest(1, 5)
                 .mainStatsMelee(1.5f, 1.0f, 0.1f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
                 .mainStatsRanged(0.1f, 0.0f)
                 .mainStatsArmor(2, 4, 3, 1, 0, 8) //10
+                .trait(PartType.MAIN, Const.Traits.SOFT, 1, new MaterialRatioTraitCondition(0.5f))
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 15)
-                .trait(PartType.MAIN, Const.Traits.SOFT, 1, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, Const.Traits.SOFT, 3)
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFD804C)
         );
         // Gold
         ret.add(new MaterialBuilder(modId("gold"), 2, Tags.Items.INGOTS_GOLD)
                 .categories(MaterialCategories.METAL)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 32)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 7)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 22)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 0)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 12)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFDFF70)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xFDFF70)
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
+                //main
+                .mainStatsCommon(32, 7, 22, 50, 1.2f)
+                .mainStatsHarvest(0, 12)
+                .mainStatsMelee(0, 4, 0.0f)
+                .mainStatsRanged(0, 0.3f)
+                .mainStatsProjectile(1.1f, 1.0f)
                 .mainStatsArmor(2, 5, 3, 1, 0, 8) //11
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.3f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.0f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 50)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 1.2f)
+                .trait(PartType.MAIN, Const.Traits.BRILLIANT, 1, new MaterialRatioTraitCondition(0.7f))
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 1)
+                .trait(PartType.MAIN, Const.Traits.SOFT, 3)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.ENCHANTABILITY, 3, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.RARITY, 40)
+                .trait(PartType.ROD, Const.Traits.MALLEABLE, 1, new MaterialRatioTraitCondition(0.5f))
+                //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 16, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 6, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 30, StatInstance.Operation.ADD)
+                .trait(PartType.TIP, Const.Traits.MALLEABLE, 1)
+                .trait(PartType.TIP, Const.Traits.SOFT, 3)
+                //coating
                 .stat(PartType.COATING, ItemStats.DURABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
-                .trait(PartType.MAIN, Const.Traits.BRILLIANT, 1, new MaterialRatioTraitCondition(0.7f))
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 1)
-                .trait(PartType.MAIN, Const.Traits.SOFT, 3)
-                .trait(PartType.ROD, Const.Traits.MALLEABLE, 1, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.TIP, Const.Traits.MALLEABLE, 1)
-                .trait(PartType.TIP, Const.Traits.SOFT, 3)
                 .trait(PartType.COATING, Const.Traits.BRILLIANT, 1)
                 .trait(PartType.COATING, Const.Traits.SOFT, 3)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFDFF70)
-                .displayTip(PartTextures.TIP_SMOOTH, 0xFDFF70)
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
         );
         // Iron
         ret.add(new MaterialBuilder(modId("iron"), 2, Tags.Items.INGOTS_IRON)
                 .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_IRON)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 250)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 14)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 6)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, Color.VALUE_WHITE)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD8D8D8)
+                .displayTip(PartTextures.TIP_SHARP, Color.VALUE_WHITE)
+                //main
+                .mainStatsCommon(250, 15, 14, 20, 0.7f)
+                .mainStatsHarvest(2, 6)
+                .mainStatsMelee(2, 1, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
+                .mainStatsRanged(1, 0.1f)
+                .mainStatsProjectile(1.0f, 1.1f)
                 .mainStatsArmor(2, 6, 5, 2, 0, 6) //15
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.1f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 20)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.7f)
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
+                .trait(PartType.MAIN, Const.Traits.MAGNETIC, 1, new MaterialRatioTraitCondition(0.66f))
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.15f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.ENCHANTABILITY, -2, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.ENCHANTABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 20)
+                .trait(PartType.ROD, Const.Traits.MAGNETIC, 3, new MaterialRatioTraitCondition(0.5f))
+                //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 128, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 4, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
@@ -493,18 +433,16 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.MAIN, Const.Traits.MAGNETIC, 1, new MaterialRatioTraitCondition(0.66f))
-                .trait(PartType.ROD, Const.Traits.MAGNETIC, 3, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.TIP, Const.Traits.MALLEABLE, 2)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, Color.VALUE_WHITE)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD8D8D8)
-                .displayTip(PartTextures.TIP_SHARP, Color.VALUE_WHITE)
         );
         // Netherite
         ret.add(new MaterialBuilder(modId("netherite"), 4, Items.NETHERITE_INGOT)
                 .categories(MaterialCategories.METAL)
                 .namePrefix(TextUtil.translate("material", "netherite"))
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x867B86)
+                .display(PartType.COATING, GearType.ARMOR, new StaticLayer(new ResourceLocation("netherite")))
+                .displayFragment(PartTextures.DUST, 0x867B86)
+                //coating
                 .stat(PartType.COATING, ItemStats.DURABILITY, 0.3f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.DURABILITY, 2, StatInstance.Operation.ADD)
                 .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, 37f / 33f - 1f, StatInstance.Operation.MUL2)
@@ -517,9 +455,6 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.COATING, ItemStats.KNOCKBACK_RESISTANCE, 1f, StatInstance.Operation.ADD)
                 .stat(PartType.COATING, ItemStats.ENCHANTABILITY, 5, StatInstance.Operation.ADD)
                 .trait(PartType.COATING, Const.Traits.FIREPROOF, 1)
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x867B86)
-                .display(PartType.COATING, GearType.ARMOR, new StaticLayer(new ResourceLocation("netherite")))
-                .displayFragment(PartTextures.DUST, 0x867B86)
         );
     }
 
@@ -527,22 +462,17 @@ public class MaterialsProvider implements DataProvider {
         // Diamond
         ret.add(new MaterialBuilder(modId("diamond"), 3, Tags.Items.GEMS_DIAMOND)
                 .categories(MaterialCategories.GEM)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x33EBCB)
+                .displayTip(PartTextures.TIP_SHARP, 0x33EBCB)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
                 // main
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 1561)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 33)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 10)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 8)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .mainStatsCommon(1561, 33, 10, 70, 0.8f)
+                .mainStatsHarvest(3, 8)
+                .mainStatsMelee(3, 1, 0.0f)
+                .mainStatsRanged(2, -0.2f)
+                .mainStatsProjectile(0.9f, 1.1f)
                 .mainStatsArmor(3, 8, 6, 3, 8, 4) //20
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 0.9f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.1f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 70)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.8f)
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 2)
                 .trait(PartType.MAIN, Const.Traits.LUSTROUS, 1, materialCountOrRatio(3, 0.5f))
                 // rod
@@ -565,32 +495,22 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.BASTION, 1)
-
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x33EBCB)
-                .displayTip(PartTextures.TIP_SHARP, 0x33EBCB)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
         );
         // Emerald
         ret.add(new MaterialBuilder(modId("emerald"), 3, Tags.Items.GEMS_EMERALD)
                 .categories(MaterialCategories.GEM)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x00B038)
+                .displayTip(PartTextures.TIP_SHARP, 0x00B038)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
                 // main
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 1080)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 24)
+                .mainStatsCommon(1080, 24, 16, 40, 1.0f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 16)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 10)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .mainStatsHarvest(2, 10)
+                .mainStatsMelee(2, 2, 0.0f)
+                .mainStatsRanged(1, -0.1f)
+                .mainStatsProjectile(1.1f, 0.9f)
                 .mainStatsArmor(3, 6, 4, 3, 4, 6) //16
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.9f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 40)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 1.0f)
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
                 .trait(PartType.MAIN, Const.Traits.SYNERGISTIC, 2)
                 // rod
@@ -613,31 +533,21 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.REACH, 2)
-
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x00B038)
-                .displayTip(PartTextures.TIP_SHARP, 0x00B038)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
         );
         // Lapis Lazuli
         ret.add(new MaterialBuilder(modId("lapis_lazuli"), 2, Tags.Items.GEMS_LAPIS)
                 .categories(MaterialCategories.GEM)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x224BAF)
+                .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
+                .displayAdornment(PartTextureSet.LOW_CONTRAST, 0x224BAF)
+                .displayFragment(PartTextures.METAL, 0x224BAF)
                 // main
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 200)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 17)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 5)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .mainStatsCommon(200, 13, 17, 30, 1.3f)
+                .mainStatsHarvest(2, 5)
+                .mainStatsMelee(2, 3, 0.0f)
+                .mainStatsRanged(0, -0.1f)
+                .mainStatsProjectile(1.0f, 0.8f)
                 .mainStatsArmor(2, 6, 5, 2, 0, 10) //15
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.8f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 30)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 1.3f)
                 // tip
                 .stat(PartType.TIP, ItemStats.ENCHANTABILITY, 0.5f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
@@ -649,16 +559,14 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.LUCKY, 3, new MaterialRatioTraitCondition(0.75f))
-
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x224BAF)
-                .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
-                .displayAdornment(PartTextureSet.LOW_CONTRAST, 0x224BAF)
-                .displayFragment(PartTextures.METAL, 0x224BAF)
         );
         // Prismarine
         ret.add(new MaterialBuilder(modId("prismarine"), 3, Tags.Items.GEMS_PRISMARINE)
                 .categories(MaterialCategories.GEM, MaterialCategories.ORGANIC)
                 .namePrefix(TextUtil.translate("material", "prismarine"))
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
+                .displayFragment(PartTextures.DUST, 0x91C5B7)
                 // coating
                 .stat(PartType.COATING, ItemStats.DURABILITY, 0.075f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, 0.125f, StatInstance.Operation.MUL2)
@@ -669,30 +577,21 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.SWIFT_SWIM, 3, new MaterialRatioTraitCondition(0.67f))
-
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
-                .displayFragment(PartTextures.DUST, 0x91C5B7)
         );
         // Quartz
         ret.add(new MaterialBuilder(modId("quartz"), 2, Tags.Items.GEMS_QUARTZ)
                 .categories(MaterialCategories.GEM)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD4CABA)
+                .displayTip(PartTextures.TIP_SHARP, 0xD4CABA)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
                 // main
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 330)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 10)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 7)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
+                .mainStatsCommon(330, 13, 10, 40, 1.2f)
+                .mainStatsHarvest(2, 7)
+                .mainStatsMelee(2, 0, 0.1f)
+                .mainStatsRanged(0, 0.1f)
+                .mainStatsProjectile(1f, 1f)
                 .mainStatsArmor(3, 5, 4, 2, 0, 4) //14
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 40)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 1.2f)
                 .trait(PartType.MAIN, Const.Traits.CRUSHING, 3)
                 .trait(PartType.MAIN, Const.Traits.JAGGED, 2)
                 // rod
@@ -714,22 +613,18 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.MIGHTY, 2, new MaterialRatioTraitCondition(0.5f))
-
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD4CABA)
-                .displayTip(PartTextures.TIP_SHARP, 0xD4CABA)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
         );
         // Amethyst
         ret.add(new MaterialBuilder(modId("amethyst"), 2, Items.AMETHYST_SHARD)
                 .categories(MaterialCategories.GEM)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xA31DE6)
                 // main
                 .mainStatsCommon(210, 10, 16, 35, 1.3f)
                 .mainStatsHarvest(2, 6)
                 .mainStatsMelee(1, 3, 0)
-                .mainStatsArmor(3, 5, 4, 3, 0, 10) //15
                 .mainStatsRanged(1, 0)
                 .mainStatsProjectile(1, 1)
+                .mainStatsArmor(3, 5, 4, 3, 0, 10) //15
                 .trait(PartType.MAIN, Const.Traits.RENEW, 1, new MaterialRatioTraitCondition(0.7f))
                 // tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, -0.25f, StatInstance.Operation.MUL2)
@@ -737,8 +632,6 @@ public class MaterialsProvider implements DataProvider {
                 //adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.CURSED, 4)
-
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xA31DE6)
         );
     }
 
@@ -746,6 +639,9 @@ public class MaterialsProvider implements DataProvider {
         // Glowstone
         ret.add(new MaterialBuilder(modId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
                 .categories(MaterialCategories.GEM, MaterialCategories.DUST)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xD2D200)
+                .displayFragment(PartTextures.DUST, 0xD2D200)
+                //tip
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.4f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
@@ -753,21 +649,18 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.RARITY, 15, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.REFRACTIVE, 1)
                 .trait(PartType.TIP, Const.Traits.LUSTROUS, 4)
-
-                .displayTip(PartTextures.TIP_SMOOTH, 0xD2D200)
-                .displayFragment(PartTextures.DUST, 0xD2D200)
         );
         // Redstone
         ret.add(new MaterialBuilder(modId("redstone"), 2, Tags.Items.DUSTS_REDSTONE)
                 .categories(MaterialCategories.GEM, MaterialCategories.DUST)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xBB0000)
+                .displayFragment(PartTextures.DUST, 0xBB0000)
+                //tip
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.5f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
-
-                .displayTip(PartTextures.TIP_SMOOTH, 0xBB0000)
-                .displayFragment(PartTextures.DUST, 0xBB0000)
         );
     }
 
@@ -776,169 +669,132 @@ public class MaterialsProvider implements DataProvider {
         // Basalt
         ret.add(new MaterialBuilder(modId("basalt"), 1, Items.BASALT)
                 .categories(MaterialCategories.ROCK)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 137)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 6)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .mainStatsArmor(1, 3, 1, 1, 0, 0) //6
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.8f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 7)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.7f)
-                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, -0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 7)
-                .trait(PartType.MAIN, Const.Traits.BRITTLE, 2)
-                .trait(PartType.MAIN, Const.Traits.CHIPPING, 3)
-                .trait(PartType.ROD, Const.Traits.BRITTLE, 3)
-                .trait(PartType.ROD, Const.Traits.CHIPPING, 2)
                 .display(PartType.MAIN,
                         new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x4F4B4F),
                         new MaterialLayer(PartTextures.SPLOTCHES, 0x32333D))
                 .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
+                //main
+                .mainStatsCommon(137, 4, 6, 7, 0.7f)
+                .mainStatsHarvest(1, 4)
+                .mainStatsMelee(1, 0, 0.0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
+                .mainStatsRanged(0, -0.1f, 1f, 0.8f)
+                .mainStatsArmor(1, 3, 1, 1, 0, 0) //6
+                .trait(PartType.MAIN, Const.Traits.BRITTLE, 2)
+                .trait(PartType.MAIN, Const.Traits.CHIPPING, 3)
+                //rod
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, -0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 7)
+                .trait(PartType.ROD, Const.Traits.BRITTLE, 3)
+                .trait(PartType.ROD, Const.Traits.CHIPPING, 2)
         );
         // Blackstone
         ret.add(new MaterialBuilder(modId("blackstone"), 1, Items.BLACKSTONE)
                 .categories(MaterialCategories.ROCK)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 151)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 4)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
-                .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.8f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 9)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.6f)
-                .stat(PartType.ROD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 9)
-                .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
-                .trait(PartType.MAIN, Const.Traits.JAGGED, 2)
-                .trait(PartType.MAIN, Const.Traits.HARD, 2)
-                .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
-                .trait(PartType.ROD, Const.Traits.JAGGED, 2)
-                .trait(PartType.ROD, Const.Traits.HARD, 1)
                 .display(PartType.MAIN,
                         new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x3C3947),
                         new MaterialLayer(PartTextures.SPLOTCHES, 0x1F121B))
                 .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x3C3947)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x3C3947)
+                //main
+                .mainStatsCommon(151, 5, 4, 9, 0.6f)
+                .mainStatsHarvest(1, 4)
+                .mainStatsMelee(1, 0, 0.0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
+                .mainStatsRanged(0, -0.2f, 1f, 0.8f)
+                .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
+                .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
+                .trait(PartType.MAIN, Const.Traits.JAGGED, 2)
+                .trait(PartType.MAIN, Const.Traits.HARD, 2)
+                //rod
+                .stat(PartType.ROD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 9)
+                .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
+                .trait(PartType.ROD, Const.Traits.JAGGED, 2)
+                .trait(PartType.ROD, Const.Traits.HARD, 1)
         );
         // End Stone
         ret.add(new MaterialBuilder(modId("end_stone"), 1, Tags.Items.END_STONES)
                 .categories(MaterialCategories.ROCK)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 1164)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFFFFCC)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFFFCC)
+                //main
+                .mainStatsCommon(1164, 15, 10, 32, 0.9f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 10)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 7)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
+                .mainStatsHarvest(2, 7)
+                .mainStatsMelee(2, 3, 0.1f)
+                .mainStatsRanged(0, 0f, 1f, 0.8f)
                 .mainStatsArmor(3, 5, 4, 3, 1, 6) //15
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.8f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 32)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.9f)
+                .trait(PartType.MAIN, Const.Traits.JAGGED, 3)
+                .trait(PartType.MAIN, Const.Traits.ANCIENT, 2)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.RARITY, 26)
-                .trait(PartType.MAIN, Const.Traits.JAGGED, 3)
-                .trait(PartType.MAIN, Const.Traits.ANCIENT, 2)
                 .trait(PartType.ROD, Const.Traits.JAGGED, 2)
                 .trait(PartType.ROD, Const.Traits.ANCIENT, 4)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFFFFCC)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFFFCC)
         );
         // Flint
         ret.add(new MaterialBuilder(modId("flint"), 1, Items.FLINT)
                 .categories(MaterialCategories.ROCK)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 124)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 3)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 5)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.1f)
+                .displayAll(PartTextureSet.HIGH_CONTRAST, 0x969696)
+                //main
+                .mainStatsCommon(124, 4, 3, 6, 0.8f)
+                .mainStatsHarvest(1, 5)
+                .mainStatsMelee(2, 0, -0.1f)
+                .mainStatsRanged(1, -0.3f, 1.0f, 1.0f)
                 .mainStatsArmor(0.5f, 2f, 1f, 0.5f, 0, 0) //4
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.3f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.0f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 6)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.8f)
+                .trait(PartType.MAIN, Const.Traits.JAGGED, 3)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.3f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 2)
-                .noStats(PartType.ADORNMENT)
-                .trait(PartType.MAIN, Const.Traits.JAGGED, 3)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 3)
                 .trait(PartType.ROD, Const.Traits.JAGGED, 2)
-                .displayAll(PartTextureSet.HIGH_CONTRAST, 0x969696)
+                //adornment (deliberately no traits lol)
+                .noStats(PartType.ADORNMENT)
         );
         // Netherrack
         ret.add(new MaterialBuilder(modId("netherrack"), 1, Tags.Items.NETHERRACK)
                 .categories(MaterialCategories.ROCK, MaterialCategories.ORGANIC)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x854242)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x854242)
+                //main
                 .mainStatsCommon(142, 5, 8, 11, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
                 .mainStatsHarvest(1, 5)
                 .mainStatsMelee(0.5f, 0.5f, 0.0f)
-                .mainStatsRanged(0.5f, 0.1f)
+                .mainStatsRanged(0.5f, 0.1f, 0.8f, 1.0f)
                 .mainStatsArmor(1, 4, 2, 1, 0, 4) //8
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 0.8f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.0f)
-                .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 11)
                 .trait(PartType.MAIN, Const.Traits.ERODED, 3)
                 .trait(PartType.MAIN, Const.Traits.FLEXIBLE, 2)
+                //rod
+                .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 11)
                 .trait(PartType.ROD, Const.Traits.ERODED, 2)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 3)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x854242)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x854242)
         );
         // Obsidian
         ret.add(new MaterialBuilder(modId("obsidian"), 3, Tags.Items.OBSIDIAN)
                 .categories(MaterialCategories.ROCK)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 3072)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 37)
-                .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.5f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 7)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 6)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, -0.4f)
-                .mainStatsArmor(3, 8, 6, 3, 4, 8) //20
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.4f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 0.7f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.7f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 10)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.6f)
-                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 5)
-                .trait(PartType.MAIN, Const.Traits.JAGGED, 3)
-                .trait(PartType.MAIN, Const.Traits.CRUSHING, 2)
-                .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
-                .trait(PartType.ROD, Const.Traits.CHIPPING, 3)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x443464)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x443464)
+                //main
+                .mainStatsCommon(3072, 37, 7, 10, 0.6f)
+                .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.5f)
+                .mainStatsHarvest(3, 6)
+                .mainStatsMelee(3, 2, -0.4f)
+                .mainStatsRanged(0, -0.4f, 0.7f, 0.7f)
+                .mainStatsArmor(3, 8, 6, 3, 4, 8) //20
+                .trait(PartType.MAIN, Const.Traits.JAGGED, 3)
+                .trait(PartType.MAIN, Const.Traits.CRUSHING, 2)
+                //rod
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 5)
+                .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
+                .trait(PartType.ROD, Const.Traits.CHIPPING, 3)
         );
         // Sandstone
         ResourceLocation sgSandstone = modId("sandstone");
@@ -946,26 +802,19 @@ public class MaterialsProvider implements DataProvider {
                 ExclusionIngredient.of(Tags.Items.SANDSTONE,
                         Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
                 .categories(MaterialCategories.ROCK)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 117)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 6)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0xE3DBB0)
+                //main
+                .mainStatsCommon(117, 6, 7, 7, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.1f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 7)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
+                .mainStatsHarvest(1, 4)
+                .mainStatsMelee(1, 0, 0.1f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
+                .mainStatsRanged(0, -0.1f, 1f, 0.8f)
                 .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.8f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 7)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.7f)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.ENCHANTABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 7)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0xE3DBB0)
         );
         // Red sandstone
         ret.add(new MaterialBuilder(modId("sandstone/red"), -1, Ingredient.of(
@@ -979,30 +828,22 @@ public class MaterialsProvider implements DataProvider {
         ret.add(new MaterialBuilder(stone, 1, Tags.Items.COBBLESTONE)
                 .categories(MaterialCategories.ROCK)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_STONE)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 131)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 5)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 5)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
+                //main
+                .mainStatsCommon(131, 5, 5, 4, 0.5f)
+                .mainStatsHarvest(1, 4)
+                .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
+                .mainStatsRanged(0, -0.2f, 1f, 0.8f)
                 .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.8f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 4)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.5f)
+                .trait(PartType.MAIN, Const.Traits.ANCIENT, 1)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 2)
-                .trait(PartType.MAIN, Const.Traits.ANCIENT, 1)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 1)
                 .trait(PartType.ROD, Const.Traits.CRUSHING, 2)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
         );
         ret.add(new MaterialBuilder(modId("stone/andesite"), -1, Items.ANDESITE)
                 .parent(stone)
@@ -1023,32 +864,25 @@ public class MaterialsProvider implements DataProvider {
         ResourceLocation sgTerracotta = modId("terracotta");
         ret.add(new MaterialBuilder(sgTerracotta, 1, Items.TERRACOTTA)
                 .categories(MaterialCategories.ROCK)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 165)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 11)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0x985F45)
+                //main
+                .mainStatsCommon(165, 11, 9, 7, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.1f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 9)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1.5f)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.2f)
+                .mainStatsHarvest(1, 4)
+                .mainStatsMelee(1.5f, 0, 0.2f)
+                .mainStatsRanged(0, -0.2f, 1f, 0.9f)
                 .mainStatsArmor(2, 3, 3, 1, 0, 3) //9
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.9f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 7)
+                .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
+                .trait(PartType.MAIN, Const.Traits.CHIPPING, 2)
+                .trait(PartType.MAIN, Const.Traits.RUSTIC, 1)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.ENCHANTABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 6)
-                .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
-                .trait(PartType.MAIN, Const.Traits.CHIPPING, 2)
-                .trait(PartType.MAIN, Const.Traits.RUSTIC, 1)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
                 .trait(PartType.ROD, Const.Traits.CRUSHING, 1)
                 .trait(PartType.ROD, Const.Traits.RUSTIC, 2)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0x985F45)
         );
         ret.add(terracotta(sgTerracotta, "black", Items.BLACK_TERRACOTTA, 0x251610));
         ret.add(terracotta(sgTerracotta, "blue", Items.BLUE_TERRACOTTA, 0x4A3B5B));
@@ -1087,31 +921,23 @@ public class MaterialsProvider implements DataProvider {
         ret.add(new MaterialBuilder(Const.Materials.WOOD.getId(), 0, planksIngredient)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .partSubstitute(PartType.ROD, woodRodSubstitute)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 59)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0x896727)
+                .displayFragment(PartTextures.WOOD, 0X896727)
+                //main
+                .mainStatsCommon(59, 8, 15, 1, 0.6f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 15)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 0)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 2)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.0f)
+                .mainStatsHarvest(0, 2)
+                .mainStatsMelee(0, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
+                .mainStatsRanged(0f, 0f, 1f, 0.9f)
                 .mainStatsArmor(1, 3, 2, 1, 0, 2) //7
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.9f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 1)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.6f)
-                .stat(PartType.ROD, ItemStats.ENCHANTABILITY, 0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 1)
                 .trait(PartType.MAIN, Const.Traits.FLAMMABLE, 1)
                 .trait(PartType.MAIN, Const.Traits.FLEXIBLE, 2)
                 .trait(PartType.MAIN, Const.Traits.JAGGED, 1)
+                //rod
+                .stat(PartType.ROD, ItemStats.ENCHANTABILITY, 0.1f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 1)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0x896727)
-                .displayFragment(PartTextures.WOOD, 0X896727)
         );
         ret.add(wood("acacia", Items.ACACIA_PLANKS, 0xBA6337));
         ret.add(wood("birch", Items.BIRCH_PLANKS, 0xD7C185));
@@ -1146,34 +972,26 @@ public class MaterialsProvider implements DataProvider {
         ret.add(new MaterialBuilder(modId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_NETHERWOOD)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 72)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 12)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xD83200)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD83200)
+                .displayFragment(PartTextures.WOOD, 0xD83200)
+                //main
+                .mainStatsCommon(72, 12, 13, 4, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.1f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_EFFICIENCY, 0.5f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 13)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 0)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 2)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.2f)
+                .mainStatsHarvest(0, 2)
+                .mainStatsMelee(0, 0, 0.2f)
+                .mainStatsRanged(0, 0f, 1f, 0.8f)
                 .mainStatsArmor(1, 4, 2, 1, 0, 6) //8
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 0)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 0.8f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 4)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.7f)
+                .trait(PartType.MAIN, Const.Traits.FLEXIBLE, 3)
+                .trait(PartType.MAIN, Const.Traits.JAGGED, 2)
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 70, StatInstance.Operation.MAX)
                 .stat(PartType.ROD, ItemStats.DURABILITY, -50, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 1, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.5f, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.RARITY, 3)
-                .trait(PartType.MAIN, Const.Traits.FLEXIBLE, 3)
-                .trait(PartType.MAIN, Const.Traits.JAGGED, 2)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xD83200)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD83200)
-                .displayFragment(PartTextures.WOOD, 0xD83200)
         );
         // Bamboo
         ret.add(new MaterialBuilder(modId("bamboo"), 0, Items.BAMBOO)
@@ -1189,6 +1007,8 @@ public class MaterialsProvider implements DataProvider {
         // Phantom Membrane
         ret.add(new MaterialBuilder(modId("phantom_membrane"), 2, Items.PHANTOM_MEMBRANE)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
+                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
                 // main
                 .mainStatsCommon(0, 12, 10, 35, 0.7f)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.ELYTRA, 17)
@@ -1203,13 +1023,12 @@ public class MaterialsProvider implements DataProvider {
                 // lining
                 .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 4, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.LIGHT, 2)
-
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
-                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
         );
         // Fine Silk Cloth
         ret.add(new MaterialBuilder(modId("fine_silk_cloth"), 2, CraftingItems.FINE_SILK_CLOTH)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
+                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
                 // main
                 .mainStatsCommon(0, 14, 14, 40, 0.9f)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.ELYTRA, 18)
@@ -1224,13 +1043,12 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 5, StatInstance.Operation.ADD)
                 .stat(PartType.LINING, ItemStats.MAGIC_ARMOR, 2, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.FLEXIBLE, 3)
-
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
-                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
         );
         // Leather
         ret.add(new MaterialBuilder(modId("leather"), 0, Tags.Items.LEATHER)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0x805133)
+                .displayFragment(PartTextures.CLOTH, 0x805133)
                 // main
                 .mainStatsCommon(0, 5, 15, 11, 0.8f)
                 .mainStatsArmor(1, 3, 2, 1, 0, 8) //7
@@ -1245,9 +1063,6 @@ public class MaterialsProvider implements DataProvider {
                 // lining
                 .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 1f, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.FLEXIBLE, 2)
-
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0x805133)
-                .displayFragment(PartTextures.CLOTH, 0x805133)
         );
         // Wool
         ExclusionIngredient woolIngredient = ExclusionIngredient.of(ItemTags.WOOL, Items.BLACK_WOOL,
@@ -1258,6 +1073,8 @@ public class MaterialsProvider implements DataProvider {
         );
         ret.add(new MaterialBuilder(Const.Materials.WOOL.getId(), 0, woolIngredient)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
+                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
+                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
                 // main
                 .mainStatsCommon(0, 4, 7, 7, 0.7f)
                 .mainStatsArmor(0.5f, 2f, 1.0f, 0.5f, 0, 4) //4
@@ -1271,9 +1088,6 @@ public class MaterialsProvider implements DataProvider {
                 // lining
                 .stat(PartType.LINING, ItemStats.KNOCKBACK_RESISTANCE, 0.1f, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.FLEXIBLE, 1)
-
-                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
-                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         ret.add(wool("black", Items.BLACK_WOOL, 0x141519));
         ret.add(wool("blue", Items.BLUE_WOOL, 0x35399D));
@@ -1297,76 +1111,72 @@ public class MaterialsProvider implements DataProvider {
         // Fine Silk
         ret.add(new MaterialBuilder(modId("fine_silk"), 2, CraftingItems.FINE_SILK)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xCCFFFF)
+                .displayBowstring(0xCCFFFF)
+                .displayFragment(PartTextures.CLOTH, 0xCCFFFF)
+                //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.MAGIC_ARMOR, 2, StatInstance.Operation.ADD)
                 .stat(PartType.BINDING, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(PartType.BINDING, Const.Traits.LUCKY, 1)
-
+                //cord
                 .stat(PartType.CORD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, 0.07f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(PartType.CORD, Const.Traits.FLEXIBLE, 2)
-
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xCCFFFF)
-                .displayBowstring(0xCCFFFF)
-                .displayFragment(PartTextures.CLOTH, 0xCCFFFF)
         );
         // Flax
         ret.add(new MaterialBuilder(modId("flax"), 1, CraftingItems.FLAX_STRING)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xB3804B)
+                .displayBowstring(0x845E37)
+                .displayFragment(PartTextures.CLOTH, 0x845E37)
+                //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 10, StatInstance.Operation.ADD)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, 0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
-
+                //cord
                 .stat(PartType.CORD, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, -0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 6, StatInstance.Operation.ADD)
-
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xB3804B)
-                .displayBowstring(0x845E37)
-                .displayFragment(PartTextures.CLOTH, 0x845E37)
         );
         // Fluffy String
         ret.add(new MaterialBuilder(modId("fluffy_string"), 1, CraftingItems.FLUFFY_STRING)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xFFFAE5)
+                .displayBowstring(0xFFFAE5)
+                .displayFragment(PartTextures.CLOTH, 0xFFFAE5)
+                //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -10, StatInstance.Operation.ADD)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.HARVEST_SPEED, -0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
-
+                //cord
                 .stat(PartType.CORD, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RANGED_SPEED, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 7, StatInstance.Operation.ADD)
-
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xFFFAE5)
-                .displayBowstring(0xFFFAE5)
-                .displayFragment(PartTextures.CLOTH, 0xFFFAE5)
         );
         // Sinew
         ret.add(new MaterialBuilder(modId("sinew"), 1, CraftingItems.SINEW_FIBER)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xD8995B)
+                .displayBowstring(0x7E6962)
+                .displayFragment(PartTextures.CLOTH, 0x7E6962)
+                //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, -0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 2)
-
+                //cord
                 .stat(PartType.CORD, ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
                 .trait(PartType.CORD, Const.Traits.FLEXIBLE, 1)
-
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xD8995B)
-                .displayBowstring(0x7E6962)
-                .displayFragment(PartTextures.CLOTH, 0x7E6962)
         );
         // String
         ExclusionIngredient stringIngredient = ExclusionIngredient.of(Tags.Items.STRING,
@@ -1376,27 +1186,25 @@ public class MaterialsProvider implements DataProvider {
         );
         ret.add(new MaterialBuilder(modId("string"), 1, stringIngredient)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
+                .displayBowstring(Color.VALUE_WHITE)
+                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
+                //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.05f, StatInstance.Operation.MUL1)
                 .trait(PartType.BINDING, Const.Traits.FLEXIBLE, 1)
-
+                //cord
                 .stat(PartType.CORD, ItemStats.RANGED_SPEED, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
-
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
-                .displayBowstring(Color.VALUE_WHITE)
-                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         // Vines
         ret.add(new MaterialBuilder(modId("vine"), 0, Items.VINE)
                 .categories(MaterialCategories.ORGANIC)
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0x007F0E)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.03f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, -0.03f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.03f, StatInstance.Operation.MUL1)
-
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0x007F0E)
         );
     }
 
@@ -1404,39 +1212,40 @@ public class MaterialsProvider implements DataProvider {
         // Feather
         ret.add(new MaterialBuilder(modId("feather"), 1, Tags.Items.FEATHERS)
                 .categories(MaterialCategories.ORGANIC)
-                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 0.9f)
-                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 1.1f)
                 .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
                 .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 0.9f)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 1.1f)
         );
         // Leaves
         ret.add(new MaterialBuilder(modId("leaves"), 1, ItemTags.LEAVES)
                 .categories(MaterialCategories.ORGANIC)
-                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 1.1f)
-                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 0.9f)
                 .displayAll(PartTextureSet.LOW_CONTRAST, 0x4A8F28)
                 .displayFragment(PartTextures.CLOTH, 0x4A8F28)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 1.1f)
+                .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 0.9f)
         );
         // Paper
         ret.add(new MaterialBuilder(modId("paper"), 0, ModTags.Items.PAPER)
                 .categories(MaterialCategories.ORGANIC)
+                .display(PartType.FLETCHING, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 1.1f)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 0.9f)
-                .display(PartType.FLETCHING, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
         );
         // Slime
         ret.add(new MaterialBuilder(modId("slime"), 1, Items.SLIME_BLOCK)
                 .categories(MaterialCategories.SLIME, MaterialCategories.ORGANIC)
-                .stat(PartType.LINING, ItemStats.ARMOR_TOUGHNESS, 0.5f, StatInstance.Operation.ADD)
-                .trait(PartType.LINING, Const.Traits.BOUNCE, 1)
                 .display(PartType.LINING, GearType.PART,
                         new MaterialLayer(PartTextures.LINING_SLIME, 0x8CD782),
                         new MaterialLayer(modId("lining_slime_highlight"), Color.VALUE_WHITE))
                 .displayFragment(PartTextures.DUST, 0x8CD782)
+                .stat(PartType.LINING, ItemStats.ARMOR_TOUGHNESS, 0.5f, StatInstance.Operation.ADD)
+                .trait(PartType.LINING, Const.Traits.BOUNCE, 1)
         );
         // Turtle
         ret.add(new MaterialBuilder(modId("turtle"), 2, Items.SCUTE)
                 .categories(MaterialCategories.ORGANIC)
+                .display(PartType.MAIN, GearType.HELMET, new MaterialLayer(modId("turtle"), 0x47BF4A))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 0)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.HELMET, 25)
                 .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 9)
@@ -1445,7 +1254,6 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.5f)
                 .trait(PartType.MAIN, Const.Traits.TURTLE, 1,
                         new MaterialCountTraitCondition(3))
-                .display(PartType.MAIN, GearType.HELMET, new MaterialLayer(modId("turtle"), 0x47BF4A))
         );
     }
 
@@ -1457,16 +1265,25 @@ public class MaterialsProvider implements DataProvider {
         // Dimerald
         ret.add(customCompoundBuilder(modId("dimerald"), 3, ModItems.CUSTOM_GEM.get())
                 .categories(MaterialCategories.GEM)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x1ACE82)
+                .displayTip(PartTextures.TIP_SHARP, 0x1ACE82)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
+                //main
                 .mainStatsCommon(1776, 36, 12, 80, 0.7f)
                 .mainStatsHarvest(3, 9)
                 .mainStatsMelee(3, 3, 0.1f)
-                .mainStatsRanged(3, 0.1f)
+                .mainStatsRanged(3, 0.1f, 1.0f, 1.2f)
                 .mainStatsArmor(4, 9, 6, 3, 10, 10) //22
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 1.0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1.2f)
+                .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
+                .trait(PartType.MAIN, Const.Traits.GOLD_DIGGER, 2, materialCountOrRatio(3, 0.5f))
+                //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.15f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 70)
+                .trait(PartType.ROD, Const.Traits.BRITTLE, 4, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.ROD, Const.Traits.ANCIENT, 3, new MaterialRatioTraitCondition(0.5f))
+                //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 360, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 3, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 2, StatInstance.Operation.ADD)
@@ -1474,22 +1291,16 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 0.5f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 25, StatInstance.Operation.ADD)
-                .noStats(PartType.ADORNMENT)
-                .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
-                .trait(PartType.MAIN, Const.Traits.GOLD_DIGGER, 2, materialCountOrRatio(3, 0.5f))
-                .trait(PartType.ROD, Const.Traits.BRITTLE, 4, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.ROD, Const.Traits.ANCIENT, 3, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.TIP, Const.Traits.IMPERIAL, 2)
+                //adornment
+                .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.KITTY_VISION, 1)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x1ACE82)
-                .displayTip(PartTextures.TIP_SHARP, 0x1ACE82)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
         );
 
         // High-Carbon Steel
         ret.add(customCompoundBuilder(modId("high_carbon_steel"), 2, ModItems.CUSTOM_INGOT.get())
                 .categories(MaterialCategories.METAL)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x848484)
                 .mainStatsCommon(420, 24, 11, 40, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.05f)
                 .mainStatsHarvest(2, 6)
@@ -1497,7 +1308,6 @@ public class MaterialsProvider implements DataProvider {
                 .mainStatsArmor(3, 8, 6, 3, 2, 6)
                 .mainStatsRanged(2, -0.2f)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x848484)
         );
     }
 
@@ -1506,6 +1316,7 @@ public class MaterialsProvider implements DataProvider {
         ret.add(new MaterialBuilder(modId("blaze_rod"), 3, Ingredient.EMPTY)
                 .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, Tags.Items.RODS_BLAZE)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFC600)
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL2)
@@ -1514,38 +1325,30 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 30)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 3)
                 .trait(PartType.ROD, Const.Traits.REACH, 1)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFC600)
         );
         // Bone
         ret.add(new MaterialBuilder(modId("bone"), 1, Items.BONE_BLOCK)
                 .categories(MaterialCategories.ORGANIC)
                 .partSubstitute(PartType.ROD, Items.BONE)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 108)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 4)
-                .stat(PartType.MAIN, ItemStats.ENCHANTABILITY, 5)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.1f)
-                .mainStatsArmor(1, 2, 1, 1, 0, 1) //5
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 1)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, 0.0f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_SPEED, 0.9f)
-                .stat(PartType.MAIN, ItemStats.PROJECTILE_ACCURACY, 1f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 8)
-                .stat(PartType.MAIN, ItemStats.CHARGEABILITY, 0.9f)
-                .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.2f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 8)
-                .trait(PartType.MAIN, Const.Traits.CHIPPING, 2)
-                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xFCFBED)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFCFBED)
+                //main
+                .mainStatsCommon(108, 4, 5, 8, 0.9f)
+                .mainStatsHarvest(1, 4)
+                .mainStatsMelee(2, 1, 0.1f)
+                .mainStatsRanged(1f, 0f, 0.9f, 1f)
+                .mainStatsArmor(1, 2, 1, 1, 0, 1) //5
+                .trait(PartType.MAIN, Const.Traits.CHIPPING, 2)
+                //rod
+                .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.2f, StatInstance.Operation.MUL2)
+                .stat(PartType.ROD, ItemStats.RARITY, 8)
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
         );
         // End Rod
         ret.add(new MaterialBuilder(modId("end_rod"), 3, Ingredient.EMPTY)
                 .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, Items.END_ROD)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xF6E2CD)
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.35f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_LEVEL, 3, StatInstance.Operation.MAX)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
@@ -1554,7 +1357,6 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 50)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
                 .trait(PartType.ROD, Const.Traits.REFRACTIVE, 1)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xF6E2CD)
         );
     }
 
@@ -2296,51 +2098,21 @@ public class MaterialsProvider implements DataProvider {
     @Override
     public void run(CachedOutput cache) {
         Path outputFolder = this.generator.getOutputFolder();
+        Set<ResourceLocation> entries = Sets.newHashSet();
 
-        for (MaterialBuilder builder : getMaterials()) {
-            try {
-                String jsonStr = GSON.toJson(builder.serialize());
-                String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
-                Path path = outputFolder.resolve(String.format("data/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-                if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
-                    Files.createDirectories(path.getParent());
-
-                    try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-                        writer.write(jsonStr);
-                    }
-                }
-
-                cache.putNew(path, hashStr);
-            } catch (IOException ex) {
-                LOGGER.error("Could not save materials to {}", outputFolder, ex);
+        //noinspection OverlyLongLambda
+        getMaterials().forEach(LambdaExceptionUtils.rethrowConsumer(builder -> {
+            if (entries.contains(builder.id)) {
+                throw new IllegalStateException("Duplicate material: " + builder.id);
             }
 
-            // Model data
-            // Unfortunately, these files still need to exist to allow models to find all the
-            // textures. There may be some way to work around the issue and reduce data duplication
-            // in the future.
-            try {
-                JsonObject json = builder.serializeModel();
-                if (json.entrySet().isEmpty()) {
-                    continue;
-                }
+            // Material
+            entries.add(builder.id);
+            Path path = outputFolder.resolve(String.format("data/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
+            DataProvider.saveStable(cache, builder.serialize(), path);
 
-                String jsonStr = GSON.toJson(json);
-                String hashStr = SHA1.hashUnencodedChars(jsonStr).toString();
-                // TODO: change path?
-                Path path = outputFolder.resolve(String.format("assets/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-                if (!Objects.equals(cache.getHash(outputFolder), hashStr) || !Files.exists(path)) {
-                    Files.createDirectories(path.getParent());
-
-                    try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-                        writer.write(jsonStr);
-                    }
-                }
-
-                cache.putNew(path, hashStr);
-            } catch (IOException ex) {
-                LOGGER.error("Could not save material models to {}", outputFolder, ex);
-            }
-        }
+            // Model
+            // TODO
+        }));
     }
 }
