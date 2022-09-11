@@ -60,7 +60,6 @@ class SideProxy implements IProxy {
         Network.init();
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGenerators::gatherData);
         modEventBus.addListener(SideProxy::commonSetup);
         modEventBus.addListener(SideProxy::registerCapabilities);
         modEventBus.addListener(SideProxy::imcEnqueue);
@@ -69,7 +68,6 @@ class SideProxy implements IProxy {
         modEventBus.addListener(ItemStats::createRegistry);
         modEventBus.addGenericListener(Feature.class, ModWorldFeatures::registerFeatures);
         modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
-        modEventBus.addGenericListener(RecipeSerializer.class, ModRecipes::registerTypes);
 
         MinecraftForge.EVENT_BUS.addListener(ModCommands::registerAll);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);

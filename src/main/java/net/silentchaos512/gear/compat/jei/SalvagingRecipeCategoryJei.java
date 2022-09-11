@@ -2,25 +2,23 @@ package net.silentchaos512.gear.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
-import net.silentchaos512.gear.block.salvager.SalvagerTileEntity;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -38,20 +36,15 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
 
     public SalvagingRecipeCategoryJei(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(SalvagerScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
-        icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.SALVAGER));
+        icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.SALVAGER));
         arrow = guiHelper.drawableBuilder(SalvagerScreen.TEXTURE, 176, 14, 24, 17)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
         localizedName = TextUtil.translate("jei", "category.salvaging");
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return Const.SALVAGING;
-    }
-
-    @Override
-    public Class<? extends SalvagingRecipe> getRecipeClass() {
-        return SalvagingRecipe.class;
+    public RecipeType<SalvagingRecipe> getRecipeType() {
+        return SGearJeiPlugin.SALVAGING_TYPE;
     }
 
     @Override
@@ -70,30 +63,22 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     }
 
     @Override
-    public void setIngredients(SalvagingRecipe recipe, IIngredients ingredients) {
-        ingredients.setInputIngredients(Collections.singletonList(recipe.getIngredient()));
-        ingredients.setOutputs(VanillaTypes.ITEM, new ArrayList<>(recipe.getPossibleResults(new SimpleContainer(SalvagerTileEntity.INVENTORY_SIZE))));
-    }
+    public void setRecipe(IRecipeLayoutBuilder builder, SalvagingRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 8 - GUI_START_X, 34 - GUI_START_Y)
+                .addIngredients(VanillaTypes.ITEM_STACK, Arrays.asList(recipe.getIngredient().getItems()));
 
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, SalvagingRecipe recipe, IIngredients ingredients) {
-        IGuiItemStackGroup itemStacks = recipeLayout.getItemStacks();
-        itemStacks.init(0, true, 8 - GUI_START_X, 34 - GUI_START_Y);
-        for (int i = 1; i < 10; ++i) {
+        List<ItemStack> results = recipe.getPossibleResults(new SimpleContainer(1));
+
+        for (int i = 1; i < 10 && i < results.size(); ++i) {
             int x = 18 * ((i - 1) % 3) + 61 - GUI_START_X;
             int y = 18 * ((i - 1) / 3) + 16 - GUI_START_Y;
-            itemStacks.init(i, false, x, y);
-        }
-
-        itemStacks.set(0, Arrays.asList(recipe.getIngredient().getItems()));
-        List<ItemStack> results = recipe.getPossibleResults(new SimpleContainer(1));
-        for (int i = 0; i < 9 && i < results.size(); ++i) {
-            itemStacks.set(i + 1, results.get(i));
+            builder.addSlot(RecipeIngredientRole.OUTPUT, x, y)
+                    .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(results.get(i)));
         }
     }
 
     @Override
-    public void draw(SalvagingRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
-        arrow.draw(matrixStack, 32 - GUI_START_X, 34 - GUI_START_Y);
+    public void draw(SalvagingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+        arrow.draw(stack, 32 - GUI_START_X, 34 - GUI_START_Y);
     }
 }

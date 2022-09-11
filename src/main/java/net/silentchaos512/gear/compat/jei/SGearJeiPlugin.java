@@ -2,14 +2,15 @@ package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,6 +31,7 @@ import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.ModRecipes;
@@ -44,14 +46,18 @@ import net.silentchaos512.lib.util.NameUtils;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @JeiPlugin
 public class SGearJeiPlugin implements IModPlugin {
     private static final ResourceLocation PLUGIN_UID = SilentGear.getId("plugin/main");
-    static final ResourceLocation GEAR_CRAFTING = SilentGear.getId("category/gear_crafting");
+
+    public static final RecipeType<CompoundingRecipe> COMPOUNDING_TYPE = RecipeType.create(SilentGear.MOD_ID, "compounding", CompoundingRecipe.class);
+    static final RecipeType<CraftingRecipe> GEAR_CRAFTING_TYPE = RecipeType.create(SilentGear.MOD_ID, "gear_crafting", CraftingRecipe.class);
+    static final RecipeType<MaterialGraderRecipeCategory.GraderRecipe> GRADING_TYPE = RecipeType.create(SilentGear.MOD_ID, "grading", MaterialGraderRecipeCategory.GraderRecipe.class);
+    static final RecipeType<SalvagingRecipe> SALVAGING_TYPE = RecipeType.create(SilentGear.MOD_ID, "salvaging", SalvagingRecipe.class);
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -62,9 +68,9 @@ public class SGearJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration reg) {
         IGuiHelper guiHelper = reg.getJeiHelpers().getGuiHelper();
         reg.addRecipeCategories(new GearCraftingRecipeCategoryJei(guiHelper));
-        reg.addRecipeCategories(new CompoundingRecipeCategory<>(Const.FABRIC_COMPOUNDER_INFO, "fabric", guiHelper));
-        reg.addRecipeCategories(new CompoundingRecipeCategory<>(Const.GEM_COMPOUNDER_INFO, "gem", guiHelper));
-        reg.addRecipeCategories(new CompoundingRecipeCategory<>(Const.METAL_COMPOUNDER_INFO, "metal", guiHelper));
+        reg.addRecipeCategories(new CompoundingRecipeCategory(Const.FABRIC_COMPOUNDER_INFO, "fabric", guiHelper));
+        reg.addRecipeCategories(new CompoundingRecipeCategory(Const.GEM_COMPOUNDER_INFO, "gem", guiHelper));
+        reg.addRecipeCategories(new CompoundingRecipeCategory(Const.METAL_COMPOUNDER_INFO, "metal", guiHelper));
         reg.addRecipeCategories(new MaterialGraderRecipeCategory(guiHelper));
         reg.addRecipeCategories(new SalvagingRecipeCategoryJei(guiHelper));
     }
@@ -77,63 +83,66 @@ public class SGearJeiPlugin implements IModPlugin {
         // Repair kit hints
         for (RepairKitItem item : Registration.getItems(RepairKitItem.class)) {
             String itemName = NameUtils.fromItem(item).getPath();
-            reg.addRecipes(Collections.singleton(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint"), "",
+            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint"), "",
                             new ItemStack(item),
                             NonNullList.of(Ingredient.EMPTY,
                                     Ingredient.of(item),
                                     PartMaterialIngredient.of(PartType.MAIN),
                                     PartMaterialIngredient.of(PartType.MAIN),
                                     PartMaterialIngredient.of(PartType.MAIN)
-                            ))),
-                    VanillaRecipeCategoryUid.CRAFTING);
-            reg.addRecipes(Collections.singleton(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint_frag"), "",
+                            ))));
+            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint_frag"), "",
                             new ItemStack(item),
                             NonNullList.of(Ingredient.EMPTY,
                                     Ingredient.of(item),
                                     Ingredient.of(ModItems.FRAGMENT),
                                     Ingredient.of(ModItems.FRAGMENT),
                                     Ingredient.of(ModItems.FRAGMENT)
-                            ))),
-                    VanillaRecipeCategoryUid.CRAFTING);
+                            ))));
         }
 
-        reg.addRecipes(recipeManager.getRecipes().stream()
-                .filter(SGearJeiPlugin::isGearCraftingRecipe)
-                .collect(Collectors.toList()), GEAR_CRAFTING);
+        reg.addRecipes(GEAR_CRAFTING_TYPE, getRecipes(recipeManager, SGearJeiPlugin::isGearCraftingRecipe, CraftingRecipe.class));
 
         // Compounders
-        reg.addRecipes(recipeManager.getRecipes().stream()
-                .filter(r -> r.getType() == ModRecipes.COMPOUNDING_FABRIC_TYPE.get())
-                .collect(Collectors.toList()), Const.COMPOUNDING_FABRIC);
-        reg.addRecipes(recipeManager.getRecipes().stream()
-                .filter(r -> r.getType() == ModRecipes.COMPOUNDING_GEM_TYPE.get())
-                .collect(Collectors.toList()), Const.COMPOUNDING_GEM);
-        reg.addRecipes(recipeManager.getRecipes().stream()
-                .filter(r -> r.getType() == ModRecipes.COMPOUNDING_METAL_TYPE.get())
-                .collect(Collectors.toList()), Const.COMPOUNDING_METAL);
+        reg.addRecipes(COMPOUNDING_TYPE, getRecipes(recipeManager, ModRecipes.COMPOUNDING_FABRIC_TYPE.get(), CompoundingRecipe.class));
+        reg.addRecipes(COMPOUNDING_TYPE, getRecipes(recipeManager, ModRecipes.COMPOUNDING_GEM_TYPE.get(), CompoundingRecipe.class));
+        reg.addRecipes(COMPOUNDING_TYPE, getRecipes(recipeManager, ModRecipes.COMPOUNDING_METAL_TYPE.get(), CompoundingRecipe.class));
 
         for (int i = 2; i <= 4; ++i) {
-            reg.addRecipes(Collections.singleton(CompoundingRecipe.makeExample(Const.FABRIC_COMPOUNDER_INFO,
-                    i, new FabricCompoundingRecipe(SilentGear.getId("fabric_example_" + i)))), Const.COMPOUNDING_FABRIC);
-            reg.addRecipes(Collections.singleton(CompoundingRecipe.makeExample(Const.GEM_COMPOUNDER_INFO,
-                    i, new GemCompoundingRecipe(SilentGear.getId("gem_example_" + i)))), Const.COMPOUNDING_GEM);
-            reg.addRecipes(Collections.singleton(CompoundingRecipe.makeExample(Const.METAL_COMPOUNDER_INFO,
-                    i, new MetalCompoundingRecipe(SilentGear.getId("metal_example_" + i)))), Const.COMPOUNDING_METAL);
+            reg.addRecipes(COMPOUNDING_TYPE, Collections.singletonList(CompoundingRecipe.makeExample(Const.FABRIC_COMPOUNDER_INFO,
+                    i, new FabricCompoundingRecipe(SilentGear.getId("fabric_example_" + i)))));
+            reg.addRecipes(COMPOUNDING_TYPE, Collections.singletonList(CompoundingRecipe.makeExample(Const.GEM_COMPOUNDER_INFO,
+                    i, new GemCompoundingRecipe(SilentGear.getId("gem_example_" + i)))));
+            reg.addRecipes(COMPOUNDING_TYPE, Collections.singletonList(CompoundingRecipe.makeExample(Const.METAL_COMPOUNDER_INFO,
+                    i, new MetalCompoundingRecipe(SilentGear.getId("metal_example_" + i)))));
         }
 
         // Grading
-        reg.addRecipes(Collections.singleton(new MaterialGraderRecipeCategory.GraderRecipe()), Const.GRADING);
+        reg.addRecipes(GRADING_TYPE, Collections.singletonList(new MaterialGraderRecipeCategory.GraderRecipe()));
 
         // Salvaging
-        reg.addRecipes(recipeManager.getRecipes().stream()
-                .filter(r -> r.getType() == ModRecipes.SALVAGING_TYPE.get())
-                .collect(Collectors.toList()), Const.SALVAGING);
+        reg.addRecipes(SALVAGING_TYPE, getRecipes(recipeManager, ModRecipes.SALVAGING_TYPE.get(), SalvagingRecipe.class));
 
         addInfoPage(reg, CraftingItems.RED_CARD_UPGRADE);
         addInfoPage(reg, CraftingItems.SPOON_UPGRADE);
         for (Item item : Registration.getItems(item -> item instanceof ICoreTool)) {
             addInfoPage(reg, item);
         }
+    }
+
+    private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, net.minecraft.world.item.crafting.RecipeType recipeType, Class<R> recipeClass) {
+        return getRecipes(recipeManager, r -> r.getType() == recipeType, recipeClass);
+    }
+
+    private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, RecipeSerializer<?> recipeSerializer, Class<R> recipeClass) {
+        return getRecipes(recipeManager, r -> r.getSerializer() == recipeSerializer, recipeClass);
+    }
+
+    private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, Predicate<Recipe<?>> predicate, Class<R> recipeClass) {
+        return recipeManager.getRecipes().stream()
+                .filter(predicate)
+                .map(recipeClass::cast)
+                .collect(Collectors.toList());
     }
 
     private static boolean isGearCraftingRecipe(Recipe<?> recipe) {
@@ -143,21 +152,21 @@ public class SGearJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration reg) {
-        reg.addRecipeCatalyst(new ItemStack(Blocks.CRAFTING_TABLE), GEAR_CRAFTING);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.REFABRICATOR), Const.COMPOUNDING_FABRIC);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.RECRYSTALLIZER), Const.COMPOUNDING_GEM);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.METAL_ALLOYER), Const.COMPOUNDING_METAL);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.MATERIAL_GRADER), Const.GRADING);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.SALVAGER), Const.SALVAGING);
+        reg.addRecipeCatalyst(new ItemStack(Blocks.CRAFTING_TABLE), GEAR_CRAFTING_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.REFABRICATOR), COMPOUNDING_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.RECRYSTALLIZER), COMPOUNDING_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.METAL_ALLOYER), COMPOUNDING_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.MATERIAL_GRADER), GRADING_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(ModBlocks.SALVAGER), SALVAGING_TYPE);
     }
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration reg) {
-        reg.addRecipeClickArea(RefabricatorScreen.class, 90, 30, 28, 23, Const.COMPOUNDING_FABRIC);
-        reg.addRecipeClickArea(RecrystallizerScreen.class, 90, 30, 28, 23, Const.COMPOUNDING_GEM);
-        reg.addRecipeClickArea(MetalAlloyerScreen.class, 90, 30, 28, 23, Const.COMPOUNDING_METAL);
-        reg.addRecipeClickArea(GraderScreen.class, 48, 30, 28, 23, Const.GRADING);
-        reg.addRecipeClickArea(SalvagerScreen.class, 30, 30, 28, 23, Const.SALVAGING);
+        reg.addRecipeClickArea(RefabricatorScreen.class, 90, 30, 28, 23, COMPOUNDING_TYPE);
+        reg.addRecipeClickArea(RecrystallizerScreen.class, 90, 30, 28, 23, COMPOUNDING_TYPE);
+        reg.addRecipeClickArea(MetalAlloyerScreen.class, 90, 30, 28, 23, COMPOUNDING_TYPE);
+        reg.addRecipeClickArea(GraderScreen.class, 48, 30, 28, 23, GRADING_TYPE);
+        reg.addRecipeClickArea(SalvagerScreen.class, 30, 30, 28, 23, SALVAGING_TYPE);
     }
 
     @Override
@@ -176,20 +185,20 @@ public class SGearJeiPlugin implements IModPlugin {
     }
 
     private static void addInfoPage(IRecipeRegistration reg, ItemLike item) {
-        String key = getDescKey(Objects.requireNonNull(item.asItem().getRegistryName()));
+        String key = getDescKey(NameUtils.fromItem(item));
         ItemStack stack = new ItemStack(item);
-        reg.addIngredientInfo(stack, VanillaTypes.ITEM, new TranslatableComponent(key));
+        reg.addIngredientInfo(stack, VanillaTypes.ITEM_STACK, Component.translatable(key));
     }
 
     private static void addInfoPage(IRecipeRegistration reg, String name, Collection<ItemLike> items) {
         String key = getDescKey(SilentGear.getId(name));
         List<ItemStack> stacks = items.stream().map(ItemStack::new).collect(Collectors.toList());
-        reg.addIngredientInfo(stacks, VanillaTypes.ITEM, new TranslatableComponent(key));
+        reg.addIngredientInfo(stacks, VanillaTypes.ITEM_STACK, Component.translatable(key));
     }
 
     private static void addInfoPage(IRecipeRegistration reg, ItemLike item, Stream<ItemStack> variants) {
-        String key = getDescKey(Objects.requireNonNull(item.asItem().getRegistryName()));
-        reg.addIngredientInfo(variants.collect(Collectors.toList()), VanillaTypes.ITEM, new TranslatableComponent(key));
+        String key = getDescKey(NameUtils.fromItem(item));
+        reg.addIngredientInfo(variants.collect(Collectors.toList()), VanillaTypes.ITEM_STACK, Component.translatable(key));
     }
 
     private static String getDescKey(ResourceLocation name) {
