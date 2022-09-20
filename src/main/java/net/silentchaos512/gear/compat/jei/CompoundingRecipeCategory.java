@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
 import net.silentchaos512.gear.block.compounder.CompounderScreen;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.ArrayList;
@@ -47,7 +48,15 @@ public class CompoundingRecipeCategory implements IRecipeCategory<CompoundingRec
 
     @Override
     public RecipeType<CompoundingRecipe> getRecipeType() {
-        return SGearJeiPlugin.COMPOUNDING_TYPE;
+        if (this.info == Const.FABRIC_COMPOUNDER_INFO) {
+            return SGearJeiPlugin.COMPOUNDING_FABRIC_TYPE;
+        } else if (this.info == Const.GEM_COMPOUNDER_INFO) {
+            return SGearJeiPlugin.COMPOUNDING_GEM_TYPE;
+        } else if (this.info == Const.METAL_COMPOUNDER_INFO) {
+            return SGearJeiPlugin.COMPOUNDING_METAL_TYPE;
+        } else {
+            throw new IllegalStateException("Unknown JEI recipe type: " + this.info.getRecipeType());
+        }
     }
 
     @Override
