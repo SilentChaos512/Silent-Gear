@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "silentgear:item/blueprint_boots",
+    "layer1": "silentgear:item/boots/_highlight"
+  }
+}

@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "gear_type": "ring",
-  "loader": "silentgear:compound_part_model",
-  "part_type": "silentgear:main",
-  "texture_path": "ring"
+  "textures": {
+    "layer0": "silentgear:item/ring/main_generic_hc",
+    "layer1": "silentgear:item/ring/_highlight",
+    "layer2": "silentgear:item/part_marker",
+    "layer3": "silentgear:item/temp_model_overlay"
+  }
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/blueprint_sickle",
+    "layer1": "silentgear:item/sickle/_highlight"
+  }
+}

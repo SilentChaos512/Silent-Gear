@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "gear_type": "arrow",
-  "loader": "silentgear:compound_part_model",
-  "part_type": "silentgear:main",
-  "texture_path": "arrow"
+  "textures": {
+    "layer0": "silentgear:item/arrow/main_generic_hc",
+    "layer1": "silentgear:item/arrow/_highlight",
+    "layer2": "silentgear:item/part_marker",
+    "layer3": "silentgear:item/temp_model_overlay"
+  }
 }

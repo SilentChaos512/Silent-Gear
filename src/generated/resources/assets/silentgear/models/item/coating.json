@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "gear_type": "part",
-  "loader": "silentgear:compound_part_model",
-  "part_type": "silentgear:coating",
-  "texture_path": "part"
+  "textures": {
+    "layer0": "silentgear:item/part/coating_material",
+    "layer1": "silentgear:item/part/coating_jar",
+    "layer2": "silentgear:item/part_marker",
+    "layer3": "silentgear:item/temp_model_overlay"
+  }
 }

@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "gear_type": "knife",
-  "loader": "silentgear:compound_part_model",
-  "part_type": "silentgear:main",
-  "texture_path": "knife"
+  "textures": {
+    "layer0": "silentgear:item/knife/main_generic_hc",
+    "layer1": "silentgear:item/knife/_highlight",
+    "layer2": "silentgear:item/part_marker",
+    "layer3": "silentgear:item/temp_model_overlay"
+  }
 }

@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "gear_type": "sickle",
-  "loader": "silentgear:compound_part_model",
-  "part_type": "silentgear:main",
-  "texture_path": "sickle"
+  "textures": {
+    "layer0": "silentgear:item/sickle/main_generic_hc",
+    "layer1": "silentgear:item/sickle/_highlight",
+    "layer2": "silentgear:item/part_marker",
+    "layer3": "silentgear:item/temp_model_overlay"
+  }
 }

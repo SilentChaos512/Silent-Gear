@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "gear_type": "mattock",
-  "loader": "silentgear:compound_part_model",
-  "part_type": "silentgear:main",
-  "texture_path": "mattock"
+  "textures": {
+    "layer0": "silentgear:item/mattock/main_generic_hc",
+    "layer1": "silentgear:item/mattock/_highlight",
+    "layer2": "silentgear:item/part_marker",
+    "layer3": "silentgear:item/temp_model_overlay"
+  }
 }

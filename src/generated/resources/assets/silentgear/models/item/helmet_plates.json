@@ -1,10 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "extra_layers": [
-    "silentgear:blueprint_helmet"
-  ],
-  "gear_type": "helmet",
-  "loader": "silentgear:compound_part_model",
-  "part_type": "silentgear:main",
-  "texture_path": "part/armor"
+  "textures": {
+    "layer0": "silentgear:item/helmet/main_generic_hc",
+    "layer1": "silentgear:item/helmet/_highlight",
+    "layer2": "silentgear:item/part_marker",
+    "layer3": "silentgear:item/temp_model_overlay"
+  }
 }

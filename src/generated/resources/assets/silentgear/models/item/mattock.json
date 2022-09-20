@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/blueprint_mattock",
+    "layer1": "silentgear:item/mattock/_highlight"
+  }
+}

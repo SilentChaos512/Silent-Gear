@@ -11,12 +11,16 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
+import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
@@ -40,6 +44,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .forEach(this::blockItemModel);
 
         ModelFile itemGenerated = getExistingFile(new ResourceLocation("item/generated"));
+        ModelFile itemHandheld = getExistingFile(new ResourceLocation("item/handheld"));
 
         for (CraftingItems item : CraftingItems.values()) {
                 builder(item, itemGenerated, "item/" + item.getName());
@@ -113,6 +118,121 @@ public class ModItemModelProvider extends ItemModelProvider {
         builder(ModItems.GOLDEN_NETHER_BANANA, itemGenerated);
         builder(ModItems.NETHER_BANANA, itemGenerated);
         builder(ModItems.PEBBLE, itemGenerated);
+
+        // Temp models
+        // Gear
+        tempGear(ModItems.SWORD, itemHandheld);
+        tempGear(ModItems.KATANA, itemHandheld);
+        tempGear(ModItems.MACHETE, itemHandheld);
+        tempGear(ModItems.SPEAR, itemHandheld);
+        tempGear(ModItems.TRIDENT, itemHandheld);
+        tempGear(ModItems.KNIFE, itemHandheld);
+        tempGear(ModItems.DAGGER, itemHandheld);
+        tempGear(ModItems.PICKAXE, itemHandheld);
+        tempGear(ModItems.SHOVEL, itemHandheld);
+        tempGear(ModItems.AXE, itemHandheld);
+        tempGear(ModItems.PAXEL, itemHandheld);
+        tempGear(ModItems.HAMMER, itemHandheld);
+        tempGear(ModItems.EXCAVATOR, itemHandheld);
+        tempGear(ModItems.SAW, itemHandheld);
+        tempGear(ModItems.PROSPECTOR_HAMMER, itemHandheld);
+        tempGear(ModItems.MATTOCK, itemHandheld);
+        tempGear(ModItems.SICKLE, itemHandheld);
+        tempGear(ModItems.SHEARS, itemHandheld);
+        tempGear(ModItems.FISHING_ROD, itemHandheld);
+        tempGear(ModItems.BOW, itemHandheld);
+        tempGear(ModItems.CROSSBOW, itemHandheld);
+        tempGear(ModItems.SLINGSHOT, itemHandheld);
+        tempGear(ModItems.SHIELD, itemGenerated);
+        tempGear(ModItems.ARROW, itemGenerated);
+        tempGear(ModItems.HELMET, itemGenerated);
+        tempGear(ModItems.CHESTPLATE, itemGenerated);
+        tempGear(ModItems.LEGGINGS, itemGenerated);
+        tempGear(ModItems.BOOTS, itemGenerated);
+        tempGear(ModItems.ELYTRA, itemGenerated);
+        tempGear(ModItems.RING, itemGenerated);
+        tempGear(ModItems.BRACELET, itemGenerated);
+        // Parts
+        tempMainPart(ModItems.SWORD_BLADE);
+        tempMainPart(ModItems.KATANA_BLADE);
+        tempMainPart(ModItems.MACHETE_BLADE);
+        tempMainPart(ModItems.SPEAR_TIP);
+        tempMainPart(ModItems.TRIDENT_PRONGS);
+        tempMainPart(ModItems.KNIFE_BLADE);
+        tempMainPart(ModItems.DAGGER_BLADE);
+        tempMainPart(ModItems.PICKAXE_HEAD);
+        tempMainPart(ModItems.SHOVEL_HEAD);
+        tempMainPart(ModItems.AXE_HEAD);
+        tempMainPart(ModItems.PAXEL_HEAD);
+        tempMainPart(ModItems.HAMMER_HEAD);
+        tempMainPart(ModItems.EXCAVATOR_HEAD);
+        tempMainPart(ModItems.SAW_BLADE);
+        tempMainPart(ModItems.MATTOCK_HEAD);
+        tempMainPart(ModItems.PROSPECTOR_HAMMER_HEAD);
+        tempMainPart(ModItems.SICKLE_BLADE);
+        tempMainPart(ModItems.SHEARS_BLADES);
+        tempMainPart(ModItems.FISHING_REEL_AND_HOOK);
+        tempMainPart(ModItems.BOW_LIMBS);
+        tempMainPart(ModItems.CROSSBOW_LIMBS);
+        tempMainPart(ModItems.SLINGSHOT_LIMBS);
+        tempMainPart(ModItems.SHIELD_PLATE);
+        tempMainPart(ModItems.HELMET_PLATES);
+        tempMainPart(ModItems.CHESTPLATE_PLATES);
+        tempMainPart(ModItems.LEGGING_PLATES);
+        tempMainPart(ModItems.BOOT_PLATES);
+        tempMainPart(ModItems.ELYTRA_WINGS);
+        tempMainPart(ModItems.ARROW_HEADS);
+        tempMainPart(ModItems.RING_SHANK);
+        tempMainPart(ModItems.BRACELET_BAND);
+        tempGearPart(ModItems.ROD);
+        tempGearPart(ModItems.TIP);
+        tempCoatingPart(ModItems.COATING);
+        tempGearPart(ModItems.GRIP);
+        tempGearPart(ModItems.BINDING);
+        tempGearPart(ModItems.LINING, "item/part/lining_cloth");
+        tempGearPart(ModItems.CORD);
+        tempGearPart(ModItems.FLETCHING);
+        tempGearPart(ModItems.ADORNMENT);
+    }
+
+    private ItemModelBuilder tempGear(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+        String name = item.get().getGearType().getName();
+        return getBuilder(item.getId().getPath())
+                .parent(parent)
+                .texture("layer0", "item/blueprint_" + name)
+                .texture("layer1", "item/" + name + "/_highlight");
+    }
+
+    private ItemModelBuilder tempMainPart(ItemRegistryObject<MainPartItem> item) {
+        String name = item.get().getGearType().getName();
+        return getBuilder(item.getId().getPath())
+                .parent(getExistingFile(new ResourceLocation("item/generated")))
+                .texture("layer0", "item/" + name + "/main_generic_hc")
+                .texture("layer1", "item/" + name + "/_highlight")
+                .texture("layer2", "item/part_marker")
+                .texture("layer3", "item/temp_model_overlay");
+    }
+
+    private ItemModelBuilder tempGearPart(ItemRegistryObject<CompoundPartItem> item) {
+        String name = item.get().getPartType().getName().getPath();
+        return tempGearPart(item, "item/part/" + name);
+    }
+
+    private ItemModelBuilder tempGearPart(ItemRegistryObject<CompoundPartItem> item, String texture) {
+        return getBuilder(item.getId().getPath())
+                .parent(getExistingFile(new ResourceLocation("item/generated")))
+                .texture("layer0", texture)
+                .texture("layer1", "item/part_marker")
+                .texture("layer2", "item/temp_model_overlay");
+    }
+
+    private ItemModelBuilder tempCoatingPart(ItemRegistryObject<CompoundPartItem> item) {
+        return getBuilder(item.getId().getPath())
+                .parent(getExistingFile(new ResourceLocation("item/generated")))
+                .texture("layer0", "item/part/coating_material")
+                .texture("layer1", "item/part/coating_jar")
+                .texture("layer2", "item/part_marker")
+                .texture("layer3", "item/temp_model_overlay");
     }
 
     private void blockItemModel(Block block) {
