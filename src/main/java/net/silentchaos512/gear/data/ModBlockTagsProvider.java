@@ -92,7 +92,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 
         // Forge
         builder(ModTags.Blocks.ORES_BORT, ModBlocks.BORT_ORE, ModBlocks.DEEPSLATE_BORT_ORE);
-        builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE);
+        builder(ModTags.Blocks.ORES_CRIMSON_IRON, ModBlocks.CRIMSON_IRON_ORE, ModBlocks.BLACKSTONE_CRIMSON_IRON_ORE);
         builder(ModTags.Blocks.ORES_AZURE_SILVER, ModBlocks.AZURE_SILVER_ORE);
         getBuilder(Tags.Blocks.ORES)
                 .addTag(ModTags.Blocks.ORES_BORT)

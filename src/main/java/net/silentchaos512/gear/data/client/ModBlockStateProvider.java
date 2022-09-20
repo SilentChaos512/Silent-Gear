@@ -34,6 +34,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.BORT_ORE.get());
         simpleBlock(ModBlocks.DEEPSLATE_BORT_ORE.get());
         simpleBlock(ModBlocks.CRIMSON_IRON_ORE.get());
+        simpleBlock(ModBlocks.BLACKSTONE_CRIMSON_IRON_ORE.get());
         simpleBlock(ModBlocks.AZURE_SILVER_ORE.get());
         simpleBlock(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get());
         simpleBlock(ModBlocks.RAW_AZURE_SILVER_BLOCK.get());

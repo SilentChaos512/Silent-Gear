@@ -49,6 +49,8 @@ public class ModBlockLootTables extends BlockLoot {
                 createOreDrop(ModBlocks.DEEPSLATE_BORT_ORE.get(), CraftingItems.BORT.asItem()));
         add(ModBlocks.CRIMSON_IRON_ORE.get(),
                 createOreDrop(ModBlocks.CRIMSON_IRON_ORE.get(), CraftingItems.RAW_CRIMSON_IRON.asItem()));
+        add(ModBlocks.BLACKSTONE_CRIMSON_IRON_ORE.get(),
+                createOreDrop(ModBlocks.BLACKSTONE_CRIMSON_IRON_ORE.get(), CraftingItems.RAW_CRIMSON_IRON.asItem()));
         add(ModBlocks.AZURE_SILVER_ORE.get(),
                 createOreDrop(ModBlocks.AZURE_SILVER_ORE.get(), CraftingItems.RAW_AZURE_SILVER.asItem()));
         dropSelf(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get());

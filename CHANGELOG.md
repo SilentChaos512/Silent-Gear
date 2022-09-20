@@ -3,7 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased (1.19.2 port)]
+### Added
+- Blackstone crimson iron ore (behaves just like crimson iron ore, but spawns exclusively in blackstone)
+### Changed
+- Ore generation is now handled with data files. World generation config settings removed.
+- "Enchantability" and "chargeability" stats renamed to "enchantment value" and "charging value"
+
+## [Unreleased 1.18?]
 ### Fixed
 - Broken bows being able to shoot arrows [#499]
 

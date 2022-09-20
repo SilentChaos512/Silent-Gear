@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:ore",
+  "config": {
+    "discard_chance_on_air_exposure": 0.0,
+    "size": 8,
+    "targets": [
+      {
+        "state": {
+          "Name": "silentgear:crimson_iron_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "forge:netherrack"
+        }
+      },
+      {
+        "state": {
+          "Name": "silentgear:blackstone_crimson_iron_ore"
+        },
+        "target": {
+          "block": "minecraft:blackstone",
+          "predicate_type": "minecraft:block_match"
+        }
+      }
+    ]
+  }
+}

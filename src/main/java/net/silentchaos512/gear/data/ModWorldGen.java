@@ -10,17 +10,22 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
 import net.minecraftforge.common.world.BiomeModifier;
@@ -35,8 +40,12 @@ import java.util.Map;
 public class ModWorldGen {
     public static void init(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
-        HolderSet.Named<Biome> overworld = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), BiomeTags.IS_OVERWORLD);
 
+        ResourceLocation bortName = SilentGear.getId("bort_ore");
+        ResourceLocation crimsonIronName = SilentGear.getId("crimson_iron_ore");
+        ResourceLocation azureSilverName = SilentGear.getId("azure_silver_ore");
+
+        // Bort
         ConfiguredFeature<?, ?> bortFeature = new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(
                         List.of(
@@ -47,35 +56,97 @@ public class ModWorldGen {
                         0.3f
                 )
         );
-
         PlacedFeature bortPlaced = new PlacedFeature(
-                holder(bortFeature, ops, SilentGear.getId("bort_ore")),
+                holder(bortFeature, ops, bortName),
                 commonOrePlacement(6, HeightRangePlacement.triangle(
                                 VerticalAnchor.absolute(-60), VerticalAnchor.absolute(10)
                         )
                 )
         );
 
+        // Crimson Iron
+        ConfiguredFeature<?, ?> crimsonIronFeature = new ConfiguredFeature<>(Feature.ORE,
+                new OreConfiguration(
+                        List.of(
+                                OreConfiguration.target(new TagMatchTest(Tags.Blocks.NETHERRACK), ModBlocks.CRIMSON_IRON_ORE.asBlockState()),
+                                OreConfiguration.target(new BlockMatchTest(Blocks.BLACKSTONE), ModBlocks.BLACKSTONE_CRIMSON_IRON_ORE.asBlockState())
+                        ),
+                        8,
+                        0
+                )
+        );
+        PlacedFeature crimsonIronPlaced = new PlacedFeature(
+                holder(crimsonIronFeature, ops, crimsonIronName),
+                commonOrePlacement(14, PlacementUtils.RANGE_10_10)
+        );
+
+        // Azure Silver
+        ConfiguredFeature<?, ?> azureSilverFeature = new ConfiguredFeature<>(Feature.ORE,
+                new OreConfiguration(
+                        new TagMatchTest(Tags.Blocks.END_STONES),
+                        ModBlocks.AZURE_SILVER_ORE.asBlockState(),
+                        6,
+                        0
+                )
+        );
+        PlacedFeature azureSilverPlaced = new PlacedFeature(
+                holder(azureSilverFeature, ops, azureSilverName),
+                commonOrePlacement(8, HeightRangePlacement.uniform(
+                                VerticalAnchor.absolute(16), VerticalAnchor.absolute(92)
+                        )
+                )
+        );
+
+        // Collections of all configured features and placed features
         Map<ResourceLocation, ConfiguredFeature<?, ?>> oreFeatures = ImmutableMap.of(
-                SilentGear.getId("bort_ore"), bortFeature
+                bortName, bortFeature,
+                crimsonIronName, crimsonIronFeature,
+                azureSilverName, azureSilverFeature
         );
-
         Map<ResourceLocation, PlacedFeature> orePlacedFeatures = ImmutableMap.of(
-                SilentGear.getId("bort_ore"), bortPlaced
+                bortName, bortPlaced,
+                crimsonIronName, crimsonIronPlaced,
+                azureSilverName, azureSilverPlaced
         );
 
-        DataProvider configuredFeatureProvider = JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, SilentGear.MOD_ID, ops, Registry.CONFIGURED_FEATURE_REGISTRY, oreFeatures);
+        HolderSet<Biome> overworldBiomes = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), BiomeTags.IS_OVERWORLD);
+        HolderSet<Biome> netherBiomes = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), BiomeTags.IS_NETHER);
+        HolderSet<Biome> endBiomes = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), BiomeTags.IS_END);
 
-        DataProvider placedFeatureProvider = JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, SilentGear.MOD_ID, ops, Registry.PLACED_FEATURE_REGISTRY, orePlacedFeatures);
-
-        BiomeModifier ores = new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
-                overworld,
-                HolderSet.direct(holderPlaced(bortPlaced, ops, SilentGear.getId("bort_ore"))),
+        // Biome modifiers
+        BiomeModifier overworldOres = new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                overworldBiomes,
+                HolderSet.direct(
+                        holderPlaced(bortPlaced, ops, bortName)
+                ),
+                GenerationStep.Decoration.UNDERGROUND_ORES
+        );
+        BiomeModifier netherOres = new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                netherBiomes,
+                HolderSet.direct(
+                        holderPlaced(crimsonIronPlaced, ops, crimsonIronName)
+                ),
+                GenerationStep.Decoration.UNDERGROUND_ORES
+        );
+        BiomeModifier endOres = new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                endBiomes,
+                HolderSet.direct(
+                        holderPlaced(azureSilverPlaced, ops, azureSilverName)
+                ),
                 GenerationStep.Decoration.UNDERGROUND_ORES
         );
 
+        DataProvider configuredFeatureProvider = JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, SilentGear.MOD_ID, ops, Registry.CONFIGURED_FEATURE_REGISTRY,
+                oreFeatures);
+        DataProvider placedFeatureProvider = JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, SilentGear.MOD_ID, ops, Registry.PLACED_FEATURE_REGISTRY,
+                orePlacedFeatures);
         DataProvider biomeModifierProvider = JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, SilentGear.MOD_ID, ops, ForgeRegistries.Keys.BIOME_MODIFIERS,
-                ImmutableMap.of(SilentGear.getId("ores"), ores));
+                ImmutableMap.of(
+                        SilentGear.getId("overworld_ores"), overworldOres,
+                        SilentGear.getId("nether_ores"), netherOres,
+                        SilentGear.getId("end_ores"), endOres
+                )
+        );
 
         generator.addProvider(true, configuredFeatureProvider);
         generator.addProvider(true, placedFeatureProvider);

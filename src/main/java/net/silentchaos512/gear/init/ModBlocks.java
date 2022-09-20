@@ -45,6 +45,8 @@ public final class ModBlocks {
             getOre(SoundType.STONE));
     public static final BlockRegistryObject<DropExperienceBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
             getOre(SoundType.NETHER_GOLD_ORE));
+    public static final BlockRegistryObject<DropExperienceBlock> BLACKSTONE_CRIMSON_IRON_ORE = register("blackstone_crimson_iron_ore", () ->
+            getOre(SoundType.GILDED_BLACKSTONE));
     public static final BlockRegistryObject<DropExperienceBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
             getOre(SoundType.STONE));
 

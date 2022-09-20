@@ -74,9 +74,6 @@ public final class Config {
         public static final ForgeConfigSpec.IntValue starlightChargerChargeRate;
         public static final ForgeConfigSpec.IntValue starlightChargerMaxCharge;
         // World
-        public static final ForgeConfigSpec.IntValue azureSilverCount;
-        public static final ForgeConfigSpec.IntValue bortCount;
-        public static final ForgeConfigSpec.IntValue crimsonIronCount;
         /*public static final ForgeConfigSpec.IntValue wildFlaxTryCount;
         public static final ForgeConfigSpec.IntValue wildFlaxPatchCount;
         public static final ForgeConfigSpec.IntValue wildFluffyTryCount;
@@ -341,15 +338,6 @@ public final class Config {
             {
                 builder.comment("World generation options (REQUIRES GAME RESTART)");
                 builder.push("world");
-                azureSilverCount = builder
-                        .comment("Veins of azure silver ore per chunk")
-                        .defineInRange("azureSilver.count", 8, 0, 1000);
-                bortCount = builder
-                        .comment("Attempts to place individual bort ore blocks per chunk.")
-                        .defineInRange("bort.count", 6, 0, 1000);
-                crimsonIronCount = builder
-                        .comment("Veins of crimson iron ore per chunk")
-                        .defineInRange("crimsonIron.count", 14, 0, 1000);
                 /*wildFlaxPatchCount = builder
                         .comment("Number of patches of wild flax to attempt to place per chunk (some biomes only)")
                         .defineInRange("wildFlax.patchCount", 1, 0, 100);

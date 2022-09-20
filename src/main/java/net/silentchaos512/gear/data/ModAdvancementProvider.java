@@ -236,7 +236,7 @@ public class ModAdvancementProvider implements DataProvider {
             Advancement crimsonIron = Advancement.Builder.advancement()
                     .parent(nether)
                     .display(CraftingItems.CRIMSON_IRON_INGOT, title("crimson_iron"), description("crimson_iron"), null, FrameType.TASK, true, true, false)
-                    .addCriterion("get_ore", getItem(ModBlocks.CRIMSON_IRON_ORE))
+                    .addCriterion("get_ore", getItem(CraftingItems.RAW_CRIMSON_IRON))
                     .addCriterion("get_ingot", getItem(CraftingItems.CRIMSON_IRON_INGOT))
                     .save(consumer, id("crimson_iron"));
 
@@ -280,7 +280,7 @@ public class ModAdvancementProvider implements DataProvider {
             Advancement azureSilver = Advancement.Builder.advancement()
                     .parent(theEnd)
                     .display(CraftingItems.AZURE_SILVER_INGOT, title("azure_silver"), description("azure_silver"), null, FrameType.TASK, true, true, false)
-                    .addCriterion("get_ore", getItem(ModBlocks.AZURE_SILVER_ORE))
+                    .addCriterion("get_ore", getItem(CraftingItems.RAW_AZURE_SILVER))
                     .addCriterion("get_ingot", getItem(CraftingItems.AZURE_SILVER_INGOT))
                     .save(consumer, id("azure_silver"));
 

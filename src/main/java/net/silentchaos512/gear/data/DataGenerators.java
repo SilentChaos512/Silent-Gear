@@ -56,6 +56,7 @@ public final class DataGenerators {
     }
 
     public static void saveStable(CachedOutput p_236073_, JsonElement p_236074_, Path p_236075_) throws IOException {
+        // Slightly modified version of DataProvider.saveStable. Only difference is that this one does not sort keys!
         ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
         HashingOutputStream hashingoutputstream = new HashingOutputStream(Hashing.sha1(), bytearrayoutputstream);
         Writer writer = new OutputStreamWriter(hashingoutputstream, StandardCharsets.UTF_8);
