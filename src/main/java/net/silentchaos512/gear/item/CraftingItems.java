@@ -37,9 +37,10 @@ import java.util.Locale;
 public enum CraftingItems implements ItemLike {
     BLUEPRINT_PAPER,
     TEMPLATE_BOARD,
-    UPGRADE_BASE,
-    ADVANCED_UPGRADE_BASE,
+    @Deprecated UPGRADE_BASE, // possible removal
+    @Deprecated ADVANCED_UPGRADE_BASE, // possible removal
     BORT,
+    BRONZE_INGOT,
     CRIMSON_IRON_INGOT,
     CRIMSON_STEEL_INGOT,
     BLAZE_GOLD_INGOT,
@@ -60,8 +61,8 @@ public enum CraftingItems implements ItemLike {
     AZURE_SILVER_DUST,
     AZURE_ELECTRUM_DUST,
     TYRIAN_STEEL_DUST,
-    DIAMOND_SHARD,
-    EMERALD_SHARD,
+    @Deprecated DIAMOND_SHARD, // possible removal
+    @Deprecated EMERALD_SHARD, // possible removal
     NETHER_STAR_FRAGMENT,
     STARMETAL_DUST,
     GLOWING_DUST,

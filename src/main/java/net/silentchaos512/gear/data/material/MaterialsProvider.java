@@ -196,8 +196,7 @@ public class MaterialsProvider implements DataProvider {
                 //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 3, StatInstance.Operation.ADD)
-                .stat(PartType.ROD, ItemStats.RARITY, 47)
-                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
+                .trait(PartType.ROD, Const.Traits.BENDING, 2)
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 83, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 3, StatInstance.Operation.ADD)
@@ -225,16 +224,9 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.GREEDY, 3)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
                 //rod
-                .stat(PartType.ROD, ItemStats.DURABILITY, 0.35f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.ENCHANTMENT_VALUE, 0.55f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.2f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.MAGIC_DAMAGE, 0.3f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RANGED_DAMAGE, 0.2f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 55)
-                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.ROD, Const.Traits.SYNERGISTIC, 2)
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 3)
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 32, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 3, StatInstance.Operation.ADD)
@@ -256,6 +248,21 @@ public class MaterialsProvider implements DataProvider {
                 .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
         );
+        // Bronze
+        ret.add(extraMetal("bronze", 2, forgeId("ingots/bronze"))
+                .categories(MaterialCategories.METAL)
+                .mainStatsCommon(300, 13, 12, 15, 1.1f)
+                .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
+                .mainStatsHarvest(2, 6)
+                .mainStatsMelee(2.5f, 1f, 0.2f)
+                .mainStatsRanged(2, -0.2f)
+                .mainStatsArmor(3, 6, 4, 2, 1, 6) //15
+                .trait(PartType.MAIN, Const.Traits.SHARP, 1)
+                // rod
+                .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.05f, StatInstance.Operation.MUL2)
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD6903B)
+        );
         // Crimson Iron
         ret.add(new MaterialBuilder(modId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)
                 .categories(MaterialCategories.METAL)
@@ -270,12 +277,8 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
                 .trait(PartType.MAIN, Const.Traits.HARD, 2)
                 //rod
-                .stat(PartType.ROD, ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.ENCHANTMENT_VALUE, 1, StatInstance.Operation.ADD)
-                .stat(PartType.ROD, ItemStats.ENCHANTMENT_VALUE, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 30)
-                .trait(PartType.ROD, Const.Traits.MALLEABLE, 3, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 3)
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 224, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 8, StatInstance.Operation.ADD)
@@ -303,11 +306,10 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.HARD, 3)
                 .trait(PartType.MAIN, Const.Traits.FLAME_WARD, 1, materialCountOrRatio(3, 0.33f))
                 //rod
-                .stat(PartType.ROD, ItemStats.DURABILITY, 0.5f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RANGED_DAMAGE, 1, StatInstance.Operation.ADD)
-                .stat(PartType.ROD, ItemStats.RARITY, 42)
-                .trait(PartType.ROD, Const.Traits.MALLEABLE, 5, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 4)
+                .trait(PartType.ROD, Const.Traits.STURDY, 1, new MaterialRatioTraitCondition(0.5f))
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 448, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 16, StatInstance.Operation.ADD)
@@ -331,8 +333,7 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.STURDY, 3, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.MAIN, Const.Traits.VOID_WARD, 1, materialCountOrRatio(3, 0.5f))
                 //rod
-                .stat(PartType.ROD, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 100)
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, -2, StatInstance.Operation.ADD)
                 .trait(PartType.ROD, Const.Traits.STURDY, 4, new MaterialRatioTraitCondition(0.5f))
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 251, StatInstance.Operation.ADD)
@@ -359,9 +360,8 @@ public class MaterialsProvider implements DataProvider {
                 .mainStatsArmor(2, 4, 3, 1, 0, 8) //10
                 .trait(PartType.MAIN, Const.Traits.SOFT, 1, new MaterialRatioTraitCondition(0.5f))
                 //rod
-                .stat(PartType.ROD, ItemStats.DURABILITY, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 15)
+                .trait(PartType.ROD, Const.Traits.BENDING, 3)
                 .trait(PartType.ROD, Const.Traits.SOFT, 3)
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFD804C)
         );
@@ -379,10 +379,8 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 1)
                 .trait(PartType.MAIN, Const.Traits.SOFT, 3)
                 //rod
-                .stat(PartType.ROD, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.ENCHANTMENT_VALUE, 3, StatInstance.Operation.ADD)
-                .stat(PartType.ROD, ItemStats.RARITY, 40)
-                .trait(PartType.ROD, Const.Traits.MALLEABLE, 1, new MaterialRatioTraitCondition(0.5f))
+                .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 3, StatInstance.Operation.ADD)
+                .trait(PartType.ROD, Const.Traits.BENDING, 4)
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 16, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 1, StatInstance.Operation.ADD)
@@ -418,11 +416,7 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
                 .trait(PartType.MAIN, Const.Traits.MAGNETIC, 1, new MaterialRatioTraitCondition(0.66f))
                 //rod
-                .stat(PartType.ROD, ItemStats.DURABILITY, 0.15f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.ENCHANTMENT_VALUE, -2, StatInstance.Operation.ADD)
-                .stat(PartType.ROD, ItemStats.ENCHANTMENT_VALUE, -0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 20)
+                .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
                 .trait(PartType.ROD, Const.Traits.MAGNETIC, 3, new MaterialRatioTraitCondition(0.5f))
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 128, StatInstance.Operation.ADD)
@@ -474,9 +468,7 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 2)
                 .trait(PartType.MAIN, Const.Traits.LUSTROUS, 1, materialCountOrRatio(3, 0.5f))
                 // rod
-                .stat(PartType.ROD, ItemStats.DURABILITY, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 50)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 5, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartType.ROD, Const.Traits.LUSTROUS, 4, new MaterialRatioTraitCondition(0.5f))
                 // tip
@@ -512,11 +504,8 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
                 .trait(PartType.MAIN, Const.Traits.SYNERGISTIC, 2)
                 // rod
-                .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.3f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 30)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 4, new MaterialRatioTraitCondition(0.5f))
-                .trait(PartType.ROD, Const.Traits.SYNERGISTIC, 3, new MaterialRatioTraitCondition(0.5f))
                 // tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 512, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 12, StatInstance.Operation.ADD)
@@ -547,11 +536,9 @@ public class MaterialsProvider implements DataProvider {
                 .mainStatsProjectile(1.0f, 0.8f)
                 .mainStatsArmor(2, 6, 5, 2, 0, 10) //15
                 // tip
-                .stat(PartType.TIP, ItemStats.ENCHANTMENT_VALUE, 0.5f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.3f, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.HOLY, 1, new MaterialRatioTraitCondition(0.75f))
                 .trait(PartType.TIP, Const.Traits.LUCKY, 4, new MaterialRatioTraitCondition(0.75f))
                 // adornment
@@ -593,11 +580,9 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.CRUSHING, 3)
                 .trait(PartType.MAIN, Const.Traits.JAGGED, 2)
                 // rod
-                .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
-                .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 30)
+                .trait(PartType.ROD, Const.Traits.BRITTLE, 3)
                 // tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 64, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 64, StatInstance.Operation.ADD)
@@ -1513,31 +1498,6 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.MAIN, Const.Traits.SILKY, 1, new MaterialRatioTraitCondition(0.66f))
                 .trait(PartType.ROD, Const.Traits.MALLEABLE, 2)
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xF2D458)
-        );
-        // Bronze
-        ret.add(extraMetal("bronze", 2, forgeId("ingots/bronze"))
-                .categories(MaterialCategories.METAL)
-                .stat(PartType.MAIN, ItemStats.DURABILITY, 480)
-                .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 18)
-                .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
-                .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 12)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
-                .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 6)
-                .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2.5f)
-                .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1f)
-                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, 0.2f)
-                .mainStatsArmor(3, 7, 5, 2, 1, 6) //17
-                .stat(PartType.MAIN, ItemStats.RANGED_DAMAGE, 2)
-                .stat(PartType.MAIN, ItemStats.RANGED_SPEED, -0.2f)
-                .stat(PartType.MAIN, ItemStats.RARITY, 35)
-                .stat(PartType.MAIN, ItemStats.CHARGING_VALUE, 1.2f)
-                .stat(PartType.ROD, ItemStats.DURABILITY, 0.15f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.05f, StatInstance.Operation.MUL2)
-                .stat(PartType.ROD, ItemStats.RARITY, 35)
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
-                .trait(PartType.MAIN, Const.Traits.ADAMANT, 1, new MaterialRatioTraitCondition(0.35f))
-                .trait(PartType.ROD, Const.Traits.MALLEABLE, 3)
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD96121)
         );
         // Compressed Iron
         ret.add(extraMetal("compressed_iron", 3, forgeId("ingots/compressed_iron"))

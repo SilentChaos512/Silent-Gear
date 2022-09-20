@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased (1.19.2 port)]
 ### Added
 - Blackstone crimson iron ore (behaves just like crimson iron ore, but spawns exclusively in blackstone)
+- Bending trait
+### Removed
+- Long rod
+- Some pointless and outdated advancements
 ### Changed
 - Ore generation is now handled with data files. World generation config settings removed.
 - "Enchantability" and "chargeability" stats renamed to "enchantment value" and "charging value"

@@ -48,8 +48,7 @@
       },
       "harvest_speed": {
         "add": 3.0
-      },
-      "rarity": 47.0
+      }
     },
     "tip": {
       "durability": {
@@ -95,8 +94,8 @@
     ],
     "rod": [
       {
-        "name": "silentgear:flexible",
-        "level": 1
+        "name": "silentgear:bending",
+        "level": 2
       }
     ],
     "tip": [

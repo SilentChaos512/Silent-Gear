@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "gear_type": "part",
-  "loader": "silentgear:compound_part_model",
-  "part_type": "silentgear:rod",
-  "texture_path": "part"
-}

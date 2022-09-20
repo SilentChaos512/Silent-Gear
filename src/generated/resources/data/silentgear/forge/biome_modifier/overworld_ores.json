@@ -1,6 +1,10 @@
 {
   "type": "forge:add_features",
   "biomes": "#minecraft:is_overworld",
-  "features": "silentgear:bort_ore",
+  "features": [
+    "silentgear:bort_ore",
+    "silentgear:wild_flax",
+    "silentgear:wild_fluffy"
+  ],
   "step": "underground_ores"
 }

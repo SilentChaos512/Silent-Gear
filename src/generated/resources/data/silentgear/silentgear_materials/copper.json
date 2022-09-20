@@ -41,13 +41,9 @@
       "magic_armor": 8.0
     },
     "rod": {
-      "durability": {
-        "mul2": -0.1
-      },
       "harvest_speed": {
         "mul2": 0.2
-      },
-      "rarity": 15.0
+      }
     }
   },
   "traits": {
@@ -64,6 +60,10 @@
       }
     ],
     "rod": [
+      {
+        "name": "silentgear:bending",
+        "level": 3
+      },
       {
         "name": "silentgear:soft",
         "level": 3

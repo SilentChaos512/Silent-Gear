@@ -9,6 +9,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.RegistryOps;
@@ -22,6 +23,8 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
@@ -44,6 +47,8 @@ public class ModWorldGen {
         ResourceLocation bortName = SilentGear.getId("bort_ore");
         ResourceLocation crimsonIronName = SilentGear.getId("crimson_iron_ore");
         ResourceLocation azureSilverName = SilentGear.getId("azure_silver_ore");
+        ResourceLocation wildFlaxName = SilentGear.getId("wild_flax");
+        ResourceLocation wildFluffyName = SilentGear.getId("wild_fluffy");
 
         // Bort
         ConfiguredFeature<?, ?> bortFeature = new ConfiguredFeature<>(Feature.ORE,
@@ -97,16 +102,46 @@ public class ModWorldGen {
                 )
         );
 
+        // Wild Flax
+        ConfiguredFeature<?, ?> wildFlaxFeature = new ConfiguredFeature<>(Feature.FLOWER,
+                FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLAX_PLANT.get())),
+                        List.of(),
+                        32
+                )
+        );
+        PlacedFeature wildFlaxPlaced = new PlacedFeature(
+                holder(wildFlaxFeature, ops, wildFlaxName),
+                List.of(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())
+        );
+
+        // Wild Fluffy
+        ConfiguredFeature<?, ?> wildFluffyFeature = new ConfiguredFeature<>(Feature.FLOWER,
+                FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLUFFY_PLANT.get())),
+                        List.of(),
+                        32
+                )
+        );
+        PlacedFeature wildFluffyPlaced = new PlacedFeature(
+                holder(wildFluffyFeature, ops, wildFluffyName),
+                List.of(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())
+        );
+
         // Collections of all configured features and placed features
         Map<ResourceLocation, ConfiguredFeature<?, ?>> oreFeatures = ImmutableMap.of(
                 bortName, bortFeature,
                 crimsonIronName, crimsonIronFeature,
-                azureSilverName, azureSilverFeature
+                azureSilverName, azureSilverFeature,
+                wildFlaxName, wildFlaxFeature,
+                wildFluffyName, wildFluffyFeature
         );
         Map<ResourceLocation, PlacedFeature> orePlacedFeatures = ImmutableMap.of(
                 bortName, bortPlaced,
                 crimsonIronName, crimsonIronPlaced,
-                azureSilverName, azureSilverPlaced
+                azureSilverName, azureSilverPlaced,
+                wildFlaxName, wildFlaxPlaced,
+                wildFluffyName, wildFluffyPlaced
         );
 
         HolderSet<Biome> overworldBiomes = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), BiomeTags.IS_OVERWORLD);
@@ -117,7 +152,9 @@ public class ModWorldGen {
         BiomeModifier overworldOres = new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
                 overworldBiomes,
                 HolderSet.direct(
-                        holderPlaced(bortPlaced, ops, bortName)
+                        holderPlaced(bortPlaced, ops, bortName),
+                        holderPlaced(wildFlaxPlaced, ops, wildFlaxName),
+                        holderPlaced(wildFluffyPlaced, ops, wildFluffyName)
                 ),
                 GenerationStep.Decoration.UNDERGROUND_ORES
         );

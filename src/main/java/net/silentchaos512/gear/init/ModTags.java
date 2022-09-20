@@ -77,6 +77,7 @@ public final class ModTags {
 
         public static final TagKey<Item> GEMS_BORT = forge("gems/bort");
 
+        public static final TagKey<Item> INGOTS_BRONZE = forge("ingots/bronze");
         public static final TagKey<Item> INGOTS_BLAZE_GOLD = forge("ingots/blaze_gold");
         public static final TagKey<Item> INGOTS_CRIMSON_IRON = forge("ingots/crimson_iron");
         public static final TagKey<Item> INGOTS_CRIMSON_STEEL = forge("ingots/crimson_steel");

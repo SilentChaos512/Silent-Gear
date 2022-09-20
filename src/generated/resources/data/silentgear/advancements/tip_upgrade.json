@@ -1,5 +1,5 @@
 {
-  "parent": "silentgear:upgrade_base",
+  "parent": "silentgear:template_board",
   "criteria": {
     "get_item": {
       "conditions": {

@@ -43,10 +43,9 @@
       "magic_armor": 12.0
     },
     "rod": {
-      "durability": {
-        "mul2": 0.1
-      },
-      "rarity": 100.0
+      "harvest_speed": {
+        "add": -2.0
+      }
     },
     "tip": {
       "durability": {

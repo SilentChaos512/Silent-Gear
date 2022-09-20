@@ -73,11 +73,6 @@ public final class Config {
         // Starlight Charger
         public static final ForgeConfigSpec.IntValue starlightChargerChargeRate;
         public static final ForgeConfigSpec.IntValue starlightChargerMaxCharge;
-        // World
-        /*public static final ForgeConfigSpec.IntValue wildFlaxTryCount;
-        public static final ForgeConfigSpec.IntValue wildFlaxPatchCount;
-        public static final ForgeConfigSpec.IntValue wildFluffyTryCount;
-        public static final ForgeConfigSpec.IntValue wildFluffyPatchCount;*/
         // Debug
         public static final ForgeConfigSpec.BooleanValue extraPartAndTraitLogging;
         public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
@@ -332,24 +327,6 @@ public final class Config {
                 starlightChargerMaxCharge = builder
                         .comment("The maximum amount of energy the starlight charger can store")
                         .defineInRange("maxCharge", 1_000_000, 0, Integer.MAX_VALUE);
-                builder.pop();
-            }
-
-            {
-                builder.comment("World generation options (REQUIRES GAME RESTART)");
-                builder.push("world");
-                /*wildFlaxPatchCount = builder
-                        .comment("Number of patches of wild flax to attempt to place per chunk (some biomes only)")
-                        .defineInRange("wildFlax.patchCount", 1, 0, 100);
-                wildFlaxTryCount = builder
-                        .comment("Block place attempts per wild flax cluster")
-                        .defineInRange("wildFlax.tryCount", 16, 0, 1000);
-                wildFluffyPatchCount = builder
-                        .comment("Number of patches of wild fluffy plants to attempt to place per chunk (some biomes only)")
-                        .defineInRange("wildFluffy.patchCount", 1, 0, 100);
-                wildFluffyTryCount = builder
-                        .comment("Block place attempts per wild fluffy plants cluster")
-                        .defineInRange("wildFluffy.tryCount", 16, 0, 1000);*/
                 builder.pop();
             }
 

@@ -211,8 +211,6 @@ public final class ModItems {
     // Compound Parts
     public static final ItemRegistryObject<CompoundPartItem> ROD = registerCompoundPart("rod", () ->
             new CompoundPartItem(PartType.ROD, baseProps()));
-    public static final ItemRegistryObject<CompoundPartItem> LONG_ROD = registerCompoundPart("long_rod", () ->
-            new CompoundPartItem(PartType.ROD, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> TIP = registerCompoundPart("tip", () ->
             new CompoundPartItem(PartType.TIP, baseProps()));
     public static final ItemRegistryObject<CompoundPartItem> COATING = registerCompoundPart("coating", () ->

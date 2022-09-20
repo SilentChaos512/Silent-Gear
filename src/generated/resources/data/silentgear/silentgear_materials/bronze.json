@@ -20,58 +20,44 @@
   },
   "stats": {
     "main": {
-      "durability": 480.0,
-      "armor_durability": 18.0,
-      "repair_value": 0.15,
+      "durability": 300.0,
+      "armor_durability": 13.0,
       "enchantment_value": 12.0,
+      "rarity": 15.0,
+      "charging_value": 1.1,
+      "repair_value": 0.15,
       "harvest_level": 2.0,
       "harvest_speed": 6.0,
       "melee_damage": 2.5,
       "magic_damage": 1.0,
       "attack_speed": 0.2,
-      "armor": 17.0,
-      "armor/helmet": 3.0,
-      "armor/chestplate": 7.0,
-      "armor/leggings": 5.0,
-      "armor/boots": 2.0,
-      "armor_toughness": 1.0,
-      "magic_armor": 6.0,
       "ranged_damage": 2.0,
       "ranged_speed": -0.2,
-      "rarity": 35.0,
-      "charging_value": 1.2
+      "armor": 15.0,
+      "armor/helmet": 3.0,
+      "armor/chestplate": 6.0,
+      "armor/leggings": 4.0,
+      "armor/boots": 2.0,
+      "armor_toughness": 1.0,
+      "magic_armor": 6.0
     },
     "rod": {
-      "durability": {
-        "mul2": 0.15
-      },
       "melee_damage": {
         "mul2": 0.05
-      },
-      "rarity": 35.0
+      }
     }
   },
   "traits": {
     "main": [
       {
-        "name": "silentgear:malleable",
-        "level": 3
-      },
-      {
-        "name": "silentgear:adamant",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.35
-          }
-        ]
+        "name": "silentgear:sharp",
+        "level": 1
       }
     ],
     "rod": [
       {
-        "name": "silentgear:malleable",
-        "level": 3
+        "name": "silentgear:flexible",
+        "level": 1
       }
     ]
   },
@@ -79,7 +65,7 @@
     "main/all": [
       {
         "texture": "silentgear:main_generic_hc",
-        "color": "#D96121"
+        "color": "#D6903B"
       },
       {
         "texture": "silentgear:_highlight"
@@ -88,19 +74,19 @@
     "main/fragment": [
       {
         "texture": "silentgear:metal",
-        "color": "#D96121"
+        "color": "#D6903B"
       }
     ],
     "rod/all": [
       {
         "texture": "silentgear:rod_generic_hc",
-        "color": "#D96121"
+        "color": "#D6903B"
       }
     ],
     "rod/part": [
       {
         "texture": "silentgear:rod",
-        "color": "#D96121"
+        "color": "#D6903B"
       }
     ]
   }

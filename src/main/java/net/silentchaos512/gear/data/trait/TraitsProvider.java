@@ -116,10 +116,12 @@ public class TraitsProvider implements DataProvider {
 
         // Durability
 
+        ret.add(new DurabilityTraitBuilder(Const.Traits.BENDING, 5, -1, 0.075f)
+                .cancelsWith(Const.Traits.FLEXIBLE));
         ret.add(new DurabilityTraitBuilder(Const.Traits.BRITTLE, 5, 1, 0.1f)
                 .cancelsWith(Const.Traits.MALLEABLE));
-        ret.add(new DurabilityTraitBuilder(Const.Traits.FLEXIBLE, 5, -1, 0.05f)
-                .cancelsWith(Const.Traits.BRITTLE));
+        ret.add(new DurabilityTraitBuilder(Const.Traits.FLEXIBLE, 5, -1, 0.075f)
+                .cancelsWith(Const.Traits.BENDING));
         ret.add(new DurabilityTraitBuilder(Const.Traits.MALLEABLE, 5, -1, 0.1f)
                 .cancelsWith(Const.Traits.BRITTLE));
         ret.add(new DurabilityTraitBuilder(Const.Traits.STURDY, 5, -1, 0.175f)

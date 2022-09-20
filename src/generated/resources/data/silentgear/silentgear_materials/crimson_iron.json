@@ -44,21 +44,9 @@
       "magic_armor": 6.0
     },
     "rod": {
-      "durability": {
-        "mul2": 0.25
-      },
-      "enchantment_value": [
-        {
-          "add": 1.0
-        },
-        {
-          "mul2": 0.1
-        }
-      ],
       "melee_damage": {
         "mul2": 0.1
-      },
-      "rarity": 30.0
+      }
     },
     "tip": {
       "durability": {
@@ -94,14 +82,8 @@
     ],
     "rod": [
       {
-        "name": "silentgear:malleable",
-        "level": 3,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.5
-          }
-        ]
+        "name": "silentgear:flexible",
+        "level": 3
       }
     ],
     "tip": [

@@ -135,7 +135,6 @@ public class ModAdvancementProvider implements DataProvider {
             Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, survivalTool);
 
             Advancement blueprintPaper = simpleGetItem(consumer, CraftingItems.BLUEPRINT_PAPER, templateBoard);
-            Advancement upgradeBase = simpleGetItem(consumer, CraftingItems.UPGRADE_BASE, templateBoard);
             Advancement repairKit;
             {
                 Advancement.Builder builder = Advancement.Builder.advancement()
@@ -157,15 +156,9 @@ public class ModAdvancementProvider implements DataProvider {
 
             Advancement blueprintBook = simpleGetItem(consumer, ModItems.BLUEPRINT_BOOK, blueprintPaper);
 
-            Advancement tipUpgrade = simpleGetItem(consumer, ModItems.TIP, ModItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), upgradeBase, "tip_upgrade");
+            Advancement tipUpgrade = simpleGetItem(consumer, ModItems.TIP, ModItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), templateBoard, "tip_upgrade");
 
             //region Gear
-
-            Advancement mixedMaterials = Advancement.Builder.advancement()
-                    .parent(blueprintPaper)
-                    .display(Items.EMERALD, title("mixed_materials"), description("mixed_materials"), null, FrameType.TASK, true, true, false)
-                    .addCriterion("mixed_materials", genericInt(GearEvents.UNIQUE_MAIN_PARTS, 2))
-                    .save(consumer, id("mixed_materials"));
 
             Advancement armor = Advancement.Builder.advancement()
                     .parent(blueprintPaper)

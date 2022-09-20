@@ -63,7 +63,6 @@ public class CompoundPartItem extends Item {
         if (this == ModItems.COATING.get()) return getMaterials(stack).size();
         if (this == ModItems.FLETCHING.get()) return getMaterials(stack).size();
         if (this == ModItems.GRIP.get()) return getMaterials(stack).size();
-        if (this == ModItems.LONG_ROD.get()) return 2;
         if (this == ModItems.ROD.get()) return 4;
         if (this == ModItems.TIP.get()) return getMaterials(stack).size();
 

@@ -42,9 +42,6 @@
       "magic_armor": 10.0
     },
     "tip": {
-      "enchantment_value": {
-        "mul2": 0.5
-      },
       "harvest_speed": {
         "mul2": -0.1
       },
@@ -53,9 +50,6 @@
       },
       "attack_speed": {
         "add": 0.3
-      },
-      "rarity": {
-        "add": 10.0
       }
     },
     "adornment": {}

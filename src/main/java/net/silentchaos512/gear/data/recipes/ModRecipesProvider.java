@@ -394,11 +394,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addIngredient(PartMaterialIngredient.of(PartType.ROD), 2)
                 .build(consumer, SilentGear.getId("part/rod"));
 
-        ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.LONG_ROD, 2)
-                .addIngredient(BlueprintIngredient.of(ModItems.ROD_BLUEPRINT.get()))
-                .addIngredient(PartMaterialIngredient.of(PartType.ROD), 3)
-                .build(consumer, SilentGear.getId("part/long_rod"));
-
         ExtendedShapelessRecipeBuilder.builder(ModRecipes.COMPOUND_PART.get(), ModItems.BINDING, 1)
                 .addIngredient(BlueprintIngredient.of(ModItems.BINDING_BLUEPRINT.get()))
                 .addIngredient(PartMaterialIngredient.of(PartType.BINDING))
@@ -728,8 +723,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
     private void registerPressing(Consumer<FinishedRecipe> consumer) {
         ExtendedSingleItemRecipeBuilder.builder(ModRecipes.PRESSING_MATERIAL.get(),
-                PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
-                ModItems.SHEET_METAL, 2)
+                        PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
+                        ModItems.SHEET_METAL, 2)
                 .build(consumer);
     }
 
@@ -915,6 +910,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addIngredient(ModTags.Items.DUSTS_AZURE_SILVER, 2)
                 .addIngredient(ModTags.Items.DUSTS_BLAZE_GOLD, 1)
                 .addIngredient(CraftingItems.NETHER_STAR_FRAGMENT)
+                .build(consumer);
+
+        shapelessBuilder(CraftingItems.BRONZE_INGOT, 4)
+                .addIngredient(Tags.Items.INGOTS_COPPER, 3)
+                .addIngredient(Tags.Items.INGOTS_IRON, 1)
                 .build(consumer);
 
         // TODO: Maybe should organize these better...

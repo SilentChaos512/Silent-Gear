@@ -2,18 +2,33 @@ package net.silentchaos512.gear.block.trees;
 
 import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.silentchaos512.gear.world.ModWorldFeatures;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.ForkingTrunkPlacer;
+import net.silentchaos512.gear.init.ModBlocks;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class NetherwoodTree extends AbstractTreeGrower {
+    public static final TreeConfiguration NETHERWOOD_TREE_CONFIG = new TreeConfiguration.TreeConfigurationBuilder(
+            BlockStateProvider.simple(ModBlocks.NETHERWOOD_LOG.asBlockState()),
+            new ForkingTrunkPlacer(5, 2, 2),
+            BlockStateProvider.simple(ModBlocks.NETHERWOOD_LEAVES.asBlockState()),
+            new AcaciaFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0)),
+            new TwoLayersFeatureSize(1, 0, 2))
+            .ignoreVines()
+            .build();
+    public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> NETHERWOOD_TREE = Holder.direct(new ConfiguredFeature<>(Feature.TREE, NETHERWOOD_TREE_CONFIG));
+
     @Nullable
     @Override
     protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource p_222910_, boolean p_222911_) {
-        return ModWorldFeatures.Configured.NETHERWOOD_TREE;
+        return NETHERWOOD_TREE;
     }
 }

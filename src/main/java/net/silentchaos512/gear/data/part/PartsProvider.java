@@ -60,7 +60,6 @@ public class PartsProvider implements DataProvider {
         ret.add(part("fletching", GearType.PROJECTILE, PartType.FLETCHING, ModItems.FLETCHING));
         ret.add(part("grip", GearType.TOOL, PartType.GRIP, ModItems.GRIP));
         ret.add(part("lining", GearType.ARMOR, PartType.LINING, ModItems.LINING));
-        ret.add(part("long_rod", GearType.TOOL, PartType.ROD, ModItems.LONG_ROD));
         ret.add(part("rod", GearType.TOOL, PartType.ROD, ModItems.ROD));
         ret.add(part("tip", GearType.TOOL, PartType.TIP, ModItems.TIP));
 

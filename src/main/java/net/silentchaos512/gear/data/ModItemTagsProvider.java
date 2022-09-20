@@ -85,6 +85,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         getBuilder(Tags.Items.GEMS)
                 .addTag(ModTags.Items.GEMS_BORT);
 
+        builder(ModTags.Items.INGOTS_BRONZE, CraftingItems.BRONZE_INGOT);
         builder(ModTags.Items.INGOTS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_INGOT);
         builder(ModTags.Items.INGOTS_CRIMSON_IRON, CraftingItems.CRIMSON_IRON_INGOT);
         builder(ModTags.Items.INGOTS_CRIMSON_STEEL, CraftingItems.CRIMSON_STEEL_INGOT);

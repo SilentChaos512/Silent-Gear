@@ -43,28 +43,12 @@
       "magic_armor": 10.0
     },
     "rod": {
-      "durability": {
-        "mul2": 0.35
-      },
-      "enchantment_value": {
-        "mul2": 0.55
-      },
       "harvest_level": {
         "max": 2.0
       },
       "harvest_speed": {
         "mul2": 0.1
-      },
-      "melee_damage": {
-        "mul2": 0.2
-      },
-      "magic_damage": {
-        "mul2": 0.3
-      },
-      "ranged_damage": {
-        "mul2": 0.2
-      },
-      "rarity": 55.0
+      }
     },
     "tip": {
       "durability": {
@@ -125,17 +109,7 @@
     "rod": [
       {
         "name": "silentgear:flexible",
-        "level": 2,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.5
-          }
-        ]
-      },
-      {
-        "name": "silentgear:synergistic",
-        "level": 2
+        "level": 3
       }
     ],
     "tip": [
