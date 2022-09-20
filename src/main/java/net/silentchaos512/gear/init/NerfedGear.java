@@ -11,6 +11,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.lib.util.NameUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -40,7 +41,7 @@ public final class NerfedGear {
 
         for (Item item : ForgeRegistries.ITEMS) {
             if (isNerfedItem(item)) {
-                SilentGear.LOGGER.debug("Try nerf durability of {}", item.getRegistryName());
+                SilentGear.LOGGER.debug("Try nerf durability of {}", NameUtils.fromItem(item));
                 try {
                     int maxDamage = (int) maxDamageField.get(item);
                     int newMax = Mth.clamp((int) (maxDamage * Config.Common.nerfedItemDurabilityMulti.get()), 1, maxDamage);
@@ -58,7 +59,7 @@ public final class NerfedGear {
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        ItemStack heldItem = event.getPlayer().getMainHandItem();
+        ItemStack heldItem = event.getEntity().getMainHandItem();
         if (isNerfedItem(heldItem.getItem())) {
             float newSpeed = event.getNewSpeed() * Config.Common.nerfedItemHarvestSpeedMulti.get().floatValue();
             event.setNewSpeed(Math.max(newSpeed, 1));

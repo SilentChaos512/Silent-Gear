@@ -8,12 +8,11 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.network.KeyPressOnItemPacket;
 import net.silentchaos512.gear.network.Network;
@@ -32,14 +31,13 @@ public class KeyTracker {
 
     private static int materialCycleCount = 0;
 
-    public static void register(FMLClientSetupEvent event) {
-        // RegisterKeyMappingsEvent?
-        ClientRegistry.registerKeyBinding(CYCLE_BACK);
-        ClientRegistry.registerKeyBinding(CYCLE_NEXT);
-        ClientRegistry.registerKeyBinding(DISPLAY_STATS);
-        ClientRegistry.registerKeyBinding(DISPLAY_TRAITS);
-        ClientRegistry.registerKeyBinding(DISPLAY_CONSTRUCTION);
-        ClientRegistry.registerKeyBinding(OPEN_ITEM);
+    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(CYCLE_BACK);
+        event.register(CYCLE_NEXT);
+        event.register(DISPLAY_STATS);
+        event.register(DISPLAY_TRAITS);
+        event.register(DISPLAY_CONSTRUCTION);
+        event.register(OPEN_ITEM);
     }
 
     @Nonnull

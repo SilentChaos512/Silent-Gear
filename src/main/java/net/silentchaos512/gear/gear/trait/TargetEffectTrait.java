@@ -4,19 +4,18 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.*;
 
@@ -121,7 +120,7 @@ public class TargetEffectTrait extends SimpleTrait {
 
                 for (MobEffectInstance inst : list) {
                     JsonObject obj = new JsonObject();
-                    obj.addProperty("effect", NameUtils.from(inst.getEffect()).toString());
+                    obj.addProperty("effect", Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(inst.getEffect())).toString());
                     obj.addProperty("amplifier", inst.getAmplifier());
                     obj.addProperty("duration", inst.getDuration() / 20f);
                     array.add(obj);
@@ -207,7 +206,7 @@ public class TargetEffectTrait extends SimpleTrait {
                 buffer.writeByte(entry.getValue().size());
 
                 for (MobEffectInstance effect : entry.getValue()) {
-                    buffer.writeResourceLocation(NameUtils.from(effect.getEffect()));
+                    buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect.getEffect())));
                     buffer.writeByte(effect.getAmplifier());
                     buffer.writeVarInt(effect.getDuration());
                 }

@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.network;
 
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
@@ -40,7 +39,7 @@ public class ProspectingResultPacket {
 
     public static void encode(ProspectingResultPacket packet, FriendlyByteBuf buffer) {
         buffer.writeVarInt(packet.blocksFound.size());
-        packet.blocksFound.forEach(block -> buffer.writeResourceLocation(NameUtils.from(block.getBlock())));
+        packet.blocksFound.forEach(block -> buffer.writeResourceLocation(NameUtils.fromBlock(block)));
     }
 
     public void handle(Supplier<NetworkEvent.Context> context) {
@@ -50,7 +49,7 @@ public class ProspectingResultPacket {
                     .map(state -> state.getBlock().getName())
                     .reduce((t1, t2) -> t1.append(", ").append(t2))
                     .orElseGet(() -> TextUtil.translate("item", "prospector_hammer.no_finds"));
-            player.sendMessage(!this.blocksFound.isEmpty() ? TextUtil.translate("item", "prospector_hammer.finds", text) : text, Util.NIL_UUID);
+            player.sendSystemMessage(!this.blocksFound.isEmpty() ? TextUtil.translate("item", "prospector_hammer.finds", text) : text);
         }
 
         context.get().setPacketHandled(true);

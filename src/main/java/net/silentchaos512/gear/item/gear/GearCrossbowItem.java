@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -46,7 +47,6 @@ import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Consumer;
 
 public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon {
@@ -318,12 +318,12 @@ public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon 
         onCrossbowShot(world, shooter, crossbow);
     }
 
-    private static float[] getShotPitches(Random random) {
+    private static float[] getShotPitches(RandomSource random) {
         boolean flag = random.nextBoolean();
         return new float[]{1.0F, getRandomShotPitch(random, flag), getRandomShotPitch(random, !flag)};
     }
 
-    private static float getRandomShotPitch(Random random, boolean p_220032_0_) {
+    private static float getRandomShotPitch(RandomSource random, boolean p_220032_0_) {
         float f = p_220032_0_ ? 0.63F : 0.43F;
         return 1.0F / (random.nextFloat() * 0.5F + 1.8F) + f;
     }

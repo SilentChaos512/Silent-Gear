@@ -25,7 +25,7 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
     public List<StatInstance> modifyStats(PartType partType, StatGearKey key, List<StatInstance> statMods) {
         List<StatInstance> ret = new ArrayList<>();
 
-        if (key.getStat() == ItemStats.CHARGEABILITY) {
+        if (key.getStat() == ItemStats.CHARGING_VALUE) {
             return ret;
         }
 
@@ -56,7 +56,7 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
 
     @Nullable
     private static StatInstance modifyStat(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
-        if (stat.getStat() == ItemStats.CHARGEABILITY) {
+        if (stat.getStat() == ItemStats.CHARGING_VALUE) {
             return null;
         }
 
@@ -82,7 +82,7 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
             return mod.getValue() * Math.pow(1.25, charge.getChargeValue());
         if (stat.getStat() == ItemStats.ARMOR_DURABILITY)
             return mod.getValue() * Math.pow(1.1, charge.getChargeValue());
-        if (stat.getStat() == ItemStats.ENCHANTABILITY)
+        if (stat.getStat() == ItemStats.ENCHANTMENT_VALUE)
             return mod.getValue() * (1 + charge.getChargeLevel() * (Math.sqrt(charge.getChargeability() - 1)));
         if (stat.getStat() == ItemStats.HARVEST_LEVEL)
             return mod.getValue() + 1;

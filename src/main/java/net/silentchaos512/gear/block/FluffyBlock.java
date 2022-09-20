@@ -75,10 +75,10 @@ public class FluffyBlock extends Block {
     private static void onGetBreakSpeed(PlayerEvent.BreakSpeed event) {
         // Increase harvest speed when player is using shears
         if (event.getState().is(ModTags.Blocks.FLUFFY_BLOCKS)) {
-            ItemStack mainHand = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
+            ItemStack mainHand = event.getEntity().getItemInHand(InteractionHand.MAIN_HAND);
 
             if (!mainHand.isEmpty() && mainHand.getItem() instanceof ShearsItem) {
-                int efficiency = EnchantmentHelper.getBlockEfficiency(event.getPlayer());
+                int efficiency = EnchantmentHelper.getBlockEfficiency(event.getEntity());
 
                 float speed = event.getNewSpeed() * 4;
                 if (efficiency > 0) {

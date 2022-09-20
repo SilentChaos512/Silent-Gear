@@ -71,7 +71,7 @@ public class CompounderBlock<R extends CompoundingRecipe> extends ModContainerBl
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
         if (tileEntity instanceof CompounderTileEntity && player instanceof ServerPlayer) {
             CompounderTileEntity te = (CompounderTileEntity) tileEntity;
-            NetworkHooks.openGui((ServerPlayer) player, te, te::encodeExtraData);
+            NetworkHooks.openScreen((ServerPlayer) player, te, te::encodeExtraData);
         }
     }
 

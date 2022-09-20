@@ -305,7 +305,7 @@ public class MaterialBuilder {
     public MaterialBuilder mainStatsCommon(float toolDurability, float armorDurability, float enchantability, float rarity) {
         stat(PartType.MAIN, ItemStats.DURABILITY, toolDurability);
         stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, armorDurability);
-        stat(PartType.MAIN, ItemStats.ENCHANTABILITY, enchantability);
+        stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, enchantability);
         stat(PartType.MAIN, ItemStats.RARITY, rarity);
         return this;
     }
@@ -313,9 +313,9 @@ public class MaterialBuilder {
     public MaterialBuilder mainStatsCommon(float toolDurability, float armorDurability, float enchantability, float rarity, float chargeability) {
         stat(PartType.MAIN, ItemStats.DURABILITY, toolDurability);
         stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, armorDurability);
-        stat(PartType.MAIN, ItemStats.ENCHANTABILITY, enchantability);
+        stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, enchantability);
         stat(PartType.MAIN, ItemStats.RARITY, rarity);
-        stat(PartType.MAIN, ItemStats.CHARGEABILITY, chargeability);
+        stat(PartType.MAIN, ItemStats.CHARGING_VALUE, chargeability);
         return this;
     }
 

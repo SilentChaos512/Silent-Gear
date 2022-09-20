@@ -26,8 +26,8 @@ import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecip
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.gear.util.ModUtils;
 import net.silentchaos512.lib.registry.BlockRegistryObject;
+import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -297,7 +297,7 @@ public final class ModBlocks {
     @SuppressWarnings("SameParameterValue")
     private static FlowerPotBlock makePottedPlant(Supplier<? extends Block> flower) {
         FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, Block.Properties.of(Material.DECORATION).strength(0));
-        ResourceLocation flowerId = ModUtils.getBlockId(flower.get());
+        ResourceLocation flowerId = NameUtils.fromBlock(flower.get());
         ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(flowerId, () -> potted);
         return potted;
     }

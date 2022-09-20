@@ -1,16 +1,15 @@
 package net.silentchaos512.gear.api.stats;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.ChatFormatting;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
 import net.silentchaos512.utils.Color;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -21,6 +20,7 @@ public class ItemStat implements IItemStat {
         UNIT, MULTIPLIER, PERCENTAGE
     }
 
+    private final ResourceLocation name;
     private final float baseValue;
     private final float defaultValue;
     private final float minimumValue;
@@ -34,11 +34,12 @@ public class ItemStat implements IItemStat {
     private final DisplayFormat displayFormat;
     private final Function<Float, Float> missingRodFunction;
 
-    public ItemStat(float defaultValue, float minValue, float maxValue, ChatFormatting nameColor, Properties properties) {
-        this(defaultValue, minValue, maxValue, new Color(nameColor.getColor() != null ? nameColor.getColor() : Color.VALUE_WHITE), properties);
+    public ItemStat(ResourceLocation name, float defaultValue, float minValue, float maxValue, ChatFormatting nameColor, Properties properties) {
+        this(name, defaultValue, minValue, maxValue, new Color(nameColor.getColor() != null ? nameColor.getColor() : Color.VALUE_WHITE), properties);
     }
 
-    public ItemStat(float defaultValue, float minValue, float maxValue, Color nameColor, Properties properties) {
+    public ItemStat(ResourceLocation name, float defaultValue, float minValue, float maxValue, Color nameColor, Properties properties) {
+        this.name = name;
         this.baseValue = properties.baseValue;
         this.defaultValue = defaultValue;
         this.minimumValue = minValue;
@@ -66,7 +67,7 @@ public class ItemStat implements IItemStat {
 
     @Override
     public ResourceLocation getStatId() {
-        return Objects.requireNonNull(ItemStats.getRegistry().getKey(this));
+        return name;
     }
 
     @Override

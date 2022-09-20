@@ -20,7 +20,7 @@ public interface ICoreRangedWeapon extends ICoreTool {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.ENCHANTABILITY,
+            ItemStats.ENCHANTMENT_VALUE,
             ItemStats.RANGED_DAMAGE,
             ItemStats.RANGED_SPEED
     );

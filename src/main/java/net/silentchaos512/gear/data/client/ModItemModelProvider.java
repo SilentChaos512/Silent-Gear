@@ -123,7 +123,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         if (block == ModBlocks.PHANTOM_LIGHT.get())
             builder(block, getExistingFile(mcLoc("item/generated")), "item/phantom_light");
         else if (block == ModBlocks.NETHERWOOD_SAPLING.get() || block == ModBlocks.STONE_TORCH.get())
-            builder(block, getExistingFile(mcLoc("item/generated")), "block/" + NameUtils.from(block).getPath());
+            builder(block, getExistingFile(mcLoc("item/generated")), "block/" + NameUtils.fromBlock(block).getPath());
         else if (block == ModBlocks.NETHERWOOD_FENCE.get())
             withExistingParent("netherwood_fence", modLoc("block/netherwood_fence_inventory"));
         else if (block == ModBlocks.NETHERWOOD_DOOR.get())
@@ -131,7 +131,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         else if (block == ModBlocks.NETHERWOOD_TRAPDOOR.get())
             withExistingParent("netherwood_trapdoor", modLoc("block/netherwood_trapdoor_bottom"));
         else if (block.asItem() != Items.AIR) {
-            String name = NameUtils.from(block).getPath();
+            String name = NameUtils.fromBlock(block).getPath();
             withExistingParent(name, modLoc("block/" + name));
         }
     }

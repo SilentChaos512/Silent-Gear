@@ -36,7 +36,7 @@ public class GearSmithingRecipeBuilder {
     }
 
     public void build(Consumer<FinishedRecipe> consumer) {
-        build(consumer, new ResourceLocation(serializer.getRegistryName() + "/" + NameUtils.from(this.gearItem).getPath()));
+        build(consumer, new ResourceLocation(NameUtils.fromRecipeSerializer(serializer) + "/" + NameUtils.fromItem(this.gearItem).getPath()));
     }
 
     public void build(Consumer<FinishedRecipe> consumer, ResourceLocation recipeId) {

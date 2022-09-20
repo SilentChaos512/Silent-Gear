@@ -56,7 +56,7 @@ public class MetalPressBlock extends ModContainerBlock<MetalPressTileEntity> {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
         if (tileEntity instanceof MetalPressTileEntity && player instanceof ServerPlayer) {
             MetalPressTileEntity te = (MetalPressTileEntity) tileEntity;
-            NetworkHooks.openGui((ServerPlayer) player, te, te::encodeExtraData);
+            NetworkHooks.openScreen((ServerPlayer) player, te, te::encodeExtraData);
         }
     }
 

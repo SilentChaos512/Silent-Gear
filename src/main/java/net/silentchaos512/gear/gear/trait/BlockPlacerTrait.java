@@ -66,7 +66,7 @@ public class BlockPlacerTrait extends SimpleTrait {
         }
 
         for (int i = 0; i < 5; i++) {
-            PhantomLight.spawnParticle(world, pos.relative(context.getClickedFace()), SilentGear.RANDOM);
+            PhantomLight.spawnParticle(world, pos.relative(context.getClickedFace()), SilentGear.RANDOM_SOURCE);
         }
 
         return InteractionResult.SUCCESS;
@@ -99,10 +99,10 @@ public class BlockPlacerTrait extends SimpleTrait {
     }
 
     private static void write(BlockPlacerTrait trait, FriendlyByteBuf buffer) {
-        buffer.writeResourceLocation(Objects.requireNonNull(trait.block.getRegistryName()));
+        buffer.writeResourceLocation(NameUtils.fromBlock(trait.block));
         buffer.writeVarInt(trait.damageOnUse);
         buffer.writeVarInt(trait.cooldown);
-        buffer.writeResourceLocation(Objects.requireNonNull(trait.sound.getRegistryName()));
+        buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(trait.sound)));
         buffer.writeFloat(trait.soundVolume);
         buffer.writeFloat(trait.soundPitch);
     }
@@ -110,7 +110,7 @@ public class BlockPlacerTrait extends SimpleTrait {
     @Override
     public Collection<String> getExtraWikiLines() {
         Collection<String> ret = super.getExtraWikiLines();
-        ret.add("  - Places: " + NameUtils.from(block));
+        ret.add("  - Places: " + NameUtils.fromBlock(block));
         ret.add("  - Durability Cost: " + damageOnUse);
         if (cooldown > 0) {
             ret.add("  - Cooldown: " + cooldown);

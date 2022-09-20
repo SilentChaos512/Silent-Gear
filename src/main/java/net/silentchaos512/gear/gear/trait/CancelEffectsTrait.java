@@ -3,18 +3,18 @@ package net.silentchaos512.gear.gear.trait;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CancelEffectsTrait extends SimpleTrait {
@@ -54,7 +54,7 @@ public class CancelEffectsTrait extends SimpleTrait {
 
     private static void encode(CancelEffectsTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.effects.size());
-        trait.effects.forEach(effect -> buffer.writeResourceLocation(NameUtils.from(effect)));
+        trait.effects.forEach(effect -> buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect))));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class CancelEffectsTrait extends SimpleTrait {
         Collection<String> ret = super.getExtraWikiLines();
         ret.add("  - Cancels these effects: " +
                 this.effects.stream()
-                        .map(e -> "`" + NameUtils.from(e) + "`")
+                        .map(e -> "`" + ForgeRegistries.MOB_EFFECTS.getKey(e) + "`")
                         .collect(Collectors.joining(", "))
         );
         return ret;

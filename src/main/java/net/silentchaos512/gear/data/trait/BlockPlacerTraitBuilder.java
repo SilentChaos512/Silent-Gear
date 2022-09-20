@@ -4,10 +4,13 @@ import com.google.gson.JsonObject;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.BlockPlacerTrait;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.lib.util.NameUtils;
+
+import java.util.Objects;
 
 public class BlockPlacerTraitBuilder extends TraitBuilder {
     private final Block block;
@@ -51,10 +54,10 @@ public class BlockPlacerTraitBuilder extends TraitBuilder {
     public JsonObject serialize() {
         JsonObject json = super.serialize();
 
-        json.addProperty("block", NameUtils.from(this.block).toString());
+        json.addProperty("block", NameUtils.fromBlock(this.block).toString());
         json.addProperty("damage_on_use", this.damageOnUse);
         json.addProperty("cooldown", this.cooldown);
-        json.addProperty("sound", NameUtils.from(this.sound).toString());
+        json.addProperty("sound", Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(this.sound)).toString());
         json.addProperty("sound_volume", this.soundVolume);
         json.addProperty("sound_pitch", this.soundPitch);
 

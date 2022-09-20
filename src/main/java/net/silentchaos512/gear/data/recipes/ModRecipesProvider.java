@@ -652,7 +652,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
             ExtendedShapelessRecipeBuilder.vanillaBuilder(item)
                     .addIngredient(item)
                     .addIngredient(Tags.Items.RODS_WOODEN)
-                    .build(consumer, SilentGear.getId(NameUtils.from(item).getPath() + "_empty"));
+                    .build(consumer, SilentGear.getId(NameUtils.fromItem(item).getPath() + "_empty"));
         }
     }
 
@@ -1278,7 +1278,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void special(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {
-        SpecialRecipeBuilder.special(serializer).save(consumer, NameUtils.from(serializer).toString());
+        SpecialRecipeBuilder.special(serializer).save(consumer, NameUtils.fromRecipeSerializer(serializer).toString());
     }
 
     private ExtendedShapelessRecipeBuilder damageGear(ItemLike result, int count, int damage) {
@@ -1464,7 +1464,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                         ResourceLocation material = TOOL_MATERIALS.getOrDefault(((TieredItem) input).getTier(), SilentGear.getId("emerald"));
                         json.getAsJsonObject("result").add("materials", buildMaterials(material, SilentGear.getId("wood")));
                     })
-                    .build(consumer, SilentGear.getId("gear/convert/" + NameUtils.from(input).getPath()));
+                    .build(consumer, SilentGear.getId("gear/convert/" + NameUtils.fromItem(input).getPath()));
         }
     }
 
@@ -1477,7 +1477,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                         ResourceLocation material = ARMOR_MATERIALS.getOrDefault(((ArmorItem) input).getMaterial(), SilentGear.getId("emerald"));
                         json.getAsJsonObject("result").add("materials", buildMaterials(material, null));
                     })
-                    .build(consumer, SilentGear.getId("gear/convert/" + NameUtils.from(input).getPath()));
+                    .build(consumer, SilentGear.getId("gear/convert/" + NameUtils.fromItem(input).getPath()));
         }
     }
 
@@ -1498,7 +1498,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         if (rodCount > 0) {
             builder.addResult(Items.STICK, rodCount);
         }
-        ResourceLocation inputId = NameUtils.from(gear.asItem());
+        ResourceLocation inputId = NameUtils.fromItem(gear);
         builder.build(consumer, SilentGear.getId("salvaging/" + inputId.getPath()));
     }
 

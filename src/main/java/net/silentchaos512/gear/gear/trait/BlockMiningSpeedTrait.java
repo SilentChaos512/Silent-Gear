@@ -50,7 +50,7 @@ public class BlockMiningSpeedTrait extends SimpleTrait {
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        ItemStack tool = event.getPlayer().getMainHandItem();
+        ItemStack tool = event.getEntity().getMainHandItem();
         Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(tool);
         for (Map.Entry<ITrait, Integer> entry : traits.entrySet()) {
             ITrait trait = entry.getKey();

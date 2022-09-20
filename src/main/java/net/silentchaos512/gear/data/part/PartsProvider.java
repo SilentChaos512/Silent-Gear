@@ -123,7 +123,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.ATTACK_SPEED, -3f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 2.0f)
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
-                    .stat(ItemStats.ENCHANTABILITY, -0.5f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.5f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.HAMMER_HEAD))
             return builder
@@ -131,7 +131,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.ATTACK_SPEED, -3.2f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.5f)
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
-                    .stat(ItemStats.ENCHANTABILITY, -0.5f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.5f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.MATTOCK_HEAD))
             return builder
@@ -139,7 +139,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.25f)
                     .stat(ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL1)
-                    .stat(ItemStats.ENCHANTABILITY, -0.25f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.25f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.PROSPECTOR_HAMMER_HEAD))
             return builder
@@ -147,7 +147,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.5f)
                     .stat(ItemStats.DURABILITY, -0.25f, StatInstance.Operation.MUL1)
-                    .stat(ItemStats.ENCHANTABILITY, -0.25f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.25f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.PAXEL_HEAD))
             return builder
@@ -155,7 +155,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.ATTACK_SPEED, -3.0f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.2f)
                     .stat(ItemStats.DURABILITY, 0.35f, StatInstance.Operation.MUL1)
-                    .stat(ItemStats.ENCHANTABILITY, -0.3f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.3f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.2f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.PICKAXE_HEAD))
             return builder
@@ -168,7 +168,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.ATTACK_SPEED, -2.4f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.5f)
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
-                    .stat(ItemStats.ENCHANTABILITY, -0.5f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.75f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.SHOVEL_HEAD))
             return builder
@@ -194,7 +194,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1f)
                     .stat(ItemStats.DURABILITY, 0.125f, StatInstance.Operation.MUL1)
-                    .stat(ItemStats.ENCHANTABILITY, -0.1f, StatInstance.Operation.MUL1);
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.1f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.KNIFE_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
@@ -231,19 +231,19 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.RANGED_SPEED, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1)
-                    .stat(ItemStats.ENCHANTABILITY, -0.45f, StatInstance.Operation.MUL1);
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.45f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.CROSSBOW_LIMBS))
             return builder
                     .stat(ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.RANGED_SPEED, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1)
-                    .stat(ItemStats.ENCHANTABILITY, -0.45f, StatInstance.Operation.MUL1);
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.45f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.SLINGSHOT_LIMBS))
             return builder
                     .stat(ItemStats.RANGED_DAMAGE, 0, StatInstance.Operation.ADD)
                     .stat(ItemStats.RANGED_SPEED, 1.5f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 2)
-                    .stat(ItemStats.ENCHANTABILITY, -0.65f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.65f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.RANGED_DAMAGE, -0.75f, StatInstance.Operation.MUL1);
 
         // Armor
@@ -269,7 +269,7 @@ public class PartsProvider implements DataProvider {
             return builder
                     .stat(ItemStats.DURABILITY, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.25f)
-                    .stat(ItemStats.ENCHANTABILITY, -0.75f, StatInstance.Operation.MUL1);
+                    .stat(ItemStats.ENCHANTMENT_VALUE, -0.75f, StatInstance.Operation.MUL1);
         if (isMainPart(builder, ModItems.SHIELD_PLATE))
             return builder
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1);

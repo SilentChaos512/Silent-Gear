@@ -285,7 +285,7 @@ public class TraitsProvider implements DataProvider {
                 .cancelsWith(Const.Traits.ERODED)
         );
         ret.add(new StatModifierTraitBuilder(Const.Traits.ORGANIC, 5)
-                .addStatMod(ItemStats.ENCHANTABILITY, 0.1f, true, true)
+                .addStatMod(ItemStats.ENCHANTMENT_VALUE, 0.1f, true, true)
                 .addStatMod(ItemStats.MAGIC_DAMAGE, -0.15f, true, true)
                 .cancelsWith(Const.Traits.ERODED)
         );

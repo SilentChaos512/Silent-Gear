@@ -145,7 +145,7 @@ public final class EnchantmentTrait extends SimpleTrait {
                 int traitLevel = entry.getValue().getRight();
 
                 CompoundTag nbt = new CompoundTag();
-                nbt.putString("id", NameUtils.from(enchantment).toString());
+                nbt.putString("id", NameUtils.fromEnchantment(enchantment).toString());
                 nbt.putShort("lvl", (short) level);
                 if (traitLevel > 0) {
                     nbt.putString("SGearTrait", traitId + "#" + traitLevel);
@@ -241,7 +241,7 @@ public final class EnchantmentTrait extends SimpleTrait {
         @SuppressWarnings("TypeMayBeWeakened")
         public static EnchantmentData of(Enchantment enchantment, int... levels) {
             EnchantmentData ret = new EnchantmentData();
-            ret.enchantmentId = enchantment.getRegistryName();
+            ret.enchantmentId = NameUtils.fromEnchantment(enchantment);
             ret.levels = levels.clone();
             return ret;
         }

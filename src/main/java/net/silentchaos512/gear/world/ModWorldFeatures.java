@@ -8,9 +8,6 @@ import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -24,9 +21,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
@@ -152,9 +146,9 @@ public final class ModWorldFeatures {
 
     private ModWorldFeatures() {}
 
-    public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
-//        event.getRegistry().register(NETHERWOOD_TREE_FEATURE.get().setRegistryName(SilentGear.getId("netherwood_tree")));
-    }
+//    public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
+////        event.getRegistry().register(NETHERWOOD_TREE_FEATURE.get().setRegistryName(SilentGear.getId("netherwood_tree")));
+//    }
 
     private static void registerConfiguredFeatures() {
         if (configuredFeaturesRegistered) return;
@@ -170,7 +164,7 @@ public final class ModWorldFeatures {
         Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, id, configuredFeature);
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void addFeaturesToBiomes(BiomeLoadingEvent biome) {
         // Need to load these as late as possible, or configs won't be loaded
         registerConfiguredFeatures();
@@ -223,7 +217,7 @@ public final class ModWorldFeatures {
     private static void addAzureSilverOre(BiomeLoadingEvent biome) {
         debugLog("Add azure silver ores to " + biome.getName());
         biome.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Placed.ORE_AZURE_SILVER);
-    }
+    }*/
 
     private static void debugLog(String msg) {
         if (Config.Common.worldGenLogging.get()) {

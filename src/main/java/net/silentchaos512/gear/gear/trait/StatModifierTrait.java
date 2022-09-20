@@ -79,7 +79,7 @@ public final class StatModifierTrait extends SimpleTrait {
         trait.mods.clear();
         int count = buffer.readByte();
         for (int i = 0; i < count; ++i) {
-            ItemStat stat = ItemStats.getRegistry().getValue(buffer.readResourceLocation());
+            ItemStat stat = ItemStats.byName(buffer.readResourceLocation());
             trait.mods.put(stat, StatMod.read(buffer));
         }
     }
@@ -87,7 +87,7 @@ public final class StatModifierTrait extends SimpleTrait {
     private static void writeBuffer(StatModifierTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.mods.size());
         trait.mods.forEach((stat, mod) -> {
-            buffer.writeResourceLocation(Objects.requireNonNull(stat.getRegistryName()));
+            buffer.writeResourceLocation(stat.getStatId());
             mod.write(buffer);
         });
     }

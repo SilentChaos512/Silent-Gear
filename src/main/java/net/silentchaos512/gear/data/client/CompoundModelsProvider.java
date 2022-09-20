@@ -64,13 +64,13 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
     }
 
     protected CompoundModelBuilder gearBuilder(ICoreItem item) {
-        return ((CompoundModelBuilder) getBuilder(NameUtils.from(item.asItem()).getPath()))
+        return ((CompoundModelBuilder) getBuilder(NameUtils.fromItem(item).getPath()))
                 .setLoader(Const.GEAR_MODEL_LOADER)
                 .setGearType(item.getGearType());
     }
 
     protected CompoundModelBuilder partBuilder(CompoundPartItem item) {
-        CompoundModelBuilder builder = ((CompoundModelBuilder) getBuilder(NameUtils.from(item).getPath()))
+        CompoundModelBuilder builder = ((CompoundModelBuilder) getBuilder(NameUtils.fromItem(item).getPath()))
                 .setLoader(Const.COMPOUND_PART_MODEL_LOADER)
                 .setGearType(item.getGearType())
                 .setPartType(item.getPartType());
@@ -91,7 +91,7 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
     }
 
     private CompoundModelBuilder fragmentBuilder(FragmentItem item) {
-        return ((CompoundModelBuilder) getBuilder(NameUtils.from(item).getPath()))
+        return ((CompoundModelBuilder) getBuilder(NameUtils.fromItem(item).getPath()))
                 .setLoader(Const.FRAGMENT_MODEL_LOADER)
                 .setGearType(GearType.FRAGMENT)
                 .setPartType(PartType.MAIN);

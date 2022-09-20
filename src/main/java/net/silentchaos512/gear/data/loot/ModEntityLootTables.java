@@ -9,9 +9,7 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.silentchaos512.gear.init.GearVillages;
 import net.silentchaos512.gear.init.LootInjector;
-import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
 
 import java.util.function.BiConsumer;
@@ -22,7 +20,7 @@ public class ModEntityLootTables extends EntityLoot {
         consumer.accept(LootInjector.Tables.ENTITIES_CAVE_SPIDER, addFineSilk(0.04f, 0.01f));
         consumer.accept(LootInjector.Tables.ENTITIES_SPIDER, addFineSilk(0.02f, 0.005f));
 
-        heroOfTheVillage(consumer,
+        /*heroOfTheVillage(consumer,
                 GearVillages.HOTV_GEAR_SMITH,
                 ModItems.ARROW_BLUEPRINT,
                 ModItems.EXCAVATOR_BLUEPRINT,
@@ -33,7 +31,7 @@ public class ModEntityLootTables extends EntityLoot {
                 CraftingItems.ADVANCED_UPGRADE_BASE,
                 CraftingItems.ROAD_MAKER_UPGRADE,
                 CraftingItems.SPOON_UPGRADE
-        );
+        );*/
     }
 
     private static LootTable.Builder addFineSilk(float baseChance, float lootingBonus) {

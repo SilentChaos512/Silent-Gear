@@ -44,7 +44,7 @@ public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
     private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.ENCHANTABILITY
+            ItemStats.ENCHANTMENT_VALUE
     );
 
     private static final Collection<PartType> REQUIRED_PARTS = ImmutableSet.of(
@@ -132,7 +132,7 @@ public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
             }
 
             worldIn.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (worldIn.getRandom().nextFloat() * 0.4F + 0.8F));
-            worldIn.gameEvent(playerIn, GameEvent.FISHING_ROD_REEL_IN, playerIn);
+            playerIn.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
         } else {
             worldIn.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (worldIn.getRandom().nextFloat() * 0.4F + 0.8F));
             if (!worldIn.isClientSide) {
@@ -142,7 +142,7 @@ public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
             }
 
             playerIn.awardStat(Stats.ITEM_USED.get(this));
-            worldIn.gameEvent(playerIn, GameEvent.FISHING_ROD_CAST, playerIn);
+            playerIn.gameEvent(GameEvent.ITEM_INTERACT_START);
         }
 
         return InteractionResultHolder.sidedSuccess(itemstack, worldIn.isClientSide());

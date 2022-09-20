@@ -22,7 +22,7 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
     }
 
     public ChargedProperties getChargedProperties() {
-        return new ChargedProperties(level, material.getStat(PartType.MAIN, ItemStats.CHARGEABILITY));
+        return new ChargedProperties(level, material.getStat(PartType.MAIN, ItemStats.CHARGING_VALUE));
     }
 
     public static class Type<T extends ChargedMaterialModifier> implements IMaterialModifierType<T> {

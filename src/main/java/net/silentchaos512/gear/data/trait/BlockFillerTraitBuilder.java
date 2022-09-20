@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.BlockFillerTrait;
 import net.silentchaos512.gear.util.DataResource;
@@ -12,6 +13,7 @@ import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.Objects;
 
 public class BlockFillerTraitBuilder extends TraitBuilder {
     @Nullable private Block targetBlock;
@@ -96,11 +98,11 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
             targetJson.addProperty("tag", this.targetBlockTag.location().toString());
         }
         if (this.targetBlock != null) {
-            targetJson.addProperty("block", NameUtils.from(this.targetBlock).toString());
+            targetJson.addProperty("block", NameUtils.fromBlock(this.targetBlock).toString());
         }
         json.add("target", targetJson);
 
-        json.addProperty("fill_block", NameUtils.from(this.fillBlock).toString());
+        json.addProperty("fill_block", NameUtils.fromBlock(this.fillBlock).toString());
         json.addProperty("replace_tile_entities", replaceTileEntities);
         json.addProperty("fill_spread_x", fillRangeX);
         json.addProperty("fill_spread_y", fillRangeY);
@@ -109,7 +111,7 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
         json.addProperty("sneak_mode", sneakMode.name().toLowerCase(Locale.ROOT));
         json.addProperty("damage_on_use", this.damageOnUse);
         json.addProperty("cooldown", this.cooldown);
-        json.addProperty("sound", NameUtils.from(this.sound).toString());
+        json.addProperty("sound", Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(this.sound)).toString());
         json.addProperty("sound_volume", this.soundVolume);
         json.addProperty("sound_pitch", this.soundPitch);
 

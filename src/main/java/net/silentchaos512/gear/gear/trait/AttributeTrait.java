@@ -150,7 +150,7 @@ public class AttributeTrait extends SimpleTrait {
         @SuppressWarnings("TypeMayBeWeakened")
         public static ModifierData of(Attribute attribute, AttributeModifier.Operation operation, float... values) {
             ModifierData ret = new ModifierData();
-            ret.name = attribute.getRegistryName();
+            ret.name = ForgeRegistries.ATTRIBUTES.getKey(attribute);
             ret.operation = operation;
             ret.values = values.clone();
             return ret;

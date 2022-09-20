@@ -191,9 +191,9 @@ public class BlockFillerTrait extends SimpleTrait {
         }
         buffer.writeBoolean(trait.targetBlock != null);
         if (trait.targetBlock != null) {
-            buffer.writeResourceLocation(NameUtils.from(trait.targetBlock));
+            buffer.writeResourceLocation(NameUtils.fromBlock(trait.targetBlock));
         }
-        buffer.writeResourceLocation(Objects.requireNonNull(trait.fillBlock.getRegistryName()));
+        buffer.writeResourceLocation(NameUtils.fromBlock(trait.fillBlock));
         buffer.writeBoolean(trait.replaceTileEntities);
         buffer.writeByte(trait.fillRangeX);
         buffer.writeByte(trait.fillRangeY);
@@ -202,7 +202,7 @@ public class BlockFillerTrait extends SimpleTrait {
         buffer.writeEnum(trait.sneakMode);
         buffer.writeFloat(trait.damageOnUse);
         buffer.writeVarInt(trait.cooldown);
-        buffer.writeResourceLocation(Objects.requireNonNull(trait.sound.getRegistryName()));
+        buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(trait.sound)));
         buffer.writeFloat(trait.soundVolume);
         buffer.writeFloat(trait.soundPitch);
     }
@@ -211,13 +211,13 @@ public class BlockFillerTrait extends SimpleTrait {
     public Collection<String> getExtraWikiLines() {
         Collection<String> ret = super.getExtraWikiLines();
 
-        ret.add("  - Fills with: " + NameUtils.from(fillBlock));
+        ret.add("  - Fills with: " + NameUtils.fromBlock(fillBlock));
         ret.add("  - Replaces");
         if (targetBlockTag != null) {
             ret.add("    - Tag: " + targetBlockTag.location());
         }
         if (targetBlock != null) {
-            ret.add("    - Block: " + NameUtils.from(targetBlock));
+            ret.add("    - Block: " + NameUtils.fromBlock(targetBlock));
         }
         ret.add("    - " + (replaceTileEntities ? "Replaces" : "Does not replace") + " tile entities");
 

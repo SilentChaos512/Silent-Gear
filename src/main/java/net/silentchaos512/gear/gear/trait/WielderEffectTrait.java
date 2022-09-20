@@ -174,7 +174,7 @@ public class WielderEffectTrait extends SimpleTrait {
         public static PotionData of(LevelType type, MobEffect effect, int... levels) {
             PotionData ret = new PotionData();
             ret.type = type;
-            ret.effectId = Objects.requireNonNull(effect.getRegistryName());
+            ret.effectId = Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect));
             ret.duration = TimeUtils.ticksFromSeconds(getDefaultDuration(ret.effectId));
             ret.levels = levels.clone();
             return ret;

@@ -82,8 +82,8 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
 
             if (stack.getItem() instanceof ICoreItem) {
                 list.set(i, part != null ? part.getItem() : ItemStack.EMPTY);
-            } else if (stack.hasContainerItem()) {
-                list.set(i, stack.getContainerItem());
+            } else if (stack.hasCraftingRemainingItem()) {
+                list.set(i, stack.getCraftingRemainingItem());
             }
         }
 

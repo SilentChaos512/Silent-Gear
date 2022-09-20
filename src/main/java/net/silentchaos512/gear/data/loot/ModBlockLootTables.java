@@ -28,6 +28,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;
@@ -166,7 +167,7 @@ public class ModBlockLootTables extends BlockLoot {
     @Override
     protected Iterable<Block> getKnownBlocks() {
         return ForgeRegistries.BLOCKS.getValues().stream()
-                .filter(block -> SilentGear.MOD_ID.equals(block.getRegistryName().getNamespace()))
+                .filter(block -> SilentGear.MOD_ID.equals(NameUtils.fromBlock(block).getNamespace()))
                 .collect(Collectors.toSet());
     }
 }

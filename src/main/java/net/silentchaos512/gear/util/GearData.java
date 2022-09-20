@@ -167,7 +167,7 @@ public final class GearData {
                 });
                 final float value = Config.Common.getStatWithMultiplier(stat, withTraits);
                 if (!Mth.equal(value, 0f) || stats.containsKey(key)) {
-                    ResourceLocation statId = Objects.requireNonNull(stat.getRegistryName());
+                    ResourceLocation statId = Objects.requireNonNull(stat.getStatId());
                     propertiesCompound.remove(statId.getPath()); // Remove old keys
                     statsCompound.putFloat(statId.toString(), stat.clampValue(value));
                 }
@@ -791,7 +791,7 @@ public final class GearData {
 
         @SubscribeEvent
         public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
-            Player player = event.getPlayer();
+            Player player = event.getEntity();
             StackList.from(player.getInventory())
                     .stream()
                     .filter(s -> s.getItem() instanceof ICoreItem)

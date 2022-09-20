@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 public class GearShieldItem extends ShieldItem implements ICoreItem {
     private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
-            ItemStats.ENCHANTABILITY
+            ItemStats.ENCHANTMENT_VALUE
     );
 
     private static final Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(

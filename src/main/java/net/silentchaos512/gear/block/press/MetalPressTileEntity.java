@@ -63,7 +63,7 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity {
         if (level == null || getItem(0).isEmpty()) {
             return null;
         }
-        return level.getRecipeManager().getRecipeFor(ModRecipes.PRESSING_TYPE, this, level).orElse(null);
+        return level.getRecipeManager().getRecipeFor(ModRecipes.PRESSING_TYPE.get(), this, level).orElse(null);
     }
 
     private ItemStack getWorkOutput(@Nullable PressingRecipe recipe) {

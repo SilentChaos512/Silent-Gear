@@ -61,7 +61,7 @@ public final class StatGearKey {
             throw new JsonParseException("invalid key: " + key);
         }
 
-        ItemStat stat = ItemStats.getRegistry().getValue(SilentGear.getIdWithDefaultNamespace(parts[0]));
+        ItemStat stat = ItemStats.byName(Objects.requireNonNull(SilentGear.getIdWithDefaultNamespace(parts[0])));
         if (stat == null) {
             return null;
         }

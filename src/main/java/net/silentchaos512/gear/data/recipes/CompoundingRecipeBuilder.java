@@ -73,11 +73,11 @@ public class CompoundingRecipeBuilder {
     }
 
     public void build(Consumer<FinishedRecipe> consumer) {
-        String name = NameUtils.from(this.resultItem).getPath();
+        String name = NameUtils.fromItem(this.resultItem).getPath();
         if (resultMaterial != null) {
             name = name + "." + resultMaterial.getId().getPath();
         }
-        build(consumer, new ResourceLocation(serializer.getRegistryName() + "/" + name));
+        build(consumer, new ResourceLocation(NameUtils.fromRecipeSerializer(serializer) + "/" + name));
     }
 
     public void build(Consumer<FinishedRecipe> consumer, ResourceLocation recipeId) {
@@ -107,7 +107,7 @@ public class CompoundingRecipeBuilder {
 
         private JsonObject serializeResult() {
             JsonObject ret = new JsonObject();
-            ret.addProperty("item", NameUtils.from(resultItem).toString());
+            ret.addProperty("item", NameUtils.fromItem(resultItem).toString());
             if (resultCount > 1) {
                 ret.addProperty("count", resultCount);
             }

@@ -28,6 +28,7 @@ import net.silentchaos512.gear.init.ModTags;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
+import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.lib.util.TimeUtils;
 import net.silentchaos512.utils.MathUtils;
 
@@ -174,7 +175,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         if (++blockEntity.updateTimer > UPDATE_FREQUENCY) {
             if (blockEntity.checkStructureLevel()) {
                 SilentGear.LOGGER.info("{}} at {}: structure level updated to {}",
-                        blockEntity.getBlockState().getBlock().getRegistryName(), blockEntity.worldPosition, blockEntity.structureLevel);
+                        NameUtils.fromBlock(blockEntity.getBlockState()), blockEntity.worldPosition, blockEntity.structureLevel);
             }
             blockEntity.updateTimer = 0;
             //sendUpdate();

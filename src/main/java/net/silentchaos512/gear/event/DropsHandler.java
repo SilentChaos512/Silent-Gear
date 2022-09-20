@@ -17,7 +17,7 @@ public final class DropsHandler {
 
     @SubscribeEvent
     public static void onEntityDrops(LivingDropsEvent event) {
-        LivingEntity entity = event.getEntityLiving();
+        LivingEntity entity = event.getEntity();
         if (entity == null) return;
 
         // Sinew drops

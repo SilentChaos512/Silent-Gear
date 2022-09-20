@@ -126,7 +126,7 @@ public final class GearClientHelper {
             TextListBuilder builder = new TextListBuilder();
 
             for (ItemStat stat : displayStats) {
-                if (stat == ItemStats.ENCHANTABILITY && !Config.Common.allowEnchanting.get()) {
+                if (stat == ItemStats.ENCHANTMENT_VALUE && !Config.Common.allowEnchanting.get()) {
                     // Enchanting not allowed, so hide the stat
                     continue;
                 }

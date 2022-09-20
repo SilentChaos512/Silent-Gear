@@ -1,25 +1,14 @@
 package net.silentchaos512.gear.compat.gamestages;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-//import net.darkhax.gamestage.GameStageHelper;
-//import net.darkhax.gamestages.data.IStageData;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.silentchaos512.gear.SilentGear;
+import net.minecraft.world.entity.player.Player;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
-import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -67,7 +56,7 @@ public class GameStagesCompat implements ResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
-        Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+        /*Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
         Collection<ResourceLocation> resources = resourceManager.listResources("silentgear_gamestages", s -> s.endsWith(".json"));
 
         for (ResourceLocation id : resources) {
@@ -100,7 +89,7 @@ public class GameStagesCompat implements ResourceManagerReloadListener {
             } else {
                 SilentGear.LOGGER.info("Unknown game stages JSON file found: {}", id);
             }
-        }
+        }*/
     }
 
     private static List<String> parseStages(JsonElement json) {

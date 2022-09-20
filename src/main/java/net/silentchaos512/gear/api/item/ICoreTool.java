@@ -21,7 +21,7 @@ public interface ICoreTool extends ICoreItem {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.ENCHANTABILITY,
+            ItemStats.ENCHANTMENT_VALUE,
             ItemStats.HARVEST_LEVEL,
             ItemStats.HARVEST_SPEED,
             ItemStats.MELEE_DAMAGE,

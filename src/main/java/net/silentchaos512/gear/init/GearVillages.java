@@ -1,51 +1,28 @@
 package net.silentchaos512.gear.init;
 
-import com.google.common.collect.ImmutableSet;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.lib.block.IBlockProvider;
-
-import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
 
 public class GearVillages {
     public static final ResourceLocation GEAR_SMITH = SilentGear.getId("gear_smith");
 
     public static final ResourceLocation HOTV_GEAR_SMITH = SilentGear.getId("gameplay/hero_of_the_village/gear_smith");
 
-    public static final RegistryObject<PoiType> POI_GEAR_SMITHING_TABLE = registerPointOfInterest(
-            "gear_smithing_table", ModBlocks.GEAR_SMITHING_TABLE);
+    /*public static final RegistryObject<PoiType> POI_GEAR_SMITHING_TABLE = registerPointOfInterest(
+            "gear_smithing_table", ModBlocks.GEAR_SMITHING_TABLE);*/
 
-    public static final RegistryObject<VillagerProfession> PROF_GEAR_SMITH = registerProfession(
-            "gear_smith", POI_GEAR_SMITHING_TABLE, SoundEvents.VILLAGER_WORK_TOOLSMITH);
+    /*public static final RegistryObject<VillagerProfession> PROF_GEAR_SMITH = registerProfession(
+            "gear_smith", POI_GEAR_SMITHING_TABLE, SoundEvents.VILLAGER_WORK_TOOLSMITH);*/
 
-    private static RegistryObject<PoiType> registerPointOfInterest(String name, IBlockProvider block) {
+    /*private static RegistryObject<PoiType> registerPointOfInterest(String name, IBlockProvider block) {
         return Registration.POINTS_OF_INTEREST.register(name, () -> {
-            PoiType type = new PoiType(SilentGear.MOD_ID + ":" + name, ImmutableSet.of(block.asBlockState()), 1, 1);
+            PoiType type = new PoiType(ImmutableSet.of(block.asBlockState()), 1, 1);
             PoiType.registerBlockStates(type);
             return type;
         });
-    }
+    }*/
 
-    private static RegistryObject<VillagerProfession> registerProfession(String name, Supplier<PoiType> poi, SoundEvent sound) {
+    /*private static RegistryObject<VillagerProfession> registerProfession(String name, Supplier<PoiType> poi, SoundEvent sound) {
         return Registration.PROFESSIONS.register(name, () -> new VillagerProfession(
                 SilentGear.getId(name).toString(),
                 poi.get(),
@@ -53,7 +30,7 @@ public class GearVillages {
                 ImmutableSet.of(),
                 sound
         ));
-    }
+    }*/
 
     public static void init() {
         // TODO
@@ -61,14 +38,14 @@ public class GearVillages {
 
     public static void register() {}
 
-    @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
+    /*@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
     public static final class Events {
         private Events() {}
 
         @SubscribeEvent
         public static void registerTrades(VillagerTradesEvent event) {
             Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
-            if (GEAR_SMITH.equals(event.getType().getRegistryName())) {
+            if (GEAR_SMITH.equals(ForgeRegistries.VILLAGER_PROFESSIONS.getKey(event.getType()))) {
                 trades.get(1).add(new BuyingItemTrade(CraftingItems.FLAX_FLOWERS, 24, 16, 2));
                 trades.get(1).add(new SellingItemTrade(CraftingItems.BLUEPRINT_PAPER, 1, 12, 12, 2));
 
@@ -83,9 +60,9 @@ public class GearVillages {
                 trades.get(2).add(new BuyingItemTrade(CraftingItems.CRIMSON_IRON_INGOT, 3, 12, 10));
             }
         }
-    }
+    }*/
 
-    private static class BuyingItemTrade implements VillagerTrades.ItemListing {
+    /*private static class BuyingItemTrade implements VillagerTrades.ItemListing {
         private final Item wantedItem;
         private final int count;
         private final int maxUses;
@@ -148,5 +125,5 @@ public class GearVillages {
                     this.xpValue,
                     this.priceMultiplier);
         }
-    }
+    }*/
 }

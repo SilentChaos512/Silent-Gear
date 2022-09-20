@@ -52,7 +52,7 @@ public class ModContainerBlock<T extends BlockEntity> extends BaseEntityBlock {
             BlockEntity tile = worldIn.getBlockEntity(pos);
             if (tile instanceof INamedContainerExtraData && player instanceof ServerPlayer) {
                 INamedContainerExtraData te = (INamedContainerExtraData) tile;
-                NetworkHooks.openGui((ServerPlayer) player, te, te::encodeExtraData);
+                NetworkHooks.openScreen((ServerPlayer) player, te, te::encodeExtraData);
             }
         }
         return InteractionResult.SUCCESS;

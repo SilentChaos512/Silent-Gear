@@ -12,7 +12,7 @@ public interface ICoreWeapon extends ICoreTool {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.ENCHANTABILITY,
+            ItemStats.ENCHANTMENT_VALUE,
             ItemStats.MELEE_DAMAGE,
             ItemStats.ATTACK_SPEED,
             ItemStats.ATTACK_REACH

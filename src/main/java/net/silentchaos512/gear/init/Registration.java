@@ -68,7 +68,7 @@ public final class Registration {
         ModItems.register();
         ModLootStuff.init();
         ModRecipes.register();
-        GearVillages.register();
+//        GearVillages.register();
     }
 
     @SuppressWarnings("unchecked")

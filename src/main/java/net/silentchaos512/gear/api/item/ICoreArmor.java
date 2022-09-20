@@ -13,7 +13,7 @@ public interface ICoreArmor extends ICoreItem {
     Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.ENCHANTABILITY,
+            ItemStats.ENCHANTMENT_VALUE,
             ItemStats.ARMOR,
             ItemStats.MAGIC_ARMOR,
             ItemStats.ARMOR_TOUGHNESS,

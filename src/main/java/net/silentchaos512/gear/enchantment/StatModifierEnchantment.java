@@ -14,8 +14,6 @@ import net.silentchaos512.gear.gear.material.MaterialManager;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
-
 public class StatModifierEnchantment extends Enchantment implements IStatModifierEnchantment {
     public StatModifierEnchantment(Rarity rarityIn, EnchantmentCategory typeIn, EquipmentSlot[] slots) {
         super(rarityIn, typeIn, slots);
@@ -56,7 +54,7 @@ public class StatModifierEnchantment extends Enchantment implements IStatModifie
             return mod.getValue() * Math.pow(1.25, charge.getChargeValue());
         if (stat.getStat() == ItemStats.ARMOR_DURABILITY)
             return mod.getValue() * Math.pow(1.1, charge.getChargeValue());
-        if (stat.getStat() == ItemStats.ENCHANTABILITY)
+        if (stat.getStat() == ItemStats.ENCHANTMENT_VALUE)
             return mod.getValue() * (1 + charge.getChargeLevel() * (Math.sqrt(charge.getChargeability() - 1)));
         if (stat.getStat() == ItemStats.HARVEST_LEVEL)
             return mod.getValue() + 1;

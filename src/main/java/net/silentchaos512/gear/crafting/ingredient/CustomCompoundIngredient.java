@@ -3,12 +3,12 @@ package net.silentchaos512.gear.crafting.ingredient;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
@@ -20,8 +20,6 @@ import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
-
-import net.minecraft.world.item.crafting.Ingredient.ItemValue;
 
 public class CustomCompoundIngredient extends Ingredient {
     private final CustomMaterialItem item;
@@ -58,7 +56,7 @@ public class CustomCompoundIngredient extends Ingredient {
     public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", Serializer.NAME.toString());
-        json.addProperty("item", NameUtils.from(this.item).toString());
+        json.addProperty("item", NameUtils.fromItem(this.item).toString());
         json.addProperty("material", this.material.toString());
         return json;
     }
@@ -99,7 +97,7 @@ public class CustomCompoundIngredient extends Ingredient {
 
         @Override
         public void write(FriendlyByteBuf buffer, CustomCompoundIngredient ingredient) {
-            buffer.writeResourceLocation(NameUtils.from(ingredient.item));
+            buffer.writeResourceLocation(NameUtils.fromItem(ingredient.item));
             buffer.writeResourceLocation(ingredient.material);
         }
     }

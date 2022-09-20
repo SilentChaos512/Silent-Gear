@@ -168,7 +168,7 @@ public final class MaterialInstance implements IMaterialInstance {
 
     @Deprecated
     private void getEnchantmentModifiedStats(List<StatInstance> mods, StatGearKey key) {
-        if (key.getStat() == ItemStats.CHARGEABILITY) {
+        if (key.getStat() == ItemStats.CHARGING_VALUE) {
             return;
         }
 
@@ -195,7 +195,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     private float getChargeability() {
-        return getStat(PartType.MAIN, ItemStats.CHARGEABILITY);
+        return getStat(PartType.MAIN, ItemStats.CHARGING_VALUE);
     }
 
     @Override

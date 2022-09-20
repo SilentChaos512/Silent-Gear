@@ -156,7 +156,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     public void fenceBlock(FenceBlock block, ResourceLocation texture) {
         super.fenceBlock(block, texture);
-        models().withExistingParent(NameUtils.from(block).getPath() + "_inventory", mcLoc("block/fence_inventory"))
+        models().withExistingParent(NameUtils.fromBlock(block).getPath() + "_inventory", mcLoc("block/fence_inventory"))
                 .texture("texture", texture);
     }
 }

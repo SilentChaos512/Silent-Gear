@@ -41,7 +41,7 @@ public class GearShearsItem extends ShearsItem implements ICoreTool {
     public static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
             ItemStats.DURABILITY,
             ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.ENCHANTABILITY,
+            ItemStats.ENCHANTMENT_VALUE,
             ItemStats.HARVEST_SPEED
     );
 
