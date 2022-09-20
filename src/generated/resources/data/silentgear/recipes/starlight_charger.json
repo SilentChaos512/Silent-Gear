@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "qgq",
-    "#g#",
-    "#/#"
-  ],
   "key": {
     "#": {
       "item": "minecraft:polished_blackstone"
@@ -12,13 +7,18 @@
     "/": {
       "tag": "forge:storage_blocks/blaze_gold"
     },
-    "q": {
-      "tag": "forge:storage_blocks/quartz"
-    },
     "g": {
       "tag": "forge:glass/colorless"
+    },
+    "q": {
+      "tag": "forge:storage_blocks/quartz"
     }
   },
+  "pattern": [
+    "qgq",
+    "#g#",
+    "#/#"
+  ],
   "result": {
     "item": "silentgear:starlight_charger"
   }

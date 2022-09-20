@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.5,
   "ingredient": {
     "item": "silentgear:raw_azure_silver"
   },
-  "result": "silentgear:azure_silver_ingot",
-  "experience": 1.5,
-  "cookingtime": 200
+  "result": "silentgear:azure_silver_ingot"
 }

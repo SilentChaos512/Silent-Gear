@@ -63,8 +63,6 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(ModTags.Items.RAW_MATERIALS_CRIMSON_IRON, CraftingItems.RAW_CRIMSON_IRON);
         builder(ModTags.Items.RAW_MATERIALS_AZURE_SILVER, CraftingItems.RAW_AZURE_SILVER);
 
-        builder(ModTags.Items.CHUNKS_CRIMSON_IRON, CraftingItems.RAW_CRIMSON_IRON);
-        builder(ModTags.Items.CHUNKS_AZURE_SILVER, CraftingItems.RAW_AZURE_SILVER);
         builder(ModTags.Items.COAL_GENERATOR_FUELS, ModItems.NETHERWOOD_CHARCOAL, ModBlocks.NETHERWOOD_CHARCOAL_BLOCK);
 
         builder(ModTags.Items.DUSTS_BLAZE_GOLD, CraftingItems.BLAZE_GOLD_DUST);

@@ -1,26 +1,26 @@
 {
   "parent": "silentgear:nether",
+  "criteria": {
+    "entered_the_end": {
+      "conditions": {
+        "to": "minecraft:the_end"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:end_stone"
-    },
-    "title": {
-      "translate": "advancements.silentgear.the_end.title"
-    },
+    "announce_to_chat": false,
     "description": {
       "translate": "advancements.silentgear.the_end.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:end_stone"
+    },
     "show_toast": false,
-    "announce_to_chat": false,
-    "hidden": false
-  },
-  "criteria": {
-    "entered_the_end": {
-      "trigger": "minecraft:changed_dimension",
-      "conditions": {
-        "to": "minecraft:the_end"
-      }
+    "title": {
+      "translate": "advancements.silentgear.the_end.title"
     }
   },
   "requirements": [

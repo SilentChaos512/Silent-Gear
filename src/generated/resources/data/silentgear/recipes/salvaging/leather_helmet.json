@@ -5,8 +5,8 @@
   },
   "results": [
     {
-      "item": "minecraft:leather",
-      "count": 5
+      "count": 5,
+      "item": "minecraft:leather"
     }
   ]
 }

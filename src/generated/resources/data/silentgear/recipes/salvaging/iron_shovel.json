@@ -8,8 +8,8 @@
       "item": "minecraft:iron_ingot"
     },
     {
-      "item": "minecraft:stick",
-      "count": 2
+      "count": 2,
+      "item": "minecraft:stick"
     }
   ]
 }

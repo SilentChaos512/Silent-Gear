@@ -22,11 +22,11 @@
     "main": {
       "durability": 0.0,
       "armor_durability/helmet": 25.0,
-      "enchantability": 9.0,
+      "enchantment_value": 9.0,
       "rarity": 20.0,
       "armor/helmet": 2.0,
       "magic_armor": 4.0,
-      "chargeability": 0.5
+      "charging_value": 0.5
     }
   },
   "traits": {

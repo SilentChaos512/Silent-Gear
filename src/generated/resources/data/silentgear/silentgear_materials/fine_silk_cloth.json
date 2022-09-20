@@ -23,9 +23,9 @@
     "main": {
       "durability": 0.0,
       "armor_durability": 14.0,
-      "enchantability": 14.0,
+      "enchantment_value": 14.0,
       "rarity": 40.0,
-      "chargeability": 0.9,
+      "charging_value": 0.9,
       "armor_durability/elytra": 18.0,
       "armor": 6.0,
       "armor/helmet": 1.0,

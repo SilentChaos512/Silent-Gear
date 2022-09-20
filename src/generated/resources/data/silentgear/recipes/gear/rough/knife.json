@@ -1,9 +1,5 @@
 {
   "type": "silentgear:shaped_gear_crafting",
-  "pattern": [
-    " #",
-    "/ "
-  ],
   "key": {
     "#": {
       "type": "silentgear:material",
@@ -13,6 +9,10 @@
       "tag": "silentgear:rods/rough"
     }
   },
+  "pattern": [
+    " #",
+    "/ "
+  ],
   "result": {
     "item": "silentgear:knife"
   }

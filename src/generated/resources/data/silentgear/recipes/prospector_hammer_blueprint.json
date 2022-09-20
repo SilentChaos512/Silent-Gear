@@ -1,11 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "silentgear:blueprints/prospector_hammer",
-  "pattern": [
-    "##",
-    " /",
-    " @"
-  ],
   "key": {
     "#": {
       "tag": "silentgear:blueprint_paper"
@@ -17,6 +12,11 @@
       "tag": "forge:ingots/iron"
     }
   },
+  "pattern": [
+    "##",
+    " /",
+    " @"
+  ],
   "result": {
     "item": "silentgear:prospector_hammer_blueprint"
   }

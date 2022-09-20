@@ -1,10 +1,10 @@
 {
   "type": "silentgear:smithing/upgrade",
-  "gear": {
-    "item": "silentgear:paxel"
-  },
   "addition": {
     "type": "silentgear:part_type",
     "part_type": "silentgear:misc_upgrade"
+  },
+  "gear": {
+    "item": "silentgear:paxel"
   }
 }

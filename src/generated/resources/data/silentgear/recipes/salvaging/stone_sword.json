@@ -5,8 +5,8 @@
   },
   "results": [
     {
-      "item": "minecraft:cobblestone",
-      "count": 2
+      "count": 2,
+      "item": "minecraft:cobblestone"
     },
     {
       "item": "minecraft:stick"

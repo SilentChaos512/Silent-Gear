@@ -19,7 +19,7 @@
     "durability": {
       "mul1": 0.35
     },
-    "enchantability": {
+    "enchantment_value": {
       "mul1": -0.3
     },
     "harvest_speed": {

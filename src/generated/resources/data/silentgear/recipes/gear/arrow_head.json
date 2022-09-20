@@ -7,8 +7,8 @@
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "projectile"
+      "gear_type": "projectile",
+      "part_type": "silentgear:main"
     }
   ],
   "result": {

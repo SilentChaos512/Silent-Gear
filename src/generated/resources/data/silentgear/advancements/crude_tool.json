@@ -1,27 +1,27 @@
 {
   "parent": "silentgear:root",
+  "criteria": {
+    "tool_has_rough_rod": {
+      "conditions": {
+        "type": "silentgear:crafted_with_rough_rod",
+        "value": 1
+      },
+      "trigger": "silentlib:generic_int"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "silentgear:rough_rod"
-    },
-    "title": {
-      "translate": "advancements.silentgear.crude_tool.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.crude_tool.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "silentgear:rough_rod"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "tool_has_rough_rod": {
-      "trigger": "silentlib:generic_int",
-      "conditions": {
-        "type": "silentgear:crafted_with_rough_rod",
-        "value": 1
-      }
+    "title": {
+      "translate": "advancements.silentgear.crude_tool.title"
     }
   },
   "requirements": [

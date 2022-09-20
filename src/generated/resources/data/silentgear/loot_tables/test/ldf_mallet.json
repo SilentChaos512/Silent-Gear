@@ -2,7 +2,6 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -36,7 +35,6 @@
             },
             {
               "function": "minecraft:set_lore",
-              "replace": false,
               "lore": [
                 {
                   "text": "Standard Issue"
@@ -44,12 +42,14 @@
                 {
                   "text": "Protectors of Free Speech"
                 }
-              ]
+              ],
+              "replace": false
             }
           ],
           "name": "silentgear:hammer"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
   ]
 }

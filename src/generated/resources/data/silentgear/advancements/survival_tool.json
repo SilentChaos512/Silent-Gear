@@ -1,36 +1,7 @@
 {
   "parent": "silentgear:crude_tool",
-  "display": {
-    "icon": {
-      "item": "silentgear:knife",
-      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
-    },
-    "title": {
-      "translate": "advancements.silentgear.survival_tool.title"
-    },
-    "description": {
-      "translate": "advancements.silentgear.survival_tool.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
-    "knife": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "silentgear:knife"
-            ]
-          }
-        ]
-      }
-    },
     "dagger": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -39,7 +10,36 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "knife": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "silentgear:knife"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.silentgear.survival_tool.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "silentgear:knife",
+      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.silentgear.survival_tool.title"
     }
   },
   "requirements": [

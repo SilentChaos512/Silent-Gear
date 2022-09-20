@@ -39,7 +39,6 @@ import net.silentchaos512.lib.util.NameUtils;
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 public class ModRecipesProvider extends LibRecipeProvider {
     public ModRecipesProvider(DataGenerator generatorIn) {
@@ -60,7 +59,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
         metals(consumer, 1.0f, new Metals("crimson_iron", CraftingItems.CRIMSON_IRON_INGOT, ModTags.Items.INGOTS_CRIMSON_IRON)
                 .block(ModBlocks.CRIMSON_IRON_BLOCK, ModTags.Items.STORAGE_BLOCKS_CRIMSON_IRON)
                 .dust(CraftingItems.CRIMSON_IRON_DUST, ModTags.Items.DUSTS_CRIMSON_IRON)
-                .chunks(ModTags.Items.CHUNKS_CRIMSON_IRON)
                 .ore(ModBlocks.CRIMSON_IRON_ORE, ModTags.Items.ORES_CRIMSON_IRON, CraftingItems.RAW_CRIMSON_IRON, ModBlocks.RAW_CRIMSON_IRON_BLOCK)
                 .nugget(CraftingItems.CRIMSON_IRON_NUGGET, ModTags.Items.NUGGETS_CRIMSON_IRON));
         metals(consumer, 0.5f, new Metals("crimson_steel", CraftingItems.CRIMSON_STEEL_INGOT, ModTags.Items.INGOTS_CRIMSON_STEEL)
@@ -70,7 +68,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
         metals(consumer, 1.5f, new Metals("azure_silver", CraftingItems.AZURE_SILVER_INGOT, ModTags.Items.INGOTS_AZURE_SILVER)
                 .block(ModBlocks.AZURE_SILVER_BLOCK, ModTags.Items.STORAGE_BLOCKS_AZURE_SILVER)
                 .dust(CraftingItems.AZURE_SILVER_DUST, ModTags.Items.DUSTS_AZURE_SILVER)
-                .chunks(ModTags.Items.CHUNKS_AZURE_SILVER)
                 .ore(ModBlocks.AZURE_SILVER_ORE, ModTags.Items.ORES_AZURE_SILVER, CraftingItems.RAW_AZURE_SILVER, ModBlocks.RAW_AZURE_SILVER_BLOCK)
                 .nugget(CraftingItems.AZURE_SILVER_NUGGET, ModTags.Items.NUGGETS_AZURE_SILVER));
         metals(consumer, 0.5f, new Metals("azure_electrum", CraftingItems.AZURE_ELECTRUM_INGOT, ModTags.Items.INGOTS_AZURE_ELECTRUM)
@@ -1539,13 +1536,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
 
         if (metal.dustTag != null) {
-            Ingredient dustOrChunks = metal.chunksTag != null
-                    ? Ingredient.fromValues(Stream.of(new Ingredient.TagValue(metal.chunksTag), new Ingredient.TagValue(metal.dustTag)))
-                    : Ingredient.of(metal.dustTag);
-            SimpleCookingRecipeBuilder.blasting(dustOrChunks, metal.ingot, smeltingXp, 100)
+            Ingredient dust = Ingredient.of(metal.dustTag);
+            SimpleCookingRecipeBuilder.blasting(dust, metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", hasIngot)
                     .save(consumer, SilentGear.getId(metal.name + "_dust_blasting"));
-            SimpleCookingRecipeBuilder.smelting(dustOrChunks, metal.ingot, smeltingXp, 200)
+            SimpleCookingRecipeBuilder.smelting(dust, metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", hasIngot)
                     .save(consumer, SilentGear.getId(metal.name + "_dust_smelting"));
         }
@@ -1574,7 +1569,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
         private TagKey<Item> nuggetTag;
         private ItemLike dust;
         private TagKey<Item> dustTag;
-        private TagKey<Item> chunksTag;
 
         public Metals(String name, ItemLike ingot, TagKey<Item> ingotTag) {
             this.name = name;
@@ -1611,11 +1605,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
         public Metals dust(ItemLike item, TagKey<Item> tag) {
             this.dust = item;
             this.dustTag = tag;
-            return this;
-        }
-
-        public Metals chunks(TagKey<Item> tag) {
-            this.chunksTag = tag;
             return this;
         }
     }

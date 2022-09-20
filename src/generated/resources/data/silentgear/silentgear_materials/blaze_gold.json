@@ -22,31 +22,31 @@
     "main": {
       "durability": 69.0,
       "armor_durability": 9.0,
-      "enchantability": 24.0,
+      "enchantment_value": 24.0,
+      "rarity": 45.0,
+      "charging_value": 1.2,
       "harvest_level": 2.0,
       "harvest_speed": 15.0,
       "melee_damage": 2.0,
       "magic_damage": 5.0,
       "attack_speed": 0.1,
+      "ranged_damage": 1.0,
+      "ranged_speed": 0.2,
+      "projectile_speed": 1.2,
+      "projectile_accuracy": 0.9,
       "armor": 13.0,
       "armor/helmet": 2.0,
       "armor/chestplate": 5.0,
       "armor/leggings": 4.0,
       "armor/boots": 2.0,
       "armor_toughness": 1.0,
-      "magic_armor": 10.0,
-      "ranged_damage": 1.0,
-      "ranged_speed": 0.2,
-      "projectile_speed": 1.2,
-      "projectile_accuracy": 0.9,
-      "rarity": 45.0,
-      "chargeability": 1.2
+      "magic_armor": 10.0
     },
     "rod": {
       "durability": {
         "mul2": 0.35
       },
-      "enchantability": {
+      "enchantment_value": {
         "mul2": 0.55
       },
       "harvest_level": {
@@ -160,21 +160,6 @@
     ]
   },
   "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#DD8500"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#DD8500"
-      }
-    ],
     "rod/all": [
       {
         "texture": "silentgear:rod_generic_hc",
@@ -221,6 +206,21 @@
       },
       {
         "texture": "silentgear:coating_jar"
+      }
+    ],
+    "main/all": [
+      {
+        "texture": "silentgear:main_generic_hc",
+        "color": "#DD8500"
+      },
+      {
+        "texture": "silentgear:_highlight"
+      }
+    ],
+    "main/fragment": [
+      {
+        "texture": "silentgear:metal",
+        "color": "#DD8500"
       }
     ]
   }

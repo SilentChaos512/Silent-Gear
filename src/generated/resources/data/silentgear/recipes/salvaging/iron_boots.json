@@ -5,8 +5,8 @@
   },
   "results": [
     {
-      "item": "minecraft:iron_ingot",
-      "count": 4
+      "count": 4,
+      "item": "minecraft:iron_ingot"
     }
   ]
 }

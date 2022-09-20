@@ -23,9 +23,9 @@
     "main": {
       "durability": 0.0,
       "armor_durability": 5.0,
-      "enchantability": 15.0,
+      "enchantment_value": 15.0,
       "rarity": 11.0,
-      "chargeability": 0.8,
+      "charging_value": 0.8,
       "armor": 7.0,
       "armor/helmet": 1.0,
       "armor/chestplate": 3.0,

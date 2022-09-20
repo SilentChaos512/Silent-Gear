@@ -1,14 +1,9 @@
 {
   "type": "minecraft:smelting",
-  "ingredient": [
-    {
-      "tag": "silents_mechanisms:chunks/crimson_iron"
-    },
-    {
-      "tag": "forge:dusts/crimson_iron"
-    }
-  ],
-  "result": "silentgear:crimson_iron_ingot",
+  "cookingtime": 200,
   "experience": 1.0,
-  "cookingtime": 200
+  "ingredient": {
+    "tag": "forge:dusts/crimson_iron"
+  },
+  "result": "silentgear:crimson_iron_ingot"
 }

@@ -5,12 +5,12 @@
   },
   "results": [
     {
-      "item": "minecraft:stick",
-      "count": 3
+      "count": 3,
+      "item": "minecraft:stick"
     },
     {
-      "item": "minecraft:string",
-      "count": 2
+      "count": 2,
+      "item": "minecraft:string"
     },
     {
       "item": "minecraft:iron_ingot"

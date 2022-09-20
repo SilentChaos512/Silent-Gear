@@ -1,13 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###"
-  ],
   "key": {
     "#": {
       "item": "silentgear:fluffy_puff"
     }
   },
+  "pattern": [
+    "###"
+  ],
   "result": {
     "item": "silentgear:fluffy_string"
   }

@@ -1,11 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "silentgear:blueprints/cord",
-  "pattern": [
-    "#/",
-    "#/",
-    "#/"
-  ],
   "key": {
     "#": {
       "tag": "silentgear:blueprint_paper"
@@ -15,6 +10,11 @@
       "part_type": "silentgear:cord"
     }
   },
+  "pattern": [
+    "#/",
+    "#/",
+    "#/"
+  ],
   "result": {
     "item": "silentgear:cord_blueprint"
   }

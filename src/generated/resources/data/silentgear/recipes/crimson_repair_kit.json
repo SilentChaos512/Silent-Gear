@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " / ",
-    "#o#",
-    "###"
-  ],
   "key": {
     "#": {
       "tag": "forge:ingots/crimson_steel"
@@ -16,6 +11,11 @@
       "tag": "forge:ingots/blaze_gold"
     }
   },
+  "pattern": [
+    " / ",
+    "#o#",
+    "###"
+  ],
   "result": {
     "item": "silentgear:crimson_repair_kit"
   }

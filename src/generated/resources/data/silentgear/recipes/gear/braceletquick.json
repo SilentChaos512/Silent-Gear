@@ -7,27 +7,27 @@
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "curio",
       "categories": [
         "metal"
-      ]
+      ],
+      "gear_type": "curio",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "curio",
       "categories": [
         "metal"
-      ]
+      ],
+      "gear_type": "curio",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "curio",
       "categories": [
         "metal"
-      ]
+      ],
+      "gear_type": "curio",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:part_type",

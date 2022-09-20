@@ -59,6 +59,7 @@ public final class Registration {
         POINTS_OF_INTEREST.register(modEventBus);
         PROFESSIONS.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
+        RECIPE_TYPES.register(modEventBus);
 
         ModBlockEntities.register();
         ModBlocks.register();

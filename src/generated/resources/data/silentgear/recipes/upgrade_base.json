@@ -15,7 +15,7 @@
     }
   ],
   "result": {
-    "item": "silentgear:upgrade_base",
-    "count": 4
+    "count": 4,
+    "item": "silentgear:upgrade_base"
   }
 }

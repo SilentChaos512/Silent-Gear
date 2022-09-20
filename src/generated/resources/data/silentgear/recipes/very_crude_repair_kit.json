@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " / ",
-    "#o#",
-    "###"
-  ],
   "key": {
     "#": {
       "tag": "silentgear:template_boards"
@@ -16,6 +11,11 @@
       "tag": "forge:stone"
     }
   },
+  "pattern": [
+    " / ",
+    "#o#",
+    "###"
+  ],
   "result": {
     "item": "silentgear:very_crude_repair_kit"
   }

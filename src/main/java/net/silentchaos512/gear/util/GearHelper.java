@@ -327,7 +327,7 @@ public final class GearHelper {
     }
 
     private static boolean canBreakPermanently(ItemStack stack) {
-        return Config.Common.gearBreaksPermanently.get() || TraitHelper.hasTrait(stack, Const.Traits.RED_CARD);
+        return (Config.Common.isLoaded() && Config.Common.gearBreaksPermanently.get()) || TraitHelper.hasTrait(stack, Const.Traits.RED_CARD);
     }
 
     public static boolean isBroken(ItemStack stack) {
@@ -359,7 +359,7 @@ public final class GearHelper {
         final int preTraitValue;
         if (GearHelper.isUnbreakable(stack)) {
             preTraitValue = 0;
-        } else if (!Config.Common.gearBreaksPermanently.get()) {
+        } else if (!(Config.Common.isLoaded() && Config.Common.gearBreaksPermanently.get())) {
             preTraitValue = Mth.clamp(amount, 0, stack.getMaxDamage() - stack.getDamageValue() - 1);
             if (!isBroken(stack) && stack.getDamageValue() + preTraitValue >= stack.getMaxDamage() - 1) {
                 onBroken.accept(entity);

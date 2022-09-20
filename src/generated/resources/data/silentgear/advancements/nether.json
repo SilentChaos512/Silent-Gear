@@ -1,26 +1,26 @@
 {
   "parent": "silentgear:root",
+  "criteria": {
+    "entered_nether": {
+      "conditions": {
+        "to": "minecraft:the_nether"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:obsidian"
-    },
-    "title": {
-      "translate": "advancements.silentgear.nether.title"
-    },
+    "announce_to_chat": false,
     "description": {
       "translate": "advancements.silentgear.nether.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:obsidian"
+    },
     "show_toast": false,
-    "announce_to_chat": false,
-    "hidden": false
-  },
-  "criteria": {
-    "entered_nether": {
-      "trigger": "minecraft:changed_dimension",
-      "conditions": {
-        "to": "minecraft:the_nether"
-      }
+    "title": {
+      "translate": "advancements.silentgear.nether.title"
     }
   },
   "requirements": [

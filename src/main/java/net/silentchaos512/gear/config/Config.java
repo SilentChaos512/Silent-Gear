@@ -394,6 +394,10 @@ public final class Config {
 
         private Common() {}
 
+        public static boolean isLoaded() {
+            return spec.isLoaded();
+        }
+
         public static float getStatWithMultiplier(ItemStat stat, float value) {
             if (statMultipliers.containsKey(stat))
                 return statMultipliers.get(stat).get().floatValue() * value;

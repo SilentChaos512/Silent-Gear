@@ -12,7 +12,7 @@
   ],
   "stats": [
     {
-      "name": "silentgear:enchantability",
+      "name": "silentgear:enchantment_value",
       "value": 0.1,
       "factor_damage": true,
       "factor_value": true

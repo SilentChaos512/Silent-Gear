@@ -5,12 +5,12 @@
   },
   "results": [
     {
-      "item": "minecraft:gold_ingot",
-      "count": 3
+      "count": 3,
+      "item": "minecraft:gold_ingot"
     },
     {
-      "item": "minecraft:stick",
-      "count": 2
+      "count": 2,
+      "item": "minecraft:stick"
     }
   ]
 }

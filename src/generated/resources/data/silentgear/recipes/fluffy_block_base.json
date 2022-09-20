@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "##",
-    "##"
-  ],
   "key": {
     "#": {
       "item": "silentgear:fluffy_fabric"
     }
   },
+  "pattern": [
+    "##",
+    "##"
+  ],
   "result": {
     "item": "silentgear:white_fluffy_block"
   }

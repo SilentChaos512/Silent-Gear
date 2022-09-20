@@ -1,14 +1,9 @@
 {
   "type": "minecraft:blasting",
-  "ingredient": [
-    {
-      "tag": "silents_mechanisms:chunks/azure_silver"
-    },
-    {
-      "tag": "forge:dusts/azure_silver"
-    }
-  ],
-  "result": "silentgear:azure_silver_ingot",
+  "cookingtime": 100,
   "experience": 1.5,
-  "cookingtime": 100
+  "ingredient": {
+    "tag": "forge:dusts/azure_silver"
+  },
+  "result": "silentgear:azure_silver_ingot"
 }

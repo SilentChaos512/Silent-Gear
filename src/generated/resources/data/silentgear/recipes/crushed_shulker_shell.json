@@ -1,5 +1,6 @@
 {
   "type": "silentgear:damage_item",
+  "damage": 10,
   "ingredients": [
     {
       "tag": "forge:hammers"
@@ -10,6 +11,5 @@
   ],
   "result": {
     "item": "silentgear:crushed_shulker_shell"
-  },
-  "damage": 10
+  }
 }

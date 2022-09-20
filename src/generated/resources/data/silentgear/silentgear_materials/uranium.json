@@ -23,7 +23,7 @@
       "durability": 800.0,
       "armor_durability": 20.0,
       "repair_value": -0.15,
-      "enchantability": 17.0,
+      "enchantment_value": 17.0,
       "harvest_level": 3.0,
       "harvest_speed": 6.0,
       "melee_damage": 2.0,
@@ -39,7 +39,7 @@
       "ranged_damage": 0.5,
       "ranged_speed": 0.1,
       "rarity": 50.0,
-      "chargeability": 1.5
+      "charging_value": 1.5
     },
     "rod": {
       "harvest_speed": {

@@ -7,43 +7,43 @@
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "chestplate"
+      "gear_type": "chestplate",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "chestplate"
+      "gear_type": "chestplate",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "chestplate"
+      "gear_type": "chestplate",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "chestplate"
+      "gear_type": "chestplate",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "chestplate"
+      "gear_type": "chestplate",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "chestplate"
+      "gear_type": "chestplate",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "chestplate"
+      "gear_type": "chestplate",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "chestplate"
+      "gear_type": "chestplate",
+      "part_type": "silentgear:main"
     }
   ],
   "result": {

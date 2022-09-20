@@ -1,9 +1,9 @@
 {
   "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 0.75,
   "ingredient": {
     "tag": "forge:dusts/tyrian_steel"
   },
-  "result": "silentgear:tyrian_steel_ingot",
-  "experience": 0.75,
-  "cookingtime": 100
+  "result": "silentgear:tyrian_steel_ingot"
 }

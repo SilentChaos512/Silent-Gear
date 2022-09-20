@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "##",
-    "##"
-  ],
   "key": {
     "#": {
       "item": "silentgear:fine_silk"
     }
   },
+  "pattern": [
+    "##",
+    "##"
+  ],
   "result": {
     "item": "silentgear:fine_silk_cloth"
   }

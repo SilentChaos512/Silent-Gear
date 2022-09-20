@@ -22,38 +22,34 @@
     "main": {
       "durability": 1259.0,
       "armor_durability": 61.0,
+      "enchantment_value": 37.0,
+      "rarity": 109.0,
+      "charging_value": 1.5,
       "repair_value": 0.5,
-      "enchantability": 37.0,
       "harvest_level": 5.0,
       "harvest_speed": 29.0,
       "melee_damage": 7.0,
       "magic_damage": 11.0,
       "attack_speed": 0.0,
+      "ranged_damage": 3.0,
+      "ranged_speed": 0.0,
+      "projectile_speed": 2.0,
+      "projectile_accuracy": 1.5,
       "armor": 19.0,
       "armor/helmet": 3.0,
       "armor/chestplate": 7.0,
       "armor/leggings": 6.0,
       "armor/boots": 3.0,
       "armor_toughness": 8.0,
-      "magic_armor": 19.0,
-      "ranged_damage": 3.0,
-      "ranged_speed": 0.0,
-      "projectile_speed": 2.0,
-      "projectile_accuracy": 1.5,
-      "rarity": 109.0,
-      "chargeability": 1.5
+      "magic_armor": 19.0
     },
     "rod": {
-      "durability": {
-        "mul2": -0.2
-      },
       "harvest_speed": {
-        "add": 5.0
+        "add": 3.0
       },
       "projectile_speed": {
         "mul2": 1.5
-      },
-      "rarity": 67.0
+      }
     },
     "tip": {
       "durability": {
@@ -64,15 +60,6 @@
       },
       "harvest_speed": {
         "add": 5.0
-      },
-      "magic_damage": {
-        "add": 3.0
-      },
-      "attack_speed": {
-        "add": 0.3
-      },
-      "rarity": {
-        "add": 41.0
       }
     }
   },
@@ -80,7 +67,7 @@
     "main": [
       {
         "name": "silentgear:malleable",
-        "level": 5
+        "level": 3
       },
       {
         "name": "silentgear:accelerate",

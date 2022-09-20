@@ -55,7 +55,7 @@
       "knockback_resistance": {
         "add": 1.0
       },
-      "enchantability": {
+      "enchantment_value": {
         "add": 5.0
       }
     }

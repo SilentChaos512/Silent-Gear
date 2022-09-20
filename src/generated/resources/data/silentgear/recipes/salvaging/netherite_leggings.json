@@ -5,8 +5,8 @@
   },
   "results": [
     {
-      "item": "minecraft:diamond",
-      "count": 7
+      "count": 7,
+      "item": "minecraft:diamond"
     },
     {
       "item": "minecraft:netherite_ingot"

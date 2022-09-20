@@ -2,15 +2,10 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 1.0,
-        "max": 2.0
-      },
       "bonus_rolls": {
         "type": "minecraft:uniform",
-        "min": 0.0,
-        "max": 1.0
+        "max": 1.0,
+        "min": 0.0
       },
       "entries": [
         {
@@ -19,41 +14,46 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 20,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "silentgear:netherwood_sapling"
+          "name": "silentgear:netherwood_sapling",
+          "weight": 20
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "silentgear:nether_banana"
+          "name": "silentgear:nether_banana",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
           "name": "silentgear:golden_nether_banana"
         }
-      ]
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 1.0
+      }
     }
   ]
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import cpw.mods.modlauncher.api.LamdbaExceptionUtils;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -23,6 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.trait.*;
 import net.silentchaos512.gear.init.ModBlocks;
 import net.silentchaos512.gear.util.Const;
@@ -30,6 +30,7 @@ import net.silentchaos512.gear.util.DataResource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -391,14 +392,22 @@ public class TraitsProvider implements DataProvider {
         Set<ResourceLocation> entries = Sets.newHashSet();
 
         //noinspection OverlyLongLambda
-        getTraits().forEach(LamdbaExceptionUtils.rethrowConsumer(builder -> {
+        getTraits().forEach(builder -> {
             if (entries.contains(builder.traitId)) {
                 throw new IllegalStateException("Duplicate trait: " + builder.traitId);
             }
 
             entries.add(builder.traitId);
             Path path = outputFolder.resolve(String.format("data/%s/silentgear_traits/%s.json", builder.traitId.getNamespace(), builder.traitId.getPath()));
-            DataProvider.saveStable(cache, builder.serialize(), path);
-        }));
+            trySaveStable(cache, builder, path);
+        });
+    }
+
+    private static void trySaveStable(CachedOutput cache, TraitBuilder builder, Path path) {
+        try {
+            DataGenerators.saveStable(cache, builder.serialize(), path);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

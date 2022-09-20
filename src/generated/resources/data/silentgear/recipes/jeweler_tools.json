@@ -1,27 +1,27 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "d": {
+      "tag": "forge:gems/diamond"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "p": {
+      "tag": "minecraft:planks"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
   "pattern": [
     "  p",
     "d#s",
     "ips"
   ],
-  "key": {
-    "p": {
-      "tag": "minecraft:planks"
-    },
-    "d": {
-      "tag": "forge:gems/diamond"
-    },
-    "#": {
-      "tag": "silentgear:blueprint_paper"
-    },
-    "s": {
-      "tag": "forge:rods/wooden"
-    },
-    "i": {
-      "tag": "forge:ingots/iron"
-    }
-  },
   "result": {
     "item": "silentgear:jeweler_tools"
   }

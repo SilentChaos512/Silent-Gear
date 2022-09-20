@@ -1,30 +1,30 @@
 {
   "parent": "silentgear:material_grader",
-  "display": {
-    "icon": {
-      "item": "silentgear:blazing_dust"
-    },
-    "title": {
-      "translate": "advancements.silentgear.grader_catalyst_2.title"
-    },
-    "description": {
-      "translate": "advancements.silentgear.grader_catalyst_2.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
     "get_item": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "tag": "silentgear:grader_catalysts/tier2"
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.silentgear.grader_catalyst_2.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "silentgear:blazing_dust"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.silentgear.grader_catalyst_2.title"
     }
   },
   "requirements": [

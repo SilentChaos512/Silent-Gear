@@ -1,28 +1,28 @@
 {
   "parent": "silentgear:material_grader",
+  "criteria": {
+    "durability": {
+      "conditions": {
+        "type": "silentgear:max_durability",
+        "value": 16000
+      },
+      "trigger": "silentlib:generic_int"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "silentgear:tip",
-      "nbt": "{Materials:[{ID:\"silentgear:emerald\"}]}"
-    },
-    "title": {
-      "translate": "advancements.silentgear.high_durability.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.high_durability.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "silentgear:tip",
+      "nbt": "{Materials:[{ID:\"silentgear:emerald\"}]}"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "durability": {
-      "trigger": "silentlib:generic_int",
-      "conditions": {
-        "type": "silentgear:max_durability",
-        "value": 16000
-      }
+    "title": {
+      "translate": "advancements.silentgear.high_durability.title"
     }
   },
   "requirements": [

@@ -1,5 +1,6 @@
 {
   "type": "silentgear:damage_item",
+  "damage": 4,
   "ingredients": [
     {
       "tag": "forge:hammers"
@@ -15,8 +16,7 @@
     }
   ],
   "result": {
-    "item": "silentgear:glowing_dust",
-    "count": 4
-  },
-  "damage": 4
+    "count": 4,
+    "item": "silentgear:glowing_dust"
+  }
 }

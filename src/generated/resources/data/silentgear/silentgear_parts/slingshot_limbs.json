@@ -21,7 +21,7 @@
       "add": 1.5
     },
     "repair_efficiency": 2.0,
-    "enchantability": {
+    "enchantment_value": {
       "mul1": -0.65
     }
   }

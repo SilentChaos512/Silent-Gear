@@ -22,25 +22,25 @@
     "main": {
       "durability": 197.0,
       "armor_durability": 17.0,
+      "enchantment_value": 29.0,
+      "rarity": 83.0,
+      "charging_value": 1.4,
       "repair_value": 0.5,
-      "enchantability": 29.0,
       "harvest_level": 3.0,
       "harvest_speed": 19.0,
       "melee_damage": 5.0,
       "magic_damage": 7.0,
       "attack_speed": 0.0,
+      "ranged_damage": 2.0,
+      "ranged_speed": 0.0,
+      "projectile_speed": 1.2,
+      "projectile_accuracy": 1.1,
       "armor": 13.0,
       "armor/helmet": 2.0,
       "armor/chestplate": 5.0,
       "armor/leggings": 4.0,
       "armor/boots": 2.0,
-      "magic_armor": 13.0,
-      "ranged_damage": 2.0,
-      "ranged_speed": 0.0,
-      "projectile_speed": 1.2,
-      "projectile_accuracy": 1.1,
-      "rarity": 83.0,
-      "chargeability": 1.4
+      "magic_armor": 13.0
     },
     "rod": {
       "durability": {
@@ -102,7 +102,7 @@
     "tip": [
       {
         "name": "silentgear:malleable",
-        "level": 3
+        "level": 2
       },
       {
         "name": "silentgear:soft",

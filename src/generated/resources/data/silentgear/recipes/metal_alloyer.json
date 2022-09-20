@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "/#/",
-    "/ /",
-    "#i#"
-  ],
   "key": {
+    "#": {
+      "item": "minecraft:blackstone"
+    },
     "/": {
       "tag": "forge:ingots/crimson_steel"
     },
     "i": {
       "tag": "forge:storage_blocks/iron"
-    },
-    "#": {
-      "item": "minecraft:blackstone"
     }
   },
+  "pattern": [
+    "/#/",
+    "/ /",
+    "#i#"
+  ],
   "result": {
     "item": "silentgear:metal_alloyer"
   }

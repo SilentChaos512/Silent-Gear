@@ -7,38 +7,38 @@
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "leggings"
+      "gear_type": "leggings",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "leggings"
+      "gear_type": "leggings",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "leggings"
+      "gear_type": "leggings",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "leggings"
+      "gear_type": "leggings",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "leggings"
+      "gear_type": "leggings",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "leggings"
+      "gear_type": "leggings",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "leggings"
+      "gear_type": "leggings",
+      "part_type": "silentgear:main"
     }
   ],
   "result": {

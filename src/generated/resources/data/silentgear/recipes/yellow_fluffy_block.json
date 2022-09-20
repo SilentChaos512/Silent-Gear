@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "#d#",
-    "###"
-  ],
   "key": {
     "#": {
       "tag": "silentgear:fluffy_blocks"
@@ -13,8 +8,13 @@
       "tag": "forge:dyes/yellow"
     }
   },
+  "pattern": [
+    "###",
+    "#d#",
+    "###"
+  ],
   "result": {
-    "item": "silentgear:yellow_fluffy_block",
-    "count": 8
+    "count": 8,
+    "item": "silentgear:yellow_fluffy_block"
   }
 }

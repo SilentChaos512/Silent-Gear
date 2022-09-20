@@ -7,7 +7,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.worldgen.features.OreFeatures;
@@ -30,23 +29,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.ModBlocks;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-public class ModWorldGen implements DataProvider {
-    private final DataGenerator generator;
-    private final ExistingFileHelper existingFileHelper;
-
-    public ModWorldGen(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        this.generator = generator;
-        this.existingFileHelper = existingFileHelper;
-    }
-
-    @Override
-    public void run(CachedOutput cachedOutput) throws IOException {
-        Path path = this.generator.getOutputFolder();
+public class ModWorldGen {
+    public static void init(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
         HolderSet.Named<Biome> overworld = new HolderSet.Named<>(ops.registry(Registry.BIOME_REGISTRY).get(), BiomeTags.IS_OVERWORLD);
 
@@ -93,11 +80,6 @@ public class ModWorldGen implements DataProvider {
         generator.addProvider(true, configuredFeatureProvider);
         generator.addProvider(true, placedFeatureProvider);
         generator.addProvider(true, biomeModifierProvider);
-    }
-
-    @Override
-    public String getName() {
-        return "Silent Gear - World Generation";
     }
 
     public static Holder<ConfiguredFeature<?, ?>> holder(ConfiguredFeature<?, ?> feature, RegistryOps<JsonElement> ops, ResourceLocation location) {

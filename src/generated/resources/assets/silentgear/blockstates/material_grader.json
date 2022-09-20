@@ -1,64 +1,64 @@
 {
   "variants": {
+    "facing=east,lit=false,waterlogged=false": {
+      "model": "silentgear:block/material_grader",
+      "y": 90
+    },
+    "facing=east,lit=false,waterlogged=true": {
+      "model": "silentgear:block/material_grader",
+      "y": 90
+    },
+    "facing=east,lit=true,waterlogged=false": {
+      "model": "silentgear:block/material_grader_on",
+      "y": 90
+    },
+    "facing=east,lit=true,waterlogged=true": {
+      "model": "silentgear:block/material_grader_on",
+      "y": 90
+    },
     "facing=north,lit=false,waterlogged=false": {
       "model": "silentgear:block/material_grader"
     },
+    "facing=north,lit=false,waterlogged=true": {
+      "model": "silentgear:block/material_grader"
+    },
+    "facing=north,lit=true,waterlogged=false": {
+      "model": "silentgear:block/material_grader_on"
+    },
+    "facing=north,lit=true,waterlogged=true": {
+      "model": "silentgear:block/material_grader_on"
+    },
     "facing=south,lit=false,waterlogged=false": {
       "model": "silentgear:block/material_grader",
+      "y": 180
+    },
+    "facing=south,lit=false,waterlogged=true": {
+      "model": "silentgear:block/material_grader",
+      "y": 180
+    },
+    "facing=south,lit=true,waterlogged=false": {
+      "model": "silentgear:block/material_grader_on",
+      "y": 180
+    },
+    "facing=south,lit=true,waterlogged=true": {
+      "model": "silentgear:block/material_grader_on",
       "y": 180
     },
     "facing=west,lit=false,waterlogged=false": {
       "model": "silentgear:block/material_grader",
       "y": 270
     },
-    "facing=east,lit=false,waterlogged=false": {
+    "facing=west,lit=false,waterlogged=true": {
       "model": "silentgear:block/material_grader",
-      "y": 90
-    },
-    "facing=north,lit=true,waterlogged=false": {
-      "model": "silentgear:block/material_grader_on"
-    },
-    "facing=south,lit=true,waterlogged=false": {
-      "model": "silentgear:block/material_grader_on",
-      "y": 180
+      "y": 270
     },
     "facing=west,lit=true,waterlogged=false": {
       "model": "silentgear:block/material_grader_on",
       "y": 270
     },
-    "facing=east,lit=true,waterlogged=false": {
-      "model": "silentgear:block/material_grader_on",
-      "y": 90
-    },
-    "facing=north,lit=false,waterlogged=true": {
-      "model": "silentgear:block/material_grader"
-    },
-    "facing=south,lit=false,waterlogged=true": {
-      "model": "silentgear:block/material_grader",
-      "y": 180
-    },
-    "facing=west,lit=false,waterlogged=true": {
-      "model": "silentgear:block/material_grader",
-      "y": 270
-    },
-    "facing=east,lit=false,waterlogged=true": {
-      "model": "silentgear:block/material_grader",
-      "y": 90
-    },
-    "facing=north,lit=true,waterlogged=true": {
-      "model": "silentgear:block/material_grader_on"
-    },
-    "facing=south,lit=true,waterlogged=true": {
-      "model": "silentgear:block/material_grader_on",
-      "y": 180
-    },
     "facing=west,lit=true,waterlogged=true": {
       "model": "silentgear:block/material_grader_on",
       "y": 270
-    },
-    "facing=east,lit=true,waterlogged=true": {
-      "model": "silentgear:block/material_grader_on",
-      "y": 90
     }
   }
 }

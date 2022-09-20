@@ -51,8 +51,6 @@ public final class ModTags {
         public static final TagKey<Item> ORES_CRIMSON_IRON = forge("ores/crimson_iron");
         public static final TagKey<Item> ORES_AZURE_SILVER = forge("ores/azure_silver");
 
-        public static final TagKey<Item> CHUNKS_CRIMSON_IRON = silentsMechanisms("chunks/crimson_iron");
-        public static final TagKey<Item> CHUNKS_AZURE_SILVER = silentsMechanisms("chunks/azure_silver");
         public static final TagKey<Item> COAL_GENERATOR_FUELS = silentsMechanisms("coal_generator_fuels");
 
         public static final TagKey<Item> STORAGE_BLOCKS_BORT = forge("storage_blocks/bort");

@@ -156,7 +156,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
     public void setDamage(ItemStack stack, int damage) {
         if (GearHelper.isUnbreakable(stack))
             return;
-        if (!Config.Common.gearBreaksPermanently.get())
+        if (!(Config.Common.isLoaded() && Config.Common.gearBreaksPermanently.get()))
             damage = Mth.clamp(damage, 0, getMaxDamage(stack));
         super.setDamage(stack, damage);
     }

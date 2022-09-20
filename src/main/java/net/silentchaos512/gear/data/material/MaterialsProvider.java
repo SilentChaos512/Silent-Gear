@@ -3,7 +3,6 @@ package net.silentchaos512.gear.data.material;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import cpw.mods.util.LambdaExceptionUtils;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -24,6 +23,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.crafting.ingredient.CustomCompoundIngredient;
+import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
@@ -40,6 +40,7 @@ import net.silentchaos512.utils.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -130,7 +131,6 @@ public class MaterialsProvider implements DataProvider {
                 .visible(false)
                 .canSalvage(false)
                 .blacklistGearType("all")
-                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
                 .mainStatsCommon(100, 6, 1, 0, 1f)
                 .mainStatsHarvest(0, 1)
                 .mainStatsMelee(1, 1, 0f)
@@ -145,6 +145,7 @@ public class MaterialsProvider implements DataProvider {
                 .noStats(PartType.CORD)
                 .noStats(PartType.FLETCHING)
                 .noStats(PartType.ADORNMENT)
+                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
         );
     }
 
@@ -152,9 +153,6 @@ public class MaterialsProvider implements DataProvider {
         // Azure Electrum
         ret.add(new MaterialBuilder(modId("azure_electrum"), 4, ModTags.Items.INGOTS_AZURE_ELECTRUM)
                 .categories(MaterialCategories.METAL)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x4575E3)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x4575E3)
-                .displayTip(PartTextures.TIP_SHARP, 0x4575E3)
                 //main
                 .mainStatsCommon(1259, 61, 37, 109, 1.5f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
@@ -176,13 +174,14 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 11, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 5, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.MALLEABLE, 3)
+
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x4575E3)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x4575E3)
+                .displayTip(PartTextures.TIP_SHARP, 0x4575E3)
         );
         // Azure Silver
         ret.add(new MaterialBuilder(modId("azure_silver"), 3, ModTags.Items.INGOTS_AZURE_SILVER)
                 .categories(MaterialCategories.METAL)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xCBBAFF)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xCBBAFF)
-                .displayTip(PartTextures.TIP_SHARP, 0xCBBAFF)
                 //main
                 .mainStatsCommon(197, 17, 29, 83, 1.4f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
@@ -208,14 +207,13 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.RARITY, 31, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.MALLEABLE, 2)
                 .trait(PartType.TIP, Const.Traits.SOFT, 2)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xCBBAFF)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xCBBAFF)
+                .displayTip(PartTextures.TIP_SHARP, 0xCBBAFF)
         );
         // Blaze Gold
         ret.add(new MaterialBuilder(modId("blaze_gold"), 3, ModTags.Items.INGOTS_BLAZE_GOLD)
                 .categories(MaterialCategories.METAL)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xDD8500)
-                .displayTip(PartTextures.TIP_SMOOTH, 0xDD8500)
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
                 //main
                 .mainStatsCommon(69, 9, 24, 45, 1.2f)
                 .mainStatsHarvest(2, 15)
@@ -253,13 +251,14 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.COATING, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
                 .trait(PartType.COATING, Const.Traits.BRILLIANT, 1)
                 .trait(PartType.COATING, Const.Traits.SOFT, 2)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xDD8500)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xDD8500)
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDD8500)
         );
         // Crimson Iron
         ret.add(new MaterialBuilder(modId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)
                 .categories(MaterialCategories.METAL)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF6189)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFF6189)
-                .displayTip(PartTextures.TIP_SHARP, 0xFF6189)
                 //main
                 .mainStatsCommon(420, 27, 14, 31, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
@@ -285,16 +284,13 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.FIERY, 1)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF6189)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFF6189)
+                .displayTip(PartTextures.TIP_SHARP, 0xFF6189)
         );
         // Crimson Steel
         ret.add(new MaterialBuilder(modId("crimson_steel"), 4, ModTags.Items.INGOTS_CRIMSON_STEEL)
                 .categories(MaterialCategories.METAL)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDC143C)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xDC143C)
-                .displayTip(PartTextures.TIP_SHARP, 0xDC143C)
-                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 5)
-                .trait(PartType.MAIN, Const.Traits.HARD, 3)
-                .trait(PartType.MAIN, Const.Traits.FLAME_WARD, 1, materialCountOrRatio(3, 0.33f))
                 //main
                 .mainStatsCommon(2400, 42, 19, 83, 0.9f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
@@ -303,6 +299,9 @@ public class MaterialsProvider implements DataProvider {
                 .mainStatsRanged(3, -0.1f)
                 .mainStatsProjectile(1f, 1.3f)
                 .mainStatsArmor(4, 8, 6, 4, 10, 10) //22
+                .trait(PartType.MAIN, Const.Traits.MALLEABLE, 5)
+                .trait(PartType.MAIN, Const.Traits.HARD, 3)
+                .trait(PartType.MAIN, Const.Traits.FLAME_WARD, 1, materialCountOrRatio(3, 0.33f))
                 //rod
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.5f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
@@ -315,13 +314,13 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 4, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.MAGMATIC, 1)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDC143C)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xDC143C)
+                .displayTip(PartTextures.TIP_SHARP, 0xDC143C)
         );
         // Tyrian Steel
         ret.add(new MaterialBuilder(modId("tyrian_steel"), 4, ModTags.Items.INGOTS_TYRIAN_STEEL)
                 .categories(MaterialCategories.METAL)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xB01080)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xB01080)
-                .displayTip(PartTextures.TIP_SHARP, 0xB01080)
                 //main
                 .mainStatsCommon(3652, 81, 16, 100, 1.1f)
                 .mainStatsHarvest(5, 18)
@@ -341,6 +340,9 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.RARITY, 30, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.IMPERIAL, 3)
                 .trait(PartType.TIP, Const.Traits.GOLD_DIGGER, 3)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xB01080)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xB01080)
+                .displayTip(PartTextures.TIP_SHARP, 0xB01080)
         );
     }
 
@@ -348,7 +350,6 @@ public class MaterialsProvider implements DataProvider {
         // Copper
         ret.add(new MaterialBuilder(modId("copper"), 2, Items.COPPER_INGOT)
                 .categories(MaterialCategories.METAL)
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFD804C)
                 //main
                 .mainStatsCommon(151, 12, 15, 12, 1.3f)
                 .mainStatsHarvest(1, 5)
@@ -362,14 +363,11 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 15)
                 .trait(PartType.ROD, Const.Traits.SOFT, 3)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFD804C)
         );
         // Gold
         ret.add(new MaterialBuilder(modId("gold"), 2, Tags.Items.INGOTS_GOLD)
                 .categories(MaterialCategories.METAL)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFDFF70)
-                .displayTip(PartTextures.TIP_SMOOTH, 0xFDFF70)
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
                 //main
                 .mainStatsCommon(32, 7, 22, 50, 1.2f)
                 .mainStatsHarvest(0, 12)
@@ -400,14 +398,15 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.COATING, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(PartType.COATING, Const.Traits.BRILLIANT, 1)
                 .trait(PartType.COATING, Const.Traits.SOFT, 3)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFDFF70)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xFDFF70)
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFDFF70)
         );
         // Iron
         ret.add(new MaterialBuilder(modId("iron"), 2, Tags.Items.INGOTS_IRON)
                 .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_IRON)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, Color.VALUE_WHITE)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD8D8D8)
-                .displayTip(PartTextures.TIP_SHARP, Color.VALUE_WHITE)
                 //main
                 .mainStatsCommon(250, 15, 14, 20, 0.7f)
                 .mainStatsHarvest(2, 6)
@@ -434,14 +433,14 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.MALLEABLE, 2)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, Color.VALUE_WHITE)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD8D8D8)
+                .displayTip(PartTextures.TIP_SHARP, Color.VALUE_WHITE)
         );
         // Netherite
         ret.add(new MaterialBuilder(modId("netherite"), 4, Items.NETHERITE_INGOT)
                 .categories(MaterialCategories.METAL)
                 .namePrefix(TextUtil.translate("material", "netherite"))
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x867B86)
-                .display(PartType.COATING, GearType.ARMOR, new StaticLayer(new ResourceLocation("netherite")))
-                .displayFragment(PartTextures.DUST, 0x867B86)
                 //coating
                 .stat(PartType.COATING, ItemStats.DURABILITY, 0.3f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.DURABILITY, 2, StatInstance.Operation.ADD)
@@ -455,6 +454,9 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.COATING, ItemStats.KNOCKBACK_RESISTANCE, 1f, StatInstance.Operation.ADD)
                 .stat(PartType.COATING, ItemStats.ENCHANTMENT_VALUE, 5, StatInstance.Operation.ADD)
                 .trait(PartType.COATING, Const.Traits.FIREPROOF, 1)
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x867B86)
+                .display(PartType.COATING, GearType.ARMOR, new StaticLayer(new ResourceLocation("netherite")))
+                .displayFragment(PartTextures.DUST, 0x867B86)
         );
     }
 
@@ -462,10 +464,6 @@ public class MaterialsProvider implements DataProvider {
         // Diamond
         ret.add(new MaterialBuilder(modId("diamond"), 3, Tags.Items.GEMS_DIAMOND)
                 .categories(MaterialCategories.GEM)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x33EBCB)
-                .displayTip(PartTextures.TIP_SHARP, 0x33EBCB)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
                 // main
                 .mainStatsCommon(1561, 33, 10, 70, 0.8f)
                 .mainStatsHarvest(3, 8)
@@ -495,14 +493,14 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.BASTION, 1)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x33EBCB)
+                .displayTip(PartTextures.TIP_SHARP, 0x33EBCB)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x33EBCB)
         );
         // Emerald
         ret.add(new MaterialBuilder(modId("emerald"), 3, Tags.Items.GEMS_EMERALD)
                 .categories(MaterialCategories.GEM)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x00B038)
-                .displayTip(PartTextures.TIP_SHARP, 0x00B038)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
                 // main
                 .mainStatsCommon(1080, 24, 16, 40, 1.0f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
@@ -533,14 +531,14 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.REACH, 2)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x00B038)
+                .displayTip(PartTextures.TIP_SHARP, 0x00B038)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x00B038)
         );
         // Lapis Lazuli
         ret.add(new MaterialBuilder(modId("lapis_lazuli"), 2, Tags.Items.GEMS_LAPIS)
                 .categories(MaterialCategories.GEM)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x224BAF)
-                .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
-                .displayAdornment(PartTextureSet.LOW_CONTRAST, 0x224BAF)
-                .displayFragment(PartTextures.METAL, 0x224BAF)
                 // main
                 .mainStatsCommon(200, 13, 17, 30, 1.3f)
                 .mainStatsHarvest(2, 5)
@@ -559,14 +557,15 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.LUCKY, 3, new MaterialRatioTraitCondition(0.75f))
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x224BAF)
+                .displayTip(PartTextures.TIP_SMOOTH, 0x224BAF)
+                .displayAdornment(PartTextureSet.LOW_CONTRAST, 0x224BAF)
+                .displayFragment(PartTextures.METAL, 0x224BAF)
         );
         // Prismarine
         ret.add(new MaterialBuilder(modId("prismarine"), 3, Tags.Items.GEMS_PRISMARINE)
                 .categories(MaterialCategories.GEM, MaterialCategories.ORGANIC)
                 .namePrefix(TextUtil.translate("material", "prismarine"))
-                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
-                .displayFragment(PartTextures.DUST, 0x91C5B7)
                 // coating
                 .stat(PartType.COATING, ItemStats.DURABILITY, 0.075f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, 0.125f, StatInstance.Operation.MUL2)
@@ -577,14 +576,13 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.SWIFT_SWIM, 3, new MaterialRatioTraitCondition(0.67f))
+                .displayCoating(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x91C5B7)
+                .displayFragment(PartTextures.DUST, 0x91C5B7)
         );
         // Quartz
         ret.add(new MaterialBuilder(modId("quartz"), 2, Tags.Items.GEMS_QUARTZ)
                 .categories(MaterialCategories.GEM)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD4CABA)
-                .displayTip(PartTextures.TIP_SHARP, 0xD4CABA)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
                 // main
                 .mainStatsCommon(330, 13, 10, 40, 1.2f)
                 .mainStatsHarvest(2, 7)
@@ -613,11 +611,14 @@ public class MaterialsProvider implements DataProvider {
                 // adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.MIGHTY, 2, new MaterialRatioTraitCondition(0.5f))
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD4CABA)
+                .displayTip(PartTextures.TIP_SHARP, 0xD4CABA)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD4CABA)
         );
         // Amethyst
         ret.add(new MaterialBuilder(modId("amethyst"), 2, Items.AMETHYST_SHARD)
                 .categories(MaterialCategories.GEM)
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xA31DE6)
                 // main
                 .mainStatsCommon(210, 10, 16, 35, 1.3f)
                 .mainStatsHarvest(2, 6)
@@ -632,6 +633,7 @@ public class MaterialsProvider implements DataProvider {
                 //adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.CURSED, 4)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xA31DE6)
         );
     }
 
@@ -639,8 +641,6 @@ public class MaterialsProvider implements DataProvider {
         // Glowstone
         ret.add(new MaterialBuilder(modId("glowstone"), 2, Tags.Items.DUSTS_GLOWSTONE)
                 .categories(MaterialCategories.GEM, MaterialCategories.DUST)
-                .displayTip(PartTextures.TIP_SMOOTH, 0xD2D200)
-                .displayFragment(PartTextures.DUST, 0xD2D200)
                 //tip
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.4f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
@@ -649,18 +649,20 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.TIP, ItemStats.RARITY, 15, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.REFRACTIVE, 1)
                 .trait(PartType.TIP, Const.Traits.LUSTROUS, 4)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xD2D200)
+                .displayFragment(PartTextures.DUST, 0xD2D200)
         );
         // Redstone
         ret.add(new MaterialBuilder(modId("redstone"), 2, Tags.Items.DUSTS_REDSTONE)
                 .categories(MaterialCategories.GEM, MaterialCategories.DUST)
-                .displayTip(PartTextures.TIP_SMOOTH, 0xBB0000)
-                .displayFragment(PartTextures.DUST, 0xBB0000)
                 //tip
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ATTACK_SPEED, 0.5f, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
+                .displayTip(PartTextures.TIP_SMOOTH, 0xBB0000)
+                .displayFragment(PartTextures.DUST, 0xBB0000)
         );
     }
 
@@ -669,11 +671,6 @@ public class MaterialsProvider implements DataProvider {
         // Basalt
         ret.add(new MaterialBuilder(modId("basalt"), 1, Items.BASALT)
                 .categories(MaterialCategories.ROCK)
-                .display(PartType.MAIN,
-                        new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x4F4B4F),
-                        new MaterialLayer(PartTextures.SPLOTCHES, 0x32333D))
-                .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
                 //main
                 .mainStatsCommon(137, 4, 6, 7, 0.7f)
                 .mainStatsHarvest(1, 4)
@@ -689,15 +686,15 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 7)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 3)
                 .trait(PartType.ROD, Const.Traits.CHIPPING, 2)
+                .display(PartType.MAIN,
+                        new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x4F4B4F),
+                        new MaterialLayer(PartTextures.SPLOTCHES, 0x32333D))
+                .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x4F4B4F)
         );
         // Blackstone
         ret.add(new MaterialBuilder(modId("blackstone"), 1, Items.BLACKSTONE)
                 .categories(MaterialCategories.ROCK)
-                .display(PartType.MAIN,
-                        new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x3C3947),
-                        new MaterialLayer(PartTextures.SPLOTCHES, 0x1F121B))
-                .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x3C3947)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x3C3947)
                 //main
                 .mainStatsCommon(151, 5, 4, 9, 0.6f)
                 .mainStatsHarvest(1, 4)
@@ -715,12 +712,15 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
                 .trait(PartType.ROD, Const.Traits.JAGGED, 2)
                 .trait(PartType.ROD, Const.Traits.HARD, 1)
+                .display(PartType.MAIN,
+                        new MaterialLayer(PartTextures.MAIN_GENERIC_LC, 0x3C3947),
+                        new MaterialLayer(PartTextures.SPLOTCHES, 0x1F121B))
+                .display(PartType.MAIN, GearType.ARMOR, PartTextureSet.LOW_CONTRAST, 0x3C3947)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x3C3947)
         );
         // End Stone
         ret.add(new MaterialBuilder(modId("end_stone"), 1, Tags.Items.END_STONES)
                 .categories(MaterialCategories.ROCK)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFFFFCC)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFFFCC)
                 //main
                 .mainStatsCommon(1164, 15, 10, 32, 0.9f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
@@ -736,11 +736,12 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 26)
                 .trait(PartType.ROD, Const.Traits.JAGGED, 2)
                 .trait(PartType.ROD, Const.Traits.ANCIENT, 4)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFFFFCC)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFFFCC)
         );
         // Flint
         ret.add(new MaterialBuilder(modId("flint"), 1, Items.FLINT)
                 .categories(MaterialCategories.ROCK)
-                .displayAll(PartTextureSet.HIGH_CONTRAST, 0x969696)
                 //main
                 .mainStatsCommon(124, 4, 3, 6, 0.8f)
                 .mainStatsHarvest(1, 5)
@@ -755,12 +756,11 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.ROD, Const.Traits.JAGGED, 2)
                 //adornment (deliberately no traits lol)
                 .noStats(PartType.ADORNMENT)
+                .displayAll(PartTextureSet.HIGH_CONTRAST, 0x969696)
         );
         // Netherrack
         ret.add(new MaterialBuilder(modId("netherrack"), 1, Tags.Items.NETHERRACK)
                 .categories(MaterialCategories.ROCK, MaterialCategories.ORGANIC)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x854242)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x854242)
                 //main
                 .mainStatsCommon(142, 5, 8, 11, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
@@ -775,12 +775,12 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 11)
                 .trait(PartType.ROD, Const.Traits.ERODED, 2)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 3)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x854242)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x854242)
         );
         // Obsidian
         ret.add(new MaterialBuilder(modId("obsidian"), 3, Tags.Items.OBSIDIAN)
                 .categories(MaterialCategories.ROCK)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x443464)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x443464)
                 //main
                 .mainStatsCommon(3072, 37, 7, 10, 0.6f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.5f)
@@ -795,6 +795,8 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 5)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
                 .trait(PartType.ROD, Const.Traits.CHIPPING, 3)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x443464)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x443464)
         );
         // Sandstone
         ResourceLocation sgSandstone = modId("sandstone");
@@ -802,7 +804,6 @@ public class MaterialsProvider implements DataProvider {
                 ExclusionIngredient.of(Tags.Items.SANDSTONE,
                         Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
                 .categories(MaterialCategories.ROCK)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0xE3DBB0)
                 //main
                 .mainStatsCommon(117, 6, 7, 7, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.1f)
@@ -815,6 +816,7 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.ENCHANTMENT_VALUE, -0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 7)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0xE3DBB0)
         );
         // Red sandstone
         ret.add(new MaterialBuilder(modId("sandstone/red"), -1, Ingredient.of(
@@ -828,8 +830,6 @@ public class MaterialsProvider implements DataProvider {
         ret.add(new MaterialBuilder(stone, 1, Tags.Items.COBBLESTONE)
                 .categories(MaterialCategories.ROCK)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_STONE)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
                 //main
                 .mainStatsCommon(131, 5, 5, 4, 0.5f)
                 .mainStatsHarvest(1, 4)
@@ -844,6 +844,8 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 2)
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 1)
                 .trait(PartType.ROD, Const.Traits.CRUSHING, 2)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0x9A9A9A)
         );
         ret.add(new MaterialBuilder(modId("stone/andesite"), -1, Items.ANDESITE)
                 .parent(stone)
@@ -864,7 +866,6 @@ public class MaterialsProvider implements DataProvider {
         ResourceLocation sgTerracotta = modId("terracotta");
         ret.add(new MaterialBuilder(sgTerracotta, 1, Items.TERRACOTTA)
                 .categories(MaterialCategories.ROCK)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0x985F45)
                 //main
                 .mainStatsCommon(165, 11, 9, 7, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.1f)
@@ -883,6 +884,7 @@ public class MaterialsProvider implements DataProvider {
                 .trait(PartType.ROD, Const.Traits.BRITTLE, 2)
                 .trait(PartType.ROD, Const.Traits.CRUSHING, 1)
                 .trait(PartType.ROD, Const.Traits.RUSTIC, 2)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0x985F45)
         );
         ret.add(terracotta(sgTerracotta, "black", Items.BLACK_TERRACOTTA, 0x251610));
         ret.add(terracotta(sgTerracotta, "blue", Items.BLUE_TERRACOTTA, 0x4A3B5B));
@@ -921,8 +923,6 @@ public class MaterialsProvider implements DataProvider {
         ret.add(new MaterialBuilder(Const.Materials.WOOD.getId(), 0, planksIngredient)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .partSubstitute(PartType.ROD, woodRodSubstitute)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0x896727)
-                .displayFragment(PartTextures.WOOD, 0X896727)
                 //main
                 .mainStatsCommon(59, 8, 15, 1, 0.6f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
@@ -938,6 +938,8 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.ENCHANTMENT_VALUE, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 1)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 1)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0x896727)
+                .displayFragment(PartTextures.WOOD, 0X896727)
         );
         ret.add(wood("acacia", Items.ACACIA_PLANKS, 0xBA6337));
         ret.add(wood("birch", Items.BIRCH_PLANKS, 0xD7C185));
@@ -972,9 +974,6 @@ public class MaterialsProvider implements DataProvider {
         ret.add(new MaterialBuilder(modId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .partSubstitute(PartType.ROD, ModTags.Items.RODS_NETHERWOOD)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xD83200)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD83200)
-                .displayFragment(PartTextures.WOOD, 0xD83200)
                 //main
                 .mainStatsCommon(72, 12, 13, 4, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.1f)
@@ -992,6 +991,9 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.5f, StatInstance.Operation.ADD)
                 .stat(PartType.ROD, ItemStats.RARITY, 3)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xD83200)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD83200)
+                .displayFragment(PartTextures.WOOD, 0xD83200)
         );
         // Bamboo
         ret.add(new MaterialBuilder(modId("bamboo"), 0, Items.BAMBOO)
@@ -1007,8 +1009,6 @@ public class MaterialsProvider implements DataProvider {
         // Phantom Membrane
         ret.add(new MaterialBuilder(modId("phantom_membrane"), 2, Items.PHANTOM_MEMBRANE)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
-                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
                 // main
                 .mainStatsCommon(0, 12, 10, 35, 0.7f)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.ELYTRA, 17)
@@ -1023,12 +1023,12 @@ public class MaterialsProvider implements DataProvider {
                 // lining
                 .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 4, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.LIGHT, 2)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
+                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
         );
         // Fine Silk Cloth
         ret.add(new MaterialBuilder(modId("fine_silk_cloth"), 2, CraftingItems.FINE_SILK_CLOTH)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
-                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
                 // main
                 .mainStatsCommon(0, 14, 14, 40, 0.9f)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.ELYTRA, 18)
@@ -1043,12 +1043,12 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 5, StatInstance.Operation.ADD)
                 .stat(PartType.LINING, ItemStats.MAGIC_ARMOR, 2, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.FLEXIBLE, 3)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0xC3B9A1)
+                .displayFragment(PartTextures.CLOTH, 0xC3B9A1)
         );
         // Leather
         ret.add(new MaterialBuilder(modId("leather"), 0, Tags.Items.LEATHER)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0x805133)
-                .displayFragment(PartTextures.CLOTH, 0x805133)
                 // main
                 .mainStatsCommon(0, 5, 15, 11, 0.8f)
                 .mainStatsArmor(1, 3, 2, 1, 0, 8) //7
@@ -1063,6 +1063,8 @@ public class MaterialsProvider implements DataProvider {
                 // lining
                 .stat(PartType.LINING, ItemStats.ARMOR_DURABILITY, 1f, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.FLEXIBLE, 2)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0x805133)
+                .displayFragment(PartTextures.CLOTH, 0x805133)
         );
         // Wool
         ExclusionIngredient woolIngredient = ExclusionIngredient.of(ItemTags.WOOL, Items.BLACK_WOOL,
@@ -1073,8 +1075,6 @@ public class MaterialsProvider implements DataProvider {
         );
         ret.add(new MaterialBuilder(Const.Materials.WOOL.getId(), 0, woolIngredient)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
-                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
-                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
                 // main
                 .mainStatsCommon(0, 4, 7, 7, 0.7f)
                 .mainStatsArmor(0.5f, 2f, 1.0f, 0.5f, 0, 4) //4
@@ -1088,6 +1088,8 @@ public class MaterialsProvider implements DataProvider {
                 // lining
                 .stat(PartType.LINING, ItemStats.KNOCKBACK_RESISTANCE, 0.1f, StatInstance.Operation.ADD)
                 .trait(PartType.LINING, Const.Traits.FLEXIBLE, 1)
+                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
+                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         ret.add(wool("black", Items.BLACK_WOOL, 0x141519));
         ret.add(wool("blue", Items.BLUE_WOOL, 0x35399D));
@@ -1111,9 +1113,6 @@ public class MaterialsProvider implements DataProvider {
         // Fine Silk
         ret.add(new MaterialBuilder(modId("fine_silk"), 2, CraftingItems.FINE_SILK)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xCCFFFF)
-                .displayBowstring(0xCCFFFF)
-                .displayFragment(PartTextures.CLOTH, 0xCCFFFF)
                 //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.1f, StatInstance.Operation.MUL1)
@@ -1125,13 +1124,13 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, 0.07f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
                 .trait(PartType.CORD, Const.Traits.FLEXIBLE, 2)
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xCCFFFF)
+                .displayBowstring(0xCCFFFF)
+                .displayFragment(PartTextures.CLOTH, 0xCCFFFF)
         );
         // Flax
         ret.add(new MaterialBuilder(modId("flax"), 1, CraftingItems.FLAX_STRING)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xB3804B)
-                .displayBowstring(0x845E37)
-                .displayFragment(PartTextures.CLOTH, 0x845E37)
                 //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 10, StatInstance.Operation.ADD)
@@ -1143,13 +1142,13 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, -0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 6, StatInstance.Operation.ADD)
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xB3804B)
+                .displayBowstring(0x845E37)
+                .displayFragment(PartTextures.CLOTH, 0x845E37)
         );
         // Fluffy String
         ret.add(new MaterialBuilder(modId("fluffy_string"), 1, CraftingItems.FLUFFY_STRING)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xFFFAE5)
-                .displayBowstring(0xFFFAE5)
-                .displayFragment(PartTextures.CLOTH, 0xFFFAE5)
                 //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -10, StatInstance.Operation.ADD)
@@ -1161,13 +1160,13 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RANGED_SPEED, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 7, StatInstance.Operation.ADD)
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xFFFAE5)
+                .displayBowstring(0xFFFAE5)
+                .displayFragment(PartTextures.CLOTH, 0xFFFAE5)
         );
         // Sinew
         ret.add(new MaterialBuilder(modId("sinew"), 1, CraftingItems.SINEW_FIBER)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xD8995B)
-                .displayBowstring(0x7E6962)
-                .displayFragment(PartTextures.CLOTH, 0x7E6962)
                 //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, -0.05f, StatInstance.Operation.MUL1)
@@ -1177,6 +1176,9 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.CORD, ItemStats.RANGED_DAMAGE, 0.2f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 8, StatInstance.Operation.ADD)
                 .trait(PartType.CORD, Const.Traits.FLEXIBLE, 1)
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0xD8995B)
+                .displayBowstring(0x7E6962)
+                .displayFragment(PartTextures.CLOTH, 0x7E6962)
         );
         // String
         ExclusionIngredient stringIngredient = ExclusionIngredient.of(Tags.Items.STRING,
@@ -1186,9 +1188,6 @@ public class MaterialsProvider implements DataProvider {
         );
         ret.add(new MaterialBuilder(modId("string"), 1, stringIngredient)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
-                .displayBowstring(Color.VALUE_WHITE)
-                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
                 //binding
                 .stat(PartType.BINDING, ItemStats.DURABILITY, -0.05f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, 0.05f, StatInstance.Operation.MUL1)
@@ -1197,14 +1196,17 @@ public class MaterialsProvider implements DataProvider {
                 //cord
                 .stat(PartType.CORD, ItemStats.RANGED_SPEED, 0.1f, StatInstance.Operation.MUL1)
                 .stat(PartType.CORD, ItemStats.RARITY, 4, StatInstance.Operation.ADD)
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
+                .displayBowstring(Color.VALUE_WHITE)
+                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         // Vines
         ret.add(new MaterialBuilder(modId("vine"), 0, Items.VINE)
                 .categories(MaterialCategories.ORGANIC)
-                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0x007F0E)
                 .stat(PartType.BINDING, ItemStats.DURABILITY, 0.03f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.ARMOR_DURABILITY, -0.03f, StatInstance.Operation.MUL1)
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.03f, StatInstance.Operation.MUL1)
+                .display(PartType.BINDING, PartTextureSet.LOW_CONTRAST, 0x007F0E)
         );
     }
 
@@ -1212,40 +1214,39 @@ public class MaterialsProvider implements DataProvider {
         // Feather
         ret.add(new MaterialBuilder(modId("feather"), 1, Tags.Items.FEATHERS)
                 .categories(MaterialCategories.ORGANIC)
-                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
-                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 0.9f)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 1.1f)
+                .displayAll(PartTextureSet.LOW_CONTRAST, Color.VALUE_WHITE)
+                .displayFragment(PartTextures.CLOTH, Color.VALUE_WHITE)
         );
         // Leaves
         ret.add(new MaterialBuilder(modId("leaves"), 1, ItemTags.LEAVES)
                 .categories(MaterialCategories.ORGANIC)
-                .displayAll(PartTextureSet.LOW_CONTRAST, 0x4A8F28)
-                .displayFragment(PartTextures.CLOTH, 0x4A8F28)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 1.1f)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 0.9f)
+                .displayAll(PartTextureSet.LOW_CONTRAST, 0x4A8F28)
+                .displayFragment(PartTextures.CLOTH, 0x4A8F28)
         );
         // Paper
         ret.add(new MaterialBuilder(modId("paper"), 0, ModTags.Items.PAPER)
                 .categories(MaterialCategories.ORGANIC)
-                .display(PartType.FLETCHING, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 1.1f)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 0.9f)
+                .display(PartType.FLETCHING, PartTextureSet.LOW_CONTRAST, 0xFFFFFF)
         );
         // Slime
         ret.add(new MaterialBuilder(modId("slime"), 1, Items.SLIME_BLOCK)
                 .categories(MaterialCategories.SLIME, MaterialCategories.ORGANIC)
+                .stat(PartType.LINING, ItemStats.ARMOR_TOUGHNESS, 0.5f, StatInstance.Operation.ADD)
+                .trait(PartType.LINING, Const.Traits.BOUNCE, 1)
                 .display(PartType.LINING, GearType.PART,
                         new MaterialLayer(PartTextures.LINING_SLIME, 0x8CD782),
                         new MaterialLayer(modId("lining_slime_highlight"), Color.VALUE_WHITE))
                 .displayFragment(PartTextures.DUST, 0x8CD782)
-                .stat(PartType.LINING, ItemStats.ARMOR_TOUGHNESS, 0.5f, StatInstance.Operation.ADD)
-                .trait(PartType.LINING, Const.Traits.BOUNCE, 1)
         );
         // Turtle
         ret.add(new MaterialBuilder(modId("turtle"), 2, Items.SCUTE)
                 .categories(MaterialCategories.ORGANIC)
-                .display(PartType.MAIN, GearType.HELMET, new MaterialLayer(modId("turtle"), 0x47BF4A))
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 0)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, GearType.HELMET, 25)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 9)
@@ -1254,6 +1255,7 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.MAIN, ItemStats.CHARGING_VALUE, 0.5f)
                 .trait(PartType.MAIN, Const.Traits.TURTLE, 1,
                         new MaterialCountTraitCondition(3))
+                .display(PartType.MAIN, GearType.HELMET, new MaterialLayer(modId("turtle"), 0x47BF4A))
         );
     }
 
@@ -1265,10 +1267,6 @@ public class MaterialsProvider implements DataProvider {
         // Dimerald
         ret.add(customCompoundBuilder(modId("dimerald"), 3, ModItems.CUSTOM_GEM.get())
                 .categories(MaterialCategories.GEM)
-                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x1ACE82)
-                .displayTip(PartTextures.TIP_SHARP, 0x1ACE82)
-                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
                 //main
                 .mainStatsCommon(1776, 36, 12, 80, 0.7f)
                 .mainStatsHarvest(3, 9)
@@ -1295,12 +1293,15 @@ public class MaterialsProvider implements DataProvider {
                 //adornment
                 .noStats(PartType.ADORNMENT)
                 .trait(PartType.ADORNMENT, Const.Traits.KITTY_VISION, 1)
+                .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0x1ACE82)
+                .displayTip(PartTextures.TIP_SHARP, 0x1ACE82)
+                .displayAdornment(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x1ACE82)
         );
 
         // High-Carbon Steel
         ret.add(customCompoundBuilder(modId("high_carbon_steel"), 2, ModItems.CUSTOM_INGOT.get())
                 .categories(MaterialCategories.METAL)
-                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x848484)
                 .mainStatsCommon(420, 24, 11, 40, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.05f)
                 .mainStatsHarvest(2, 6)
@@ -1308,6 +1309,7 @@ public class MaterialsProvider implements DataProvider {
                 .mainStatsArmor(3, 8, 6, 3, 2, 6)
                 .mainStatsRanged(2, -0.2f)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
+                .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0x848484)
         );
     }
 
@@ -1316,7 +1318,6 @@ public class MaterialsProvider implements DataProvider {
         ret.add(new MaterialBuilder(modId("blaze_rod"), 3, Ingredient.EMPTY)
                 .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, Tags.Items.RODS_BLAZE)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFC600)
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL2)
@@ -1325,13 +1326,12 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 30)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 3)
                 .trait(PartType.ROD, Const.Traits.REACH, 1)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xFFC600)
         );
         // Bone
         ret.add(new MaterialBuilder(modId("bone"), 1, Items.BONE_BLOCK)
                 .categories(MaterialCategories.ORGANIC)
                 .partSubstitute(PartType.ROD, Items.BONE)
-                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xFCFBED)
-                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFCFBED)
                 //main
                 .mainStatsCommon(108, 4, 5, 8, 0.9f)
                 .mainStatsHarvest(1, 4)
@@ -1343,12 +1343,13 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RARITY, 8)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
+                .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xFCFBED)
+                .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xFCFBED)
         );
         // End Rod
         ret.add(new MaterialBuilder(modId("end_rod"), 3, Ingredient.EMPTY)
                 .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, Items.END_ROD)
-                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xF6E2CD)
                 .stat(PartType.ROD, ItemStats.DURABILITY, 0.35f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.HARVEST_LEVEL, 3, StatInstance.Operation.MAX)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
@@ -1357,6 +1358,7 @@ public class MaterialsProvider implements DataProvider {
                 .stat(PartType.ROD, ItemStats.RARITY, 50)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 2)
                 .trait(PartType.ROD, Const.Traits.REFRACTIVE, 1)
+                .display(PartType.ROD, PartTextureSet.HIGH_CONTRAST, 0xF6E2CD)
         );
     }
 
@@ -2101,7 +2103,7 @@ public class MaterialsProvider implements DataProvider {
         Set<ResourceLocation> entries = Sets.newHashSet();
 
         //noinspection OverlyLongLambda
-        getMaterials().forEach(LambdaExceptionUtils.rethrowConsumer(builder -> {
+        getMaterials().forEach(builder -> {
             if (entries.contains(builder.id)) {
                 throw new IllegalStateException("Duplicate material: " + builder.id);
             }
@@ -2109,10 +2111,18 @@ public class MaterialsProvider implements DataProvider {
             // Material
             entries.add(builder.id);
             Path path = outputFolder.resolve(String.format("data/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-            DataProvider.saveStable(cache, builder.serialize(), path);
+            trySaveStable(cache, builder, path);
 
             // Model
             // TODO
-        }));
+        });
+    }
+
+    private static void trySaveStable(CachedOutput cache, MaterialBuilder builder, Path path) {
+        try {
+            DataGenerators.saveStable(cache, builder.serialize(), path);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

@@ -3,7 +3,6 @@ package net.silentchaos512.gear.data.part;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import cpw.mods.util.LambdaExceptionUtils;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -17,6 +16,7 @@ import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.init.ModItems;
 import net.silentchaos512.gear.init.Registration;
@@ -28,6 +28,7 @@ import net.silentchaos512.utils.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -298,7 +299,7 @@ public class PartsProvider implements DataProvider {
         Set<ResourceLocation> entries = Sets.newHashSet();
 
         //noinspection OverlyLongLambda
-        getParts().forEach(LambdaExceptionUtils.rethrowConsumer(builder -> {
+        getParts().forEach(builder -> {
             if (entries.contains(builder.id)) {
                 throw new IllegalStateException("Duplicate part: " + builder.id);
             }
@@ -306,10 +307,18 @@ public class PartsProvider implements DataProvider {
             // Part
             entries.add(builder.id);
             Path path = outputFolder.resolve(String.format("data/%s/silentgear_parts/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-            DataProvider.saveStable(cache, builder.serialize(), path);
+            trySaveStable(cache, builder, path);
 
             // Model
             // TODO
-        }));
+        });
+    }
+
+    private static void trySaveStable(CachedOutput cache, PartBuilder builder, Path path) {
+        try {
+            DataGenerators.saveStable(cache, builder.serialize(), path);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

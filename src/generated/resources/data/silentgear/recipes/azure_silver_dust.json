@@ -1,5 +1,6 @@
 {
   "type": "silentgear:damage_item",
+  "damage": 1,
   "ingredients": [
     {
       "tag": "forge:hammers"
@@ -10,6 +11,5 @@
   ],
   "result": {
     "item": "silentgear:azure_silver_dust"
-  },
-  "damage": 1
+  }
 }

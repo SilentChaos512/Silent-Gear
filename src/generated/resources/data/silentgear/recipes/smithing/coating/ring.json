@@ -1,10 +1,10 @@
 {
   "type": "silentgear:smithing/coating",
-  "gear": {
-    "item": "silentgear:ring"
-  },
   "addition": {
     "type": "silentgear:material",
     "part_type": "silentgear:coating"
+  },
+  "gear": {
+    "item": "silentgear:ring"
   }
 }

@@ -2,90 +2,90 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "silentgear:rod_blueprint"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "silentgear:pickaxe_blueprint"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "silentgear:shovel_blueprint"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "silentgear:axe_blueprint"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "silentgear:knife_blueprint"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 11,
-          "name": "silentgear:sword_blueprint"
+          "name": "silentgear:sword_blueprint",
+          "weight": 11
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "silentgear:katana_blueprint"
+          "name": "silentgear:katana_blueprint",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 7,
-          "name": "silentgear:machete_blueprint"
+          "name": "silentgear:machete_blueprint",
+          "weight": 7
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
-          "name": "silentgear:spear_blueprint"
+          "name": "silentgear:spear_blueprint",
+          "weight": 8
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "silentgear:shield_blueprint"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
   ]
 }

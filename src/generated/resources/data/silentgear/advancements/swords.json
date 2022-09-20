@@ -1,36 +1,7 @@
 {
   "parent": "silentgear:blueprint_paper",
-  "display": {
-    "icon": {
-      "item": "silentgear:sword",
-      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
-    },
-    "title": {
-      "translate": "advancements.silentgear.swords.title"
-    },
-    "description": {
-      "translate": "advancements.silentgear.swords.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
-    "sword": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "silentgear:sword"
-            ]
-          }
-        ]
-      }
-    },
     "katana": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -39,10 +10,10 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
     },
     "machete": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -51,7 +22,36 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "sword": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "silentgear:sword"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.silentgear.swords.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "silentgear:sword",
+      "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.silentgear.swords.title"
     }
   },
   "requirements": [

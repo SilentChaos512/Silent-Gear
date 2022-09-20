@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "silentgear:blueprints/ring",
-  "pattern": [
-    " #/",
-    "# #",
-    "/# "
-  ],
   "key": {
     "#": {
       "tag": "silentgear:template_boards"
     },
     "/": {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "curio",
       "categories": [
         "metal"
-      ]
+      ],
+      "gear_type": "curio",
+      "part_type": "silentgear:main"
     }
   },
+  "pattern": [
+    " #/",
+    "# #",
+    "/# "
+  ],
   "result": {
     "item": "silentgear:ring_template"
   }

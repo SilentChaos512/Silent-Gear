@@ -1,11 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "silentgear:blueprints/shovel",
-  "pattern": [
-    "#",
-    "/",
-    "/"
-  ],
   "key": {
     "#": {
       "tag": "silentgear:template_boards"
@@ -14,6 +9,11 @@
       "tag": "forge:rods/wooden"
     }
   },
+  "pattern": [
+    "#",
+    "/",
+    "/"
+  ],
   "result": {
     "item": "silentgear:shovel_template"
   }

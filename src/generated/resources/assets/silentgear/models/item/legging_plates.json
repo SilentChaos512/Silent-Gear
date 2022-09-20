@@ -1,10 +1,10 @@
 {
   "parent": "minecraft:item/generated",
-  "loader": "silentgear:compound_part_model",
-  "gear_type": "leggings",
-  "part_type": "silentgear:main",
-  "texture_path": "part/armor",
   "extra_layers": [
     "silentgear:blueprint_leggings"
-  ]
+  ],
+  "gear_type": "leggings",
+  "loader": "silentgear:compound_part_model",
+  "part_type": "silentgear:main",
+  "texture_path": "part/armor"
 }

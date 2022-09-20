@@ -1,27 +1,27 @@
 {
   "parent": "silentgear:repair_kit",
+  "criteria": {
+    "repair": {
+      "conditions": {
+        "type": "silentgear:repair_from_broken",
+        "value": 1
+      },
+      "trigger": "silentlib:generic_int"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:flint"
-    },
-    "title": {
-      "translate": "advancements.silentgear.repair_from_broken.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.repair_from_broken.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:flint"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "repair": {
-      "trigger": "silentlib:generic_int",
-      "conditions": {
-        "type": "silentgear:repair_from_broken",
-        "value": 1
-      }
+    "title": {
+      "translate": "advancements.silentgear.repair_from_broken.title"
     }
   },
   "requirements": [

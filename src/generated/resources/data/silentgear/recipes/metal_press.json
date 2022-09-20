@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "forge:obsidian"
+    },
+    "/": {
+      "tag": "forge:rods/iron"
+    },
+    "t": {
+      "tag": "forge:ingots/tyrian_steel"
+    }
+  },
   "pattern": [
     "#t#",
     "/ /",
     "#t#"
   ],
-  "key": {
-    "#": {
-      "tag": "forge:obsidian"
-    },
-    "t": {
-      "tag": "forge:ingots/tyrian_steel"
-    },
-    "/": {
-      "tag": "forge:rods/iron"
-    }
-  },
   "result": {
     "item": "silentgear:metal_press"
   }

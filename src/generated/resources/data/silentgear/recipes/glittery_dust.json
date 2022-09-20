@@ -1,26 +1,26 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "/": {
+      "tag": "forge:nuggets/emerald"
+    },
+    "b": {
+      "item": "silentgear:nether_banana"
+    },
+    "o": {
+      "item": "minecraft:popped_chorus_fruit"
+    }
+  },
   "pattern": [
     "o/o",
     "#b#",
     "o/o"
   ],
-  "key": {
-    "o": {
-      "item": "minecraft:popped_chorus_fruit"
-    },
-    "/": {
-      "tag": "forge:nuggets/emerald"
-    },
-    "#": {
-      "tag": "forge:dusts/glowstone"
-    },
-    "b": {
-      "item": "silentgear:nether_banana"
-    }
-  },
   "result": {
-    "item": "silentgear:glittery_dust",
-    "count": 8
+    "count": 8,
+    "item": "silentgear:glittery_dust"
   }
 }

@@ -1,11 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "silentgear:blueprints/saw",
-  "pattern": [
-    "###",
-    "##/",
-    "  /"
-  ],
   "key": {
     "#": {
       "tag": "silentgear:blueprint_paper"
@@ -14,6 +9,11 @@
       "tag": "forge:rods/wooden"
     }
   },
+  "pattern": [
+    "###",
+    "##/",
+    "  /"
+  ],
   "result": {
     "item": "silentgear:saw_blueprint"
   }

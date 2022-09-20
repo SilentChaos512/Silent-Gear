@@ -22,30 +22,30 @@
     "main": {
       "durability": 32.0,
       "armor_durability": 7.0,
-      "enchantability": 22.0,
+      "enchantment_value": 22.0,
+      "rarity": 50.0,
+      "charging_value": 1.2,
       "harvest_level": 0.0,
       "harvest_speed": 12.0,
       "melee_damage": 0.0,
       "magic_damage": 4.0,
       "attack_speed": 0.0,
+      "ranged_damage": 0.0,
+      "ranged_speed": 0.3,
+      "projectile_speed": 1.1,
+      "projectile_accuracy": 1.0,
       "armor": 11.0,
       "armor/helmet": 2.0,
       "armor/chestplate": 5.0,
       "armor/leggings": 3.0,
       "armor/boots": 1.0,
-      "magic_armor": 8.0,
-      "ranged_damage": 0.0,
-      "ranged_speed": 0.3,
-      "projectile_speed": 1.1,
-      "projectile_accuracy": 1.0,
-      "rarity": 50.0,
-      "chargeability": 1.2
+      "magic_armor": 8.0
     },
     "rod": {
       "durability": {
         "mul2": 0.05
       },
-      "enchantability": {
+      "enchantment_value": {
         "add": 3.0
       },
       "rarity": 40.0

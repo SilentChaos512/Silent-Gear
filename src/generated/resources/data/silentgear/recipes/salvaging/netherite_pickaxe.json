@@ -5,15 +5,15 @@
   },
   "results": [
     {
-      "item": "minecraft:diamond",
-      "count": 3
+      "count": 3,
+      "item": "minecraft:diamond"
     },
     {
       "item": "minecraft:netherite_ingot"
     },
     {
-      "item": "minecraft:stick",
-      "count": 2
+      "count": 2,
+      "item": "minecraft:stick"
     }
   ]
 }

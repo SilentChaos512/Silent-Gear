@@ -5,12 +5,12 @@
   },
   "results": [
     {
-      "item": "minecraft:diamond",
-      "count": 3
+      "count": 3,
+      "item": "minecraft:diamond"
     },
     {
-      "item": "minecraft:stick",
-      "count": 2
+      "count": 2,
+      "item": "minecraft:stick"
     }
   ]
 }

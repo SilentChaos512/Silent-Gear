@@ -7,28 +7,28 @@
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "helmet"
+      "gear_type": "helmet",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "helmet"
+      "gear_type": "helmet",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "helmet"
+      "gear_type": "helmet",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "helmet"
+      "gear_type": "helmet",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "helmet"
+      "gear_type": "helmet",
+      "part_type": "silentgear:main"
     }
   ],
   "result": {

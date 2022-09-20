@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "###"
-  ],
   "key": {
     "#": {
       "item": "silentgear:netherwood_planks"
     }
   },
+  "pattern": [
+    "###",
+    "###"
+  ],
   "result": {
-    "item": "silentgear:netherwood_trapdoor",
-    "count": 2
+    "count": 2,
+    "item": "silentgear:netherwood_trapdoor"
   }
 }

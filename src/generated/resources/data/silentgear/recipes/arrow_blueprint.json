@@ -1,11 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "silentgear:blueprints/arrow",
-  "pattern": [
-    "#",
-    "/",
-    "@"
-  ],
   "key": {
     "#": {
       "tag": "silentgear:blueprint_paper"
@@ -17,6 +12,11 @@
       "tag": "forge:feathers"
     }
   },
+  "pattern": [
+    "#",
+    "/",
+    "@"
+  ],
   "result": {
     "item": "silentgear:arrow_blueprint"
   }

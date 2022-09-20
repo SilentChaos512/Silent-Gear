@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " / ",
-    "#o#",
-    "###"
-  ],
   "key": {
     "#": {
       "tag": "forge:ingots/iron"
@@ -16,6 +11,11 @@
       "tag": "forge:gems/diamond"
     }
   },
+  "pattern": [
+    " / ",
+    "#o#",
+    "###"
+  ],
   "result": {
     "item": "silentgear:sturdy_repair_kit"
   }

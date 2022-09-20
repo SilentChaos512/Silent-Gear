@@ -7,23 +7,23 @@
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "boots"
+      "gear_type": "boots",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "boots"
+      "gear_type": "boots",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "boots"
+      "gear_type": "boots",
+      "part_type": "silentgear:main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main",
-      "gear_type": "boots"
+      "gear_type": "boots",
+      "part_type": "silentgear:main"
     }
   ],
   "result": {

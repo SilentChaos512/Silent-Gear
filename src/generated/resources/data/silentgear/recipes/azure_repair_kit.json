@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " / ",
-    "#o#",
-    "###"
-  ],
   "key": {
     "#": {
       "tag": "forge:ingots/azure_electrum"
@@ -16,6 +11,11 @@
       "tag": "forge:gems/emerald"
     }
   },
+  "pattern": [
+    " / ",
+    "#o#",
+    "###"
+  ],
   "result": {
     "item": "silentgear:azure_repair_kit"
   }

@@ -1,35 +1,7 @@
 {
   "parent": "silentgear:root",
-  "display": {
-    "icon": {
-      "item": "silentgear:flax_fiber"
-    },
-    "title": {
-      "translate": "advancements.silentgear.overworld_plants.title"
-    },
-    "description": {
-      "translate": "advancements.silentgear.overworld_plants.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
-    "flax_seeds": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "silentgear:flax_seeds"
-            ]
-          }
-        ]
-      }
-    },
     "flax_fibers": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -38,22 +10,22 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
     },
-    "fluffy_seeds": {
-      "trigger": "minecraft:inventory_changed",
+    "flax_seeds": {
       "conditions": {
         "items": [
           {
             "items": [
-              "silentgear:fluffy_seeds"
+              "silentgear:flax_seeds"
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
     },
     "fluffy_puffs": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -62,7 +34,35 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "fluffy_seeds": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "silentgear:fluffy_seeds"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.silentgear.overworld_plants.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "silentgear:flax_fiber"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.silentgear.overworld_plants.title"
     }
   },
   "requirements": [

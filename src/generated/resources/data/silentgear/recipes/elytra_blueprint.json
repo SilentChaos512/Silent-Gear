@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "/e/",
-    "p#p",
-    "p p"
-  ],
   "key": {
     "#": {
       "tag": "silentgear:blueprint_paper"
@@ -19,6 +14,11 @@
       "item": "minecraft:phantom_membrane"
     }
   },
+  "pattern": [
+    "/e/",
+    "p#p",
+    "p p"
+  ],
   "result": {
     "item": "silentgear:elytra_blueprint"
   }
