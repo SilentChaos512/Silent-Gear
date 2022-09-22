@@ -43,16 +43,9 @@
       },
       "attack_speed": {
         "add": 0.2
-      },
-      "rarity": {
-        "add": 8.0
       }
     },
-    "lining": {
-      "armor_durability": {
-        "add": 4.0
-      }
-    }
+    "lining": {}
   },
   "traits": {
     "main": [
@@ -77,6 +70,10 @@
       {
         "name": "silentgear:light",
         "level": 2
+      },
+      {
+        "name": "silentgear:flexible",
+        "level": 3
       }
     ]
   },

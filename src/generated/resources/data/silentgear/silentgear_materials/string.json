@@ -35,12 +35,6 @@
   },
   "stats": {
     "binding": {
-      "durability": {
-        "mul1": -0.05
-      },
-      "armor_durability": {
-        "mul1": 0.05
-      },
       "repair_efficiency": {
         "mul1": 0.05
       }
@@ -48,9 +42,6 @@
     "cord": {
       "ranged_speed": {
         "mul1": 0.1
-      },
-      "rarity": {
-        "add": 4.0
       }
     }
   },

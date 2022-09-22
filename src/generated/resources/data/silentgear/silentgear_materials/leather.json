@@ -34,9 +34,6 @@
       "magic_armor": 8.0
     },
     "grip": {
-      "durability": {
-        "mul1": 0.05
-      },
       "repair_efficiency": {
         "mul1": 0.1
       },
@@ -45,16 +42,9 @@
       },
       "attack_speed": {
         "add": 0.15
-      },
-      "rarity": {
-        "add": 5.0
       }
     },
-    "lining": {
-      "armor_durability": {
-        "add": 1.0
-      }
-    }
+    "lining": {}
   },
   "traits": {
     "main": [
@@ -78,7 +68,7 @@
     "lining": [
       {
         "name": "silentgear:flexible",
-        "level": 2
+        "level": 4
       }
     ]
   },

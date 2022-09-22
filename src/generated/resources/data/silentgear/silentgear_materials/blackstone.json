@@ -41,13 +41,9 @@
       "armor/boots": 1.0
     },
     "rod": {
-      "durability": {
-        "mul2": 0.1
-      },
       "harvest_speed": {
         "mul2": -0.1
-      },
-      "rarity": 9.0
+      }
     }
   },
   "traits": {
@@ -68,7 +64,7 @@
     "rod": [
       {
         "name": "silentgear:brittle",
-        "level": 2
+        "level": 1
       },
       {
         "name": "silentgear:jagged",

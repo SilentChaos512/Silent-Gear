@@ -22,9 +22,6 @@
   },
   "stats": {
     "rod": {
-      "durability": {
-        "mul2": 0.35
-      },
       "harvest_level": {
         "max": 3.0
       },
@@ -36,14 +33,17 @@
       },
       "ranged_damage": {
         "mul2": 0.1
-      },
-      "rarity": 50.0
+      }
     }
   },
   "traits": {
     "rod": [
       {
         "name": "silentgear:flexible",
+        "level": 4
+      },
+      {
+        "name": "silentgear:sturdy",
         "level": 2
       },
       {

@@ -20,12 +20,6 @@
   },
   "stats": {
     "binding": {
-      "durability": {
-        "mul1": 0.03
-      },
-      "armor_durability": {
-        "mul1": -0.03
-      },
       "repair_efficiency": {
         "mul1": 0.03
       }

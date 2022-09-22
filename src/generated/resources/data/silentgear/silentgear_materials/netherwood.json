@@ -49,21 +49,12 @@
       "magic_armor": 6.0
     },
     "rod": {
-      "durability": [
-        {
-          "max": 70.0
-        },
-        {
-          "add": -50.0
-        }
-      ],
       "harvest_speed": {
         "add": 1.0
       },
       "melee_damage": {
         "add": 0.5
-      },
-      "rarity": 3.0
+      }
     }
   },
   "traits": {
@@ -80,7 +71,7 @@
     "rod": [
       {
         "name": "silentgear:flexible",
-        "level": 2
+        "level": 1
       }
     ]
   },

@@ -42,16 +42,9 @@
       "magic_armor": 3.0
     },
     "rod": {
-      "durability": {
-        "mul2": -0.1
-      },
-      "enchantment_value": {
-        "mul2": -0.1
-      },
       "melee_damage": {
         "mul2": 0.1
-      },
-      "rarity": 6.0
+      }
     }
   },
   "traits": {
@@ -77,10 +70,6 @@
       {
         "name": "silentgear:crushing",
         "level": 1
-      },
-      {
-        "name": "silentgear:rustic",
-        "level": 2
       }
     ]
   },

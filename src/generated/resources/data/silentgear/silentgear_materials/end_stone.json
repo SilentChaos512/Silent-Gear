@@ -44,13 +44,9 @@
       "magic_armor": 6.0
     },
     "rod": {
-      "durability": {
-        "mul2": 0.1
-      },
       "melee_damage": {
         "add": 1.0
-      },
-      "rarity": 26.0
+      }
     }
   },
   "traits": {
@@ -66,8 +62,8 @@
     ],
     "rod": [
       {
-        "name": "silentgear:jagged",
-        "level": 2
+        "name": "silentgear:malleable",
+        "level": 1
       },
       {
         "name": "silentgear:ancient",

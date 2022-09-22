@@ -25,20 +25,17 @@
     "translate": "misc.silentgear.crude"
   },
   "stats": {
-    "rod": {
-      "durability": {
-        "mul1": -0.25
-      },
-      "rarity": {
-        "add": -5.0
-      }
-    }
+    "rod": {}
   },
   "traits": {
     "rod": [
       {
         "name": "silentgear:crude",
         "level": 3
+      },
+      {
+        "name": "silentgear:bending",
+        "level": 5
       }
     ]
   },

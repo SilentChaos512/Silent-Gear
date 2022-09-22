@@ -46,8 +46,7 @@
     "rod": {
       "harvest_speed": {
         "mul2": -0.1
-      },
-      "rarity": 5.0
+      }
     }
   },
   "traits": {

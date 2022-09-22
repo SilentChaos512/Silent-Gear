@@ -45,13 +45,9 @@
       "magic_armor": 10.0
     },
     "rod": {
-      "durability": {
-        "mul2": 0.25
-      },
       "harvest_speed": {
         "mul2": 0.15
-      },
-      "rarity": 70.0
+      }
     },
     "tip": {
       "durability": {
@@ -107,7 +103,7 @@
     "rod": [
       {
         "name": "silentgear:brittle",
-        "level": 4,
+        "level": 1,
         "conditions": [
           {
             "type": "silentgear:material_ratio",

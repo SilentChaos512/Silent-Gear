@@ -47,6 +47,7 @@
       "armor/boots": 2.0,
       "magic_armor": 6.0
     },
+    "rod": {},
     "tip": {
       "durability": {
         "add": 128.0

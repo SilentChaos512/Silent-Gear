@@ -39,12 +39,7 @@
       "armor/leggings": 1.0,
       "armor/boots": 0.5
     },
-    "rod": {
-      "durability": {
-        "mul2": -0.3
-      },
-      "rarity": 2.0
-    },
+    "rod": {},
     "adornment": {}
   },
   "traits": {

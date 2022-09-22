@@ -88,22 +88,13 @@
       "armor/boots": 1.0,
       "magic_armor": 2.0
     },
-    "rod": {
-      "enchantment_value": {
-        "mul2": 0.1
-      },
-      "rarity": 1.0
-    }
+    "rod": {}
   },
   "traits": {
     "main": [
       {
         "name": "silentgear:flammable",
         "level": 1
-      },
-      {
-        "name": "silentgear:flexible",
-        "level": 2
       },
       {
         "name": "silentgear:jagged",
@@ -113,7 +104,7 @@
     "rod": [
       {
         "name": "silentgear:flexible",
-        "level": 1
+        "level": 2
       }
     ]
   },

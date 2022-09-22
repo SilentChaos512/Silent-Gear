@@ -40,15 +40,9 @@
       },
       "harvest_speed": {
         "mul1": 0.15
-      },
-      "rarity": {
-        "add": 10.0
       }
     },
     "lining": {
-      "armor_durability": {
-        "add": 5.0
-      },
       "magic_armor": {
         "add": 2.0
       }
@@ -76,7 +70,7 @@
     "lining": [
       {
         "name": "silentgear:flexible",
-        "level": 3
+        "level": 4
       }
     ]
   },

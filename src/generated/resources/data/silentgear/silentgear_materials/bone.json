@@ -49,8 +49,7 @@
     "rod": {
       "melee_damage": {
         "mul2": 0.2
-      },
-      "rarity": 8.0
+      }
     }
   },
   "traits": {

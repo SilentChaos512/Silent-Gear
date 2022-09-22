@@ -43,12 +43,7 @@
       "armor/boots": 1.0,
       "magic_armor": 4.0
     },
-    "rod": {
-      "durability": {
-        "mul2": -0.2
-      },
-      "rarity": 11.0
-    }
+    "rod": {}
   },
   "traits": {
     "main": [
@@ -67,8 +62,8 @@
         "level": 2
       },
       {
-        "name": "silentgear:flexible",
-        "level": 3
+        "name": "silentgear:bending",
+        "level": 2
       }
     ]
   },

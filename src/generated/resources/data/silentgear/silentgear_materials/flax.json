@@ -21,14 +21,6 @@
   },
   "stats": {
     "binding": {
-      "durability": [
-        {
-          "mul1": -0.05
-        },
-        {
-          "add": 10.0
-        }
-      ],
       "armor_durability": {
         "mul1": 0.05
       },
@@ -37,17 +29,11 @@
       }
     },
     "cord": {
-      "durability": {
-        "mul1": 0.05
-      },
       "ranged_damage": {
         "mul1": -0.1
       },
       "ranged_speed": {
         "mul1": 0.2
-      },
-      "rarity": {
-        "add": 6.0
       }
     }
   },
@@ -55,7 +41,7 @@
     "binding": [
       {
         "name": "silentgear:flexible",
-        "level": 1
+        "level": 3
       }
     ]
   },

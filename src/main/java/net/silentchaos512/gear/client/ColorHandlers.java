@@ -11,8 +11,6 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
-import net.silentchaos512.gear.item.gear.GearArmorItem;
-import net.silentchaos512.gear.item.gear.GearShieldItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.utils.Color;
@@ -35,7 +33,7 @@ public final class ColorHandlers {
 
         // Tools, armor, shields, etc.
         ForgeRegistries.ITEMS.getValues().stream()
-                .filter(item -> item instanceof GearArmorItem || item instanceof GearShieldItem)
+                .filter(item -> item instanceof ICoreItem /*item instanceof GearArmorItem || item instanceof GearShieldItem*/)
                 .map(item -> (ICoreItem) item)
                 .forEach(item -> itemColors.register(item.getItemColors(), item));
 

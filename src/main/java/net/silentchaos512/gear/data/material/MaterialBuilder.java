@@ -393,14 +393,11 @@ public class MaterialBuilder {
         ITraitInstance inst = TraitInstance.of(trait, level, conditions);
         List<ITraitInstance> list = traits.computeIfAbsent(partType, pt -> new ArrayList<>());
         list.add(inst);
-        return this;
-    }
 
-    @Deprecated
-    public MaterialBuilder trait(PartType partType, ResourceLocation traitId, int level, ITraitCondition... conditions) {
-        ITraitInstance inst = TraitInstance.lazy(traitId, level, conditions);
-        List<ITraitInstance> list = traits.computeIfAbsent(partType, pt -> new ArrayList<>());
-        list.add(inst);
+        if (!stats.containsKey(partType)) {
+            SilentGear.LOGGER.warn("Material '{}' has trait '{}' but no stats! This may or may not be an error.", id, trait.getId());
+        }
+
         return this;
     }
 

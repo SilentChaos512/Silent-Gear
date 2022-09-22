@@ -95,9 +95,6 @@
       },
       "attack_speed": {
         "add": 0.2
-      },
-      "rarity": {
-        "add": 4.0
       }
     },
     "lining": {
@@ -122,13 +119,13 @@
     "grip": [
       {
         "name": "silentgear:flexible",
-        "level": 1
+        "level": 2
       }
     ],
     "lining": [
       {
         "name": "silentgear:flexible",
-        "level": 1
+        "level": 2
       }
     ]
   },

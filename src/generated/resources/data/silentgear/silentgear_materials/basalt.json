@@ -46,8 +46,7 @@
       },
       "melee_damage": {
         "mul2": -0.1
-      },
-      "rarity": 7.0
+      }
     }
   },
   "traits": {

@@ -24,12 +24,15 @@
     "translate": "material.silentgear.bamboo"
   },
   "stats": {
-    "rod": {
-      "durability": {
-        "mul1": 0.05
-      },
-      "rarity": 4.0
-    }
+    "rod": {}
+  },
+  "traits": {
+    "rod": [
+      {
+        "name": "silentgear:flexible",
+        "level": 3
+      }
+    ]
   },
   "model": {
     "rod/all": [

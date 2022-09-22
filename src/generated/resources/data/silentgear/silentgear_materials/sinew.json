@@ -21,22 +21,13 @@
   },
   "stats": {
     "binding": {
-      "durability": {
-        "mul1": 0.05
-      },
       "repair_efficiency": {
         "mul1": -0.05
       }
     },
     "cord": {
-      "durability": {
-        "mul1": 0.2
-      },
       "ranged_damage": {
         "mul1": 0.2
-      },
-      "rarity": {
-        "add": 8.0
       }
     }
   },
@@ -44,13 +35,13 @@
     "binding": [
       {
         "name": "silentgear:flexible",
-        "level": 2
+        "level": 4
       }
     ],
     "cord": [
       {
         "name": "silentgear:flexible",
-        "level": 1
+        "level": 2
       }
     ]
   },

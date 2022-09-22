@@ -46,13 +46,9 @@
       "armor/boots": 1.0
     },
     "rod": {
-      "durability": {
-        "mul2": -0.1
-      },
       "harvest_speed": {
-        "mul2": 0.2
-      },
-      "rarity": 2.0
+        "mul2": 0.1
+      }
     }
   },
   "traits": {
@@ -65,7 +61,7 @@
     "rod": [
       {
         "name": "silentgear:brittle",
-        "level": 1
+        "level": 2
       },
       {
         "name": "silentgear:crushing",

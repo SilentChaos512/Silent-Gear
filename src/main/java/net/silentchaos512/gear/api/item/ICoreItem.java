@@ -158,7 +158,13 @@ public interface ICoreItem extends ItemLike, IStatItem {
     @Deprecated
     @OnlyIn(Dist.CLIENT)
     default ItemColor getItemColors() {
-        return (stack, tintIndex) -> Color.VALUE_WHITE;
+//        return (stack, tintIndex) -> Color.VALUE_WHITE;
+        return (stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return GearData.getBlendedColor(stack, PartType.MAIN);
+            }
+            return Color.VALUE_WHITE;
+        };
     }
 
     default boolean hasTexturesFor(PartType partType) {
