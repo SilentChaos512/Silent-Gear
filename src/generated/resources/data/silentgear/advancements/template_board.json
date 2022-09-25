@@ -1,5 +1,5 @@
 {
-  "parent": "silentgear:survival_tool",
+  "parent": "silentgear:root",
   "criteria": {
     "get_item": {
       "conditions": {

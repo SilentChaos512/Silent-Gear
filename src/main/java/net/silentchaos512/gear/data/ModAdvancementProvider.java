@@ -120,7 +120,7 @@ public class ModAdvancementProvider implements DataProvider {
                     .addCriterion("kachink", genericInt(DurabilityTrait.TRIGGER_BRITTLE, 1))
                     .save(consumer, id("kachink2"));
 
-            Advancement crudeTool = Advancement.Builder.advancement()
+            /*Advancement crudeTool = Advancement.Builder.advancement()
                     .parent(root)
                     .display(CraftingItems.ROUGH_ROD, title("crude_tool"), description("crude_tool"), null, FrameType.TASK, true, true, false)
                     .addCriterion("tool_has_rough_rod", genericInt(GearEvents.CRAFTED_WITH_ROUGH_ROD, 1))
@@ -131,8 +131,8 @@ public class ModAdvancementProvider implements DataProvider {
                     .addCriterion("knife", getItem(ModItems.KNIFE))
                     .addCriterion("dagger", getItem(ModItems.DAGGER))
                     .requirements(RequirementsStrategy.OR)
-                    .save(consumer, id("survival_tool"));
-            Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, survivalTool);
+                    .save(consumer, id("survival_tool"));*/
+            Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, root);
 
             Advancement blueprintPaper = simpleGetItem(consumer, CraftingItems.BLUEPRINT_PAPER, templateBoard);
             Advancement repairKit;

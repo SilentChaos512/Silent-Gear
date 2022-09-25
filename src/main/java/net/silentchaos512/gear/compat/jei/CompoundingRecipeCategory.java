@@ -78,10 +78,10 @@ public class CompoundingRecipeCategory implements IRecipeCategory<CompoundingRec
     public void setRecipe(IRecipeLayoutBuilder builder, CompoundingRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < info.getInputSlotCount(); ++i) {
             List<ItemStack> items = Arrays.asList(recipe.getIngredients().get(i).getItems());
-            builder.addSlot(RecipeIngredientRole.INPUT, 18 * i + 16 - GUI_START_X, 34 - GUI_START_Y)
+            builder.addSlot(RecipeIngredientRole.INPUT, 18 * i + 17 - GUI_START_X, 35 - GUI_START_Y)
                     .addIngredients(VanillaTypes.ITEM_STACK, shiftIngredients(items, 3 * i));
         }
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 125 - GUI_START_X, 34 - GUI_START_Y)
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 126 - GUI_START_X, 35 - GUI_START_Y)
                         .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem()));
     }
 

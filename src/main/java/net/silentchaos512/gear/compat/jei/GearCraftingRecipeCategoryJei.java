@@ -64,13 +64,13 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CraftingRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 94, 18)
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
                 .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem()));
 
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
-                int index = 1 + x + y * 3;
-                IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.INPUT, x * 18, y * 18);
+                int index = x + y * 3;
+                IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.INPUT, x * 18 + 1, y * 18 + 1);
                 if (index < recipe.getIngredients().size()) {
                     slotBuilder.addIngredients(recipe.getIngredients().get(index));
                 }

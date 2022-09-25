@@ -1,9 +1,8 @@
 {
-  "type": "silentgear:damage_item",
-  "damage": 10,
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:hammers"
+      "tag": "forge:obsidian"
     },
     {
       "item": "minecraft:shulker_shell"

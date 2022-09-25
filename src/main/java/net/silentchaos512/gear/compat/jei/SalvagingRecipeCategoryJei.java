@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingRecipe> {
-    private static final int GUI_START_X = 8;
-    private static final int GUI_START_Y = 16;
+    private static final int GUI_START_X = 9;
+    private static final int GUI_START_Y = 17;
     private static final int GUI_WIDTH = 114 - GUI_START_X;
     private static final int GUI_HEIGHT = 69 - GUI_START_Y;
 
@@ -69,9 +69,9 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
 
         List<ItemStack> results = recipe.getPossibleResults(new SimpleContainer(1));
 
-        for (int i = 1; i < 10 && i < results.size(); ++i) {
-            int x = 18 * ((i - 1) % 3) + 61 - GUI_START_X;
-            int y = 18 * ((i - 1) / 3) + 16 - GUI_START_Y;
+        for (int i = 0; i < 9 && i < results.size(); ++i) {
+            int x = 18 * (i % 3) + 61 - GUI_START_X;
+            int y = 18 * (i / 3) + 16 - GUI_START_Y;
             builder.addSlot(RecipeIngredientRole.OUTPUT, x, y)
                     .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(results.get(i)));
         }

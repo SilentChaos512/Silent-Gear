@@ -61,9 +61,9 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, GraderRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
+        builder.addSlot(RecipeIngredientRole.INPUT, 2, 2)
                 .addIngredients(VanillaTypes.ITEM_STACK, getMaterials());
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 21)
+        builder.addSlot(RecipeIngredientRole.INPUT, 2, 22)
                 .addIngredients(VanillaTypes.ITEM_STACK, getCatalysts());
     }
 

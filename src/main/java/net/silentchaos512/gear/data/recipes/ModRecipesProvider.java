@@ -735,8 +735,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addCriterion("has_template_board", has(ModTags.Items.TEMPLATE_BOARDS))
                 .build(consumer);
 
-        damageGear(CraftingItems.GLOWING_DUST, 4, 4)
+        /*damageGear(CraftingItems.GLOWING_DUST, 4, 4)
                 .addIngredient(ModTags.Items.HAMMERS)
+                .addIngredient(Tags.Items.DUSTS_GLOWSTONE, 2)
+                .addIngredient(Tags.Items.GEMS_QUARTZ)
+                .build(consumer);*/
+
+        shapelessBuilder(CraftingItems.GLOWING_DUST, 4)
+                .addIngredient(Items.STICK)
                 .addIngredient(Tags.Items.DUSTS_GLOWSTONE, 2)
                 .addIngredient(Tags.Items.GEMS_QUARTZ)
                 .build(consumer);
@@ -746,13 +752,23 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addIngredient(Tags.Items.COBBLESTONE)
                 .build(consumer);
 
-        damageGear(CraftingItems.TEMPLATE_BOARD, 6, 1)
+        /*damageGear(CraftingItems.TEMPLATE_BOARD, 6, 1)
                 .addIngredient(ModTags.Items.KNIVES)
+                .addIngredient(ItemTags.LOGS)
+                .build(consumer);*/
+
+        shapelessBuilder(CraftingItems.TEMPLATE_BOARD, 6)
+                .addIngredient(Items.FLINT)
                 .addIngredient(ItemTags.LOGS)
                 .build(consumer);
 
-        damageGear(CraftingItems.CRUSHED_SHULKER_SHELL, 1, 10)
+        /*damageGear(CraftingItems.CRUSHED_SHULKER_SHELL, 1, 10)
                 .addIngredient(ModTags.Items.HAMMERS)
+                .addIngredient(Items.SHULKER_SHELL)
+                .build(consumer);*/
+
+        shapelessBuilder(CraftingItems.CRUSHED_SHULKER_SHELL, 1)
+                .addIngredient(Tags.Items.OBSIDIAN)
                 .addIngredient(Items.SHULKER_SHELL)
                 .build(consumer);
 

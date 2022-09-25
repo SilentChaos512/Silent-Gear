@@ -1,9 +1,8 @@
 {
-  "type": "silentgear:damage_item",
-  "damage": 1,
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:knives"
+      "item": "minecraft:flint"
     },
     {
       "tag": "minecraft:logs"
