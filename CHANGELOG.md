@@ -3,7 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.10.15] - 2022-09-28
+### Added
+- Command to set grades on a held material item, `/sgear_grade set <grade>`
+- More properties for the `silentgear:material` recipe ingredient
+  - `material` - allows a specific material to be specified (ie, `silentgear:copper`)
+  - `min_grade` and `max_grade` - allows only materials of a certain grade range to be used
 ### Fixed
 - Broken bows being able to shoot arrows [#499]
 

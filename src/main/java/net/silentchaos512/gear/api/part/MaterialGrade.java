@@ -94,6 +94,12 @@ public enum MaterialGrade {
         }
     }
 
+    public ItemStack copyWithGrade(@Nonnull ItemStack stack) {
+        ItemStack ret = stack.copy();
+        setGradeOnStack(ret);
+        return ret;
+    }
+
     public MutableComponent getDisplayName() {
         return new TranslatableComponent("stat.silentgear.grade." + name());
     }

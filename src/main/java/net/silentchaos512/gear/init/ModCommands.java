@@ -10,6 +10,7 @@ public final class ModCommands {
 
     public static void registerAll(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        GradeCommand.register(dispatcher);
         SetDamageCommand.register(dispatcher);
         MaterialsCommand.register(dispatcher);
         PartsCommand.register(dispatcher);

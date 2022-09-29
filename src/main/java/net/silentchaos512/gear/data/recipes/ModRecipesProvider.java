@@ -17,6 +17,7 @@ import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.crafting.ingredient.BlueprintIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
@@ -42,6 +43,8 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class ModRecipesProvider extends LibRecipeProvider {
+    private static final boolean ADD_TEST_RECIPES = false;
+
     public ModRecipesProvider(DataGenerator generatorIn) {
         super(generatorIn, SilentGear.MOD_ID);
     }
@@ -95,6 +98,21 @@ public class ModRecipesProvider extends LibRecipeProvider {
         registerPressing(consumer);
         registerSmithing(consumer);
         registerSalvaging(consumer);
+
+        if (ADD_TEST_RECIPES) {
+            registerTestRecipes(consumer);
+        }
+    }
+
+    private void registerTestRecipes(Consumer<FinishedRecipe> consumer) {
+        shapedBuilder(Items.BUCKET)
+                .patternLine("# #")
+                .patternLine(" # ")
+                .key('#', PartMaterialIngredient.builder(PartType.MAIN)
+                        .withMaterial(DataResource.material("copper"))
+                        .withGrade(MaterialGrade.A, null).build()
+                )
+                .build(consumer, modId("graded_mat_test"));
     }
 
     private void registerSpecialRecipes(Consumer<FinishedRecipe> consumer) {
@@ -731,8 +749,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
     private void registerPressing(Consumer<FinishedRecipe> consumer) {
         ExtendedSingleItemRecipeBuilder.builder(ModRecipes.PRESSING_MATERIAL.get(),
-                PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
-                ModItems.SHEET_METAL, 2)
+                        PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
+                        ModItems.SHEET_METAL, 2)
                 .build(consumer);
     }
 

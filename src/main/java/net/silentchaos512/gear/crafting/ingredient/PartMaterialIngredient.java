@@ -14,13 +14,16 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
+import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -32,6 +35,9 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
     private final GearType gearType;
     private final int minTier;
     private final int maxTier;
+    private MaterialGrade minGrade = MaterialGrade.NONE;
+    private MaterialGrade maxGrade = MaterialGrade.NONE;
+    @Nullable private DataResource<IMaterial> material;
     private final Set<IMaterialCategory> categories = new LinkedHashSet<>();
 
     private PartMaterialIngredient(PartType partType, GearType gearType, int minTier, int maxTier) {
@@ -66,6 +72,14 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
         PartMaterialIngredient ret = new PartMaterialIngredient(partType, gearType, minTier, maxTier);
         ret.categories.addAll(Arrays.asList(categories));
         return ret;
+    }
+
+    public static Builder builder(PartType partType) {
+        return builder(partType, GearType.TOOL);
+    }
+
+    public static Builder builder(PartType partType, GearType gearType) {
+        return new Builder(partType, gearType);
     }
 
     @Override
@@ -105,17 +119,23 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        MaterialInstance material = MaterialInstance.from(stack);
-        if (material == null) return false;
+        MaterialInstance mat = MaterialInstance.from(stack);
+        if (mat == null) return false;
 
-        int tier = material.getTier(this.partType);
-        return material.get().isCraftingAllowed(material, partType, gearType)
-                && (categories.isEmpty() || material.hasAnyCategory(categories))
-                && tierMatches(tier);
+        return mat.get().isCraftingAllowed(mat, partType, gearType)
+                && (categories.isEmpty() || mat.hasAnyCategory(categories))
+                && (this.material == null || this.material.getId().equals(mat.getId()))
+                && tierMatches(mat.getTier(this.partType))
+                && gradesMatch(MaterialGrade.fromStack(stack));
     }
 
     private boolean tierMatches(int tier) {
         return tier >= this.minTier && tier <= this.maxTier;
+    }
+
+    private boolean gradesMatch(MaterialGrade grade) {
+        return grade.ordinal() >= this.minGrade.ordinal()
+                && (this.maxGrade == MaterialGrade.NONE || grade.ordinal() <= this.maxGrade.ordinal());
     }
 
     @Override
@@ -125,10 +145,12 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
             return materials.stream()
                     .map(MaterialInstance::of)
                     .filter(mat -> mat.get().isCraftingAllowed(mat, partType, gearType))
+                    .filter(mat -> this.material == null || this.material.getId().equals(mat.getId()))
                     .filter(mat -> categories.isEmpty() || mat.hasAnyCategory(categories))
                     .filter(mat -> tierMatches(mat.getTier(this.partType)))
                     .flatMap(mat -> Stream.of(mat.get().getIngredient().getItems()))
                     .filter(stack -> !stack.isEmpty())
+                    .map(stack -> this.minGrade != MaterialGrade.NONE ? this.minGrade.copyWithGrade(stack) : stack)
                     .toArray(ItemStack[]::new);
         }
         return super.getItems();
@@ -157,6 +179,9 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
         if (this.gearType != GearType.TOOL) {
             json.addProperty("gear_type", this.gearType.getName());
         }
+        if (this.material != null) {
+            json.addProperty("material", this.material.getId().toString());
+        }
         if (!this.categories.isEmpty()) {
             JsonArray array = new JsonArray();
             this.categories.forEach(cat -> array.add(cat.getName()));
@@ -167,6 +192,12 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
         }
         if (this.maxTier < Integer.MAX_VALUE) {
             json.addProperty("max_tier", this.maxTier);
+        }
+        if (this.minGrade != MaterialGrade.NONE) {
+            json.addProperty("min_grade", this.minGrade.name());
+        }
+        if (this.maxGrade != MaterialGrade.NONE) {
+            json.addProperty("max_grade", this.maxGrade.name());
         }
         return json;
     }
@@ -199,8 +230,15 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
 
             int minTier = buffer.readVarInt();
             int maxTier = buffer.readVarInt();
+            MaterialGrade minGrade = EnumUtils.byOrdinal(buffer.readByte(), MaterialGrade.NONE);
+            MaterialGrade maxGrade = EnumUtils.byOrdinal(buffer.readByte(), MaterialGrade.NONE);
+            DataResource<IMaterial> material = buffer.readBoolean() ? DataResource.material(buffer.readResourceLocation()) : null;
 
-            return of(partType, gearType, minTier, maxTier, categories);
+            PartMaterialIngredient ret = of(partType, gearType, minTier, maxTier, categories);
+            ret.minGrade = minGrade;
+            ret.maxGrade = maxGrade;
+            ret.material = material;
+            return ret;
         }
 
         @Override
@@ -231,9 +269,17 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
 
             int minTier = GsonHelper.getAsInt(json, "min_tier", 0);
             int maxTier = GsonHelper.getAsInt(json, "max_tier", Integer.MAX_VALUE);
+            MaterialGrade minGrade = MaterialGrade.fromString(GsonHelper.getAsString(json, "min_grade", "NONE"));
+            MaterialGrade maxGrade = MaterialGrade.fromString(GsonHelper.getAsString(json, "max_grade", "NONE"));
+            DataResource<IMaterial> material = json.has("material")
+                    ? DataResource.material(new ResourceLocation(GsonHelper.getAsString(json, "material")))
+                    : null;
 
             PartMaterialIngredient ret = of(type, gearType, minTier, maxTier);
             ret.categories.addAll(categories);
+            ret.minGrade = minGrade;
+            ret.maxGrade = maxGrade;
+            ret.material = material;
             return ret;
         }
 
@@ -245,6 +291,63 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
             ingredient.categories.forEach(cat -> buffer.writeUtf(cat.getName()));
             buffer.writeVarInt(ingredient.minTier);
             buffer.writeVarInt(ingredient.maxTier);
+            buffer.writeByte(ingredient.minGrade.ordinal());
+            buffer.writeByte(ingredient.maxGrade.ordinal());
+            buffer.writeBoolean(ingredient.material != null);
+            if (ingredient.material != null) {
+                buffer.writeResourceLocation(ingredient.material.getId());
+            }
+        }
+    }
+
+    public static class Builder {
+        private final PartType partType;
+        private final GearType gearType;
+        private int minTier = 0;
+        private int maxTier = Integer.MAX_VALUE;
+        private MaterialGrade minGrade = MaterialGrade.NONE;
+        private MaterialGrade maxGrade = MaterialGrade.NONE;
+        private DataResource<IMaterial> material;
+        private final Set<IMaterialCategory> categories = new LinkedHashSet<>();
+
+        public Builder(PartType partType, GearType gearType) {
+            this.partType = partType;
+            this.gearType = gearType;
+        }
+
+        public Builder withCategories(IMaterialCategory... categories) {
+            this.categories.addAll(Arrays.asList(categories));
+            return this;
+        }
+
+        public Builder withTier(int min, int max) {
+            this.minTier = min;
+            this.maxTier = max;
+            return this;
+        }
+
+        public Builder withGrade(@Nullable MaterialGrade min, @Nullable MaterialGrade max) {
+            if (min != null) {
+                this.minGrade = min;
+            }
+            if (max != null) {
+                this.maxGrade = max;
+            }
+            return this;
+        }
+
+        public Builder withMaterial(DataResource<IMaterial> material) {
+            this.material = material;
+            return this;
+        }
+
+        public PartMaterialIngredient build() {
+            PartMaterialIngredient ret = new PartMaterialIngredient(partType, gearType, minTier, maxTier);
+            ret.categories.addAll(this.categories);
+            ret.minGrade = this.minGrade;
+            ret.maxGrade = this.maxGrade;
+            ret.material = material;
+            return ret;
         }
     }
 }
