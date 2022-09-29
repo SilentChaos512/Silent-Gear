@@ -1,6 +1,7 @@
 {
   "credit": "Made with Blockbench",
   "parent": "block/block",
+  "render_type": "cutout",
   "textures": {
     "0": "silentgear:block/glass_pieces",
     "1": "silentgear:block/tyrian_steel_block",

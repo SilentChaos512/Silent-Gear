@@ -7,11 +7,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
@@ -223,26 +220,6 @@ public final class ModBlocks {
     private ModBlocks() {}
 
     static void register() {}
-
-    @OnlyIn(Dist.CLIENT)
-    public static void registerRenderTypes(FMLClientSetupEvent event) {
-        /*ItemBlockRenderTypes.setRenderLayer(FLAX_PLANT.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(FLUFFY_PLANT.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(MATERIAL_GRADER.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(METAL_ALLOYER.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(METAL_PRESS.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(NETHERWOOD_DOOR.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(NETHERWOOD_SAPLING.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(NETHERWOOD_TRAPDOOR.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(POTTED_NETHERWOOD_SAPLING.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(RECRYSTALLIZER.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SALVAGER.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(STARLIGHT_CHARGER.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(STONE_TORCH.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(WALL_STONE_TORCH.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(WILD_FLAX_PLANT.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(WILD_FLUFFY_PLANT.get(), RenderType.cutout());*/
-    }
 
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {

@@ -10,7 +10,6 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.Registration;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.util.Const;
@@ -31,8 +30,8 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
         ModelFile itemGenerated = getExistingFile(mcLoc("item/generated"));
         ModelFile itemHandheld = getExistingFile(mcLoc("item/handheld"));
 
-        Registration.getItems(CompoundPartItem.class).forEach(item ->
-                partBuilder(item).parent(itemGenerated));
+        /*Registration.getItems(CompoundPartItem.class).forEach(item ->
+                partBuilder(item).parent(itemGenerated));*/
 
         fragmentBuilder(ModItems.FRAGMENT.get()).parent(itemGenerated);
 

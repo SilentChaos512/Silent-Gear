@@ -1,6 +1,7 @@
 {
   "credit": "Made with Blockbench",
   "parent": "block/block",
+  "render_type": "cutout",
   "textures": {
     "0": "silentgear:block/azure_electrum_block",
     "1": "block/gold_block",

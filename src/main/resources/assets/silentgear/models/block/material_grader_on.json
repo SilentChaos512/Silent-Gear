@@ -1,6 +1,7 @@
 {
   "credit": "Made with Blockbench",
   "parent": "minecraft:block/orientable",
+  "render_type": "cutout",
   "textures": {
     "0": "silentgear:block/blaze_gold_block",
     "1": "block/iron_block",

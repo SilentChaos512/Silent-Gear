@@ -54,7 +54,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         axisBlock(ModBlocks.STRIPPED_NETHERWOOD_LOG.get(), modLoc("block/stripped_netherwood_log"), modLoc("block/stripped_netherwood_log_top"));
         simpleBlock(ModBlocks.NETHERWOOD_WOOD.get(), models().cubeAll("netherwood_wood", modLoc("block/netherwood_log")));
         simpleBlock(ModBlocks.STRIPPED_NETHERWOOD_WOOD.get(), models().cubeAll("stripped_netherwood_wood", modLoc("block/stripped_netherwood_log")));
-        simpleBlock(ModBlocks.NETHERWOOD_SAPLING.get(), models().cross("netherwood_sapling", modLoc("block/netherwood_sapling")));
+        simpleBlock(ModBlocks.NETHERWOOD_SAPLING.get(), models().cross("netherwood_sapling", modLoc("block/netherwood_sapling")).renderType("cutout"));
         ResourceLocation planks = modLoc("block/netherwood_planks");
         slabBlock(ModBlocks.NETHERWOOD_SLAB.get(), planks, planks);
         stairsBlock(ModBlocks.NETHERWOOD_STAIRS.get(), planks);
@@ -109,18 +109,18 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.FLAX_PLANT.get()).forAllStates(state -> {
             int i = cropAgeToIndex(state.getValue(ModCropBlock.AGE));
             return ConfiguredModel.builder()
-                    .modelFile(models().crop("flax_plant" + i, modLoc("block/flax_plant" + i)))
+                    .modelFile(models().crop("flax_plant" + i, modLoc("block/flax_plant" + i)).renderType("cutout"))
                     .build();
         });
-        simpleBlock(ModBlocks.WILD_FLAX_PLANT.get(), models().crop("wild_flax_plant", modLoc("block/flax_plant3")));
+        simpleBlock(ModBlocks.WILD_FLAX_PLANT.get(), models().crop("wild_flax_plant", modLoc("block/flax_plant3")).renderType("cutout"));
 
         getVariantBuilder(ModBlocks.FLUFFY_PLANT.get()).forAllStates(state -> {
             int i = cropAgeToIndex(state.getValue(ModCropBlock.AGE));
             return ConfiguredModel.builder()
-                    .modelFile(models().crop("fluffy_plant" + i, modLoc("block/fluffy_plant" + i)))
+                    .modelFile(models().crop("fluffy_plant" + i, modLoc("block/fluffy_plant" + i)).renderType("cutout"))
                     .build();
         });
-        simpleBlock(ModBlocks.WILD_FLUFFY_PLANT.get(), models().crop("wild_fluffy_plant", modLoc("block/fluffy_plant3")));
+        simpleBlock(ModBlocks.WILD_FLUFFY_PLANT.get(), models().crop("wild_fluffy_plant", modLoc("block/fluffy_plant3")).renderType("cutout"));
     }
 
     private ModelFile.ExistingModelFile getExistingModel(String blockName) {

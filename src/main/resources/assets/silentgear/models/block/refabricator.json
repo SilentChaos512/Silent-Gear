@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/orientable",
+	"render_type": "cutout",
 	"textures": {
 		"0": "block/oak_planks",
 		"1": "block/stripped_dark_oak_log",

@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.3] - 2022-09-28
+### Added
+- The `/sgear_grade command` added in 2.10.15
+- `silentgear:material` recipe ingredient improvements from 2.10.15
+### Fixed
+- Transparency issues with some blocks [#537]
+
 ## [3.0.2] - 2022-09-25
 ### Changed
 - Replaced gear-damaging recipes with temporary substitutes
