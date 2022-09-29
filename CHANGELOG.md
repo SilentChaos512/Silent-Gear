@@ -26,9 +26,12 @@ Minecraft 1.19.2 port. Beginning of a compatibility-breaking overhaul.
 - Ore generation is now handled with data files. World generation config settings removed.
 - "Enchantability" and "chargeability" stats renamed to "enchantment value" and "charging value"
 
-## [Unreleased 1.18?]
-### Fixed
-- Broken bows being able to shoot arrows [#499]
+## [2.10.15] - 2022-09-28
+### Added
+- Command to set grades on a held material item, `/sgear_grade set <grade>`
+- More properties for the `silentgear:material` recipe ingredient
+  - `material` - allows a specific material to be specified (ie, `silentgear:copper`)
+  - `min_grade` and `max_grade` - allows only materials of a certain grade range to be used
 
 ## [2.10.14] - 2022-08-18
 ### Changed

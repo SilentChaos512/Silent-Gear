@@ -17,6 +17,7 @@ import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.crafting.ingredient.BlueprintIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
@@ -41,6 +42,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class ModRecipesProvider extends LibRecipeProvider {
+    private static final boolean ADD_TEST_RECIPES = false;
+
     public ModRecipesProvider(DataGenerator generatorIn) {
         super(generatorIn, SilentGear.MOD_ID);
     }
@@ -92,6 +95,21 @@ public class ModRecipesProvider extends LibRecipeProvider {
         registerPressing(consumer);
         registerSmithing(consumer);
         registerSalvaging(consumer);
+
+        if (ADD_TEST_RECIPES) {
+            registerTestRecipes(consumer);
+        }
+    }
+
+    private void registerTestRecipes(Consumer<FinishedRecipe> consumer) {
+        shapedBuilder(Items.BUCKET)
+                .patternLine("# #")
+                .patternLine(" # ")
+                .key('#', PartMaterialIngredient.builder(PartType.MAIN)
+                        .withMaterial(DataResource.material("copper"))
+                        .withGrade(MaterialGrade.A, null).build()
+                )
+                .build(consumer, modId("graded_mat_test"));
     }
 
     private void registerSpecialRecipes(Consumer<FinishedRecipe> consumer) {
