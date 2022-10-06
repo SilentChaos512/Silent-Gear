@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "silentgear:item/blueprint_chestplate",
+    "layer0": "silentgear:item/chestplate/main_generic_hc",
     "layer1": "silentgear:item/chestplate/_highlight"
   }
 }

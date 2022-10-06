@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "silentgear:item/blueprint_fishing_rod",
-    "layer1": "silentgear:item/fishing_rod/_highlight"
+    "layer0": "silentgear:item/fishing_rod/rod_generic_lc",
+    "layer1": "silentgear:item/fishing_rod/main_generic_hc",
+    "layer2": "silentgear:item/fishing_rod/_highlight",
+    "layer3": "silentgear:item/fishing_rod/bowstring_string"
   }
 }

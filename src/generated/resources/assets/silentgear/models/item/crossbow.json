@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "silentgear:item/blueprint_crossbow",
-    "layer1": "silentgear:item/crossbow/_highlight"
+    "layer0": "silentgear:item/crossbow/rod_generic_lc",
+    "layer1": "silentgear:item/crossbow/main_generic_hc",
+    "layer2": "silentgear:item/crossbow/_highlight",
+    "layer3": "silentgear:item/crossbow/bowstring_string"
   }
 }

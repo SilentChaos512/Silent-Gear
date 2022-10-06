@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "silentgear:item/blueprint_ring",
-    "layer1": "silentgear:item/ring/_highlight"
+    "layer0": "silentgear:item/ring/main_generic_hc",
+    "layer1": "silentgear:item/ring/_highlight",
+    "layer2": "silentgear:item/ring/adornment_generic",
+    "layer3": "silentgear:item/ring/adornment_highlight"
   }
 }

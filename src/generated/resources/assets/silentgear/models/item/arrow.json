@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "silentgear:item/blueprint_arrow",
-    "layer1": "silentgear:item/arrow/_highlight"
+    "layer0": "silentgear:item/arrow/rod_generic_lc",
+    "layer1": "silentgear:item/arrow/main_generic_hc",
+    "layer2": "silentgear:item/arrow/_highlight",
+    "layer3": "silentgear:item/arrow/fletching_generic"
   }
 }

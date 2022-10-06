@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "silentgear:item/blueprint_slingshot",
-    "layer1": "silentgear:item/slingshot/_highlight"
+    "layer0": "silentgear:item/slingshot/rod_generic_lc",
+    "layer1": "silentgear:item/slingshot/main_generic_hc",
+    "layer2": "silentgear:item/slingshot/_highlight",
+    "layer3": "silentgear:item/slingshot/bowstring_string"
   }
 }

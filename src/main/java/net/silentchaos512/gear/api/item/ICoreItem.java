@@ -159,11 +159,13 @@ public interface ICoreItem extends ItemLike, IStatItem {
     @OnlyIn(Dist.CLIENT)
     default ItemColor getItemColors() {
 //        return (stack, tintIndex) -> Color.VALUE_WHITE;
+        //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
-            if (tintIndex == 0) {
-                return GearData.getBlendedColor(stack, PartType.MAIN);
-            }
-            return Color.VALUE_WHITE;
+            return switch (tintIndex) {
+                case 0 -> GearData.getBlendedColor(stack, PartType.ROD);
+                case 1 -> GearData.getBlendedColor(stack, PartType.MAIN);
+                default -> Color.VALUE_WHITE;
+            };
         };
     }
 

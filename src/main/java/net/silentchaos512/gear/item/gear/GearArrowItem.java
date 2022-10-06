@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -19,6 +20,8 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IPartData;
@@ -31,6 +34,7 @@ import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -245,5 +249,19 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
     @Override
     public int getBarColor(ItemStack stack) {
         return GearHelper.getBarColor(stack);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public ItemColor getItemColors() {
+//        return (stack, tintIndex) -> Color.VALUE_WHITE;
+        //noinspection OverlyLongLambda
+        return (stack, tintIndex) -> {
+            return switch (tintIndex) {
+                case 0 -> GearData.getBlendedColor(stack, PartType.ROD);
+                case 1 -> GearData.getBlendedColor(stack, PartType.MAIN);
+                case 3 -> GearData.getBlendedColor(stack, PartType.FLETCHING);
+                default -> Color.VALUE_WHITE;
+            };
+        };
     }
 }

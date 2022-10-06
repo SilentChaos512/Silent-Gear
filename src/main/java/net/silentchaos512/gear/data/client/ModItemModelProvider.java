@@ -139,19 +139,19 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGear(ModItems.MATTOCK, itemHandheld);
         tempGear(ModItems.SICKLE, itemHandheld);
         tempGear(ModItems.SHEARS, itemHandheld);
-        tempGear(ModItems.FISHING_ROD, itemHandheld);
-        tempGear(ModItems.BOW, itemHandheld);
-        tempGear(ModItems.CROSSBOW, itemHandheld);
-        tempGear(ModItems.SLINGSHOT, itemHandheld);
+        tempGearBow(ModItems.FISHING_ROD, itemHandheld);
+        tempGearBow(ModItems.BOW, itemHandheld);
+        tempGearBow(ModItems.CROSSBOW, itemHandheld);
+        tempGearBow(ModItems.SLINGSHOT, itemHandheld);
         tempGear(ModItems.SHIELD, itemGenerated);
-        tempGear(ModItems.ARROW, itemGenerated);
-        tempGear(ModItems.HELMET, itemGenerated);
-        tempGear(ModItems.CHESTPLATE, itemGenerated);
-        tempGear(ModItems.LEGGINGS, itemGenerated);
-        tempGear(ModItems.BOOTS, itemGenerated);
-        tempGear(ModItems.ELYTRA, itemGenerated);
-        tempGear(ModItems.RING, itemGenerated);
-        tempGear(ModItems.BRACELET, itemGenerated);
+        tempGearArrow(ModItems.ARROW, itemGenerated);
+        tempGearArmor(ModItems.HELMET, itemGenerated);
+        tempGearArmor(ModItems.CHESTPLATE, itemGenerated);
+        tempGearArmor(ModItems.LEGGINGS, itemGenerated);
+        tempGearArmor(ModItems.BOOTS, itemGenerated);
+        tempGearElytra(ModItems.ELYTRA, itemGenerated);
+        tempGearCurio(ModItems.RING, itemGenerated);
+        tempGearCurio(ModItems.BRACELET, itemGenerated);
         // Parts
         tempMainPart(ModItems.SWORD_BLADE);
         tempMainPart(ModItems.KATANA_BLADE);
@@ -199,8 +199,56 @@ public class ModItemModelProvider extends ItemModelProvider {
         String name = item.get().getGearType().getName();
         return getBuilder(item.getId().getPath())
                 .parent(parent)
-                .texture("layer0", "item/blueprint_" + name)
+                .texture("layer0", "item/" + name + "/rod_generic_lc")
+                .texture("layer1", "item/" + name + "/main_generic_hc")
+                .texture("layer2", "item/" + name + "/_highlight");
+    }
+
+    private ItemModelBuilder tempGearBow(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+        String name = item.get().getGearType().getName();
+        return getBuilder(item.getId().getPath())
+                .parent(parent)
+                .texture("layer0", "item/" + name + "/rod_generic_lc")
+                .texture("layer1", "item/" + name + "/main_generic_hc")
+                .texture("layer2", "item/" + name + "/_highlight")
+                .texture("layer3", "item/" + name + "/bowstring_string");
+    }
+
+    private ItemModelBuilder tempGearCurio(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+        String name = item.get().getGearType().getName();
+        return getBuilder(item.getId().getPath())
+                .parent(parent)
+                .texture("layer0", "item/" + name + "/main_generic_hc")
+                .texture("layer1", "item/" + name + "/_highlight")
+                .texture("layer2", "item/" + name + "/adornment_generic")
+                .texture("layer3", "item/" + name + "/adornment_highlight");
+    }
+
+    private ItemModelBuilder tempGearArmor(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+        String name = item.get().getGearType().getName();
+        return getBuilder(item.getId().getPath())
+                .parent(parent)
+                .texture("layer0", "item/" + name + "/main_generic_hc")
                 .texture("layer1", "item/" + name + "/_highlight");
+    }
+
+    private ItemModelBuilder tempGearElytra(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+        String name = item.get().getGearType().getName();
+        return getBuilder(item.getId().getPath())
+                .parent(parent)
+                .texture("layer0", "item/" + name + "/main_generic_hc")
+                .texture("layer1", "item/" + name + "/_highlight")
+                .texture("layer2", "item/" + name + "/binding_generic");
+    }
+
+    private ItemModelBuilder tempGearArrow(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+        String name = item.get().getGearType().getName();
+        return getBuilder(item.getId().getPath())
+                .parent(parent)
+                .texture("layer0", "item/" + name + "/rod_generic_lc")
+                .texture("layer1", "item/" + name + "/main_generic_hc")
+                .texture("layer2", "item/" + name + "/_highlight")
+                .texture("layer3", "item/" + name + "/fletching_generic");
     }
 
     private ItemModelBuilder tempMainPart(ItemRegistryObject<MainPartItem> item) {

@@ -1,11 +1,16 @@
 package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.utils.Color;
 
 import java.util.Set;
 
@@ -63,5 +68,18 @@ public interface ICoreArmor extends ICoreItem {
     @Override
     default ItemStat getDurabilityStat() {
         return ItemStats.ARMOR_DURABILITY;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    default ItemColor getItemColors() {
+//        return (stack, tintIndex) -> Color.VALUE_WHITE;
+        //noinspection OverlyLongLambda
+        return (stack, tintIndex) -> {
+            return switch (tintIndex) {
+                case 0 -> GearData.getBlendedColor(stack, PartType.MAIN);
+                default -> Color.VALUE_WHITE;
+            };
+        };
     }
 }

@@ -2,15 +2,20 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.ModelPropertiesHelper;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -94,5 +99,20 @@ public interface ICoreRangedWeapon extends ICoreTool {
         return partType != PartType.FLETCHING
                 && partType != PartType.ADORNMENT
                 && partType != PartType.LINING;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    default ItemColor getItemColors() {
+//        return (stack, tintIndex) -> Color.VALUE_WHITE;
+        //noinspection OverlyLongLambda
+        return (stack, tintIndex) -> {
+            return switch (tintIndex) {
+                case 0 -> GearData.getBlendedColor(stack, PartType.ROD);
+                case 1 -> GearData.getBlendedColor(stack, PartType.MAIN);
+                case 3 -> GearData.getBlendedColor(stack, PartType.CORD);
+                default -> Color.VALUE_WHITE;
+            };
+        };
     }
 }

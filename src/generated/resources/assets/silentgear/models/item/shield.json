@@ -1,7 +1,8 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "silentgear:item/blueprint_shield",
-    "layer1": "silentgear:item/shield/_highlight"
+    "layer0": "silentgear:item/shield/rod_generic_lc",
+    "layer1": "silentgear:item/shield/main_generic_hc",
+    "layer2": "silentgear:item/shield/_highlight"
   }
 }
