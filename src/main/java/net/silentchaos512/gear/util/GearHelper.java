@@ -40,6 +40,7 @@ import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -50,9 +51,10 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.lib.advancements.LibTriggers;
+import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -661,7 +663,7 @@ public final class GearHelper {
     public static Rarity getRarity(ItemStack stack) {
         int rarity = GearData.getStatInt(stack, ItemStats.RARITY);
         if (stack.isEnchanted())
-            if(Config.Client.vanillaStyleTooltips.get()) {
+            if (Config.Client.vanillaStyleTooltips.get()) {
                 rarity += 80;
             } else {
                 rarity += 20;
@@ -685,7 +687,7 @@ public final class GearHelper {
         }
         if (!inTab) return;
 
-        Collection<ItemStack> list = new ArrayList<>();
+        /*Collection<ItemStack> list = new ArrayList<>();
         // Create a few samples of each tool type, because rendering performance is a problem on many machines.
         for (int i = 3; i <= Math.max(4, PartManager.getHighestMainPartTier()); ++i) {
             ItemStack stack = createSampleItem(item, i);
@@ -693,7 +695,14 @@ public final class GearHelper {
                 list.add(stack);
             }
         }
-        items.addAll(list);
+        items.addAll(list);*/
+
+        // Add some standard materials instead of randoms
+        items.add(createSampleItem(item, Const.Materials.IRON));
+        items.add(createSampleItem(item, Const.Materials.DIAMOND));
+        items.add(createSampleItem(item, Const.Materials.CRIMSON_STEEL));
+        items.add(createSampleItem(item, Const.Materials.AZURE_ELECTRUM));
+        items.add(createSampleItem(item, Const.Materials.TYRIAN_STEEL));
     }
 
     private static ItemStack createSampleItem(ICoreItem item, int tier) {
@@ -707,6 +716,51 @@ public final class GearHelper {
         }
         GearData.setExampleTag(result, true);
         return result;
+    }
+
+    private static ItemStack createSampleItem(ICoreItem item, DataResource<IMaterial> mainMaterial) {
+        Collection<IPartData> parts = Lists.newArrayList();
+        for (PartType partType : item.getRequiredParts()) {
+            // FIXME: Cords are missing from bows and fishing rods
+            partType.makeCompoundPart(item.getGearType(), selectMaterialForSample(partType, item.getGearType(), mainMaterial))
+                    .ifPresent(parts::add);
+        }
+        ItemStack result = new ItemStack(item);
+        GearData.writeConstructionParts(result, parts);
+        GearData.recalculateStats(result, null);
+        return result;
+    }
+
+    private static DataResource<IMaterial> selectMaterialForSample(PartType partType, GearType gearType, DataResource<IMaterial> main) {
+        if (partType == PartType.ROD) {
+            return Const.Materials.WOOD;
+        } else if (partType == PartType.CORD) {
+            return Const.Materials.STRING;
+        } else if (partType == PartType.FLETCHING) {
+            return Const.Materials.FEATHER;
+        } else if (partType == PartType.BINDING) {
+            return Const.Materials.STRING;
+        } else if (partType == PartType.ADORNMENT) {
+            return getRandomMaterial(partType, gearType);
+        }
+        return main;
+    }
+
+    private static DataResource<IMaterial> getRandomMaterial(PartType partType, GearType gearType) {
+        // Excludes children, will select a random child material (if appropriate) below
+        List<IMaterial> matsOfTier = MaterialManager.getValues(true).stream()
+                .map(MaterialInstance::of)
+                .filter(m -> m.allowedInPart(partType) && m.isCraftingAllowed(partType, gearType))
+                .map(MaterialInstance::get)
+                .toList();
+
+        if (!matsOfTier.isEmpty()) {
+            IMaterial material = matsOfTier.get(SilentGear.RANDOM.nextInt(matsOfTier.size()));
+            return DataResource.material(material.getId());
+        }
+
+        // Something went wrong...
+        return Const.Materials.EXAMPLE;
     }
 
     public static Component getDisplayName(ItemStack gear) {

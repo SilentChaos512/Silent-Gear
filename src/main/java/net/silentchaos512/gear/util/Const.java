@@ -107,10 +107,14 @@ public final class Const {
         public static final DataResource<IMaterial> AZURE_SILVER = DataResource.material("azure_silver");
         public static final DataResource<IMaterial> BLAZE_GOLD = DataResource.material("blaze_gold");
         public static final DataResource<IMaterial> CRIMSON_STEEL = DataResource.material("crimson_steel");
+        public static final DataResource<IMaterial> DIAMOND = DataResource.material("diamond");
         public static final DataResource<IMaterial> DIMERALD = DataResource.material("dimerald");
         public static final DataResource<IMaterial> EMERALD = DataResource.material("emerald");
         public static final DataResource<IMaterial> EXAMPLE = DataResource.material("example");
+        public static final DataResource<IMaterial> FEATHER = DataResource.material("feather");
+        public static final DataResource<IMaterial> IRON = DataResource.material("iron");
         public static final DataResource<IMaterial> STRING = DataResource.material("string");
+        public static final DataResource<IMaterial> TYRIAN_STEEL = DataResource.material("tyrian_steel");
 
         public static final DataResource<IMaterial> WOOD = DataResource.material("wood");
         public static final DataResource<IMaterial> WOOD_ROUGH = DataResource.material("wood/rough");
