@@ -24,6 +24,7 @@ import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -48,10 +49,15 @@ public class GearDiggerItem extends DiggerItem implements ICoreTool {
     private final Set<Material> extraMaterials;
 
     public GearDiggerItem(GearType gearType, TagKey<Block> blocks, Set<Material> extraMaterials, Properties properties) {
-        super(0, 1, GearHelper.DUMMY_TIER, blocks, properties);
+        super(0, 1, GearHelper.DEFAULT_DUMMY_TIER, blocks, properties);
         this.gearType = gearType;
         this.blocks = blocks;
         this.extraMaterials = Collections.unmodifiableSet(extraMaterials);
+    }
+
+    @Override
+    public Tier getTier() {
+        return Config.Common.isLoaded() ? Config.Common.dummyToolTier.get() : GearHelper.DEFAULT_DUMMY_TIER;
     }
 
     @Override

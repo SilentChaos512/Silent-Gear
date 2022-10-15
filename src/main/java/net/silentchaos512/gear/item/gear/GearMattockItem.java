@@ -21,6 +21,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -44,7 +45,12 @@ public class GearMattockItem extends HoeItem implements ICoreTool {
     );
 
     public GearMattockItem() {
-        super(GearHelper.DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
+        super(GearHelper.DEFAULT_DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
+    }
+
+    @Override
+    public Tier getTier() {
+        return Config.Common.isLoaded() ? Config.Common.dummyToolTier.get() : GearHelper.DEFAULT_DUMMY_TIER;
     }
 
     @Override

@@ -22,6 +22,7 @@ import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -49,9 +50,14 @@ public class GearAxeItem extends AxeItem implements ICoreTool {
     }
 
     public GearAxeItem(GearType gearType, Set<Material> extraMaterials) {
-        super(GearHelper.DUMMY_TIER, 0f, 0f, GearHelper.getBaseItemProperties());
+        super(GearHelper.DEFAULT_DUMMY_TIER, 0f, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
         this.extraMaterials = Collections.unmodifiableSet(extraMaterials);
+    }
+
+    @Override
+    public Tier getTier() {
+        return Config.Common.isLoaded() ? Config.Common.dummyToolTier.get() : GearHelper.DEFAULT_DUMMY_TIER;
     }
 
     @Override

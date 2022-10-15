@@ -18,6 +18,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreWeapon;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -29,8 +30,13 @@ public class GearSwordItem extends SwordItem implements ICoreWeapon {
     private final GearType gearType;
 
     public GearSwordItem(GearType gearType) {
-        super(GearHelper.DUMMY_TIER, 0, 0, GearHelper.getBaseItemProperties());
+        super(GearHelper.DEFAULT_DUMMY_TIER, 0, 0, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
+    }
+
+    @Override
+    public Tier getTier() {
+        return Config.Common.isLoaded() ? Config.Common.dummyToolTier.get() : GearHelper.DEFAULT_DUMMY_TIER;
     }
 
     @Override
