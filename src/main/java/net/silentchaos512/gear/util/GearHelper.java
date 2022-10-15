@@ -73,8 +73,8 @@ import java.util.stream.Stream;
  */
 public final class GearHelper {
     public static final ResourceLocation DAMAGE_FACTOR_CHANGE = SilentGear.getId("damage_factor_change");
-    public static Tier DUMMY_TIER = Tiers.WOOD;
-    public static ArmorMaterial DUMMY_ARMOR_MATERIAL = ArmorMaterials.LEATHER;
+    public static Tiers DEFAULT_DUMMY_TIER = Tiers.WOOD;
+    public static ArmorMaterials DEFAULT_DUMMY_ARMOR_MATERIAL = ArmorMaterials.LEATHER;
 
     private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;

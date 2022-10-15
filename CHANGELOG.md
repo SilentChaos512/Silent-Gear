@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Config options to set the dummy item tier and armor material for gear items. This can be used to work around mod compatibility bugs in some cases. [from 2.10.16 for MC 1.18.2]
+
 ## [3.0.4] - 2022-10-05
 ### Changed
 - Improved the temporary models for gear items [#538]

@@ -3,7 +3,9 @@ package net.silentchaos512.gear.config;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tiers;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -13,6 +15,7 @@ import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.init.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.IAoeTool;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -45,6 +48,8 @@ public final class Config {
         public static final ForgeConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeOres;
         public static final ForgeConfigSpec.IntValue damageFactorLevels;
         public static final ForgeConfigSpec.BooleanValue gearBreaksPermanently;
+        public static final ForgeConfigSpec.ConfigValue<Tiers> dummyToolTier;
+        public static final ForgeConfigSpec.ConfigValue<ArmorMaterials> dummyArmorMaterial;
         public static final ForgeConfigSpec.EnumValue<MaterialGrade> graderMedianGrade;
         public static final ForgeConfigSpec.DoubleValue graderStandardDeviation;
         public static final ForgeConfigSpec.IntValue prospectorHammerRange;
@@ -204,6 +209,18 @@ public final class Config {
                 gearBreaksPermanently = builder
                         .comment("If true, gear breaks permanently, like vanilla tools and armor")
                         .define("breaksPermanently", false);
+
+                dummyToolTier = builder
+                        .comment("The item tier assigned to gear tool items.",
+                                "Leave this alone unless you are trying to work around mod compatibility issues!",
+                                "Normally, this value is not used for anything. But some mods mistakenly check it.")
+                        .define("dummyToolTier", GearHelper.DEFAULT_DUMMY_TIER);
+
+                dummyArmorMaterial = builder
+                        .comment("The armor material assigned to the gear armor items.",
+                                "Leave this alone unless you are trying to work around mod compatibility issues!",
+                                "Normally, this value is not used for anything. But some mods mistakenly check it.")
+                        .define("dummyArmorMaterial", GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL);
 
                 {
                     builder.push("enchanting");
