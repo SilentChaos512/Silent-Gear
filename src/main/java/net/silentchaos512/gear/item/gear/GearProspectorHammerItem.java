@@ -12,7 +12,7 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.network.NetworkDirection;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.SgTags;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.ProspectingResultPacket;
 import net.silentchaos512.gear.util.GearHelper;
@@ -68,7 +68,7 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
                             .relative(Direction.DOWN, k);
 
                     BlockState state = context.getLevel().getBlockState(pos);
-                    if (state.is(ModTags.Blocks.PROSPECTOR_HAMMER_TARGETS)) {
+                    if (state.is(SgTags.Blocks.PROSPECTOR_HAMMER_TARGETS)) {
                         matches.add(state);
                     }
                 }

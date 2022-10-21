@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import net.silentchaos512.gear.init.ModContainers;
+import net.silentchaos512.gear.init.SgMenuTypes;
 import net.silentchaos512.gear.item.IContainerItem;
 
 import javax.annotation.Nonnull;
@@ -24,7 +24,7 @@ public class BlueprintBookContainer extends AbstractContainerMenu {
     }
 
     BlueprintBookContainer(int id, Inventory playerInventory, ItemStack stack) {
-        super(ModContainers.BLUEPRINT_BOOK.get(), id);
+        super(SgMenuTypes.BLUEPRINT_BOOK.get(), id);
         this.item = stack;
         IContainerItem containerItem = (IContainerItem) this.item.getItem();
         this.itemHandler = containerItem.getInventory(this.item);

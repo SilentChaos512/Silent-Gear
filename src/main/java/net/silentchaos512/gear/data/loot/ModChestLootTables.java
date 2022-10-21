@@ -10,8 +10,8 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.silentchaos512.gear.init.LootInjector;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.CraftingItems;
 
 import java.util.function.BiConsumer;
@@ -81,15 +81,15 @@ public class ModChestLootTables extends ChestLoot {
                 .add(EmptyLootItem.emptyItem()
                         .setWeight(10)
                 )
-                .add(LootItem.lootTableItem(ModBlocks.NETHERWOOD_SAPLING)
+                .add(LootItem.lootTableItem(SgBlocks.NETHERWOOD_SAPLING)
                         .setWeight(20)
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                 )
-                .add(LootItem.lootTableItem(ModItems.NETHER_BANANA)
+                .add(LootItem.lootTableItem(SgItems.NETHER_BANANA)
                         .setWeight(10)
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4)))
                 )
-                .add(LootItem.lootTableItem(ModItems.GOLDEN_NETHER_BANANA)
+                .add(LootItem.lootTableItem(SgItems.GOLDEN_NETHER_BANANA)
                         .setWeight(1)
                 )
         );

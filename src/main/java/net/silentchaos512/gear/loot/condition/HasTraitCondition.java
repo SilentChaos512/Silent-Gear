@@ -11,7 +11,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.init.ModLootStuff;
+import net.silentchaos512.gear.init.SgLoot;
 import net.silentchaos512.gear.util.DataResource;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -51,7 +51,7 @@ public class HasTraitCondition extends GearLootCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootStuff.HAS_TRAIT.get();
+        return SgLoot.HAS_TRAIT.get();
     }
 
     public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<HasTraitCondition> {

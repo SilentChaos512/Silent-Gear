@@ -31,7 +31,7 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
@@ -114,7 +114,7 @@ public class FillRepairKitRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.FILL_REPAIR_KIT.get();
+        return SgRecipes.FILL_REPAIR_KIT.get();
     }
 
     public static final class Serializer implements RecipeSerializer<FillRepairKitRecipe> {

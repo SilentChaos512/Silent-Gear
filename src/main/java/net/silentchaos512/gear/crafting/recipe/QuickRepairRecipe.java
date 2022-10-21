@@ -34,7 +34,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
@@ -83,7 +83,7 @@ public class QuickRepairRecipe extends CustomRecipe {
         if (gear.isEmpty() || repairKitEfficiency < 0.1E-9) return false;
 
         for (ItemStack stack : materials) {
-            if (!ModRecipes.isRepairMaterial(gear, stack)) {
+            if (!SgRecipes.isRepairMaterial(gear, stack)) {
                 return false;
             }
         }
@@ -103,7 +103,7 @@ public class QuickRepairRecipe extends CustomRecipe {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
-        Collection<ItemStack> mats = list.allMatches(mat -> ModRecipes.isRepairMaterial(gear, mat));
+        Collection<ItemStack> mats = list.allMatches(mat -> SgRecipes.isRepairMaterial(gear, mat));
 
         // Repair with materials first
         repairWithLooseMaterials(gear, repairKit, mats);
@@ -159,7 +159,7 @@ public class QuickRepairRecipe extends CustomRecipe {
             ItemStack stack = inv.getItem(i);
 
             if (stack.getItem() instanceof RepairKitItem) {
-                repairWithLooseMaterials(gear, repairKit, stackList.allMatches(mat -> ModRecipes.isRepairMaterial(gear, mat)));
+                repairWithLooseMaterials(gear, repairKit, stackList.allMatches(mat -> SgRecipes.isRepairMaterial(gear, mat)));
                 RepairKitItem item = (RepairKitItem) stack.getItem();
                 ItemStack copy = stack.copy();
                 item.removeRepairMaterials(copy, item.getRepairMaterials(gear, copy, RepairContext.Type.QUICK));
@@ -184,7 +184,7 @@ public class QuickRepairRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.QUICK_REPAIR.get();
+        return SgRecipes.QUICK_REPAIR.get();
     }
 
     public static final class Serializer implements RecipeSerializer<QuickRepairRecipe> {

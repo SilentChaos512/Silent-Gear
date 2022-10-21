@@ -23,7 +23,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.silentchaos512.gear.block.ModContainerBlock;
-import net.silentchaos512.gear.init.ModBlockEntities;
+import net.silentchaos512.gear.init.SgBlockEntities;
 
 import javax.annotation.Nullable;
 
@@ -85,6 +85,6 @@ public class GraderBlock extends ModContainerBlock<GraderTileEntity> implements 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, ModBlockEntities.MATERIAL_GRADER.get(), GraderTileEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.MATERIAL_GRADER.get(), GraderTileEntity::tick);
     }
 }

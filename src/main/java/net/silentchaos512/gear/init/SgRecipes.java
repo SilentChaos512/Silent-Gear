@@ -7,6 +7,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.*;
@@ -30,7 +32,10 @@ import net.silentchaos512.lib.crafting.recipe.ExtendedSingleItemRecipe;
 
 import java.util.function.Supplier;
 
-public final class ModRecipes {
+public final class SgRecipes {
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, SilentGear.MOD_ID);
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, SilentGear.MOD_ID);
+
     // Types
     public static final RegistryObject<RecipeType<CompoundingRecipe>> COMPOUNDING_TYPE = registerType(Const.COMPOUNDING);
     public static final RegistryObject<RecipeType<FabricCompoundingRecipe>> COMPOUNDING_FABRIC_TYPE = registerType(Const.COMPOUNDING_FABRIC);
@@ -88,9 +93,10 @@ public final class ModRecipes {
     public static final RegistryObject<RecipeSerializer<?>> REPAIR_ITEM_OVERRIDE = register("crafting_special_repairitem", () ->
             new SimpleRecipeSerializer<>(RepairItemRecipeFix::new));
 
-    private ModRecipes() {}
+    private SgRecipes() {
+    }
 
-    static void register() {
+    static {
         // Ingredient serializers
         CraftingHelper.register(BlueprintIngredient.Serializer.NAME, BlueprintIngredient.Serializer.INSTANCE);
         CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);
@@ -104,11 +110,11 @@ public final class ModRecipes {
     }
 
     private static RegistryObject<RecipeSerializer<?>> register(ResourceLocation id, Supplier<RecipeSerializer<?>> serializer) {
-        return Registration.RECIPE_SERIALIZERS.register(id.getPath(), serializer);
+        return RECIPE_SERIALIZERS.register(id.getPath(), serializer);
     }
 
     public static <T extends Recipe<?>> RegistryObject<RecipeType<T>> registerType(ResourceLocation name) {
-        return Registration.RECIPE_TYPES.register(name.getPath(), () -> RecipeType.simple(name));
+        return RECIPE_TYPES.register(name.getPath(), () -> RecipeType.simple(name));
     }
 
     public static boolean isRepairMaterial(ItemStack gear, ItemStack materialItem) {

@@ -49,11 +49,25 @@ class SideProxy implements IProxy {
     @Nullable private static MinecraftServer server;
 
     SideProxy() {
-        Registration.register();
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        SgBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        SgBlocks.BLOCKS.register(modEventBus);
+        SgMenuTypes.MENU_TYPES.register(modEventBus);
+        SgEnchantments.ENCHANTMENTS.register(modEventBus);
+        SgEntities.ENTITIES.register(modEventBus);
+        SgItems.ITEMS.register(modEventBus);
+        SgLoot.LOOT_CONDITIONS.register(modEventBus);
+        SgLoot.LOOT_FUNCTIONS.register(modEventBus);
+        SgLoot.LOOT_MODIFIERS.register(modEventBus);
+        SgVillages.POINTS_OF_INTEREST.register(modEventBus);
+        SgVillages.PROFESSIONS.register(modEventBus);
+        SgRecipes.RECIPE_SERIALIZERS.register(modEventBus);
+        SgRecipes.RECIPE_TYPES.register(modEventBus);
+
         Config.init();
         Network.init();
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(SideProxy::commonSetup);
         modEventBus.addListener(SideProxy::registerCapabilities);
         modEventBus.addListener(SideProxy::imcEnqueue);
@@ -61,7 +75,7 @@ class SideProxy implements IProxy {
 
 //        modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
 
-        MinecraftForge.EVENT_BUS.addListener(ModCommands::registerAll);
+        MinecraftForge.EVENT_BUS.addListener(SgCommands::registerAll);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
         MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
@@ -70,7 +84,7 @@ class SideProxy implements IProxy {
     private static void commonSetup(FMLCommonSetupEvent event) {
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
             if (Config.Common.spawnWithStarterBlueprints.get())
-                return Collections.singleton(ModItems.BLUEPRINT_PACKAGE.get().getStack());
+                return Collections.singleton(SgItems.BLUEPRINT_PACKAGE.get().getStack());
             return Collections.emptyList();
         });
 
@@ -84,8 +98,8 @@ class SideProxy implements IProxy {
     }
 
     private static void registerCompostables() {
-        LibHooks.registerCompostable(0.3f, ModItems.FLAX_SEEDS);
-        LibHooks.registerCompostable(0.3f, ModItems.FLUFFY_SEEDS);
+        LibHooks.registerCompostable(0.3f, SgItems.FLAX_SEEDS);
+        LibHooks.registerCompostable(0.3f, SgItems.FLUFFY_SEEDS);
         LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
         LibHooks.registerCompostable(0.5f, CraftingItems.FLUFFY_PUFF);
     }
@@ -181,8 +195,8 @@ class SideProxy implements IProxy {
         }
 
         private static void clientSetup(FMLClientSetupEvent event) {
-            ModBlockEntities.registerRenderers(event);
-            ModContainers.registerScreens(event);
+            SgBlockEntities.registerRenderers(event);
+            SgMenuTypes.registerScreens(event);
             ModItemModelProperties.register(event);
         }
 

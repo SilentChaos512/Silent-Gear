@@ -13,7 +13,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -49,7 +49,7 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.SMITHING_COATING.get();
+        return SgRecipes.SMITHING_COATING.get();
     }
 
     public static class Serializer implements RecipeSerializer<CoatingSmithingRecipe> {

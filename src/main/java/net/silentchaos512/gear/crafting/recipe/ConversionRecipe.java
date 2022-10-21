@@ -21,7 +21,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 
 import java.util.*;
@@ -83,7 +83,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.CONVERSION.get();
+        return SgRecipes.CONVERSION.get();
     }
 
     @Override

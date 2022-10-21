@@ -21,7 +21,7 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
     public GearCraftingRecipeCategoryJei(IGuiHelper guiHelper) {
         ResourceLocation location = SilentGear.getId("textures/gui/gear_crafting_jei.png");
         this.background = guiHelper.createDrawable(location, 0, 0, WIDTH, HEIGHT);
-        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.BLUEPRINT_PACKAGE));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(SgItems.BLUEPRINT_PACKAGE));
         this.localizedName = TextUtil.translate("gui", "category.gearCrafting");
     }
 

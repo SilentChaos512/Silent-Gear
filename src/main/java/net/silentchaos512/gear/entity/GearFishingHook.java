@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.PlayMessages;
-import net.silentchaos512.gear.init.ModEntities;
+import net.silentchaos512.gear.init.SgEntities;
 import net.silentchaos512.gear.item.gear.GearFishingRodItem;
 
 public class GearFishingHook extends FishingHook implements IEntityAdditionalSpawnData {
@@ -21,7 +21,7 @@ public class GearFishingHook extends FishingHook implements IEntityAdditionalSpa
     }
 
     public GearFishingHook(PlayMessages.SpawnEntity message, Level level) {
-        this(ModEntities.FISHING_HOOK.get(), level);
+        this(SgEntities.FISHING_HOOK.get(), level);
     }
 
     @Override

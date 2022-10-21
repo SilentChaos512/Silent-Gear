@@ -11,15 +11,15 @@ import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSi
 import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.ForkingTrunkPlacer;
-import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.init.SgBlocks;
 
 import javax.annotation.Nullable;
 
 public class NetherwoodTree extends AbstractTreeGrower {
     public static final TreeConfiguration NETHERWOOD_TREE_CONFIG = new TreeConfiguration.TreeConfigurationBuilder(
-            BlockStateProvider.simple(ModBlocks.NETHERWOOD_LOG.asBlockState()),
+            BlockStateProvider.simple(SgBlocks.NETHERWOOD_LOG.asBlockState()),
             new ForkingTrunkPlacer(5, 2, 2),
-            BlockStateProvider.simple(ModBlocks.NETHERWOOD_LEAVES.asBlockState()),
+            BlockStateProvider.simple(SgBlocks.NETHERWOOD_LEAVES.asBlockState()),
             new AcaciaFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0)),
             new TwoLayersFeatureSize(1, 0, 2))
             .ignoreVines()

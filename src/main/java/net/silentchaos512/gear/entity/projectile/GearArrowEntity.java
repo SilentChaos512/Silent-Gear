@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PlayMessages;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.init.ModEntities;
+import net.silentchaos512.gear.init.SgEntities;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -41,7 +41,7 @@ public class GearArrowEntity extends Arrow {
     }
 
     public GearArrowEntity(PlayMessages.SpawnEntity message, Level world) {
-        this(ModEntities.ARROW.get(), world);
+        this(SgEntities.ARROW.get(), world);
     }
 
     private static boolean isSameArrowStack(UUID uuid, ItemStack other) {

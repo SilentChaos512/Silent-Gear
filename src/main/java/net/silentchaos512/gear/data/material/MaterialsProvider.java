@@ -28,9 +28,9 @@ import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.gear.trait.condition.*;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.init.SgTags;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.util.Const;
@@ -96,7 +96,7 @@ public class MaterialsProvider implements DataProvider {
     //region Material builders
 
     private void addCraftedMaterials(Collection<MaterialBuilder> ret) {
-        ret.add(new MaterialBuilder(modId("sheet_metal"), 0, ModItems.SHEET_METAL)
+        ret.add(new MaterialBuilder(modId("sheet_metal"), 0, SgItems.SHEET_METAL)
                 .type(MaterialSerializers.CRAFTED, false)
                 .categories(MaterialCategories.SHEET)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, -1, StatInstance.Operation.MUL2)
@@ -151,7 +151,7 @@ public class MaterialsProvider implements DataProvider {
 
     private void addModMetals(Collection<MaterialBuilder> ret) {
         // Azure Electrum
-        ret.add(new MaterialBuilder(modId("azure_electrum"), 4, ModTags.Items.INGOTS_AZURE_ELECTRUM)
+        ret.add(new MaterialBuilder(modId("azure_electrum"), 4, SgTags.Items.INGOTS_AZURE_ELECTRUM)
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(1259, 61, 37, 109, 1.5f)
@@ -180,7 +180,7 @@ public class MaterialsProvider implements DataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0x4575E3)
         );
         // Azure Silver
-        ret.add(new MaterialBuilder(modId("azure_silver"), 3, ModTags.Items.INGOTS_AZURE_SILVER)
+        ret.add(new MaterialBuilder(modId("azure_silver"), 3, SgTags.Items.INGOTS_AZURE_SILVER)
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(197, 17, 29, 83, 1.4f)
@@ -211,7 +211,7 @@ public class MaterialsProvider implements DataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0xCBBAFF)
         );
         // Blaze Gold
-        ret.add(new MaterialBuilder(modId("blaze_gold"), 3, ModTags.Items.INGOTS_BLAZE_GOLD)
+        ret.add(new MaterialBuilder(modId("blaze_gold"), 3, SgTags.Items.INGOTS_BLAZE_GOLD)
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(69, 9, 24, 45, 1.2f)
@@ -264,7 +264,7 @@ public class MaterialsProvider implements DataProvider {
                 .displayAll(PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xD6903B)
         );
         // Crimson Iron
-        ret.add(new MaterialBuilder(modId("crimson_iron"), 3, ModTags.Items.INGOTS_CRIMSON_IRON)
+        ret.add(new MaterialBuilder(modId("crimson_iron"), 3, SgTags.Items.INGOTS_CRIMSON_IRON)
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(420, 27, 14, 31, 0.7f)
@@ -292,7 +292,7 @@ public class MaterialsProvider implements DataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0xFF6189)
         );
         // Crimson Steel
-        ret.add(new MaterialBuilder(modId("crimson_steel"), 4, ModTags.Items.INGOTS_CRIMSON_STEEL)
+        ret.add(new MaterialBuilder(modId("crimson_steel"), 4, SgTags.Items.INGOTS_CRIMSON_STEEL)
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(2400, 42, 19, 83, 0.9f)
@@ -321,7 +321,7 @@ public class MaterialsProvider implements DataProvider {
                 .displayTip(PartTextures.TIP_SHARP, 0xDC143C)
         );
         // Tyrian Steel
-        ret.add(new MaterialBuilder(modId("tyrian_steel"), 4, ModTags.Items.INGOTS_TYRIAN_STEEL)
+        ret.add(new MaterialBuilder(modId("tyrian_steel"), 4, SgTags.Items.INGOTS_TYRIAN_STEEL)
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(3652, 81, 16, 100, 1.1f)
@@ -404,7 +404,7 @@ public class MaterialsProvider implements DataProvider {
         // Iron
         ret.add(new MaterialBuilder(modId("iron"), 2, Tags.Items.INGOTS_IRON)
                 .categories(MaterialCategories.METAL)
-                .partSubstitute(PartType.ROD, ModTags.Items.RODS_IRON)
+                .partSubstitute(PartType.ROD, SgTags.Items.RODS_IRON)
                 //main
                 .mainStatsCommon(250, 15, 14, 20, 0.7f)
                 .mainStatsHarvest(2, 6)
@@ -806,7 +806,7 @@ public class MaterialsProvider implements DataProvider {
         ResourceLocation stone = modId("stone");
         ret.add(new MaterialBuilder(stone, 1, Tags.Items.COBBLESTONE)
                 .categories(MaterialCategories.ROCK)
-                .partSubstitute(PartType.ROD, ModTags.Items.RODS_STONE)
+                .partSubstitute(PartType.ROD, SgTags.Items.RODS_STONE)
                 //main
                 .mainStatsCommon(131, 5, 5, 4, 0.5f)
                 .mainStatsHarvest(1, 4)
@@ -884,7 +884,7 @@ public class MaterialsProvider implements DataProvider {
                 Items.JUNGLE_PLANKS,
                 Items.OAK_PLANKS,
                 Items.SPRUCE_PLANKS,
-                ModBlocks.NETHERWOOD_PLANKS,
+                SgBlocks.NETHERWOOD_PLANKS,
                 Items.CRIMSON_PLANKS,
                 Items.WARPED_PLANKS
         );
@@ -929,7 +929,7 @@ public class MaterialsProvider implements DataProvider {
         ret.add(new MaterialBuilder(modId("wood/rough"), 0, Ingredient.EMPTY)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
                 .namePrefix(TextUtil.misc("crude"))
-                .partSubstitute(PartType.ROD, ModTags.Items.RODS_ROUGH)
+                .partSubstitute(PartType.ROD, SgTags.Items.RODS_ROUGH)
                 .noStats(PartType.ROD)
                 .trait(PartType.ROD, Const.Traits.CRUDE, 3)
                 .trait(PartType.ROD, Const.Traits.BENDING, 5)
@@ -938,9 +938,9 @@ public class MaterialsProvider implements DataProvider {
         );
 
         // Netherwood
-        ret.add(new MaterialBuilder(modId("netherwood"), 0, ModBlocks.NETHERWOOD_PLANKS)
+        ret.add(new MaterialBuilder(modId("netherwood"), 0, SgBlocks.NETHERWOOD_PLANKS)
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
-                .partSubstitute(PartType.ROD, ModTags.Items.RODS_NETHERWOOD)
+                .partSubstitute(PartType.ROD, SgTags.Items.RODS_NETHERWOOD)
                 //main
                 .mainStatsCommon(72, 12, 13, 4, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.1f)
@@ -1167,7 +1167,7 @@ public class MaterialsProvider implements DataProvider {
                 .displayFragment(PartTextures.CLOTH, 0x4A8F28)
         );
         // Paper
-        ret.add(new MaterialBuilder(modId("paper"), 0, ModTags.Items.PAPER)
+        ret.add(new MaterialBuilder(modId("paper"), 0, SgTags.Items.PAPER)
                 .categories(MaterialCategories.ORGANIC)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_SPEED, 1.1f)
                 .stat(PartType.FLETCHING, ItemStats.PROJECTILE_ACCURACY, 0.9f)
@@ -1199,12 +1199,12 @@ public class MaterialsProvider implements DataProvider {
     }
 
     private void addCompounds(Collection<MaterialBuilder> ret) {
-        ret.add(compoundBuilder(modId("hybrid_gem"), ModItems.HYBRID_GEM));
-        ret.add(compoundBuilder(modId("metal_alloy"), ModItems.ALLOY_INGOT));
-        ret.add(compoundBuilder(modId("mixed_fabric"), ModItems.MIXED_FABRIC));
+        ret.add(compoundBuilder(modId("hybrid_gem"), SgItems.HYBRID_GEM));
+        ret.add(compoundBuilder(modId("metal_alloy"), SgItems.ALLOY_INGOT));
+        ret.add(compoundBuilder(modId("mixed_fabric"), SgItems.MIXED_FABRIC));
 
         // Dimerald
-        ret.add(customCompoundBuilder(modId("dimerald"), 3, ModItems.CUSTOM_GEM.get())
+        ret.add(customCompoundBuilder(modId("dimerald"), 3, SgItems.CUSTOM_GEM.get())
                 .categories(MaterialCategories.GEM)
                 //main
                 .mainStatsCommon(1776, 36, 12, 80, 0.7f)
@@ -1237,7 +1237,7 @@ public class MaterialsProvider implements DataProvider {
         );
 
         // High-Carbon Steel
-        ret.add(customCompoundBuilder(modId("high_carbon_steel"), 2, ModItems.CUSTOM_INGOT.get())
+        ret.add(customCompoundBuilder(modId("high_carbon_steel"), 2, SgItems.CUSTOM_INGOT.get())
                 .categories(MaterialCategories.METAL)
                 .mainStatsCommon(420, 24, 11, 40, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.05f)

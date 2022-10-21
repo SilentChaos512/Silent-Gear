@@ -26,7 +26,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.init.SgBlocks;
 
 public class SalvagerScreen extends AbstractContainerScreen<SalvagerContainer> {
     public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/salvager.png");
@@ -44,7 +44,7 @@ public class SalvagerScreen extends AbstractContainerScreen<SalvagerContainer> {
 
     @Override
     protected void renderLabels(PoseStack matrixStack, int x, int y) {
-        MutableComponent text = ModBlocks.SALVAGER.asBlock().getName();
+        MutableComponent text = SgBlocks.SALVAGER.asBlock().getName();
         this.font.draw(matrixStack, text.getString(), 28, 6, 0x404040);
     }
 

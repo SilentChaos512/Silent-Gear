@@ -12,9 +12,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.MainPartItem;
@@ -39,7 +38,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         // Blocks
-        Registration.BLOCKS.getEntries().stream()
+        SgBlocks.BLOCKS.getEntries().stream()
                 .map(RegistryObject::get)
                 .forEach(this::blockItemModel);
 
@@ -50,45 +49,45 @@ public class ModItemModelProvider extends ItemModelProvider {
                 builder(item, itemGenerated, "item/" + item.getName());
         }
 
-        builder(ModItems.NETHERWOOD_CHARCOAL, itemGenerated);
+        builder(SgItems.NETHERWOOD_CHARCOAL, itemGenerated);
 
         // Crafted materials
-        builder(ModItems.SHEET_METAL)
+        builder(SgItems.SHEET_METAL)
                 .parent(itemGenerated)
                 .texture("layer0", "item/sheet_metal")
                 .texture("layer1", "item/sheet_metal_highlight");
 
         // Compound materials
-        builder(ModItems.ALLOY_INGOT)
+        builder(SgItems.ALLOY_INGOT)
                 .parent(itemGenerated)
                 .texture("layer0", "item/alloy_ingot")
                 .texture("layer1", "item/alloy_ingot_highlight");
-        builder(ModItems.HYBRID_GEM)
+        builder(SgItems.HYBRID_GEM)
                 .parent(itemGenerated)
                 .texture("layer0", "item/hybrid_gem")
                 .texture("layer1", "item/hybrid_gem_highlight");
-        builder(ModItems.MIXED_FABRIC, itemGenerated, "item/mixed_fabric");
+        builder(SgItems.MIXED_FABRIC, itemGenerated, "item/mixed_fabric");
 
         // Custom materials
-        builder(ModItems.CUSTOM_INGOT)
+        builder(SgItems.CUSTOM_INGOT)
                 .parent(itemGenerated)
                 .texture("layer0", "item/alloy_ingot")
                 .texture("layer1", "item/alloy_ingot_highlight");
-        builder(ModItems.CUSTOM_GEM)
+        builder(SgItems.CUSTOM_GEM)
                 .parent(itemGenerated)
                 .texture("layer0", "item/hybrid_gem")
                 .texture("layer1", "item/hybrid_gem_highlight");
 
-        builder(ModItems.BLUEPRINT_BOOK)
+        builder(SgItems.BLUEPRINT_BOOK)
                 .parent(itemGenerated)
                 .texture("layer0", "item/blueprint_book_cover")
                 .texture("layer1", "item/blueprint_book_pages")
                 .texture("layer2", "item/blueprint_book_deco");
 
-        builder(ModItems.JEWELER_TOOLS, itemGenerated, "item/jeweler_tools");
+        builder(SgItems.JEWELER_TOOLS, itemGenerated, "item/jeweler_tools");
 
         // Blueprints and templates
-        Registration.getItems(PartBlueprintItem.class).forEach(item -> {
+        SgItems.getItems(PartBlueprintItem.class).forEach(item -> {
             if (item.hasStandardModel()) {
                 builder(item)
                         .parent(itemGenerated)
@@ -96,103 +95,103 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .texture("layer1", "item/blueprint_" + item.getPartType().getName().getPath());
             }
         });
-        Registration.getItems(GearBlueprintItem.class).forEach(item -> builder(item)
+        SgItems.getItems(GearBlueprintItem.class).forEach(item -> builder(item)
                 .parent(itemGenerated)
                 .texture("layer0", "item/" + (item.isSingleUse() ? "template" : "blueprint"))
                 .texture("layer1", "item/blueprint_" + item.getGearType().getName()));
 
-        builder(ModItems.MOD_KIT, itemGenerated);
+        builder(SgItems.MOD_KIT, itemGenerated);
 
         // Repair kits
-        builder(ModItems.VERY_CRUDE_REPAIR_KIT, itemGenerated);
-        builder(ModItems.CRUDE_REPAIR_KIT, itemGenerated);
-        builder(ModItems.STURDY_REPAIR_KIT, itemGenerated);
-        builder(ModItems.CRIMSON_REPAIR_KIT, itemGenerated);
-        builder(ModItems.AZURE_REPAIR_KIT, itemGenerated);
+        builder(SgItems.VERY_CRUDE_REPAIR_KIT, itemGenerated);
+        builder(SgItems.CRUDE_REPAIR_KIT, itemGenerated);
+        builder(SgItems.STURDY_REPAIR_KIT, itemGenerated);
+        builder(SgItems.CRIMSON_REPAIR_KIT, itemGenerated);
+        builder(SgItems.AZURE_REPAIR_KIT, itemGenerated);
 
         // Misc
-        builder(ModItems.GUIDE_BOOK, itemGenerated);
-        builder(ModItems.BLUEPRINT_PACKAGE, itemGenerated);
-        builder(ModItems.FLAX_SEEDS, itemGenerated);
-        builder(ModItems.FLUFFY_SEEDS, itemGenerated);
-        builder(ModItems.GOLDEN_NETHER_BANANA, itemGenerated);
-        builder(ModItems.NETHER_BANANA, itemGenerated);
-        builder(ModItems.PEBBLE, itemGenerated);
+        builder(SgItems.GUIDE_BOOK, itemGenerated);
+        builder(SgItems.BLUEPRINT_PACKAGE, itemGenerated);
+        builder(SgItems.FLAX_SEEDS, itemGenerated);
+        builder(SgItems.FLUFFY_SEEDS, itemGenerated);
+        builder(SgItems.GOLDEN_NETHER_BANANA, itemGenerated);
+        builder(SgItems.NETHER_BANANA, itemGenerated);
+        builder(SgItems.PEBBLE, itemGenerated);
 
         // Temp models
         // Gear
-        tempGear(ModItems.SWORD, itemHandheld);
-        tempGear(ModItems.KATANA, itemHandheld);
-        tempGear(ModItems.MACHETE, itemHandheld);
-        tempGear(ModItems.SPEAR, itemHandheld);
-        tempGear(ModItems.TRIDENT, itemHandheld);
-        tempGear(ModItems.KNIFE, itemHandheld);
-        tempGear(ModItems.DAGGER, itemHandheld);
-        tempGear(ModItems.PICKAXE, itemHandheld);
-        tempGear(ModItems.SHOVEL, itemHandheld);
-        tempGear(ModItems.AXE, itemHandheld);
-        tempGear(ModItems.PAXEL, itemHandheld);
-        tempGear(ModItems.HAMMER, itemHandheld);
-        tempGear(ModItems.EXCAVATOR, itemHandheld);
-        tempGear(ModItems.SAW, itemHandheld);
-        tempGear(ModItems.PROSPECTOR_HAMMER, itemHandheld);
-        tempGear(ModItems.MATTOCK, itemHandheld);
-        tempGear(ModItems.SICKLE, itemHandheld);
-        tempGear(ModItems.SHEARS, itemHandheld);
-        tempGearBow(ModItems.FISHING_ROD, itemHandheld);
-        tempGearBow(ModItems.BOW, itemHandheld);
-        tempGearBow(ModItems.CROSSBOW, itemHandheld);
-        tempGearBow(ModItems.SLINGSHOT, itemHandheld);
-        tempGear(ModItems.SHIELD, itemGenerated);
-        tempGearArrow(ModItems.ARROW, itemGenerated);
-        tempGearArmor(ModItems.HELMET, itemGenerated);
-        tempGearArmor(ModItems.CHESTPLATE, itemGenerated);
-        tempGearArmor(ModItems.LEGGINGS, itemGenerated);
-        tempGearArmor(ModItems.BOOTS, itemGenerated);
-        tempGearElytra(ModItems.ELYTRA, itemGenerated);
-        tempGearCurio(ModItems.RING, itemGenerated);
-        tempGearCurio(ModItems.BRACELET, itemGenerated);
+        tempGear(SgItems.SWORD, itemHandheld);
+        tempGear(SgItems.KATANA, itemHandheld);
+        tempGear(SgItems.MACHETE, itemHandheld);
+        tempGear(SgItems.SPEAR, itemHandheld);
+        tempGear(SgItems.TRIDENT, itemHandheld);
+        tempGear(SgItems.KNIFE, itemHandheld);
+        tempGear(SgItems.DAGGER, itemHandheld);
+        tempGear(SgItems.PICKAXE, itemHandheld);
+        tempGear(SgItems.SHOVEL, itemHandheld);
+        tempGear(SgItems.AXE, itemHandheld);
+        tempGear(SgItems.PAXEL, itemHandheld);
+        tempGear(SgItems.HAMMER, itemHandheld);
+        tempGear(SgItems.EXCAVATOR, itemHandheld);
+        tempGear(SgItems.SAW, itemHandheld);
+        tempGear(SgItems.PROSPECTOR_HAMMER, itemHandheld);
+        tempGear(SgItems.MATTOCK, itemHandheld);
+        tempGear(SgItems.SICKLE, itemHandheld);
+        tempGear(SgItems.SHEARS, itemHandheld);
+        tempGearBow(SgItems.FISHING_ROD, itemHandheld);
+        tempGearBow(SgItems.BOW, itemHandheld);
+        tempGearBow(SgItems.CROSSBOW, itemHandheld);
+        tempGearBow(SgItems.SLINGSHOT, itemHandheld);
+        tempGear(SgItems.SHIELD, itemGenerated);
+        tempGearArrow(SgItems.ARROW, itemGenerated);
+        tempGearArmor(SgItems.HELMET, itemGenerated);
+        tempGearArmor(SgItems.CHESTPLATE, itemGenerated);
+        tempGearArmor(SgItems.LEGGINGS, itemGenerated);
+        tempGearArmor(SgItems.BOOTS, itemGenerated);
+        tempGearElytra(SgItems.ELYTRA, itemGenerated);
+        tempGearCurio(SgItems.RING, itemGenerated);
+        tempGearCurio(SgItems.BRACELET, itemGenerated);
         // Parts
-        tempMainPart(ModItems.SWORD_BLADE);
-        tempMainPart(ModItems.KATANA_BLADE);
-        tempMainPart(ModItems.MACHETE_BLADE);
-        tempMainPart(ModItems.SPEAR_TIP);
-        tempMainPart(ModItems.TRIDENT_PRONGS);
-        tempMainPart(ModItems.KNIFE_BLADE);
-        tempMainPart(ModItems.DAGGER_BLADE);
-        tempMainPart(ModItems.PICKAXE_HEAD);
-        tempMainPart(ModItems.SHOVEL_HEAD);
-        tempMainPart(ModItems.AXE_HEAD);
-        tempMainPart(ModItems.PAXEL_HEAD);
-        tempMainPart(ModItems.HAMMER_HEAD);
-        tempMainPart(ModItems.EXCAVATOR_HEAD);
-        tempMainPart(ModItems.SAW_BLADE);
-        tempMainPart(ModItems.MATTOCK_HEAD);
-        tempMainPart(ModItems.PROSPECTOR_HAMMER_HEAD);
-        tempMainPart(ModItems.SICKLE_BLADE);
-        tempMainPart(ModItems.SHEARS_BLADES);
-        tempMainPart(ModItems.FISHING_REEL_AND_HOOK);
-        tempMainPart(ModItems.BOW_LIMBS);
-        tempMainPart(ModItems.CROSSBOW_LIMBS);
-        tempMainPart(ModItems.SLINGSHOT_LIMBS);
-        tempMainPart(ModItems.SHIELD_PLATE);
-        tempMainPart(ModItems.HELMET_PLATES);
-        tempMainPart(ModItems.CHESTPLATE_PLATES);
-        tempMainPart(ModItems.LEGGING_PLATES);
-        tempMainPart(ModItems.BOOT_PLATES);
-        tempMainPart(ModItems.ELYTRA_WINGS);
-        tempMainPart(ModItems.ARROW_HEADS);
-        tempMainPart(ModItems.RING_SHANK);
-        tempMainPart(ModItems.BRACELET_BAND);
-        tempGearPart(ModItems.ROD);
-        tempGearPart(ModItems.TIP);
-        tempCoatingPart(ModItems.COATING);
-        tempGearPart(ModItems.GRIP);
-        tempGearPart(ModItems.BINDING);
-        tempGearPart(ModItems.LINING, "item/part/lining_cloth");
-        tempGearPart(ModItems.CORD);
-        tempGearPart(ModItems.FLETCHING);
-        tempGearPart(ModItems.ADORNMENT);
+        tempMainPart(SgItems.SWORD_BLADE);
+        tempMainPart(SgItems.KATANA_BLADE);
+        tempMainPart(SgItems.MACHETE_BLADE);
+        tempMainPart(SgItems.SPEAR_TIP);
+        tempMainPart(SgItems.TRIDENT_PRONGS);
+        tempMainPart(SgItems.KNIFE_BLADE);
+        tempMainPart(SgItems.DAGGER_BLADE);
+        tempMainPart(SgItems.PICKAXE_HEAD);
+        tempMainPart(SgItems.SHOVEL_HEAD);
+        tempMainPart(SgItems.AXE_HEAD);
+        tempMainPart(SgItems.PAXEL_HEAD);
+        tempMainPart(SgItems.HAMMER_HEAD);
+        tempMainPart(SgItems.EXCAVATOR_HEAD);
+        tempMainPart(SgItems.SAW_BLADE);
+        tempMainPart(SgItems.MATTOCK_HEAD);
+        tempMainPart(SgItems.PROSPECTOR_HAMMER_HEAD);
+        tempMainPart(SgItems.SICKLE_BLADE);
+        tempMainPart(SgItems.SHEARS_BLADES);
+        tempMainPart(SgItems.FISHING_REEL_AND_HOOK);
+        tempMainPart(SgItems.BOW_LIMBS);
+        tempMainPart(SgItems.CROSSBOW_LIMBS);
+        tempMainPart(SgItems.SLINGSHOT_LIMBS);
+        tempMainPart(SgItems.SHIELD_PLATE);
+        tempMainPart(SgItems.HELMET_PLATES);
+        tempMainPart(SgItems.CHESTPLATE_PLATES);
+        tempMainPart(SgItems.LEGGING_PLATES);
+        tempMainPart(SgItems.BOOT_PLATES);
+        tempMainPart(SgItems.ELYTRA_WINGS);
+        tempMainPart(SgItems.ARROW_HEADS);
+        tempMainPart(SgItems.RING_SHANK);
+        tempMainPart(SgItems.BRACELET_BAND);
+        tempGearPart(SgItems.ROD);
+        tempGearPart(SgItems.TIP);
+        tempCoatingPart(SgItems.COATING);
+        tempGearPart(SgItems.GRIP);
+        tempGearPart(SgItems.BINDING);
+        tempGearPart(SgItems.LINING, "item/part/lining_cloth");
+        tempGearPart(SgItems.CORD);
+        tempGearPart(SgItems.FLETCHING);
+        tempGearPart(SgItems.ADORNMENT);
     }
 
     private ItemModelBuilder tempGear(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
@@ -284,19 +283,19 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private void blockItemModel(Block block) {
-        if (block == ModBlocks.FLAX_PLANT.get() || block == ModBlocks.FLUFFY_PLANT.get()) {
+        if (block == SgBlocks.FLAX_PLANT.get() || block == SgBlocks.FLUFFY_PLANT.get()) {
             return;
         }
 
-        if (block == ModBlocks.PHANTOM_LIGHT.get())
+        if (block == SgBlocks.PHANTOM_LIGHT.get())
             builder(block, getExistingFile(mcLoc("item/generated")), "item/phantom_light");
-        else if (block == ModBlocks.NETHERWOOD_SAPLING.get() || block == ModBlocks.STONE_TORCH.get())
+        else if (block == SgBlocks.NETHERWOOD_SAPLING.get() || block == SgBlocks.STONE_TORCH.get())
             builder(block, getExistingFile(mcLoc("item/generated")), "block/" + NameUtils.fromBlock(block).getPath());
-        else if (block == ModBlocks.NETHERWOOD_FENCE.get())
+        else if (block == SgBlocks.NETHERWOOD_FENCE.get())
             withExistingParent("netherwood_fence", modLoc("block/netherwood_fence_inventory"));
-        else if (block == ModBlocks.NETHERWOOD_DOOR.get())
+        else if (block == SgBlocks.NETHERWOOD_DOOR.get())
             builder(block, getExistingFile(mcLoc("item/generated")), "item/netherwood_door");
-        else if (block == ModBlocks.NETHERWOOD_TRAPDOOR.get())
+        else if (block == SgBlocks.NETHERWOOD_TRAPDOOR.get())
             withExistingParent("netherwood_trapdoor", modLoc("block/netherwood_trapdoor_bottom"));
         else if (block.asItem() != Items.AIR) {
             String name = NameUtils.fromBlock(block).getPath();

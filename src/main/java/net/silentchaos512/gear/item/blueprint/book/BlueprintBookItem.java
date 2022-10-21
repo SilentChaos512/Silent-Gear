@@ -19,7 +19,7 @@ import net.minecraftforge.network.NetworkHooks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
-import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.item.ICycleItem;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
@@ -131,7 +131,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
             // Create a book with all blueprints
             ItemStack filled = new ItemStack(this);
             IItemHandler inventory = this.getInventory(filled);
-            List<Item> blueprints = new ArrayList<>(Registration.getItems(item -> this.canStore(new ItemStack(item))));
+            List<Item> blueprints = new ArrayList<>(SgItems.getItems(item -> this.canStore(new ItemStack(item))));
             for (int i = 0; i < blueprints.size() && i < getInventorySize(filled); i++) {
                 inventory.insertItem(i, new ItemStack(blueprints.get(i)), false);
             }

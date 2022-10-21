@@ -23,7 +23,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -104,7 +104,7 @@ public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        if (TraitHelper.hasTrait(stack, Const.Traits.SPOON) && ModItems.SHOVEL.get().isCorrectToolForDrops(stack, state)) {
+        if (TraitHelper.hasTrait(stack, Const.Traits.SPOON) && SgItems.SHOVEL.get().isCorrectToolForDrops(stack, state)) {
             return true;
         }
         return canPerformAction(stack, ToolActions.PICKAXE_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_PICKAXE, extraMaterials);

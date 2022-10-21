@@ -10,6 +10,9 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
 import net.silentchaos512.gear.block.charger.ChargerTileEntity;
@@ -27,13 +30,17 @@ import net.silentchaos512.lib.registry.BlockRegistryObject;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public final class ModBlocks {
+public final class SgBlocks {
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, SilentGear.MOD_ID);
+
     private static final Map<Block, Block> STRIPPED_WOOD = new HashMap<>();
 
     public static final BlockRegistryObject<DropExperienceBlock> BORT_ORE = register("bort_ore", () ->
@@ -53,19 +60,19 @@ public final class ModBlocks {
             getRawOreBlock(SoundType.STONE));
 
     public static final BlockRegistryObject<Block> BORT_BLOCK = register("bort_block",
-            ModBlocks::getStorageBlock);
+            SgBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> CRIMSON_IRON_BLOCK = register("crimson_iron_block",
-            ModBlocks::getStorageBlock);
+            SgBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> CRIMSON_STEEL_BLOCK = register("crimson_steel_block",
-            ModBlocks::getStorageBlock);
+            SgBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> BLAZE_GOLD_BLOCK = register("blaze_gold_block",
-            ModBlocks::getStorageBlock);
+            SgBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> AZURE_SILVER_BLOCK = register("azure_silver_block",
-            ModBlocks::getStorageBlock);
+            SgBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> AZURE_ELECTRUM_BLOCK = register("azure_electrum_block",
-            ModBlocks::getStorageBlock);
+            SgBlocks::getStorageBlock);
     public static final BlockRegistryObject<Block> TYRIAN_STEEL_BLOCK = register("tyrian_steel_block",
-            ModBlocks::getStorageBlock);
+            SgBlocks::getStorageBlock);
 
     public static final BlockRegistryObject<Block> GEAR_SMITHING_TABLE = register("gear_smithing_table", () ->
             new GearSmithingTableBlock(BlockBehaviour.Properties.of(Material.WOOD)
@@ -109,7 +116,7 @@ public final class ModBlocks {
                     .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<ModCropBlock> FLAX_PLANT = registerNoItem("flax_plant", () ->
-            new ModCropBlock(ModItems.FLAX_SEEDS::get, BlockBehaviour.Properties.of(Material.PLANT)
+            new ModCropBlock(SgItems.FLAX_SEEDS::get, BlockBehaviour.Properties.of(Material.PLANT)
                     .strength(0)
                     .noCollission()
                     .randomTicks()
@@ -120,7 +127,7 @@ public final class ModBlocks {
                     .noCollission()
                     .sound(SoundType.CROP)));
     public static final BlockRegistryObject<ModCropBlock> FLUFFY_PLANT = registerNoItem("fluffy_plant", () ->
-            new ModCropBlock(ModItems.FLUFFY_SEEDS::get, BlockBehaviour.Properties.of(Material.PLANT)
+            new ModCropBlock(SgItems.FLUFFY_SEEDS::get, BlockBehaviour.Properties.of(Material.PLANT)
                     .strength(0)
                     .noCollission()
                     .randomTicks()
@@ -217,9 +224,8 @@ public final class ModBlocks {
     public static final BlockRegistryObject<PhantomLight> PHANTOM_LIGHT = register("phantom_light",
             PhantomLight::new);
 
-    private ModBlocks() {}
-
-    static void register() {}
+    private SgBlocks() {
+    }
 
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -248,16 +254,16 @@ public final class ModBlocks {
     }
 
     private static <T extends Block> BlockRegistryObject<T> registerNoItem(String name, Supplier<T> block) {
-        return new BlockRegistryObject<>(Registration.BLOCKS.register(name, block));
+        return new BlockRegistryObject<>(BLOCKS.register(name, block));
     }
 
     private static <T extends Block> BlockRegistryObject<T> register(String name, Supplier<T> block) {
-        return register(name, block, ModBlocks::defaultItem);
+        return register(name, block, SgBlocks::defaultItem);
     }
 
     private static <T extends Block> BlockRegistryObject<T> register(String name, Supplier<T> block, Function<BlockRegistryObject<T>, Supplier<? extends BlockItem>> item) {
         BlockRegistryObject<T> ret = registerNoItem(name, block);
-        Registration.ITEMS.register(name, item.apply(ret));
+        SgItems.ITEMS.register(name, item.apply(ret));
         return ret;
     }
 
@@ -285,5 +291,14 @@ public final class ModBlocks {
         return BlockBehaviour.Properties.of(Material.NETHER_WOOD)
                 .strength(hardnessIn, resistanceIn)
                 .sound(SoundType.WOOD);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Block> Collection<T> getBlocks(Class<T> clazz) {
+        return BLOCKS.getEntries().stream()
+                .map(RegistryObject::get)
+                .filter(clazz::isInstance)
+                .map(block -> (T) block)
+                .collect(Collectors.toList());
     }
 }

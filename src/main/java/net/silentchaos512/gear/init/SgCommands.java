@@ -5,8 +5,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.silentchaos512.gear.command.*;
 
-public final class ModCommands {
-    private ModCommands() {throw new IllegalAccessError("Utility class");}
+public final class SgCommands {
+    private SgCommands() {throw new IllegalAccessError("Utility class");}
 
     public static void registerAll(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();

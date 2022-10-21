@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
-import net.silentchaos512.gear.init.ModContainers;
+import net.silentchaos512.gear.init.SgMenuTypes;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 
@@ -23,7 +23,7 @@ public class MetalPressContainer extends AbstractContainerMenu {
     }
 
     public MetalPressContainer(int id, Inventory playerInventory, Container inventory, ContainerData fields) {
-        super(ModContainers.METAL_PRESS.get(), id);
+        super(SgMenuTypes.METAL_PRESS.get(), id);
         this.inventory = inventory;
         this.fields = fields;
 

@@ -10,7 +10,7 @@ import net.minecraftforge.common.util.Lazy;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
@@ -40,7 +40,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.SHAPELESS_GEAR.get();
+        return SgRecipes.SHAPELESS_GEAR.get();
     }
 
     @Override

@@ -25,7 +25,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.SgTags;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
@@ -65,10 +65,10 @@ public final class TooltipHandler {
 
         ItemStack stack = event.getItemStack();
 
-        if (TagUtils.contains(ModTags.Items.GRADER_CATALYSTS, stack)) {
+        if (TagUtils.contains(SgTags.Items.GRADER_CATALYSTS, stack)) {
             onGraderCatalystTooltip(event);
         }
-        if (TagUtils.contains(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack)) {
+        if (TagUtils.contains(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack)) {
             onStarlightChargerCatalystTooltip(event);
         }
 

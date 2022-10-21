@@ -35,7 +35,7 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.LazyPartData;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.util.DataResource;
@@ -54,36 +54,36 @@ public final class PartType {
     public static final PartType NONE = create(Builder.builder(SilentGear.getId("none")));
 
     public static final PartType ADORNMENT = create(Builder.builder(SilentGear.getId("adornment"))
-            .compoundPartItem(() -> ModItems.ADORNMENT.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(() -> SgItems.ADORNMENT.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.ADORNMENT_GENERIC)
             .isRemovable(true)
     );
     public static final PartType BINDING = create(Builder.builder(SilentGear.getId("binding"))
-            .compoundPartItem(() -> ModItems.BINDING.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(() -> SgItems.BINDING.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.BINDING_GENERIC)
             .isRemovable(true)
     );
     public static final PartType COATING = create(Builder.builder(SilentGear.getId("coating"))
-            .compoundPartItem(() -> ModItems.COATING.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(() -> SgItems.COATING.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.MAIN_GENERIC_HC)
             .isRemovable(true)
     );
     public static final PartType CORD = create(Builder.builder(SilentGear.getId("cord"))
-            .compoundPartItem(() -> ModItems.CORD.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(() -> SgItems.CORD.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.BOWSTRING_STRING)
             .alias("bowstring")
     );
     public static final PartType FLETCHING = create(Builder.builder(SilentGear.getId("fletching"))
-            .compoundPartItem(() -> ModItems.FLETCHING.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(() -> SgItems.FLETCHING.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.FLETCHING_GENERIC)
     );
     public static final PartType GRIP = create(Builder.builder(SilentGear.getId("grip"))
-            .compoundPartItem(() -> ModItems.GRIP.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(() -> SgItems.GRIP.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.GRIP_WOOL)
             .isRemovable(true)
     );
     public static final PartType LINING = create(Builder.builder(SilentGear.getId("lining"))
-            .compoundPartItem(() -> ModItems.LINING.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(() -> SgItems.LINING.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.LINING_CLOTH)
             .isRemovable(true)
     );
@@ -97,11 +97,11 @@ public final class PartType {
             .maxPerItem(Integer.MAX_VALUE)
     );
     public static final PartType ROD = create(Builder.builder(SilentGear.getId("rod"))
-            .compoundPartItem(() -> ModItems.ROD.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(() -> SgItems.ROD.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.ROD_GENERIC_LC)
     );
     public static final PartType TIP = create(Builder.builder(SilentGear.getId("tip"))
-            .compoundPartItem(() -> ModItems.TIP.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(() -> SgItems.TIP.orElseThrow(IllegalStateException::new))
             .defaultTexture(PartTextures.TIP_SHARP)
             .isRemovable(true)
     );

@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.SgItems;
 
 import java.util.Set;
 
@@ -35,7 +35,7 @@ public class GearPaxelItem extends GearPickaxeItem {
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
         return super.isCorrectToolForDrops(stack, state)
-                || ModItems.SHOVEL.get().isCorrectToolForDrops(stack, state)
-                || ModItems.AXE.get().isCorrectToolForDrops(stack, state);
+                || SgItems.SHOVEL.get().isCorrectToolForDrops(stack, state)
+                || SgItems.AXE.get().isCorrectToolForDrops(stack, state);
     }
 }

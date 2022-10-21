@@ -18,8 +18,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.ModBlockEntities;
-import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.SgBlockEntities;
+import net.silentchaos512.gear.init.SgTags;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.InventoryUtils;
@@ -76,7 +76,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity {
     };
 
     public GraderTileEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.MATERIAL_GRADER.get(), INVENTORY_SIZE, pos, state);
+        super(SgBlockEntities.MATERIAL_GRADER.get(), INVENTORY_SIZE, pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, GraderTileEntity blockEntity) {
@@ -162,8 +162,8 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity {
 
     public static int getCatalystTier(ItemStack stack) {
         if (!stack.isEmpty()) {
-            for (int i = ModTags.Items.GRADER_CATALYSTS_TIERS.size() - 1; i >= 0; --i) {
-                if (stack.is(ModTags.Items.GRADER_CATALYSTS_TIERS.get(i))) {
+            for (int i = SgTags.Items.GRADER_CATALYSTS_TIERS.size() - 1; i >= 0; --i) {
+                if (stack.is(SgTags.Items.GRADER_CATALYSTS_TIERS.get(i))) {
                     return i + 1;
                 }
             }

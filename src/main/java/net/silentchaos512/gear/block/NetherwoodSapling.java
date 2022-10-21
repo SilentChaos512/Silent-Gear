@@ -5,7 +5,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.block.trees.NetherwoodTree;
-import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.SgTags;
 import net.silentchaos512.lib.util.TagUtils;
 
 public class NetherwoodSapling extends SaplingBlock {
@@ -15,6 +15,6 @@ public class NetherwoodSapling extends SaplingBlock {
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos) {
-        return TagUtils.contains(ModTags.Blocks.NETHERWOOD_SOIL, state);
+        return TagUtils.contains(SgTags.Blocks.NETHERWOOD_SOIL, state);
     }
 }

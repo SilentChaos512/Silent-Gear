@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.GearData;
 
@@ -36,7 +36,7 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.SALVAGING_GEAR.get();
+        return SgRecipes.SALVAGING_GEAR.get();
     }
 
     public static class Serializer implements RecipeSerializer<GearSalvagingRecipe> {

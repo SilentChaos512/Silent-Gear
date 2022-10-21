@@ -28,7 +28,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.init.ModLootStuff;
+import net.silentchaos512.gear.init.SgLoot;
 import net.silentchaos512.gear.util.GearGenerator;
 
 public final class SelectGearTierLootFunction extends LootItemConditionalFunction {
@@ -52,7 +52,7 @@ public final class SelectGearTierLootFunction extends LootItemConditionalFunctio
 
     @Override
     public LootItemFunctionType getType() {
-        return ModLootStuff.SELECT_TIER.get();
+        return SgLoot.SELECT_TIER.get();
     }
 
     public static class Serializer extends LootItemConditionalFunction.Serializer<SelectGearTierLootFunction> {

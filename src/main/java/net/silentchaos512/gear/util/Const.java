@@ -61,12 +61,12 @@ public final class Const {
                     MaterialCategories.DUST
             ),
             4,
-            () -> ModItems.ALLOY_INGOT.get(),
-            () -> ModBlocks.METAL_ALLOYER.get(),
-            () -> ModBlockEntities.METAL_ALLOYER.get(),
-            () -> ModContainers.METAL_ALLOYER.get(),
-            () -> ModRecipes.COMPOUNDING_METAL.get(),
-            () -> ModRecipes.COMPOUNDING_METAL_TYPE.get(),
+            () -> SgItems.ALLOY_INGOT.get(),
+            () -> SgBlocks.METAL_ALLOYER.get(),
+            () -> SgBlockEntities.METAL_ALLOYER.get(),
+            () -> SgMenuTypes.METAL_ALLOYER.get(),
+            () -> SgRecipes.COMPOUNDING_METAL.get(),
+            () -> SgRecipes.COMPOUNDING_METAL_TYPE.get(),
             MetalCompoundingRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
@@ -76,12 +76,12 @@ public final class Const {
                     MaterialCategories.DUST
             ),
             4,
-            () -> ModItems.HYBRID_GEM.get(),
-            () -> ModBlocks.RECRYSTALLIZER.get(),
-            () -> ModBlockEntities.RECRYSTALLIZER.get(),
-            () -> ModContainers.RECRYSTALLIZER.get(),
-            () -> ModRecipes.COMPOUNDING_GEM.get(),
-            () -> ModRecipes.COMPOUNDING_GEM_TYPE.get(),
+            () -> SgItems.HYBRID_GEM.get(),
+            () -> SgBlocks.RECRYSTALLIZER.get(),
+            () -> SgBlockEntities.RECRYSTALLIZER.get(),
+            () -> SgMenuTypes.RECRYSTALLIZER.get(),
+            () -> SgRecipes.COMPOUNDING_GEM.get(),
+            () -> SgRecipes.COMPOUNDING_GEM_TYPE.get(),
             GemCompoundingRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
@@ -92,12 +92,12 @@ public final class Const {
                     MaterialCategories.SLIME
             ),
             4,
-            () -> ModItems.MIXED_FABRIC.get(),
-            () -> ModBlocks.REFABRICATOR.get(),
-            () -> ModBlockEntities.REFABRICATOR.get(),
-            () -> ModContainers.REFABRICATOR.get(),
-            () -> ModRecipes.COMPOUNDING_FABRIC.get(),
-            () -> ModRecipes.COMPOUNDING_FABRIC_TYPE.get(),
+            () -> SgItems.MIXED_FABRIC.get(),
+            () -> SgBlocks.REFABRICATOR.get(),
+            () -> SgBlockEntities.REFABRICATOR.get(),
+            () -> SgMenuTypes.REFABRICATOR.get(),
+            () -> SgRecipes.COMPOUNDING_FABRIC.get(),
+            () -> SgRecipes.COMPOUNDING_FABRIC_TYPE.get(),
             FabricCompoundingRecipe.class);
 
     private Const() {}

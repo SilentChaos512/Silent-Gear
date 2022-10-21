@@ -8,7 +8,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.network.IContainerFactory;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.charger.ChargerContainer;
 import net.silentchaos512.gear.block.charger.ChargerScreen;
 import net.silentchaos512.gear.block.compounder.CompounderContainer;
@@ -24,7 +27,9 @@ import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainer;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainerScreen;
 
-public final class ModContainers {
+public final class SgMenuTypes {
+    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, SilentGear.MOD_ID);
+
     public static final RegistryObject<MenuType<GraderContainer>> MATERIAL_GRADER = register("material_grader",
             GraderContainer::new);
 
@@ -36,21 +41,21 @@ public final class ModContainers {
                     id,
                     playerInventory,
                     buffer,
-                    ModBlocks.METAL_ALLOYER.get().getCategories()));
+                    SgBlocks.METAL_ALLOYER.get().getCategories()));
 
     public static final RegistryObject<MenuType<CompounderContainer>> RECRYSTALLIZER = register("recrystallizer",
             (id, playerInventory, buffer) -> new CompounderContainer(getRecrystallizer(),
                     id,
                     playerInventory,
                     buffer,
-                    ModBlocks.RECRYSTALLIZER.get().getCategories()));
+                    SgBlocks.RECRYSTALLIZER.get().getCategories()));
 
     public static final RegistryObject<MenuType<CompounderContainer>> REFABRICATOR = register("refabricator",
             (id, playerInventory, buffer) -> new CompounderContainer(getRefabricator(),
                     id,
                     playerInventory,
                     buffer,
-                    ModBlocks.REFABRICATOR.get().getCategories()));
+                    SgBlocks.REFABRICATOR.get().getCategories()));
 
     public static final RegistryObject<MenuType<SalvagerContainer>> SALVAGER = register("salvager",
             SalvagerContainer::new);
@@ -61,9 +66,8 @@ public final class ModContainers {
     public static final RegistryObject<MenuType<BlueprintBookContainer>> BLUEPRINT_BOOK = register("blueprint_book",
             BlueprintBookContainer::new);
 
-    private ModContainers() {}
-
-    static void register() {}
+    private SgMenuTypes() {
+    }
 
     @OnlyIn(Dist.CLIENT)
     public static void registerScreens(FMLClientSetupEvent event) {
@@ -79,7 +83,7 @@ public final class ModContainers {
     }
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> register(String name, IContainerFactory<T> factory) {
-        return Registration.CONTAINERS.register(name, () -> IForgeMenuType.create(factory));
+        return MENU_TYPES.register(name, () -> IForgeMenuType.create(factory));
     }
 
     private static MenuType<?> getMetalAlloyer() {

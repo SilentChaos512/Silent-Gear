@@ -8,7 +8,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.init.ModLootStuff;
+import net.silentchaos512.gear.init.SgLoot;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.GearData;
@@ -44,7 +44,7 @@ public final class SetPartsFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType getType() {
-        return ModLootStuff.SET_PARTS.get();
+        return SgLoot.SET_PARTS.get();
     }
 
     public static class Serializer extends LootItemConditionalFunction.Serializer<SetPartsFunction> {

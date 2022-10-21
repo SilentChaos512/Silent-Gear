@@ -11,7 +11,7 @@ import net.silentchaos512.gear.SilentGear;
 
 import java.util.List;
 
-public final class ModTags {
+public final class SgTags {
     public static final class Blocks {
         public static final TagKey<Block> FLUFFY_BLOCKS = mod("fluffy_blocks");
         public static final TagKey<Block> NETHERWOOD_LOGS = mod("netherwood_logs");
@@ -155,5 +155,5 @@ public final class ModTags {
         }
     }
 
-    private ModTags() {}
+    private SgTags() {}
 }

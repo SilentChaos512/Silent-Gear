@@ -9,7 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.registry.ItemRegistryObject;
@@ -37,7 +37,7 @@ public final class ColorHandlers {
                 .map(item -> (ICoreItem) item)
                 .forEach(item -> itemColors.register(item.getItemColors(), item));
 
-        Registration.getItems(item -> item instanceof IColoredMaterialItem).forEach(item -> {
+        SgItems.getItems(item -> item instanceof IColoredMaterialItem).forEach(item -> {
             IColoredMaterialItem coloredMaterialItem = (IColoredMaterialItem) item;
             itemColors.register(coloredMaterialItem::getColor, item);
         });

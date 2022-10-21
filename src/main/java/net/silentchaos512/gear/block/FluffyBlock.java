@@ -18,7 +18,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.SgTags;
 
 public class FluffyBlock extends Block {
     static {
@@ -44,7 +44,7 @@ public class FluffyBlock extends Block {
 
         // Count the number of fluffy blocks that are stacked up.
         int stackedBlocks = 0;
-        while (stackedBlocks < 10 && world.getBlockState(pos).is(ModTags.Blocks.FLUFFY_BLOCKS)) {
+        while (stackedBlocks < 10 && world.getBlockState(pos).is(SgTags.Blocks.FLUFFY_BLOCKS)) {
             pos = pos.below();
             ++stackedBlocks;
         }
@@ -74,7 +74,7 @@ public class FluffyBlock extends Block {
 
     private static void onGetBreakSpeed(PlayerEvent.BreakSpeed event) {
         // Increase harvest speed when player is using shears
-        if (event.getState().is(ModTags.Blocks.FLUFFY_BLOCKS)) {
+        if (event.getState().is(SgTags.Blocks.FLUFFY_BLOCKS)) {
             ItemStack mainHand = event.getEntity().getItemInHand(InteractionHand.MAIN_HAND);
 
             if (!mainHand.isEmpty() && mainHand.getItem() instanceof ShearsItem) {

@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ISlingshotAmmo;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.SlingshotAmmoItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.util.EntityHelper;
@@ -93,14 +93,14 @@ public class GearSlingshotItem extends GearBowItem {
 
             if (!ammoItem.isEmpty() || infiniteAmmo) {
                 if (ammoItem.isEmpty()) {
-                    ammoItem = new ItemStack(ModItems.PEBBLE);
+                    ammoItem = new ItemStack(SgItems.PEBBLE);
                 }
 
                 float f = getPowerForTime(i);
                 if (!((double) f < 0.1D)) {
                     boolean flag1 = player.getAbilities().instabuild || (ammoItem.getItem() instanceof SlingshotAmmoItem && ((SlingshotAmmoItem) ammoItem.getItem()).isInfinite(ammoItem, stack, player));
                     if (!worldIn.isClientSide) {
-                        SlingshotAmmoItem slingshotAmmoItem = (SlingshotAmmoItem) (ammoItem.getItem() instanceof SlingshotAmmoItem ? ammoItem.getItem() : ModItems.PEBBLE.get());
+                        SlingshotAmmoItem slingshotAmmoItem = (SlingshotAmmoItem) (ammoItem.getItem() instanceof SlingshotAmmoItem ? ammoItem.getItem() : SgItems.PEBBLE.get());
                         AbstractArrow shot = slingshotAmmoItem.createArrow(worldIn, ammoItem, player);
                         shot.setBaseDamage(shot.getBaseDamage() + GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
                         shot.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);

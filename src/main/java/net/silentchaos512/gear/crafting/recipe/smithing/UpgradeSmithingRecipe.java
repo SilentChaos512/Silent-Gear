@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.common.ForgeHooks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -37,7 +37,7 @@ public class UpgradeSmithingRecipe extends GearSmithingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.SMITHING_UPGRADE.get();
+        return SgRecipes.SMITHING_UPGRADE.get();
     }
 
     public static class Serializer implements RecipeSerializer<UpgradeSmithingRecipe> {

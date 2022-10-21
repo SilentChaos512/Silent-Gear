@@ -22,9 +22,9 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialModifiers;
 import net.silentchaos512.gear.gear.material.modifier.ChargedMaterialModifier;
-import net.silentchaos512.gear.init.ModBlockEntities;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.SgBlockEntities;
+import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.init.SgTags;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -106,7 +106,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     public static ChargerTileEntity createStarlightCharger(BlockPos pos, BlockState state) {
-        return new ChargerTileEntity(ModBlockEntities.STARLIGHT_CHARGER.get(), MaterialModifiers.STARCHARGED, pos, state);
+        return new ChargerTileEntity(SgBlockEntities.STARLIGHT_CHARGER.get(), MaterialModifiers.STARCHARGED, pos, state);
     }
 
     protected int getMaxCharge() {
@@ -135,8 +135,8 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     public static int getStarlightChargerCatalystTier(ItemStack catalyst) {
-        for (int i = ModTags.Items.STARLIGHT_CHARGER_TIERS.size() - 1; i >= 0; --i) {
-            if (catalyst.is(ModTags.Items.STARLIGHT_CHARGER_TIERS.get(i))) {
+        for (int i = SgTags.Items.STARLIGHT_CHARGER_TIERS.size() - 1; i >= 0; --i) {
+            if (catalyst.is(SgTags.Items.STARLIGHT_CHARGER_TIERS.get(i))) {
                 return i + 1;
             }
         }
@@ -274,9 +274,9 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     protected int getPillarLevel(BlockPos pos) {
         assert level != null;
         BlockState state = this.level.getBlockState(pos.above(2));
-        if (state.getBlock() == ModBlocks.CRIMSON_STEEL_BLOCK.get()) return 1;
-        if (state.getBlock() == ModBlocks.AZURE_ELECTRUM_BLOCK.get()) return 2;
-        if (state.getBlock() == ModBlocks.TYRIAN_STEEL_BLOCK.get()) return 3;
+        if (state.getBlock() == SgBlocks.CRIMSON_STEEL_BLOCK.get()) return 1;
+        if (state.getBlock() == SgBlocks.AZURE_ELECTRUM_BLOCK.get()) return 2;
+        if (state.getBlock() == SgBlocks.TYRIAN_STEEL_BLOCK.get()) return 3;
 
         return 0;
     }
@@ -309,7 +309,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
         if (index == 0) return GearApi.isMaterial(stack);
-        if (index == 1) return stack.is(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS);
+        if (index == 1) return stack.is(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS);
         return false;
     }
 

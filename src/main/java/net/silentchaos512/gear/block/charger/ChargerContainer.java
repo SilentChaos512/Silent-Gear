@@ -12,8 +12,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.silentchaos512.gear.api.GearApi;
-import net.silentchaos512.gear.init.ModContainers;
-import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.SgMenuTypes;
+import net.silentchaos512.gear.init.SgTags;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.TagUtils;
@@ -43,7 +43,7 @@ public class ChargerContainer extends AbstractContainerMenu {
         addSlot(new Slot(inventory, 1, 56, 46) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return TagUtils.contains(ModTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack);
+                return TagUtils.contains(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack);
             }
         });
         addSlot(new SlotOutputOnly(inventory, 2, 116, 35));
@@ -54,11 +54,11 @@ public class ChargerContainer extends AbstractContainerMenu {
     }
 
     public static ChargerContainer createStarlightCharger(int id, Inventory inv, FriendlyByteBuf data) {
-        return new ChargerContainer(ModContainers.STARLIGHT_CHARGER.get(), id, inv, data);
+        return new ChargerContainer(SgMenuTypes.STARLIGHT_CHARGER.get(), id, inv, data);
     }
 
     public static ChargerContainer createStarlightCharger(int id, Inventory inv, Container blockInv, ContainerData fields) {
-        return new ChargerContainer(ModContainers.STARLIGHT_CHARGER.get(), id, inv, blockInv, fields);
+        return new ChargerContainer(SgMenuTypes.STARLIGHT_CHARGER.get(), id, inv, blockInv, fields);
     }
 
     public int getWorkProgress() {

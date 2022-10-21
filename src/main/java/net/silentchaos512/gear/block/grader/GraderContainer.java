@@ -12,7 +12,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.silentchaos512.gear.api.part.MaterialGrade;
-import net.silentchaos512.gear.init.ModContainers;
+import net.silentchaos512.gear.init.SgMenuTypes;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.utils.EnumUtils;
@@ -27,7 +27,7 @@ public class GraderContainer extends AbstractContainerMenu {
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
     public GraderContainer(int id, Inventory playerInventory, Container inventory, ContainerData fields) {
-        super(ModContainers.MATERIAL_GRADER.get(), id);
+        super(SgMenuTypes.MATERIAL_GRADER.get(), id);
         this.inventory = inventory;
         this.fields = fields;
 

@@ -32,10 +32,9 @@ import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecip
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModRecipes;
-import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.item.FragmentItem;
@@ -83,7 +82,7 @@ public class SGearJeiPlugin implements IModPlugin {
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
         // Repair kit hints
-        for (RepairKitItem item : Registration.getItems(RepairKitItem.class)) {
+        for (RepairKitItem item : SgItems.getItems(RepairKitItem.class)) {
             String itemName = NameUtils.fromItem(item).getPath();
             reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint"), "",
                             new ItemStack(item),
@@ -97,18 +96,18 @@ public class SGearJeiPlugin implements IModPlugin {
                             new ItemStack(item),
                             NonNullList.of(Ingredient.EMPTY,
                                     Ingredient.of(item),
-                                    Ingredient.of(ModItems.FRAGMENT),
-                                    Ingredient.of(ModItems.FRAGMENT),
-                                    Ingredient.of(ModItems.FRAGMENT)
+                                    Ingredient.of(SgItems.FRAGMENT),
+                                    Ingredient.of(SgItems.FRAGMENT),
+                                    Ingredient.of(SgItems.FRAGMENT)
                             ))));
         }
 
         reg.addRecipes(GEAR_CRAFTING_TYPE, getRecipes(recipeManager, SGearJeiPlugin::isGearCraftingRecipe, CraftingRecipe.class));
 
         // Compounders
-        reg.addRecipes(COMPOUNDING_FABRIC_TYPE, getRecipes(recipeManager, ModRecipes.COMPOUNDING_FABRIC_TYPE.get(), CompoundingRecipe.class));
-        reg.addRecipes(COMPOUNDING_GEM_TYPE, getRecipes(recipeManager, ModRecipes.COMPOUNDING_GEM_TYPE.get(), CompoundingRecipe.class));
-        reg.addRecipes(COMPOUNDING_METAL_TYPE, getRecipes(recipeManager, ModRecipes.COMPOUNDING_METAL_TYPE.get(), CompoundingRecipe.class));
+        reg.addRecipes(COMPOUNDING_FABRIC_TYPE, getRecipes(recipeManager, SgRecipes.COMPOUNDING_FABRIC_TYPE.get(), CompoundingRecipe.class));
+        reg.addRecipes(COMPOUNDING_GEM_TYPE, getRecipes(recipeManager, SgRecipes.COMPOUNDING_GEM_TYPE.get(), CompoundingRecipe.class));
+        reg.addRecipes(COMPOUNDING_METAL_TYPE, getRecipes(recipeManager, SgRecipes.COMPOUNDING_METAL_TYPE.get(), CompoundingRecipe.class));
 
         for (int i = 2; i <= 4; ++i) {
             reg.addRecipes(COMPOUNDING_FABRIC_TYPE, Collections.singletonList(CompoundingRecipe.makeExample(Const.FABRIC_COMPOUNDER_INFO,
@@ -123,11 +122,11 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipes(GRADING_TYPE, Collections.singletonList(new MaterialGraderRecipeCategory.GraderRecipe()));
 
         // Salvaging
-        reg.addRecipes(SALVAGING_TYPE, getRecipes(recipeManager, ModRecipes.SALVAGING_TYPE.get(), SalvagingRecipe.class));
+        reg.addRecipes(SALVAGING_TYPE, getRecipes(recipeManager, SgRecipes.SALVAGING_TYPE.get(), SalvagingRecipe.class));
 
         addInfoPage(reg, CraftingItems.RED_CARD_UPGRADE);
         addInfoPage(reg, CraftingItems.SPOON_UPGRADE);
-        for (Item item : Registration.getItems(item -> item instanceof ICoreTool)) {
+        for (Item item : SgItems.getItems(item -> item instanceof ICoreTool)) {
             addInfoPage(reg, item);
         }
     }
@@ -149,17 +148,17 @@ public class SGearJeiPlugin implements IModPlugin {
 
     private static boolean isGearCraftingRecipe(Recipe<?> recipe) {
         RecipeSerializer<?> serializer = recipe.getSerializer();
-        return serializer == ModRecipes.SHAPED_GEAR.get() || serializer == ModRecipes.SHAPELESS_GEAR.get() || serializer == ModRecipes.COMPOUND_PART.get();
+        return serializer == SgRecipes.SHAPED_GEAR.get() || serializer == SgRecipes.SHAPELESS_GEAR.get() || serializer == SgRecipes.COMPOUND_PART.get();
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration reg) {
         reg.addRecipeCatalyst(new ItemStack(Blocks.CRAFTING_TABLE), GEAR_CRAFTING_TYPE);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.REFABRICATOR), COMPOUNDING_FABRIC_TYPE);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.RECRYSTALLIZER), COMPOUNDING_GEM_TYPE);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.METAL_ALLOYER), COMPOUNDING_METAL_TYPE);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.MATERIAL_GRADER), GRADING_TYPE);
-        reg.addRecipeCatalyst(new ItemStack(ModBlocks.SALVAGER), SALVAGING_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(SgBlocks.REFABRICATOR), COMPOUNDING_FABRIC_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(SgBlocks.RECRYSTALLIZER), COMPOUNDING_GEM_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(SgBlocks.METAL_ALLOYER), COMPOUNDING_METAL_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(SgBlocks.MATERIAL_GRADER), GRADING_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(SgBlocks.SALVAGER), SALVAGING_TYPE);
     }
 
     @Override
@@ -173,7 +172,7 @@ public class SGearJeiPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration reg) {
-        reg.registerSubtypeInterpreter(ModItems.FRAGMENT.get(), (stack, context) -> {
+        reg.registerSubtypeInterpreter(SgItems.FRAGMENT.get(), (stack, context) -> {
             IMaterialInstance material = FragmentItem.getMaterial(stack);
             return material != null ? material.getId().toString() : "";
         });
@@ -182,8 +181,8 @@ public class SGearJeiPlugin implements IModPlugin {
             IMaterialInstance material = CustomMaterialItem.getMaterial(stack);
             return material != null ? material.getId().toString() : "";
         };
-        reg.registerSubtypeInterpreter(ModItems.CUSTOM_GEM.get(), customMaterials);
-        reg.registerSubtypeInterpreter(ModItems.CUSTOM_INGOT.get(), customMaterials);
+        reg.registerSubtypeInterpreter(SgItems.CUSTOM_GEM.get(), customMaterials);
+        reg.registerSubtypeInterpreter(SgItems.CUSTOM_INGOT.get(), customMaterials);
     }
 
     private static void addInfoPage(IRecipeRegistration reg, ItemLike item) {

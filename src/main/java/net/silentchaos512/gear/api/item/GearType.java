@@ -9,7 +9,7 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
@@ -261,7 +261,7 @@ public final class GearType {
 
     public Optional<ICoreItem> getItem() {
         return Optional.ofNullable(ITEMS.computeIfAbsent(this, gearType -> {
-            return Registration.getItems(ICoreItem.class).stream()
+            return SgItems.getItems(ICoreItem.class).stream()
                     .filter(item -> item.getGearType() == gearType)
                     .findAny().orElse(null);
         }));

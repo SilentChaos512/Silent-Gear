@@ -7,8 +7,8 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.crafting.ingredient.ExclusionIngredient;
@@ -21,7 +21,7 @@ public class CombineFragmentsRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.COMBINE_FRAGMENTS.get();
+        return SgRecipes.COMBINE_FRAGMENTS.get();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class CombineFragmentsRecipe extends CustomRecipe {
         for (int i = 0; i < craftingInventory.getContainerSize(); ++i) {
             ItemStack stack = craftingInventory.getItem(i);
             if (!stack.isEmpty()) {
-                if (stack.getItem() == ModItems.FRAGMENT.get()) {
+                if (stack.getItem() == SgItems.FRAGMENT.get()) {
                     ++fragmentCount;
                 } else {
                     return false;

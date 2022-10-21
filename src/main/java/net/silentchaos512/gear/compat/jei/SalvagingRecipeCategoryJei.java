@@ -16,7 +16,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
-import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.init.SgBlocks;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
 
     public SalvagingRecipeCategoryJei(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(SalvagerScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
-        icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.SALVAGER));
+        icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(SgBlocks.SALVAGER));
         arrow = guiHelper.drawableBuilder(SalvagerScreen.TEXTURE, 176, 14, 24, 17)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
         localizedName = TextUtil.translate("jei", "category.salvaging");

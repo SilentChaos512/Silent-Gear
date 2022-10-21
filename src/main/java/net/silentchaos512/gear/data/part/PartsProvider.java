@@ -18,8 +18,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.part.PartSerializers;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.util.Const;
@@ -51,19 +50,19 @@ public class PartsProvider implements DataProvider {
     protected Collection<PartBuilder> getParts() {
         Collection<PartBuilder> ret = new ArrayList<>();
 
-        ret.add(part("adornment", GearType.CURIO, PartType.ADORNMENT, ModItems.ADORNMENT));
-        ret.add(part("binding", GearType.TOOL, PartType.BINDING, ModItems.BINDING));
-        ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.CORD, ModItems.CORD));
-        ret.add(part("coating", GearType.ALL, PartType.COATING, ModItems.COATING)
+        ret.add(part("adornment", GearType.CURIO, PartType.ADORNMENT, SgItems.ADORNMENT));
+        ret.add(part("binding", GearType.TOOL, PartType.BINDING, SgItems.BINDING));
+        ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.CORD, SgItems.CORD));
+        ret.add(part("coating", GearType.ALL, PartType.COATING, SgItems.COATING)
                 .blacklistGearType(GearType.ELYTRA)
         );
-        ret.add(part("fletching", GearType.PROJECTILE, PartType.FLETCHING, ModItems.FLETCHING));
-        ret.add(part("grip", GearType.TOOL, PartType.GRIP, ModItems.GRIP));
-        ret.add(part("lining", GearType.ARMOR, PartType.LINING, ModItems.LINING));
-        ret.add(part("rod", GearType.TOOL, PartType.ROD, ModItems.ROD));
-        ret.add(part("tip", GearType.TOOL, PartType.TIP, ModItems.TIP));
+        ret.add(part("fletching", GearType.PROJECTILE, PartType.FLETCHING, SgItems.FLETCHING));
+        ret.add(part("grip", GearType.TOOL, PartType.GRIP, SgItems.GRIP));
+        ret.add(part("lining", GearType.ARMOR, PartType.LINING, SgItems.LINING));
+        ret.add(part("rod", GearType.TOOL, PartType.ROD, SgItems.ROD));
+        ret.add(part("tip", GearType.TOOL, PartType.TIP, SgItems.TIP));
 
-        Registration.getItems(MainPartItem.class).forEach(item -> {
+        SgItems.getItems(MainPartItem.class).forEach(item -> {
             PartBuilder builder = part(NameUtils.fromItem(item).getPath(), item.getGearType(), item.getPartType(), item);
             ret.add(addHeadStats(builder));
         });
@@ -112,12 +111,12 @@ public class PartsProvider implements DataProvider {
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     private static PartBuilder addHeadStats(PartBuilder builder) {
         // Tools
-        if (isMainPart(builder, ModItems.AXE_HEAD))
+        if (isMainPart(builder, SgItems.AXE_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 5, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -3, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1);
-        if (isMainPart(builder, ModItems.EXCAVATOR_HEAD))
+        if (isMainPart(builder, SgItems.EXCAVATOR_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -3f, StatInstance.Operation.ADD)
@@ -125,7 +124,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.5f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.HAMMER_HEAD))
+        if (isMainPart(builder, SgItems.HAMMER_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 4, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -3.2f, StatInstance.Operation.ADD)
@@ -133,7 +132,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.5f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.MATTOCK_HEAD))
+        if (isMainPart(builder, SgItems.MATTOCK_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
@@ -141,7 +140,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.25f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.PROSPECTOR_HAMMER_HEAD))
+        if (isMainPart(builder, SgItems.PROSPECTOR_HAMMER_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
@@ -149,7 +148,7 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.DURABILITY, -0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.25f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.25f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.PAXEL_HEAD))
+        if (isMainPart(builder, SgItems.PAXEL_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -3.0f, StatInstance.Operation.ADD)
@@ -157,12 +156,12 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.DURABILITY, 0.35f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.3f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.2f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.PICKAXE_HEAD))
+        if (isMainPart(builder, SgItems.PICKAXE_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.8f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
-        if (isMainPart(builder, ModItems.SAW_BLADE))
+        if (isMainPart(builder, SgItems.SAW_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.4f, StatInstance.Operation.ADD)
@@ -170,75 +169,75 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.75f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.SHOVEL_HEAD))
+        if (isMainPart(builder, SgItems.SHOVEL_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 1.5f, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -3.0f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 2f);
-        if (isMainPart(builder, ModItems.SICKLE_BLADE))
+        if (isMainPart(builder, SgItems.SICKLE_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -1.8f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
 
         // Melee weapons
-        if (isMainPart(builder, ModItems.DAGGER_BLADE))
+        if (isMainPart(builder, SgItems.DAGGER_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -1.2f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 2.0f)
                     .stat(ItemStats.MELEE_DAMAGE, -0.5f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.KATANA_BLADE))
+        if (isMainPart(builder, SgItems.KATANA_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 4, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.6f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1f)
                     .stat(ItemStats.DURABILITY, 0.125f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.1f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.KNIFE_BLADE))
+        if (isMainPart(builder, SgItems.KNIFE_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -1.6f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 2.0f)
                     .stat(ItemStats.MELEE_DAMAGE, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.DURABILITY, 0.25f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.MACHETE_BLADE))
+        if (isMainPart(builder, SgItems.MACHETE_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.2f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
-        if (isMainPart(builder, ModItems.SPEAR_TIP))
+        if (isMainPart(builder, SgItems.SPEAR_TIP))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.7f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.25f)
                     .stat(ItemStats.DURABILITY, -0.2f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ATTACK_REACH, 1, StatInstance.Operation.ADD);
-        if (isMainPart(builder, ModItems.SWORD_BLADE))
+        if (isMainPart(builder, SgItems.SWORD_BLADE))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 3, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.4f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
-        if (isMainPart(builder, ModItems.TRIDENT_PRONGS))
+        if (isMainPart(builder, SgItems.TRIDENT_PRONGS))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 4, StatInstance.Operation.ADD)
                     .stat(ItemStats.ATTACK_SPEED, -2.9f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1f);
 
         // Ranged weapons
-        if (isMainPart(builder, ModItems.BOW_LIMBS))
+        if (isMainPart(builder, SgItems.BOW_LIMBS))
             return builder
                     .stat(ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.RANGED_SPEED, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.45f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.CROSSBOW_LIMBS))
+        if (isMainPart(builder, SgItems.CROSSBOW_LIMBS))
             return builder
                     .stat(ItemStats.RANGED_DAMAGE, 2, StatInstance.Operation.ADD)
                     .stat(ItemStats.RANGED_SPEED, 1, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.45f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.SLINGSHOT_LIMBS))
+        if (isMainPart(builder, SgItems.SLINGSHOT_LIMBS))
             return builder
                     .stat(ItemStats.RANGED_DAMAGE, 0, StatInstance.Operation.ADD)
                     .stat(ItemStats.RANGED_SPEED, 1.5f, StatInstance.Operation.ADD)
@@ -247,40 +246,40 @@ public class PartsProvider implements DataProvider {
                     .stat(ItemStats.RANGED_DAMAGE, -0.75f, StatInstance.Operation.MUL1);
 
         // Armor
-        if (isMainPart(builder, ModItems.HELMET_PLATES)
-                || isMainPart(builder, ModItems.CHESTPLATE_PLATES)
-                || isMainPart(builder, ModItems.LEGGING_PLATES)
-                || isMainPart(builder, ModItems.BOOT_PLATES))
+        if (isMainPart(builder, SgItems.HELMET_PLATES)
+                || isMainPart(builder, SgItems.CHESTPLATE_PLATES)
+                || isMainPart(builder, SgItems.LEGGING_PLATES)
+                || isMainPart(builder, SgItems.BOOT_PLATES))
             return builder
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1);
 
-        if (isMainPart(builder, ModItems.ELYTRA_WINGS))
+        if (isMainPart(builder, SgItems.ELYTRA_WINGS))
             return builder
                     .stat(ItemStats.ARMOR, -0.65f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ARMOR, -3.5f, StatInstance.Operation.ADD)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1);
 
         // Oddballs
-        if (isMainPart(builder, ModItems.SHEARS_BLADES))
+        if (isMainPart(builder, SgItems.SHEARS_BLADES))
             return builder
                     .stat(ItemStats.DURABILITY, -0.048f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.25f);
-        if (isMainPart(builder, ModItems.FISHING_REEL_AND_HOOK))
+        if (isMainPart(builder, SgItems.FISHING_REEL_AND_HOOK))
             return builder
                     .stat(ItemStats.DURABILITY, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1.25f)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.75f, StatInstance.Operation.MUL1);
-        if (isMainPart(builder, ModItems.SHIELD_PLATE))
+        if (isMainPart(builder, SgItems.SHIELD_PLATE))
             return builder
                     .stat(ItemStats.REPAIR_EFFICIENCY, 1);
-        if (isMainPart(builder, ModItems.ARROW_HEADS))
+        if (isMainPart(builder, SgItems.ARROW_HEADS))
             return builder
                     .stat(ItemStats.REPAIR_EFFICIENCY, 0.75f);
 
         // Curios
-        if (isMainPart(builder, ModItems.RING_SHANK))
+        if (isMainPart(builder, SgItems.RING_SHANK))
             return builder;
-        if (isMainPart(builder, ModItems.BRACELET_BAND))
+        if (isMainPart(builder, SgItems.BRACELET_BAND))
             return builder;
 
         throw new IllegalArgumentException("Stats for " + builder.id + " are missing!");

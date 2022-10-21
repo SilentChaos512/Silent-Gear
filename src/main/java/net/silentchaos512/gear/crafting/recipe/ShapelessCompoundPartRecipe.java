@@ -13,7 +13,7 @@ import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
@@ -37,7 +37,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.COMPOUND_PART.get();
+        return SgRecipes.COMPOUND_PART.get();
     }
 
     @Override

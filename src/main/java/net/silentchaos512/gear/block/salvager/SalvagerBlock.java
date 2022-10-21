@@ -43,7 +43,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.silentchaos512.gear.block.ModContainerBlock;
-import net.silentchaos512.gear.init.ModBlockEntities;
+import net.silentchaos512.gear.init.SgBlockEntities;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -94,6 +94,6 @@ public class SalvagerBlock extends ModContainerBlock<SalvagerTileEntity> {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, ModBlockEntities.SALVAGER.get(), SalvagerTileEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.SALVAGER.get(), SalvagerTileEntity::tick);
     }
 }

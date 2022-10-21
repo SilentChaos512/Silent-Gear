@@ -13,17 +13,16 @@ import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.init.Registration;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.item.crafting.Ingredient.ItemValue;
+import net.silentchaos512.gear.init.SgItems;
 
 public final class GearTypeIngredient extends Ingredient {
     private final GearType type;
 
     private GearTypeIngredient(GearType type) {
-        super(Registration.ITEMS.getEntries().stream()
+        super(SgItems.ITEMS.getEntries().stream()
                 .filter(iro -> iro.isPresent() && iro.get() instanceof ICoreItem)
                 .map(iro -> (ICoreItem) iro.get())
                 .filter(item -> item.getGearType().matches(type))

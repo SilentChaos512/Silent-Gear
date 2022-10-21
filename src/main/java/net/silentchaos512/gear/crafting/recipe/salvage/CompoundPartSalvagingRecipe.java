@@ -8,8 +8,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.init.ModRecipes;
-import net.silentchaos512.gear.init.Registration;
+import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.gear.part.PartData;
 
@@ -37,7 +37,7 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public Ingredient getIngredient() {
-        return Ingredient.of(Registration.getItems(CompoundPartItem.class).toArray(new CompoundPartItem[0]));
+        return Ingredient.of(SgItems.getItems(CompoundPartItem.class).toArray(new CompoundPartItem[0]));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.SALVAGING_COMPOUND_PART.get();
+        return SgRecipes.SALVAGING_COMPOUND_PART.get();
     }
 
     public static class Serializer implements RecipeSerializer<CompoundPartSalvagingRecipe> {

@@ -23,7 +23,7 @@ import net.silentchaos512.gear.block.compounder.CompounderInfo;
 import net.silentchaos512.gear.block.compounder.CompounderTileEntity;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 
 import javax.annotation.Nullable;
@@ -118,12 +118,12 @@ public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.COMPOUNDING.get();
+        return SgRecipes.COMPOUNDING.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipes.COMPOUNDING_TYPE.get();
+        return SgRecipes.COMPOUNDING_TYPE.get();
     }
 
     public static class Serializer<T extends CompoundingRecipe> implements RecipeSerializer<T> {

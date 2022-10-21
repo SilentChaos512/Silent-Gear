@@ -9,6 +9,9 @@ import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
@@ -22,10 +25,15 @@ import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.TimeUtils;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({"unused", "OverlyCoupledClass"})
-public final class ModItems {
+public final class SgItems {
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SilentGear.MOD_ID);
+
     public static final ItemRegistryObject<GuideBookItem> GUIDE_BOOK = register("guide_book", () ->
             new GuideBookItem(unstackableProps()));
 
@@ -247,7 +255,7 @@ public final class ModItems {
             new CraftedMaterialItem(baseProps()));
 
     static {
-        CraftingItems.register(Registration.ITEMS);
+        CraftingItems.register(ITEMS);
     }
 
     public static final ItemRegistryObject<FragmentItem> FRAGMENT = register("fragment", () -> new FragmentItem(baseProps()));
@@ -255,9 +263,9 @@ public final class ModItems {
     public static final ItemRegistryObject<Item> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
     public static final ItemRegistryObject<ItemNameBlockItem> FLAX_SEEDS = register("flax_seeds", () ->
-            new SeedItem(ModBlocks.FLAX_PLANT.get(), baseProps()));
+            new SeedItem(SgBlocks.FLAX_PLANT.get(), baseProps()));
     public static final ItemRegistryObject<ItemNameBlockItem> FLUFFY_SEEDS = register("fluffy_seeds", () ->
-            new SeedItem(ModBlocks.FLUFFY_PLANT.get(), baseProps()));
+            new SeedItem(SgBlocks.FLUFFY_PLANT.get(), baseProps()));
 
     public static final ItemRegistryObject<Item> NETHER_BANANA = register("nether_banana", () ->
             new Item(baseProps()
@@ -315,9 +323,7 @@ public final class ModItems {
     public static final ItemRegistryObject<GearCurioItem> BRACELET = register("bracelet", () ->
             new GearCurioItem(GearType.BRACELET, "bracelet", unstackableProps()));
 
-    private ModItems() {}
-
-    static void register() {}
+    private SgItems() {}
 
     private static Item.Properties baseProps() {
         return new Item.Properties().tab(SilentGear.ITEM_GROUP);
@@ -328,7 +334,7 @@ public final class ModItems {
     }
 
     private static <T extends Item> ItemRegistryObject<T> register(String name, Supplier<T> item) {
-        return new ItemRegistryObject<>(Registration.ITEMS.register(name, item));
+        return new ItemRegistryObject<>(ITEMS.register(name, item));
     }
 
     private static <T extends CompoundPartItem> ItemRegistryObject<T> registerCompoundPart(String name, Supplier<T> item) {
@@ -343,5 +349,21 @@ public final class ModItems {
     private static ItemRegistryObject<PartBlueprintItem> registerPartBlueprint(PartType partType, boolean singleUse) {
         String name = partType.getName().getPath() + "_" + (singleUse ? "template" : "blueprint");
         return register(name, () -> new PartBlueprintItem(partType, singleUse, baseProps()));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Collection<T> getItems(Class<T> clazz) {
+        return ITEMS.getEntries().stream()
+                .map(RegistryObject::get)
+                .filter(clazz::isInstance)
+                .map(item -> (T) item)
+                .collect(Collectors.toList());
+    }
+
+    public static Collection<Item> getItems(Predicate<Item> predicate) {
+        return ITEMS.getEntries().stream()
+                .map(RegistryObject::get)
+                .filter(predicate)
+                .collect(Collectors.toList());
     }
 }

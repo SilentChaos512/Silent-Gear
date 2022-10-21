@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.MaterialGrade;
-import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.init.SgBlocks;
 
 public class GraderScreen extends AbstractContainerScreen<GraderContainer> {
     public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/grader.png");
@@ -37,7 +37,7 @@ public class GraderScreen extends AbstractContainerScreen<GraderContainer> {
 
     @Override
     protected void renderLabels(PoseStack matrixStack, int x, int y) {
-        Component text = ModBlocks.MATERIAL_GRADER.asBlock().getName();
+        Component text = SgBlocks.MATERIAL_GRADER.asBlock().getName();
         font.draw(matrixStack, text.getString(), 28, 6, 0x404040);
 
         MaterialGrade lastAttempt = this.menu.getLastGradeAttempt();

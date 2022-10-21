@@ -22,7 +22,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TextUtil;
@@ -58,13 +58,13 @@ public class CompoundPartItem extends Item {
         }
 
         // Crafted count not stored... Base the value on the default recipes.
-        if (this == ModItems.BINDING.get()) return getMaterials(stack).size();
-        if (this == ModItems.CORD.get()) return 1;
-        if (this == ModItems.COATING.get()) return getMaterials(stack).size();
-        if (this == ModItems.FLETCHING.get()) return getMaterials(stack).size();
-        if (this == ModItems.GRIP.get()) return getMaterials(stack).size();
-        if (this == ModItems.ROD.get()) return 4;
-        if (this == ModItems.TIP.get()) return getMaterials(stack).size();
+        if (this == SgItems.BINDING.get()) return getMaterials(stack).size();
+        if (this == SgItems.CORD.get()) return 1;
+        if (this == SgItems.COATING.get()) return getMaterials(stack).size();
+        if (this == SgItems.FLETCHING.get()) return getMaterials(stack).size();
+        if (this == SgItems.GRIP.get()) return getMaterials(stack).size();
+        if (this == SgItems.ROD.get()) return 4;
+        if (this == SgItems.TIP.get()) return getMaterials(stack).size();
 
         SilentGear.LOGGER.error("Unknown part with no crafted count: {}", stack);
         return 1;
@@ -177,7 +177,7 @@ public class CompoundPartItem extends Item {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (!allowedIn(group) || this == ModItems.SHIELD_PLATE.get()) {
+        if (!allowedIn(group) || this == SgItems.SHIELD_PLATE.get()) {
             return;
         }
         items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));

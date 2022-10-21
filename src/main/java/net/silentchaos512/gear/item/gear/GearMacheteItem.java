@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.init.ModItems;
+import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.Set;
@@ -29,7 +29,7 @@ public class GearMacheteItem extends GearSwordItem {
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
         // Allow clearing vegetation, just like sickles but with a smaller range
         if (!player.isCrouching())
-            return ModItems.SICKLE.get().onSickleStartBreak(itemstack, pos, player, BREAK_RANGE, EFFECTIVE_MATERIALS);
+            return SgItems.SICKLE.get().onSickleStartBreak(itemstack, pos, player, BREAK_RANGE, EFFECTIVE_MATERIALS);
         return super.onBlockStartBreak(itemstack, pos, player);
     }
 

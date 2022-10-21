@@ -11,7 +11,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.silentchaos512.gear.block.ModContainerBlock;
-import net.silentchaos512.gear.init.ModBlockEntities;
+import net.silentchaos512.gear.init.SgBlockEntities;
 
 import javax.annotation.Nullable;
 
@@ -40,6 +40,6 @@ public class StarlightChargerBlock extends ModContainerBlock<ChargerTileEntity> 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, ModBlockEntities.STARLIGHT_CHARGER.get(), ChargerTileEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.STARLIGHT_CHARGER.get(), ChargerTileEntity::tick);
     }
 }

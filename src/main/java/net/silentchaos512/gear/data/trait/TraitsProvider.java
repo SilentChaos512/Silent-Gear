@@ -24,7 +24,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.trait.*;
-import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.init.SgBlocks;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.DataResource;
 import org.apache.logging.log4j.LogManager;
@@ -314,7 +314,7 @@ public class TraitsProvider implements DataProvider {
         );
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.RACKER, 1, Blocks.NETHERRACK, 3)
                 .withGearTypeCondition(GearType.TOOL));
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.REFRACTIVE, 1, ModBlocks.PHANTOM_LIGHT.get(), 5)
+        ret.add(new BlockPlacerTraitBuilder(Const.Traits.REFRACTIVE, 1, SgBlocks.PHANTOM_LIGHT.get(), 5)
                 .sound(SoundEvents.AMETHYST_BLOCK_STEP, 0.75f, 0.5f)
                 .withGearTypeCondition(GearType.TOOL)
         );

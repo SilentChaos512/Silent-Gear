@@ -18,8 +18,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.ModItems;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
 
 import javax.annotation.Nullable;
@@ -74,12 +74,12 @@ public class SalvagingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.SALVAGING.get();
+        return SgRecipes.SALVAGING.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipes.SALVAGING_TYPE.get();
+        return SgRecipes.SALVAGING_TYPE.get();
     }
 
     @Override
@@ -121,7 +121,7 @@ public class SalvagingRecipe implements Recipe<Container> {
                     ret.add(material.getItem());
                 }
                 if (frags > 0) {
-                    ret.add(ModItems.FRAGMENT.get().create(material, frags));
+                    ret.add(SgItems.FRAGMENT.get().create(material, frags));
                 }
             }
             return ret;

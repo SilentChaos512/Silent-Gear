@@ -35,7 +35,7 @@ import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.init.SgBlocks;
 
 import java.util.List;
 import java.util.Map;
@@ -54,8 +54,8 @@ public class ModWorldGen {
         ConfiguredFeature<?, ?> bortFeature = new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(
                         List.of(
-                                OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, ModBlocks.BORT_ORE.asBlockState()),
-                                OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, ModBlocks.DEEPSLATE_BORT_ORE.asBlockState())
+                                OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, SgBlocks.BORT_ORE.asBlockState()),
+                                OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, SgBlocks.DEEPSLATE_BORT_ORE.asBlockState())
                         ),
                         2,
                         0.3f
@@ -73,8 +73,8 @@ public class ModWorldGen {
         ConfiguredFeature<?, ?> crimsonIronFeature = new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(
                         List.of(
-                                OreConfiguration.target(new TagMatchTest(Tags.Blocks.NETHERRACK), ModBlocks.CRIMSON_IRON_ORE.asBlockState()),
-                                OreConfiguration.target(new BlockMatchTest(Blocks.BLACKSTONE), ModBlocks.BLACKSTONE_CRIMSON_IRON_ORE.asBlockState())
+                                OreConfiguration.target(new TagMatchTest(Tags.Blocks.NETHERRACK), SgBlocks.CRIMSON_IRON_ORE.asBlockState()),
+                                OreConfiguration.target(new BlockMatchTest(Blocks.BLACKSTONE), SgBlocks.BLACKSTONE_CRIMSON_IRON_ORE.asBlockState())
                         ),
                         8,
                         0
@@ -89,7 +89,7 @@ public class ModWorldGen {
         ConfiguredFeature<?, ?> azureSilverFeature = new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(
                         new TagMatchTest(Tags.Blocks.END_STONES),
-                        ModBlocks.AZURE_SILVER_ORE.asBlockState(),
+                        SgBlocks.AZURE_SILVER_ORE.asBlockState(),
                         6,
                         0
                 )
@@ -105,7 +105,7 @@ public class ModWorldGen {
         // Wild Flax
         ConfiguredFeature<?, ?> wildFlaxFeature = new ConfiguredFeature<>(Feature.FLOWER,
                 FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLAX_PLANT.get())),
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(SgBlocks.WILD_FLAX_PLANT.get())),
                         List.of(),
                         32
                 )
@@ -118,7 +118,7 @@ public class ModWorldGen {
         // Wild Fluffy
         ConfiguredFeature<?, ?> wildFluffyFeature = new ConfiguredFeature<>(Feature.FLOWER,
                 FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.WILD_FLUFFY_PLANT.get())),
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(SgBlocks.WILD_FLUFFY_PLANT.get())),
                         List.of(),
                         32
                 )

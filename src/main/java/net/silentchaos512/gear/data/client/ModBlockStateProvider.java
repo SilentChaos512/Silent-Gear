@@ -9,7 +9,7 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.ModCropBlock;
-import net.silentchaos512.gear.init.ModBlocks;
+import net.silentchaos512.gear.init.SgBlocks;
 import net.silentchaos512.lib.block.IBlockProvider;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -31,96 +31,96 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         // Ores and storage blocks
-        simpleBlock(ModBlocks.BORT_ORE.get());
-        simpleBlock(ModBlocks.DEEPSLATE_BORT_ORE.get());
-        simpleBlock(ModBlocks.CRIMSON_IRON_ORE.get());
-        simpleBlock(ModBlocks.BLACKSTONE_CRIMSON_IRON_ORE.get());
-        simpleBlock(ModBlocks.AZURE_SILVER_ORE.get());
-        simpleBlock(ModBlocks.RAW_CRIMSON_IRON_BLOCK.get());
-        simpleBlock(ModBlocks.RAW_AZURE_SILVER_BLOCK.get());
-        simpleBlock(ModBlocks.BORT_BLOCK.get());
-        simpleBlock(ModBlocks.CRIMSON_IRON_BLOCK.get());
-        simpleBlock(ModBlocks.CRIMSON_STEEL_BLOCK.get());
-        simpleBlock(ModBlocks.BLAZE_GOLD_BLOCK.get());
-        simpleBlock(ModBlocks.AZURE_SILVER_BLOCK.get());
-        simpleBlock(ModBlocks.AZURE_ELECTRUM_BLOCK.get());
-        simpleBlock(ModBlocks.TYRIAN_STEEL_BLOCK.get());
+        simpleBlock(SgBlocks.BORT_ORE.get());
+        simpleBlock(SgBlocks.DEEPSLATE_BORT_ORE.get());
+        simpleBlock(SgBlocks.CRIMSON_IRON_ORE.get());
+        simpleBlock(SgBlocks.BLACKSTONE_CRIMSON_IRON_ORE.get());
+        simpleBlock(SgBlocks.AZURE_SILVER_ORE.get());
+        simpleBlock(SgBlocks.RAW_CRIMSON_IRON_BLOCK.get());
+        simpleBlock(SgBlocks.RAW_AZURE_SILVER_BLOCK.get());
+        simpleBlock(SgBlocks.BORT_BLOCK.get());
+        simpleBlock(SgBlocks.CRIMSON_IRON_BLOCK.get());
+        simpleBlock(SgBlocks.CRIMSON_STEEL_BLOCK.get());
+        simpleBlock(SgBlocks.BLAZE_GOLD_BLOCK.get());
+        simpleBlock(SgBlocks.AZURE_SILVER_BLOCK.get());
+        simpleBlock(SgBlocks.AZURE_ELECTRUM_BLOCK.get());
+        simpleBlock(SgBlocks.TYRIAN_STEEL_BLOCK.get());
 
         // Netherwood
-        simpleBlock(ModBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
-        simpleBlock(ModBlocks.NETHERWOOD_PLANKS.get());
-        simpleBlock(ModBlocks.NETHERWOOD_LEAVES.get());
-        axisBlock(ModBlocks.NETHERWOOD_LOG.get(), modLoc("block/netherwood_log"), modLoc("block/netherwood_log_top"));
-        axisBlock(ModBlocks.STRIPPED_NETHERWOOD_LOG.get(), modLoc("block/stripped_netherwood_log"), modLoc("block/stripped_netherwood_log_top"));
-        simpleBlock(ModBlocks.NETHERWOOD_WOOD.get(), models().cubeAll("netherwood_wood", modLoc("block/netherwood_log")));
-        simpleBlock(ModBlocks.STRIPPED_NETHERWOOD_WOOD.get(), models().cubeAll("stripped_netherwood_wood", modLoc("block/stripped_netherwood_log")));
-        simpleBlock(ModBlocks.NETHERWOOD_SAPLING.get(), models().cross("netherwood_sapling", modLoc("block/netherwood_sapling")).renderType("cutout"));
+        simpleBlock(SgBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
+        simpleBlock(SgBlocks.NETHERWOOD_PLANKS.get());
+        simpleBlock(SgBlocks.NETHERWOOD_LEAVES.get());
+        axisBlock(SgBlocks.NETHERWOOD_LOG.get(), modLoc("block/netherwood_log"), modLoc("block/netherwood_log_top"));
+        axisBlock(SgBlocks.STRIPPED_NETHERWOOD_LOG.get(), modLoc("block/stripped_netherwood_log"), modLoc("block/stripped_netherwood_log_top"));
+        simpleBlock(SgBlocks.NETHERWOOD_WOOD.get(), models().cubeAll("netherwood_wood", modLoc("block/netherwood_log")));
+        simpleBlock(SgBlocks.STRIPPED_NETHERWOOD_WOOD.get(), models().cubeAll("stripped_netherwood_wood", modLoc("block/stripped_netherwood_log")));
+        simpleBlock(SgBlocks.NETHERWOOD_SAPLING.get(), models().cross("netherwood_sapling", modLoc("block/netherwood_sapling")).renderType("cutout"));
         ResourceLocation planks = modLoc("block/netherwood_planks");
-        slabBlock(ModBlocks.NETHERWOOD_SLAB.get(), planks, planks);
-        stairsBlock(ModBlocks.NETHERWOOD_STAIRS.get(), planks);
-        fenceBlock(ModBlocks.NETHERWOOD_FENCE.get(), planks);
-        fenceGateBlock(ModBlocks.NETHERWOOD_FENCE_GATE.get(), planks);
-        doorBlock(ModBlocks.NETHERWOOD_DOOR.get(), modLoc("block/netherwood_door_bottom"), modLoc("block/netherwood_door_top"));
-        trapdoorBlock(ModBlocks.NETHERWOOD_TRAPDOOR.get(), modLoc("block/netherwood_trapdoor"), true);
+        slabBlock(SgBlocks.NETHERWOOD_SLAB.get(), planks, planks);
+        stairsBlock(SgBlocks.NETHERWOOD_STAIRS.get(), planks);
+        fenceBlock(SgBlocks.NETHERWOOD_FENCE.get(), planks);
+        fenceGateBlock(SgBlocks.NETHERWOOD_FENCE_GATE.get(), planks);
+        doorBlock(SgBlocks.NETHERWOOD_DOOR.get(), modLoc("block/netherwood_door_bottom"), modLoc("block/netherwood_door_top"));
+        trapdoorBlock(SgBlocks.NETHERWOOD_TRAPDOOR.get(), modLoc("block/netherwood_trapdoor"), true);
 
         // Fluffy blocks
-        simpleBlock(ModBlocks.WHITE_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.ORANGE_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.MAGENTA_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.LIGHT_BLUE_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.YELLOW_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.LIME_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.PINK_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.GRAY_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.LIGHT_GRAY_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.CYAN_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.PURPLE_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.BLUE_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.BROWN_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.GREEN_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.RED_FLUFFY_BLOCK.get());
-        simpleBlock(ModBlocks.BLACK_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.WHITE_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.ORANGE_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.MAGENTA_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.LIGHT_BLUE_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.YELLOW_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.LIME_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.PINK_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.GRAY_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.LIGHT_GRAY_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.CYAN_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.PURPLE_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.BLUE_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.BROWN_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.GREEN_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.RED_FLUFFY_BLOCK.get());
+        simpleBlock(SgBlocks.BLACK_FLUFFY_BLOCK.get());
 
         // Oddballs
-        simpleBlock(ModBlocks.PHANTOM_LIGHT.get(), models().cubeAll("phantom_light", modLoc("item/blank")));
-        simpleBlock(ModBlocks.POTTED_NETHERWOOD_SAPLING.get(), models()
+        simpleBlock(SgBlocks.PHANTOM_LIGHT.get(), models().cubeAll("phantom_light", modLoc("item/blank")));
+        simpleBlock(SgBlocks.POTTED_NETHERWOOD_SAPLING.get(), models()
                 .withExistingParent("potted_netherwood_sapling", "block/flower_pot_cross")
                 .texture("plant", "block/netherwood_sapling"));
-        simpleBlock(ModBlocks.STONE_TORCH.get(), models().torch("stone_torch", modLoc("block/stone_torch")));
-        getVariantBuilder(ModBlocks.WALL_STONE_TORCH.get())
+        simpleBlock(SgBlocks.STONE_TORCH.get(), models().torch("stone_torch", modLoc("block/stone_torch")));
+        getVariantBuilder(SgBlocks.WALL_STONE_TORCH.get())
                 .forAllStates(state -> ConfiguredModel.builder()
                         .modelFile(wallTorch("wall_stone_torch", modLoc("block/stone_torch")))
                         .rotationY((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 90)
                         .build());
 
         // Crafters and Machines
-        simpleBlock(ModBlocks.GEAR_SMITHING_TABLE.get(), getExistingModel("gear_smithing_table"));
-        simpleBlock(ModBlocks.STARLIGHT_CHARGER.get(), getExistingModel("starlight_charger"));
-        orientableMachineBlock(ModBlocks.MATERIAL_GRADER, "material_grader");
-        orientableMachineBlock(ModBlocks.METAL_PRESS, "metal_press");
-        orientableMachineBlock(ModBlocks.SALVAGER, "salvager");
+        simpleBlock(SgBlocks.GEAR_SMITHING_TABLE.get(), getExistingModel("gear_smithing_table"));
+        simpleBlock(SgBlocks.STARLIGHT_CHARGER.get(), getExistingModel("starlight_charger"));
+        orientableMachineBlock(SgBlocks.MATERIAL_GRADER, "material_grader");
+        orientableMachineBlock(SgBlocks.METAL_PRESS, "metal_press");
+        orientableMachineBlock(SgBlocks.SALVAGER, "salvager");
 
         // Compounders
-        orientableMachineBlock(ModBlocks.METAL_ALLOYER, "metal_alloyer");
-        orientableMachineBlock(ModBlocks.RECRYSTALLIZER, "recrystallizer");
-        orientableMachineBlock(ModBlocks.REFABRICATOR, "refabricator");
+        orientableMachineBlock(SgBlocks.METAL_ALLOYER, "metal_alloyer");
+        orientableMachineBlock(SgBlocks.RECRYSTALLIZER, "recrystallizer");
+        orientableMachineBlock(SgBlocks.REFABRICATOR, "refabricator");
 
         // Plants
-        getVariantBuilder(ModBlocks.FLAX_PLANT.get()).forAllStates(state -> {
+        getVariantBuilder(SgBlocks.FLAX_PLANT.get()).forAllStates(state -> {
             int i = cropAgeToIndex(state.getValue(ModCropBlock.AGE));
             return ConfiguredModel.builder()
                     .modelFile(models().crop("flax_plant" + i, modLoc("block/flax_plant" + i)).renderType("cutout"))
                     .build();
         });
-        simpleBlock(ModBlocks.WILD_FLAX_PLANT.get(), models().crop("wild_flax_plant", modLoc("block/flax_plant3")).renderType("cutout"));
+        simpleBlock(SgBlocks.WILD_FLAX_PLANT.get(), models().crop("wild_flax_plant", modLoc("block/flax_plant3")).renderType("cutout"));
 
-        getVariantBuilder(ModBlocks.FLUFFY_PLANT.get()).forAllStates(state -> {
+        getVariantBuilder(SgBlocks.FLUFFY_PLANT.get()).forAllStates(state -> {
             int i = cropAgeToIndex(state.getValue(ModCropBlock.AGE));
             return ConfiguredModel.builder()
                     .modelFile(models().crop("fluffy_plant" + i, modLoc("block/fluffy_plant" + i)).renderType("cutout"))
                     .build();
         });
-        simpleBlock(ModBlocks.WILD_FLUFFY_PLANT.get(), models().crop("wild_fluffy_plant", modLoc("block/fluffy_plant3")).renderType("cutout"));
+        simpleBlock(SgBlocks.WILD_FLUFFY_PLANT.get(), models().crop("wild_fluffy_plant", modLoc("block/fluffy_plant3")).renderType("cutout"));
     }
 
     private ModelFile.ExistingModelFile getExistingModel(String blockName) {

@@ -13,8 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.init.ModBlocks;
-import net.silentchaos512.gear.init.ModTags;
+import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.init.SgTags;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.TagUtils;
 
@@ -35,7 +35,7 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
 
     public MaterialGraderRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(GraderScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
-        icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.MATERIAL_GRADER));
+        icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(SgBlocks.MATERIAL_GRADER));
         localizedName = TextUtil.translate("jei", "category.grading");
     }
 
@@ -77,7 +77,7 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
 
     @Nonnull
     public static List<ItemStack> getCatalysts() {
-        return TagUtils.getItemsInTag(ModTags.Items.GRADER_CATALYSTS)
+        return TagUtils.getItemsInTag(SgTags.Items.GRADER_CATALYSTS)
                 .map(ItemStack::new)
                 .collect(Collectors.toList());
     }

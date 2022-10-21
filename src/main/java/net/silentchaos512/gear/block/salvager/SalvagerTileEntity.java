@@ -33,8 +33,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.ModBlockEntities;
-import net.silentchaos512.gear.init.ModRecipes;
+import net.silentchaos512.gear.init.SgBlockEntities;
+import net.silentchaos512.gear.init.SgRecipes;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.TimeUtils;
@@ -72,13 +72,13 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
     };
 
     public SalvagerTileEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.SALVAGER.get(), INVENTORY_SIZE, pos, state);
+        super(SgBlockEntities.SALVAGER.get(), INVENTORY_SIZE, pos, state);
     }
 
     @Nullable
     private SalvagingRecipe getRecipe() {
         if (level == null) return null;
-        return level.getRecipeManager().getRecipeFor(ModRecipes.SALVAGING_TYPE.get(), this, level).orElse(null);
+        return level.getRecipeManager().getRecipeFor(SgRecipes.SALVAGING_TYPE.get(), this, level).orElse(null);
     }
 
     @Override
