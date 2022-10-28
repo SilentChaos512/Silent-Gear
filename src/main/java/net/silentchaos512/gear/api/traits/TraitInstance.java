@@ -25,15 +25,19 @@ import java.util.Collection;
 import java.util.List;
 
 public final class TraitInstance implements ITraitInstance {
-    private final ITrait trait;
+    private final DataResource<ITrait> trait;
     private final int level;
     private final ImmutableList<ITraitCondition> conditions;
 
     private TraitInstance(ITrait trait, int level, ITraitCondition... conditions) {
+        this(DataResource.trait(trait.getId()), level, conditions);
+    }
+
+    private TraitInstance(DataResource<ITrait> trait, int level, ITraitCondition... conditions) {
         this.trait = trait;
         this.level = level;
         this.conditions = ImmutableList.<ITraitCondition>builder()
-                .add(this.trait.getConditions().toArray(new ITraitCondition[0]))
+                .add(trait.isPresent() ? trait.get().getConditions().toArray(new ITraitCondition[0]) : new ITraitCondition[0])
                 .add(conditions)
                 .build();
     }
@@ -70,7 +74,7 @@ public final class TraitInstance implements ITraitInstance {
     @Nonnull
     @Override
     public ITrait getTrait() {
-        return trait;
+        return trait.get();
     }
 
     @Override
@@ -84,7 +88,7 @@ public final class TraitInstance implements ITraitInstance {
     }
 
     public MutableComponent getDisplayName() {
-        MutableComponent text = this.trait.getDisplayName(this.level).copy();
+        MutableComponent text = this.trait.get().getDisplayName(this.level).copy();
         if (!conditions.isEmpty()) {
             text.append("*");
         }
@@ -92,15 +96,15 @@ public final class TraitInstance implements ITraitInstance {
     }
 
     public void addInformation(List<Component> tooltip, TooltipFlag flag) {
-        if (!this.trait.showInTooltip(flag)) return;
+        if (!this.trait.get().showInTooltip(flag)) return;
 
         // Display name
         MutableComponent displayName = this.getDisplayName().withStyle(ChatFormatting.ITALIC);
-        tooltip.add(trait.isHidden() ? TextUtil.withColor(displayName, ChatFormatting.DARK_GRAY) : displayName);
+        tooltip.add(trait.get().isHidden() ? TextUtil.withColor(displayName, ChatFormatting.DARK_GRAY) : displayName);
 
         // Description (usually not shown)
         if (KeyTracker.isAltDown()) {
-            Component description = TextUtil.withColor(this.trait.getDescription(level), ChatFormatting.DARK_GRAY);
+            Component description = TextUtil.withColor(this.trait.get().getDescription(level), ChatFormatting.DARK_GRAY);
             tooltip.add(Component.literal("    ").append(description));
         }
     }
@@ -129,11 +133,7 @@ public final class TraitInstance implements ITraitInstance {
     }
 
     public static TraitInstance read(FriendlyByteBuf buffer) {
-        ResourceLocation traitId = buffer.readResourceLocation();
-        ITrait trait = TraitManager.get(traitId);
-        if (trait == null) {
-            throw new IllegalStateException("Unknown trait: " + traitId);
-        }
+        DataResource<ITrait> trait = DataResource.trait(buffer.readResourceLocation());
         int level = buffer.readByte();
 
         ITraitCondition[] conditions = new ITraitCondition[buffer.readByte()];
@@ -141,7 +141,7 @@ public final class TraitInstance implements ITraitInstance {
             conditions[i] = TraitSerializers.readCondition(buffer);
         }
 
-        return of(trait, level, conditions);
+        return new TraitInstance(trait, level, conditions);
     }
 
     public void write(FriendlyByteBuf buffer) {
