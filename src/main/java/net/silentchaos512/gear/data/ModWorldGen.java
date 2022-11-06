@@ -57,13 +57,12 @@ public class ModWorldGen {
                                 OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, SgBlocks.BORT_ORE.asBlockState()),
                                 OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, SgBlocks.DEEPSLATE_BORT_ORE.asBlockState())
                         ),
-                        2,
-                        0.3f
+                        3
                 )
         );
         PlacedFeature bortPlaced = new PlacedFeature(
                 holder(bortFeature, ops, bortName),
-                commonOrePlacement(6, HeightRangePlacement.triangle(
+                commonOrePlacement(40, HeightRangePlacement.triangle(
                                 VerticalAnchor.absolute(-60), VerticalAnchor.absolute(10)
                         )
                 )
