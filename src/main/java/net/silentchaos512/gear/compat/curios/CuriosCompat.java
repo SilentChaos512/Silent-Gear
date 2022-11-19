@@ -26,6 +26,7 @@ public final class CuriosCompat {
     private CuriosCompat() {}
 
     public static void imcEnqueue(InterModEnqueueEvent event) {
+        InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.BACK.getMessageBuilder().size(1).build());
         InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.BRACELET.getMessageBuilder().size(2).build());
         InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.RING.getMessageBuilder().size(2).build());
     }
