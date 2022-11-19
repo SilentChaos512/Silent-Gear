@@ -1,0 +1,43 @@
+{
+  "parent": "silentgear:item/shield_base",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, 90, 0],
+      "translation": [3.25, -2, 4]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [0, 90, 0],
+      "translation": [3.25, -2, 4]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 180, 5],
+      "translation": [0, -10, 0]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 180, 5],
+      "translation": [0, -10, 0]
+    },
+    "ground": {
+      "translation": [0, 1.75, 0],
+      "scale": [0.25, 0.25, 0.25]
+    },
+    "gui": {
+      "rotation": [15, -29.5, 0],
+      "translation": [0.25, 0, 0],
+      "scale": [0.65, 0.65, 0.65]
+    },
+    "fixed": {
+      "rotation": [0, 180, 0],
+      "translation": [0, 0, -1.75],
+      "scale": [0.75, 0.75, 0.75]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "blocking": 1
+      },
+      "model": "silentgear:item/shield_blocking"
+    }
+  ]
+}

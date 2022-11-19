@@ -142,7 +142,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearBow(SgItems.BOW, itemHandheld);
         tempGearBow(SgItems.CROSSBOW, itemHandheld);
         tempGearBow(SgItems.SLINGSHOT, itemHandheld);
-        tempGear(SgItems.SHIELD, itemGenerated);
         tempGearArrow(SgItems.ARROW, itemGenerated);
         tempGearArmor(SgItems.HELMET, itemGenerated);
         tempGearArmor(SgItems.CHESTPLATE, itemGenerated);

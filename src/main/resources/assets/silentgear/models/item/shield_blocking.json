@@ -1,0 +1,35 @@
+{
+  "parent": "silentgear:item/shield_base",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [45, 145, 0],
+      "translation": [4, -0.75, 0]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [45, 145, 0],
+      "translation": [4, -0.75, 0]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 180, 5],
+      "translation": [0, -6, 0]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 180, 5],
+      "translation": [0, -6, 0]
+    },
+    "ground": {
+      "translation": [0, 1.75, 0],
+      "scale": [0.25, 0.25, 0.25]
+    },
+    "gui": {
+      "rotation": [15, -29.5, 0],
+      "translation": [0.25, 0, 0],
+      "scale": [0.65, 0.65, 0.65]
+    },
+    "fixed": {
+      "rotation": [0, 180, 0],
+      "translation": [0, 0, -1.75],
+      "scale": [0.75, 0.75, 0.75]
+    }
+  }
+}
