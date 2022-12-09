@@ -65,8 +65,10 @@ class SideProxy implements IProxy {
         SgRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         SgRecipes.RECIPE_TYPES.register(modEventBus);
 
-        Config.init();
-        Network.init();
+        if (checkClientInstance()) {
+            Config.init();
+            Network.init();
+        }
 
         modEventBus.addListener(SideProxy::commonSetup);
         modEventBus.addListener(SideProxy::registerCapabilities);
