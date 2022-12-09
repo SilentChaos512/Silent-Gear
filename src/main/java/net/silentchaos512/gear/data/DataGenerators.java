@@ -16,8 +16,6 @@ import net.silentchaos512.gear.data.client.CompoundModelsProvider;
 import net.silentchaos512.gear.data.client.ModBlockStateProvider;
 import net.silentchaos512.gear.data.client.ModItemModelProvider;
 import net.silentchaos512.gear.data.loot.ModLootTables;
-import net.silentchaos512.gear.data.material.MaterialsProvider;
-import net.silentchaos512.gear.data.part.PartsProvider;
 import net.silentchaos512.gear.data.recipes.ModRecipesProvider;
 import net.silentchaos512.gear.data.trait.TraitsProvider;
 

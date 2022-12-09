@@ -3,7 +3,7 @@ package net.silentchaos512.gear.gear.trait;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.GearHelper;
@@ -13,7 +13,7 @@ import java.util.Collection;
 
 public class SelfRepairTrait extends SimpleTrait {
     public static final ITraitSerializer<SelfRepairTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("self_repair"),
+            ApiConst.SELF_REPAIR_TRAIT_ID,
             SelfRepairTrait::new,
             (trait, json) -> {
                 trait.activationChance = GsonHelper.getAsFloat(json, "activation_chance");

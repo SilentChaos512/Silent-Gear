@@ -38,7 +38,7 @@ import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.MainPartItem;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.lib.util.NameUtils;
 

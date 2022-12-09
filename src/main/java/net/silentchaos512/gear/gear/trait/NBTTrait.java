@@ -8,7 +8,7 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -20,9 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 public final class NBTTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("nbt");
     static final ITraitSerializer<NBTTrait> SERIALIZER = new Serializer<>(
-            SERIALIZER_ID,
+            ApiConst.NBT_TRAIT_ID,
             NBTTrait::new,
             NBTTrait::readJson,
             NBTTrait::readBuffer,

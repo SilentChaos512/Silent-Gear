@@ -1,22 +1,17 @@
-package net.silentchaos512.gear.data.part;
+package net.silentchaos512.gear.data;
 
-import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.data.part.PartBuilder;
+import net.silentchaos512.gear.api.data.part.PartsProviderBase;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -24,30 +19,17 @@ import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.utils.Color;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
-public class PartsProvider implements DataProvider {
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-    private final DataGenerator generator;
-
+public final class PartsProvider extends PartsProviderBase {
     public PartsProvider(DataGenerator generator) {
-        this.generator = generator;
+        super(generator, SilentGear.MOD_ID);
     }
 
     @Override
-    public String getName() {
-        return "Silent Gear - Parts";
-    }
-
-    protected Collection<PartBuilder> getParts() {
+    public Collection<PartBuilder> getParts() {
         Collection<PartBuilder> ret = new ArrayList<>();
 
         ret.add(part("adornment", GearType.CURIO, PartType.ADORNMENT, SgItems.ADORNMENT));
@@ -282,41 +264,13 @@ public class PartsProvider implements DataProvider {
         if (isMainPart(builder, SgItems.BRACELET_BAND))
             return builder;
 
-        throw new IllegalArgumentException("Stats for " + builder.id + " are missing!");
+        throw new IllegalArgumentException("Stats for " + builder.getId() + " are missing!");
     }
 
     private static boolean isMainPart(PartBuilder builder, ItemLike item) {
         if (!(item.asItem() instanceof MainPartItem))
             throw new IllegalArgumentException("Item " + NameUtils.fromItem(item) + " is not a main part item!");
-        return builder.id.equals(NameUtils.fromItem(item));
+        return builder.getId().equals(NameUtils.fromItem(item));
     }
 
-    @Override
-    public void run(CachedOutput cache) {
-        Path outputFolder = this.generator.getOutputFolder();
-        Set<ResourceLocation> entries = Sets.newHashSet();
-
-        //noinspection OverlyLongLambda
-        getParts().forEach(builder -> {
-            if (entries.contains(builder.id)) {
-                throw new IllegalStateException("Duplicate part: " + builder.id);
-            }
-
-            // Part
-            entries.add(builder.id);
-            Path path = outputFolder.resolve(String.format("data/%s/silentgear_parts/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-            trySaveStable(cache, builder, path);
-
-            // Model
-            // TODO
-        });
-    }
-
-    private static void trySaveStable(CachedOutput cache, PartBuilder builder, Path path) {
-        try {
-            DataGenerators.saveStable(cache, builder.serialize(), path);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-    }
 }

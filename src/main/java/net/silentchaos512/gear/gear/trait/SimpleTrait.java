@@ -18,7 +18,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -32,7 +32,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SimpleTrait implements ITrait {
-    public static final Serializer<SimpleTrait> SERIALIZER = new Serializer<>(Serializer.NAME, SimpleTrait::new);
+    public static final Serializer<SimpleTrait> SERIALIZER = new Serializer<>(ApiConst.SIMPLE_TRAIT_ID, SimpleTrait::new);
 
     private final ResourceLocation objId;
     private final ITraitSerializer<?> serializer;
@@ -185,8 +185,6 @@ public class SimpleTrait implements ITrait {
     }
 
     public static final class Serializer<T extends SimpleTrait> implements ITraitSerializer<T> {
-        private static final ResourceLocation NAME = SilentGear.getId("simple_trait");
-
         private final ResourceLocation serializerId;
         private final Function<ResourceLocation, T> factory;
         @Nullable private final BiConsumer<T, JsonObject> deserializeJson;

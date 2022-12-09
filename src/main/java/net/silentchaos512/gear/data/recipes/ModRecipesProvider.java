@@ -30,7 +30,7 @@ import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.gear.GearArmorItem;
 import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.lib.data.recipe.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.recipe.ExtendedShapelessRecipeBuilder;
 import net.silentchaos512.lib.data.recipe.ExtendedSingleItemRecipeBuilder;

@@ -177,7 +177,6 @@ class SideProxy implements IProxy {
 
     static class Client extends SideProxy {
         Client() {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(KeyTracker::registerKeyMappings);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::clientSetup);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::postSetup);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandlers::onItemColors);
@@ -186,6 +185,9 @@ class SideProxy implements IProxy {
             MinecraftForge.EVENT_BUS.register(new GearHudOverlay());
             MinecraftForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
             MinecraftForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
+            if (checkClientInstance()) {
+                MinecraftForge.EVENT_BUS.addListener(KeyTracker::onKeyInput);
+            }
 
             if (SilentGear.isDevBuild()) {
                 MinecraftForge.EVENT_BUS.register(new DebugOverlay());

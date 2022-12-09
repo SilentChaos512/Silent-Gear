@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.data.material;
+package net.silentchaos512.gear.api.data.material;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -31,7 +31,7 @@ import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -39,7 +39,7 @@ import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "OverlyComplexClass"})
 public class MaterialBuilder {
-    final ResourceLocation id;
+    private final ResourceLocation id;
     private final int tier;
     private boolean canSalvage = true;
     private final Ingredient ingredient;
@@ -78,6 +78,10 @@ public class MaterialBuilder {
         this.name = Component.translatable(String.format("material.%s.%s",
                 this.id.getNamespace(),
                 this.id.getPath().replace("/", ".")));
+    }
+
+    public ResourceLocation getId() {
+        return id;
     }
 
     public MaterialBuilder type(IMaterialSerializer<?> serializer, boolean simple) {

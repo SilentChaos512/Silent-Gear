@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.data.part;
+package net.silentchaos512.gear.api.data.part;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -25,7 +25,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.PartSerializers;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import java.util.Map;
 
 @SuppressWarnings("WeakerAccess")
 public class PartBuilder {
-    final ResourceLocation id;
+    private final ResourceLocation id;
     private IPartSerializer<?> serializerType = PartSerializers.COMPOUND_PART;
     private final GearType gearType;
     private final PartType partType;
@@ -66,6 +66,10 @@ public class PartBuilder {
         if (!this.gearType.isGear()) {
             throw new IllegalArgumentException("Part gear type must extend GearType.ALL");
         }
+    }
+
+    public ResourceLocation getId() {
+        return id;
     }
 
     public PartBuilder serializerType(IPartSerializer<?> serializer) {

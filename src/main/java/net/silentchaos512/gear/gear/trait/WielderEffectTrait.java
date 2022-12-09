@@ -13,7 +13,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -28,7 +28,7 @@ import java.util.*;
 
 public class WielderEffectTrait extends SimpleTrait {
     public static final ITraitSerializer<WielderEffectTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("wielder_effect"),
+            ApiConst.WIELDER_EFFECT_TRAIT_ID,
             WielderEffectTrait::new,
             WielderEffectTrait::deserializeJson,
             WielderEffectTrait::readFromNetwork,

@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.NameUtils;
@@ -29,8 +30,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class BlockFillerTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("block_filler");
-    public static final ITraitSerializer<BlockFillerTrait> SERIALIZER = new Serializer<>(SERIALIZER_ID,
+    public static final ITraitSerializer<BlockFillerTrait> SERIALIZER = new Serializer<>(ApiConst.BLOCK_FILLER_TRAIT_ID,
             BlockFillerTrait::new,
             BlockFillerTrait::readJson,
             BlockFillerTrait::read,

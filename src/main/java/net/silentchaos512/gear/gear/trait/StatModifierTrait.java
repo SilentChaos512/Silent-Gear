@@ -24,6 +24,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.stats.IItemStat;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -34,7 +35,7 @@ import java.util.*;
 
 public final class StatModifierTrait extends SimpleTrait {
     public static final ITraitSerializer<StatModifierTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("stat_modifier"),
+            ApiConst.STAT_MODIFIER_TRAIT_ID,
             StatModifierTrait::new,
             StatModifierTrait::readJson,
             StatModifierTrait::readBuffer,

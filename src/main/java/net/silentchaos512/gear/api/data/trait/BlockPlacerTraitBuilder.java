@@ -1,13 +1,13 @@
-package net.silentchaos512.gear.data.trait;
+package net.silentchaos512.gear.api.data.trait;
 
 import com.google.gson.JsonObject;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.gear.trait.BlockPlacerTrait;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.Objects;
@@ -25,7 +25,7 @@ public class BlockPlacerTraitBuilder extends TraitBuilder {
     }
 
     public BlockPlacerTraitBuilder(ResourceLocation traitId, int maxLevel, Block block, int damageOnUse) {
-        super(traitId, maxLevel, BlockPlacerTrait.SERIALIZER);
+        super(traitId, maxLevel, ApiConst.BLOCK_PLACER_TRAIT_ID);
         this.block = block;
         this.damageOnUse = damageOnUse;
         this.sound = this.block.defaultBlockState().getSoundType().getPlaceSound();

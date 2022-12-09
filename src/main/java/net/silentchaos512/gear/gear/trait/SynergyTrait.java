@@ -4,15 +4,14 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 
 import java.util.Collection;
 
 public class SynergyTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("synergy");
     public static final ITraitSerializer<SynergyTrait> SERIALIZER = new Serializer<>(
-            SERIALIZER_ID,
+            ApiConst.SYNERGY_TRAIT_ID,
             SynergyTrait::new,
             SynergyTrait::deserialize,
             SynergyTrait::read,

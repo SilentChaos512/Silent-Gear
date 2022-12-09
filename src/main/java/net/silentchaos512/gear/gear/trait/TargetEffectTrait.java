@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -21,7 +21,7 @@ import java.util.*;
 
 public class TargetEffectTrait extends SimpleTrait {
     public static final ITraitSerializer<TargetEffectTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("target_effect"),
+            ApiConst.TARGET_EFFECT_TRAIT_ID,
             TargetEffectTrait::new,
             TargetEffectTrait::deserialize,
             TargetEffectTrait::read,

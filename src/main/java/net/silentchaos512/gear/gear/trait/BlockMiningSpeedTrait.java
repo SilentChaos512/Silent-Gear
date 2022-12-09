@@ -14,6 +14,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -25,7 +26,7 @@ import java.util.Map;
 @Mod.EventBusSubscriber
 public class BlockMiningSpeedTrait extends SimpleTrait {
     public static final ITraitSerializer<BlockMiningSpeedTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("block_mining_speed"),
+            ApiConst.BLOCK_MINING_SPEED_TRAIT_ID,
             BlockMiningSpeedTrait::new,
             (trait, json) -> {
                 trait.speedMultiplier = GsonHelper.getAsFloat(json, "speed_multiplier", 1f);

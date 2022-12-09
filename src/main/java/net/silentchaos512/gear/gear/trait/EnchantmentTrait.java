@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -25,9 +26,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public final class EnchantmentTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("enchantment");
     public static final ITraitSerializer<EnchantmentTrait> SERIALIZER = new Serializer<>(
-            SERIALIZER_ID,
+            ApiConst.ENCHANTMENT_TRAIT_ID,
             EnchantmentTrait::new,
             EnchantmentTrait::readJson,
             EnchantmentTrait::readBuffer,

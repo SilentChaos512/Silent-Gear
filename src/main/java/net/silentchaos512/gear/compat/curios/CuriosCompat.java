@@ -13,7 +13,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.item.gear.GearElytraItem;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.util.TraitHelper;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypePreset;

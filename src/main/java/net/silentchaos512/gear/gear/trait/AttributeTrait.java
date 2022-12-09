@@ -13,7 +13,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -23,9 +23,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class AttributeTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("attribute");
     public static final ITraitSerializer<AttributeTrait> SERIALIZER = new Serializer<>(
-            SERIALIZER_ID,
+            ApiConst.ATTRIBUTE_TRAIT_ID,
             AttributeTrait::new,
             AttributeTrait::readJson,
             AttributeTrait::readBuffer,

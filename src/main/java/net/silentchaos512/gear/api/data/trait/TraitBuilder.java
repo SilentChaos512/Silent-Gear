@@ -1,19 +1,18 @@
-package net.silentchaos512.gear.data.trait;
+package net.silentchaos512.gear.api.data.trait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
-import net.silentchaos512.gear.api.traits.ITraitSerializer;
-import net.silentchaos512.gear.gear.trait.SimpleTrait;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
 import net.silentchaos512.gear.gear.trait.condition.GearTypeTraitCondition;
 import net.silentchaos512.gear.gear.trait.condition.OrTraitCondition;
-import net.silentchaos512.gear.util.DataResource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +21,7 @@ import java.util.Collections;
 import java.util.function.Consumer;
 
 public class TraitBuilder {
-    protected final ResourceLocation traitId;
+    private final ResourceLocation traitId;
     protected final int maxLevel;
     protected final ResourceLocation type;
 
@@ -36,13 +35,13 @@ public class TraitBuilder {
 
     private Consumer<JsonObject> extraData = json -> {};
 
-    public TraitBuilder(DataResource<ITrait> trait, int maxLevel, ITraitSerializer<?> serializer) {
-        this(trait.getId(), maxLevel, serializer);
+    public TraitBuilder(DataResource<ITrait> trait, int maxLevel, ResourceLocation serializerId) {
+        this(trait.getId(), maxLevel, serializerId);
     }
 
-    public TraitBuilder(ResourceLocation traitId, int maxLevel, ITraitSerializer<?> serializer) {
+    public TraitBuilder(ResourceLocation traitId, int maxLevel, ResourceLocation serializerId) {
         this.traitId = traitId;
-        this.type = serializer.getName();
+        this.type = serializerId;
         this.maxLevel = maxLevel;
 
         this.name = Component.translatable(Util.makeDescriptionId("trait", traitId));
@@ -54,7 +53,11 @@ public class TraitBuilder {
     }
 
     public static TraitBuilder simple(ResourceLocation traitId, int maxLevel) {
-        return new TraitBuilder(traitId, maxLevel, SimpleTrait.SERIALIZER);
+        return new TraitBuilder(traitId, maxLevel, ApiConst.SIMPLE_TRAIT_ID);
+    }
+
+    public ResourceLocation getTraitId() {
+        return traitId;
     }
 
     public TraitBuilder setName(Component text) {

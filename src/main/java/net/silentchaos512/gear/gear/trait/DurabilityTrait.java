@@ -23,6 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.lib.advancements.LibTriggers;
@@ -39,7 +40,7 @@ public final class DurabilityTrait extends SimpleTrait {
     public static final ResourceLocation TRIGGER_BRITTLE = SilentGear.getId("brittle_proc");
 
     public static final ITraitSerializer<DurabilityTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("durability"),
+            ApiConst.DURABILITY_TRAIT_ID,
             DurabilityTrait::new,
             (trait, json) -> {
                 trait.activationChance = GsonHelper.getAsFloat(json, "activation_chance", 1);

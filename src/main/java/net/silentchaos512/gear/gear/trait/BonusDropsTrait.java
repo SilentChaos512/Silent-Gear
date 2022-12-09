@@ -7,6 +7,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 
@@ -15,7 +16,7 @@ import java.util.Collection;
 public final class BonusDropsTrait extends SimpleTrait {
     @SuppressWarnings("OverlyLongLambda")
     public static final ITraitSerializer<BonusDropsTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("bonus_drops"),
+            ApiConst.BONUS_DROPS_TRAIT_ID,
             BonusDropsTrait::new,
             (trait, json) -> {
                 trait.baseChance = GsonHelper.getAsFloat(json, "base_chance", 0f);

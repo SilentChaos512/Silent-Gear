@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.util;
+package net.silentchaos512.gear.api.util;
 
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public final class DataResource<T> { // TODO: Move to api package?
+public final class DataResource<T> {
     private final ResourceLocation objectId;
     private final Function<ResourceLocation, T> getter;
 

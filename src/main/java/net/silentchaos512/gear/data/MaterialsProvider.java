@@ -1,11 +1,6 @@
-package net.silentchaos512.gear.data.material;
+package net.silentchaos512.gear.data;
 
-import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -14,6 +9,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.data.material.MaterialBuilder;
+import net.silentchaos512.gear.api.data.material.MaterialsProviderBase;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.material.StaticLayer;
@@ -23,7 +20,6 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.crafting.ingredient.CustomCompoundIngredient;
-import net.silentchaos512.gear.data.DataGenerators;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
@@ -37,21 +33,11 @@ import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.utils.Color;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
-public class MaterialsProvider implements DataProvider {
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-
-    private final DataGenerator generator;
-    private final String modId;
+public class MaterialsProvider extends MaterialsProviderBase {
 
     @Deprecated
     public MaterialsProvider(DataGenerator generator) {
@@ -59,15 +45,10 @@ public class MaterialsProvider implements DataProvider {
     }
 
     public MaterialsProvider(DataGenerator generator, String modId) {
-        this.generator = generator;
-        this.modId = modId;
+        super(generator, modId);
     }
 
     @Override
-    public String getName() {
-        return "Silent Gear - Materials";
-    }
-
     protected Collection<MaterialBuilder> getMaterials() {
         Collection<MaterialBuilder> ret = new ArrayList<>();
 
@@ -1997,41 +1978,4 @@ public class MaterialsProvider implements DataProvider {
         return new OrTraitCondition(new MaterialCountTraitCondition(count), new MaterialRatioTraitCondition(ratio));
     }
 
-    @SuppressWarnings("WeakerAccess")
-    protected static ResourceLocation forgeId(String path) {
-        return new ResourceLocation("forge", path);
-    }
-
-    protected ResourceLocation modId(String path) {
-        return new ResourceLocation(this.modId, path);
-    }
-
-    @Override
-    public void run(CachedOutput cache) {
-        Path outputFolder = this.generator.getOutputFolder();
-        Set<ResourceLocation> entries = Sets.newHashSet();
-
-        //noinspection OverlyLongLambda
-        getMaterials().forEach(builder -> {
-            if (entries.contains(builder.id)) {
-                throw new IllegalStateException("Duplicate material: " + builder.id);
-            }
-
-            // Material
-            entries.add(builder.id);
-            Path path = outputFolder.resolve(String.format("data/%s/silentgear_materials/%s.json", builder.id.getNamespace(), builder.id.getPath()));
-            trySaveStable(cache, builder, path);
-
-            // Model
-            // TODO
-        });
-    }
-
-    private static void trySaveStable(CachedOutput cache, MaterialBuilder builder, Path path) {
-        try {
-            DataGenerators.saveStable(cache, builder.serialize(), path);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-    }
 }

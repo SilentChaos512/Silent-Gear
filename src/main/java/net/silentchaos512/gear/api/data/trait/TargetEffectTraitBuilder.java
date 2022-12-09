@@ -1,19 +1,18 @@
-package net.silentchaos512.gear.data.trait;
+package net.silentchaos512.gear.api.data.trait;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.gear.trait.TargetEffectTrait;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.lib.util.TimeUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TargetEffectTraitBuilder extends TraitBuilder {
     private final Map<GearType, Map<Integer, List<MobEffectInstance>>> potions = new LinkedHashMap<>();
@@ -23,7 +22,7 @@ public class TargetEffectTraitBuilder extends TraitBuilder {
     }
 
     public TargetEffectTraitBuilder(ResourceLocation traitId, int maxLevel) {
-        super(traitId, maxLevel, TargetEffectTrait.SERIALIZER);
+        super(traitId, maxLevel, ApiConst.TARGET_EFFECT_TRAIT_ID);
     }
 
     public TargetEffectTraitBuilder addEffect(GearType gearType, int traitLevel, MobEffect effect, int amplifier, float durationInSeconds) {
@@ -44,18 +43,49 @@ public class TargetEffectTraitBuilder extends TraitBuilder {
     @Override
     public JsonObject serialize() {
         if (this.potions.isEmpty()) {
-            throw new IllegalStateException("Target effect trait '" + this.traitId + "' has no effects");
+            throw new IllegalStateException("Target effect trait '" + this.getTraitId() + "' has no effects");
         }
 
         JsonObject json = super.serialize();
 
         JsonObject effectsJson = new JsonObject();
         this.potions.forEach((gearType, map) -> {
-            TargetEffectTrait.EffectMap effectMap = new TargetEffectTrait.EffectMap(map);
+            EffectMap effectMap = new EffectMap(map);
             effectsJson.add(gearType.getName(), effectMap.serialize());
         });
         json.add("effects", effectsJson);
 
         return json;
+    }
+
+    public static class EffectMap {
+        private final Map<Integer, List<MobEffectInstance>> effects = new LinkedHashMap<>();
+
+        public EffectMap(Map<Integer, List<MobEffectInstance>> effects) {
+            this.effects.putAll(effects);
+        }
+
+        public JsonObject serialize() {
+            JsonObject json = new JsonObject();
+
+            for (Map.Entry<Integer, List<MobEffectInstance>> entry : this.effects.entrySet()) {
+                int level = entry.getKey();
+                List<MobEffectInstance> list = entry.getValue();
+
+                JsonArray array = new JsonArray();
+
+                for (MobEffectInstance inst : list) {
+                    JsonObject obj = new JsonObject();
+                    obj.addProperty("effect", Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(inst.getEffect())).toString());
+                    obj.addProperty("amplifier", inst.getAmplifier());
+                    obj.addProperty("duration", inst.getDuration() / 20f);
+                    array.add(obj);
+                }
+
+                json.add(String.valueOf(level), array);
+            }
+
+            return json;
+        }
     }
 }

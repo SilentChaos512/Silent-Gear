@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.data.trait;
+package net.silentchaos512.gear.api.data.trait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -6,10 +6,11 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.gear.trait.AttributeTrait;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,14 +18,14 @@ import java.util.List;
 import java.util.Map;
 
 public class AttributeTraitBuilder extends TraitBuilder {
-    private final Map<String, List<AttributeTrait.ModifierData>> modifiers = new LinkedHashMap<>();
+    private final Map<String, List<Modifier>> modifiers = new LinkedHashMap<>();
 
     public AttributeTraitBuilder(DataResource<ITrait> trait, int maxLevel) {
         this(trait.getId(), maxLevel);
     }
 
     public AttributeTraitBuilder(ResourceLocation traitId, int maxLevel) {
-        super(traitId, maxLevel, AttributeTrait.SERIALIZER);
+        super(traitId, maxLevel, ApiConst.ATTRIBUTE_TRAIT_ID);
     }
 
     public AttributeTraitBuilder addModifier(GearType gearType, EquipmentSlot slot, Attribute attribute, AttributeModifier.Operation operation, float... values) {
@@ -33,7 +34,7 @@ public class AttributeTraitBuilder extends TraitBuilder {
 
     public AttributeTraitBuilder addModifier(GearType gearType, String slot, Attribute attribute, AttributeModifier.Operation operation, float... values) {
         this.modifiers.computeIfAbsent(makeKey(gearType, slot), str -> new ArrayList<>())
-                .add(AttributeTrait.ModifierData.of(attribute, operation, values));
+                .add(new Modifier(ForgeRegistries.ATTRIBUTES.getKey(attribute), operation, values));
         return this;
     }
 
@@ -65,7 +66,7 @@ public class AttributeTraitBuilder extends TraitBuilder {
     @Override
     public JsonObject serialize() {
         if (this.modifiers.isEmpty()) {
-            throw new IllegalStateException("Attribute trait '" + this.traitId + "' has no modifiers");
+            throw new IllegalStateException("Attribute trait '" + this.getTraitId() + "' has no modifiers");
         }
 
         JsonObject json = super.serialize();
@@ -79,5 +80,22 @@ public class AttributeTraitBuilder extends TraitBuilder {
         json.add("attribute_modifiers", modsJson);
 
         return json;
+    }
+
+    public record Modifier(ResourceLocation name, AttributeModifier.Operation operation, float... values) {
+        public JsonObject serialize() {
+            JsonObject json = new JsonObject();
+
+            json.addProperty("attribute", name.toString());
+            json.addProperty("operation", operation.toValue());
+
+            JsonArray array = new JsonArray();
+            for (float f : this.values) {
+                array.add(f);
+            }
+            json.add("value", array);
+
+            return json;
+        }
     }
 }

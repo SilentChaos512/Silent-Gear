@@ -1,13 +1,13 @@
-package net.silentchaos512.gear.data.trait;
+package net.silentchaos512.gear.api.data.trait;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.gear.trait.BlockMiningSpeedTrait;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,7 +21,7 @@ public class BlockMiningSpeedTraitBuilder extends TraitBuilder {
     }
 
     public BlockMiningSpeedTraitBuilder(DataResource<ITrait> trait, int maxLevel, float speedMultiplier, Collection<TagKey<Block>> blocks) {
-        super(trait, maxLevel, BlockMiningSpeedTrait.SERIALIZER);
+        super(trait, maxLevel, ApiConst.BLOCK_MINING_SPEED_TRAIT_ID);
         this.speedMultiplier = speedMultiplier;
         this.blocks = Sets.newHashSet(blocks);
     }

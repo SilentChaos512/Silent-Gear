@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.data.trait;
+package net.silentchaos512.gear.api.data.trait;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
@@ -6,9 +6,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.gear.trait.BlockFillerTrait;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -24,7 +24,7 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
     private int fillRangeY = 0;
     private int fillRangeZ = 0;
     private boolean fillFacingPlaneOnly = false;
-    private BlockFillerTrait.SneakMode sneakMode = BlockFillerTrait.SneakMode.PASS;
+    private SneakMode sneakMode = SneakMode.PASS;
     private final float damageOnUse;
     private int cooldown;
     private SoundEvent sound;
@@ -36,7 +36,7 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
     }
 
     public BlockFillerTraitBuilder(ResourceLocation traitId, int maxLevel, Block fillBlock, float damageOnUse) {
-        super(traitId, maxLevel, BlockFillerTrait.SERIALIZER);
+        super(traitId, maxLevel, ApiConst.BLOCK_FILLER_TRAIT_ID);
         this.fillBlock = fillBlock;
         this.damageOnUse = damageOnUse;
         this.sound = this.fillBlock.defaultBlockState().getSoundType().getBreakSound();
@@ -65,7 +65,7 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
         return this;
     }
 
-    public BlockFillerTraitBuilder sneakMode(BlockFillerTrait.SneakMode mode) {
+    public BlockFillerTraitBuilder sneakMode(SneakMode mode) {
         this.sneakMode = mode;
         return this;
     }
@@ -116,5 +116,9 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
         json.addProperty("sound_pitch", this.soundPitch);
 
         return json;
+    }
+
+    public enum SneakMode {
+        PASS, CONSTRAIN, IGNORE;
     }
 }

@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class CancelEffectsTrait extends SimpleTrait {
     public static final ITraitSerializer<CancelEffectsTrait> SERIALIZER = new Serializer<>(
-            SilentGear.getId("cancel_effects"),
+            ApiConst.CANCEL_EFFECTS_TRAIT_ID,
             CancelEffectsTrait::new,
             CancelEffectsTrait::deserialize,
             CancelEffectsTrait::decode,

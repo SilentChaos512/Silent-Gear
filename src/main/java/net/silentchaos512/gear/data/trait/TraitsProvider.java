@@ -1,15 +1,7 @@
 package net.silentchaos512.gear.data.trait;
 
-import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,42 +10,26 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.data.trait.*;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.data.DataGenerators;
-import net.silentchaos512.gear.gear.trait.*;
+import net.silentchaos512.gear.gear.trait.StellarTrait;
 import net.silentchaos512.gear.init.SgBlocks;
 import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.gear.util.DataResource;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-public class TraitsProvider implements DataProvider {
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-    private final DataGenerator generator;
-
+public class TraitsProvider extends TraitsProviderBase {
     public TraitsProvider(DataGenerator generator) {
-        this.generator = generator;
+        super(generator, SilentGear.MOD_ID);
     }
 
     @Override
-    public String getName() {
-        return "Silent Gear - Traits";
-    }
-
     @SuppressWarnings({"OverlyLongMethod", "MethodMayBeStatic"})
-    protected Collection<TraitBuilder> getTraits() {
+    public Collection<TraitBuilder> getTraits() {
         Collection<TraitBuilder> ret = new ArrayList<>();
 
         // Simple
@@ -213,32 +189,32 @@ public class TraitsProvider implements DataProvider {
 
         // Wielder Effect (Potion)
 
-        ret.add(new PotionTraitBuilder(Const.Traits.ADAMANT, 5)
-                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.PIECE_COUNT, MobEffects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
+        ret.add(new WielderEffectTraitBuilder(Const.Traits.ADAMANT, 5)
+                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.PIECE_COUNT, MobEffects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
         );
-        ret.add(new PotionTraitBuilder(Const.Traits.AQUATIC, 5)
-                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.FULL_SET_ONLY, MobEffects.WATER_BREATHING, 1)
+        ret.add(new WielderEffectTraitBuilder(Const.Traits.AQUATIC, 5)
+                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.FULL_SET_ONLY, MobEffects.WATER_BREATHING, 1)
         );
-        ret.add(new PotionTraitBuilder(Const.Traits.FLAME_WARD, 1)
-                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.FULL_SET_ONLY, MobEffects.FIRE_RESISTANCE, 1)
+        ret.add(new WielderEffectTraitBuilder(Const.Traits.FLAME_WARD, 1)
+                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.FULL_SET_ONLY, MobEffects.FIRE_RESISTANCE, 1)
                 .overridesTrait(Const.Traits.FLAMMABLE)
                 .withGearTypeCondition(GearType.ARMOR)
                 .extraWikiLines("  - The item cannot be destroyed by fire or lava")
         );
-        ret.add(new PotionTraitBuilder(Const.Traits.KITTY_VISION, 1)
-                .addEffect(GearType.HELMET, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
-                .addEffect(GearType.CURIO, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
+        ret.add(new WielderEffectTraitBuilder(Const.Traits.KITTY_VISION, 1)
+                .addEffect(GearType.HELMET, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
+                .addEffect(GearType.CURIO, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
                 .withGearTypeCondition(GearType.HELMET, GearType.CURIO)
         );
-        ret.add(new PotionTraitBuilder(Const.Traits.MIGHTY, 5)
-                .addEffect(GearType.TOOL, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
-                .addEffect(GearType.TOOL, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 1, 2, 3)
-                .addEffect(GearType.CURIO, WielderEffectTrait.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 2, 2, 3)
+        ret.add(new WielderEffectTraitBuilder(Const.Traits.MIGHTY, 5)
+                .addEffect(GearType.TOOL, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
+                .addEffect(GearType.TOOL, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 1, 2, 3)
+                .addEffect(GearType.CURIO, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 2, 2, 3)
                 .withGearTypeCondition(GearType.TOOL, GearType.CURIO)
         );
-        ret.add(new PotionTraitBuilder(Const.Traits.STELLAR, 5, StellarTrait.SERIALIZER)
-                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.PIECE_COUNT, MobEffects.MOVEMENT_SPEED, 0, 1, 2, 3)
-                .addEffect(GearType.ARMOR, WielderEffectTrait.LevelType.PIECE_COUNT, MobEffects.JUMP, 1, 2, 3, 4)
+        ret.add(new WielderEffectTraitBuilder(Const.Traits.STELLAR, 5, StellarTrait.SERIALIZER.getName())
+                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.PIECE_COUNT, MobEffects.MOVEMENT_SPEED, 0, 1, 2, 3)
+                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.PIECE_COUNT, MobEffects.JUMP, 1, 2, 3, 4)
                 .extraWikiLines(String.format("  - Has a %d%% chance per level to restore 1 durability each second",
                         (int) (100 * Const.Traits.STELLAR_REPAIR_CHANCE)))
         );
@@ -349,67 +325,5 @@ public class TraitsProvider implements DataProvider {
         ret.add(new BlockMiningSpeedTraitBuilder(Const.Traits.GREEDY, 5, 0.2f, Tags.Blocks.ORES));
 
         return ret;
-    }
-
-    protected static TraitBuilder bonusDropsTraits(DataResource<ITrait> trait, int maxLevel, float chance, float multiplier, Ingredient ingredient) {
-        return new TraitBuilder(trait, maxLevel, BonusDropsTrait.SERIALIZER)
-                .extraData(json -> {
-                    json.addProperty("base_chance", chance);
-                    json.addProperty("bonus_multiplier", multiplier);
-                    json.add("ingredient", ingredient.toJson());
-                });
-    }
-
-    protected static TraitBuilder cancelEffectsTrait(DataResource<ITrait> trait, MobEffect... effects) {
-        JsonArray array = new JsonArray();
-        for (MobEffect effect : effects) {
-            array.add(Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect)).toString());
-        }
-
-        return new TraitBuilder(trait, 1, CancelEffectsTrait.SERIALIZER)
-                .extraData(json -> {
-                    json.add("effects", array);
-                });
-    }
-
-    protected static TraitBuilder damageTypeTrait(DataResource<ITrait> trait, int maxLevel, String damageType, int damageBonus) {
-        return new TraitBuilder(trait, maxLevel, DamageTypeTrait.SERIALIZER)
-                .extraData(json -> {
-                    json.addProperty("damage_type", damageType);
-                    json.addProperty("damage_bonus", damageBonus);
-                });
-    }
-
-    protected static TraitBuilder selfRepairTrait(DataResource<ITrait> trait, int maxLevel, float activationChance, int repairAmount) {
-        return new TraitBuilder(trait, maxLevel, SelfRepairTrait.SERIALIZER)
-                .extraData(json -> {
-                    json.addProperty("activation_chance", activationChance);
-                    json.addProperty("repair_amount", repairAmount);
-                });
-    }
-
-    @Override
-    public void run(CachedOutput cache) {
-        Path outputFolder = this.generator.getOutputFolder();
-        Set<ResourceLocation> entries = Sets.newHashSet();
-
-        //noinspection OverlyLongLambda
-        getTraits().forEach(builder -> {
-            if (entries.contains(builder.traitId)) {
-                throw new IllegalStateException("Duplicate trait: " + builder.traitId);
-            }
-
-            entries.add(builder.traitId);
-            Path path = outputFolder.resolve(String.format("data/%s/silentgear_traits/%s.json", builder.traitId.getNamespace(), builder.traitId.getPath()));
-            trySaveStable(cache, builder, path);
-        });
-    }
-
-    private static void trySaveStable(CachedOutput cache, TraitBuilder builder, Path path) {
-        try {
-            DataGenerators.saveStable(cache, builder.serialize(), path);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
     }
 }

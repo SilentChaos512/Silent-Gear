@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.block.PhantomLight;
 import net.silentchaos512.gear.util.GearHelper;
@@ -26,8 +27,13 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class BlockPlacerTrait extends SimpleTrait {
-    private static final ResourceLocation SERIALIZER_ID = SilentGear.getId("block_placer");
-    public static final ITraitSerializer<BlockPlacerTrait> SERIALIZER = new Serializer<>(SERIALIZER_ID, BlockPlacerTrait::new, BlockPlacerTrait::readJson, BlockPlacerTrait::read, BlockPlacerTrait::write);
+    public static final ITraitSerializer<BlockPlacerTrait> SERIALIZER = new Serializer<>(
+            ApiConst.BLOCK_PLACER_TRAIT_ID,
+            BlockPlacerTrait::new,
+            BlockPlacerTrait::readJson,
+            BlockPlacerTrait::read,
+            BlockPlacerTrait::write
+    );
 
     private Block block;
     private int damageOnUse;

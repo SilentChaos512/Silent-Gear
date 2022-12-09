@@ -16,7 +16,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
-import net.silentchaos512.gear.util.DataResource;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nonnull;

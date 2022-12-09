@@ -6,6 +6,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
 import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
