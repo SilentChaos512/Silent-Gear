@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.1.1] - 2022-12-17
 ### Fixed
 - More block transparency issues [#537, #565]
+- Add deprecated version of DataResource to fix compatibility issues with other mods
 
 ## [3.1.0] - 2022-12-09
 ### Changed
