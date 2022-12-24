@@ -22,6 +22,7 @@ public final class Const {
 
     // Model properties
     public static final ResourceLocation BROKEN_PROPERTY = modId("broken");
+    public static final ModResourceLocation MODEL = SilentGear.getId("model");
 
     // Recipe types and categories
     public static final ResourceLocation COMBINE_FRAGMENTS = modId("combine_fragments");

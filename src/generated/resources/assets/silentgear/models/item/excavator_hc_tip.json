@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/excavator/rod_generic_lc",
+    "layer1": "silentgear:item/excavator/main_generic_hc",
+    "layer2": "silentgear:item/excavator/_highlight",
+    "layer3": "silentgear:item/excavator/tip_sharp"
+  }
+}

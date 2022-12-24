@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/trident/rod_generic_lc",
+    "layer1": "silentgear:item/trident/main_generic_hc",
+    "layer2": "silentgear:item/trident/_highlight",
+    "layer3": "silentgear:item/trident/tip_sharp",
+    "layer4": "silentgear:item/trident/grip_wool"
+  }
+}

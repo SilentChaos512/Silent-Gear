@@ -3,13 +3,13 @@ package net.silentchaos512.gear.util;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,6 +18,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.material.IMaterialDisplay;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.MaterialLayer;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartDataList;
@@ -61,6 +64,7 @@ public final class GearData {
     private static final String NBT_LOCK_STATS = "LockStats";
     private static final String NBT_IS_EXAMPLE = "IsExample";
     private static final String NBT_MODEL_KEY = "ModelKey";
+    private static final String NBT_MODEL = "Model";
     private static final String NBT_SYNERGY = "synergy";
     private static final String NBT_TIER = "Tier";
     private static final String NBT_UUID = "SGear_UUID";
@@ -269,8 +273,10 @@ public final class GearData {
         // Remove deprecated keys
         nbt.remove("ArmorColor");
         nbt.remove("BlendedHeadColor");
+        nbt.remove(NBT_MODEL_KEY);
 
-        nbt.putString(NBT_MODEL_KEY, calculateModelKey(stack, parts));
+//        nbt.putString(NBT_MODEL_KEY, calculateModelKey(stack, parts));
+        nbt.putInt(NBT_MODEL, calculateModelIndex(stack));
 
         // Remove old model keys
         stack.getOrCreateTagElement(NBT_ROOT).remove("ModelKeys");
@@ -437,6 +443,35 @@ public final class GearData {
         }
 
         return Color.VALUE_WHITE;
+    }
+
+    public static int getModelIndex(ItemStack gear) {
+        CompoundTag nbt = getData(gear, NBT_ROOT_RENDERING);
+        if (nbt.contains(NBT_MODEL)) {
+            return nbt.getInt(NBT_MODEL);
+        }
+        return 0;
+    }
+
+    private static int calculateModelIndex(ItemStack gear) {
+        PartData coatingOrMainPart = getCoatingOrMainPart(gear);
+        IMaterialInstance mainMaterial = coatingOrMainPart != null
+                ? coatingOrMainPart.getMaterials().get(0)
+                : MaterialInstance.of(Const.Materials.IRON.get());
+        IMaterialDisplay main = mainMaterial.getDisplayProperties();
+        MaterialLayer firstLayer = main.getLayerList(GearHelper.getType(gear), PartType.MAIN, mainMaterial).getFirstLayer();
+        boolean highContrast = firstLayer == null || !firstLayer.getTextureId().toString().endsWith("lc");
+
+        int ret = highContrast ? 3 : 2;
+
+        if (getPartOfType(gear, PartType.TIP) != null) {
+            ret |= 4;
+        }
+        if (getPartOfType(gear, PartType.GRIP) != null) {
+            ret |= 8;
+        }
+
+        return ret;
     }
 
     //region Part getters and checks

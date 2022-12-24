@@ -1,8 +1,57 @@
 {
   "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "silentgear:item/prospector_hammer_lc",
+      "predicate": {
+        "silentgear:model": 2.0
+      }
+    },
+    {
+      "model": "silentgear:item/prospector_hammer_hc",
+      "predicate": {
+        "silentgear:model": 3.0
+      }
+    },
+    {
+      "model": "silentgear:item/prospector_hammer_lc_tip",
+      "predicate": {
+        "silentgear:model": 6.0
+      }
+    },
+    {
+      "model": "silentgear:item/prospector_hammer_hc_tip",
+      "predicate": {
+        "silentgear:model": 7.0
+      }
+    },
+    {
+      "model": "silentgear:item/prospector_hammer_lc_grip",
+      "predicate": {
+        "silentgear:model": 10.0
+      }
+    },
+    {
+      "model": "silentgear:item/prospector_hammer_hc_grip",
+      "predicate": {
+        "silentgear:model": 11.0
+      }
+    },
+    {
+      "model": "silentgear:item/prospector_hammer_lc_tip_grip",
+      "predicate": {
+        "silentgear:model": 14.0
+      }
+    },
+    {
+      "model": "silentgear:item/prospector_hammer_hc_tip_grip",
+      "predicate": {
+        "silentgear:model": 15.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "silentgear:item/prospector_hammer/rod_generic_lc",
-    "layer1": "silentgear:item/prospector_hammer/main_generic_hc",
-    "layer2": "silentgear:item/prospector_hammer/_highlight"
+    "layer1": "silentgear:item/prospector_hammer/main_generic_lc"
   }
 }

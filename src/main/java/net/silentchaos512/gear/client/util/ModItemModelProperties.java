@@ -8,9 +8,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 public final class ModItemModelProperties {
+
     private ModItemModelProperties() {}
 
     @SuppressWarnings("OverlyComplexMethod")
@@ -59,6 +61,9 @@ public final class ModItemModelProperties {
         });
 
         SgItems.getItems(ICoreItem.class).forEach(item -> {
+            ItemProperties.register(item.asItem(), Const.MODEL, (stack, level, entity, par4) -> {
+                return GearData.getModelIndex(stack);
+            });
             ItemProperties.register(item.asItem(), Const.BROKEN_PROPERTY, (stack, level, entity, par4) -> {
                 return GearHelper.isBroken(stack) ? 0 : 1;
             });

@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/pickaxe/rod_generic_lc",
+    "layer1": "silentgear:item/pickaxe/main_generic_hc",
+    "layer2": "silentgear:item/pickaxe/_highlight",
+    "layer3": "silentgear:item/pickaxe/tip_sharp",
+    "layer4": "silentgear:item/pickaxe/grip_wool"
+  }
+}

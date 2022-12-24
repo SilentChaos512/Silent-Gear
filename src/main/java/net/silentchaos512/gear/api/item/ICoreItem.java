@@ -155,7 +155,6 @@ public interface ICoreItem extends ItemLike, IStatItem {
         return 0;
     }
 
-    @Deprecated
     @OnlyIn(Dist.CLIENT)
     default ItemColor getItemColors() {
 //        return (stack, tintIndex) -> Color.VALUE_WHITE;
@@ -163,7 +162,16 @@ public interface ICoreItem extends ItemLike, IStatItem {
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
                 case 0 -> GearData.getBlendedColor(stack, PartType.ROD);
-                case 1 -> GearData.getBlendedColor(stack, PartType.MAIN);
+                case 1 -> {
+                    if (GearData.hasPartOfType(stack, PartType.COATING)) {
+                        yield GearData.getBlendedColor(stack, PartType.COATING);
+                    } else {
+                        yield GearData.getBlendedColor(stack, PartType.MAIN);
+                    }
+                }
+                // 2: highlight layer, no color needed
+                case 3 -> GearData.getBlendedColor(stack, PartType.TIP);
+                case 4 -> GearData.getBlendedColor(stack, PartType.GRIP);
                 default -> Color.VALUE_WHITE;
             };
         };

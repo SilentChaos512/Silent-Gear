@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/prospector_hammer/rod_generic_lc",
+    "layer1": "silentgear:item/prospector_hammer/main_generic_lc",
+    "layer2": "silentgear:item/blank",
+    "layer3": "silentgear:item/blank",
+    "layer4": "silentgear:item/prospector_hammer/grip_wool"
+  }
+}

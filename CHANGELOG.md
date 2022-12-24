@@ -3,9 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.1.3] - 2022-12-24
+### Changed
+- Most tools can now display tip upgrades and grips on their models
+- Materials using "lc" main textures should now display properly for most tools
 ### Fixed
 - Tooltip cycle keys (Z/C) not working correctly [#567]
+- Missing translation for potted netherwood sapling (ochotonida) [#536]
+- Gear models not displaying their coating color
+- Yet another attempt at working around DataResource crashes...
 
 ## [3.1.2] - 2022-12-22
 ### Fixed

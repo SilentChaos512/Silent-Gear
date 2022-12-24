@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/sickle/rod_generic_lc",
+    "layer1": "silentgear:item/sickle/main_generic_lc",
+    "layer2": "silentgear:item/blank",
+    "layer3": "silentgear:item/sickle/tip_sharp"
+  }
+}

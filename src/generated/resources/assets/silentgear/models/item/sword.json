@@ -1,8 +1,57 @@
 {
   "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "silentgear:item/sword_lc",
+      "predicate": {
+        "silentgear:model": 2.0
+      }
+    },
+    {
+      "model": "silentgear:item/sword_hc",
+      "predicate": {
+        "silentgear:model": 3.0
+      }
+    },
+    {
+      "model": "silentgear:item/sword_lc_tip",
+      "predicate": {
+        "silentgear:model": 6.0
+      }
+    },
+    {
+      "model": "silentgear:item/sword_hc_tip",
+      "predicate": {
+        "silentgear:model": 7.0
+      }
+    },
+    {
+      "model": "silentgear:item/sword_lc_grip",
+      "predicate": {
+        "silentgear:model": 10.0
+      }
+    },
+    {
+      "model": "silentgear:item/sword_hc_grip",
+      "predicate": {
+        "silentgear:model": 11.0
+      }
+    },
+    {
+      "model": "silentgear:item/sword_lc_tip_grip",
+      "predicate": {
+        "silentgear:model": 14.0
+      }
+    },
+    {
+      "model": "silentgear:item/sword_hc_tip_grip",
+      "predicate": {
+        "silentgear:model": 15.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "silentgear:item/sword/rod_generic_lc",
-    "layer1": "silentgear:item/sword/main_generic_hc",
-    "layer2": "silentgear:item/sword/_highlight"
+    "layer1": "silentgear:item/sword/main_generic_lc"
   }
 }

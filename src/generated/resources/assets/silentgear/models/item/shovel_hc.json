@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/shovel/rod_generic_lc",
+    "layer1": "silentgear:item/shovel/main_generic_hc",
+    "layer2": "silentgear:item/shovel/_highlight"
+  }
+}
