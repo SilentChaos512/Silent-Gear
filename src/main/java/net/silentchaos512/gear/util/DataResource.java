@@ -18,27 +18,27 @@ public class DataResource<T> extends net.silentchaos512.gear.api.util.DataResour
         super(id, getter);
     }
 
-    public static net.silentchaos512.gear.api.util.DataResource<IMaterial> material(String modPath) {
+    public static DataResource<IMaterial> material(String modPath) {
         return material(SilentGear.getId(modPath));
     }
 
-    public static net.silentchaos512.gear.api.util.DataResource<IMaterial> material(ResourceLocation id) {
-        return new net.silentchaos512.gear.api.util.DataResource<>(id, MaterialManager::get);
+    public static DataResource<IMaterial> material(ResourceLocation id) {
+        return new DataResource<>(id, MaterialManager::get);
     }
 
-    public static net.silentchaos512.gear.api.util.DataResource<IGearPart> part(String modPath) {
+    public static DataResource<IGearPart> part(String modPath) {
         return part(SilentGear.getId(modPath));
     }
 
-    public static net.silentchaos512.gear.api.util.DataResource<IGearPart> part(ResourceLocation id) {
-        return new net.silentchaos512.gear.api.util.DataResource<>(id, PartManager::get);
+    public static DataResource<IGearPart> part(ResourceLocation id) {
+        return new DataResource<>(id, PartManager::get);
     }
 
-    public static net.silentchaos512.gear.api.util.DataResource<ITrait> trait(String modPath) {
+    public static DataResource<ITrait> trait(String modPath) {
         return trait(SilentGear.getId(modPath));
     }
 
-    public static net.silentchaos512.gear.api.util.DataResource<ITrait> trait(ResourceLocation id) {
-        return new net.silentchaos512.gear.api.util.DataResource<>(id, TraitManager::get);
+    public static DataResource<ITrait> trait(ResourceLocation id) {
+        return new DataResource<>(id, TraitManager::get);
     }
 }
