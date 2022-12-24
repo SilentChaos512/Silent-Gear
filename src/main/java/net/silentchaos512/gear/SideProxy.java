@@ -19,7 +19,6 @@ import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.DebugOverlay;
-import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
@@ -185,9 +184,6 @@ class SideProxy implements IProxy {
             MinecraftForge.EVENT_BUS.register(new GearHudOverlay());
             MinecraftForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
             MinecraftForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
-            if (checkClientInstance()) {
-                MinecraftForge.EVENT_BUS.addListener(KeyTracker::onKeyInput);
-            }
 
             if (SilentGear.isDevBuild()) {
                 MinecraftForge.EVENT_BUS.register(new DebugOverlay());
