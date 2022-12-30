@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Elytra blueprint and template recipes no longer require netherite ingots (they use gold ingots instead)
 ### Fixed
+- Compounder recipes with less than 4 ingredients not showing up in JEI (dimerald, etc.) [#570, #562, #552]
 - Add colors to gear part models. Removed "TEMP MDL" layer even though the models are still temporary.
 
 ## [3.1.3] - 2022-12-24
