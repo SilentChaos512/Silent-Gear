@@ -5,7 +5,7 @@
       "tag": "silentgear:template_boards"
     },
     "/": {
-      "tag": "forge:ingots/netherite"
+      "tag": "forge:ingots/gold"
     },
     "e": {
       "item": "minecraft:elytra"

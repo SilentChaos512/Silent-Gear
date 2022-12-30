@@ -161,7 +161,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         ShapedRecipeBuilder.shaped(SgItems.ELYTRA_BLUEPRINT)
                 .define('#', SgTags.Items.BLUEPRINT_PAPER)
-                .define('/', Tags.Items.INGOTS_NETHERITE)
+                .define('/', Tags.Items.INGOTS_GOLD)
                 .define('e', Items.ELYTRA)
                 .define('p', Items.PHANTOM_MEMBRANE)
                 .pattern("/e/")
@@ -171,7 +171,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .save(consumer);
         ShapedRecipeBuilder.shaped(SgItems.ELYTRA_TEMPLATE)
                 .define('#', SgTags.Items.TEMPLATE_BOARDS)
-                .define('/', Tags.Items.INGOTS_NETHERITE)
+                .define('/', Tags.Items.INGOTS_GOLD)
                 .define('e', Items.ELYTRA)
                 .define('p', Items.PHANTOM_MEMBRANE)
                 .pattern("/e/")
@@ -736,6 +736,17 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addIngredient(SgTags.Items.INGOTS_AZURE_ELECTRUM)
                 .addIngredient(CraftingItems.CRUSHED_SHULKER_SHELL)
                 .addIngredient(Items.NETHERITE_SCRAP)
+                .build(consumer);
+
+        CompoundingRecipeBuilder.metalBuilder(CraftingItems.BLAZE_GOLD_INGOT, 1)
+                .addIngredient(Tags.Items.INGOTS_GOLD)
+                .addIngredient(Items.BLAZE_POWDER, 2)
+                .build(consumer);
+
+        CompoundingRecipeBuilder.metalBuilder(CraftingItems.CRIMSON_STEEL_INGOT, 3)
+                .addIngredient(SgTags.Items.STORAGE_BLOCKS_CRIMSON_IRON)
+                .addIngredient(Tags.Items.RODS_BLAZE, 2)
+                .addIngredient(Items.MAGMA_CREAM)
                 .build(consumer);
     }
 

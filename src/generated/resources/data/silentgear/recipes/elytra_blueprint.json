@@ -5,7 +5,7 @@
       "tag": "silentgear:blueprint_paper"
     },
     "/": {
-      "tag": "forge:ingots/netherite"
+      "tag": "forge:ingots/gold"
     },
     "e": {
       "item": "minecraft:elytra"
