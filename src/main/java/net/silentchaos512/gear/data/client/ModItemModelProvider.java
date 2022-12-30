@@ -324,8 +324,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .parent(getExistingFile(new ResourceLocation("item/generated")))
                 .texture("layer0", "item/" + name + "/main_generic_hc")
                 .texture("layer1", "item/" + name + "/_highlight")
-                .texture("layer2", "item/part_marker")
-                .texture("layer3", "item/temp_model_overlay");
+                .texture("layer2", "item/part_marker");
     }
 
     private ItemModelBuilder tempGearPart(ItemRegistryObject<CompoundPartItem> item) {
@@ -337,8 +336,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         return getBuilder(item.getId().getPath())
                 .parent(getExistingFile(new ResourceLocation("item/generated")))
                 .texture("layer0", texture)
-                .texture("layer1", "item/part_marker")
-                .texture("layer2", "item/temp_model_overlay");
+                .texture("layer1", "item/part_marker");
     }
 
     private ItemModelBuilder tempCoatingPart(ItemRegistryObject<CompoundPartItem> item) {
@@ -346,8 +344,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .parent(getExistingFile(new ResourceLocation("item/generated")))
                 .texture("layer0", "item/part/coating_material")
                 .texture("layer1", "item/part/coating_jar")
-                .texture("layer2", "item/part_marker")
-                .texture("layer3", "item/temp_model_overlay");
+                .texture("layer2", "item/part_marker");
     }
 
     private void blockItemModel(Block block) {

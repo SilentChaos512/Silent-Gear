@@ -3,7 +3,6 @@
   "textures": {
     "layer0": "silentgear:item/part/coating_material",
     "layer1": "silentgear:item/part/coating_jar",
-    "layer2": "silentgear:item/part_marker",
-    "layer3": "silentgear:item/temp_model_overlay"
+    "layer2": "silentgear:item/part_marker"
   }
 }

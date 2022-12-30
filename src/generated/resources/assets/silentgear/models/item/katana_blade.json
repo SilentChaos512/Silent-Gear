@@ -3,7 +3,6 @@
   "textures": {
     "layer0": "silentgear:item/katana/main_generic_hc",
     "layer1": "silentgear:item/katana/_highlight",
-    "layer2": "silentgear:item/part_marker",
-    "layer3": "silentgear:item/temp_model_overlay"
+    "layer2": "silentgear:item/part_marker"
   }
 }

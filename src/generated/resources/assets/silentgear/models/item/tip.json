@@ -2,7 +2,6 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "silentgear:item/part/tip",
-    "layer1": "silentgear:item/part_marker",
-    "layer2": "silentgear:item/temp_model_overlay"
+    "layer1": "silentgear:item/part_marker"
   }
 }

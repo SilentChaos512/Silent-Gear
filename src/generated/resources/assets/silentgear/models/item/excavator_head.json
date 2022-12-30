@@ -3,7 +3,6 @@
   "textures": {
     "layer0": "silentgear:item/excavator/main_generic_hc",
     "layer1": "silentgear:item/excavator/_highlight",
-    "layer2": "silentgear:item/part_marker",
-    "layer3": "silentgear:item/temp_model_overlay"
+    "layer2": "silentgear:item/part_marker"
   }
 }

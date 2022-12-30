@@ -8,6 +8,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.utils.Color;
@@ -19,7 +20,8 @@ public final class ColorHandlers {
     @Deprecated
     public static Map<String, Integer[]> gearColorCache = new HashMap<>();
 
-    private ColorHandlers() {}
+    private ColorHandlers() {
+    }
 
     public static void onItemColors(RegisterColorHandlersEvent.Item event) {
         ItemColors itemColors = event.getItemColors();
@@ -34,6 +36,13 @@ public final class ColorHandlers {
                 .map(item -> (ICoreItem) item)
                 .forEach(item -> event.register(item.getItemColors(), item));
 
+        // Gear parts
+        ForgeRegistries.ITEMS.getValues().stream()
+                .filter(item -> item instanceof CompoundPartItem)
+                .map(item -> (CompoundPartItem) item)
+                .forEach(item -> event.register(item::getColor, item));
+
+        // Compound/custom materials
         SgItems.getItems(item -> item instanceof IColoredMaterialItem).forEach(item -> {
             IColoredMaterialItem coloredMaterialItem = (IColoredMaterialItem) item;
             event.register(coloredMaterialItem::getColor, item);

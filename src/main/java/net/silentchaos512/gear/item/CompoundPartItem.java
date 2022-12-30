@@ -136,7 +136,12 @@ public class CompoundPartItem extends Item {
     }
 
     public int getColor(ItemStack stack, int layer) {
-        return ColorUtils.getBlendedColor(this, getMaterials(stack), layer);
+        if (layer == 0) {
+            // A bit of a temporary workaround for the missing model system...
+            int colorLayer = this == SgItems.TIP.get() ? 1 : 0;
+            return ColorUtils.getBlendedColor(this, getMaterials(stack), colorLayer);
+        }
+        return Color.VALUE_WHITE;
     }
 
     public int getColorWeight(int index, int totalCount) {
