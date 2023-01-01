@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.5] - 2023-01-01
+### Fixed
+- Possible error when a gear item determines which model to use [#572]
+
 ## [3.1.4] - 2022-12-30
 ### Added
 - Metal Alloyer recipes for blaze gold ingots and crimson steel ingots (they're cheaper!)

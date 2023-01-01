@@ -455,9 +455,11 @@ public final class GearData {
 
     private static int calculateModelIndex(ItemStack gear) {
         PartData coatingOrMainPart = getCoatingOrMainPart(gear);
-        IMaterialInstance mainMaterial = coatingOrMainPart != null
-                ? coatingOrMainPart.getMaterials().get(0)
-                : MaterialInstance.of(Const.Materials.IRON.get());
+        if (coatingOrMainPart == null || coatingOrMainPart.getMaterials().isEmpty()) {
+            // Data packs may not be fully loaded yet, or something else has gone wrong
+            return -1;
+        }
+        IMaterialInstance mainMaterial = coatingOrMainPart.getMaterials().get(0);
         IMaterialDisplay main = mainMaterial.getDisplayProperties();
         MaterialLayer firstLayer = main.getLayerList(GearHelper.getType(gear), PartType.MAIN, mainMaterial).getFirstLayer();
         boolean highContrast = firstLayer == null || !firstLayer.getTextureId().toString().endsWith("lc");
