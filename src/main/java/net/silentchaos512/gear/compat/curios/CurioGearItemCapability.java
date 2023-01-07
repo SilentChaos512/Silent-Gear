@@ -17,7 +17,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.silentchaos512.gear.item.gear.GearElytraItem;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TraitHelper;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -98,6 +100,11 @@ public class CurioGearItemCapability {
             Multimap<Attribute, AttributeModifier> multimap = GearHelper.getAttributeModifiers(slotContext.identifier(), stack, HashMultimap.create(), false);
             extraAttributes.accept(multimap);
             return multimap;
+        }
+
+        @Override
+        public boolean makesPiglinsNeutral(SlotContext slotContext) {
+            return TraitHelper.hasTrait(stack, Const.Traits.BRILLIANT);
         }
 
         @Override
