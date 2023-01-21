@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.2.0] - 2023-01-21
 ### Fixed
 - Curios (rings, bracelets) with the Brilliant trait not warding off piglins
+- The `silentgear:set_parts` loot function has been updated. It can now be used to set materials, even with modifiers (grade, starcharged).
 
 ## [3.1.5] - 2023-01-01
 ### Fixed

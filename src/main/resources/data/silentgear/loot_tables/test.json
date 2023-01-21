@@ -13,22 +13,109 @@
                             "function": "silentgear:set_parts",
                             "parts": [
                                 {
-                                    "part": "silentgear:main/diamond",
-                                    "grade": "S"
+                                    "part": "silentgear:hammer_head",
+                                    "item": "silentgear:hammer_head",
+                                    "materials": [
+                                        {
+                                            "material": "silentgear:diamond",
+                                            "modifiers": [
+                                                {
+                                                    "type": "silentgear:grade",
+                                                    "grade": "S"
+                                                },
+                                                {
+                                                    "type": "silentgear:starcharged",
+                                                    "level": 1
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "material": "silentgear:diamond",
+                                            "modifiers": [
+                                                {
+                                                    "type": "silentgear:grade",
+                                                    "grade": "S"
+                                                },
+                                                {
+                                                    "type": "silentgear:starcharged",
+                                                    "level": 1
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "material": "silentgear:diamond",
+                                            "modifiers": [
+                                                {
+                                                    "type": "silentgear:grade",
+                                                    "grade": "S"
+                                                },
+                                                {
+                                                    "type": "silentgear:starcharged",
+                                                    "level": 1
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "material": "silentgear:diamond",
+                                            "modifiers": [
+                                                {
+                                                    "type": "silentgear:grade",
+                                                    "grade": "S"
+                                                },
+                                                {
+                                                    "type": "silentgear:starcharged",
+                                                    "level": 1
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "material": "silentgear:emerald",
+                                            "modifiers": [
+                                                {
+                                                    "type": "silentgear:grade",
+                                                    "grade": "S"
+                                                },
+                                                {
+                                                    "type": "silentgear:starcharged",
+                                                    "level": 1
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "material": "silentgear:emerald",
+                                            "modifiers": [
+                                                {
+                                                    "type": "silentgear:grade",
+                                                    "grade": "S"
+                                                },
+                                                {
+                                                    "type": "silentgear:starcharged",
+                                                    "level": 1
+                                                }
+                                            ]
+                                        }
+                                    ]
                                 },
                                 {
-                                    "part": "silentgear:main/diamond",
-                                    "grade": "S"
+                                    "part": "silentgear:rod",
+                                    "item": "silentgear:rod",
+                                    "materials": [
+                                        "silentgear:blaze_gold"
+                                    ]
                                 },
                                 {
-                                    "part": "silentgear:main/emerald",
-                                    "grade": "S"
+                                    "part": "silentgear:tip",
+                                    "item": "silentgear:tip",
+                                    "materials": [
+                                        "silentgear:redstone"
+                                    ]
                                 },
                                 {
-                                    "part": "silentgear:rod/blaze"
-                                },
-                                {
-                                    "part": "silentgear:tip/redstone"
+                                    "part": "silentgear:coating",
+                                    "item": "silentgear:coating",
+                                    "materials": [
+                                        "silentgear:netherite"
+                                    ]
                                 }
                             ]
                         },

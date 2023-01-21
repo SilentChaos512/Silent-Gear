@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public final class Network {
-    public static final String VERSION = "sgear-net-13";
+    public static final String VERSION = "sgear-net-14";
     private static final Pattern NET_VERSION_PATTERN = Pattern.compile("sgear-net-\\d+$");
     private static final Pattern MOD_VERSION_PATTERN = Pattern.compile("^\\d+\\.\\d+\\.\\d+$");
 

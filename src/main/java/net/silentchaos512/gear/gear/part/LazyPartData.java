@@ -1,27 +1,30 @@
 package net.silentchaos512.gear.gear.part;
 
+import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.api.util.DataResource;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * A "lazy" version of {@link PartData}. Since {@link IGearPart}s may not exist when certain things
@@ -77,13 +80,14 @@ public class LazyPartData implements IPartData {
 
     @Override
     public ItemStack getItem() {
-        if (this.craftingItem.isEmpty()) {
-            IGearPart part = get();
-            if (part != null) {
-                return PartData.of(part).getItem();
-            }
+        if (!this.craftingItem.isEmpty()) {
+            return this.craftingItem;
         }
-        return this.craftingItem;
+        IGearPart part = get();
+        if (part == null) {
+            return ItemStack.EMPTY;
+        }
+        return PartData.of(part).getItem();
     }
 
     @Override
@@ -116,17 +120,44 @@ public class LazyPartData implements IPartData {
             return new LazyPartData(new ResourceLocation(key));
         }
 
-        JsonObject jsonObject = json.getAsJsonObject();
-        String key = GsonHelper.getAsString(jsonObject, "part");
-        return new LazyPartData(new ResourceLocation(key));
+        JsonObject jo = json.getAsJsonObject();
+        ResourceLocation partId = new ResourceLocation(GsonHelper.getAsString(jo, "part"));
+
+        if (!jo.has("item")) {
+            return LazyPartData.of(partId);
+        }
+
+        Item item = GsonHelper.getAsItem(jo, "item");
+        if (!(item instanceof CompoundPartItem)) {
+            throw new JsonSyntaxException("Item " + item + " is not a compound part item. Try using \"part\" instead.");
+        }
+
+        if (!jo.has("materials") || !jo.get("materials").isJsonArray()) {
+            throw new JsonSyntaxException("\"materials\" is either missing or not a JSON array");
+        }
+        List<LazyMaterialInstance> materials = deserializeMaterials(GsonHelper.getAsJsonArray(jo, "materials"));
+
+        return LazyPartData.of(DataResource.part(partId), (CompoundPartItem) item, materials);
+
+    }
+
+    private static List<LazyMaterialInstance> deserializeMaterials(JsonArray json) {
+        List<LazyMaterialInstance> materials = Lists.newArrayList();
+        for (JsonElement je : json) {
+            materials.add(LazyMaterialInstance.deserialize(je));
+        }
+        return materials;
     }
 
     public static List<PartData> createPartList(Collection<LazyPartData> parts) {
-        return parts.stream()
-                .filter(LazyPartData::isValid)
-                .map(LazyPartData::get)
-                .filter(Objects::nonNull)
-                .map(PartData::of)
-                .collect(Collectors.toList());
+        List<PartData> list = new ArrayList<>();
+        for (LazyPartData lazy : parts) {
+            IGearPart gearPart = lazy.get();
+            if (gearPart != null) {
+                PartData part = PartData.of(gearPart, lazy.craftingItem);
+                list.add(part);
+            }
+        }
+        return list;
     }
 }

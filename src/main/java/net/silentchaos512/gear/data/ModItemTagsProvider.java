@@ -61,6 +61,9 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         builder(SgTags.Items.RAW_MATERIALS_CRIMSON_IRON, CraftingItems.RAW_CRIMSON_IRON);
         builder(SgTags.Items.RAW_MATERIALS_AZURE_SILVER, CraftingItems.RAW_AZURE_SILVER);
+        getBuilder(Tags.Items.RAW_MATERIALS)
+                .addTag(SgTags.Items.RAW_MATERIALS_CRIMSON_IRON)
+                .addTag(SgTags.Items.RAW_MATERIALS_AZURE_SILVER);
 
         builder(SgTags.Items.COAL_GENERATOR_FUELS, SgItems.NETHERWOOD_CHARCOAL, SgBlocks.NETHERWOOD_CHARCOAL_BLOCK);
 

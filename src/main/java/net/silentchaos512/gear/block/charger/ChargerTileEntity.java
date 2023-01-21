@@ -165,7 +165,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
     }
 
     protected void chargeMaterial(ItemStack output, int level) {
-        ChargedMaterialModifier mod = materialModifier.create(MaterialInstance.from(output), level);
+        ChargedMaterialModifier mod = materialModifier.create(level);
         materialModifier.write(mod, output);
     }
 

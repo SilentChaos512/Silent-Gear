@@ -1,7 +1,12 @@
 package net.silentchaos512.gear.gear.material.modifier;
 
+import com.google.gson.JsonObject;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
@@ -10,6 +15,8 @@ import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.gear.material.MaterialModifiers;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
 
@@ -29,7 +36,12 @@ public class GradeMaterialModifier implements IMaterialModifier {
     }
 
     @Override
-    public List<StatInstance> modifyStats(PartType partType, StatGearKey key, List<StatInstance> statMods) {
+    public IMaterialModifierType<?> getType() {
+        return MaterialModifiers.GRADE;
+    }
+
+    @Override
+    public List<StatInstance> modifyStats(IMaterialInstance material, PartType partType, StatGearKey key, List<StatInstance> statMods) {
         if (key.getStat().isAffectedByGrades() && grade != null) {
             float bonus = grade.bonusPercent / 100f;
             List<StatInstance> ret = new ArrayList<>();
@@ -64,20 +76,49 @@ public class GradeMaterialModifier implements IMaterialModifier {
 
     public static class Type implements IMaterialModifierType<GradeMaterialModifier> {
         @Override
+        public ResourceLocation getId() {
+            return Const.GRADE;
+        }
+
+        @Override
         public void removeModifier(ItemStack stack) {
             MaterialGrade.NONE.setGradeOnStack(stack);
         }
 
         @Nullable
         @Override
-        public GradeMaterialModifier read(IMaterialInstance material) {
-            MaterialGrade grade = MaterialGrade.fromStack(material.getItem());
+        public GradeMaterialModifier read(CompoundTag tag) {
+            MaterialGrade grade = MaterialGrade.fromNbt(tag);
             return new GradeMaterialModifier(grade);
         }
 
         @Override
-        public void write(GradeMaterialModifier modifier, ItemStack stack) {
-            modifier.grade.setGradeOnStack(stack);
+        public void write(GradeMaterialModifier modifier, CompoundTag tag) {
+            modifier.grade.writeToNbt(tag);
+        }
+
+        @Override
+        public GradeMaterialModifier readFromNetwork(FriendlyByteBuf buf) {
+            MaterialGrade grade = MaterialGrade.fromString(buf.readUtf());
+            return new GradeMaterialModifier(grade);
+        }
+
+        @Override
+        public void writeToNetwork(GradeMaterialModifier modifier, FriendlyByteBuf buf) {
+            buf.writeUtf(modifier.grade.name());
+        }
+
+        @Override
+        public GradeMaterialModifier deserialize(JsonObject json) {
+            MaterialGrade grade = MaterialGrade.fromString(GsonHelper.getAsString(json, "grade"));
+            return new GradeMaterialModifier(grade);
+        }
+
+        @Override
+        public JsonObject serialize(GradeMaterialModifier modifier) {
+            JsonObject json = new JsonObject();
+            json.addProperty("grade", modifier.grade.name());
+            return json;
         }
     }
 }

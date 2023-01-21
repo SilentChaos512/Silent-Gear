@@ -2,6 +2,8 @@ package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -158,7 +160,7 @@ public final class MaterialInstance implements IMaterialInstance {
 
         // Material modifiers (grades, starcharged, etc.)
         for (IMaterialModifier materialModifier : getModifiers()) {
-            mods = materialModifier.modifyStats(partType, key, mods);
+            mods = materialModifier.modifyStats(this, partType, key, mods);
         }
 
         GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);
@@ -244,12 +246,34 @@ public final class MaterialInstance implements IMaterialInstance {
         ItemStack stack = ItemStack.of(nbt.getCompound("Item"));
         if (stack.isEmpty()) {
             // Item is missing from NBT, so pick something from the ingredient
-            ItemStack[] array = material.getIngredient().getItems();
-            if (array.length > 0) {
-                return array[0].copy();
-            }
+            ItemStack defaultItem = getDefaultItem(material);
+            readModifiers(nbt, defaultItem);
+            return defaultItem;
         }
         return stack;
+    }
+
+    private static void readModifiers(CompoundTag nbt, ItemStack defaultItem) {
+        if (!nbt.contains("Modifiers")) {
+            return;
+        }
+
+        ListTag list = nbt.getList("Modifiers", Tag.TAG_COMPOUND);
+        for (int i = 0; i < list.size(); ++i) {
+            CompoundTag compoundTag = list.getCompound(i);
+            IMaterialModifier mod = MaterialModifiers.readNbt(compoundTag);
+            if (mod != null) {
+                MaterialModifiers.writeToItem(mod, defaultItem);
+            }
+        }
+    }
+
+    private static ItemStack getDefaultItem(IMaterial material) {
+        ItemStack[] array = material.getIngredient().getItems();
+        if (array.length > 0) {
+            return array[0].copy();
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override

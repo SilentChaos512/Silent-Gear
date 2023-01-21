@@ -53,6 +53,10 @@ public final class Const {
 
     // Random
     public static final ResourceLocation NULL_ID = new ResourceLocation("null");
+
+    // Material Modifiers
+    public static final ModResourceLocation GRADE = SilentGear.getId("grade");
+    public static final ModResourceLocation STARCHARGED = SilentGear.getId("starcharged");
     public static final String NBT_IS_FOIL = "SG_IsFoil";
 
     // Compound-crafting block info

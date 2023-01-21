@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.GsonHelper;
@@ -36,8 +37,15 @@ public enum MaterialGrade {
     }
 
     public static MaterialGrade fromStack(ItemStack stack) {
-        if (!stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBT_KEY)) {
-            String str = stack.getOrCreateTag().getString(NBT_KEY);
+        if (!stack.isEmpty() && stack.hasTag()) {
+            return fromNbt(stack.getOrCreateTag());
+        }
+        return NONE;
+    }
+
+    public static MaterialGrade fromNbt(CompoundTag tag) {
+        if (tag.contains(NBT_KEY)) {
+            String str = tag.getString(NBT_KEY);
             return fromString(str);
         }
         return NONE;
@@ -86,11 +94,15 @@ public enum MaterialGrade {
 
     public void setGradeOnStack(@Nonnull ItemStack stack) {
         if (!stack.isEmpty()) {
-            if (this != NONE) {
-                stack.getOrCreateTag().putString(NBT_KEY, name());
-            } else {
-                stack.getOrCreateTag().remove(NBT_KEY);
-            }
+            writeToNbt(stack.getOrCreateTag());
+        }
+    }
+
+    public void writeToNbt(CompoundTag tag) {
+        if (this == NONE) {
+            tag.remove(NBT_KEY);
+        } else {
+            tag.putString(NBT_KEY, name());
         }
     }
 

@@ -3,12 +3,14 @@ package net.silentchaos512.gear.gear.material.modifier;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ChargedProperties;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.SplitItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.gear.material.MaterialModifiers;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.utils.Color;
 
@@ -17,12 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StarchargedMaterialModifier extends ChargedMaterialModifier {
-    public StarchargedMaterialModifier(IMaterialInstance material, int level) {
-        super(material, level);
+    public StarchargedMaterialModifier(int level) {
+        super(level);
     }
 
     @Override
-    public List<StatInstance> modifyStats(PartType partType, StatGearKey key, List<StatInstance> statMods) {
+    public IMaterialModifierType<?> getType() {
+        return MaterialModifiers.STARCHARGED;
+    }
+
+    @Override
+    public List<StatInstance> modifyStats(IMaterialInstance material, PartType partType, StatGearKey key, List<StatInstance> statMods) {
         List<StatInstance> ret = new ArrayList<>();
 
         if (key.getStat() == ItemStats.CHARGING_VALUE) {
@@ -30,7 +37,7 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
         }
 
         for (StatInstance mod : statMods) {
-            StatInstance newMod = modifyStat(key, mod, getChargedProperties());
+            StatInstance newMod = modifyStat(key, mod, getChargedProperties(material));
             ret.add(newMod != null ? newMod : mod);
         }
 
@@ -63,9 +70,8 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
         if (isSupportedModifierOp(mod)) {
             float modifiedStatValue = (float) getModifiedStatValue(stat, mod, charge);
 
-            if (stat.getStat() instanceof SplitItemStat) {
+            if (stat.getStat() instanceof SplitItemStat splitItemStat) {
                 // For stats like armor, split the bonus evenly between all gear types
-                SplitItemStat splitItemStat = (SplitItemStat) stat.getStat();
                 if (!splitItemStat.getSplitTypes().contains(stat.getGearType())) {
                     modifiedStatValue = mod.getValue() + (modifiedStatValue - mod.getValue()) * splitItemStat.getSplitTypes().size();
                 }
