@@ -308,7 +308,7 @@ public final class GearData {
             // Stat is missing, notify server to recalculate
             Level level = SilentGear.PROXY.getClientLevel();
 
-            if (level != null && GearHelper.isValidGear(stack) && ((ICoreItem) stack.getItem()).getRelevantStats(stack).contains(stat)) {
+            if (level != null && SilentGear.PROXY.checkClientConnection() && GearHelper.isValidGear(stack) && ((ICoreItem) stack.getItem()).getRelevantStats(stack).contains(stat)) {
                 SilentGear.LOGGER.debug("Sending recalculate stats packet for item with missing {} stat: {}", stat.getStatId(), stack.getHoverName().getString());
                 Network.channel.sendToServer(new RecalculateStatsPacket(level, stack, stat));
                 // Prevent the packet from being spammed...

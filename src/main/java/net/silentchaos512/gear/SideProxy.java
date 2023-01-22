@@ -158,6 +158,16 @@ class SideProxy implements IProxy {
         return null;
     }
 
+    @Override
+    public boolean checkClientInstance() {
+        return true;
+    }
+
+    @Override
+    public boolean checkClientConnection() {
+        return true;
+    }
+
     @Nullable
     @Override
     public MinecraftServer getServer() {
@@ -234,8 +244,21 @@ class SideProxy implements IProxy {
         @Override
         public Level getClientLevel() {
             Minecraft mc = Minecraft.getInstance();
-            //noinspection ConstantConditions -- mc can be null during runData
+            //noinspection ConstantConditions -- mc can be null during runData and some other circumstances
             return mc != null ? mc.level : null;
+        }
+
+        @Override
+        public boolean checkClientInstance() {
+            //noinspection ConstantConditions -- mc can be null during runData and some other circumstances
+            return Minecraft.getInstance() != null;
+        }
+
+        @Override
+        public boolean checkClientConnection() {
+            Minecraft mc = Minecraft.getInstance();
+            //noinspection ConstantConditions -- mc can be null during runData and some other circumstances
+            return mc != null && mc.getConnection() != null;
         }
     }
 
