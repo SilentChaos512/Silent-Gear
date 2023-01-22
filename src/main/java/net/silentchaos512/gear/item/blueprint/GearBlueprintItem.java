@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -104,6 +105,10 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     private void appendSupportedTypesText(Collection<Component> list) {
+        if (!SilentGear.PROXY.checkClientInstance()) {
+            return;
+        }
+
         if (KeyTracker.isDisplayStatsDown()) {
             Optional<ICoreItem> itemOptional = this.gearType.getItem();
 

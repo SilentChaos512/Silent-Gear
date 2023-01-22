@@ -17,6 +17,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
@@ -150,9 +151,11 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
                     .append(selected.getHoverName().copy().withStyle(ChatFormatting.GRAY)));
         }
 
-        tooltip.add(TextUtil.translate("item", "blueprint_book.keyHint",
-                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
-                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE)));
+        if (SilentGear.PROXY.checkClientInstance()) {
+            tooltip.add(TextUtil.translate("item", "blueprint_book.keyHint",
+                    TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
+                    TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE)));
+        }
     }
 
     @Override
