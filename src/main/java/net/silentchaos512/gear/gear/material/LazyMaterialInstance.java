@@ -162,6 +162,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeResourceLocation(this.materialId);
+        buf.writeVarInt(this.modifiers.size());
         this.modifiers.forEach(mod -> MaterialModifiers.writeToNetwork(mod, buf));
     }
 }

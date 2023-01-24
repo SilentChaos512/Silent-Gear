@@ -95,6 +95,7 @@ public class MaterialModifiers {
     public static <T extends IMaterialModifier> void writeToNetwork(T modifier, FriendlyByteBuf buf) {
         //noinspection unchecked
         IMaterialModifierType<T> type = (IMaterialModifierType<T>) modifier.getType();
+        buf.writeResourceLocation(type.getId());
         type.writeToNetwork(modifier, buf);
     }
 
