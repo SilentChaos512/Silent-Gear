@@ -136,6 +136,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearStandardTool(SgItems.EXCAVATOR, itemHandheld);
         tempGearStandardTool(SgItems.SAW, itemHandheld);
         tempGearStandardTool(SgItems.PROSPECTOR_HAMMER, itemHandheld);
+        tempGearStandardTool(SgItems.HOE, itemHandheld);
         tempGearStandardTool(SgItems.MATTOCK, itemHandheld);
         tempGearStandardTool(SgItems.SICKLE, itemHandheld);
         tempGearStandardTool(SgItems.SHEARS, itemHandheld);
@@ -166,6 +167,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempMainPart(SgItems.HAMMER_HEAD);
         tempMainPart(SgItems.EXCAVATOR_HEAD);
         tempMainPart(SgItems.SAW_BLADE);
+        tempMainPart(SgItems.HOE_HEAD);
         tempMainPart(SgItems.MATTOCK_HEAD);
         tempMainPart(SgItems.PROSPECTOR_HAMMER_HEAD);
         tempMainPart(SgItems.SICKLE_BLADE);

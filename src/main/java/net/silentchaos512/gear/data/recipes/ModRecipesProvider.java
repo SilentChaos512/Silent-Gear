@@ -134,6 +134,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         toolBlueprint(consumer, "hammer", SgItems.HAMMER_BLUEPRINT, SgItems.HAMMER_TEMPLATE, "###", "###", " / ");
         toolBlueprint(consumer, "excavator", SgItems.EXCAVATOR_BLUEPRINT, SgItems.EXCAVATOR_TEMPLATE, "# #", "###", " / ");
         toolBlueprint(consumer, "saw", SgItems.SAW_BLUEPRINT, SgItems.SAW_TEMPLATE, "###", "##/", "  /");
+        toolBlueprint(consumer, "hoe", SgItems.HOE_BLUEPRINT, SgItems.HOE_TEMPLATE, "##", " /", " /");
         toolBlueprint(consumer, "mattock", SgItems.MATTOCK_BLUEPRINT, SgItems.MATTOCK_TEMPLATE, "## ", "#/#", " / ");
         toolBlueprint(consumer, "prospector_hammer", SgItems.PROSPECTOR_HAMMER_BLUEPRINT, SgItems.PROSPECTOR_HAMMER_TEMPLATE,
                 Ingredient.of(Tags.Items.INGOTS_IRON), "##", " /", " @");
@@ -506,6 +507,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         toolRecipes(consumer, "paxel", 5, SgItems.PAXEL, SgItems.PAXEL_HEAD, SgItems.PAXEL_BLUEPRINT.get());
         toolRecipes(consumer, "hammer", 6, SgItems.HAMMER, SgItems.HAMMER_HEAD, SgItems.HAMMER_BLUEPRINT.get());
         toolRecipes(consumer, "excavator", 5, SgItems.EXCAVATOR, SgItems.EXCAVATOR_HEAD, SgItems.EXCAVATOR_BLUEPRINT.get());
+        toolRecipes(consumer, "hoe", 2, SgItems.HOE, SgItems.HOE_HEAD, SgItems.HOE_BLUEPRINT.get());
         toolRecipes(consumer, "mattock", 4, SgItems.MATTOCK, SgItems.MATTOCK_HEAD, SgItems.MATTOCK_BLUEPRINT.get());
         toolRecipes(consumer, "prospector_hammer", 2, SgItems.PROSPECTOR_HAMMER, SgItems.PROSPECTOR_HAMMER_HEAD, SgItems.PROSPECTOR_HAMMER_BLUEPRINT.get());
         toolRecipes(consumer, "saw", 5, SgItems.SAW, SgItems.SAW_BLADE, SgItems.SAW_BLUEPRINT.get());
@@ -587,14 +589,15 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .build(consumer, SilentGear.getId("gear/rough/axe"));
 
         // Coonversion recipes
-        toolConversion(consumer, SgItems.SWORD, Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD);
-        toolConversion(consumer, SgItems.PICKAXE, Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE);
-        toolConversion(consumer, SgItems.SHOVEL, Items.DIAMOND_SHOVEL, Items.GOLDEN_SHOVEL, Items.IRON_SHOVEL, Items.STONE_SHOVEL, Items.WOODEN_SHOVEL);
-        toolConversion(consumer, SgItems.AXE, Items.DIAMOND_AXE, Items.GOLDEN_AXE, Items.IRON_AXE, Items.STONE_AXE, Items.WOODEN_AXE);
-        armorConversion(consumer, SgItems.HELMET, Items.DIAMOND_HELMET, Items.GOLDEN_HELMET, Items.IRON_HELMET, Items.LEATHER_HELMET);
-        armorConversion(consumer, SgItems.CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.IRON_CHESTPLATE, Items.LEATHER_CHESTPLATE);
-        armorConversion(consumer, SgItems.LEGGINGS, Items.DIAMOND_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.IRON_LEGGINGS, Items.LEATHER_LEGGINGS);
-        armorConversion(consumer, SgItems.BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
+        toolConversion(consumer, SgItems.SWORD, Items.NETHERITE_SWORD, Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD);
+        toolConversion(consumer, SgItems.PICKAXE, Items.NETHERITE_PICKAXE, Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE);
+        toolConversion(consumer, SgItems.SHOVEL, Items.NETHERITE_SHOVEL, Items.DIAMOND_SHOVEL, Items.GOLDEN_SHOVEL, Items.IRON_SHOVEL, Items.STONE_SHOVEL, Items.WOODEN_SHOVEL);
+        toolConversion(consumer, SgItems.AXE, Items.NETHERITE_AXE, Items.DIAMOND_AXE, Items.GOLDEN_AXE, Items.IRON_AXE, Items.STONE_AXE, Items.WOODEN_AXE);
+        toolConversion(consumer, SgItems.HOE, Items.NETHERITE_HOE, Items.DIAMOND_HOE, Items.GOLDEN_HOE, Items.IRON_HOE, Items.STONE_HOE, Items.WOODEN_HOE);
+        armorConversion(consumer, SgItems.HELMET, Items.NETHERITE_HELMET, Items.DIAMOND_HELMET, Items.GOLDEN_HELMET, Items.IRON_HELMET, Items.LEATHER_HELMET);
+        armorConversion(consumer, SgItems.CHESTPLATE, Items.NETHERITE_CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.IRON_CHESTPLATE, Items.LEATHER_CHESTPLATE);
+        armorConversion(consumer, SgItems.LEGGINGS, Items.NETHERITE_LEGGINGS, Items.DIAMOND_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.IRON_LEGGINGS, Items.LEATHER_LEGGINGS);
+        armorConversion(consumer, SgItems.BOOTS, Items.NETHERITE_BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
     }
 
     private void registerModifierKits(Consumer<FinishedRecipe> consumer) {
@@ -1484,6 +1487,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private static final Map<Tier, ResourceLocation> TOOL_MATERIALS = ImmutableMap.<Tier, ResourceLocation>builder()
+            .put(Tiers.NETHERITE, SilentGear.getId("diamond"))
             .put(Tiers.DIAMOND, SilentGear.getId("diamond"))
             .put(Tiers.GOLD, SilentGear.getId("gold"))
             .put(Tiers.IRON, SilentGear.getId("iron"))
@@ -1500,11 +1504,13 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private static void toolConversion(Consumer<FinishedRecipe> consumer, ItemLike result, Item... toolItems) {
         for (Item input : toolItems) {
             assert input instanceof TieredItem;
+            Tier tier = ((TieredItem) input).getTier();
+            ResourceLocation coating = tier == Tiers.NETHERITE ? SilentGear.getId("netherite") : null;
             ExtendedShapelessRecipeBuilder.builder(SgRecipes.CONVERSION.get(), result)
                     .addIngredient(input)
                     .addExtraData(json -> {
-                        ResourceLocation material = TOOL_MATERIALS.getOrDefault(((TieredItem) input).getTier(), SilentGear.getId("emerald"));
-                        json.getAsJsonObject("result").add("materials", buildMaterials(material, SilentGear.getId("wood")));
+                        ResourceLocation material = TOOL_MATERIALS.getOrDefault(tier, SilentGear.getId("emerald"));
+                        json.getAsJsonObject("result").add("materials", buildMaterials(material, SilentGear.getId("wood"), coating));
                     })
                     .build(consumer, SilentGear.getId("gear/convert/" + NameUtils.fromItem(input).getPath()));
         }
@@ -1513,11 +1519,13 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private static void armorConversion(Consumer<FinishedRecipe> consumer, ItemLike result, Item... armorItems) {
         for (Item input : armorItems) {
             assert input instanceof ArmorItem;
+            ArmorMaterial armorMaterial = ((ArmorItem) input).getMaterial();
+            ResourceLocation coating = armorMaterial == ArmorMaterials.NETHERITE ? SilentGear.getId("netherite") : null;
             ExtendedShapelessRecipeBuilder.builder(SgRecipes.CONVERSION.get(), result)
                     .addIngredient(input)
                     .addExtraData(json -> {
-                        ResourceLocation material = ARMOR_MATERIALS.getOrDefault(((ArmorItem) input).getMaterial(), SilentGear.getId("emerald"));
-                        json.getAsJsonObject("result").add("materials", buildMaterials(material, null));
+                        ResourceLocation material = ARMOR_MATERIALS.getOrDefault(armorMaterial, SilentGear.getId("emerald"));
+                        json.getAsJsonObject("result").add("materials", buildMaterials(material, null, coating));
                     })
                     .build(consumer, SilentGear.getId("gear/convert/" + NameUtils.fromItem(input).getPath()));
         }
@@ -1544,11 +1552,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
         builder.build(consumer, SilentGear.getId("salvaging/" + inputId.getPath()));
     }
 
-    private static JsonObject buildMaterials(ResourceLocation main, @Nullable ResourceLocation rod) {
+    private static JsonObject buildMaterials(ResourceLocation main, @Nullable ResourceLocation rod, @Nullable ResourceLocation coating) {
         JsonObject json = new JsonObject();
         json.add("main", LazyMaterialInstance.of(main).serialize());
         if (rod != null) {
             json.add("rod", LazyMaterialInstance.of(rod).serialize());
+        }
+        if (coating != null) {
+            json.add("coating", LazyMaterialInstance.of(coating).serialize());
         }
         return json;
     }

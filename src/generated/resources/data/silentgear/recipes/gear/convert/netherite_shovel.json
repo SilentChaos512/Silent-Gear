@@ -1,0 +1,22 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_shovel"
+    }
+  ],
+  "result": {
+    "item": "silentgear:shovel",
+    "materials": {
+      "coating": {
+        "material": "silentgear:netherite"
+      },
+      "main": {
+        "material": "silentgear:diamond"
+      },
+      "rod": {
+        "material": "silentgear:wood"
+      }
+    }
+  }
+}

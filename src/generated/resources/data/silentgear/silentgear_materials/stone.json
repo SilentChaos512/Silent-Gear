@@ -35,6 +35,7 @@
       "melee_damage": 1.0,
       "attack_speed": 0.0,
       "attack_speed/axe": -0.2,
+      "attack_speed/hoe": -1.0,
       "ranged_damage": 0.0,
       "ranged_speed": -0.2,
       "projectile_speed": 1.0,

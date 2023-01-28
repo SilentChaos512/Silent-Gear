@@ -1,0 +1,22 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_pickaxe"
+    }
+  ],
+  "result": {
+    "item": "silentgear:pickaxe",
+    "materials": {
+      "coating": {
+        "material": "silentgear:netherite"
+      },
+      "main": {
+        "material": "silentgear:diamond"
+      },
+      "rod": {
+        "material": "silentgear:wood"
+      }
+    }
+  }
+}

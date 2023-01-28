@@ -1,0 +1,20 @@
+{
+  "type": "silentgear:compound_part",
+  "gear_type": "hoe",
+  "part_type": "silentgear:main",
+  "crafting_item": {
+    "item": "silentgear:hoe_head"
+  },
+  "name": {
+    "translate": "part.silentgear.hoe_head"
+  },
+  "stats": {
+    "melee_damage": {
+      "mul1": -1.0
+    },
+    "attack_speed": {
+      "add": -1.0
+    },
+    "repair_efficiency": 1.0
+  }
+}

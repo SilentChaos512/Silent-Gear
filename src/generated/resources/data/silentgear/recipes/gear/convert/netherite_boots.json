@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_boots"
+    }
+  ],
+  "result": {
+    "item": "silentgear:boots",
+    "materials": {
+      "coating": {
+        "material": "silentgear:netherite"
+      },
+      "main": {
+        "material": "silentgear:emerald"
+      }
+    }
+  }
+}

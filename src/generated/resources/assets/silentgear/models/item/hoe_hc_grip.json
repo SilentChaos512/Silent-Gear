@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "silentgear:item/hoe/rod_generic_lc",
+    "layer1": "silentgear:item/hoe/main_generic_hc",
+    "layer2": "silentgear:item/hoe/_highlight",
+    "layer3": "silentgear:item/blank",
+    "layer4": "silentgear:item/hoe/grip_wool"
+  }
+}

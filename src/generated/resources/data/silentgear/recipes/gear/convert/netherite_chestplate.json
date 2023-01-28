@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_chestplate"
+    }
+  ],
+  "result": {
+    "item": "silentgear:chestplate",
+    "materials": {
+      "coating": {
+        "material": "silentgear:netherite"
+      },
+      "main": {
+        "material": "silentgear:emerald"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:conversion",
+  "ingredients": [
+    {
+      "item": "minecraft:stone_hoe"
+    }
+  ],
+  "result": {
+    "item": "silentgear:hoe",
+    "materials": {
+      "main": {
+        "material": "silentgear:stone"
+      },
+      "rod": {
+        "material": "silentgear:wood"
+      }
+    }
+  }
+}

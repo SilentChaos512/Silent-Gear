@@ -114,6 +114,11 @@ public final class PartsProvider extends PartsProviderBase {
                     .stat(ItemStats.DURABILITY, 1.0f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.ENCHANTMENT_VALUE, -0.5f, StatInstance.Operation.MUL1)
                     .stat(ItemStats.HARVEST_SPEED, -0.5f, StatInstance.Operation.MUL1);
+        if (isMainPart(builder, SgItems.HOE_HEAD))
+            return builder
+                    .stat(ItemStats.MELEE_DAMAGE, -1f, StatInstance.Operation.MUL1)
+                    .stat(ItemStats.ATTACK_SPEED, -1f, StatInstance.Operation.ADD)
+                    .stat(ItemStats.REPAIR_EFFICIENCY, 1);
         if (isMainPart(builder, SgItems.MATTOCK_HEAD))
             return builder
                     .stat(ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)

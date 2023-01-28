@@ -93,6 +93,7 @@ public final class SgItems {
     public static final ItemRegistryObject<GearBlueprintItem> HAMMER_BLUEPRINT = registerGearBlueprint(GearType.HAMMER, false);
     public static final ItemRegistryObject<GearBlueprintItem> EXCAVATOR_BLUEPRINT = registerGearBlueprint(GearType.EXCAVATOR, false);
     public static final ItemRegistryObject<GearBlueprintItem> SAW_BLUEPRINT = registerGearBlueprint(GearType.SAW, false);
+    public static final ItemRegistryObject<GearBlueprintItem> HOE_BLUEPRINT = registerGearBlueprint(GearType.HOE, false);
     public static final ItemRegistryObject<GearBlueprintItem> MATTOCK_BLUEPRINT = registerGearBlueprint(GearType.MATTOCK, false);
     public static final ItemRegistryObject<GearBlueprintItem> PROSPECTOR_HAMMER_BLUEPRINT = registerGearBlueprint(GearType.PROSPECTOR_HAMMER, false);
     public static final ItemRegistryObject<GearBlueprintItem> SICKLE_BLUEPRINT = registerGearBlueprint(GearType.SICKLE, false);
@@ -133,6 +134,7 @@ public final class SgItems {
     public static final ItemRegistryObject<GearBlueprintItem> HAMMER_TEMPLATE = registerGearBlueprint(GearType.HAMMER, true);
     public static final ItemRegistryObject<GearBlueprintItem> EXCAVATOR_TEMPLATE = registerGearBlueprint(GearType.EXCAVATOR, true);
     public static final ItemRegistryObject<GearBlueprintItem> SAW_TEMPLATE = registerGearBlueprint(GearType.SAW, true);
+    public static final ItemRegistryObject<GearBlueprintItem> HOE_TEMPLATE = registerGearBlueprint(GearType.HOE, true);
     public static final ItemRegistryObject<GearBlueprintItem> MATTOCK_TEMPLATE = registerGearBlueprint(GearType.MATTOCK, true);
     public static final ItemRegistryObject<GearBlueprintItem> PROSPECTOR_HAMMER_TEMPLATE = registerGearBlueprint(GearType.PROSPECTOR_HAMMER, true);
     public static final ItemRegistryObject<GearBlueprintItem> SICKLE_TEMPLATE = registerGearBlueprint(GearType.SICKLE, true);
@@ -182,6 +184,8 @@ public final class SgItems {
             new MainPartItem(GearType.EXCAVATOR, unstackableProps()));
     public static final ItemRegistryObject<MainPartItem> SAW_BLADE = registerCompoundPart("saw_blade", () ->
             new MainPartItem(GearType.SAW, unstackableProps()));
+    public static final ItemRegistryObject<MainPartItem> HOE_HEAD = registerCompoundPart("hoe_head", () ->
+            new MainPartItem(GearType.HOE, unstackableProps()));
     public static final ItemRegistryObject<MainPartItem> MATTOCK_HEAD = registerCompoundPart("mattock_head", () ->
             new MainPartItem(GearType.MATTOCK, unstackableProps()));
     public static final ItemRegistryObject<MainPartItem> PROSPECTOR_HAMMER_HEAD = registerCompoundPart("prospector_hammer_head", () ->
@@ -301,6 +305,7 @@ public final class SgItems {
     public static final ItemRegistryObject<GearExcavatorItem> EXCAVATOR = register("excavator", () -> new GearExcavatorItem(GearType.EXCAVATOR));
     public static final ItemRegistryObject<GearSawItem> SAW = register("saw", () -> new GearSawItem(GearType.SAW));
     public static final ItemRegistryObject<GearProspectorHammerItem> PROSPECTOR_HAMMER = register("prospector_hammer", () -> new GearProspectorHammerItem(GearType.PROSPECTOR_HAMMER));
+    public static final ItemRegistryObject<GearHoeItem> HOE = register("hoe", () -> new GearHoeItem(GearType.HOE));
     public static final ItemRegistryObject<GearMattockItem> MATTOCK = register("mattock", () -> new GearMattockItem());
     public static final ItemRegistryObject<GearSickleItem> SICKLE = register("sickle", () -> new GearSickleItem(GearType.SICKLE));
     public static final ItemRegistryObject<GearShearsItem> SHEARS = register("shears", () -> new GearShearsItem());

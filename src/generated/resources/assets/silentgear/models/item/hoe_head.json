@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "silentgear:item/hoe/main_generic_hc",
+    "layer1": "silentgear:item/hoe/_highlight",
+    "layer2": "silentgear:item/part_marker"
+  }
+}

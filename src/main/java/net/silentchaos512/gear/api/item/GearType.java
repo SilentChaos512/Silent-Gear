@@ -57,6 +57,8 @@ public final class GearType {
             b.toolActions(ToolActions.PICKAXE_DIG));
     public static final GearType SAW = getOrCreate("saw", AXE, b ->
             b.toolActions(ToolActions.AXE_DIG));
+    public static final GearType HOE = getOrCreate("hoe", HARVEST_TOOL, b ->
+            b.toolActions(ToolActions.DEFAULT_HOE_ACTIONS));
     public static final GearType MATTOCK = getOrCreate("mattock", HARVEST_TOOL, b ->
             b.toolActions(ToolActions.AXE_DIG, ToolActions.HOE_DIG, ToolActions.HOE_TILL, ToolActions.SHOVEL_DIG));
     public static final GearType PAXEL = getOrCreate("paxel", HARVEST_TOOL, b ->

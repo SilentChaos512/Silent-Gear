@@ -337,6 +337,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsHarvest(1, 5)
                 .mainStatsMelee(1.5f, 1.0f, 0.1f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, 0f)
                 .mainStatsRanged(0.1f, 0.0f)
                 .mainStatsArmor(2, 4, 3, 1, 0, 8) //10
                 .trait(PartType.MAIN, Const.Traits.SOFT, 1, new MaterialRatioTraitCondition(0.5f))
@@ -353,6 +354,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsCommon(32, 7, 22, 50, 1.2f)
                 .mainStatsHarvest(0, 12)
                 .mainStatsMelee(0, 4, 0.0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -2f)
                 .mainStatsRanged(0, 0.3f)
                 .mainStatsProjectile(1.1f, 1.0f)
                 .mainStatsArmor(2, 5, 3, 1, 0, 8) //11
@@ -391,6 +393,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsHarvest(2, 6)
                 .mainStatsMelee(2, 1, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, 0f)
                 .mainStatsRanged(1, 0.1f)
                 .mainStatsProjectile(1.0f, 1.1f)
                 .mainStatsArmor(2, 6, 5, 2, 0, 6) //15
@@ -442,6 +445,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.GEM)
                 // main
                 .mainStatsCommon(1561, 33, 10, 70, 0.8f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, 1f)
                 .mainStatsHarvest(3, 8)
                 .mainStatsMelee(3, 1, 0.0f)
                 .mainStatsRanged(2, -0.2f)
@@ -480,6 +484,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
                 .mainStatsHarvest(2, 10)
                 .mainStatsMelee(2, 2, 0.0f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, 1f)
                 .mainStatsRanged(1, -0.1f)
                 .mainStatsProjectile(1.1f, 0.9f)
                 .mainStatsArmor(3, 6, 4, 3, 4, 6) //16
@@ -643,6 +648,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsHarvest(1, 4)
                 .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -1f)
                 .mainStatsRanged(0, -0.1f, 1f, 0.8f)
                 .mainStatsArmor(1, 3, 1, 1, 0, 0) //6
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 2)
@@ -666,6 +672,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsHarvest(1, 4)
                 .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -1f)
                 .mainStatsRanged(0, -0.2f, 1f, 0.8f)
                 .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
                 .trait(PartType.MAIN, Const.Traits.BRITTLE, 1)
@@ -769,6 +776,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsHarvest(1, 4)
                 .mainStatsMelee(1, 0, 0.1f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -1f)
                 .mainStatsRanged(0, -0.1f, 1f, 0.8f)
                 .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
                 //rod
@@ -793,6 +801,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsHarvest(1, 4)
                 .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -1f)
                 .mainStatsRanged(0, -0.2f, 1f, 0.8f)
                 .mainStatsArmor(1, 2, 1, 1, 0, 0) //5
                 .trait(PartType.MAIN, Const.Traits.ANCIENT, 1)
@@ -881,6 +890,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsHarvest(0, 2)
                 .mainStatsMelee(0, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
+                .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -2f)
                 .mainStatsRanged(0f, 0f, 1f, 0.9f)
                 .mainStatsArmor(1, 3, 2, 1, 0, 2) //7
                 .trait(PartType.MAIN, Const.Traits.FLAMMABLE, 1)

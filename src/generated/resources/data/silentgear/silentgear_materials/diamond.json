@@ -25,6 +25,7 @@
       "enchantment_value": 10.0,
       "rarity": 70.0,
       "charging_value": 0.8,
+      "attack_speed/hoe": 1.0,
       "harvest_level": 3.0,
       "harvest_speed": 8.0,
       "melee_damage": 3.0,
