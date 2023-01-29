@@ -16,6 +16,8 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.config.Config;
@@ -24,11 +26,12 @@ import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -137,7 +140,11 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(Config.Client.showMaterialTooltips.get()) {
-            Collection<IMaterialInstance> materials = getSubMaterials(stack);
+            List<IMaterialInstance> materials = getSubMaterials(stack);
+            List<TraitInstance> traits = TraitHelper.getTraits(materials, PartGearKey.of(GearType.ALL, PartType.MAIN), ItemStack.EMPTY);
+
+            float synergy = SynergyUtils.getSynergy(PartType.MAIN, materials, traits);
+            tooltip.add(SynergyUtils.getDisplayText(synergy));
 
             TextListBuilder statsBuilder = new TextListBuilder();
             for (IMaterialInstance material : materials) {
