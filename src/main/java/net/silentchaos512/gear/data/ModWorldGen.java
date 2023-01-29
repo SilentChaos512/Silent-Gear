@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.data;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.Holder;
@@ -36,6 +37,7 @@ import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.world.SgWorldFeatures;
 
 import java.util.List;
 import java.util.Map;
@@ -53,7 +55,7 @@ public class ModWorldGen {
         // Bort
         ConfiguredFeature<?, ?> bortFeature = new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(
-                        List.of(
+                        Lists.newArrayList(
                                 OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, SgBlocks.BORT_ORE.asBlockState()),
                                 OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, SgBlocks.DEEPSLATE_BORT_ORE.asBlockState())
                         ),
@@ -71,7 +73,7 @@ public class ModWorldGen {
         // Crimson Iron
         ConfiguredFeature<?, ?> crimsonIronFeature = new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(
-                        List.of(
+                        Lists.newArrayList(
                                 OreConfiguration.target(new TagMatchTest(Tags.Blocks.NETHERRACK), SgBlocks.CRIMSON_IRON_ORE.asBlockState()),
                                 OreConfiguration.target(new BlockMatchTest(Blocks.BLACKSTONE), SgBlocks.BLACKSTONE_CRIMSON_IRON_ORE.asBlockState())
                         ),
@@ -102,29 +104,29 @@ public class ModWorldGen {
         );
 
         // Wild Flax
-        ConfiguredFeature<?, ?> wildFlaxFeature = new ConfiguredFeature<>(Feature.FLOWER,
+        ConfiguredFeature<?, ?> wildFlaxFeature = new ConfiguredFeature<>(SgWorldFeatures.WILD_PLANT,
                 FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK,
                         new SimpleBlockConfiguration(BlockStateProvider.simple(SgBlocks.WILD_FLAX_PLANT.get())),
-                        List.of(),
+                        Lists.newArrayList(),
                         32
                 )
         );
         PlacedFeature wildFlaxPlaced = new PlacedFeature(
                 holder(wildFlaxFeature, ops, wildFlaxName),
-                List.of(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())
+                Lists.newArrayList(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())
         );
 
         // Wild Fluffy
-        ConfiguredFeature<?, ?> wildFluffyFeature = new ConfiguredFeature<>(Feature.FLOWER,
+        ConfiguredFeature<?, ?> wildFluffyFeature = new ConfiguredFeature<>(SgWorldFeatures.WILD_PLANT,
                 FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK,
                         new SimpleBlockConfiguration(BlockStateProvider.simple(SgBlocks.WILD_FLUFFY_PLANT.get())),
-                        List.of(),
+                        Lists.newArrayList(),
                         32
                 )
         );
         PlacedFeature wildFluffyPlaced = new PlacedFeature(
                 holder(wildFluffyFeature, ops, wildFluffyName),
-                List.of(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())
+                Lists.newArrayList(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())
         );
 
         // Collections of all configured features and placed features
@@ -198,7 +200,7 @@ public class ModWorldGen {
     }
 
     private static List<PlacementModifier> orePlacement(PlacementModifier p_195347_, PlacementModifier p_195348_) {
-        return List.of(p_195347_, InSquarePlacement.spread(), p_195348_, BiomeFilter.biome());
+        return Lists.newArrayList(p_195347_, InSquarePlacement.spread(), p_195348_, BiomeFilter.biome());
     }
 
     private static List<PlacementModifier> commonOrePlacement(int count, PlacementModifier modifier) {

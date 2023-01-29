@@ -37,6 +37,7 @@ import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.world.SgWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
 import net.silentchaos512.lib.util.LibHooks;
@@ -69,6 +70,7 @@ class SideProxy implements IProxy {
             Network.init();
         }
 
+        modEventBus.addListener(SgWorldFeatures::registerFeatures);
         modEventBus.addListener(SideProxy::commonSetup);
         modEventBus.addListener(SideProxy::registerCapabilities);
         modEventBus.addListener(SideProxy::imcEnqueue);
