@@ -47,7 +47,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModelFile itemHandheld = getExistingFile(new ResourceLocation("item/handheld"));
 
         for (CraftingItems item : CraftingItems.values()) {
-                builder(item, itemGenerated, "item/" + item.getName());
+            builder(item, itemGenerated, "item/" + item.getName());
         }
 
         builder(SgItems.NETHERWOOD_CHARCOAL, itemGenerated);
@@ -84,6 +84,10 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer0", "item/blueprint_book_cover")
                 .texture("layer1", "item/blueprint_book_pages")
                 .texture("layer2", "item/blueprint_book_deco");
+
+        builder(SgItems.FRAGMENT)
+                .parent(itemGenerated)
+                .texture("layer0", "item/fragment/metal");
 
         builder(SgItems.JEWELER_TOOLS, itemGenerated, "item/jeweler_tools");
 

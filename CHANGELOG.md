@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hoes! They're just hoes. They till dirt and stuff. Enjoy.
 ### Changed
 - Vanilla netherite items can now be converted into equivalent gear items like other tools and armor
+### Fixed
+- Fragments now have a temporary model
 
 ## [3.2.1] - 2023-01-23
 ### Fixed

@@ -5,10 +5,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.utils.Color;
@@ -47,6 +50,15 @@ public final class ColorHandlers {
             IColoredMaterialItem coloredMaterialItem = (IColoredMaterialItem) item;
             event.register(coloredMaterialItem::getColor, item);
         });
+
+        // Fragments
+        event.register((stack, tintIndex) -> {
+            IMaterialInstance material = FragmentItem.getMaterial(stack);
+            if (material == null) {
+                return Color.VALUE_WHITE;
+            }
+            return material.getDisplayProperties().getLayerColor(GearType.ALL, PartType.MAIN, material, 0);
+        }, SgItems.FRAGMENT);
     }
 
     /**
