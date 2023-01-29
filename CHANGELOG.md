@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.2.2] - 2023-01-28
 ### Added
 - Hoes! They're just hoes. They till dirt and stuff. Enjoy.
+- Compound materials now display their synergy value
 ### Changed
 - Paxels can now strip logs and perform all axe tool actions [#227]
 - Vanilla netherite items can now be converted into equivalent gear items like other tools and armor
