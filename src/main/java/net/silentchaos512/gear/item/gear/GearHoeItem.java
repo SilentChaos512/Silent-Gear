@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 
 public class GearHoeItem extends HoeItem implements ICoreTool {
     private final GearType gearType;
-    private final Set<Material> effectiveMaterials;
+    protected final Set<Material> effectiveMaterials;
 
     public GearHoeItem(GearType gearType) {
         this(gearType, Collections.emptySet());
