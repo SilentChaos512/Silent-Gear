@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Turkish translation (vemamr)
+### Fixed
+- Not being able to throw tridents when playing on a server [#575]
 
 ## [3.2.3] - 2023-01-29
 ### Fixed
