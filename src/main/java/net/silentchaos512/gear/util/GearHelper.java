@@ -384,7 +384,7 @@ public final class GearHelper {
     //endregion
 
     public static Item.Properties getBaseItemProperties() {
-        return new Item.Properties().stacksTo(1).tab(SilentGear.ITEM_GROUP);
+        return new Item.Properties().stacksTo(1).durability(100).tab(SilentGear.ITEM_GROUP);
     }
 
     public static GearType getType(ItemStack gear) {
