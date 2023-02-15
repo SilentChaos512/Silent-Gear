@@ -62,7 +62,9 @@ public final class MaterialInstance implements IMaterialInstance {
         this.material = material;
         this.grade = grade;
         this.item = craftingItem.copy();
-        this.item.setCount(1);
+        if (!this.item.isEmpty()) {
+            this.item.setCount(1);
+        }
     }
 
     public static MaterialInstance of(IMaterial material) {
