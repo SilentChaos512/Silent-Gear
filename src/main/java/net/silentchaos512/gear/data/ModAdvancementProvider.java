@@ -1,15 +1,12 @@
 package net.silentchaos512.gear.data;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -18,6 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.ForgeAdvancementProvider;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.event.GearEvents;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
@@ -33,59 +33,23 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.advancements.GenericIntTrigger;
 import net.silentchaos512.lib.util.NameUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collections;
-import java.util.Set;
 import java.util.function.Consumer;
 
-public class ModAdvancementProvider implements DataProvider {
-    private static final Logger LOGGER = LogManager.getLogger();
-    private final DataGenerator generator;
-
-    public ModAdvancementProvider(DataGenerator generator) {
-        this.generator = generator;
-    }
-
-    @Override
-    public void run(CachedOutput cache) {
-        Path path = this.generator.getOutputFolder();
-        Set<ResourceLocation> set = Sets.newHashSet();
-        //noinspection OverlyLongLambda
-        Consumer<Advancement> consumer = (p_204017_3_) -> {
-            if (!set.add(p_204017_3_.getId())) {
-                throw new IllegalStateException("Duplicate advancement " + p_204017_3_.getId());
-            } else {
-                Path path1 = getPath(path, p_204017_3_);
-
-                try {
-                    DataProvider.saveStable(cache, p_204017_3_.deconstruct().serializeToJson(), path1);
-                } catch (IOException ioexception) {
-                    LOGGER.error("Couldn't save advancement {}", path1, ioexception);
-                }
-
-            }
-        };
-
-        new Advancements().accept(consumer);
-    }
-
-    @Override
-    public String getName() {
-        return "Silent Gear - Advancements";
+public class ModAdvancementProvider extends ForgeAdvancementProvider {
+    public ModAdvancementProvider(GatherDataEvent event) {
+        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper(), Collections.singletonList(new Advancements()));
     }
 
     private static Path getPath(Path pathIn, Advancement advancementIn) {
         return pathIn.resolve("data/" + advancementIn.getId().getNamespace() + "/advancements/" + advancementIn.getId().getPath() + ".json");
     }
 
-    private static class Advancements implements Consumer<Consumer<Advancement>> {
-        @SuppressWarnings({"unused", "OverlyLongMethod"})
+    private static class Advancements implements AdvancementGenerator {
         @Override
-        public void accept(Consumer<Advancement> consumer) {
+        public void generate(HolderLookup.Provider registries, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
             ItemStack rootIcon = new ItemStack(SgItems.PICKAXE);
             GearData.writeConstructionParts(rootIcon, ImmutableList.of(
                     LazyPartData.of(Const.Parts.PICKAXE_HEAD, SgItems.PICKAXE_HEAD.get(), Const.Materials.CRIMSON_STEEL),
@@ -97,7 +61,7 @@ public class ModAdvancementProvider implements DataProvider {
             Advancement root = Advancement.Builder.advancement()
                     .display(rootIcon, title("root"), description("root"), new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/adventure.png"), FrameType.TASK, false, false, false)
                     .addCriterion("get_item", getItem(Items.CRAFTING_TABLE))
-                    .save(consumer, id("root"));
+                    .save(saver, id("root"));
 
             Advancement overworldPlants = Advancement.Builder.advancement()
                     .parent(root)
@@ -107,17 +71,17 @@ public class ModAdvancementProvider implements DataProvider {
                     .addCriterion("fluffy_seeds", getItem(SgItems.FLUFFY_SEEDS))
                     .addCriterion("fluffy_puffs", getItem(CraftingItems.FLUFFY_PUFF))
                     .requirements(RequirementsStrategy.AND)
-                    .save(consumer, id("overworld_plants"));
+                    .save(saver, id("overworld_plants"));
             Advancement kachink1 = Advancement.Builder.advancement()
                     .parent(root)
                     .display(Items.IRON_NUGGET, title("kachink1"), description("kachink1"), null, FrameType.TASK, true, true, false)
                     .addCriterion("kachink", genericInt(GearHelper.DAMAGE_FACTOR_CHANGE, 1))
-                    .save(consumer, id("kachink1"));
+                    .save(saver, id("kachink1"));
             Advancement kachink2 = Advancement.Builder.advancement()
                     .parent(kachink1)
                     .display(CraftingItems.DIAMOND_SHARD, title("kachink2"), description("kachink2"), null, FrameType.TASK, true, true, false)
                     .addCriterion("kachink", genericInt(DurabilityTrait.TRIGGER_BRITTLE, 1))
-                    .save(consumer, id("kachink2"));
+                    .save(saver, id("kachink2"));
 
             /*Advancement crudeTool = Advancement.Builder.advancement()
                     .parent(root)
@@ -131,9 +95,9 @@ public class ModAdvancementProvider implements DataProvider {
                     .addCriterion("dagger", getItem(ModItems.DAGGER))
                     .requirements(RequirementsStrategy.OR)
                     .save(consumer, id("survival_tool"));*/
-            Advancement templateBoard = simpleGetItem(consumer, CraftingItems.TEMPLATE_BOARD, root);
+            Advancement templateBoard = simpleGetItem(saver, CraftingItems.TEMPLATE_BOARD, root);
 
-            Advancement blueprintPaper = simpleGetItem(consumer, CraftingItems.BLUEPRINT_PAPER, templateBoard);
+            Advancement blueprintPaper = simpleGetItem(saver, CraftingItems.BLUEPRINT_PAPER, templateBoard);
             Advancement repairKit;
             {
                 Advancement.Builder builder = Advancement.Builder.advancement()
@@ -142,20 +106,20 @@ public class ModAdvancementProvider implements DataProvider {
                         .requirements(RequirementsStrategy.OR);
                 SgItems.getItems(RepairKitItem.class).forEach(item ->
                         builder.addCriterion(NameUtils.fromItem(item).getPath(), getItem(item)));
-                repairKit = builder.save(consumer, id("repair_kit"));
+                repairKit = builder.save(saver, id("repair_kit"));
             }
 
-            Advancement crimsonRepairKit = simpleGetItem(consumer, SgItems.CRIMSON_REPAIR_KIT, repairKit);
-            Advancement azureRepairKit = simpleGetItem(consumer, SgItems.AZURE_REPAIR_KIT, crimsonRepairKit);
+            Advancement crimsonRepairKit = simpleGetItem(saver, SgItems.CRIMSON_REPAIR_KIT, repairKit);
+            Advancement azureRepairKit = simpleGetItem(saver, SgItems.AZURE_REPAIR_KIT, crimsonRepairKit);
             Advancement repairFromBroken = Advancement.Builder.advancement()
                     .parent(repairKit)
                     .display(Items.FLINT, title("repair_from_broken"), description("repair_from_broken"), null, FrameType.TASK, true, true, false)
                     .addCriterion("repair", genericInt(GearEvents.REPAIR_FROM_BROKEN, 1))
-                    .save(consumer, id("repair_from_broken"));
+                    .save(saver, id("repair_from_broken"));
 
-            Advancement blueprintBook = simpleGetItem(consumer, SgItems.BLUEPRINT_BOOK, blueprintPaper);
+            Advancement blueprintBook = simpleGetItem(saver, SgItems.BLUEPRINT_BOOK, blueprintPaper);
 
-            Advancement tipUpgrade = simpleGetItem(consumer, SgItems.TIP, SgItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), templateBoard, "tip_upgrade");
+            Advancement tipUpgrade = simpleGetItem(saver, SgItems.TIP, SgItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), templateBoard, "tip_upgrade");
 
             //region Gear
 
@@ -167,13 +131,13 @@ public class ModAdvancementProvider implements DataProvider {
                     .addCriterion("leggings", getItem(SgItems.LEGGINGS))
                     .addCriterion("boots", getItem(SgItems.BOOTS))
                     .requirements(RequirementsStrategy.OR)
-                    .save(consumer, id("armor"));
+                    .save(saver, id("armor"));
 
             Advancement bow = Advancement.Builder.advancement()
                     .parent(blueprintPaper)
                     .display(SgItems.BOW, title("bow"), description("bow"), null, FrameType.TASK, true, true, false)
                     .addCriterion("get_item", getItem(SgItems.BOW))
-                    .save(consumer, id("bow"));
+                    .save(saver, id("bow"));
             Advancement standardTools = Advancement.Builder.advancement()
                     .parent(blueprintPaper)
                     .display(SgItems.PICKAXE, title("standard_tools"), description("standard_tools"), null, FrameType.TASK, true, true, false)
@@ -181,7 +145,7 @@ public class ModAdvancementProvider implements DataProvider {
                     .addCriterion("shovel", getItem(SgItems.SHOVEL))
                     .addCriterion("axe", getItem(SgItems.AXE))
                     .requirements(RequirementsStrategy.AND)
-                    .save(consumer, id("standard_tools"));
+                    .save(saver, id("standard_tools"));
             Advancement swords = Advancement.Builder.advancement()
                     .parent(blueprintPaper)
                     .display(SgItems.SWORD, title("swords"), description("swords"), null, FrameType.TASK, true, true, false)
@@ -189,7 +153,7 @@ public class ModAdvancementProvider implements DataProvider {
                     .addCriterion("katana", getItem(SgItems.KATANA))
                     .addCriterion("machete", getItem(SgItems.MACHETE))
                     .requirements(RequirementsStrategy.AND)
-                    .save(consumer, id("swords"));
+                    .save(saver, id("swords"));
 
             Advancement bigJobTools = Advancement.Builder.advancement()
                     .parent(standardTools)
@@ -198,13 +162,13 @@ public class ModAdvancementProvider implements DataProvider {
                     .addCriterion("excavator", getItem(SgItems.EXCAVATOR))
                     .addCriterion("lumber_axe", getItem(SgItems.SAW))
                     .requirements(RequirementsStrategy.AND)
-                    .save(consumer, id("big_job_tools"));
+                    .save(saver, id("big_job_tools"));
 
-            Advancement crossbow = simpleGetItem(consumer, SgItems.CROSSBOW, bow);
+            Advancement crossbow = simpleGetItem(saver, SgItems.CROSSBOW, bow);
 
-            Advancement mattock = simpleGetItem(consumer, SgItems.MATTOCK, standardTools);
+            Advancement mattock = simpleGetItem(saver, SgItems.MATTOCK, standardTools);
 
-            Advancement sickle = simpleGetItem(consumer, SgItems.SICKLE, mattock);
+            Advancement sickle = simpleGetItem(saver, SgItems.SICKLE, mattock);
 
             //endregion
 
@@ -214,7 +178,7 @@ public class ModAdvancementProvider implements DataProvider {
                     .parent(root)
                     .display(Items.OBSIDIAN, title("nether"), description("nether"), null, FrameType.TASK, false, false, false)
                     .addCriterion("entered_nether", ChangeDimensionTrigger.TriggerInstance.changedDimensionTo(Level.NETHER))
-                    .save(consumer, id("nether"));
+                    .save(saver, id("nether"));
 
             Advancement netherPlants = Advancement.Builder.advancement()
                     .parent(nether)
@@ -222,42 +186,42 @@ public class ModAdvancementProvider implements DataProvider {
                     .addCriterion("banana", getItem(SgItems.NETHER_BANANA))
                     .addCriterion("sapling", getItem(SgBlocks.NETHERWOOD_SAPLING))
                     .requirements(RequirementsStrategy.AND)
-                    .save(consumer, id("nether_plants"));
+                    .save(saver, id("nether_plants"));
 
-            Advancement blazeGold = simpleGetItem(consumer, CraftingItems.BLAZE_GOLD_INGOT, nether, "blaze_gold");
+            Advancement blazeGold = simpleGetItem(saver, CraftingItems.BLAZE_GOLD_INGOT, nether, "blaze_gold");
             Advancement crimsonIron = Advancement.Builder.advancement()
                     .parent(nether)
                     .display(CraftingItems.CRIMSON_IRON_INGOT, title("crimson_iron"), description("crimson_iron"), null, FrameType.TASK, true, true, false)
                     .addCriterion("get_ore", getItem(CraftingItems.RAW_CRIMSON_IRON))
                     .addCriterion("get_ingot", getItem(CraftingItems.CRIMSON_IRON_INGOT))
-                    .save(consumer, id("crimson_iron"));
+                    .save(saver, id("crimson_iron"));
 
             Advancement materialGrader = Advancement.Builder.advancement()
                     .parent(blazeGold)
                     .display(SgBlocks.MATERIAL_GRADER, title("material_grader"), description("material_grader"), null, FrameType.TASK, true, true, false)
                     .addCriterion("get_grader", getItem(SgBlocks.MATERIAL_GRADER))
                     .addCriterion("get_catalyst", getItem(SgTags.Items.GRADER_CATALYSTS_TIER_1))
-                    .save(consumer, id("material_grader"));
+                    .save(saver, id("material_grader"));
 
-            Advancement crimsonSteel = simpleGetItem(consumer, CraftingItems.CRIMSON_STEEL_INGOT, crimsonIron, "crimson_steel");
-            Advancement salvager = simpleGetItem(consumer, SgBlocks.SALVAGER, crimsonIron);
+            Advancement crimsonSteel = simpleGetItem(saver, CraftingItems.CRIMSON_STEEL_INGOT, crimsonIron, "crimson_steel");
+            Advancement salvager = simpleGetItem(saver, SgBlocks.SALVAGER, crimsonIron);
 
             Advancement highDurability = Advancement.Builder.advancement()
                     .parent(materialGrader)
                     .display(SgItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EMERALD)), title("high_durability"), description("high_durability"), null, FrameType.TASK, true, true, false)
                     .addCriterion("durability", genericInt(GearEvents.MAX_DURABILITY, 16_000))
-                    .save(consumer, id("high_durability"));
+                    .save(saver, id("high_durability"));
             Advancement graderCatalyst2 = Advancement.Builder.advancement()
                     .parent(materialGrader)
                     .display(CraftingItems.BLAZING_DUST, title("grader_catalyst_2"), description("grader_catalyst_2"), null, FrameType.TASK, true, true, false)
                     .addCriterion("get_item", getItem(SgTags.Items.GRADER_CATALYSTS_TIER_2))
-                    .save(consumer, id("grader_catalyst_2"));
+                    .save(saver, id("grader_catalyst_2"));
 
             Advancement graderCatalyst3 = Advancement.Builder.advancement()
                     .parent(graderCatalyst2)
                     .display(CraftingItems.GLITTERY_DUST, title("grader_catalyst_3"), description("grader_catalyst_3"), null, FrameType.TASK, true, true, false)
                     .addCriterion("get_item", getItem(SgTags.Items.GRADER_CATALYSTS_TIER_3))
-                    .save(consumer, id("grader_catalyst_3"));
+                    .save(saver, id("grader_catalyst_3"));
 
             //endregion
 
@@ -267,20 +231,20 @@ public class ModAdvancementProvider implements DataProvider {
                     .parent(nether)
                     .display(Items.END_STONE, title("the_end"), description("the_end"), null, FrameType.TASK, false, false, false)
                     .addCriterion("entered_the_end", ChangeDimensionTrigger.TriggerInstance.changedDimensionTo(Level.END))
-                    .save(consumer, id("the_end"));
+                    .save(saver, id("the_end"));
 
             Advancement azureSilver = Advancement.Builder.advancement()
                     .parent(theEnd)
                     .display(CraftingItems.AZURE_SILVER_INGOT, title("azure_silver"), description("azure_silver"), null, FrameType.TASK, true, true, false)
                     .addCriterion("get_ore", getItem(CraftingItems.RAW_AZURE_SILVER))
                     .addCriterion("get_ingot", getItem(CraftingItems.AZURE_SILVER_INGOT))
-                    .save(consumer, id("azure_silver"));
+                    .save(saver, id("azure_silver"));
 
             Advancement azureElectrum = Advancement.Builder.advancement()
                     .parent(azureSilver)
                     .display(CraftingItems.AZURE_ELECTRUM_INGOT, title("azure_electrum"), description("azure_electrum"), null, FrameType.TASK, true, true, false)
                     .addCriterion("get_ingot", getItem(CraftingItems.AZURE_ELECTRUM_INGOT))
-                    .save(consumer, id("azure_electrum"));
+                    .save(saver, id("azure_electrum"));
 
             ItemStack azureSilverBoots = new ItemStack(SgItems.BOOTS);
             GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.Parts.ARMOR_BODY, SgItems.BOOT_PLATES.get(), LazyMaterialInstance.of(Const.Materials.AZURE_SILVER))));
@@ -288,7 +252,7 @@ public class ModAdvancementProvider implements DataProvider {
                     .parent(azureSilver)
                     .display(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, FrameType.TASK, true, true, false)
                     .addCriterion("fall_with_moonwalker_boots", genericInt(GearEvents.FALL_WITH_MOONWALKER, 1))
-                    .save(consumer, id("moonwalker"));
+                    .save(saver, id("moonwalker"));
 
             //endregion
         }

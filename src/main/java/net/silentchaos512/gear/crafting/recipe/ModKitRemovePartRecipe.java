@@ -2,6 +2,7 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.core.NonNullList;
@@ -17,8 +18,8 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
 public class ModKitRemovePartRecipe extends CustomRecipe {
-    public ModKitRemovePartRecipe(ResourceLocation idIn) {
-        super(idIn);
+    public ModKitRemovePartRecipe(ResourceLocation idIn, CraftingBookCategory bookCategory) {
+        super(idIn, bookCategory);
     }
 
     @Override

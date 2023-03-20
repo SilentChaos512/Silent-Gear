@@ -28,7 +28,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-import net.silentchaos512.gear.SilentGear;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -116,7 +115,7 @@ public enum CraftingItems implements ItemLike {
 
     private static final class ItemInternal extends Item {
         ItemInternal() {
-            super(new Properties().tab(SilentGear.ITEM_GROUP));
+            super(new Properties());
         }
 
         @Override

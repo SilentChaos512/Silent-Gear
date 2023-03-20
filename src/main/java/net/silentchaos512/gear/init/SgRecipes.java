@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -46,7 +46,7 @@ public final class SgRecipes {
 
     // Serializers
     public static final RegistryObject<RecipeSerializer<?>> COMBINE_FRAGMENTS = register(Const.COMBINE_FRAGMENTS, () ->
-            new SimpleRecipeSerializer<>(CombineFragmentsRecipe::new));
+            new SimpleCraftingRecipeSerializer<>(CombineFragmentsRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> COMPOUND_PART = register(Const.COMPOUND_PART, () ->
             ExtendedShapelessRecipe.Serializer.basic(ShapelessCompoundPartRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> COMPOUNDING = register(Const.COMPOUNDING, () ->
@@ -62,15 +62,15 @@ public final class SgRecipes {
     public static final RegistryObject<RecipeSerializer<?>> DAMAGE_ITEM = register(Const.DAMAGE_ITEM,
             SGearDamageItemRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> FILL_REPAIR_KIT = register(Const.FILL_REPAIR_KIT, () ->
-            new SimpleRecipeSerializer<>(FillRepairKitRecipe::new));
+            new SimpleCraftingRecipeSerializer<>(FillRepairKitRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART, () ->
-            new SimpleRecipeSerializer<>(ModKitRemovePartRecipe::new));
+            new SimpleCraftingRecipeSerializer<>(ModKitRemovePartRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> PRESSING = register(Const.PRESSING, () ->
             ExtendedSingleItemRecipe.Serializer.basic(PRESSING_TYPE.get(), PressingRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> PRESSING_MATERIAL = register(Const.PRESSING_MATERIAL, () ->
             ExtendedSingleItemRecipe.Serializer.basic(PRESSING_TYPE.get(), MaterialPressingRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> QUICK_REPAIR = register(Const.QUICK_REPAIR, () ->
-            new SimpleRecipeSerializer<>(QuickRepairRecipe::new));
+            new SimpleCraftingRecipeSerializer<>(QuickRepairRecipe::new));
     public static final RegistryObject<RecipeSerializer<?>> SALVAGING = register(Const.SALVAGING,
             SalvagingRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> SALVAGING_GEAR = register(Const.SALVAGING_GEAR,
@@ -86,12 +86,12 @@ public final class SgRecipes {
     public static final RegistryObject<RecipeSerializer<?>> SMITHING_UPGRADE = register(Const.SMITHING_UPGRADE,
             UpgradeSmithingRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> SWAP_GEAR_PART = register(Const.SWAP_GEAR_PART, () ->
-            new SimpleRecipeSerializer<>(GearPartSwapRecipe::new));
+            new SimpleCraftingRecipeSerializer<>(GearPartSwapRecipe::new));
 
     // This overrides the vanilla crafting grid repair recipe, to prevent it from destroying gear items
     @SuppressWarnings("unused")
     public static final RegistryObject<RecipeSerializer<?>> REPAIR_ITEM_OVERRIDE = register("crafting_special_repairitem", () ->
-            new SimpleRecipeSerializer<>(RepairItemRecipeFix::new));
+            new SimpleCraftingRecipeSerializer<>(RepairItemRecipeFix::new));
 
     private SgRecipes() {
     }

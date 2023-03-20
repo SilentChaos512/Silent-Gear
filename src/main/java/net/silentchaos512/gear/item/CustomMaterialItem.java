@@ -4,7 +4,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -81,19 +80,14 @@ public class CustomMaterialItem extends Item implements IColoredMaterialItem {
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowedIn(group)) {
-            items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
+    public void addSubItems(NonNullList<ItemStack> items) {items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
+        for (IMaterial material : MaterialManager.getValues()) {
+            if (material instanceof CustomCompoundMaterial) {
+                IMaterialInstance mat = MaterialInstance.of(material);
+                ItemStack stack = create(mat);
 
-            for (IMaterial material : MaterialManager.getValues()) {
-                if (material instanceof CustomCompoundMaterial) {
-                    IMaterialInstance mat = MaterialInstance.of(material);
-                    ItemStack stack = create(mat);
-
-                    if (mat.getIngredient().test(stack)) {
-                        items.add(stack);
-                    }
+                if (mat.getIngredient().test(stack)) {
+                    items.add(stack);
                 }
             }
         }

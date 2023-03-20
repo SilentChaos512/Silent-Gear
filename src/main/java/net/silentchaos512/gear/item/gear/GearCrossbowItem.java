@@ -2,12 +2,9 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -44,6 +41,8 @@ import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.client.util.ModelPropertiesHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -263,12 +262,11 @@ public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon 
                     icrossbowuser.shootCrossbowProjectile(attackTarget, crossbow, iprojectile, p_220016_9_);
                 }
             } else {
-                Vec3 vec3d1 = shooter.getUpVector(1.0F);
-                Quaternion quaternion = new Quaternion(new Vector3f(vec3d1), p_220016_9_, true);
-                Vec3 vec3d = shooter.getViewVector(1.0F);
-                Vector3f vector3f = new Vector3f(vec3d);
-                vector3f.transform(quaternion);
-                iprojectile.shoot(vector3f.x(), vector3f.y(), vector3f.z(), p_220016_7_, p_220016_8_);
+                Vec3 vec31 = shooter.getUpVector(1.0F);
+                Quaternionf quaternionf = (new Quaternionf()).setAngleAxis((double)(p_220016_9_ * ((float)Math.PI / 180F)), vec31.x, vec31.y, vec31.z);
+                Vec3 vec3 = shooter.getViewVector(1.0F);
+                Vector3f vector3f = vec3.toVector3f().rotate(quaternionf);
+                iprojectile.shoot((double)vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), p_220016_7_, p_220016_8_);
             }
 
             crossbow.hurtAndBreak(flag ? 3 : 1, shooter, (p_220017_1_) -> {
@@ -429,11 +427,6 @@ public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon 
     @Override
     public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override

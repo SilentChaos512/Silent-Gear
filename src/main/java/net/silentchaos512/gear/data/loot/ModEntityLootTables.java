@@ -1,7 +1,8 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.data.loot.EntityLoot;
+import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -14,9 +15,16 @@ import net.silentchaos512.gear.item.CraftingItems;
 
 import java.util.function.BiConsumer;
 
-public class ModEntityLootTables extends EntityLoot {
+public class ModEntityLootTables extends EntityLootSubProvider {
+    protected ModEntityLootTables() {
+        super(FeatureFlags.REGISTRY.allFlags());
+    }
+
     @Override
-    public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
+    public void generate() {}
+
+    @Override
+    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         consumer.accept(LootInjector.Tables.ENTITIES_CAVE_SPIDER, addFineSilk(0.04f, 0.01f));
         consumer.accept(LootInjector.Tables.ENTITIES_SPIDER, addFineSilk(0.02f, 0.005f));
 

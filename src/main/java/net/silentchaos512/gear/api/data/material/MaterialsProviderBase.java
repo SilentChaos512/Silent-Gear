@@ -8,10 +8,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.data.DataGenerators;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class MaterialsProviderBase implements DataProvider {
     protected final DataGenerator generator;
@@ -39,31 +41,19 @@ public abstract class MaterialsProviderBase implements DataProvider {
     }
 
     @Override
-    public void run(@NotNull CachedOutput cache) {
-        Path outputFolder = this.generator.getOutputFolder();
-        Set<ResourceLocation> entries = Sets.newHashSet();
+    public CompletableFuture<?> run(CachedOutput cache) {
+        Path outputFolder = this.generator.getPackOutput().getOutputFolder();
+        Set<ResourceLocation> set = Sets.newHashSet();
+        List<CompletableFuture<?>> list = new ArrayList<>();
 
-        //noinspection OverlyLongLambda
-        getMaterials().forEach(builder -> {
-            if (entries.contains(builder.getId())) {
+        this.getMaterials().forEach(builder -> {
+            if (!set.add(builder.getId())) {
                 throw new IllegalStateException("Duplicate material: " + builder.getId());
             }
-
-            // Material
-            entries.add(builder.getId());
             Path path = outputFolder.resolve(String.format("data/%s/silentgear_materials/%s.json", builder.getId().getNamespace(), builder.getId().getPath()));
-            MaterialsProviderBase.trySaveStable(cache, builder, path);
-
-            // Model
-            // TODO
+            list.add(DataGenerators.saveStable(cache, builder.serialize(), path));
         });
-    }
 
-    private static void trySaveStable(CachedOutput cache, MaterialBuilder builder, Path path) {
-        try {
-            DataGenerators.saveStable(cache, builder.serialize(), path);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+        return CompletableFuture.allOf(list.toArray(new CompletableFuture[0]));
     }
 }

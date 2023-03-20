@@ -16,7 +16,7 @@ import net.silentchaos512.lib.util.NameUtils;
 
 public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
     public CompoundModelsProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, SilentGear.MOD_ID, ITEM_FOLDER, CompoundModelBuilder::new, existingFileHelper);
+        super(generator.getPackOutput(), SilentGear.MOD_ID, ITEM_FOLDER, CompoundModelBuilder::new, existingFileHelper);
     }
 
     @Override

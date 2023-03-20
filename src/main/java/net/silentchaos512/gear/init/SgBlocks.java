@@ -1,7 +1,9 @@
 package net.silentchaos512.gear.init;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.*;
@@ -176,7 +178,7 @@ public final class SgBlocks {
             () -> new Block(BlockBehaviour.Properties.of(Material.STONE)
                     .requiresCorrectToolForDrops()
                     .strength(5, 6)),
-            bro -> () -> new BlockItem(bro.get(), new Item.Properties().tab(SilentGear.ITEM_GROUP)) {
+            bro -> () -> new BlockItem(bro.get(), new Item.Properties()) {
                 @Override
                 public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
                     return 10 * Config.Common.netherwoodCharcoalBurnTime.get();
@@ -201,11 +203,11 @@ public final class SgBlocks {
     public static final BlockRegistryObject<FenceBlock> NETHERWOOD_FENCE = register("netherwood_fence", () ->
             new FenceBlock(netherWoodProps(2f, 3f)));
     public static final BlockRegistryObject<FenceGateBlock> NETHERWOOD_FENCE_GATE = register("netherwood_fence_gate", () ->
-            new FenceGateBlock(netherWoodProps(2f, 3f)));
+            new FenceGateBlock(netherWoodProps(2f, 3f), SoundEvents.NETHER_WOOD_FENCE_GATE_CLOSE, SoundEvents.NETHER_WOOD_FENCE_GATE_OPEN));
     public static final BlockRegistryObject<DoorBlock> NETHERWOOD_DOOR = register("netherwood_door", () ->
-            new DoorBlock(netherWoodProps(3f, 3f).noOcclusion()));
+            new DoorBlock(netherWoodProps(3f, 3f).noOcclusion(), SoundEvents.NETHER_WOOD_DOOR_CLOSE, SoundEvents.NETHER_WOOD_DOOR_OPEN));
     public static final BlockRegistryObject<TrapDoorBlock> NETHERWOOD_TRAPDOOR = register("netherwood_trapdoor", () ->
-            new TrapDoorBlock(netherWoodProps(3f, 3f).noOcclusion()));
+            new TrapDoorBlock(netherWoodProps(3f, 3f).noOcclusion(), SoundEvents.NETHER_WOOD_TRAPDOOR_CLOSE, SoundEvents.NETHER_WOOD_TRAPDOOR_OPEN));
     public static final BlockRegistryObject<LeavesBlock> NETHERWOOD_LEAVES = register("netherwood_leaves", () ->
             new LeavesBlock(BlockBehaviour.Properties.of(Material.LEAVES)
                     .strength(0.2f)
@@ -272,11 +274,11 @@ public final class SgBlocks {
     }
 
     private static <T extends Block> Supplier<BlockItem> defaultItem(BlockRegistryObject<T> block) {
-        return () -> new BlockItem(block.get(), new Item.Properties().tab(SilentGear.ITEM_GROUP));
+        return () -> new BlockItem(block.get(), new Item.Properties());
     }
 
     private static Supplier<BlockItem> getStoneTorchItem() {
-        return () -> new StandingAndWallBlockItem(STONE_TORCH.get(), WALL_STONE_TORCH.get(), new Item.Properties().tab(SilentGear.ITEM_GROUP));
+        return () -> new StandingAndWallBlockItem(STONE_TORCH.get(), WALL_STONE_TORCH.get(), new Item.Properties(), Direction.DOWN);
     }
 
     @SuppressWarnings("SameParameterValue")

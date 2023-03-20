@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.data.loot.ChestLoot;
+import net.minecraft.data.loot.packs.VanillaChestLoot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -16,9 +16,9 @@ import net.silentchaos512.gear.item.CraftingItems;
 
 import java.util.function.BiConsumer;
 
-public class ModChestLootTables extends ChestLoot {
+public class ModChestLootTables extends VanillaChestLoot {
     @Override
-    public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
+    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         consumer.accept(LootInjector.Tables.CHESTS_NETHER_BRIDGE, addNetherMetalsAndFlora());
         consumer.accept(LootInjector.Tables.CHESTS_BASTION_TREASURE, addNetherMetalsWithExtra());
         consumer.accept(LootInjector.Tables.CHESTS_BASTION_OTHER, addNetherFlora(LootTable.lootTable()));

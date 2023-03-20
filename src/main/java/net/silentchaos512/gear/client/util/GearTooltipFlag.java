@@ -32,4 +32,9 @@ public class GearTooltipFlag implements TooltipFlag {
     public boolean isAdvanced() {
         return advanced;
     }
+
+    @Override
+    public boolean isCreative() {
+        return false;
+    }
 }

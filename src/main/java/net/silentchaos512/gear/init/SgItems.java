@@ -331,7 +331,7 @@ public final class SgItems {
     private SgItems() {}
 
     private static Item.Properties baseProps() {
-        return new Item.Properties().tab(SilentGear.ITEM_GROUP);
+        return new Item.Properties();
     }
 
     private static Item.Properties unstackableProps() {

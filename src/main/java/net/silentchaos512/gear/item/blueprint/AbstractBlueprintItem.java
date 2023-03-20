@@ -1,10 +1,12 @@
 package net.silentchaos512.gear.item.blueprint;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 import net.silentchaos512.gear.config.Config;
@@ -45,13 +47,6 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
         BlueprintType config = Config.Common.blueprintTypes.get();
         return this.singleUse && !config.allowTemplate()
                 || !this.singleUse && !config.allowBlueprint();
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (!this.isDisabled()) {
-            super.fillItemCategory(group, items);
-        }
     }
 
     @Override

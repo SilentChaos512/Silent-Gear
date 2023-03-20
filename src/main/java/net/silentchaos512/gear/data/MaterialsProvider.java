@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class MaterialsProvider extends MaterialsProviderBase {
-
     @Deprecated
     public MaterialsProvider(DataGenerator generator) {
         this(generator, SilentGear.MOD_ID);

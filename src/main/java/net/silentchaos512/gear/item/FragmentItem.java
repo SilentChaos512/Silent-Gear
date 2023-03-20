@@ -1,17 +1,14 @@
 package net.silentchaos512.gear.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
@@ -67,19 +64,6 @@ public class FragmentItem extends Item {
             return Component.translatable(this.getDescriptionId(stack) + ".invalid");
         }
         return Component.translatable(this.getDescriptionId(stack), material.getDisplayName(PartType.MAIN));
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (!this.allowedIn(group)) return;
-
-        items.add(new ItemStack(this));
-
-        if (SilentGear.isDevBuild()) {
-            for (IMaterial material : MaterialManager.getValues()) {
-                items.add(create(MaterialInstance.of(material), 1));
-            }
-        }
     }
 
     @Override

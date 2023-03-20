@@ -1,12 +1,10 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -19,7 +17,6 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.init.SgItems;
@@ -178,13 +175,5 @@ public class CompoundPartItem extends Item {
             });
             tooltip.addAll(matsBuilder.build());
         }
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (!allowedIn(group) || this == SgItems.SHIELD_PLATE.get()) {
-            return;
-        }
-        items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)));
     }
 }

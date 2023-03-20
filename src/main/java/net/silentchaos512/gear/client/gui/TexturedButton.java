@@ -21,7 +21,7 @@ public class TexturedButton extends Button {
     }
 
     public TexturedButton(ResourceLocation resLoc, int x, int y, int texturePosX, int texturePosY, int width, int height, List<String> hoverTextList, OnPress action) {
-        super(x, y, width, height, Component.literal(""), action);
+        super(x, y, width, height, Component.literal(""), action, DEFAULT_NARRATION);
         this.texturePosX = texturePosX;
         this.texturePosY = texturePosY;
         this.resLoc = resLoc;

@@ -1,11 +1,9 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -22,7 +20,6 @@ import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.AbstractMaterial;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.util.Const;
@@ -152,13 +149,6 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
                 statsBuilder.add(TextUtil.withColor(material.getDisplayName(PartType.MAIN).copy(), nameColor));
             }
             tooltip.addAll(statsBuilder.build());
-        }
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowedIn(group)) {
-            items.add(create(MaterialList.of(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), 1));
         }
     }
 }

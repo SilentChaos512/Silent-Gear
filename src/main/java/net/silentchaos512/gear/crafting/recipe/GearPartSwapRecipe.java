@@ -2,6 +2,7 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.core.NonNullList;
@@ -22,8 +23,8 @@ import net.silentchaos512.lib.collection.StackList;
 import java.util.*;
 
 public class GearPartSwapRecipe extends CustomRecipe {
-    public GearPartSwapRecipe(ResourceLocation idIn) {
-        super(idIn);
+    public GearPartSwapRecipe(ResourceLocation idIn, CraftingBookCategory bookCategory) {
+        super(idIn, bookCategory);
     }
 
     @Override

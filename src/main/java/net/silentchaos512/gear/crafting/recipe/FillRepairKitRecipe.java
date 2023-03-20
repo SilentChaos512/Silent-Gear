@@ -21,6 +21,7 @@ package net.silentchaos512.gear.crafting.recipe;
 import com.google.gson.JsonObject;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.network.FriendlyByteBuf;
@@ -38,8 +39,8 @@ import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.collection.StackList;
 
 public class FillRepairKitRecipe extends CustomRecipe {
-    public FillRepairKitRecipe(ResourceLocation idIn) {
-        super(idIn);
+    public FillRepairKitRecipe(ResourceLocation idIn, CraftingBookCategory bookCategory) {
+        super(idIn, bookCategory);
     }
 
     @Override
@@ -120,12 +121,12 @@ public class FillRepairKitRecipe extends CustomRecipe {
     public static final class Serializer implements RecipeSerializer<FillRepairKitRecipe> {
         @Override
         public FillRepairKitRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            return new FillRepairKitRecipe(recipeId);
+            return new FillRepairKitRecipe(recipeId, CraftingBookCategory.MISC);
         }
 
         @Override
         public FillRepairKitRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            return new FillRepairKitRecipe(recipeId);
+            return new FillRepairKitRecipe(recipeId, CraftingBookCategory.MISC);
         }
 
         @Override

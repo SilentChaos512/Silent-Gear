@@ -384,7 +384,7 @@ public final class GearHelper {
     //endregion
 
     public static Item.Properties getBaseItemProperties() {
-        return new Item.Properties().stacksTo(1).durability(100).tab(SilentGear.ITEM_GROUP);
+        return new Item.Properties().stacksTo(1).durability(100);
     }
 
     public static GearType getType(ItemStack gear) {
@@ -680,12 +680,13 @@ public final class GearHelper {
 
     public static void fillItemGroup(ICoreItem item, CreativeModeTab group, Collection<ItemStack> items) {
         boolean inTab = false;
-        for (CreativeModeTab tabInList : item.asItem().getCreativeTabs()) {
+        // FIXME?
+        /*for (CreativeModeTab tabInList : item.asItem().getCreativeTabs()) {
             if (tabInList == group) {
                 inTab = true;
                 break;
             }
-        }
+        }*/
         if (!inTab) return;
 
         /*Collection<ItemStack> list = new ArrayList<>();

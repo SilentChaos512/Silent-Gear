@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.data.loot;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.data.loot.GiftLoot;
+import net.minecraft.data.loot.packs.VanillaGiftLoot;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -26,9 +26,9 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class ModGiftLootTables extends GiftLoot {
+public class ModGiftLootTables extends VanillaGiftLoot {
     @Override
-    public void accept(BiConsumer<ResourceLocation, LootTable.Builder> p_accept_1_) {
+    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> p_accept_1_) {
         p_accept_1_.accept(SgItems.BLUEPRINT_PACKAGE.get().getDefaultLootTable(), LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(SgItems.ROD_BLUEPRINT)))

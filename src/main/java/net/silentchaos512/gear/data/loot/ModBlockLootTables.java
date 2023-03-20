@@ -4,7 +4,8 @@ import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -31,18 +32,23 @@ import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ModBlockLootTables extends BlockLoot {
+public class ModBlockLootTables extends BlockLootSubProvider {
     private static final float[] DEFAULT_SAPLING_DROP_RATES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
     private static final LootItemCondition.Builder SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
     private static final LootItemCondition.Builder SHEARS = MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.SHEARS));
     private static final LootItemCondition.Builder SILK_TOUCH_OR_SHEARS = SHEARS.or(SILK_TOUCH);
     private static final LootItemCondition.Builder NOT_SILK_TOUCH_OR_SHEARS = SILK_TOUCH_OR_SHEARS.invert();
 
+    protected ModBlockLootTables() {
+        super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags());
+    }
+
     @Override
-    protected void addTables() {
+    protected void generate() {
         add(SgBlocks.BORT_ORE.get(),
                 createOreDrop(SgBlocks.BORT_ORE.get(), CraftingItems.BORT.asItem()));
         add(SgBlocks.DEEPSLATE_BORT_ORE.get(),
@@ -76,7 +82,7 @@ public class ModBlockLootTables extends BlockLoot {
         add(SgBlocks.NETHERWOOD_DOOR.get(), block ->
                 createSinglePropConditionTable(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
         dropSelf(SgBlocks.NETHERWOOD_TRAPDOOR.get());
-        add(SgBlocks.NETHERWOOD_SLAB.get(), BlockLoot::createSlabItemTable);
+        add(SgBlocks.NETHERWOOD_SLAB.get(), this::createSlabItemTable);
         dropSelf(SgBlocks.NETHERWOOD_STAIRS.get());
         dropSelf(SgBlocks.STONE_TORCH.get());
 
@@ -120,7 +126,7 @@ public class ModBlockLootTables extends BlockLoot {
     }
 
     @Nonnull
-    private static Function<Block, LootTable.Builder> netherwoodLeaves(ItemLike sapling, ItemLike stick, float... chances) {
+    private Function<Block, LootTable.Builder> netherwoodLeaves(ItemLike sapling, ItemLike stick, float... chances) {
         return (block) -> createSelfDropDispatchTable(block, SILK_TOUCH_OR_SHEARS, applyExplosionCondition(block, LootItem.lootTableItem(sapling))
                 .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, chances)))
                 .withPool(LootPool.lootPool()
@@ -136,7 +142,7 @@ public class ModBlockLootTables extends BlockLoot {
                                 .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
     }
 
-    private static LootTable.Builder flaxPlant(LootItemCondition.Builder builder) {
+    private LootTable.Builder flaxPlant(LootItemCondition.Builder builder) {
         return applyExplosionDecay(SgBlocks.FLAX_PLANT, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .when(builder)
@@ -153,7 +159,7 @@ public class ModBlockLootTables extends BlockLoot {
         );
     }
 
-    private static LootTable.Builder fluffyPlant(LootItemCondition.Builder builder) {
+    private LootTable.Builder fluffyPlant(LootItemCondition.Builder builder) {
         return applyExplosionDecay(SgBlocks.FLUFFY_PLANT, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .when(builder)

@@ -1,14 +1,14 @@
 package net.silentchaos512.gear.data;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.BlockTagsProvider;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FluffyBlock;
 import net.silentchaos512.gear.init.SgBlocks;
@@ -18,17 +18,12 @@ import net.silentchaos512.lib.block.IBlockProvider;
 import java.util.Arrays;
 
 public class ModBlockTagsProvider extends BlockTagsProvider {
-    public ModBlockTagsProvider(DataGenerator generatorIn, ExistingFileHelper existingFileHelper) {
-        super(generatorIn, SilentGear.MOD_ID, existingFileHelper);
+    public ModBlockTagsProvider(GatherDataEvent event) {
+        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), SilentGear.MOD_ID, event.getExistingFileHelper());
     }
 
     @Override
-    public String getName() {
-        return "Silent Gear - Block Tags";
-    }
-
-    @Override
-    public void addTags() {
+    protected void addTags(HolderLookup.Provider provider) {
         // Harvesting
         tag(Tags.Blocks.NEEDS_NETHERITE_TOOL)
                 .addTag(SgTags.Blocks.ORES_AZURE_SILVER);
@@ -74,18 +69,18 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(SgBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
 
         // Silent Gear
-        getBuilder(SgTags.Blocks.FLUFFY_BLOCKS)
+        tag(SgTags.Blocks.FLUFFY_BLOCKS)
                 .add(SgBlocks.getBlocks(FluffyBlock.class).toArray(new Block[0]));
-        getBuilder(SgTags.Blocks.NETHERWOOD_LOGS)
+        tag(SgTags.Blocks.NETHERWOOD_LOGS)
                 .add(SgBlocks.NETHERWOOD_LOG.get())
                 .add(SgBlocks.STRIPPED_NETHERWOOD_LOG.get())
                 .add(SgBlocks.NETHERWOOD_WOOD.get())
                 .add(SgBlocks.STRIPPED_NETHERWOOD_WOOD.get());
-        getBuilder(SgTags.Blocks.NETHERWOOD_SOIL)
+        tag(SgTags.Blocks.NETHERWOOD_SOIL)
                 .addTag(Tags.Blocks.NETHERRACK)
                 .addTag(BlockTags.DIRT)
                 .add(Blocks.FARMLAND);
-        getBuilder(SgTags.Blocks.PROSPECTOR_HAMMER_TARGETS)
+        tag(SgTags.Blocks.PROSPECTOR_HAMMER_TARGETS)
                 .add(Blocks.ANCIENT_DEBRIS)
                 .addTag(Tags.Blocks.ORES);
 
@@ -131,7 +126,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
     }
 
     private void builder(TagKey<Block> tag, IBlockProvider... items) {
-        getBuilder(tag).add(Arrays.stream(items).map(IBlockProvider::asBlock).toArray(Block[]::new));
+        tag(tag).add(Arrays.stream(items).map(IBlockProvider::asBlock).toArray(Block[]::new));
     }
 
     protected TagsProvider.TagAppender<Block> getBuilder(TagKey<Block> tag) {

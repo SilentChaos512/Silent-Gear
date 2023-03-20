@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 
 public class ModItemModelProvider extends ItemModelProvider {
     public ModItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, SilentGear.MOD_ID, existingFileHelper);
+        super(generator.getPackOutput(), SilentGear.MOD_ID, existingFileHelper);
     }
 
     @Nonnull

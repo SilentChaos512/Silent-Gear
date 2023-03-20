@@ -21,7 +21,7 @@ import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOL
 
 public class ModBlockStateProvider extends BlockStateProvider {
     public ModBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, SilentGear.MOD_ID, exFileHelper);
+        super(gen.getPackOutput(), SilentGear.MOD_ID, exFileHelper);
     }
 
     @Nonnull

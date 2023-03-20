@@ -1,12 +1,10 @@
 package net.silentchaos512.gear.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -70,13 +68,6 @@ public class CraftedMaterialItem extends Item implements IColoredMaterialItem {
     public Component getName(ItemStack stack) {
         IMaterialInstance material = getMaterial(stack);
         return Component.translatable(this.getDescriptionId(), material.getDisplayName(PartType.MAIN));
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowedIn(group)) {
-            items.add(create(LazyMaterialInstance.of(Const.Materials.EXAMPLE), 1));
-        }
     }
 
     @Override

@@ -24,7 +24,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.lib.item.LootContainerItem;
 
 import javax.annotation.Nullable;
@@ -32,7 +31,7 @@ import java.util.List;
 
 public class BlueprintPackageItem extends LootContainerItem {
     public BlueprintPackageItem(ResourceLocation defaultLootTable) {
-        super(defaultLootTable, new Properties().tab(SilentGear.ITEM_GROUP));
+        super(defaultLootTable, new Properties());
     }
 
     public ResourceLocation getDefaultLootTable() {

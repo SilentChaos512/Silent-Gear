@@ -2,6 +2,7 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -15,8 +16,8 @@ import net.silentchaos512.lib.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.lib.util.InventoryUtils;
 
 public class CombineFragmentsRecipe extends CustomRecipe {
-    public CombineFragmentsRecipe(ResourceLocation idIn) {
-        super(idIn);
+    public CombineFragmentsRecipe(ResourceLocation idIn, CraftingBookCategory bookCategory) {
+        super(idIn, bookCategory);
     }
 
     @Override

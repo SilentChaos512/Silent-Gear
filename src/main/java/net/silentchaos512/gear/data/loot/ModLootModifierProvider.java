@@ -11,7 +11,7 @@ import net.silentchaos512.gear.util.Const;
 
 public class ModLootModifierProvider extends GlobalLootModifierProvider {
     public ModLootModifierProvider(DataGenerator gen) {
-        super(gen, SilentGear.MOD_ID);
+        super(gen.getPackOutput(), SilentGear.MOD_ID);
     }
 
     @Override

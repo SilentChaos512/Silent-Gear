@@ -2,8 +2,7 @@ package net.silentchaos512.gear.data;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +13,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.BlockTagsProvider;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.SgBlocks;
@@ -29,18 +29,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class ModItemTagsProvider extends ItemTagsProvider {
-    public ModItemTagsProvider(DataGenerator generatorIn, BlockTagsProvider blocks, ExistingFileHelper existingFileHelper) {
-        super(generatorIn, blocks, SilentGear.MOD_ID, existingFileHelper);
+    public ModItemTagsProvider(GatherDataEvent event, BlockTagsProvider blocks) {
+        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), blocks, SilentGear.MOD_ID, event.getExistingFileHelper());
     }
 
     @Override
-    public String getName() {
-        return "Silent Gear - Item Tags";
-    }
-
-    @SuppressWarnings("OverlyLongMethod")
-    @Override
-    public void addTags() {
+    protected void addTags(HolderLookup.Provider provider) {
         // Forge
         copy(SgTags.Blocks.ORES_BORT, SgTags.Items.ORES_BORT);
         copy(SgTags.Blocks.ORES_CRIMSON_IRON, SgTags.Items.ORES_CRIMSON_IRON);
@@ -61,7 +55,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         builder(SgTags.Items.RAW_MATERIALS_CRIMSON_IRON, CraftingItems.RAW_CRIMSON_IRON);
         builder(SgTags.Items.RAW_MATERIALS_AZURE_SILVER, CraftingItems.RAW_AZURE_SILVER);
-        getBuilder(Tags.Items.RAW_MATERIALS)
+        tag(Tags.Items.RAW_MATERIALS)
                 .addTag(SgTags.Items.RAW_MATERIALS_CRIMSON_IRON)
                 .addTag(SgTags.Items.RAW_MATERIALS_AZURE_SILVER);
 
@@ -74,7 +68,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(SgTags.Items.DUSTS_AZURE_ELECTRUM, CraftingItems.AZURE_ELECTRUM_DUST);
         builder(SgTags.Items.DUSTS_TYRIAN_STEEL, CraftingItems.TYRIAN_STEEL_DUST);
         builder(SgTags.Items.DUSTS_STARMETAL, CraftingItems.STARMETAL_DUST);
-        getBuilder(Tags.Items.DUSTS)
+        tag(Tags.Items.DUSTS)
                 .addTag(SgTags.Items.DUSTS_BLAZE_GOLD)
                 .addTag(SgTags.Items.DUSTS_CRIMSON_IRON)
                 .addTag(SgTags.Items.DUSTS_CRIMSON_STEEL)
@@ -84,7 +78,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .addTag(SgTags.Items.DUSTS_STARMETAL);
 
         builder(SgTags.Items.GEMS_BORT, CraftingItems.BORT);
-        getBuilder(Tags.Items.GEMS)
+        tag(Tags.Items.GEMS)
                 .addTag(SgTags.Items.GEMS_BORT);
 
         builder(SgTags.Items.INGOTS_BRONZE, CraftingItems.BRONZE_INGOT);
@@ -94,7 +88,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(SgTags.Items.INGOTS_AZURE_SILVER, CraftingItems.AZURE_SILVER_INGOT);
         builder(SgTags.Items.INGOTS_AZURE_ELECTRUM, CraftingItems.AZURE_ELECTRUM_INGOT);
         builder(SgTags.Items.INGOTS_TYRIAN_STEEL, CraftingItems.TYRIAN_STEEL_INGOT);
-        getBuilder(Tags.Items.INGOTS)
+        tag(Tags.Items.INGOTS)
                 .addTag(SgTags.Items.INGOTS_BLAZE_GOLD)
                 .addTag(SgTags.Items.INGOTS_CRIMSON_IRON)
                 .addTag(SgTags.Items.INGOTS_CRIMSON_STEEL)
@@ -110,7 +104,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(SgTags.Items.NUGGETS_TYRIAN_STEEL, CraftingItems.TYRIAN_STEEL_NUGGET);
         builder(SgTags.Items.NUGGETS_DIAMOND, CraftingItems.DIAMOND_SHARD);
         builder(SgTags.Items.NUGGETS_EMERALD, CraftingItems.EMERALD_SHARD);
-        getBuilder(Tags.Items.NUGGETS)
+        tag(Tags.Items.NUGGETS)
                 .addTag(SgTags.Items.NUGGETS_BLAZE_GOLD)
                 .addTag(SgTags.Items.NUGGETS_CRIMSON_IRON)
                 .addTag(SgTags.Items.NUGGETS_CRIMSON_STEEL)
@@ -125,7 +119,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(SgTags.Items.RODS_ROUGH, CraftingItems.ROUGH_ROD);
         builder(SgTags.Items.RODS_STONE, CraftingItems.STONE_ROD);
         builder(Tags.Items.RODS_WOODEN, CraftingItems.NETHERWOOD_STICK);
-        getBuilder(Tags.Items.RODS)
+        tag(Tags.Items.RODS)
                 .addTag(SgTags.Items.RODS_IRON)
                 .addTag(SgTags.Items.RODS_NETHERWOOD)
                 .addTag(SgTags.Items.RODS_ROUGH)
@@ -149,7 +143,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(SgTags.Items.HELMETS, SgItems.HELMET);
         builder(SgTags.Items.HOES, SgItems.HOE, SgItems.MATTOCK);
         builder(SgTags.Items.KNIVES, SgItems.KNIFE, SgItems.DAGGER);
-        getBuilder(makeWrapper("forge", "tools/knives")).addTag(SgTags.Items.KNIVES); // alt tag that some mods are apparently using :(
+        tag(makeWrapper("forge", "tools/knives")).addTag(SgTags.Items.KNIVES); // alt tag that some mods are apparently using :(
         builder(SgTags.Items.LEGGINGS, SgItems.LEGGINGS);
         builder(SgTags.Items.PICKAXES, SgItems.HAMMER, SgItems.PAXEL, SgItems.PICKAXE);
         builder(SgTags.Items.SAWS, SgItems.SAW);
@@ -170,7 +164,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
         copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
 
-        getBuilder(ItemTags.ARROWS).add(SgItems.ARROW.get());
+        tag(ItemTags.ARROWS).add(SgItems.ARROW.get());
         builder(ItemTags.PIGLIN_LOVED,
                 SgBlocks.BLAZE_GOLD_BLOCK,
                 SgItems.GOLDEN_NETHER_BANANA,
@@ -184,22 +178,22 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(SgTags.Blocks.FLUFFY_BLOCKS, SgTags.Items.FLUFFY_BLOCKS);
         copy(SgTags.Blocks.NETHERWOOD_LOGS, SgTags.Items.NETHERWOOD_LOGS);
 
-        getBuilder(SgTags.Items.GRADER_CATALYSTS_TIER_1).add(CraftingItems.GLOWING_DUST.asItem());
-        getBuilder(SgTags.Items.GRADER_CATALYSTS_TIER_2).add(CraftingItems.BLAZING_DUST.asItem());
-        getBuilder(SgTags.Items.GRADER_CATALYSTS_TIER_3).add(CraftingItems.GLITTERY_DUST.asItem());
-        getBuilder(SgTags.Items.GRADER_CATALYSTS_TIER_4);
-        getBuilder(SgTags.Items.GRADER_CATALYSTS_TIER_5);
-        getBuilder(SgTags.Items.GRADER_CATALYSTS)
+        tag(SgTags.Items.GRADER_CATALYSTS_TIER_1).add(CraftingItems.GLOWING_DUST.asItem());
+        tag(SgTags.Items.GRADER_CATALYSTS_TIER_2).add(CraftingItems.BLAZING_DUST.asItem());
+        tag(SgTags.Items.GRADER_CATALYSTS_TIER_3).add(CraftingItems.GLITTERY_DUST.asItem());
+        tag(SgTags.Items.GRADER_CATALYSTS_TIER_4);
+        tag(SgTags.Items.GRADER_CATALYSTS_TIER_5);
+        tag(SgTags.Items.GRADER_CATALYSTS)
                 .addTag(SgTags.Items.GRADER_CATALYSTS_TIER_1)
                 .addTag(SgTags.Items.GRADER_CATALYSTS_TIER_2)
                 .addTag(SgTags.Items.GRADER_CATALYSTS_TIER_3)
                 .addTag(SgTags.Items.GRADER_CATALYSTS_TIER_4)
                 .addTag(SgTags.Items.GRADER_CATALYSTS_TIER_5);
 
-        getBuilder(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_1).addTag(SgTags.Items.DUSTS_BLAZE_GOLD);
-        getBuilder(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_2).addTag(SgTags.Items.DUSTS_AZURE_SILVER);
-        getBuilder(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_3).addTag(SgTags.Items.DUSTS_STARMETAL);
-        getBuilder(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS)
+        tag(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_1).addTag(SgTags.Items.DUSTS_BLAZE_GOLD);
+        tag(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_2).addTag(SgTags.Items.DUSTS_AZURE_SILVER);
+        tag(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_3).addTag(SgTags.Items.DUSTS_STARMETAL);
+        tag(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS)
                 .addTag(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_1)
                 .addTag(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_2)
                 .addTag(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_3);
@@ -213,10 +207,10 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .map(item -> (AbstractBlueprintItem) item)
                 .sorted(Comparator.comparing(blueprint -> blueprint.getItemTag().location()))
                 .forEach(item -> blueprints.put(item.getItemTag().location(), item));
-        TagsProvider.TagAppender<Item> blueprintsBuilder = getBuilder(SgTags.Items.BLUEPRINTS);
+        TagsProvider.TagAppender<Item> blueprintsBuilder = tag(SgTags.Items.BLUEPRINTS);
         blueprints.keySet().forEach(tagId -> {
             TagKey<Item> tag = ItemTags.create(tagId);
-            getBuilder(tag).add(blueprints.get(tagId).toArray(new Item[0]));
+            tag(tag).add(blueprints.get(tagId).toArray(new Item[0]));
             blueprintsBuilder.addTag(tag);
         });
 
@@ -232,10 +226,6 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     }
 
     private void builder(TagKey<Item> tag, ItemLike... items) {
-        getBuilder(tag).add(Arrays.stream(items).map(ItemLike::asItem).toArray(Item[]::new));
-    }
-
-    protected TagsProvider.TagAppender<Item> getBuilder(TagKey<Item> tag) {
-        return tag(tag);
+        tag(tag).add(Arrays.stream(items).map(ItemLike::asItem).toArray(Item[]::new));
     }
 }

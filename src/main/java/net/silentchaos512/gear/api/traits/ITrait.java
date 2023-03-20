@@ -66,7 +66,7 @@ public interface ITrait {
 
     @Deprecated
     default void addInformation(int level, List<Component> tooltip) {
-        addInformation(level, tooltip, () -> false);
+        addInformation(level, tooltip, TooltipFlag.NORMAL);
     }
 
     /**

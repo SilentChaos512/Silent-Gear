@@ -34,6 +34,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ForgeBiomeModifiers;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.init.SgBlocks;
@@ -43,7 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ModWorldGen {
-    public static void init(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+    public static void init(GatherDataEvent event) {
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
 
         ResourceLocation bortName = SilentGear.getId("bort_ore");

@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.item.blueprint.book;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -9,7 +8,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -123,22 +121,16 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         return InteractionResultHolder.success(stack);
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowedIn(group)) {
-            super.fillItemCategory(group, items);
-
-            // Create a book with all blueprints
-            ItemStack filled = new ItemStack(this);
-            IItemHandler inventory = this.getInventory(filled);
-            List<Item> blueprints = new ArrayList<>(SgItems.getItems(item -> this.canStore(new ItemStack(item))));
-            for (int i = 0; i < blueprints.size() && i < getInventorySize(filled); i++) {
-                inventory.insertItem(i, new ItemStack(blueprints.get(i)), false);
-            }
-            this.saveInventory(filled, inventory);
-            filled.setHoverName(TextUtil.translate("item", "blueprint_book.fully_loaded"));
-            items.add(filled);
+    public ItemStack createdFullyLoadedBook() {
+        ItemStack filled = new ItemStack(this);
+        IItemHandler inventory = this.getInventory(filled);
+        List<Item> blueprints = new ArrayList<>(SgItems.getItems(item -> this.canStore(new ItemStack(item))));
+        for (int i = 0; i < blueprints.size() && i < getInventorySize(filled); i++) {
+            inventory.insertItem(i, new ItemStack(blueprints.get(i)), false);
         }
+        this.saveInventory(filled, inventory);
+        filled.setHoverName(TextUtil.translate("item", "blueprint_book.fully_loaded"));
+        return filled;
     }
 
     @Override

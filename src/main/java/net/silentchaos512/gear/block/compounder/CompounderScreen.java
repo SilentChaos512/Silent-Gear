@@ -26,10 +26,10 @@ public class CompounderScreen extends AbstractContainerScreen<CompounderContaine
     protected void init() {
         super.init();
         this.lastWorkEnabledValue = this.menu.getWorkEnabled();
-        this.workButton = new Button(this.leftPos + 70, this.topPos + 60, 50, 20, getWorkEnabledButtonTitle(), b -> {
+        this.workButton = Button.builder(getWorkEnabledButtonTitle(), b -> {
             this.menu.toggleWorkEnabled();
             b.setMessage(getWorkEnabledButtonTitle());
-        });
+        }).bounds(this.leftPos + 70, this.topPos + 60, 50, 20).build();;
         this.addWidget(this.workButton);
     }
 

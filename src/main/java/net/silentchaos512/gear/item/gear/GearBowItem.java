@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -222,11 +221,6 @@ public class GearBowItem extends BowItem implements ICoreRangedWeapon {
     @Override
     public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        GearHelper.fillItemGroup(this, group, items);
     }
 
     @Override
