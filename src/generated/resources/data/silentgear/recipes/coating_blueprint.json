@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
   "group": "silentgear:blueprints/coating",
   "ingredients": [
     {
