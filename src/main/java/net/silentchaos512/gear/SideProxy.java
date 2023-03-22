@@ -6,10 +6,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
@@ -46,7 +48,10 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 
 class SideProxy implements IProxy {
-    @Nullable private static MinecraftServer server;
+    @Nullable
+    private static MinecraftServer server;
+    @Nullable
+    private static CreativeModeTab creativeModeTab;
 
     SideProxy() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -75,6 +80,7 @@ class SideProxy implements IProxy {
         modEventBus.addListener(SideProxy::registerCapabilities);
         modEventBus.addListener(SideProxy::imcEnqueue);
         modEventBus.addListener(SideProxy::imcProcess);
+        modEventBus.addListener(SideProxy::onRegisterCreativeTab);
 
 //        modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
 
@@ -119,7 +125,20 @@ class SideProxy implements IProxy {
         }
     }
 
-    private static void imcProcess(InterModProcessEvent event) {}
+    private static void imcProcess(InterModProcessEvent event) {
+    }
+
+    private static void onRegisterCreativeTab(CreativeModeTabEvent.Register event) {
+        creativeModeTab = event.registerCreativeModeTab(SilentGear.getId("tab"), b -> b
+                .icon(() -> SgItems.BLUEPRINT_PACKAGE.get().getStack())
+                .title(Component.translatable("itemGroup.silentgear"))
+                .displayItems((flagSet, output, bool) -> {
+                    // TODO: What about sub items?
+                    SgItems.ITEMS.getEntries().forEach(ro -> output.accept(ro.get()));
+                })
+                .build()
+        );
+    }
 
     private static void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(TraitManager.INSTANCE);
@@ -267,7 +286,8 @@ class SideProxy implements IProxy {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverSetup);
         }
 
-        private void serverSetup(FMLDedicatedServerSetupEvent event) {}
+        private void serverSetup(FMLDedicatedServerSetupEvent event) {
+        }
     }
 
     @Nullable
