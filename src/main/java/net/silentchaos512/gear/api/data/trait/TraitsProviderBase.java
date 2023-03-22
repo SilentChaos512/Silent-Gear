@@ -15,11 +15,9 @@ import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.data.DataGenerators;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class TraitsProviderBase implements DataProvider {
     protected final DataGenerator generator;
@@ -76,27 +74,20 @@ public abstract class TraitsProviderBase implements DataProvider {
     }
 
     @Override
-    public void run(@NotNull CachedOutput cache) {
-        Path outputFolder = this.generator.getOutputFolder();
-        Set<ResourceLocation> entries = Sets.newHashSet();
+    public CompletableFuture<?> run(@NotNull CachedOutput cache) {
+        Path outputFolder = this.generator.getPackOutput().getOutputFolder();
+        Set<ResourceLocation> set = Sets.newHashSet();
+        List<CompletableFuture<?>> list = new ArrayList<>();
 
-        //noinspection OverlyLongLambda
-        getTraits().forEach(builder -> {
-            if (entries.contains(builder.getTraitId())) {
-                throw new IllegalStateException("Duplicate trait: " + builder.getTraitId());
+        this.getTraits().forEach(builder -> {
+            ResourceLocation id = builder.getTraitId();
+            if (!set.add(id)) {
+                throw new IllegalStateException("Duplicate trait: " + id);
             }
-
-            entries.add(builder.getTraitId());
-            Path path = outputFolder.resolve(String.format("data/%s/silentgear_traits/%s.json", builder.getTraitId().getNamespace(), builder.getTraitId().getPath()));
-            TraitsProviderBase.trySaveStable(cache, builder, path);
+            Path path = outputFolder.resolve(String.format("data/%s/silentgear_traits/%s.json", id.getNamespace(), id.getPath()));
+            list.add(DataGenerators.saveStable(cache, builder.serialize(), path));
         });
-    }
 
-    private static void trySaveStable(CachedOutput cache, TraitBuilder builder, Path path) {
-        try {
-            DataGenerators.saveStable(cache, builder.serialize(), path);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+        return CompletableFuture.allOf(list.toArray(new CompletableFuture[0]));
     }
 }

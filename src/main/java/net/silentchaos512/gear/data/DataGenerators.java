@@ -47,7 +47,7 @@ public final class DataGenerators {
         gen.addProvider(event.includeServer(), new ModLootTables(gen));
         gen.addProvider(event.includeServer(), new ModRecipesProvider(gen));
         gen.addProvider(event.includeServer(), new ModAdvancementProvider(event));
-        ModWorldGen.init(gen, existingFileHelper);
+//        ModWorldGen.init(gen, existingFileHelper); //FIXME
 
         gen.addProvider(event.includeServer(), new ModBlockStateProvider(gen, existingFileHelper));
         gen.addProvider(event.includeServer(), new ModItemModelProvider(gen, existingFileHelper));

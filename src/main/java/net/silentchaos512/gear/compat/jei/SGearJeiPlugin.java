@@ -85,21 +85,23 @@ public class SGearJeiPlugin implements IModPlugin {
         for (RepairKitItem item : SgItems.getItems(RepairKitItem.class)) {
             String itemName = NameUtils.fromItem(item).getPath();
             reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint"), "",
-                            new ItemStack(item),
-                            NonNullList.of(Ingredient.EMPTY,
-                                    Ingredient.of(item),
-                                    PartMaterialIngredient.of(PartType.MAIN),
-                                    PartMaterialIngredient.of(PartType.MAIN),
-                                    PartMaterialIngredient.of(PartType.MAIN)
-                            ))));
+                    CraftingBookCategory.MISC,
+                    new ItemStack(item),
+                    NonNullList.of(Ingredient.EMPTY,
+                            Ingredient.of(item),
+                            PartMaterialIngredient.of(PartType.MAIN),
+                            PartMaterialIngredient.of(PartType.MAIN),
+                            PartMaterialIngredient.of(PartType.MAIN)
+                    ))));
             reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint_frag"), "",
-                            new ItemStack(item),
-                            NonNullList.of(Ingredient.EMPTY,
-                                    Ingredient.of(item),
-                                    Ingredient.of(SgItems.FRAGMENT),
-                                    Ingredient.of(SgItems.FRAGMENT),
-                                    Ingredient.of(SgItems.FRAGMENT)
-                            ))));
+                    CraftingBookCategory.MISC,
+                    new ItemStack(item),
+                    NonNullList.of(Ingredient.EMPTY,
+                            Ingredient.of(item),
+                            Ingredient.of(SgItems.FRAGMENT),
+                            Ingredient.of(SgItems.FRAGMENT),
+                            Ingredient.of(SgItems.FRAGMENT)
+                    ))));
         }
 
         reg.addRecipes(GEAR_CRAFTING_TYPE, getRecipes(recipeManager, SGearJeiPlugin::isGearCraftingRecipe, CraftingRecipe.class));
