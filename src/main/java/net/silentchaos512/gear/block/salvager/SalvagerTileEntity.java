@@ -135,6 +135,10 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
             }
 
             if (!copy.isEmpty()) {
+                if (copy.getTag() != null && copy.getTag().isEmpty()) {
+                    copy.setTag(null);
+                }
+
                 builder.add(copy);
             }
         }
