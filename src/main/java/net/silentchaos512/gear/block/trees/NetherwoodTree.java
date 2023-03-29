@@ -17,15 +17,6 @@ import net.silentchaos512.gear.init.SgBlocks;
 import org.jetbrains.annotations.Nullable;
 
 public class NetherwoodTree extends AbstractTreeGrower {
-    public static final TreeConfiguration NETHERWOOD_TREE_CONFIG = new TreeConfiguration.TreeConfigurationBuilder(
-            BlockStateProvider.simple(SgBlocks.NETHERWOOD_LOG.asBlockState()),
-            new ForkingTrunkPlacer(5, 2, 2),
-            BlockStateProvider.simple(SgBlocks.NETHERWOOD_LEAVES.asBlockState()),
-            new AcaciaFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0)),
-            new TwoLayersFeatureSize(1, 0, 2))
-            .ignoreVines()
-            .build();
-    public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> NETHERWOOD_TREE = Holder.direct(new ConfiguredFeature<>(Feature.TREE, NETHERWOOD_TREE_CONFIG));
     public static final ResourceKey<ConfiguredFeature<?, ?>> KEY = FeatureUtils.createKey("silentgear:netherwood");
 
     @Nullable
