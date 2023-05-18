@@ -3,6 +3,7 @@ package net.silentchaos512.gear.util;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import com.thevortex.allthemodium.material.ToolTiers;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -454,6 +455,12 @@ public final class GearHelper {
                 return Tiers.DIAMOND;
             case 4:
                 return Tiers.NETHERITE;
+            case 5:
+                return com.thevortex.allthemodium.material.ToolTiers.ALLTHEMODIUM_TIER;
+            case 6:
+                return com.thevortex.allthemodium.material.ToolTiers.VIBRANIUM_TIER;
+            case 7:
+                return com.thevortex.allthemodium.material.ToolTiers.UNOBTAINIUM_TIER;
             default:
                 return Tiers.NETHERITE;
         }
