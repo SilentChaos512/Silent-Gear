@@ -2,6 +2,7 @@ package net.silentchaos512.gear.block.press;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -68,7 +69,8 @@ public class MetalPressTileEntity extends LockableSidedInventoryTileEntity {
 
     private ItemStack getWorkOutput(@Nullable PressingRecipe recipe) {
         if (recipe != null) {
-            return recipe.assemble(this);
+            RegistryAccess registryAccess = this.level != null ? this.level.registryAccess() : null;
+            return recipe.assemble(this, registryAccess);
         }
         return ItemStack.EMPTY;
     }

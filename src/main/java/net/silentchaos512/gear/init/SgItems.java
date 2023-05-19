@@ -2,12 +2,8 @@ package net.silentchaos512.gear.init;
 
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -316,10 +312,10 @@ public final class SgItems {
     public static final ItemRegistryObject<GearShieldItem> SHIELD = register("shield", () -> new GearShieldItem());
     public static final ItemRegistryObject<GearArrowItem> ARROW = register("arrow", () -> new GearArrowItem(unstackableProps()));
 
-    public static final ItemRegistryObject<GearArmorItem> HELMET = register("helmet", () -> new GearArmorItem(EquipmentSlot.HEAD));
-    public static final ItemRegistryObject<GearArmorItem> CHESTPLATE = register("chestplate", () -> new GearArmorItem(EquipmentSlot.CHEST));
-    public static final ItemRegistryObject<GearArmorItem> LEGGINGS = register("leggings", () -> new GearArmorItem(EquipmentSlot.LEGS));
-    public static final ItemRegistryObject<GearArmorItem> BOOTS = register("boots", () -> new GearArmorItem(EquipmentSlot.FEET));
+    public static final ItemRegistryObject<GearArmorItem> HELMET = register("helmet", () -> new GearArmorItem(ArmorItem.Type.HELMET));
+    public static final ItemRegistryObject<GearArmorItem> CHESTPLATE = register("chestplate", () -> new GearArmorItem(ArmorItem.Type.CHESTPLATE));
+    public static final ItemRegistryObject<GearArmorItem> LEGGINGS = register("leggings", () -> new GearArmorItem(ArmorItem.Type.LEGGINGS));
+    public static final ItemRegistryObject<GearArmorItem> BOOTS = register("boots", () -> new GearArmorItem(ArmorItem.Type.BOOTS));
 
     public static final ItemRegistryObject<GearElytraItem> ELYTRA = register("elytra", () -> new GearElytraItem(unstackableProps()));
 

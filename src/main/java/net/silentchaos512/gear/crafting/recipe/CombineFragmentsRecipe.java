@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.crafting.recipe;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -62,7 +63,7 @@ public class CombineFragmentsRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer craftingInventory) {
+    public ItemStack assemble(CraftingContainer craftingInventory, RegistryAccess registryAccess) {
         StackList list = StackList.from(craftingInventory);
         ItemStack stack = list.firstOfType(FragmentItem.class);
         if (stack.isEmpty()) return ItemStack.EMPTY;

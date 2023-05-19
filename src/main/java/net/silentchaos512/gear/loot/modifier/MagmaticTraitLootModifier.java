@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
@@ -39,7 +38,7 @@ public class MagmaticTraitLootModifier extends LootModifier {
 
     private static ItemStack smelt(ItemStack stack, LootContext context) {
         return context.getLevel().getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(stack), context.getLevel())
-                .map(SmeltingRecipe::getResultItem)
+                .map(r -> r.getResultItem(context.getLevel().registryAccess()))
                 .filter(s -> !s.isEmpty())
                 .map(s -> ItemHandlerHelper.copyStackWithSize(s, stack.getCount() * s.getCount()))
                 .orElse(stack);

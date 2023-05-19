@@ -1,13 +1,14 @@
 package net.silentchaos512.gear.crafting.recipe.smithing;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.UpgradeRecipe;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.LegacyUpgradeRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
-public abstract class GearSmithingRecipe extends UpgradeRecipe {
+public abstract class GearSmithingRecipe extends LegacyUpgradeRecipe {
     protected final Ingredient addition;
     protected final ItemStack gearItem;
 
@@ -18,7 +19,7 @@ public abstract class GearSmithingRecipe extends UpgradeRecipe {
     }
 
     @Override
-    public ItemStack assemble(Container inv) {
+    public ItemStack assemble(Container inv, RegistryAccess registryAccess) {
         ItemStack gear = inv.getItem(0).copy();
         ItemStack upgradeItem = inv.getItem(1);
         return applyUpgrade(gear, upgradeItem);

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -34,7 +35,6 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
-
     private final ResourceLocation recipeId;
     final List<Ingredient> ingredients = new ArrayList<>();
     ItemStack result = ItemStack.EMPTY;
@@ -85,7 +85,7 @@ public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
     }
 
     @Override
-    public ItemStack assemble(CompounderTileEntity<?> inv) {
+    public ItemStack assemble(CompounderTileEntity<?> inv, RegistryAccess registryAccess) {
         return this.result.copy();
     }
 
@@ -95,7 +95,7 @@ public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
         return this.result.copy();
     }
 

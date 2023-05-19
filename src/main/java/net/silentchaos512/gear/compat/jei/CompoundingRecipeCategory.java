@@ -82,7 +82,7 @@ public class CompoundingRecipeCategory implements IRecipeCategory<CompoundingRec
                     .addIngredients(VanillaTypes.ITEM_STACK, shiftIngredients(items, 3 * i));
         }
         builder.addSlot(RecipeIngredientRole.OUTPUT, 126 - GUI_START_X, 35 - GUI_START_Y)
-                        .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem()));
+                        .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem(null)));
     }
 
     private static List<ItemStack> shiftIngredients(List<ItemStack> list, int amount) {

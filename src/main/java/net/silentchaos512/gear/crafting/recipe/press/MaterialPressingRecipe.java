@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.crafting.recipe.press;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -18,7 +19,7 @@ public class MaterialPressingRecipe extends PressingRecipe {
     }
 
     @Override
-    public ItemStack assemble(Container inv) {
+    public ItemStack assemble(Container inv, RegistryAccess registryAccess) {
         IMaterialInstance material = MaterialInstance.from(inv.getItem(0));
 
         if (material != null) {

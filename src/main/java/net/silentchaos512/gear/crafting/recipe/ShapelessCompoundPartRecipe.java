@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +25,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     public ShapelessCompoundPartRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
-        ItemStack output = recipe.getResultItem();
+        ItemStack output = recipe.getResultItem(null);
         if (!(output.getItem() instanceof CompoundPartItem)) {
             throw new JsonParseException("result is not a compound part item: " + output);
         }
@@ -68,8 +69,8 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
-        int craftedCount = getBaseRecipe().getResultItem().getCount();
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+        int craftedCount = getBaseRecipe().getResultItem(registryAccess).getCount();
         return item.create(getMaterials(inv), craftedCount);
     }
 
@@ -90,9 +91,9 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
         // Create an example item, so we're not just showing a broken item
-        int craftedCount = getBaseRecipe().getResultItem().getCount();
+        int craftedCount = getBaseRecipe().getResultItem(registryAccess).getCount();
         return item.create(MaterialList.of(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), craftedCount);
     }
 

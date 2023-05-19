@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.mixin;
 
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.damagesource.DamageSource;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinItemEntity {
     @Inject(at = @At("HEAD"), method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", cancellable = true)
     private void hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> callback) {
-        if (source.isFire() && isFireproof(getItem())) {
+        if (source.is(DamageTypeTags.IS_FIRE) && isFireproof(getItem())) {
             callback.setReturnValue(false);
         }
     }

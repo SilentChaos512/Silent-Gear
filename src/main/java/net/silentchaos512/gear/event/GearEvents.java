@@ -27,9 +27,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -107,7 +109,7 @@ public final class GearEvents {
             return;
 
         DamageSource source = event.getSource();
-        if (source == null || !"player".equals(source.msgId)) return;
+        if (source == null || !"player".equals(source.getMsgId())) return;
 
         Entity attacker = source.getEntity();
         if (!(attacker instanceof Player)) return;
@@ -132,7 +134,7 @@ public final class GearEvents {
         LivingEntity attacked = event.getEntity();
 
         DamageSource source = event.getSource();
-        if (source == null || !"player".equals(source.msgId)) return;
+        if (source == null || !"player".equals(source.getMsgId())) return;
 
         Entity attacker = source.getEntity();
         if (!(attacker instanceof Player)) return;
@@ -169,7 +171,7 @@ public final class GearEvents {
     }
 
     private static boolean isFireDamage(DamageSource source) {
-        return source == DamageSource.IN_FIRE || source == DamageSource.ON_FIRE || source == DamageSource.LAVA;
+        return source.is(DamageTypeTags.IS_FIRE);
     }
 
     private static void damageFlammableItems(LivingDamageEvent event) {
@@ -203,7 +205,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onLivingHurtMagicArmor(LivingHurtEvent event) {
-        if (event.getSource().isMagic()) {
+        if (event.getSource().is(DamageTypes.MAGIC)) {
             float magicArmor = getTotalMagicArmor(event.getEntity());
             float scale = 1f - getReducedMagicDamageScale(magicArmor);
             event.setAmount(event.getAmount() * scale);

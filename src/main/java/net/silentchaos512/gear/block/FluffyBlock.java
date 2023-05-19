@@ -2,7 +2,6 @@ package net.silentchaos512.gear.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
@@ -52,7 +51,7 @@ public class FluffyBlock extends Block {
         // Reduce fall distance per stacked block
         float newDistance = distance - Math.min(8 * stackedBlocks, distance);
         entity.fallDistance = 0f;
-        entity.causeFallDamage(newDistance, 1f, DamageSource.FALL);
+        entity.causeFallDamage(newDistance, 1f, world.damageSources().fall());
     }
 
     @Override

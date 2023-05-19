@@ -132,7 +132,7 @@ class SideProxy implements IProxy {
         creativeModeTab = event.registerCreativeModeTab(SilentGear.getId("tab"), b -> b
                 .icon(() -> SgItems.BLUEPRINT_PACKAGE.get().getStack())
                 .title(Component.translatable("itemGroup.silentgear"))
-                .displayItems((flagSet, output, bool) -> {
+                .displayItems((itemDisplayParameters, output) -> {
                     // TODO: What about sub items?
                     SgItems.ITEMS.getEntries().forEach(ro -> output.accept(ro.get()));
                 })

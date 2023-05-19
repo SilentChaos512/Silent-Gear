@@ -55,8 +55,8 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
 
-    public GearArmorItem(EquipmentSlot slot) {
-        super(GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL, slot, GearHelper.getBaseItemProperties());
+    public GearArmorItem(ArmorItem.Type type) {
+        super(GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL, type, GearHelper.getBaseItemProperties());
     }
 
     @Override
@@ -64,21 +64,16 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
         return Config.Common.isLoaded() ? Config.Common.dummyArmorMaterial.get() : GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL;
     }
 
-    @Deprecated
-    public GearArmorItem(EquipmentSlot slot, String name) {
-        this(slot);
-    }
-
     @Override
     public GearType getGearType() {
-        switch (this.getSlot()) {
-            case HEAD:
+        switch (this.getType()) {
+            case HELMET:
                 return GearType.HELMET;
-            case CHEST:
+            case CHESTPLATE:
                 return GearType.CHESTPLATE;
-            case LEGS:
+            case LEGGINGS:
                 return GearType.LEGGINGS;
-            case FEET:
+            case BOOTS:
                 return GearType.BOOTS;
             default:
                 throw new IllegalStateException("Don't know the gear type for " + NameUtils.fromItem(this));
@@ -87,7 +82,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public boolean isValidSlot(String slot) {
-        return this.getSlot().getName().equalsIgnoreCase(slot);
+        return this.getType().getSlot().getName().equalsIgnoreCase(slot);
     }
 
     //region Stats and attributes
@@ -133,7 +128,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = LinkedHashMultimap.create();
-        if (slot == this.getSlot()) {
+        if (slot == this.getType().getSlot()) {
             UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
             multimap.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADDITION));
             multimap.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADDITION));
@@ -168,7 +163,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, t -> {
-            GearHelper.onBroken(stack, t instanceof Player ? (Player) t : null, this.getSlot());
+            GearHelper.onBroken(stack, t instanceof Player ? (Player) t : null, this.getType().getSlot());
             onBroken.accept(t);
         });
     }

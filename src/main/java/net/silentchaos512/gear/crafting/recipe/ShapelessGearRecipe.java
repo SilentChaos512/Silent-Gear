@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -24,7 +25,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     public ShapelessGearRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
-        ItemStack output = recipe.getResultItem();
+        ItemStack output = recipe.getResultItem(null);
         if (!(output.getItem() instanceof ICoreItem)) {
             throw new JsonParseException("result is not a gear item: " + output);
         }
@@ -62,7 +63,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
         return item.construct(getParts(inv));
     }
 
@@ -72,7 +73,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
         return exampleOutput.get();
     }
 

@@ -3,6 +3,7 @@ package net.silentchaos512.gear.crafting.recipe.salvage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -50,9 +51,9 @@ public class SalvagingRecipe implements Recipe<Container> {
 
     @Deprecated
     @Override
-    public ItemStack assemble(Container inv) {
+    public ItemStack assemble(Container inv, RegistryAccess registryAccess) {
         // DO NOT USE
-        return getResultItem();
+        return getResultItem(registryAccess);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class SalvagingRecipe implements Recipe<Container> {
 
     @Deprecated
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
         // DO NOT USE
         return !results.isEmpty() ? results.get(0) : ItemStack.EMPTY;
     }

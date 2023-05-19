@@ -3,6 +3,7 @@ package net.silentchaos512.gear.crafting.recipe;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -33,7 +34,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     private ConversionRecipe(ShapelessRecipe recipe) {
         super(recipe);
 
-        ItemStack output = recipe.getResultItem();
+        ItemStack output = recipe.getResultItem(null);
         if (!(output.getItem() instanceof ICoreItem)) {
             throw new JsonParseException("result is not a gear item: " + output);
         }
@@ -92,7 +93,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
         ItemStack result = item.construct(getParts());
         ItemStack original = findOriginalItem(inv);
         if (!original.isEmpty()) {

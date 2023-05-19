@@ -65,7 +65,7 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CraftingRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
-                .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem()));
+                .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem(null)));
 
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
