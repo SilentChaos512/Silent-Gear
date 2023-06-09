@@ -8,8 +8,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.utils.Color;
 
 import java.util.Set;
@@ -77,7 +77,7 @@ public interface ICoreArmor extends ICoreItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> GearData.getBlendedColor(stack, PartType.MAIN);
+                case 0 -> ColorUtils.getBlendedColor(stack, PartType.MAIN);
                 default -> Color.VALUE_WHITE;
             };
         };

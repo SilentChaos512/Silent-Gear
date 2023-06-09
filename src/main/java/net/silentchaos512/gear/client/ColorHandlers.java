@@ -9,20 +9,14 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.init.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
-import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.utils.Color;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public final class ColorHandlers {
-    @Deprecated
-    public static Map<String, Integer[]> gearColorCache = new HashMap<>();
-
     private ColorHandlers() {
     }
 
@@ -71,9 +65,9 @@ public final class ColorHandlers {
     public static int getShieldColor(ItemStack stack, int tintIndex) {
         switch (tintIndex) {
             case 0:
-                return GearData.getBlendedColor(stack, PartType.ROD);
+                return ColorUtils.getBlendedColor(stack, PartType.ROD);
             case 1:
-                return GearData.getBlendedColor(stack, PartType.MAIN);
+                return ColorUtils.getBlendedColor(stack, PartType.MAIN);
             default:
                 return Color.VALUE_WHITE;
         }

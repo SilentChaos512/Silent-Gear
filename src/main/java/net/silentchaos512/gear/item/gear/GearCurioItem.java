@@ -26,6 +26,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.util.Const;
@@ -184,8 +185,8 @@ public class GearCurioItem extends Item implements ICoreItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> GearData.getBlendedColor(stack, PartType.MAIN);
-                case 2 -> GearData.getBlendedColor(stack, PartType.ADORNMENT);
+                case 0 -> ColorUtils.getBlendedColor(stack, PartType.MAIN);
+                case 2 -> ColorUtils.getBlendedColor(stack, PartType.ADORNMENT);
                 default -> Color.VALUE_WHITE;
             };
         };
