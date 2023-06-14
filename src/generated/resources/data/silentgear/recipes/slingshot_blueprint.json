@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:slingshot_blueprint"
-  }
+  },
+  "show_notification": true
 }

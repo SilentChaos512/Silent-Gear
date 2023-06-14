@@ -13,5 +13,6 @@
   ],
   "result": {
     "item": "silentgear:boots_template"
-  }
+  },
+  "show_notification": true
 }

@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:katana_template"
-  }
+  },
+  "show_notification": true
 }

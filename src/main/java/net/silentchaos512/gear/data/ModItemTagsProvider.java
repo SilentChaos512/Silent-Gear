@@ -198,7 +198,15 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .addTag(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_2)
                 .addTag(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS_TIER_3);
 
-        builder(SgTags.Items.REPAIR_KITS, SgItems.CRUDE_REPAIR_KIT);
+        builder(SgTags.Items.REPAIR_KITS,
+                SgItems.VERY_CRUDE_REPAIR_KIT,
+                SgItems.CRUDE_REPAIR_KIT,
+                SgItems.STURDY_REPAIR_KIT,
+                SgItems.CRIMSON_REPAIR_KIT,
+                SgItems.AZURE_REPAIR_KIT);
+
+        tag(SgTags.Items.IMPERIAL_DROPS).addTag(Tags.Items.GEMS);
+        tag(SgTags.Items.GOLD_DIGGER_DROPS).addTag(Tags.Items.NUGGETS);
 
         // Blueprints
         Multimap<ResourceLocation, AbstractBlueprintItem> blueprints = MultimapBuilder.linkedHashKeys().arrayListValues().build();

@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:excavator_template"
-  }
+  },
+  "show_notification": true
 }

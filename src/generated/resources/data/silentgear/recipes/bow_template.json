@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:bow_template"
-  }
+  },
+  "show_notification": true
 }

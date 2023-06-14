@@ -13,5 +13,6 @@
   ],
   "result": {
     "item": "silentgear:tyrian_steel_block"
-  }
+  },
+  "show_notification": true
 }

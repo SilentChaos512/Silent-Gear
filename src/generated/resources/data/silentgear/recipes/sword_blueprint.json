@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:sword_blueprint"
-  }
+  },
+  "show_notification": true
 }

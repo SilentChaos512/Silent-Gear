@@ -13,5 +13,6 @@
   "result": {
     "count": 3,
     "item": "silentgear:netherwood_planks"
-  }
+  },
+  "show_notification": true
 }

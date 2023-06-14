@@ -22,5 +22,6 @@
   ],
   "result": {
     "item": "silentgear:material_grader"
-  }
+  },
+  "show_notification": true
 }

@@ -16,6 +16,6 @@
   "base_chance": 0.15,
   "bonus_multiplier": 0.5,
   "ingredient": {
-    "tag": "forge:nuggets"
+    "tag": "silentgear:gold_digger"
   }
 }

@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "silentgear:knife_blueprint"
-  }
+  },
+  "show_notification": true
 }

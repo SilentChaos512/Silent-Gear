@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:saw_template"
-  }
+  },
+  "show_notification": true
 }

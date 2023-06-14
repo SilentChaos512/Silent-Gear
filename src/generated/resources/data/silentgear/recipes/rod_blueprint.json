@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "silentgear:rod_blueprint"
-  }
+  },
+  "show_notification": true
 }

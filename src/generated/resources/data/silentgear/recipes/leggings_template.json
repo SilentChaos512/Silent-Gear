@@ -14,5 +14,6 @@
   ],
   "result": {
     "item": "silentgear:leggings_template"
-  }
+  },
+  "show_notification": true
 }

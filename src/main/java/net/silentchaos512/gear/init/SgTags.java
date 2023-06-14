@@ -140,6 +140,9 @@ public final class SgTags {
         public static final TagKey<Item> STARLIGHT_CHARGER_CATALYSTS_TIER_3 = mod("starlight_charger_catalysts/tier3");
         public static final List<TagKey<Item>> STARLIGHT_CHARGER_TIERS = ImmutableList.of(STARLIGHT_CHARGER_CATALYSTS_TIER_1, STARLIGHT_CHARGER_CATALYSTS_TIER_2, STARLIGHT_CHARGER_CATALYSTS_TIER_3);
 
+        public static final TagKey<Item> IMPERIAL_DROPS = mod("imperial_drops");
+        public static final TagKey<Item> GOLD_DIGGER_DROPS = mod("gold_digger");
+
         private Items() {}
 
         private static TagKey<Item> forge(String path) {

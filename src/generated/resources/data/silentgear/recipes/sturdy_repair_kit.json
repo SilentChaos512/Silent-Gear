@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "silentgear:sturdy_repair_kit"
-  }
+  },
+  "show_notification": true
 }

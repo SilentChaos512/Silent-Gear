@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "silentgear:shears_blueprint"
-  }
+  },
+  "show_notification": true
 }

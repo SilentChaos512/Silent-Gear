@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:mattock_blueprint"
-  }
+  },
+  "show_notification": true
 }

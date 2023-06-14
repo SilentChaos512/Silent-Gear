@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "silentgear:very_crude_repair_kit"
-  }
+  },
+  "show_notification": true
 }

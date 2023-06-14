@@ -10,7 +10,7 @@
   "attribute_modifiers": {
     "all": [
       {
-        "attribute": "forge:reach_distance",
+        "attribute": "forge:block_reach",
         "operation": 0,
         "value": [
           0.5,

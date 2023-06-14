@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "silentgear:shears_template"
-  }
+  },
+  "show_notification": true
 }

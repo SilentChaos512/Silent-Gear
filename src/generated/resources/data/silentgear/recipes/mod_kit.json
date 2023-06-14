@@ -18,5 +18,6 @@
   ],
   "result": {
     "item": "silentgear:mod_kit"
-  }
+  },
+  "show_notification": true
 }

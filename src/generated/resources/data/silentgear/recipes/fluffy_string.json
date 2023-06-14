@@ -11,5 +11,6 @@
   ],
   "result": {
     "item": "silentgear:fluffy_string"
-  }
+  },
+  "show_notification": true
 }

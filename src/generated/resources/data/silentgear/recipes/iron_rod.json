@@ -13,5 +13,6 @@
   "result": {
     "count": 4,
     "item": "silentgear:iron_rod"
-  }
+  },
+  "show_notification": true
 }

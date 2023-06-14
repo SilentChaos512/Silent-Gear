@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:paxel_template"
-  }
+  },
+  "show_notification": true
 }

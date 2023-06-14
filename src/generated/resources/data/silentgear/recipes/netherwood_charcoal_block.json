@@ -13,5 +13,6 @@
   ],
   "result": {
     "item": "silentgear:netherwood_charcoal_block"
-  }
+  },
+  "show_notification": true
 }

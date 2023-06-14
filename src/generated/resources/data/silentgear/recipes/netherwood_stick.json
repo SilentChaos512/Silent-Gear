@@ -13,5 +13,6 @@
   "result": {
     "count": 4,
     "item": "silentgear:netherwood_stick"
-  }
+  },
+  "show_notification": true
 }

@@ -12,5 +12,6 @@
   ],
   "result": {
     "item": "silentgear:fluffy_fabric"
-  }
+  },
+  "show_notification": true
 }

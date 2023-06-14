@@ -13,5 +13,6 @@
   ],
   "result": {
     "item": "silentgear:crimson_steel_block"
-  }
+  },
+  "show_notification": true
 }

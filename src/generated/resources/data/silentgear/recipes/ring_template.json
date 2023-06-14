@@ -22,5 +22,6 @@
   ],
   "result": {
     "item": "silentgear:ring_template"
-  }
+  },
+  "show_notification": true
 }

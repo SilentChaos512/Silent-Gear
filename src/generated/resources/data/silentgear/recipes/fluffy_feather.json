@@ -13,5 +13,6 @@
   ],
   "result": {
     "item": "silentgear:fluffy_feather"
-  }
+  },
+  "show_notification": true
 }

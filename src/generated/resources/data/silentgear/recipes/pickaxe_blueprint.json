@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:pickaxe_blueprint"
-  }
+  },
+  "show_notification": true
 }

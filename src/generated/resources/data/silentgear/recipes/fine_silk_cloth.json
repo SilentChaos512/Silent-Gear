@@ -12,5 +12,6 @@
   ],
   "result": {
     "item": "silentgear:fine_silk_cloth"
-  }
+  },
+  "show_notification": true
 }

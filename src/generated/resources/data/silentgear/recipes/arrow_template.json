@@ -20,5 +20,6 @@
   ],
   "result": {
     "item": "silentgear:arrow_template"
-  }
+  },
+  "show_notification": true
 }

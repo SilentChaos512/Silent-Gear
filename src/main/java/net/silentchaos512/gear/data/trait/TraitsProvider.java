@@ -16,6 +16,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.trait.StellarTrait;
 import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.init.SgTags;
 import net.silentchaos512.gear.util.Const;
 
 import java.util.ArrayList;
@@ -309,9 +310,9 @@ public class TraitsProvider extends TraitsProviderBase {
 
         // Misfits
 
-        ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.of(Tags.Items.NUGGETS))
+        ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.of(SgTags.Items.GOLD_DIGGER_DROPS))
                 .withGearTypeCondition(GearType.HARVEST_TOOL));
-        ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.of(Tags.Items.GEMS))
+        ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.of(SgTags.Items.IMPERIAL_DROPS))
                 .withGearTypeCondition(GearType.HARVEST_TOOL));
 
         ret.add(cancelEffectsTrait(Const.Traits.CURE_POISON, MobEffects.POISON));

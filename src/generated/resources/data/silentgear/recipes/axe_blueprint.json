@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:axe_blueprint"
-  }
+  },
+  "show_notification": true
 }

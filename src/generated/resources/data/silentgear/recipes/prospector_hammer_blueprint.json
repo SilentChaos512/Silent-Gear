@@ -20,5 +20,6 @@
   ],
   "result": {
     "item": "silentgear:prospector_hammer_blueprint"
-  }
+  },
+  "show_notification": true
 }

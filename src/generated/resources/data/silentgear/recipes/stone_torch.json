@@ -16,5 +16,6 @@
   "result": {
     "count": 4,
     "item": "silentgear:stone_torch"
-  }
+  },
+  "show_notification": true
 }

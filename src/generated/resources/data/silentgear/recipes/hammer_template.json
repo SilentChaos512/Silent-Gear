@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:hammer_template"
-  }
+  },
+  "show_notification": true
 }

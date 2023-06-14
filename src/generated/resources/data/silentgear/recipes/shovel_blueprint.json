@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "silentgear:shovel_blueprint"
-  }
+  },
+  "show_notification": true
 }

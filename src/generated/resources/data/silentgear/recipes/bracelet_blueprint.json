@@ -22,5 +22,6 @@
   ],
   "result": {
     "item": "silentgear:bracelet_blueprint"
-  }
+  },
+  "show_notification": true
 }
