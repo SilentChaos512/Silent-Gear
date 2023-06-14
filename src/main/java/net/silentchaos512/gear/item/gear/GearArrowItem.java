@@ -29,6 +29,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
 import net.silentchaos512.gear.util.GearData;
@@ -257,9 +258,9 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> GearData.getBlendedColor(stack, PartType.ROD);
-                case 1 -> GearData.getBlendedColor(stack, PartType.MAIN);
-                case 3 -> GearData.getBlendedColor(stack, PartType.FLETCHING);
+                case 0 -> ColorUtils.getBlendedColor(stack, PartType.ROD);
+                case 1 -> ColorUtils.getBlendedColor(stack, PartType.MAIN);
+                case 3 -> ColorUtils.getBlendedColor(stack, PartType.FLETCHING);
                 default -> Color.VALUE_WHITE;
             };
         };

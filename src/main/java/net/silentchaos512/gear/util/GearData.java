@@ -42,7 +42,6 @@ import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.RecalculateStatsPacket;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
-import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -253,7 +252,7 @@ public final class GearData {
 
     public static String getModelKey(ItemStack stack, int animationFrame) {
         String fromNbt = getData(stack, NBT_ROOT_RENDERING).getString(NBT_MODEL_KEY);
-        String key = fromNbt.isEmpty() ? stack.getOrCreateTag().toString() : fromNbt;
+        String key = fromNbt.isEmpty() ? getUUID(stack).toString() : fromNbt;
         return animationFrame > 0 ? key + "_" + animationFrame : key;
     }
 
@@ -273,9 +272,8 @@ public final class GearData {
         // Remove deprecated keys
         nbt.remove("ArmorColor");
         nbt.remove("BlendedHeadColor");
-        nbt.remove(NBT_MODEL_KEY);
 
-//        nbt.putString(NBT_MODEL_KEY, calculateModelKey(stack, parts));
+        nbt.putString(NBT_MODEL_KEY, calculateModelKey(stack, parts));
         nbt.putInt(NBT_MODEL, calculateModelIndex(stack));
 
         // Remove old model keys
@@ -393,56 +391,6 @@ public final class GearData {
             data.putInt(NBT_TIER, max);
         }
         return data.getInt(NBT_TIER);
-    }
-
-    @Deprecated
-    public static int getBlendedColor(ItemStack stack, PartType partType) {
-        List<PartData> list = getConstructionParts(stack).getPartsOfType(partType);
-        if (!list.isEmpty()) {
-            return getBlendedColor(stack, list) & 0xFFFFFF;
-        }
-        return Color.VALUE_WHITE;
-    }
-
-    @Deprecated
-    private static int getBlendedColor(ItemStack gear, List<PartData> parts) {
-        int[] componentSums = new int[3];
-        int maxColorSum = 0;
-        int colorCount = 0;
-
-        int partCount = parts.size();
-        for (int i = 0; i < partCount; ++i) {
-            PartData part = parts.get(i);
-            int color = part.get().getColor(part, gear, 0, 0);
-            int r = (color >> 16) & 0xFF;
-            int g = (color >> 8) & 0xFF;
-            int b = color & 0xFF;
-            // Add earlier colors multiple times, to give them greater weight
-            int colorWeight = (partCount - i) * (partCount - i);
-            for (int j = 0; j < colorWeight; ++j) {
-                maxColorSum += Math.max(r, Math.max(g, b));
-                componentSums[0] += r;
-                componentSums[1] += g;
-                componentSums[2] += b;
-                ++colorCount;
-            }
-        }
-
-        if (colorCount > 0) {
-            int r = componentSums[0] / colorCount;
-            int g = componentSums[1] / colorCount;
-            int b = componentSums[2] / colorCount;
-            float maxAverage = (float) maxColorSum / (float) colorCount;
-            float max = (float) Math.max(r, Math.max(g, b));
-            r = (int) ((float) r * maxAverage / max);
-            g = (int) ((float) g * maxAverage / max);
-            b = (int) ((float) b * maxAverage / max);
-            int finalColor = (r << 8) + g;
-            finalColor = (finalColor << 8) + b;
-            return finalColor;
-        }
-
-        return Color.VALUE_WHITE;
     }
 
     public static int getModelIndex(ItemStack gear) {

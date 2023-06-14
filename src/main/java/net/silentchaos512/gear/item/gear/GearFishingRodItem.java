@@ -32,6 +32,7 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.entity.GearFishingHook;
 import net.silentchaos512.gear.util.GearData;
@@ -251,9 +252,9 @@ public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> GearData.getBlendedColor(stack, PartType.ROD);
-                case 1 -> GearData.getBlendedColor(stack, PartType.MAIN);
-                case 3 -> GearData.getBlendedColor(stack, PartType.CORD);
+                case 0 -> ColorUtils.getBlendedColor(stack, PartType.ROD);
+                case 1 -> ColorUtils.getBlendedColor(stack, PartType.MAIN);
+                case 3 -> ColorUtils.getBlendedColor(stack, PartType.CORD);
                 default -> Color.VALUE_WHITE;
             };
         };

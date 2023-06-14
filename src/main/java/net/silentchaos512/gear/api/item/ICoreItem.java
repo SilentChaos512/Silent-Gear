@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -161,17 +162,17 @@ public interface ICoreItem extends ItemLike, IStatItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> GearData.getBlendedColor(stack, PartType.ROD);
+                case 0 -> ColorUtils.getBlendedColor(stack, PartType.ROD);
                 case 1 -> {
                     if (GearData.hasPartOfType(stack, PartType.COATING)) {
-                        yield GearData.getBlendedColor(stack, PartType.COATING);
+                        yield ColorUtils.getBlendedColor(stack, PartType.COATING);
                     } else {
-                        yield GearData.getBlendedColor(stack, PartType.MAIN);
+                        yield ColorUtils.getBlendedColor(stack, PartType.MAIN);
                     }
                 }
                 // 2: highlight layer, no color needed
-                case 3 -> GearData.getBlendedColor(stack, PartType.TIP);
-                case 4 -> GearData.getBlendedColor(stack, PartType.GRIP);
+                case 3 -> ColorUtils.getBlendedColor(stack, PartType.TIP);
+                case 4 -> ColorUtils.getBlendedColor(stack, PartType.GRIP);
                 default -> Color.VALUE_WHITE;
             };
         };
