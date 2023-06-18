@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:boots_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

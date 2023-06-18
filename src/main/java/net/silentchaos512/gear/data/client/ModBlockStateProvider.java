@@ -11,7 +11,7 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.ModCropBlock;
-import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.lib.block.IBlockProvider;
 import net.silentchaos512.lib.util.NameUtils;
 

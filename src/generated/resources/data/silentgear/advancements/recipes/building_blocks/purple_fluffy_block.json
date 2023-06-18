@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:purple_fluffy_block"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

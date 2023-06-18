@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.init;
+package net.silentchaos512.gear.setup;
 
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -60,6 +60,9 @@ public final class SgItems {
             Config.Common.repairKitAzureCapacity::get,
             Config.Common.repairKitAzureEfficiency::get,
             unstackableProps().rarity(Rarity.EPIC)));
+
+    public static final ItemRegistryObject<Item> COATING_SMITHING_TEMPLATE = register("coating_smithing_template", () ->
+            new Item(baseProps()));
 
     //region Blueprints and templates
     public static final ItemRegistryObject<BlueprintBookItem> BLUEPRINT_BOOK = register("blueprint_book", () ->

@@ -35,7 +35,7 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.LazyPartData;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.api.util.DataResource;

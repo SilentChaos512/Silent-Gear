@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.silentchaos512.gear.api.item.GearType;
@@ -29,20 +27,11 @@ import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class GearSickleItem extends GearDiggerItem {
     private static final int DURABILITY_USAGE = 3;
     private static final int BREAK_RANGE = 4;
     private static final int HARVEST_RANGE = 2;
-    static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
-            Material.CACTUS,
-            Material.LEAVES,
-            Material.PLANT,
-            Material.REPLACEABLE_PLANT,
-            Material.WEB,
-            Material.BAMBOO_SAPLING
-    );
     private static final Map<Block, BlockState> HARVEST_STATES = new HashMap<>();
 
     static {
@@ -61,7 +50,7 @@ public class GearSickleItem extends GearDiggerItem {
     }
 
     public GearSickleItem(GearType gearType) {
-        super(gearType, BlockTags.LEAVES, EFFECTIVE_MATERIALS, GearHelper.getBaseItemProperties());
+        super(gearType, BlockTags.LEAVES, GearHelper.getBaseItemProperties());
     }
 
     //region Sickle harvesting
@@ -141,16 +130,17 @@ public class GearSickleItem extends GearDiggerItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack sickle, BlockPos pos, Player player) {
-        return onSickleStartBreak(sickle, pos, player, BREAK_RANGE, EFFECTIVE_MATERIALS);
+        return onSickleStartBreak(sickle, pos, player, BREAK_RANGE);
     }
 
-    boolean onSickleStartBreak(ItemStack sickle, BlockPos pos, Player player, final int range, Set<Material> effectiveMaterials) {
+    boolean onSickleStartBreak(ItemStack sickle, BlockPos pos, Player player, final int range) {
         if (GearHelper.isBroken(sickle)) return false;
 
-        Level world = player.level;
+        Level world = player.level();
         BlockState state = world.getBlockState(pos);
 
-        if (!effectiveMaterials.contains(state.getMaterial())) return false;
+        // FIXME: Maybe add a new tag for sickle mineable blocks?
+        if (!state.is(BlockTags.MINEABLE_WITH_HOE)) return false;
 
         int blocksBroken = 1;
 
@@ -161,7 +151,7 @@ public class GearSickleItem extends GearDiggerItem {
         for (int xPos = x - range; xPos <= x + range; ++xPos) {
             for (int zPos = z - range; zPos <= z + range; ++zPos) {
                 BlockPos target = new BlockPos(xPos, y, zPos);
-                if (!(xPos == x && zPos == z) && world.getBlockState(target) == state && breakExtraBlock(sickle, world, target, player, effectiveMaterials)) {
+                if (!(xPos == x && zPos == z) && world.getBlockState(target) == state && breakExtraBlock(sickle, world, target, player)) {
                     ++blocksBroken;
                 }
             }
@@ -170,14 +160,12 @@ public class GearSickleItem extends GearDiggerItem {
         return super.onBlockStartBreak(sickle, pos, player);
     }
 
-    private static boolean breakExtraBlock(ItemStack sickle, Level world, BlockPos pos, Player player, Set<Material> effectiveMaterials) {
+    private static boolean breakExtraBlock(ItemStack sickle, Level world, BlockPos pos, Player player) {
         if (world.isEmptyBlock(pos) || !(player instanceof ServerPlayer)) return false;
 
         ServerPlayer playerMP = (ServerPlayer) player;
-        BlockState state = player.level.getBlockState(pos);
+        BlockState state = player.level().getBlockState(pos);
         Block block = state.getBlock();
-
-        if (!effectiveMaterials.contains(state.getMaterial())) return false;
 
         int xpDropped = ForgeHooks.onBlockBreakEvent(world, playerMP.gameMode.getGameModeForPlayer(), playerMP, pos);
         boolean canceled = xpDropped == -1;

@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PlayMessages;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.init.SgEntities;
+import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -82,7 +82,7 @@ public class GearArrowEntity extends Arrow {
     @SuppressWarnings("OverlyComplexMethod")
     @Override
     public void playerTouch(Player entityIn) {
-        if (!this.level.isClientSide && (this.inGround || this.isNoPhysics()) && this.shakeTime <= 0) {
+        if (!this.level().isClientSide && (this.inGround || this.isNoPhysics()) && this.shakeTime <= 0) {
             boolean flag = this.pickup == AbstractArrow.Pickup.ALLOWED || this.pickup == AbstractArrow.Pickup.CREATIVE_ONLY && entityIn.getAbilities().instabuild || this.isNoPhysics() && this.getOwner().getUUID() == entityIn.getUUID();
             if (this.pickup == Pickup.ALLOWED && (!GearHelper.isGear(arrowStack) || !addArrowToPlayerInventory(entityIn))) {
                 flag = false;

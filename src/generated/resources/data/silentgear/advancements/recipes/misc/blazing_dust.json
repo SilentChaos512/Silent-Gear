@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:blazing_dust"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

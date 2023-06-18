@@ -67,12 +67,12 @@ public final class PartsCommand {
         String listStr = PartManager.getValues().stream()
                 .map(part -> part.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendSuccess(Component.literal(listStr), true);
+        context.getSource().sendSuccess(() -> Component.literal(listStr), true);
 
         for (PartType type : PartType.getValues()) {
             int count = PartManager.getPartsOfType(type).size();
             String str = String.format("%s: %d", type.getName(), count);
-            context.getSource().sendSuccess(Component.literal(str), true);
+            context.getSource().sendSuccess(() -> Component.literal(str), true);
         }
 
         return 1;
@@ -100,7 +100,7 @@ public final class PartsCommand {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            context.getSource().sendSuccess(Component.literal("Wrote to " + output.getAbsolutePath()), true);
+            context.getSource().sendSuccess(() -> Component.literal("Wrote to " + output.getAbsolutePath()), true);
         }
 
         return 1;

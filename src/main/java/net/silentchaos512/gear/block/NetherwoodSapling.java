@@ -5,7 +5,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.block.trees.NetherwoodTree;
-import net.silentchaos512.gear.init.SgTags;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.lib.util.TagUtils;
 
 public class NetherwoodSapling extends SaplingBlock {

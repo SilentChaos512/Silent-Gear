@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:katana_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

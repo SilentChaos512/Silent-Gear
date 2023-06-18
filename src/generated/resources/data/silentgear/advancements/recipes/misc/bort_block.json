@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:bort_block"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

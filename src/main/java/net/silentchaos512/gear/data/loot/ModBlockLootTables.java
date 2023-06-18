@@ -26,8 +26,8 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.init.SgBlocks;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.util.NameUtils;
 

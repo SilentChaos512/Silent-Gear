@@ -58,7 +58,7 @@ public final class StatsCommand {
         }
 
         context.getSource().sendSuccess(
-                TextUtil.translate("command", "stats.info.header", player.getName(), stack.getHoverName())
+                () -> TextUtil.translate("command", "stats.info.header", player.getName(), stack.getHoverName())
                         .withStyle(ChatFormatting.BOLD),
                 true
         );
@@ -81,7 +81,7 @@ public final class StatsCommand {
                         ChatFormatting.YELLOW);
 
                 context.getSource().sendSuccess(
-                        TextUtil.translate("command", "stats.info.format", name, modsText, valueText),
+                        () -> TextUtil.translate("command", "stats.info.format", name, modsText, valueText),
                         true
                 );
 
@@ -92,7 +92,7 @@ public final class StatsCommand {
                         Component partModsText = StatModifierMap.formatText(partMods, stat, 5, true);
 
                         context.getSource().sendSuccess(
-                                TextUtil.translate("command", "stats.info.formatPart", partName, partModsText),
+                                () -> TextUtil.translate("command", "stats.info.formatPart", partName, partModsText),
                                 true
                         );
                     }
@@ -110,7 +110,7 @@ public final class StatsCommand {
             boolean locked = !GearData.hasLockedStats(stack);
             GearData.setLockedStats(stack, locked);
             String translationKey = "command.silentgear.lock_stats." + (locked ? "locked" : "unlocked");
-            context.getSource().sendSuccess(Component.translatable(translationKey, stack.getHoverName()), true);
+            context.getSource().sendSuccess(() -> Component.translatable(translationKey, stack.getHoverName()), true);
         } else {
             context.getSource().sendFailure(Component.translatable("command.silentgear.lock_stats.invalid"));
         }
@@ -124,7 +124,7 @@ public final class StatsCommand {
                     GearData.recalculateStats(stack, player);
                 }
             }
-            context.getSource().sendSuccess(Component.translatable("command.silentgear.recalculate", player.getScoreboardName()), true);
+            context.getSource().sendSuccess(() -> Component.translatable("command.silentgear.recalculate", player.getScoreboardName()), true);
         }
         return 1;
     }

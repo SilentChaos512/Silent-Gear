@@ -19,8 +19,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.SgItems;
-import net.silentchaos512.gear.init.SgRecipes;
+import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
 
 import javax.annotation.Nullable;

@@ -48,5 +48,6 @@
     [
       "get_ingot"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

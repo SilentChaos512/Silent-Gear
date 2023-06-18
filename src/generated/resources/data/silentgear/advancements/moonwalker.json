@@ -29,5 +29,6 @@
     [
       "fall_with_moonwalker_boots"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:raw_crimson_iron_block"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

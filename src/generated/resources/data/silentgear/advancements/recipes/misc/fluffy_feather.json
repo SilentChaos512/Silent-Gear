@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:fluffy_feather"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

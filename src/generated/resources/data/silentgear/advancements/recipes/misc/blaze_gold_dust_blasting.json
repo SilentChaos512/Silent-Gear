@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:blaze_gold_dust_blasting"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

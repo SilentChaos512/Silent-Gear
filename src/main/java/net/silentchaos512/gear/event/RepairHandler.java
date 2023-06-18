@@ -118,7 +118,7 @@ public final class RepairHandler {
 
         for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
             Enchantment enchantment = entry.getKey();
-            if (!enchantment.isCurse() || EnchantmentHelper.getItemEnchantmentLevel(enchantment, itemstack) == 0) {
+            if (!enchantment.isCurse() || itemstack.getEnchantmentLevel(enchantment) == 0) {
                 itemstack.enchant(enchantment, entry.getValue());
             }
         }

@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:tyrian_steel_nugget"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

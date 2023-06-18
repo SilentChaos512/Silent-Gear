@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.init;
+package net.silentchaos512.gear.setup;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.village.poi.PoiType;

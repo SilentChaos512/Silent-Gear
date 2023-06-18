@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.init;
+package net.silentchaos512.gear.setup;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.registries.Registries;

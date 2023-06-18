@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.init;
+package net.silentchaos512.gear.setup;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;

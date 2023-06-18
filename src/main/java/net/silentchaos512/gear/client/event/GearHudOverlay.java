@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.client.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.GameType;
@@ -21,7 +21,9 @@ import net.silentchaos512.gear.util.GearHelper;
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class GearHudOverlay extends GuiComponent {
+public class GearHudOverlay {
+    protected static final ResourceLocation GUI_ICONS_LOCATION = new ResourceLocation("textures/gui/icons.png");
+
     private final Minecraft mc;
     private int scaledWidth;
     private int scaledHeight;
@@ -36,27 +38,22 @@ public class GearHudOverlay extends GuiComponent {
         this.scaledHeight = this.mc.getWindow().getGuiScaledHeight();
 
         if (!this.mc.options.hideGui) {
-            renderAttackIndicator(event.getPoseStack());
+            renderAttackIndicator(event.getGuiGraphics());
         }
     }
 
-    private void renderAttackIndicator(PoseStack p_238456_1_) {
+    private void renderAttackIndicator(GuiGraphics graphics) {
         // Renders an attack indicator if an entity is within extra reach distance of a gear weapon
-
-//        RenderSystem.defaultAlphaFunc();
         RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
-//        RenderSystem.enableBlend();
-//        RenderSystem.enableAlphaTest();
 
-        Options gamesettings = this.mc.options;
-        if (gamesettings.getCameraType().isFirstPerson()) {
-            MultiPlayerGameMode playerController = this.mc.gameMode;
-            if (playerController != null && playerController.getPlayerMode() != GameType.SPECTATOR && !isEntityTargeted(mc.hitResult)) {
+        Options options = this.mc.options;
+        if (options.getCameraType().isFirstPerson()) {
+            MultiPlayerGameMode playerGameMode = this.mc.gameMode;
+            if (playerGameMode != null && playerGameMode.getPlayerMode() != GameType.SPECTATOR && !isEntityTargeted(mc.hitResult)) {
                 LocalPlayer player = this.mc.player;
                 if (player == null) return;
 
-                if (!gamesettings.renderDebug || gamesettings.hideGui || player.isReducedDebugInfo() || gamesettings.reducedDebugInfo().get()) {
-//                    RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+                if (!options.renderDebug || options.hideGui || player.isReducedDebugInfo() || options.reducedDebugInfo().get()) {
                     if (this.mc.options.attackIndicator().get() == AttackIndicatorStatus.CROSSHAIR) {
                         float f = player.getAttackStrengthScale(0.0F);
                         boolean flag = false;
@@ -70,17 +67,13 @@ public class GearHudOverlay extends GuiComponent {
                         int k = this.scaledWidth / 2 - 8;
                         if (flag) {
                             RenderSystem.clearColor(0.5f, 1f, 0.5f, 1f);
-                            this.blit(p_238456_1_, k, j, 68, 94, 16, 16);
+                            graphics.blit(GUI_ICONS_LOCATION, k, j, 68, 94, 16, 16);
                         }
                     }
                 }
 
             }
         }
-
-//        RenderSystem.defaultBlendFunc();
-//        RenderSystem.color4f(1f, 1f, 1f, 1f);
-//        RenderSystem.disableBlend();
     }
 
     private static boolean isEntityTargeted(@Nullable HitResult rayTraceIn) {

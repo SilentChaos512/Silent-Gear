@@ -13,8 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.init.SgBlocks;
-import net.silentchaos512.gear.init.SgTags;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.TagUtils;
 

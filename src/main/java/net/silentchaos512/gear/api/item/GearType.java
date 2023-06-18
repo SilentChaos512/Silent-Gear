@@ -9,7 +9,7 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;

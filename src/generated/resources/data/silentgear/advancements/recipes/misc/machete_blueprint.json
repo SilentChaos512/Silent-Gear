@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:machete_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

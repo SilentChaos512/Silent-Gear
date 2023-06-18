@@ -64,7 +64,7 @@ public final class RandomGearCommand {
         for (ServerPlayer player : players) {
             ItemStack stack = GearGenerator.create((ICoreItem) item, tier);
             if (!stack.isEmpty()) {
-                context.getSource().sendSuccess(Component.translatable("commands.give.success.single", 1, stack.getDisplayName(), player.getDisplayName()), true);
+                context.getSource().sendSuccess(() -> Component.translatable("commands.give.success.single", 1, stack.getDisplayName(), player.getDisplayName()), true);
                 PlayerUtils.giveItem(player, stack.copy());
             }
         }

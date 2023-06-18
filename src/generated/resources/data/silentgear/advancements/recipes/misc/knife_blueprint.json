@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:knife_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

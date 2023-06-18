@@ -6,8 +6,8 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PlayMessages;
-import net.silentchaos512.gear.init.SgEntities;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgEntities;
+import net.silentchaos512.gear.setup.SgItems;
 
 public class SlingshotProjectile extends AbstractArrow {
     public SlingshotProjectile(EntityType<? extends SlingshotProjectile> type, Level worldIn) {

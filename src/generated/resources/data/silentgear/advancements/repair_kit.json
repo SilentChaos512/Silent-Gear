@@ -85,5 +85,6 @@
       "crimson_repair_kit",
       "azure_repair_kit"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

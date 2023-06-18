@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:shovel_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

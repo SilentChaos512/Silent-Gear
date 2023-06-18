@@ -34,7 +34,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -45,7 +44,7 @@ public class PhantomLight extends Block implements SimpleWaterloggedBlock {
     private static final VoxelShape VOXEL_SHAPE = Block.box(5, 5, 5, 11, 11, 11);
 
     public PhantomLight() {
-        super(Properties.of(Material.DECORATION)
+        super(Properties.of()
                 .noCollission()
                 .strength(0.5f, 6000000.0f)
                 .lightLevel(state -> 15)

@@ -12,7 +12,7 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.network.NetworkDirection;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.init.SgTags;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.ProspectingResultPacket;
 import net.silentchaos512.gear.util.GearHelper;

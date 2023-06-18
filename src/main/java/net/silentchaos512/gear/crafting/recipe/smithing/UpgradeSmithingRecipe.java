@@ -11,13 +11,13 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.common.ForgeHooks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.SgRecipes;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 public class UpgradeSmithingRecipe extends GearSmithingRecipe {
-    public UpgradeSmithingRecipe(ResourceLocation recipeIdIn, ItemStack gearItem, Ingredient additionIn) {
-        super(recipeIdIn, gearItem, additionIn);
+    public UpgradeSmithingRecipe(ResourceLocation recipeId, ItemStack gearItem, Ingredient template, Ingredient addition) {
+        super(recipeId, gearItem, template, addition);
     }
 
     @Override
@@ -44,20 +44,23 @@ public class UpgradeSmithingRecipe extends GearSmithingRecipe {
         @Override
         public UpgradeSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             ItemStack gearItem = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "gear"));
+            Ingredient template = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "template"));
             Ingredient upgradeItem = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "addition"));
-            return new UpgradeSmithingRecipe(recipeId, gearItem, upgradeItem);
+            return new UpgradeSmithingRecipe(recipeId, gearItem, template, upgradeItem);
         }
 
         @Override
         public UpgradeSmithingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            ItemStack itemstack = buffer.readItem();
-            Ingredient ingredient1 = Ingredient.fromNetwork(buffer);
-            return new UpgradeSmithingRecipe(recipeId, itemstack, ingredient1);
+            ItemStack gearItem = buffer.readItem();
+            Ingredient template = Ingredient.fromNetwork(buffer);
+            Ingredient addition = Ingredient.fromNetwork(buffer);
+            return new UpgradeSmithingRecipe(recipeId, gearItem, template, addition);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, UpgradeSmithingRecipe recipe) {
             buffer.writeItem(recipe.gearItem);
+            recipe.template.toNetwork(buffer);
             recipe.addition.toNetwork(buffer);
         }
     }

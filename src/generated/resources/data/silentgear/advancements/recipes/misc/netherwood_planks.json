@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:netherwood_planks"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

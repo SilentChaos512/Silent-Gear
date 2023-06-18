@@ -24,7 +24,7 @@ import net.silentchaos512.gear.block.compounder.CompounderInfo;
 import net.silentchaos512.gear.block.compounder.CompounderTileEntity;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
-import net.silentchaos512.gear.init.SgRecipes;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 
 import javax.annotation.Nullable;

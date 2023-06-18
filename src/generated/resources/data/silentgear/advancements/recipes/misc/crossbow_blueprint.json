@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:crossbow_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:azure_electrum_block"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

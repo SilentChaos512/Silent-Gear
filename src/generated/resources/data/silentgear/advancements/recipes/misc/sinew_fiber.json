@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:sinew_fiber"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import net.silentchaos512.gear.init.SgMenuTypes;
+import net.silentchaos512.gear.setup.SgMenuTypes;
 import net.silentchaos512.gear.item.IContainerItem;
 
 import javax.annotation.Nonnull;

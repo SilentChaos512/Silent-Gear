@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -11,12 +10,13 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
-import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.Arrays;
@@ -78,7 +78,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     }
 
     @Override
-    public void draw(SalvagingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        arrow.draw(stack, 32 - GUI_START_X, 34 - GUI_START_Y);
+    public void draw(SalvagingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        arrow.draw(guiGraphics, 32 - GUI_START_X, 34 - GUI_START_Y);
     }
 }

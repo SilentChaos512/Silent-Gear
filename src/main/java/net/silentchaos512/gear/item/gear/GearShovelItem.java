@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -26,19 +24,9 @@ import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public class GearShovelItem extends ShovelItem implements ICoreTool {
-    private static final Set<Material> SHOVEL_EFFECTIVE_MATERIALS = ImmutableSet.of(
-            Material.CLAY,
-            Material.SNOW,
-            Material.GRASS,
-            Material.DIRT,
-            Material.SAND,
-            Material.TOP_SNOW
-    );
-
     private final GearType gearType;
 
     public GearShovelItem(GearType gearType) {
@@ -71,12 +59,12 @@ public class GearShovelItem extends ShovelItem implements ICoreTool {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return canPerformAction(stack, ToolActions.SHOVEL_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_SHOVEL, SHOVEL_EFFECTIVE_MATERIALS);
+        return canPerformAction(stack, ToolActions.SHOVEL_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_SHOVEL);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, SHOVEL_EFFECTIVE_MATERIALS);
+        return GearHelper.getDestroySpeed(stack, state);
     }
 
     @Override

@@ -11,7 +11,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
@@ -35,9 +34,9 @@ import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
-import net.silentchaos512.gear.init.*;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.setup.*;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.world.SgWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
@@ -58,13 +57,14 @@ class SideProxy implements IProxy {
 
         SgBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         SgBlocks.BLOCKS.register(modEventBus);
-        SgMenuTypes.MENU_TYPES.register(modEventBus);
+        SgCreativeTabs.CREATIVE_TABS.register(modEventBus);
         SgEnchantments.ENCHANTMENTS.register(modEventBus);
         SgEntities.ENTITIES.register(modEventBus);
         SgItems.ITEMS.register(modEventBus);
         SgLoot.LOOT_CONDITIONS.register(modEventBus);
         SgLoot.LOOT_FUNCTIONS.register(modEventBus);
         SgLoot.LOOT_MODIFIERS.register(modEventBus);
+        SgMenuTypes.MENU_TYPES.register(modEventBus);
         SgVillages.POINTS_OF_INTEREST.register(modEventBus);
         SgVillages.PROFESSIONS.register(modEventBus);
         SgRecipes.RECIPE_SERIALIZERS.register(modEventBus);
@@ -80,7 +80,6 @@ class SideProxy implements IProxy {
         modEventBus.addListener(SideProxy::registerCapabilities);
         modEventBus.addListener(SideProxy::imcEnqueue);
         modEventBus.addListener(SideProxy::imcProcess);
-        modEventBus.addListener(SideProxy::onRegisterCreativeTab);
 
 //        modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
 
@@ -126,18 +125,6 @@ class SideProxy implements IProxy {
     }
 
     private static void imcProcess(InterModProcessEvent event) {
-    }
-
-    private static void onRegisterCreativeTab(CreativeModeTabEvent.Register event) {
-        creativeModeTab = event.registerCreativeModeTab(SilentGear.getId("tab"), b -> b
-                .icon(() -> SgItems.BLUEPRINT_PACKAGE.get().getStack())
-                .title(Component.translatable("itemGroup.silentgear"))
-                .displayItems((itemDisplayParameters, output) -> {
-                    // TODO: What about sub items?
-                    SgItems.ITEMS.getEntries().forEach(ro -> output.accept(ro.get()));
-                })
-                .build()
-        );
     }
 
     private static void onAddReloadListeners(AddReloadListenerEvent event) {

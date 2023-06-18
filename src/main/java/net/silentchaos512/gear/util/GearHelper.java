@@ -27,7 +27,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -177,7 +176,7 @@ public final class GearHelper {
             replaceAttributeModifierInMap(map, Attributes.ATTACK_SPEED, getAttackSpeedModifier(stack));
 
             // Reach distance
-            ForgeMod.REACH_DISTANCE.ifPresent(attr -> {
+            ForgeMod.BLOCK_REACH.ifPresent(attr -> {
                 float reachStat = GearData.getStat(stack, ItemStats.REACH_DISTANCE, false);
                 AttributeModifier mod = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, AttributeModifier.Operation.ADDITION);
                 map.put(attr, mod);
@@ -298,7 +297,7 @@ public final class GearHelper {
     private static void onDamageFactorChange(ServerPlayer player, int preDamageFactor, int newDamageFactor) {
         if (newDamageFactor > preDamageFactor) {
             if (Config.Client.playKachinkSound.get()) {
-                player.level.playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 0.5f, 2.0f);
+                player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 0.5f, 2.0f);
             }
             LibTriggers.GENERIC_INT.trigger(player, DAMAGE_FACTOR_CHANGE, 1);
         }
@@ -459,18 +458,17 @@ public final class GearHelper {
         }
     }
 
-    public static boolean isCorrectToolForDrops(ItemStack stack, BlockState state, @Nullable TagKey<Block> blocksForTool, Set<Material> extraMaterials) {
+    public static boolean isCorrectToolForDrops(ItemStack stack, BlockState state, @Nullable TagKey<Block> blocksForTool) {
         Tier tier = getTier(stack);
         if (tier != null) {
             boolean isInToolTag = blocksForTool != null && state.is(blocksForTool);
-            boolean isExtraMaterial = extraMaterials.contains(state.getMaterial());
-            return (isInToolTag || isExtraMaterial) && TierSortingRegistry.isCorrectTierForDrops(tier, state);
+            return isInToolTag && TierSortingRegistry.isCorrectTierForDrops(tier, state);
         }
         // Tool is likely broken
         return false;
     }
 
-    public static float getDestroySpeed(ItemStack stack, BlockState state, @Nullable Set<Material> extraMaterials) {
+    public static float getDestroySpeed(ItemStack stack, BlockState state) {
         if (isBroken(stack))
             return BROKEN_DESTROY_SPEED;
 
@@ -478,11 +476,6 @@ public final class GearHelper {
 
         // Tool effective on block?
         if (stack.getItem().isCorrectToolForDrops(stack, state)) {
-            return speed;
-        }
-
-        // Check extra materials
-        if (extraMaterials != null && extraMaterials.contains(state.getMaterial())) {
             return speed;
         }
 
@@ -606,7 +599,7 @@ public final class GearHelper {
                 : ItemStats.ATTACK_REACH.getBaseValue();
 
         // Also check Forge reach distance, to allow curios to add more reach
-        AttributeInstance attribute = entity.getAttribute(ForgeMod.REACH_DISTANCE.get());
+        AttributeInstance attribute = entity.getAttribute(ForgeMod.BLOCK_REACH.get());
         if (attribute != null) {
             double reachBonus = attribute.getValue() - attribute.getBaseValue();
             return base + reachBonus;
@@ -619,7 +612,7 @@ public final class GearHelper {
     @Nullable
     private static EntityHitResult rayTraceEntities(Entity shooter, Vec3 startVec, Vec3 endVec, AABB boundingBox, Predicate<Entity> filter, double distance) {
         // Copied from ProjectileHelper (getEntityHitResult)
-        Level world = shooter.level;
+        Level world = shooter.level();
         double d0 = distance;
         Entity entity = null;
         Vec3 vector3d = null;
@@ -750,11 +743,13 @@ public final class GearHelper {
 
     private static DataResource<IMaterial> getRandomMaterial(PartType partType, GearType gearType) {
         // Excludes children, will select a random child material (if appropriate) below
-        List<IMaterial> matsOfTier = MaterialManager.getValues(true).stream()
-                .map(MaterialInstance::of)
-                .filter(m -> m.allowedInPart(partType) && m.isCraftingAllowed(partType, gearType))
-                .map(MaterialInstance::get)
-                .toList();
+        List<IMaterial> matsOfTier = new ArrayList<>();
+        for (IMaterial material : MaterialManager.getValues(true)) {
+            MaterialInstance inst = MaterialInstance.of(material);
+            if (inst.allowedInPart(partType) && inst.isCraftingAllowed(partType, gearType)) {
+                matsOfTier.add(inst.get());
+            }
+        }
 
         if (!matsOfTier.isEmpty()) {
             IMaterial material = matsOfTier.get(SilentGear.RANDOM.nextInt(matsOfTier.size()));

@@ -2,13 +2,13 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -72,7 +72,7 @@ public interface ICoreTool extends ICoreItem {
      * @return The amount of damage done (durability lost) to the item
      */
     default int getDamageOnBlockBreak(ItemStack gear, Level world, BlockState state, BlockPos pos) {
-        return state.getMaterial() != Material.LEAVES && state.getDestroySpeed(world, pos) > 0 ? 1 : 0;
+        return !state.is(BlockTags.LEAVES) && state.getDestroySpeed(world, pos) > 0 ? 1 : 0;
     }
 
     /**

@@ -19,7 +19,7 @@ import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TextUtil;

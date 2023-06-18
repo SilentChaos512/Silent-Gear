@@ -96,5 +96,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "silentgear:blocks/flax_plant"
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:crimson_steel_ingot_from_block"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

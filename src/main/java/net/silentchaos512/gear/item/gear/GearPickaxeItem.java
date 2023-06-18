@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -15,51 +14,31 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
 public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
-    private static final Set<Material> PICKAXE_EXTRA_MATERIALS = ImmutableSet.of(
-            Material.STONE,
-            Material.METAL,
-            Material.HEAVY_METAL,
-            Material.ICE,
-            Material.ICE_SOLID,
-            Material.GLASS,
-            Material.BUILDABLE_GLASS,
-            Material.PISTON,
-            Material.DECORATION
-    );
-
     public static final Set<ToolAction> ACTIONS_WITH_SPOON = GearHelper.makeToolActionSet(ToolActions.PICKAXE_DIG, ToolActions.SHOVEL_DIG);
 
     private final GearType gearType;
-    private final Set<Material> extraMaterials;
 
     public GearPickaxeItem(GearType gearType) {
-        this(gearType, PICKAXE_EXTRA_MATERIALS);
-    }
-
-    public GearPickaxeItem(GearType gearType, Set<Material> extraMaterials) {
         super(GearHelper.DEFAULT_DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
-        this.extraMaterials = Collections.unmodifiableSet(extraMaterials);
     }
 
     @Override
@@ -106,12 +85,12 @@ public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
         if (TraitHelper.hasTrait(stack, Const.Traits.SPOON) && SgItems.SHOVEL.get().isCorrectToolForDrops(stack, state)) {
             return true;
         }
-        return canPerformAction(stack, ToolActions.PICKAXE_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_PICKAXE, extraMaterials);
+        return canPerformAction(stack, ToolActions.PICKAXE_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_PICKAXE);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, extraMaterials);
+        return GearHelper.getDestroySpeed(stack, state);
     }
 
     @Override

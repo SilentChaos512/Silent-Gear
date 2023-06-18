@@ -71,7 +71,7 @@ public final class MaterialsCommand {
         String listStr = MaterialManager.getValues().stream()
                 .map(mat -> mat.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendSuccess(Component.literal(listStr), true);
+        context.getSource().sendSuccess(() -> Component.literal(listStr), true);
 
         return 1;
     }

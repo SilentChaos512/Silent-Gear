@@ -11,7 +11,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.init.SgLoot;
+import net.silentchaos512.gear.setup.SgLoot;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;

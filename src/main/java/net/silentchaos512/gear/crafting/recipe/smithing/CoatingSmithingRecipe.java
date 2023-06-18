@@ -13,15 +13,15 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.SgRecipes;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.Objects;
 
 public class CoatingSmithingRecipe extends GearSmithingRecipe {
-    public CoatingSmithingRecipe(ResourceLocation recipeIdIn, ItemStack gearItem, Ingredient additionIn) {
-        super(recipeIdIn, gearItem, additionIn);
+    public CoatingSmithingRecipe(ResourceLocation recipeId, ItemStack gearItem, Ingredient template, Ingredient addition) {
+        super(recipeId, gearItem, template, addition);
     }
 
     @Override
@@ -56,20 +56,23 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
         @Override
         public CoatingSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             ItemStack gearItem = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "gear"));
-            Ingredient upgradeItem = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "addition"));
-            return new CoatingSmithingRecipe(recipeId, gearItem, upgradeItem);
+            Ingredient template = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "template"));
+            Ingredient upgrade = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "addition"));
+            return new CoatingSmithingRecipe(recipeId, gearItem, template, upgrade);
         }
 
         @Override
         public CoatingSmithingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            ItemStack itemstack = buffer.readItem();
-            Ingredient ingredient1 = Ingredient.fromNetwork(buffer);
-            return new CoatingSmithingRecipe(recipeId, itemstack, ingredient1);
+            ItemStack gearItem = buffer.readItem();
+            Ingredient template = Ingredient.fromNetwork(buffer);
+            Ingredient addition = Ingredient.fromNetwork(buffer);
+            return new CoatingSmithingRecipe(recipeId, gearItem, template, addition);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, CoatingSmithingRecipe recipe) {
             buffer.writeItem(recipe.gearItem);
+            recipe.template.toNetwork(buffer);
             recipe.addition.toNetwork(buffer);
         }
     }

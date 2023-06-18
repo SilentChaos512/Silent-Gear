@@ -71,15 +71,6 @@ public class GearBowItem extends BowItem implements ICoreRangedWeapon {
         return GearData.getStat(stack, ItemStats.RANGED_DAMAGE);
     }
 
-    @Override
-    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        if (player.level.isClientSide) {
-            float pull = (stack.getUseDuration() - player.getUseItemRemainingTicks()) / getDrawDelay(stack);
-//            ToolModel.bowPull.put(GearData.getUUID(stack), pull);
-        }
-        super.onUsingTick(stack, player, count);
-    }
-
     @Nonnull
     @Override
     public InteractionResultHolder<ItemStack> use(@Nonnull Level world, Player player, @Nonnull InteractionHand hand) {

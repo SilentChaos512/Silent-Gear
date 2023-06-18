@@ -36,7 +36,7 @@ public final class GradeCommand {
 
         if (material != null) {
             grade.setGradeOnStack(stack);
-            context.getSource().sendSuccess(TextUtil.translate("command", "grade.success", grade.name(), stack.getHoverName()), false);
+            context.getSource().sendSuccess(() -> TextUtil.translate("command", "grade.success", grade.name(), stack.getHoverName()), false);
             return 1;
         } else {
             context.getSource().sendFailure(TextUtil.translate("command", "grade.notMaterial", stack.getHoverName()));

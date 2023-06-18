@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:rod_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

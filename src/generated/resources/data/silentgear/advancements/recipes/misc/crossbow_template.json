@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:crossbow_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

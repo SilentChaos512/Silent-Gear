@@ -17,7 +17,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.item.GearType;
@@ -28,10 +27,8 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 @Deprecated
@@ -45,13 +42,11 @@ public class GearDiggerItem extends DiggerItem implements ICoreTool {
 
     private final TagKey<Block> blocks;
     private final GearType gearType;
-    private final Set<Material> extraMaterials;
 
-    public GearDiggerItem(GearType gearType, TagKey<Block> blocks, Set<Material> extraMaterials, Properties properties) {
+    public GearDiggerItem(GearType gearType, TagKey<Block> blocks, Properties properties) {
         super(0, 1, GearHelper.DEFAULT_DUMMY_TIER, blocks, properties);
         this.gearType = gearType;
         this.blocks = blocks;
-        this.extraMaterials = Collections.unmodifiableSet(extraMaterials);
     }
 
     @Override
@@ -79,7 +74,7 @@ public class GearDiggerItem extends DiggerItem implements ICoreTool {
             ToolAction action = entry.getKey();
             TagKey<Block> tag = entry.getValue();
 
-            if (canPerformAction(stack, action) && GearHelper.isCorrectToolForDrops(stack, state, tag, extraMaterials)) {
+            if (canPerformAction(stack, action) && GearHelper.isCorrectToolForDrops(stack, state, tag)) {
                 return true;
             }
         }
@@ -89,7 +84,7 @@ public class GearDiggerItem extends DiggerItem implements ICoreTool {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, extraMaterials);
+        return GearHelper.getDestroySpeed(stack, state);
     }
 
     @Override

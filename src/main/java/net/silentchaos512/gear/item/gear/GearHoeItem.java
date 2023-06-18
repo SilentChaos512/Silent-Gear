@@ -13,7 +13,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -24,23 +23,15 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public class GearHoeItem extends HoeItem implements ICoreTool {
     private final GearType gearType;
-    protected final Set<Material> effectiveMaterials;
 
     public GearHoeItem(GearType gearType) {
-        this(gearType, Collections.emptySet());
-    }
-
-    public GearHoeItem(GearType gearType, Set<Material> effectiveMaterials) {
         super(GearHelper.DEFAULT_DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
-        this.effectiveMaterials = effectiveMaterials;
     }
 
     @Override
@@ -72,7 +63,7 @@ public class GearHoeItem extends HoeItem implements ICoreTool {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return GearHelper.isCorrectToolForDrops(stack, state, null, this.effectiveMaterials);
+        return GearHelper.isCorrectToolForDrops(stack, state, null);
     }
 
     //region Standard tool overrides
@@ -89,7 +80,7 @@ public class GearHoeItem extends HoeItem implements ICoreTool {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, this.effectiveMaterials);
+        return GearHelper.getDestroySpeed(stack, state);
     }
 
     @Override

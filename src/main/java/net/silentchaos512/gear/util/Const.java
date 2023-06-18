@@ -12,7 +12,7 @@ import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecip
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
-import net.silentchaos512.gear.init.*;
+import net.silentchaos512.gear.setup.*;
 
 public final class Const {
     // Model loaders

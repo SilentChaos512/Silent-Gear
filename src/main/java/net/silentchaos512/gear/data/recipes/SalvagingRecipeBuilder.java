@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.init.SgRecipes;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;

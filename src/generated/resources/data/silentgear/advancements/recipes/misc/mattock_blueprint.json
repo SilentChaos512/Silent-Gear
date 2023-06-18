@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:mattock_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:elytra_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -12,8 +12,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.init.SgBlocks;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.MainPartItem;
@@ -113,6 +113,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         builder(SgItems.STURDY_REPAIR_KIT, itemGenerated);
         builder(SgItems.CRIMSON_REPAIR_KIT, itemGenerated);
         builder(SgItems.AZURE_REPAIR_KIT, itemGenerated);
+
+        // Smithing templates
+        builder(SgItems.COATING_SMITHING_TEMPLATE, itemGenerated);
 
         // Misc
         builder(SgItems.GUIDE_BOOK, itemGenerated);

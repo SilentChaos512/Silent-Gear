@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:prospector_hammer_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

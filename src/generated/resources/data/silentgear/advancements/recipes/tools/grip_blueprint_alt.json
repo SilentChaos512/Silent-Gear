@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:grip_blueprint_alt"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

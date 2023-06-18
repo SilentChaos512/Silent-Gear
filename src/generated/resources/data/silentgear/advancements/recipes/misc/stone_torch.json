@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:stone_torch"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

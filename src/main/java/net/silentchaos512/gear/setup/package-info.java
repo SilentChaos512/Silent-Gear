@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package net.silentchaos512.gear.init;
+package net.silentchaos512.gear.setup;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

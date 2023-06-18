@@ -75,11 +75,11 @@ public final class TraitsCommand {
             return 0;
         }
 
-        context.getSource().sendSuccess(trait.getDisplayName(0), true);
-        context.getSource().sendSuccess(trait.getDescription(1), true);
-        context.getSource().sendSuccess(Component.translatable("command.silentgear.traits.maxLevel", trait.getMaxLevel()), true);
-        context.getSource().sendSuccess(Component.literal("Object: " + trait), true);
-        context.getSource().sendSuccess(Component.literal("Serializer: " + trait.getSerializer()), true);
+        context.getSource().sendSuccess(() -> trait.getDisplayName(0), true);
+        context.getSource().sendSuccess(() -> trait.getDescription(1), true);
+        context.getSource().sendSuccess(() -> Component.translatable("command.silentgear.traits.maxLevel", trait.getMaxLevel()), true);
+        context.getSource().sendSuccess(() -> Component.literal("Object: " + trait), true);
+        context.getSource().sendSuccess(() -> Component.literal("Serializer: " + trait.getSerializer()), true);
 
         return 1;
     }
@@ -88,8 +88,8 @@ public final class TraitsCommand {
         String listStr = TraitManager.getValues().stream()
                 .map(trait -> trait.getId().toString())
                 .collect(Collectors.joining(", "));
-        context.getSource().sendSuccess(Component.literal(listStr), true);
-        context.getSource().sendSuccess(Component.literal("Total: " + TraitManager.getValues().size()), true);
+        context.getSource().sendSuccess(() -> Component.literal(listStr), true);
+        context.getSource().sendSuccess(() -> Component.literal("Total: " + TraitManager.getValues().size()), true);
 
         return 1;
     }

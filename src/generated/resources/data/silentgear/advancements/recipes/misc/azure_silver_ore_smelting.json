@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:azure_silver_ore_smelting"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

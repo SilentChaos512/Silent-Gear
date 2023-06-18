@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.init;
+package net.silentchaos512.gear.setup;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.resources.ResourceLocation;

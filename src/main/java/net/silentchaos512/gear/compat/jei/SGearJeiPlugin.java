@@ -32,9 +32,9 @@ import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecip
 import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
-import net.silentchaos512.gear.init.SgBlocks;
-import net.silentchaos512.gear.init.SgItems;
-import net.silentchaos512.gear.init.SgRecipes;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.item.FragmentItem;

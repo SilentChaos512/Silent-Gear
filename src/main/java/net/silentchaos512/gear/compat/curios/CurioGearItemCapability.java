@@ -41,14 +41,14 @@ public class CurioGearItemCapability {
             item.addAttributes("back", stack, multimap, false);
         }) {
             @Override
-            public void curioTick(String identifier, int index, LivingEntity livingEntity) {
-                if (livingEntity.level.isClientSide || !ElytraItem.isFlyEnabled(stack)) {
+            public void curioTick(SlotContext context) {
+                if (context.entity().level().isClientSide || !ElytraItem.isFlyEnabled(stack)) {
                     return;
                 }
-                Integer ticksFlying = ObfuscationReflectionHelper.getPrivateValue(LivingEntity.class, livingEntity, "fallFlyTicks");
+                Integer ticksFlying = ObfuscationReflectionHelper.getPrivateValue(LivingEntity.class, context.entity(), "fallFlyTicks");
 
                 if (ticksFlying != null && (ticksFlying + 1) % 20 == 0) {
-                    stack.hurtAndBreak(1, livingEntity, entity -> entity.broadcastBreakEvent(EquipmentSlot.CHEST));
+                    stack.hurtAndBreak(1, context.entity(), entity -> entity.broadcastBreakEvent(EquipmentSlot.CHEST));
                 }
             }
         });
@@ -92,7 +92,7 @@ public class CurioGearItemCapability {
 
         @Override
         public void curioTick(SlotContext slotContext) {
-            GearHelper.inventoryTick(stack, slotContext.entity().level, slotContext.entity(), -1, true);
+            GearHelper.inventoryTick(stack, slotContext.entity().level(), slotContext.entity(), -1, true);
         }
 
         @Override

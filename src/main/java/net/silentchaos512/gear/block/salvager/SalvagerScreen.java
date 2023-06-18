@@ -18,15 +18,15 @@
 
 package net.silentchaos512.gear.block.salvager;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.setup.SgBlocks;
 
 public class SalvagerScreen extends AbstractContainerScreen<SalvagerContainer> {
     public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/salvager.png");
@@ -36,20 +36,20 @@ public class SalvagerScreen extends AbstractContainerScreen<SalvagerContainer> {
     }
 
     @Override
-    public void render(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int x, int y) {
+    protected void renderLabels(GuiGraphics graphics, int x, int y) {
         MutableComponent text = SgBlocks.SALVAGER.asBlock().getName();
-        this.font.draw(matrixStack, text.getString(), 28, 6, 0x404040);
+        graphics.drawString(this.font, text.getString(), 28, 6, 0x404040, false);
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
         RenderSystem.clearColor(1, 1, 1, 1);
@@ -57,9 +57,9 @@ public class SalvagerScreen extends AbstractContainerScreen<SalvagerContainer> {
 
         int posX = (this.width - this.imageWidth) / 2;
         int posY = (this.height - this.imageHeight) / 2;
-        blit(matrixStack, posX, posY, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(TEXTURE, posX, posY, 0, 0, this.imageWidth, this.imageHeight);
 
         // Progress arrow
-        blit(matrixStack, posX + 32, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16);
+        graphics.blit(TEXTURE, posX + 32, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16);
     }
 }

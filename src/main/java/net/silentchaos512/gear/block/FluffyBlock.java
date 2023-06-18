@@ -13,11 +13,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.silentchaos512.gear.init.SgTags;
+import net.silentchaos512.gear.setup.SgTags;
 
 public class FluffyBlock extends Block {
     static {
@@ -27,7 +26,7 @@ public class FluffyBlock extends Block {
     private final DyeColor dyeColor;
 
     public FluffyBlock(DyeColor color) {
-        super(Properties.of(Material.WOOL)
+        super(Properties.of()
                 .strength(0.8f, 3)
                 .sound(SoundType.WOOL));
         this.dyeColor = color;

@@ -78,5 +78,6 @@
     [
       "fluffy_puffs"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

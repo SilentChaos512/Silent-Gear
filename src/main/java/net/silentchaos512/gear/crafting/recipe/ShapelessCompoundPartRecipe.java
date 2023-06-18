@@ -14,7 +14,7 @@ import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.SgRecipes;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;

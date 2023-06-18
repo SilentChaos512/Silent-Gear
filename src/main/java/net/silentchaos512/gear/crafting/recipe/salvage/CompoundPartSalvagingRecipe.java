@@ -8,8 +8,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.init.SgItems;
-import net.silentchaos512.gear.init.SgRecipes;
+import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.gear.part.PartData;
 

@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:fishing_rod_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

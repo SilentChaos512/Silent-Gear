@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:boots_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

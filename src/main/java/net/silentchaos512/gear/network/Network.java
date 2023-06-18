@@ -34,7 +34,7 @@ public final class Network {
                 .decoder(SyncTraitsPacket::fromBytes)
                 .encoder(SyncTraitsPacket::toBytes)
                 .markAsLoginPacket()
-                .consumer(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
+                .consumerMainThread(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
                     TraitManager.handleTraitSyncPacket(msg, ctx);
                     channel.reply(new LoginPacket.Reply(), ctx.get());
                 }))
@@ -44,7 +44,7 @@ public final class Network {
                 .decoder(SyncGearPartsPacket::fromBytes)
                 .encoder(SyncGearPartsPacket::toBytes)
                 .markAsLoginPacket()
-                .consumer(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
+                .consumerMainThread(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
                     PartManager.handlePartSyncPacket(msg, ctx);
                     channel.reply(new LoginPacket.Reply(), ctx.get());
                 }))
@@ -53,12 +53,12 @@ public final class Network {
                 .loginIndex(LoginPacket::getLoginIndex, LoginPacket::setLoginIndex)
                 .decoder(buffer -> new LoginPacket.Reply())
                 .encoder((msg, buffer) -> {})
-                .consumer(HandshakeHandler.indexFirst((hh, msg, ctx) -> msg.handle(ctx)))
+                .consumerMainThread(HandshakeHandler.indexFirst((hh, msg, ctx) -> msg.handle(ctx)))
                 .add();
         channel.messageBuilder(SyncGearCraftingItemsPacket.class, 4)
                 .encoder(SyncGearCraftingItemsPacket::toBytes)
                 .decoder(SyncGearCraftingItemsPacket::fromBytes)
-                .consumer(SyncGearCraftingItemsPacket::handle)
+                .consumerMainThread(SyncGearCraftingItemsPacket::handle)
                 .add();
         // 5 was ShowPartsScreenPacket
         channel.messageBuilder(SyncMaterialsPacket.class, 6)
@@ -66,7 +66,7 @@ public final class Network {
                 .decoder(SyncMaterialsPacket::fromBytes)
                 .encoder(SyncMaterialsPacket::toBytes)
                 .markAsLoginPacket()
-                .consumer(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
+                .consumerMainThread(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
                     MaterialManager.handleSyncPacket(msg, ctx);
                     channel.reply(new LoginPacket.Reply(), ctx.get());
                 }))
@@ -75,52 +75,52 @@ public final class Network {
         channel.messageBuilder(PlayMessages.SpawnEntity.class, 7)
                 .encoder(PlayMessages.SpawnEntity::encode)
                 .decoder(PlayMessages.SpawnEntity::decode)
-                .consumer(PlayMessages.SpawnEntity::handle)
+                .consumerMainThread(PlayMessages.SpawnEntity::handle)
                 .add();
         channel.messageBuilder(SyncMaterialCraftingItemsPacket.class, 8)
                 .decoder(SyncMaterialCraftingItemsPacket::decode)
                 .encoder(SyncMaterialCraftingItemsPacket::encode)
-                .consumer(SyncMaterialCraftingItemsPacket::handle)
+                .consumerMainThread(SyncMaterialCraftingItemsPacket::handle)
                 .add();
         channel.messageBuilder(KeyPressOnItemPacket.class, 9, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(KeyPressOnItemPacket::decode)
                 .encoder(KeyPressOnItemPacket::encode)
-                .consumer(KeyPressOnItemPacket::handle)
+                .consumerMainThread(KeyPressOnItemPacket::handle)
                 .add();
         channel.messageBuilder(SelectBlueprintFromBookPacket.class, 10, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(SelectBlueprintFromBookPacket::decode)
                 .encoder(SelectBlueprintFromBookPacket::encode)
-                .consumer(SelectBlueprintFromBookPacket::handle)
+                .consumerMainThread(SelectBlueprintFromBookPacket::handle)
                 .add();
         channel.messageBuilder(ProspectingResultPacket.class, 11, NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ProspectingResultPacket::decode)
                 .encoder(ProspectingResultPacket::encode)
-                .consumer(ProspectingResultPacket::handle)
+                .consumerMainThread(ProspectingResultPacket::handle)
                 .add();
         channel.messageBuilder(GearLeftClickPacket.class, 12, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(GearLeftClickPacket::decode)
                 .encoder(GearLeftClickPacket::encode)
-                .consumer(GearLeftClickPacket::handle)
+                .consumerMainThread(GearLeftClickPacket::handle)
                 .add();
         channel.messageBuilder(ClientOutputCommandPacket.class, 13)
                 .encoder(ClientOutputCommandPacket::encode)
                 .decoder(ClientOutputCommandPacket::decode)
-                .consumer(ClientOutputCommandPacket::handle)
+                .consumerMainThread(ClientOutputCommandPacket::handle)
                 .add();
         channel.messageBuilder(CompounderUpdatePacket.class, 14, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(CompounderUpdatePacket::encode)
                 .decoder(CompounderUpdatePacket::decode)
-                .consumer(CompounderUpdatePacket::handle)
+                .consumerMainThread(CompounderUpdatePacket::handle)
                 .add();
         channel.messageBuilder(OpenGuideBookPacket.class, 15, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder((pkt, buf) -> {})
                 .decoder(buf -> new OpenGuideBookPacket())
-                .consumer(OpenGuideBookPacket::handle)
+                .consumerMainThread(OpenGuideBookPacket::handle)
                 .add();
         channel.messageBuilder(RecalculateStatsPacket.class, 16, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(RecalculateStatsPacket::decode)
                 .encoder(RecalculateStatsPacket::encode)
-                .consumer(RecalculateStatsPacket::handle)
+                .consumerMainThread(RecalculateStatsPacket::handle)
                 .add();
     }
 

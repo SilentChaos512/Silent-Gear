@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:material_grader"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

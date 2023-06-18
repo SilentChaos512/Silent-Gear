@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:tyrian_steel_dust_blasting"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

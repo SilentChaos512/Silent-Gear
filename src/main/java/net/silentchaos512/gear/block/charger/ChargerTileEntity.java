@@ -22,9 +22,9 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialModifiers;
 import net.silentchaos512.gear.gear.material.modifier.ChargedMaterialModifier;
-import net.silentchaos512.gear.init.SgBlockEntities;
-import net.silentchaos512.gear.init.SgBlocks;
-import net.silentchaos512.gear.init.SgTags;
+import net.silentchaos512.gear.setup.SgBlockEntities;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
@@ -248,7 +248,7 @@ public class ChargerTileEntity extends LockableSidedInventoryTileEntity implemen
         }
 
         return output.getCount() < output.getMaxStackSize()
-                && input.sameItem(output)
+                && input.equals(output, false)
                 && getMaterialChargeLevel(output) == chargeTier
                 && getGrade(input) == getGrade(output);
     }

@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:netherwood_slab"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

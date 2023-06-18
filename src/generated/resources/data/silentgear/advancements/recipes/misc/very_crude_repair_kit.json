@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:very_crude_repair_kit"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.silentchaos512.gear.api.item.GearType;
@@ -26,32 +24,15 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public class GearAxeItem extends AxeItem implements ICoreTool {
-    static final Set<Material> AXE_EFFECTIVE_MATERIALS = ImmutableSet.of(
-            Material.VEGETABLE,
-            Material.WOOD,
-            Material.BAMBOO,
-            Material.LEAVES,
-            Material.PLANT,
-            Material.REPLACEABLE_PLANT
-    );
-
     private final GearType gearType;
-    private final Set<Material> extraMaterials;
 
     public GearAxeItem(GearType gearType) {
-        this(gearType, AXE_EFFECTIVE_MATERIALS);
-    }
-
-    public GearAxeItem(GearType gearType, Set<Material> extraMaterials) {
         super(GearHelper.DEFAULT_DUMMY_TIER, 0f, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
-        this.extraMaterials = Collections.unmodifiableSet(extraMaterials);
     }
 
     @Override
@@ -89,12 +70,12 @@ public class GearAxeItem extends AxeItem implements ICoreTool {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return canPerformAction(stack, ToolActions.AXE_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_AXE, extraMaterials);
+        return canPerformAction(stack, ToolActions.AXE_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_AXE);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return GearHelper.getDestroySpeed(stack, state, extraMaterials);
+        return GearHelper.getDestroySpeed(stack, state);
     }
 
     @Override

@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.block.compounder;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -50,15 +50,15 @@ public class CompounderScreen extends AbstractContainerScreen<CompounderContaine
     }
 
     @Override
-    public void render(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.workButton.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.workButton.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
         RenderSystem.clearColor(1, 1, 1, 1);
@@ -66,9 +66,9 @@ public class CompounderScreen extends AbstractContainerScreen<CompounderContaine
 
         int posX = (this.width - this.imageWidth) / 2;
         int posY = (this.height - this.imageHeight) / 2;
-        blit(matrixStack, posX, posY, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(TEXTURE, posX, posY, 0, 0, this.imageWidth, this.imageHeight);
 
         // Progress arrow
-        blit(matrixStack, posX + 93, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16);
+        graphics.blit(TEXTURE, posX + 93, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16);
     }
 }

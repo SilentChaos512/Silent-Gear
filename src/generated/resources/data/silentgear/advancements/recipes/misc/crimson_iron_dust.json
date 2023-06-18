@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:crimson_iron_dust"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

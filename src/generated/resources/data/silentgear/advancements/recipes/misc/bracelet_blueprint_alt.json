@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:bracelet_blueprint_alt"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

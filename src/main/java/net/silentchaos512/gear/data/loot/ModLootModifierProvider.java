@@ -6,6 +6,7 @@ import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.modifier.BonusDropsTraitLootModifier;
+import net.silentchaos512.gear.loot.modifier.LootTableInjectorLootModifier;
 import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
 import net.silentchaos512.gear.util.Const;
 
@@ -25,5 +26,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         HasTraitCondition.builder(Const.Traits.MAGMATIC).build()
                 }
         ));
+
+        add("loot_injector", new LootTableInjectorLootModifier(new LootItemCondition[0]));
     }
 }

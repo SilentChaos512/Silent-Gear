@@ -79,7 +79,7 @@ public class BlockFillerTrait extends SimpleTrait {
         int durabilityCost = Math.round(damageOnUse * replaceCount);
         boolean hasEnoughDurability = durabilityCost < 1 || stack.getDamageValue() < stack.getMaxDamage() - durabilityCost;
 
-        if (player != null && player.level.isClientSide) {
+        if (player != null && player.level().isClientSide) {
             // Bale out here on client
             return replaceCount > 0 && hasEnoughDurability ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }

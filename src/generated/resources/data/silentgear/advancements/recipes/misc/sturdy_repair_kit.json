@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:sturdy_repair_kit"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:leggings_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

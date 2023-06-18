@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.init;
+package net.silentchaos512.gear.setup;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -9,7 +9,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -78,65 +77,65 @@ public final class SgBlocks {
             SgBlocks::getStorageBlock);
 
     public static final BlockRegistryObject<Block> GEAR_SMITHING_TABLE = register("gear_smithing_table", () ->
-            new GearSmithingTableBlock(BlockBehaviour.Properties.of(Material.WOOD)
+            new GearSmithingTableBlock(BlockBehaviour.Properties.of()
                     .strength(2.5F)
                     .sound(SoundType.WOOD)));
 
     public static final BlockRegistryObject<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
-            new GraderBlock(BlockBehaviour.Properties.of(Material.METAL)
+            new GraderBlock(BlockBehaviour.Properties.of()
                     .strength(5, 30)));
 
     public static final BlockRegistryObject<SalvagerBlock> SALVAGER = register("salvager", () ->
-            new SalvagerBlock(BlockBehaviour.Properties.of(Material.METAL)
+            new SalvagerBlock(BlockBehaviour.Properties.of()
                     .strength(5, 30)));
 
     public static final BlockRegistryObject<StarlightChargerBlock> STARLIGHT_CHARGER = register("starlight_charger", () ->
             new StarlightChargerBlock(ChargerTileEntity::createStarlightCharger,
-                    BlockBehaviour.Properties.of(Material.METAL)
+                    BlockBehaviour.Properties.of()
                             .strength(5, 30)));
 
     public static final BlockRegistryObject<CompounderBlock<MetalCompoundingRecipe>> METAL_ALLOYER = register("metal_alloyer", () ->
             new CompounderBlock<>(Const.METAL_COMPOUNDER_INFO,
-                    BlockBehaviour.Properties.of(Material.METAL)
+                    BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<CompounderBlock<GemCompoundingRecipe>> RECRYSTALLIZER = register("recrystallizer", () ->
             new CompounderBlock<>(Const.GEM_COMPOUNDER_INFO,
-                    BlockBehaviour.Properties.of(Material.METAL)
+                    BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<CompounderBlock<FabricCompoundingRecipe>> REFABRICATOR = register("refabricator", () ->
             new CompounderBlock<>(Const.FABRIC_COMPOUNDER_INFO,
-                    BlockBehaviour.Properties.of(Material.METAL)
+                    BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<MetalPressBlock> METAL_PRESS = register("metal_press", () ->
-            new MetalPressBlock(BlockBehaviour.Properties.of(Material.METAL)
+            new MetalPressBlock(BlockBehaviour.Properties.of()
                     .strength(4, 20)
                     .sound(SoundType.METAL)));
 
     public static final BlockRegistryObject<ModCropBlock> FLAX_PLANT = registerNoItem("flax_plant", () ->
-            new ModCropBlock(SgItems.FLAX_SEEDS::get, BlockBehaviour.Properties.of(Material.PLANT)
+            new ModCropBlock(SgItems.FLAX_SEEDS::get, BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .randomTicks()
                     .sound(SoundType.CROP)));
     public static final BlockRegistryObject<BushBlock> WILD_FLAX_PLANT = registerNoItem("wild_flax_plant", () ->
-            new BushBlock(BlockBehaviour.Properties.of(Material.PLANT)
+            new BushBlock(BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .sound(SoundType.CROP)));
     public static final BlockRegistryObject<ModCropBlock> FLUFFY_PLANT = registerNoItem("fluffy_plant", () ->
-            new ModCropBlock(SgItems.FLUFFY_SEEDS::get, BlockBehaviour.Properties.of(Material.PLANT)
+            new ModCropBlock(SgItems.FLUFFY_SEEDS::get, BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .randomTicks()
                     .sound(SoundType.CROP)));
     public static final BlockRegistryObject<BushBlock> WILD_FLUFFY_PLANT = registerNoItem("wild_fluffy_plant", () ->
-            new BushBlock(BlockBehaviour.Properties.of(Material.PLANT)
+            new BushBlock(BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .sound(SoundType.CROP)));
@@ -159,7 +158,7 @@ public final class SgBlocks {
     public static final BlockRegistryObject<FluffyBlock> BLACK_FLUFFY_BLOCK = registerFluffyBlock(DyeColor.BLACK);
 
     public static final BlockRegistryObject<TorchBlock> STONE_TORCH = register("stone_torch",
-            () -> new TorchBlock(BlockBehaviour.Properties.of(Material.DECORATION)
+            () -> new TorchBlock(BlockBehaviour.Properties.of()
                     .noCollission()
                     .strength(0)
                     .lightLevel(state -> 14)
@@ -167,7 +166,7 @@ public final class SgBlocks {
                     ParticleTypes.FLAME),
             bro -> getStoneTorchItem());
     public static final BlockRegistryObject<WallTorchBlock> WALL_STONE_TORCH = registerNoItem("wall_stone_torch", () ->
-            new WallTorchBlock(BlockBehaviour.Properties.of(Material.DECORATION)
+            new WallTorchBlock(BlockBehaviour.Properties.of()
                     .noCollission()
                     .strength(0)
                     .lightLevel(state -> 14)
@@ -176,7 +175,7 @@ public final class SgBlocks {
                     ParticleTypes.FLAME));
 
     public static final BlockRegistryObject<Block> NETHERWOOD_CHARCOAL_BLOCK = register("netherwood_charcoal_block",
-            () -> new Block(BlockBehaviour.Properties.of(Material.STONE)
+            () -> new Block(BlockBehaviour.Properties.of()
                     .requiresCorrectToolForDrops()
                     .strength(5, 6)),
             bro -> () -> new BlockItem(bro.get(), new Item.Properties()) {
@@ -210,13 +209,13 @@ public final class SgBlocks {
     public static final BlockRegistryObject<TrapDoorBlock> NETHERWOOD_TRAPDOOR = register("netherwood_trapdoor", () ->
             new TrapDoorBlock(netherWoodProps(3f, 3f).noOcclusion(), BlockSetType.CRIMSON));
     public static final BlockRegistryObject<LeavesBlock> NETHERWOOD_LEAVES = register("netherwood_leaves", () ->
-            new LeavesBlock(BlockBehaviour.Properties.of(Material.LEAVES)
+            new LeavesBlock(BlockBehaviour.Properties.of()
                     .strength(0.2f)
                     .randomTicks()
                     .noOcclusion()
                     .sound(SoundType.GRASS)));
     public static final BlockRegistryObject<NetherwoodSapling> NETHERWOOD_SAPLING = register("netherwood_sapling", () ->
-            new NetherwoodSapling(BlockBehaviour.Properties.of(Material.PLANT)
+            new NetherwoodSapling(BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .randomTicks()
@@ -237,21 +236,21 @@ public final class SgBlocks {
     }
 
     private static DropExperienceBlock getOre(SoundType soundType) {
-        return new ModOreBlock(BlockBehaviour.Properties.of(Material.STONE)
+        return new ModOreBlock(BlockBehaviour.Properties.of()
                 .strength(4, 10)
                 .requiresCorrectToolForDrops()
                 .sound(soundType));
     }
 
     private static Block getRawOreBlock(SoundType soundType) {
-        return new ModOreBlock(BlockBehaviour.Properties.of(Material.STONE)
+        return new ModOreBlock(BlockBehaviour.Properties.of()
                 .strength(4, 20)
                 .requiresCorrectToolForDrops()
                 .sound(soundType));
     }
 
     private static Block getStorageBlock() {
-        return new Block(BlockBehaviour.Properties.of(Material.METAL)
+        return new Block(BlockBehaviour.Properties.of()
                 .strength(3, 6)
                 .sound(SoundType.METAL));
     }
@@ -284,14 +283,14 @@ public final class SgBlocks {
 
     @SuppressWarnings("SameParameterValue")
     private static FlowerPotBlock makePottedPlant(Supplier<? extends Block> flower) {
-        FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, Block.Properties.of(Material.DECORATION).strength(0));
+        FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, Block.Properties.of().strength(0));
         ResourceLocation flowerId = NameUtils.fromBlock(flower.get());
         ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(flowerId, () -> potted);
         return potted;
     }
 
     private static BlockBehaviour.Properties netherWoodProps(float hardnessIn, float resistanceIn) {
-        return BlockBehaviour.Properties.of(Material.NETHER_WOOD)
+        return BlockBehaviour.Properties.of()
                 .strength(hardnessIn, resistanceIn)
                 .sound(SoundType.WOOD);
     }

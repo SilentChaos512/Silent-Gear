@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:road_maker_upgrade"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

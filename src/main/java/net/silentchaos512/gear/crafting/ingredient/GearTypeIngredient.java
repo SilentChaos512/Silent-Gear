@@ -16,7 +16,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 
 import javax.annotation.Nullable;
 
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgItems;
 
 public final class GearTypeIngredient extends Ingredient {
     private final GearType type;

@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:shield_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

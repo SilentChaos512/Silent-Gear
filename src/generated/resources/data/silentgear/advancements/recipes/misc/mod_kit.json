@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:mod_kit"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

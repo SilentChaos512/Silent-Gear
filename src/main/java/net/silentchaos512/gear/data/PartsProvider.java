@@ -13,7 +13,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.gear.part.PartSerializers;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.util.Const;

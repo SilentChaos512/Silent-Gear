@@ -11,8 +11,8 @@ import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FluffyBlock;
-import net.silentchaos512.gear.init.SgBlocks;
-import net.silentchaos512.gear.init.SgTags;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.lib.block.IBlockProvider;
 
 import java.util.Arrays;

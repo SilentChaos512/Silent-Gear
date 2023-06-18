@@ -2,6 +2,47 @@
   "type": "minecraft:chest",
   "pools": [
     {
+      "bonus_rolls": {
+        "type": "minecraft:uniform",
+        "max": 1.0,
+        "min": 0.0
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5.0,
+                "min": 2.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "silentgear:blaze_gold_ingot",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "silentgear:crimson_steel_dust"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -55,60 +96,7 @@
         "max": 2.0,
         "min": 1.0
       }
-    },
-    {
-      "bonus_rolls": {
-        "type": "minecraft:uniform",
-        "max": 1.0,
-        "min": 0.0
-      },
-      "entries": [
-        {
-          "type": "minecraft:empty",
-          "weight": 10
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 2.0,
-                "min": 1.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "silentgear:netherwood_sapling",
-          "weight": 20
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 4.0,
-                "min": 2.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "silentgear:nether_banana",
-          "weight": 10
-        },
-        {
-          "type": "minecraft:item",
-          "name": "silentgear:golden_nether_banana"
-        }
-      ],
-      "rolls": {
-        "type": "minecraft:uniform",
-        "max": 2.0,
-        "min": 1.0
-      }
     }
-  ]
+  ],
+  "random_sequence": "silentgear:inject/minecraft/chests/bastion_treasure"
 }

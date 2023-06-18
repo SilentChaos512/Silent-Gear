@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 
 public class GuideBookScreen extends Screen {
@@ -26,13 +26,13 @@ public class GuideBookScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        drawBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        drawBackgroundLayer(graphics, partialTicks, mouseX, mouseY);
 
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
-    private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int x, int y) {
+    private void drawBackgroundLayer(GuiGraphics graphics, float partialTicks, int x, int y) {
         if (minecraft == null) return;
 
         RenderSystem.clearColor(1, 1, 1, 1);
@@ -40,6 +40,6 @@ public class GuideBookScreen extends Screen {
 
         int posX = (this.width - 176) / 2;
         int posY = (this.height - 166) / 2;
-        blit(matrixStack, posX, posY, 0, 0, 176, 166);
+        graphics.blit(TEXTURE, posX, posY, 0, 0, 176, 166);
     }
 }

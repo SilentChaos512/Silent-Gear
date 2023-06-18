@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:netherwood_charcoal_from_block"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

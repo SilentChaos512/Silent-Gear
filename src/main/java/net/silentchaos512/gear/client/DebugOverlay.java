@@ -84,7 +84,7 @@ public class DebugOverlay extends DebugRenderOverlay {
             Entity renderViewEntity = mc.getCameraEntity();
             if (renderViewEntity != null) {
                 BlockPos pos = brt.getBlockPos();
-                BlockState state = renderViewEntity.level.getBlockState(pos);
+                BlockState state = renderViewEntity.level().getBlockState(pos);
 
                 /*if (item instanceof ICoreTool) {
                     ToolType toolClass = state.getBlock().getHarvestTool(state);

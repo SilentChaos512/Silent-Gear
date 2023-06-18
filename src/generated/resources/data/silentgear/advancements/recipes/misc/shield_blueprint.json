@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:shield_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

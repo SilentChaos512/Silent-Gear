@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:wide_plate_upgrade"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

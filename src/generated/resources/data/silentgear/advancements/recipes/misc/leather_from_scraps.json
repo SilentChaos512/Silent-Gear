@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:leather_from_scraps"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

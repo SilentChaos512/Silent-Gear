@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:spear_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

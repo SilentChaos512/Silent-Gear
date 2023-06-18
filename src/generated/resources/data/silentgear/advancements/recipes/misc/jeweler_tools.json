@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:jeweler_tools"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

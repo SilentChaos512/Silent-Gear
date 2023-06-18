@@ -18,8 +18,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.init.SgBlockEntities;
-import net.silentchaos512.gear.init.SgTags;
+import net.silentchaos512.gear.setup.SgBlockEntities;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.InventoryUtils;
@@ -251,7 +251,7 @@ public class GraderTileEntity extends LockableSidedInventoryTileEntity {
         }
 
         ItemStack stackInSlot = getItem(index);
-        if (stack.isEmpty() || (!stackInSlot.isEmpty() && !stackInSlot.sameItem(stack))) {
+        if (stack.isEmpty() || (!stackInSlot.isEmpty() && !stackInSlot.equals(stack, false))) {
             return false;
         }
 

@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:pickaxe_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

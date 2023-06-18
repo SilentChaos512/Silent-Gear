@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:dried_sinew"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

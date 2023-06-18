@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -13,6 +12,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +21,7 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
     }
 
     @Override
-    public void draw(CraftingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(CraftingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         Collection<Component> lines = new ArrayList<>();
 
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
@@ -94,18 +94,18 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
             }
         }
 
-        stack.pushPose();
+        guiGraphics.pose().pushPose();
         float scale = lines.size() > 5 ? 0.75f : 1f;
-        stack.scale(scale, scale, 1f);
+        guiGraphics.pose().scale(scale, scale, 1f);
 
         Font font = Minecraft.getInstance().font;
         int y = (int) (56 / scale);
 
         for (Component line : lines) {
-            font.drawShadow(stack, line.getVisualOrderText(), 0, y, -1);
+            guiGraphics.drawString(font, line.getVisualOrderText(), 0, y, -1, true);
             y += 10;
         }
 
-        stack.popPose();
+        guiGraphics.pose().popPose();
     }
 }

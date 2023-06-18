@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:knife_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

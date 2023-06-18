@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:blue_dye_from_flax_flowers"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

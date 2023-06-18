@@ -178,6 +178,7 @@ public interface ICoreItem extends ItemLike, IStatItem {
         };
     }
 
+    @Deprecated
     default boolean hasTexturesFor(PartType partType) {
         return true;
     }

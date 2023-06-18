@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:golden_nether_banana"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

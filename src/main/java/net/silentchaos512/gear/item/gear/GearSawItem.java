@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -12,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.BlockEvent;
 import net.silentchaos512.gear.SilentGear;
@@ -23,12 +21,12 @@ import javax.annotation.Nullable;
 
 public class GearSawItem extends GearAxeItem {
     public GearSawItem(GearType gearType) {
-        super(gearType, ImmutableSet.of(Material.WOOD));
+        super(gearType);
     }
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        Level world = player.level;
+        Level world = player.level();
         if (!world.isClientSide) {
             BlockState state = world.getBlockState(pos);
 

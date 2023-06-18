@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:netherwood_charcoal"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

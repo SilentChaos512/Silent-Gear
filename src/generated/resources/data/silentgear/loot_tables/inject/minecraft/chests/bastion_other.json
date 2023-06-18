@@ -55,5 +55,6 @@
         "min": 1.0
       }
     }
-  ]
+  ],
+  "random_sequence": "silentgear:inject/minecraft/chests/bastion_other"
 }

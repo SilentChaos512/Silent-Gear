@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:shears_blueprint"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

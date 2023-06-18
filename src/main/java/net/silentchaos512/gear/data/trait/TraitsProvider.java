@@ -15,8 +15,8 @@ import net.silentchaos512.gear.api.data.trait.*;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.trait.StellarTrait;
-import net.silentchaos512.gear.init.SgBlocks;
-import net.silentchaos512.gear.init.SgTags;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.Const;
 
 import java.util.ArrayList;
@@ -165,7 +165,7 @@ public class TraitsProvider extends TraitsProviderBase {
         }
         ret.add(new AttributeTraitBuilder(Const.Traits.REACH, 5)
                 .addModifierAnySlot(GearType.ALL,
-                        ForgeMod.REACH_DISTANCE.get(),
+                        ForgeMod.BLOCK_REACH.get(),
                         AttributeModifier.Operation.ADDITION,
                         0.5f, 1f, 1.5f, 2f, 3f)
         );

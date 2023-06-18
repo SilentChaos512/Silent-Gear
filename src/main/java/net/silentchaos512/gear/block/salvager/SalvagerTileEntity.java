@@ -33,8 +33,8 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.init.SgBlockEntities;
-import net.silentchaos512.gear.init.SgRecipes;
+import net.silentchaos512.gear.setup.SgBlockEntities;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
 import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.TimeUtils;
@@ -195,7 +195,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
             return false;
 
         ItemStack current = getItem(index);
-        if (!current.isEmpty() && !current.sameItem(stack))
+        if (!current.isEmpty() && !current.equals(stack, false))
             return false;
 
         return isInputSlot(index) || super.canPlaceItem(index, stack);

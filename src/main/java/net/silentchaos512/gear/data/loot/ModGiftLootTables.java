@@ -16,7 +16,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.gear.part.LazyPartData;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
 import net.silentchaos512.gear.loot.function.SetPartsFunction;
 import net.silentchaos512.lib.util.NameUtils;

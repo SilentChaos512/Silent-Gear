@@ -43,7 +43,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.silentchaos512.gear.block.ModContainerBlock;
-import net.silentchaos512.gear.init.SgBlockEntities;
+import net.silentchaos512.gear.setup.SgBlockEntities;
 
 import javax.annotation.Nullable;
 import java.util.List;

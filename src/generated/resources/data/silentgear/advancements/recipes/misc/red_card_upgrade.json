@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:red_card_upgrade"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

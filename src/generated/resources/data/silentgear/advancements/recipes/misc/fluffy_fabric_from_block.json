@@ -30,5 +30,6 @@
     "recipes": [
       "silentgear:fluffy_fabric_from_block"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:guide_book"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

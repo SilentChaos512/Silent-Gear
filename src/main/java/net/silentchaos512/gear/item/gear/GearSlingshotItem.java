@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ISlingshotAmmo;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.init.SgItems;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.SlingshotAmmoItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.util.EntityHelper;

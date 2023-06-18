@@ -22,7 +22,7 @@ public class SeedItem extends ItemNameBlockItem {
     public InteractionResult interactLivingEntity(ItemStack itemstack, Player player, LivingEntity entity, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (!entity.level.isClientSide && !entity.isBaby() && entity instanceof AgeableMob && ((AgeableMob) entity).getAge() == 0) {
+        if (!entity.level().isClientSide && !entity.isBaby() && entity instanceof AgeableMob && ((AgeableMob) entity).getAge() == 0) {
             //noinspection ChainOfInstanceofChecks
             if (entity instanceof Chicken) {
                 if (((Chicken) entity).isInLove()) {
@@ -36,7 +36,7 @@ public class SeedItem extends ItemNameBlockItem {
             }
 
             if (entity instanceof Parrot)
-                if (!entity.level.isClientSide) {
+                if (!entity.level().isClientSide) {
                     if (!((Parrot) entity).isTame())
                         if (Math.random() <= 0.33) {
                             ((Parrot) entity).tame(player);

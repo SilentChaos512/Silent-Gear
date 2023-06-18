@@ -105,7 +105,7 @@ public final class GearEvents {
     public static void onAttackEntity(LivingAttackEvent event) {
         // Check if already handled
         LivingEntity attacked = event.getEntity();
-        if (attacked == null || attacked.level.isClientSide || entityAttackedThisTick.contains(attacked.getUUID()))
+        if (attacked == null || attacked.level().isClientSide || entityAttackedThisTick.contains(attacked.getUUID()))
             return;
 
         DamageSource source = event.getSource();
@@ -243,7 +243,7 @@ public final class GearEvents {
 
             if (tool.isCorrectToolForDrops(state)) {
                 int level = TraitHelper.getTraitLevel(tool, Const.Traits.LUSTROUS);
-                int light = getLightForLustrousTrait(player.level, player.blockPosition());
+                int light = getLightForLustrousTrait(player.level(), player.blockPosition());
                 //use getNewSpeed() instead of getOriginalSpeed() to support other mods that are changing the break speed with this event.
                 event.setNewSpeed(event.getNewSpeed() + getLustrousSpeedBonus(level, light));
             }
@@ -356,11 +356,11 @@ public final class GearEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDeath(LivingDeathEvent event) {
         Entity killer = event.getSource().getEntity();
-        if (killer instanceof Player && !killer.level.isClientSide) {
+        if (killer instanceof Player && !killer.level().isClientSide) {
             Player player = (Player) killer;
             if (TraitHelper.hasTraitEitherHand(player, Const.Traits.CONFETTI)) {
                 for (int i = 0; i < 3; ++i) {
-                    FireworkRocketEntity rocket = new FireworkRocketEntity(player.level, event.getEntity().getX(), event.getEntity().getEyeY(), event.getEntity().getZ(), createRandomFirework());
+                    FireworkRocketEntity rocket = new FireworkRocketEntity(player.level(), event.getEntity().getX(), event.getEntity().getEyeY(), event.getEntity().getZ(), createRandomFirework());
                     EntityHelper.safeSpawn(rocket);
                 }
             }
@@ -388,7 +388,7 @@ public final class GearEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!event.player.level.isClientSide && event.phase == TickEvent.Phase.START) {
+        if (!event.player.level().isClientSide && event.phase == TickEvent.Phase.START) {
             int magnetic = Math.max(TraitHelper.getHighestLevelEitherHand(event.player, Const.Traits.MAGNETIC),
                     TraitHelper.getHighestLevelCurio(event.player, Const.Traits.MAGNETIC));
 
@@ -421,7 +421,7 @@ public final class GearEvents {
         Vec3 target = new Vec3(player.getX(), player.getY(0.5), player.getZ());
 
         AABB aabb = new AABB(player.getX() - range, player.getY() - range, player.getZ() - range, player.getX() + range + 1, player.getY() + range + 1, player.getZ() + range + 1);
-        for (ItemEntity entity : player.level.getEntitiesOfClass(ItemEntity.class, aabb, e -> e.distanceToSqr(player) < range * range)) {
+        for (ItemEntity entity : player.level().getEntitiesOfClass(ItemEntity.class, aabb, e -> e.distanceToSqr(player) < range * range)) {
             if (canMagneticPullItem(entity)) {
                 // Accelerate to target point
                 Vec3 vec = entity.getDismountLocationForPassenger(player).vectorTo(target);
@@ -466,7 +466,7 @@ public final class GearEvents {
                     if (damage > 0) {
                         GearHelper.attemptDamage(stack, damage, event.getEntity(), EquipmentSlot.FEET);
                     }
-                    event.getEntity().level.playSound(null, event.getEntity().blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundSource.PLAYERS, 1f, 1f);
+                    event.getEntity().level().playSound(null, event.getEntity().blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundSource.PLAYERS, 1f, 1f);
                     event.setCanceled(true);
                 }
             }

@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSi
 import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.ForkingTrunkPlacer;
-import net.silentchaos512.gear.init.SgBlocks;
+import net.silentchaos512.gear.setup.SgBlocks;
 import org.jetbrains.annotations.Nullable;
 
 public class NetherwoodTree extends AbstractTreeGrower {

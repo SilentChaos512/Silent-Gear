@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:blueprint_book"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

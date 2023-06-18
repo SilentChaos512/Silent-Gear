@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:paxel_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

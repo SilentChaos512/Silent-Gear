@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:azure_electrum_dust"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

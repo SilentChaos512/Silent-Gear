@@ -28,5 +28,6 @@
     "recipes": [
       "silentgear:fletching_template"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }
