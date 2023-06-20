@@ -67,6 +67,7 @@ public class GearSmithingRecipeBuilder {
         @Override
         public void serializeRecipeData(JsonObject json) {
             json.add("gear", Ingredient.of(builder.gearItem).toJson());
+            json.add("template", builder.template.toJson());
             json.add("addition", builder.addition.toJson());
         }
 

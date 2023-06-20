@@ -6,5 +6,8 @@
   },
   "gear": {
     "item": "silentgear:katana"
+  },
+  "template": {
+    "item": "minecraft:stick"
   }
 }

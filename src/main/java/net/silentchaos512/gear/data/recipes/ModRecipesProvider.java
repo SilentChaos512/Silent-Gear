@@ -1228,6 +1228,23 @@ public class ModRecipesProvider extends LibRecipeProvider {
             }
             GearSmithingRecipeBuilder.upgrade(item, PartType.MISC_UPGRADE).build(consumer);
         });
+
+        shapelessBuilder(RecipeCategory.MISC, SgItems.COATING_SMITHING_TEMPLATE)
+                .requires(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
+                .requires(SgTags.Items.BLUEPRINT_PAPER)
+                .requires(SgTags.Items.GEMS_BORT)
+                .unlockedBy("has_item", has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                .save(consumer);
+
+        shapedBuilder(RecipeCategory.MISC, SgItems.COATING_SMITHING_TEMPLATE, 2)
+                .pattern("dtd")
+                .pattern("dnd")
+                .pattern("ddd")
+                .define('d', Tags.Items.GEMS_DIAMOND)
+                .define('t', SgItems.COATING_SMITHING_TEMPLATE)
+                .define('n', Tags.Items.NETHERRACK)
+                .unlockedBy("has_item", has(SgItems.COATING_SMITHING_TEMPLATE))
+                .save(consumer, SilentGear.getId("coating_smithing_template_duplication"));
     }
 
     private void registerSalvaging(Consumer<FinishedRecipe> consumer) {

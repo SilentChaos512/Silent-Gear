@@ -6,5 +6,8 @@
   },
   "gear": {
     "item": "silentgear:dagger"
+  },
+  "template": {
+    "item": "minecraft:stick"
   }
 }

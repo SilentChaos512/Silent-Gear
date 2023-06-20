@@ -6,5 +6,8 @@
   },
   "gear": {
     "item": "silentgear:sickle"
+  },
+  "template": {
+    "item": "minecraft:stick"
   }
 }

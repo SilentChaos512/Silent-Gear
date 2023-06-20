@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_upgrade_smithing_template"
+    },
+    {
+      "tag": "silentgear:blueprint_paper"
+    },
+    {
+      "tag": "forge:gems/bort"
+    }
+  ],
+  "result": {
+    "item": "silentgear:coating_smithing_template"
+  }
+}
