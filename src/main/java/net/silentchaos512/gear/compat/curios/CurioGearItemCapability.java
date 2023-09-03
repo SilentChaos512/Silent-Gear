@@ -15,7 +15,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.silentchaos512.gear.item.gear.GearElytraItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
@@ -45,9 +44,9 @@ public class CurioGearItemCapability {
                 if (context.entity().level().isClientSide || !ElytraItem.isFlyEnabled(stack)) {
                     return;
                 }
-                Integer ticksFlying = ObfuscationReflectionHelper.getPrivateValue(LivingEntity.class, context.entity(), "fallFlyTicks");
+                int ticksFlying = context.entity().getFallFlyingTicks();
 
-                if (ticksFlying != null && (ticksFlying + 1) % 20 == 0) {
+                if ((ticksFlying + 1) % 20 == 0) {
                     stack.hurtAndBreak(1, context.entity(), entity -> entity.broadcastBreakEvent(EquipmentSlot.CHEST));
                 }
             }
