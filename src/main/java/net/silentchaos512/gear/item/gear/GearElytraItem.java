@@ -188,6 +188,10 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
     }
 
     public void addAttributes(String slot, ItemStack stack, Multimap<Attribute, AttributeModifier> multimap, boolean includeArmor) {
+        if (GearHelper.isBroken(stack)) {
+            return;
+        }
+
         float armor = getStat(stack, ItemStats.ARMOR);
         if (armor > 0 && includeArmor) {
             multimap.put(Attributes.ARMOR, new AttributeModifier(ARMOR_UUID, "Elytra armor modifier", armor, AttributeModifier.Operation.ADDITION));

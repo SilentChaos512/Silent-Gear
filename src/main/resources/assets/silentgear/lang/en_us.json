@@ -707,7 +707,7 @@
   "materialModifier.silentgear.starcharged": "Starcharged",
   "misc.silentgear.ammo": "Ammo: %d",
   "misc.silentgear.broken": "You broke it!",
-  "misc.silentgear.caelusNotInstalled": "Requires Caelus API to use",
+  "misc.silentgear.caelusNotInstalled": "Requires Caelus API to use in back slot",
   "misc.silentgear.crude": "Crude",
   "misc.silentgear.curiosNotInstalled": "Requires Curios API to equip",
   "misc.silentgear.exampleOutput1": "Example output (modular recipe)",
