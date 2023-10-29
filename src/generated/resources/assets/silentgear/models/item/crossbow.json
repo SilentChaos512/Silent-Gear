@@ -1,9 +1,66 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "silentgear:item/crossbow/rod_generic_lc",
     "layer1": "silentgear:item/crossbow/main_generic_hc",
     "layer2": "silentgear:item/crossbow/_highlight",
     "layer3": "silentgear:item/crossbow/bowstring_string"
-  }
+  },
+  "display": {
+      "thirdperson_righthand": {
+          "rotation": [ -90, 0, -60 ],
+          "translation": [ 2, 0.1, -3 ],
+          "scale": [ 0.9, 0.9, 0.9 ]
+      },
+      "thirdperson_lefthand": {
+          "rotation": [ -90, 0, 30 ],
+          "translation": [ 2, 0.1, -3 ],
+          "scale": [ 0.9, 0.9, 0.9 ]
+      },
+      "firstperson_righthand": {
+          "rotation": [ -90, 0, -55 ],
+          "translation": [ 1.13, 3.2, 1.13],
+          "scale": [ 0.68, 0.68, 0.68 ]
+      },
+      "firstperson_lefthand": {
+          "rotation": [ -90, 0, 35 ],
+          "translation": [ 1.13, 3.2, 1.13],
+          "scale": [ 0.68, 0.68, 0.68 ]
+      }
+  },
+  "overrides": [
+      {
+          "predicate": {
+              "pulling": 1
+          },
+          "model": "silentgear:item/crossbow/cross_pull_0"
+      },
+      {
+          "predicate": {
+              "pulling": 1,
+              "pull": 0.58
+          },
+          "model": "silentgear:item/crossbow/cross_pull_1"
+      },
+      {
+          "predicate": {
+              "pulling": 1,
+              "pull": 1.0
+          },
+          "model": "silentgear:item/crossbow/cross_pull_2"
+      },
+      {
+          "predicate": {
+              "charged": 1
+          },
+          "model": "silentgear:item/crossbow/crossbow_arrow"
+      },
+      {
+          "predicate": {
+              "charged": 1,
+              "firework": 1
+          },
+          "model": "silentgear:item/crossbow/crossbow_firework"
+      }
+  ]
 }
