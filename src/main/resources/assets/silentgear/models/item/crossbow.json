@@ -33,34 +33,34 @@
           "predicate": {
               "pulling": 1
           },
-          "model": "silentgear:item/crossbow/cross_pull_0"
+          "model": "silentgear:item/crossbow_pull_0"
       },
       {
           "predicate": {
               "pulling": 1,
               "pull": 0.58
           },
-          "model": "silentgear:item/crossbow/cross_pull_1"
+          "model": "silentgear:item/crossbow_pull_1"
       },
       {
           "predicate": {
               "pulling": 1,
               "pull": 1.0
           },
-          "model": "silentgear:item/crossbow/cross_pull_2"
+          "model": "silentgear:item/crossbow_pull_2"
       },
       {
           "predicate": {
               "charged": 1
           },
-          "model": "silentgear:item/crossbow/crossbow_arrow"
+          "model": "silentgear:item/crossbow_arrow"
       },
       {
           "predicate": {
               "charged": 1,
               "firework": 1
           },
-          "model": "silentgear:item/crossbow/crossbow_firework"
+          "model": "silentgear:item/crossbow_firework"
       }
   ]
 }
