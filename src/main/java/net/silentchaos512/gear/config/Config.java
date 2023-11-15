@@ -211,13 +211,13 @@ public final class Config {
                         .comment("The item tier assigned to gear tool items.",
                                 "Leave this alone unless you are trying to work around mod compatibility issues!",
                                 "Normally, this value is not used for anything. But some mods mistakenly check it.")
-                        .define("dummyToolTier", GearHelper.DEFAULT_DUMMY_TIER);
+                        .defineEnum("dummyToolTier", GearHelper.DEFAULT_DUMMY_TIER);
 
                 dummyArmorMaterial = builder
                         .comment("The armor material assigned to the gear armor items.",
                                 "Leave this alone unless you are trying to work around mod compatibility issues!",
                                 "Normally, this value is not used for anything. But some mods mistakenly check it.")
-                        .define("dummyArmorMaterial", GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL);
+                        .defineEnum("dummyArmorMaterial", GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL);
 
                 {
                     builder.push("enchanting");
