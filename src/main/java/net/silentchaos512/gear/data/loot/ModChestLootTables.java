@@ -2,7 +2,6 @@ package net.silentchaos512.gear.data.loot;
 
 import net.minecraft.data.loot.packs.VanillaChestLoot;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
@@ -11,34 +10,30 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.loot.modifier.LootTableInjectorLootModifier;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.SgLoot;
 
 import java.util.function.BiConsumer;
 
 public class ModChestLootTables extends VanillaChestLoot {
     @Override
     public void generate(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
-        consumer.accept(injectorTable(BuiltInLootTables.NETHER_BRIDGE), addNetherMetalsAndFlora());
-        consumer.accept(injectorTable(BuiltInLootTables.BASTION_TREASURE), addNetherMetalsWithExtra());
-        consumer.accept(injectorTable(BuiltInLootTables.BASTION_OTHER), addNetherFlora(LootTable.lootTable()));
-        consumer.accept(injectorTable(BuiltInLootTables.BASTION_BRIDGE), addNetherMetalsAndFlora());
-        consumer.accept(injectorTable(BuiltInLootTables.RUINED_PORTAL), addNetherMetalsAndFlora());
+        consumer.accept(SgLoot.Injector.Tables.NETHER_BRIDGE, addNetherMetalsAndFlora());
+        consumer.accept(SgLoot.Injector.Tables.BASTION_TREASURE, addNetherMetalsWithExtra());
+        consumer.accept(SgLoot.Injector.Tables.BASTION_OTHER, addNetherFlora(LootTable.lootTable()));
+        consumer.accept(SgLoot.Injector.Tables.BASTION_BRIDGE, addNetherMetalsAndFlora());
+        consumer.accept(SgLoot.Injector.Tables.RUINED_PORTAL, addNetherMetalsAndFlora());
     }
 
-    private static ResourceLocation injectorTable(ResourceLocation baseLootTable) {
-        return LootTableInjectorLootModifier.getInjectorTableId(baseLootTable);
-    }
-
-    private static LootTable.Builder addNetherMetalsAndFlora() {
+    public static LootTable.Builder addNetherMetalsAndFlora() {
         LootTable.Builder builder = LootTable.lootTable();
         addNetherMetals(builder);
         addNetherFlora(builder);
         return builder;
     }
 
-    private static LootTable.Builder addNetherMetalsWithExtra() {
+    public static LootTable.Builder addNetherMetalsWithExtra() {
         LootTable.Builder builder = LootTable.lootTable();
         builder.withPool(LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(1))
@@ -55,7 +50,7 @@ public class ModChestLootTables extends VanillaChestLoot {
         return addNetherMetals(builder);
     }
 
-    private static LootTable.Builder addNetherMetals(LootTable.Builder builder) {
+    public static LootTable.Builder addNetherMetals(LootTable.Builder builder) {
         builder.withPool(LootPool.lootPool()
                 .setRolls(UniformGenerator.between(1, 2))
                 .add(EmptyLootItem.emptyItem()
@@ -79,7 +74,7 @@ public class ModChestLootTables extends VanillaChestLoot {
         return builder;
     }
 
-    private static LootTable.Builder addNetherFlora(LootTable.Builder builder) {
+    public static LootTable.Builder addNetherFlora(LootTable.Builder builder) {
         builder.withPool(LootPool.lootPool()
                 .setRolls(UniformGenerator.between(1, 2))
                 .setBonusRolls(UniformGenerator.between(0, 1))

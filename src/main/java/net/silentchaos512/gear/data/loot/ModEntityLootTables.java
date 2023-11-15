@@ -2,19 +2,18 @@ package net.silentchaos512.gear.data.loot;
 
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.loot.modifier.LootTableInjectorLootModifier;
-import net.silentchaos512.gear.util.ModResourceLocation;
-import org.jetbrains.annotations.NotNull;
+import net.silentchaos512.gear.setup.SgLoot;
 
 import java.util.function.BiConsumer;
 
@@ -28,8 +27,9 @@ public class ModEntityLootTables extends EntityLootSubProvider {
 
     @Override
     public void generate(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
-        consumer.accept(getInjectorTableId(EntityType.CAVE_SPIDER.getDefaultLootTable()), addFineSilk(0.04f, 0.01f));
-        consumer.accept(getInjectorTableId(EntityType.SPIDER.getDefaultLootTable()), addFineSilk(0.02f, 0.005f));
+        consumer.accept(SgLoot.Injector.Tables.CAVE_SPIDER, addFineSilk(0.04f, 0.01f));
+        consumer.accept(SgLoot.Injector.Tables.SPIDER, addFineSilk(0.02f, 0.005f));
+        consumer.accept(SgLoot.Injector.Tables.ZOMBIE_VILLAGER, addLeatherScraps());
 
         /*heroOfTheVillage(consumer,
                 GearVillages.HOTV_GEAR_SMITH,
@@ -45,11 +45,6 @@ public class ModEntityLootTables extends EntityLootSubProvider {
         );*/
     }
 
-    @NotNull
-    private static ModResourceLocation getInjectorTableId(ResourceLocation CAVE_SPIDER) {
-        return LootTableInjectorLootModifier.getInjectorTableId(CAVE_SPIDER);
-    }
-
     private static LootTable.Builder addFineSilk(float baseChance, float lootingBonus) {
         return LootTable.lootTable()
                 .withPool(LootPool.lootPool()
@@ -57,6 +52,17 @@ public class ModEntityLootTables extends EntityLootSubProvider {
                         .add(LootItem.lootTableItem(CraftingItems.FINE_SILK)
                                 .when(LootItemKilledByPlayerCondition.killedByPlayer())
                                 .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(baseChance, lootingBonus))
+                        )
+                );
+    }
+
+    private static LootTable.Builder addLeatherScraps() {
+        return LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(CraftingItems.LEATHER_SCRAP)
+                                .when(LootItemKilledByPlayerCondition.killedByPlayer())
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5)))
                         )
                 );
     }
