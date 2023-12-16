@@ -6,17 +6,19 @@ This is based on and completely replaced the tool/armor system from Silent's Gem
 
 Add-on mods can add new part types, gear types, and trait types, as well as anything a data pack can do. 
 
-## Links and Downloads
+## Downloads and More Information
 
-- [CurseForge](https://minecraft.curseforge.com/projects/silent-gear) (downloads and more information)
+- [Curseforge](https://minecraft.curseforge.com/projects/silent-gear)
+- [Modrinth](https://modrinth.com/mod/silent-gear)
+
+If you downloaded the mod from somewhere other than Curseforge or Modrinth (or as part of a modpack in some cases), I cannot make any guarantees about the file or its contents, as it may have been uploaded without my permission.
+
+## Other Links
+
 - [Wiki](https://github.com/SilentChaos512/Silent-Gear/wiki) (advanced information)
 - [GitHub repository](https://github.com/SilentChaos512/Silent-Gear) (source code)
 - [Issue Tracker on GitHub](https://github.com/SilentChaos512/Silent-Gear/issues) (bug reports and feature requests)
 - [Discord Server](https://discord.gg/Adyk9zHnUn) (easiest way to get quick questions answered, do not use to report bugs)
-
-### Note on Downloads
-
-**I only upload builds to Minecraft CurseForge.** If you downloaded the mod from somewhere other than Curse/CurseForge or the Twitch launcher (or as part of a modpack in some cases), I cannot make any guarantees about the file or its contents, as it was uploaded without my permission.
 
 -----------------------------------
 
