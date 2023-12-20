@@ -76,8 +76,8 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
     }
 
     @Nullable
-    private SalvagingRecipe getRecipe() {
-        if (level == null) return null;
+    private SalvagingRecipe getRecipe(ItemStack input) {
+        if (level == null || input.isEmpty()) return null;
         return level.getRecipeManager().getRecipeFor(SgRecipes.SALVAGING_TYPE.get(), this, level).orElse(null);
     }
 
@@ -88,7 +88,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state, SalvagerTileEntity blockEntity) {
         ItemStack input = blockEntity.getItem(0);
-        SalvagingRecipe recipe = blockEntity.getRecipe();
+        SalvagingRecipe recipe = blockEntity.getRecipe(input);
         if (recipe != null) {
             if (blockEntity.progress < BASE_WORK_TIME) {
                 ++blockEntity.progress;
