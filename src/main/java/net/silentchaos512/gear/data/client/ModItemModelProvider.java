@@ -148,9 +148,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearStandardTool(SgItems.SICKLE, itemHandheld);
         tempGearStandardTool(SgItems.SHEARS, itemHandheld);
         tempGearBow(SgItems.FISHING_ROD, itemHandheld);
-        tempGearBow(SgItems.BOW, itemHandheld);
+        // tempGearBow(SgItems.BOW, itemHandheld);
         // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
-        tempGearBow(SgItems.SLINGSHOT, itemHandheld);
+        // tempGearBow(SgItems.SLINGSHOT, itemHandheld);
         tempGearArrow(SgItems.ARROW, itemGenerated);
         tempGearArmor(SgItems.HELMET, itemGenerated);
         tempGearArmor(SgItems.CHESTPLATE, itemGenerated);

@@ -3,7 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.20.1-Unreleased]
+### Fixed
+- Salvagers checking recipes even with no input items, causing lag [#641]
+- No animations on bows and slingshots [#613]
+
+## [1.20.1-3.5.2] - 2023-11-14
 ### Fixed
 - Silent Gear loot not generating in chests or dropping from mobs [#637, #625]
 - Crossbow model positioning (LuXeZs) [#634]
