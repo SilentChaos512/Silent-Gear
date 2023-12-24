@@ -511,7 +511,7 @@
     "jei.silentgear.fishing_rod.desc": "Es ist eine Angel. Was hast du erwartet?",
     "jei.silentgear.hammer.desc": "Zerstört Erz und Stein im 3x3 Feld. Erze werden nur zerstört wenn eines anvisiert wird.",
     "jei.silentgear.katana.desc": "Etwas schnelleres Schwert, aber etwas schwächer. Katanas haben eine hohe Reichweite.",
-    "jei.silentgear.knife.desc": "Ähnlich wie der Dolchm jedoch hat das Messer eine höhere Haltbarkeit, hat dafür jedoch eine verringerte Angriffsgeschwindigkeit und geringeren Schaden",
+    "jei.silentgear.knife.desc": "Ähnlich wie der Dolch jedoch hat das Messer eine höhere Haltbarkeit, dafür jedoch eine verringerte Angriffsgeschwindigkeit und geringeren Schaden",
     "jei.silentgear.machete.desc": "Es ist ein Schwert, eine Axt, und eine Sichel. Am besten als Waffe. Etwas langsamer, aber guter Schaden. Kann wie die Sichel Pflanzen zerschneiden.",
     "jei.silentgear.materialType": "Material: %s",
     "jei.silentgear.mattock.desc": "Perfekt zum Feld und Holz hacken. Etwas langsamer aber Haltbarer. Kann alles, was eine Feldhacke kann.",
