@@ -12,13 +12,13 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.setup.SgBlocks;
-import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.NameUtils;
@@ -141,7 +141,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearStandardTool(SgItems.PAXEL, itemHandheld);
         tempGearStandardTool(SgItems.HAMMER, itemHandheld);
         tempGearStandardTool(SgItems.EXCAVATOR, itemHandheld);
-        tempGearStandardTool(SgItems.SAW, itemHandheld);
+        tempGearStandardTool(SgItems.SAW, getExistingFile(modLoc("item/saw_base")));
         tempGearStandardTool(SgItems.PROSPECTOR_HAMMER, itemHandheld);
         tempGearStandardTool(SgItems.HOE, itemHandheld);
         tempGearStandardTool(SgItems.MATTOCK, itemHandheld);
@@ -206,58 +206,59 @@ public class ModItemModelProvider extends ItemModelProvider {
     private ItemModelBuilder tempGearStandardTool(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
         String name = item.get().getGearType().getName();
         String path = item.getId().getPath();
+        ModelFile mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path));
 
         ItemModelBuilder model_lc = getBuilder(path + "_lc")
-                .parent(parent)
+                .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
                 .texture("layer1", "item/" + name + "/main_generic_lc");
         ItemModelBuilder model_hc = getBuilder(path + "_hc")
-                .parent(parent)
+                .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
                 .texture("layer1", "item/" + name + "/main_generic_hc")
                 .texture("layer2", "item/" + name + "/_highlight");
         ItemModelBuilder model_lc_tip = getBuilder(path + "_lc_tip")
-                .parent(parent)
+                .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
                 .texture("layer1", "item/" + name + "/main_generic_lc")
                 .texture("layer2", "item/blank")
                 .texture("layer3", "item/" + name + "/tip_sharp");
         ItemModelBuilder model_hc_tip = getBuilder(path + "_hc_tip")
-                .parent(parent)
+                .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
                 .texture("layer1", "item/" + name + "/main_generic_hc")
                 .texture("layer2", "item/" + name + "/_highlight")
                 .texture("layer3", "item/" + name + "/tip_sharp");
         ItemModelBuilder model_lc_grip = getBuilder(path + "_lc_grip")
-                .parent(parent)
+                .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
                 .texture("layer1", "item/" + name + "/main_generic_lc")
                 .texture("layer2", "item/blank")
                 .texture("layer3", "item/blank")
                 .texture("layer4", "item/" + name + "/grip_wool");
         ItemModelBuilder model_hc_grip = getBuilder(path + "_hc_grip")
-                .parent(parent)
+                .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
                 .texture("layer1", "item/" + name + "/main_generic_hc")
                 .texture("layer2", "item/" + name + "/_highlight")
                 .texture("layer3", "item/blank")
                 .texture("layer4", "item/" + name + "/grip_wool");
         ItemModelBuilder model_lc_tip_grip = getBuilder(path + "_lc_tip_grip")
-                .parent(parent)
+                .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
                 .texture("layer1", "item/" + name + "/main_generic_lc")
                 .texture("layer2", "item/blank")
                 .texture("layer3", "item/" + name + "/tip_sharp")
                 .texture("layer4", "item/" + name + "/grip_wool");
         ItemModelBuilder model_hc_tip_grip = getBuilder(path + "_hc_tip_grip")
-                .parent(parent)
+                .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
                 .texture("layer1", "item/" + name + "/main_generic_hc")
                 .texture("layer2", "item/" + name + "/_highlight")
                 .texture("layer3", "item/" + name + "/tip_sharp")
                 .texture("layer4", "item/" + name + "/grip_wool");
 
-        return getBuilder(path)
+        ItemModelBuilder mainBuilder = getBuilder(path)
                 .parent(parent)
                 .override().predicate(Const.MODEL, 2).model(model_lc).end()
                 .override().predicate(Const.MODEL, 3).model(model_hc).end()
@@ -269,6 +270,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .override().predicate(Const.MODEL, 8 | 4 | 3).model(model_hc_tip_grip).end()
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
                 .texture("layer1", "item/" + name + "/main_generic_lc");
+        return mainBuilder;
     }
 
     private ItemModelBuilder tempGear(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {

@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "silentgear:item/knife",
   "textures": {
     "layer0": "silentgear:item/knife/rod_generic_lc",
     "layer1": "silentgear:item/knife/main_generic_lc",

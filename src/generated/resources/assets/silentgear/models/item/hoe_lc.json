@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "silentgear:item/hoe",
   "textures": {
     "layer0": "silentgear:item/hoe/rod_generic_lc",
     "layer1": "silentgear:item/hoe/main_generic_lc"

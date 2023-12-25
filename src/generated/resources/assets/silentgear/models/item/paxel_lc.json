@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "silentgear:item/paxel",
   "textures": {
     "layer0": "silentgear:item/paxel/rod_generic_lc",
     "layer1": "silentgear:item/paxel/main_generic_lc"

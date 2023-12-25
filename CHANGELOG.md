@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Salvagers checking recipes even with no input items, causing lag [#641]
 - No animations on bows and slingshots [#613]
+- Saw model held strangely in third person
 
 ## [1.20.1-3.5.2] - 2023-11-14
 ### Fixed

@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "silentgear:item/pickaxe",
   "textures": {
     "layer0": "silentgear:item/pickaxe/rod_generic_lc",
     "layer1": "silentgear:item/pickaxe/main_generic_lc"

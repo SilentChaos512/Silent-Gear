@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "silentgear:item/excavator",
   "textures": {
     "layer0": "silentgear:item/excavator/rod_generic_lc",
     "layer1": "silentgear:item/excavator/main_generic_hc",
