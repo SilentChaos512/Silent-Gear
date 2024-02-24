@@ -3,7 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.20.1-Unreleased]
+## [1.20.1-3.5.4] - 2024-02-24
+### Added
+- Some missing item descriptions in JEI (msueberkrueb) [#648]
+### Fixed
+- Netherwood saplings not growing. They can now be grown on dirt or netherrack. (gamehunt) [#657, fixes #636]
+
+## [1.20.1-3.5.3] - 2023-12-25
 ### Fixed
 - Salvagers checking recipes even with no input items, causing lag [#641]
 - No animations on bows and slingshots [#613]
