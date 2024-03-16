@@ -9,7 +9,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.TierSortingRegistry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -26,10 +25,7 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.utils.Color;
 
@@ -122,7 +118,8 @@ public final class GearClientHelper {
             tooltip.add(TextUtil.withColor(misc("tier", GearData.getTier(stack)), Color.DEEPSKYBLUE));
 
             Tier harvestTier = GearData.getHarvestTier(stack);
-            tooltip.add(TextUtil.withColor(misc("harvestTier", TierSortingRegistry.getName(harvestTier)), Color.GOLD));
+            MutableComponent harvestTierNameWithColor = TierHelper.getTranslatedNameWithColor(harvestTier);
+            tooltip.add(TextUtil.withColor(misc("harvestTier", harvestTierNameWithColor), Color.SEAGREEN));
 
             // Display only stats relevant to the item class
             Collection<ItemStat> relevantStats = item.getRelevantStats(stack);

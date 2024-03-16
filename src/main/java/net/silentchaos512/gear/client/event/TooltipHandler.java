@@ -4,10 +4,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -28,9 +26,10 @@ import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.lib.util.TagUtils;
 import net.silentchaos512.utils.Color;
@@ -142,8 +141,8 @@ public final class TooltipHandler {
                 event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tier", material.getTier(partType)), Color.DEEPSKYBLUE));
 
                 Tier harvestTier = material.getHarvestTier();
-                ResourceLocation harvestTierName = TierSortingRegistry.getName(harvestTier);
-                event.getToolTip().add(TextUtil.withColor(TextUtil.misc("harvestTier", harvestTierName), Color.GOLD));
+                MutableComponent harvestTierNameWithColor = TierHelper.getTranslatedNameWithColor(harvestTier);
+                event.getToolTip().add(TextUtil.withColor(TextUtil.misc("harvestTier", harvestTierNameWithColor), Color.SEAGREEN));
 
                 getMaterialTraitLines(event, partType, material);
 

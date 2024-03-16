@@ -347,7 +347,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(32, 7, 22, 50, 1.2f)
-                .mainStatsHarvest(Tiers.WOOD, 12)
+                .mainStatsHarvest(Tiers.GOLD, 12)
                 .mainStatsMelee(0, 4, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -2f)
                 .mainStatsRanged(0, 0.3f)
@@ -1783,7 +1783,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Silver
         ret.add(extraMetal("silver", 2, forgeId("ingots/silver"))
                 .categories(MaterialCategories.METAL)
-                .harvestTier(Tiers.WOOD)
+                .harvestTier(Tiers.GOLD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 64)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 20)
