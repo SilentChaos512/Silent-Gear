@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Tier;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.stats.ItemStat;
@@ -15,6 +16,7 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -44,6 +46,12 @@ public interface IPartData extends IGearComponentInstance<IGearPart> {
     default int getTier() {
         IGearPart part = get();
         return part != null ? part.getTier() : 0;
+    }
+
+    @Override
+    default Tier getHarvestTier() {
+        IGearPart part = get();
+        return part != null ? part.getHarvestTier(this) : TierHelper.weakestTier();
     }
 
     default PartType getType() {

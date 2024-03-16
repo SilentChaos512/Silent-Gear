@@ -7,8 +7,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
@@ -25,13 +28,13 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.ITraitInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
-import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -41,6 +44,7 @@ import java.util.*;
 public class MaterialBuilder {
     private final ResourceLocation id;
     private final int tier;
+    private ResourceLocation harvestTier = null;
     private boolean canSalvage = true;
     private final Ingredient ingredient;
     private final Map<PartType, Ingredient> partSubstitutes = new LinkedHashMap<>();
@@ -323,9 +327,22 @@ public class MaterialBuilder {
         return this;
     }
 
-    public MaterialBuilder mainStatsHarvest(int harvestLevel, float harvestSpeed) {
-        stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, harvestLevel);
+    public MaterialBuilder mainStatsHarvest(Tier harvestTier, float harvestSpeed) {
+        return mainStatsHarvest(TierSortingRegistry.getName(harvestTier), harvestSpeed);
+    }
+
+    public MaterialBuilder mainStatsHarvest(ResourceLocation harvestTier, float harvestSpeed) {
+        this.harvestTier = harvestTier;
         stat(PartType.MAIN, ItemStats.HARVEST_SPEED, harvestSpeed);
+        return this;
+    }
+
+    public MaterialBuilder harvestTier(Tier harvestTier) {
+        return harvestTier(TierSortingRegistry.getName(harvestTier));
+    }
+
+    private MaterialBuilder harvestTier(ResourceLocation harvestTier) {
+        this.harvestTier = harvestTier;
         return this;
     }
 
@@ -439,6 +456,12 @@ public class MaterialBuilder {
                 array.add(CraftingHelper.serialize(condition));
             }
             json.add("conditions", array);
+        }
+
+        if (this.harvestTier != null) {
+            json.addProperty("harvest_tier", this.harvestTier.toString());
+        } else if (parent == null) {
+            json.addProperty("harvest_tier", TierSortingRegistry.getName(Tiers.WOOD).toString());
         }
 
         JsonObject availability = new JsonObject();

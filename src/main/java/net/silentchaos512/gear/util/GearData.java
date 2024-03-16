@@ -10,7 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -66,6 +68,7 @@ public final class GearData {
     private static final String NBT_MODEL = "Model";
     private static final String NBT_SYNERGY = "synergy";
     private static final String NBT_TIER = "Tier";
+    private static final String NBT_HARVEST_TIER = "HarvestTier";
     private static final String NBT_UUID = "SGear_UUID";
 
     private static final String NBT_BROKEN_COUNT = "BrokenCount";
@@ -140,6 +143,10 @@ public final class GearData {
             clearCachedData(gear);
             propertiesCompound.putString("ModVersion", SilentGear.getVersion());
             Map<ITrait, Integer> traits = TraitHelper.getTraits(gear, item.getGearType(), parts);
+
+            // Harvest tier
+            Tier harvestTier = TierHelper.getHighestTier(parts);
+            propertiesCompound.putString(NBT_HARVEST_TIER, TierSortingRegistry.getName(harvestTier).toString());
 
             // Get all stat modifiers from all parts and item class modifiers
             StatModifierMap stats = getStatModifiers(gear, item, parts);
@@ -391,6 +398,22 @@ public final class GearData {
             data.putInt(NBT_TIER, max);
         }
         return data.getInt(NBT_TIER);
+    }
+
+    public static Tier getHarvestTier(ItemStack gear) {
+        if (!GearHelper.isGear(gear)) return TierHelper.weakestTier();
+
+        CompoundTag data = getData(gear, NBT_ROOT_PROPERTIES);
+        String key = data.getString(NBT_HARVEST_TIER);
+        ResourceLocation name = ResourceLocation.tryParse(key);
+        if (name != null) {
+            Tier tier = TierSortingRegistry.byName(name);
+            if (tier != null) {
+                return tier;
+            }
+        }
+
+        return TierHelper.weakestTier();
     }
 
     public static int getModelIndex(ItemStack gear) {

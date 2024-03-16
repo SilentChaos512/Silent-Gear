@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:netherite",
   "availability": {
     "tier": 4,
     "categories": [
@@ -24,7 +25,6 @@
       "armor_durability": 34.0,
       "repair_value": 0.15,
       "enchantment_value": 13.0,
-      "harvest_level": 4.0,
       "harvest_speed": 18.0,
       "melee_damage": 6.0,
       "magic_damage": 4.0,

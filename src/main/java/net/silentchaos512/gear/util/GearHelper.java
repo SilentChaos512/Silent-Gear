@@ -430,36 +430,8 @@ public final class GearHelper {
         return parts2.isEmpty();
     }
 
-    public static int getHarvestLevel(ItemStack stack, @Nullable BlockState state) {
-        if (isBroken(stack))
-            return -1;
-
-        return GearData.getStatInt(stack, ItemStats.HARVEST_LEVEL);
-    }
-
-    @Nullable
-    public static Tier getTier(ItemStack stack) {
-        switch (getHarvestLevel(stack, null)) {
-            case -1:
-                // Broken or invalid tool
-                return null;
-            case 0:
-                return Tiers.WOOD;
-            case 1:
-                return Tiers.STONE;
-            case 2:
-                return Tiers.IRON;
-            case 3:
-                return Tiers.DIAMOND;
-            case 4:
-                return Tiers.NETHERITE;
-            default:
-                return Tiers.NETHERITE;
-        }
-    }
-
     public static boolean isCorrectToolForDrops(ItemStack stack, BlockState state, @Nullable TagKey<Block> blocksForTool) {
-        Tier tier = getTier(stack);
+        Tier tier = GearData.getHarvestTier(stack);
         if (tier != null) {
             boolean isInToolTag = blocksForTool != null && state.is(blocksForTool);
             return isInToolTag && TierSortingRegistry.isCorrectTierForDrops(tier, state);

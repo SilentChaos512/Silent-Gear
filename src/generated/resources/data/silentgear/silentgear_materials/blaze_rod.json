@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:iron",
   "availability": {
     "tier": 3,
     "categories": [
@@ -22,9 +23,6 @@
   },
   "stats": {
     "rod": {
-      "harvest_level": {
-        "max": 2.0
-      },
       "harvest_speed": {
         "mul2": 0.1
       },

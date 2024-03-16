@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
@@ -24,6 +25,7 @@ import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.gear.util.SynergyUtils;
+import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.Color;
 import net.silentchaos512.utils.MathUtils;
@@ -89,6 +91,11 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
                 .mapToInt(m -> m.getTier(partType))
                 .max()
                 .orElse(0);
+    }
+
+    @Override
+    public Tier getHarvestTier(IMaterialInstance material) {
+        return TierHelper.getHighestTier(getMaterials(material));
     }
 
     @Override

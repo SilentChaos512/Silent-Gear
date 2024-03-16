@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.api.util;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;

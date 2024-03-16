@@ -20,15 +20,18 @@ package net.silentchaos512.gear.gear.part;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
+import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.IPartSerializer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.utils.Color;
 
 import java.util.List;
@@ -39,6 +42,11 @@ public class UpgradePart extends AbstractGearPart {
 
     public UpgradePart(ResourceLocation registryName) {
         super(registryName);
+    }
+
+    @Override
+    public Tier getHarvestTier(IPartData part) {
+        return TierHelper.weakestTier();
     }
 
     @Override

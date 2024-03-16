@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:wood",
   "availability": {
     "tier": 2,
     "categories": [
@@ -23,7 +24,6 @@
       "durability": 64.0,
       "armor_durability": 9.0,
       "enchantment_value": 20.0,
-      "harvest_level": 0.0,
       "harvest_speed": 11.0,
       "melee_damage": 0.0,
       "magic_damage": 4.0,

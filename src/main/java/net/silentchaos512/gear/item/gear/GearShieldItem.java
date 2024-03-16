@@ -41,7 +41,6 @@ public class GearShieldItem extends ShieldItem implements ICoreItem {
     );
 
     private static final Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
-            ItemStats.HARVEST_LEVEL,
             ItemStats.HARVEST_SPEED,
             ItemStats.REACH_DISTANCE,
             ItemStats.MELEE_DAMAGE,

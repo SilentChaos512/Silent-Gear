@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:wood",
   "availability": {
     "tier": 0,
     "categories": [
@@ -33,7 +34,6 @@
       "charging_value": 0.7,
       "repair_value": 0.1,
       "repair_efficiency": 0.5,
-      "harvest_level": 0.0,
       "harvest_speed": 2.0,
       "melee_damage": 0.0,
       "attack_speed": 0.2,

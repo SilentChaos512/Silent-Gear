@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:stone",
   "availability": {
     "tier": 1,
     "categories": [
@@ -27,7 +28,6 @@
       "rarity": 11.0,
       "charging_value": 0.8,
       "repair_value": -0.2,
-      "harvest_level": 1.0,
       "harvest_speed": 5.0,
       "melee_damage": 0.5,
       "magic_damage": 0.5,

@@ -69,7 +69,6 @@ public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
     private static final Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
             ItemStats.ARMOR_DURABILITY,
             ItemStats.REPAIR_VALUE,
-            ItemStats.HARVEST_LEVEL,
             ItemStats.HARVEST_SPEED,
             ItemStats.RANGED_DAMAGE,
             ItemStats.RANGED_SPEED,

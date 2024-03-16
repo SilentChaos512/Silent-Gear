@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:diamond",
   "availability": {
     "tier": 3,
     "categories": [
@@ -22,9 +23,6 @@
   },
   "stats": {
     "rod": {
-      "harvest_level": {
-        "max": 3.0
-      },
       "harvest_speed": {
         "mul2": 0.2
       },

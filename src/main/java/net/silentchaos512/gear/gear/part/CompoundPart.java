@@ -2,11 +2,12 @@ package net.silentchaos512.gear.gear.part;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraftforge.common.MinecraftForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
@@ -29,6 +30,7 @@ import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.SynergyUtils;
+import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.utils.MathUtils;
 
@@ -62,6 +64,11 @@ public class CompoundPart extends AbstractGearPart {
     public int getTier(PartData part) {
         MaterialInstance material = getPrimaryMaterial(part);
         return material != null ? material.getTier(this.partType) : super.getTier(part);
+    }
+
+    @Override
+    public Tier getHarvestTier(IPartData part) {
+        return TierHelper.getHighestTier(getMaterials(part));
     }
 
     @Override

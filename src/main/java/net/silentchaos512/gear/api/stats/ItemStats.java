@@ -51,11 +51,6 @@ public final class ItemStats {
     ));
 
     // Harvesting Tools
-    public static final ItemStat HARVEST_LEVEL = register(new ItemStat(SilentGear.getId("harvest_level"), 0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
-            .defaultOp(StatInstance.Operation.MAX)
-            .displayAsInt()
-            .affectedByGrades(false)
-    ));
     public static final ItemStat HARVEST_SPEED = register(new ItemStat(SilentGear.getId("harvest_speed"), 0f, 0f, Integer.MAX_VALUE, Color.SEAGREEN, new ItemStat.Properties()
             .affectedByGrades(true)
             .synergyApplies()

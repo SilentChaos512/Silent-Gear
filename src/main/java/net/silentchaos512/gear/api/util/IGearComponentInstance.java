@@ -1,8 +1,9 @@
 package net.silentchaos512.gear.api.util;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.MaterialList;
@@ -22,6 +23,8 @@ public interface IGearComponentInstance<T extends IGearComponent<?>> {
     ItemStack getItem();
 
     MaterialList getMaterials();
+
+    Tier getHarvestTier();
 
     float getStat(PartType partType, StatGearKey key, ItemStack gear);
 

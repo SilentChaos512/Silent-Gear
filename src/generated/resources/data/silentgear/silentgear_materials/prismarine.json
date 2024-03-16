@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:wood",
   "availability": {
     "tier": 3,
     "categories": [

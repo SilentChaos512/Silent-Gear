@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
@@ -24,11 +25,11 @@ import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
 import net.silentchaos512.gear.gear.trait.condition.*;
+import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgTags;
-import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.crafting.ingredient.ExclusionIngredient;
@@ -97,7 +98,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xFF0000)
                 .mainStatsCommon(1337, 84, 5, 111, 0.5f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -1f)
-                .mainStatsHarvest(0, 5)
+                .mainStatsHarvest(Tiers.WOOD, 5)
                 .mainStatsMelee(1, 1, 0f)
                 .mainStatsRanged(1, 0f)
                 .mainStatsArmor(3, 8, 6, 3, 10, 10)
@@ -112,7 +113,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .canSalvage(false)
                 .blacklistGearType("all")
                 .mainStatsCommon(100, 6, 1, 0, 1f)
-                .mainStatsHarvest(0, 1)
+                .mainStatsHarvest(Tiers.WOOD, 1)
                 .mainStatsMelee(1, 1, 0f)
                 .mainStatsRanged(0, 0f)
                 .mainStatsArmor(1, 1, 1, 1, 1, 1)
@@ -136,7 +137,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(1259, 61, 37, 109, 1.5f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
-                .mainStatsHarvest(5, 29)
+                .mainStatsHarvest(Tiers.NETHERITE, 29)
                 .mainStatsMelee(7, 11, 0.0f)
                 .mainStatsRanged(3, 0.0f)
                 .mainStatsProjectile(2f, 1.5f)
@@ -165,7 +166,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(197, 17, 29, 83, 1.4f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
-                .mainStatsHarvest(3, 19)
+                .mainStatsHarvest(Tiers.DIAMOND, 19)
                 .mainStatsMelee(5, 7, 0.0f)
                 .mainStatsRanged(2, 0.0f)
                 .mainStatsProjectile(1.2f, 1.1f)
@@ -195,7 +196,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(69, 9, 24, 45, 1.2f)
-                .mainStatsHarvest(2, 15)
+                .mainStatsHarvest(Tiers.IRON, 15)
                 .mainStatsMelee(2, 5, 0.1f)
                 .mainStatsRanged(1, 0.2f)
                 .mainStatsProjectile(1.2f, 0.9f)
@@ -204,13 +205,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartType.MAIN, Const.Traits.GREEDY, 3)
                 .trait(PartType.MAIN, Const.Traits.MALLEABLE, 3)
                 //rod
-                .stat(PartType.ROD, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL2)
                 .trait(PartType.ROD, Const.Traits.FLEXIBLE, 3)
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 32, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 3, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 4, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 1, StatInstance.Operation.ADD)
@@ -233,7 +232,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.METAL)
                 .mainStatsCommon(300, 13, 12, 15, 1.1f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
-                .mainStatsHarvest(2, 6)
+                .mainStatsHarvest(Tiers.IRON, 6)
                 .mainStatsMelee(2.5f, 1f, 0.2f)
                 .mainStatsRanged(2, -0.2f)
                 .mainStatsArmor(3, 6, 4, 2, 1, 6) //15
@@ -249,7 +248,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(420, 27, 14, 31, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
-                .mainStatsHarvest(3, 10)
+                .mainStatsHarvest(Tiers.DIAMOND, 10)
                 .mainStatsMelee(3, 3, -0.1f)
                 .mainStatsRanged(2, -0.1f)
                 .mainStatsProjectile(1, 1.1f)
@@ -262,7 +261,6 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 224, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 8, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 3, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RARITY, 10, StatInstance.Operation.ADD)
@@ -277,7 +275,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(2400, 42, 19, 83, 0.9f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.5f)
-                .mainStatsHarvest(4, 15)
+                .mainStatsHarvest(Tiers.NETHERITE, 15)
                 .mainStatsMelee(6, 6, -0.1f)
                 .mainStatsRanged(3, -0.1f)
                 .mainStatsProjectile(1f, 1.3f)
@@ -293,7 +291,6 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 448, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 16, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 4, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.RARITY, 20, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.MAGMATIC, 1)
                 .display(PartType.MAIN, PartTextureSet.HIGH_CONTRAST_WITH_HIGHLIGHT, 0xDC143C)
@@ -305,7 +302,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(3652, 81, 16, 100, 1.1f)
-                .mainStatsHarvest(5, 18)
+                .mainStatsHarvest(Tiers.NETHERITE, 18)
                 .mainStatsMelee(8, 6, 0.0f)
                 .mainStatsRanged(4, 0.0f)
                 .mainStatsProjectile(1.1f, 1.1f)
@@ -317,7 +314,6 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartType.ROD, Const.Traits.STURDY, 4, new MaterialRatioTraitCondition(0.5f))
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 251, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 5, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.RARITY, 30, StatInstance.Operation.ADD)
                 .trait(PartType.TIP, Const.Traits.IMPERIAL, 3)
                 .trait(PartType.TIP, Const.Traits.GOLD_DIGGER, 3)
@@ -333,7 +329,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(151, 12, 15, 12, 1.3f)
-                .mainStatsHarvest(1, 5)
+                .mainStatsHarvest(Tiers.STONE, 5)
                 .mainStatsMelee(1.5f, 1.0f, 0.1f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, 0f)
@@ -351,7 +347,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.METAL)
                 //main
                 .mainStatsCommon(32, 7, 22, 50, 1.2f)
-                .mainStatsHarvest(0, 12)
+                .mainStatsHarvest(Tiers.WOOD, 12)
                 .mainStatsMelee(0, 4, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -2f)
                 .mainStatsRanged(0, 0.3f)
@@ -389,7 +385,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .partSubstitute(PartType.ROD, SgTags.Items.RODS_IRON)
                 //main
                 .mainStatsCommon(250, 15, 14, 20, 0.7f)
-                .mainStatsHarvest(2, 6)
+                .mainStatsHarvest(Tiers.IRON, 6)
                 .mainStatsMelee(2, 1, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, 0f)
@@ -405,7 +401,6 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 128, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 4, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_SPEED, 0.2f, StatInstance.Operation.ADD)
@@ -419,12 +414,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(new MaterialBuilder(modId("netherite"), 4, Items.NETHERITE_INGOT)
                 .categories(MaterialCategories.METAL)
                 .namePrefix(TextUtil.translate("material", "netherite"))
+                .harvestTier(Tiers.NETHERITE)
                 //coating
                 .stat(PartType.COATING, ItemStats.DURABILITY, 0.3f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.DURABILITY, 2, StatInstance.Operation.ADD)
                 .stat(PartType.COATING, ItemStats.ARMOR_DURABILITY, 37f / 33f - 1f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.HARVEST_SPEED, 0.125f, StatInstance.Operation.MUL2)
-                .stat(PartType.COATING, ItemStats.HARVEST_LEVEL, 4, StatInstance.Operation.MAX)
                 .stat(PartType.COATING, ItemStats.MELEE_DAMAGE, 1f / 3f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.MAGIC_DAMAGE, 1f / 3f, StatInstance.Operation.MUL2)
                 .stat(PartType.COATING, ItemStats.RANGED_DAMAGE, 1f / 3f, StatInstance.Operation.MUL2)
@@ -445,7 +440,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 // main
                 .mainStatsCommon(1561, 33, 10, 70, 0.8f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, 1f)
-                .mainStatsHarvest(3, 8)
+                .mainStatsHarvest(Tiers.DIAMOND, 8)
                 .mainStatsMelee(3, 1, 0.0f)
                 .mainStatsRanged(2, -0.2f)
                 .mainStatsProjectile(0.9f, 1.1f)
@@ -459,7 +454,6 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 // tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 256, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 9, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 3, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 1, StatInstance.Operation.ADD)
@@ -481,7 +475,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 // main
                 .mainStatsCommon(1080, 24, 16, 40, 1.0f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
-                .mainStatsHarvest(2, 10)
+                .mainStatsHarvest(Tiers.IRON, 10)
                 .mainStatsMelee(2, 2, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, 1f)
                 .mainStatsRanged(1, -0.1f)
@@ -495,7 +489,6 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 // tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 512, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 12, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 1, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 2, StatInstance.Operation.ADD)
@@ -516,7 +509,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.GEM)
                 // main
                 .mainStatsCommon(200, 13, 17, 30, 1.3f)
-                .mainStatsHarvest(2, 5)
+                .mainStatsHarvest(Tiers.IRON, 5)
                 .mainStatsMelee(2, 3, 0.0f)
                 .mainStatsRanged(0, -0.1f)
                 .mainStatsProjectile(1.0f, 0.8f)
@@ -558,7 +551,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.GEM)
                 // main
                 .mainStatsCommon(330, 13, 10, 40, 1.2f)
-                .mainStatsHarvest(2, 7)
+                .mainStatsHarvest(Tiers.IRON, 7)
                 .mainStatsMelee(2, 0, 0.1f)
                 .mainStatsRanged(0, 0.1f)
                 .mainStatsProjectile(1f, 1f)
@@ -572,7 +565,6 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 // tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 64, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.ARMOR_DURABILITY, 64, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 4, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.RANGED_DAMAGE, 1.5f, StatInstance.Operation.ADD)
@@ -592,7 +584,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.GEM)
                 // main
                 .mainStatsCommon(210, 10, 16, 35, 1.3f)
-                .mainStatsHarvest(2, 6)
+                .mainStatsHarvest(Tiers.IRON, 6)
                 .mainStatsMelee(1, 3, 0)
                 .mainStatsRanged(1, 0)
                 .mainStatsProjectile(1, 1)
@@ -644,7 +636,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.ROCK)
                 //main
                 .mainStatsCommon(137, 4, 6, 7, 0.7f)
-                .mainStatsHarvest(1, 4)
+                .mainStatsHarvest(Tiers.STONE, 4)
                 .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -1f)
@@ -668,7 +660,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.ROCK)
                 //main
                 .mainStatsCommon(151, 5, 4, 9, 0.6f)
-                .mainStatsHarvest(1, 4)
+                .mainStatsHarvest(Tiers.STONE, 4)
                 .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -1f)
@@ -694,7 +686,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(1164, 15, 10, 32, 0.9f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
-                .mainStatsHarvest(2, 7)
+                .mainStatsHarvest(Tiers.IRON, 7)
                 .mainStatsMelee(2, 3, 0.1f)
                 .mainStatsRanged(0, 0f, 1f, 0.8f)
                 .mainStatsArmor(3, 5, 4, 3, 1, 6) //15
@@ -712,7 +704,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.ROCK)
                 //main
                 .mainStatsCommon(124, 4, 3, 6, 0.8f)
-                .mainStatsHarvest(1, 5)
+                .mainStatsHarvest(Tiers.STONE, 5)
                 .mainStatsMelee(2, 0, -0.1f)
                 .mainStatsRanged(1, -0.3f, 1.0f, 1.0f)
                 .mainStatsArmor(0.5f, 2f, 1f, 0.5f, 0, 0) //4
@@ -731,7 +723,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(142, 5, 8, 11, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.2f)
-                .mainStatsHarvest(1, 5)
+                .mainStatsHarvest(Tiers.STONE, 5)
                 .mainStatsMelee(0.5f, 0.5f, 0.0f)
                 .mainStatsRanged(0.5f, 0.1f, 0.8f, 1.0f)
                 .mainStatsArmor(1, 4, 2, 1, 0, 4) //8
@@ -750,7 +742,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(3072, 37, 7, 10, 0.6f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.5f)
-                .mainStatsHarvest(3, 6)
+                .mainStatsHarvest(Tiers.DIAMOND, 6)
                 .mainStatsMelee(3, 2, -0.4f)
                 .mainStatsRanged(0, -0.4f, 0.7f, 0.7f)
                 .mainStatsArmor(3, 8, 6, 3, 4, 8) //20
@@ -772,7 +764,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(117, 6, 7, 7, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.1f)
-                .mainStatsHarvest(1, 4)
+                .mainStatsHarvest(Tiers.STONE, 4)
                 .mainStatsMelee(1, 0, 0.1f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.1f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -1f)
@@ -797,7 +789,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .partSubstitute(PartType.ROD, SgTags.Items.RODS_STONE)
                 //main
                 .mainStatsCommon(131, 5, 5, 4, 0.5f)
-                .mainStatsHarvest(1, 4)
+                .mainStatsHarvest(Tiers.STONE, 4)
                 .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -1f)
@@ -833,7 +825,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(165, 11, 9, 7, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.1f)
-                .mainStatsHarvest(1, 4)
+                .mainStatsHarvest(Tiers.STONE, 4)
                 .mainStatsMelee(1.5f, 0, 0.2f)
                 .mainStatsRanged(0, -0.2f, 1f, 0.9f)
                 .mainStatsArmor(2, 3, 3, 1, 0, 3) //9
@@ -886,7 +878,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(59, 8, 15, 1, 0.6f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
-                .mainStatsHarvest(0, 2)
+                .mainStatsHarvest(Tiers.WOOD, 2)
                 .mainStatsMelee(0, 0, 0.0f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.AXE, -0.2f)
                 .stat(PartType.MAIN, ItemStats.ATTACK_SPEED, GearType.HOE, -2f)
@@ -935,7 +927,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsCommon(72, 12, 13, 4, 0.7f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.1f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_EFFICIENCY, 0.5f)
-                .mainStatsHarvest(0, 2)
+                .mainStatsHarvest(Tiers.WOOD, 2)
                 .mainStatsMelee(0, 0, 0.2f)
                 .mainStatsRanged(0, 0f, 1f, 0.8f)
                 .mainStatsArmor(1, 4, 2, 1, 0, 6) //8
@@ -1198,7 +1190,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.GEM)
                 //main
                 .mainStatsCommon(1776, 36, 12, 80, 0.7f)
-                .mainStatsHarvest(3, 9)
+                .mainStatsHarvest(Tiers.DIAMOND, 9)
                 .mainStatsMelee(3, 3, 0.1f)
                 .mainStatsRanged(3, 0.1f, 1.0f, 1.2f)
                 .mainStatsArmor(4, 9, 6, 3, 10, 10) //22
@@ -1210,7 +1202,6 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartType.ROD, Const.Traits.ANCIENT, 3, new MaterialRatioTraitCondition(0.5f))
                 //tip
                 .stat(PartType.TIP, ItemStats.DURABILITY, 360, StatInstance.Operation.ADD)
-                .stat(PartType.TIP, ItemStats.HARVEST_LEVEL, 3, StatInstance.Operation.MAX)
                 .stat(PartType.TIP, ItemStats.HARVEST_SPEED, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MELEE_DAMAGE, 2, StatInstance.Operation.ADD)
                 .stat(PartType.TIP, ItemStats.MAGIC_DAMAGE, 1, StatInstance.Operation.ADD)
@@ -1231,7 +1222,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .categories(MaterialCategories.METAL)
                 .mainStatsCommon(420, 24, 11, 40, 0.8f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.05f)
-                .mainStatsHarvest(2, 6)
+                .mainStatsHarvest(Tiers.IRON, 6)
                 .mainStatsMelee(4, 1, -0.2f)
                 .mainStatsArmor(3, 8, 6, 3, 2, 6)
                 .mainStatsRanged(2, -0.2f)
@@ -1245,7 +1236,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(new MaterialBuilder(modId("blaze_rod"), 3, Ingredient.EMPTY)
                 .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, Tags.Items.RODS_BLAZE)
-                .stat(PartType.ROD, ItemStats.HARVEST_LEVEL, 2, StatInstance.Operation.MAX)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RANGED_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
@@ -1260,7 +1251,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .partSubstitute(PartType.ROD, Items.BONE)
                 //main
                 .mainStatsCommon(108, 4, 5, 8, 0.9f)
-                .mainStatsHarvest(1, 4)
+                .mainStatsHarvest(Tiers.STONE, 4)
                 .mainStatsMelee(2, 1, 0.1f)
                 .mainStatsRanged(1f, 0f, 0.9f, 1f)
                 .mainStatsArmor(1, 2, 1, 1, 0, 1) //5
@@ -1275,7 +1266,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(new MaterialBuilder(modId("end_rod"), 3, Ingredient.EMPTY)
                 .categories(MaterialCategories.METAL)
                 .partSubstitute(PartType.ROD, Items.END_ROD)
-                .stat(PartType.ROD, ItemStats.HARVEST_LEVEL, 3, StatInstance.Operation.MAX)
+                .harvestTier(Tiers.DIAMOND)
                 .stat(PartType.ROD, ItemStats.HARVEST_SPEED, 0.2f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.MELEE_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
                 .stat(PartType.ROD, ItemStats.RANGED_DAMAGE, 0.1f, StatInstance.Operation.MUL2)
@@ -1290,10 +1281,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Aluminum
         ret.add(extraMetal("aluminum", 2, forgeId("ingots/aluminum"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 365)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 14)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 8)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2)
@@ -1316,11 +1307,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Aluminum Steel
         ret.add(extraMetal("aluminum_steel", 3, forgeId("ingots/aluminum_steel"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.DIAMOND)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 660)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 18)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 11)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 8)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 4)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1.5f)
@@ -1342,10 +1333,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Bismuth
         ret.add(extraMetal("bismuth", 2, forgeId("ingots/bismuth"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 330)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 10)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 12)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 5)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2.5f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3.5f)
@@ -1366,11 +1357,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Bismuth Brass
         ret.add(extraMetal("bismuth_brass", 2, forgeId("ingots/bismuth_brass"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 580)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 15)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 14)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 9)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2f)
@@ -1391,11 +1382,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Bismuth Brass
         ret.add(extraMetal("bismuth_steel", 3, forgeId("ingots/bismuth_steel"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.DIAMOND)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1050)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 25)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 14)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 10)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 4f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 5f)
@@ -1416,11 +1407,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Brass
         ret.add(extraMetal("brass", 2, forgeId("ingots/brass"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 240)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 8)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 13)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 7)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1.5f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1.5f)
@@ -1441,11 +1432,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Compressed Iron
         ret.add(extraMetal("compressed_iron", 3, forgeId("ingots/compressed_iron"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.DIAMOND)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1024)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 24)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 12)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 9)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 4f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1f)
@@ -1466,10 +1457,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Electrum
         ret.add(extraMetal("electrum", 2, forgeId("ingots/electrum"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 96)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 10)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 25)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 14)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 5f)
@@ -1490,11 +1481,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Enderium
         ret.add(extraMetal("enderium", 4, forgeId("ingots/enderium"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.NETHERITE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1200)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 34)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 13)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 4)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 18)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 6f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4f)
@@ -1514,11 +1505,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Invar
         ret.add(extraMetal("invar", 2, forgeId("ingots/invar"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 640)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 13)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 7)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3.5f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3f)
@@ -1539,10 +1530,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Lead
         ret.add(extraMetal("lead", 2, forgeId("ingots/lead"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 260)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 14)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 15)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 4)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2f)
@@ -1563,11 +1554,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Lumium
         ret.add(extraMetal("lumium", 3, forgeId("ingots/lumium"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.DIAMOND)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 920)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 14)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 15)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 4f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3f)
@@ -1589,10 +1580,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Nickel
         ret.add(extraMetal("nickel", 2, forgeId("ingots/nickel"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 380)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 17)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 12)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 7)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2.5f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1f)
@@ -1613,10 +1604,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Osmium
         ret.add(extraMetal("osmium", 2, forgeId("ingots/osmium"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 500)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 30)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 12)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 10)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 4f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2f)
@@ -1636,10 +1627,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Platinum
         ret.add(extraMetal("platinum", 3, forgeId("ingots/platinum"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.DIAMOND)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 900)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 21)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 14)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 12)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 4f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4f)
@@ -1661,11 +1652,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Redstone Alloy
         ret.add(extraMetal("redstone_alloy", 2, forgeId("ingots/redstone_alloy"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 840)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 18)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 11)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4f)
@@ -1685,11 +1676,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Refined glowstone
         ret.add(extraMetal("refined_glowstone", 3, forgeId("ingots/refined_glowstone"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 300)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 18)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 18)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 14)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 5f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 3f)
@@ -1713,11 +1704,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Refined Iron
         ret.add(extraMetal("refined_iron", 2, forgeId("ingots/refined_iron"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 512)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 15)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 7)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2f)
@@ -1739,11 +1730,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Refined obsidian
         ret.add(extraMetal("refined_obsidian", 4, forgeId("ingots/refined_obsidian"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.DIAMOND)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 2500)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 50)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.3f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 40)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 20)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 10f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4f)
@@ -1766,11 +1757,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Signalum
         ret.add(extraMetal("signalum", 4, forgeId("ingots/signalum"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.DIAMOND)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 800)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 25)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 16)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 13)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 3f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4f)
@@ -1792,10 +1783,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Silver
         ret.add(extraMetal("silver", 2, forgeId("ingots/silver"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.WOOD)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 64)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 9)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 20)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 0)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 11)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 0f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 4f)
@@ -1817,11 +1808,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Steel
         ret.add(extraMetal("steel", 2, forgeId("ingots/steel"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.IRON)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 500)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 11)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 2)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 6)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 4f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1f)
@@ -1840,10 +1831,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Tin
         ret.add(extraMetal("tin", 1, forgeId("ingots/tin"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.STONE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 192)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 13)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 12)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 5)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1.5f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1f)
@@ -1864,10 +1855,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Titanium
         ret.add(extraMetal("titanium", 4, forgeId("ingots/titanium"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.NETHERITE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 1600)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 37)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 12)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 4)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 8)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 6f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1f)
@@ -1890,11 +1881,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Uranium
         ret.add(extraMetal("uranium", 3, forgeId("ingots/uranium"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.DIAMOND)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 800)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 20)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, -0.15f)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 17)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 3)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 6)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 2f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 2f)
@@ -1914,10 +1905,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Zinc
         ret.add(extraMetal("zinc", 1, forgeId("ingots/zinc"))
                 .categories(MaterialCategories.METAL)
+                .harvestTier(Tiers.STONE)
                 .stat(PartType.MAIN, ItemStats.DURABILITY, 192)
                 .stat(PartType.MAIN, ItemStats.ARMOR_DURABILITY, 10)
                 .stat(PartType.MAIN, ItemStats.ENCHANTMENT_VALUE, 15)
-                .stat(PartType.MAIN, ItemStats.HARVEST_LEVEL, 1)
                 .stat(PartType.MAIN, ItemStats.HARVEST_SPEED, 3)
                 .stat(PartType.MAIN, ItemStats.MELEE_DAMAGE, 1.5f)
                 .stat(PartType.MAIN, ItemStats.MAGIC_DAMAGE, 1f)

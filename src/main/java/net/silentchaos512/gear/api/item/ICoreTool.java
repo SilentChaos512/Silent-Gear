@@ -22,7 +22,6 @@ public interface ICoreTool extends ICoreItem {
             ItemStats.DURABILITY,
             ItemStats.REPAIR_EFFICIENCY,
             ItemStats.ENCHANTMENT_VALUE,
-            ItemStats.HARVEST_LEVEL,
             ItemStats.HARVEST_SPEED,
             ItemStats.MELEE_DAMAGE,
             ItemStats.ATTACK_SPEED

@@ -14,6 +14,7 @@ import net.silentchaos512.gear.gear.material.MaterialManager;
 
 import javax.annotation.Nullable;
 
+@Deprecated
 public class StatModifierEnchantment extends Enchantment implements IStatModifierEnchantment {
     public StatModifierEnchantment(Rarity rarityIn, EnchantmentCategory typeIn, EquipmentSlot[] slots) {
         super(rarityIn, typeIn, slots);
@@ -56,8 +57,6 @@ public class StatModifierEnchantment extends Enchantment implements IStatModifie
             return mod.getValue() * Math.pow(1.1, charge.getChargeValue());
         if (stat.getStat() == ItemStats.ENCHANTMENT_VALUE)
             return mod.getValue() * (1 + charge.getChargeLevel() * (Math.sqrt(charge.getChargeability() - 1)));
-        if (stat.getStat() == ItemStats.HARVEST_LEVEL)
-            return mod.getValue() + 1;
         if (stat.getStat() == ItemStats.HARVEST_SPEED)
             return mod.getValue() + 1.5 * charge.getChargeLevel() * charge.getChargeValue();
         if (stat.getStat() == ItemStats.MELEE_DAMAGE)

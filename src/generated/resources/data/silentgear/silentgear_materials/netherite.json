@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:netherite",
   "availability": {
     "tier": 4,
     "categories": [
@@ -36,9 +37,6 @@
       },
       "harvest_speed": {
         "mul2": 0.125
-      },
-      "harvest_level": {
-        "max": 4.0
       },
       "melee_damage": {
         "mul2": 0.33333334

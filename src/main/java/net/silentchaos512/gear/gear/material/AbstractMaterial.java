@@ -8,8 +8,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.VanillaIngredientSerializer;
 import net.silentchaos512.gear.SilentGear;
@@ -22,10 +25,11 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.DefaultMaterialDisplay;
-import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.client.material.GearDisplayManager;
+import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
+import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nonnull;
@@ -43,6 +47,7 @@ public abstract class AbstractMaterial implements IMaterial {
     protected boolean simple = true;
 
     protected int tier = -1;
+    protected Tier harvestTier = Tiers.IRON;
     protected Ingredient ingredient = Ingredient.EMPTY;
     protected final Map<PartType, Ingredient> partSubstitutes = new HashMap<>();
 
@@ -92,6 +97,17 @@ public abstract class AbstractMaterial implements IMaterial {
             return getParent().getTier(material, partType);
         }
         return this.tier;
+    }
+
+    @Override
+    public Tier getHarvestTier(IMaterialInstance material) {
+        if (this.parent != null) {
+            IMaterial parent = getParent();
+            if (parent != null) {
+                return TierHelper.getHigher(this.harvestTier, MaterialInstance.of(parent).getHarvestTier());
+            }
+        }
+        return this.harvestTier;
     }
 
     @Override
@@ -271,6 +287,7 @@ public abstract class AbstractMaterial implements IMaterial {
                 ret.parent = new ResourceLocation(GsonHelper.getAsString(json, "parent"));
             }
 
+            deserializeHarvestTier(json, ret);
             deserializeStats(json, ret);
             deserializeTraits(json, ret);
             deserializeCraftingItems(json, ret);
@@ -279,6 +296,23 @@ public abstract class AbstractMaterial implements IMaterial {
             deserializeAvailability(json, ret);
 
             return ret;
+        }
+
+        void deserializeHarvestTier(JsonObject json, T ret) {
+            if (ret.parent != null && !json.has("harvest_tier")) {
+                // Will try to inherit harvest tier from parent
+                ret.harvestTier = Tiers.WOOD;
+                return;
+            }
+
+            String harvestTierStr = GsonHelper.getAsString(json, "harvest_tier");
+            ResourceLocation harvestTierName = new ResourceLocation(harvestTierStr);
+            Tier harvestTier = TierSortingRegistry.byName(harvestTierName);
+            if (harvestTier != null) {
+                ret.harvestTier = harvestTier;
+            } else {
+                throw new JsonSyntaxException("Unknown harvest tier: " + harvestTierName);
+            }
         }
 
         //region deserialize methods
@@ -476,6 +510,7 @@ public abstract class AbstractMaterial implements IMaterial {
             if (buffer.readBoolean()) {
                 material.parent = buffer.readResourceLocation();
             }
+            material.harvestTier = TierSortingRegistry.byName(buffer.readResourceLocation());
             material.tier = buffer.readByte();
             material.visible = buffer.readBoolean();
             material.canSalvage = buffer.readBoolean();
@@ -588,6 +623,7 @@ public abstract class AbstractMaterial implements IMaterial {
                 buffer.writeResourceLocation(material.parent);
             }
 
+            buffer.writeResourceLocation(TierSortingRegistry.getName(material.harvestTier));
             buffer.writeByte(material.tier);
             buffer.writeBoolean(material.visible);
             buffer.writeBoolean(material.canSalvage);

@@ -1,6 +1,7 @@
 {
   "type": "silentgear:compound",
   "simple": false,
+  "harvest_tier": "minecraft:wood",
   "crafting_items": {
     "main": {
       "item": "silentgear:alloy_ingot"

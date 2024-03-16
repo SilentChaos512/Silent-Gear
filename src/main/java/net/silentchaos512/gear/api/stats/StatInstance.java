@@ -251,7 +251,7 @@ public class StatInstance {
     }
 
     public boolean shouldList(PartType partType, ItemStat stat, boolean advanced) {
-        return advanced || value != 0 || (partType == PartType.MAIN && stat == ItemStats.HARVEST_LEVEL);
+        return advanced || value != 0;
     }
 
     public int getPreferredDecimalPlaces(ItemStat stat, int max) {

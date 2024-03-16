@@ -1,9 +1,10 @@
 package net.silentchaos512.gear.api.material;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
@@ -93,6 +94,8 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
      * @return The tier
      */
     int getTier(IMaterialInstance material, PartType partType);
+
+    Tier getHarvestTier(IMaterialInstance material);
 
     Optional<Ingredient> getPartSubstitute(PartType partType);
 

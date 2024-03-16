@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:iron",
   "availability": {
     "tier": 1,
     "categories": [
@@ -26,7 +27,6 @@
       "rarity": 32.0,
       "charging_value": 0.9,
       "repair_value": -0.2,
-      "harvest_level": 2.0,
       "harvest_speed": 7.0,
       "melee_damage": 2.0,
       "magic_damage": 3.0,

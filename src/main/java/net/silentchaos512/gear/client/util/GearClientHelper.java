@@ -4,10 +4,12 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.TierSortingRegistry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -119,6 +121,9 @@ public final class GearClientHelper {
 
             tooltip.add(TextUtil.withColor(misc("tier", GearData.getTier(stack)), Color.DEEPSKYBLUE));
 
+            Tier harvestTier = GearData.getHarvestTier(stack);
+            tooltip.add(TextUtil.withColor(misc("harvestTier", TierSortingRegistry.getName(harvestTier)), Color.GOLD));
+
             // Display only stats relevant to the item class
             Collection<ItemStat> relevantStats = item.getRelevantStats(stack);
             Collection<ItemStat> displayStats = flag.isAdvanced() && SilentGear.isDevBuild() ? ItemStats.allStatsOrdered() : relevantStats;
@@ -144,8 +149,6 @@ public final class GearClientHelper {
                     int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
                     int durabilityMax = stack.getMaxDamage();
                     textStat = statText("durabilityFormat", durabilityLeft, durabilityMax);
-                } else if (stat == ItemStats.HARVEST_LEVEL) {
-                    textStat = TooltipHandler.harvestLevelWithHint(textStat, statValue);
                 }
 
                 builder.add(statText("displayFormat", textName, textStat));

@@ -4,7 +4,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -137,6 +140,10 @@ public final class TooltipHandler {
                 PartType partType = partTypes.get(index);
                 event.getToolTip().add(buildPartTypeHeader(partTypes, partType));
                 event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tier", material.getTier(partType)), Color.DEEPSKYBLUE));
+
+                Tier harvestTier = material.getHarvestTier();
+                ResourceLocation harvestTierName = TierSortingRegistry.getName(harvestTier);
+                event.getToolTip().add(TextUtil.withColor(TextUtil.misc("harvestTier", harvestTierName), Color.GOLD));
 
                 getMaterialTraitLines(event, partType, material);
 
@@ -396,12 +403,7 @@ public final class TooltipHandler {
                 int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
                 MutableComponent statListText = TextUtil.withColor(StatModifierMap.formatText(modifiers, stat, decimalPlaces), statColor);
 
-                // Harvest level hints
-                MutableComponent textWithAdditions = stat == ItemStats.HARVEST_LEVEL && modifiers.size() == 1
-                        ? harvestLevelWithHint(statListText, inst.getValue())
-                        : statListText;
-
-                return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, textWithAdditions));
+                return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, statListText));
             }
         }
 
@@ -419,12 +421,7 @@ public final class TooltipHandler {
                 int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
                 MutableComponent statListText = TextUtil.withColor(StatModifierMap.formatText(modifiers, stat, decimalPlaces), color);
 
-                // Harvest level hints
-                MutableComponent textWithAdditions = stat == ItemStats.HARVEST_LEVEL && modifiers.size() == 1
-                        ? harvestLevelWithHint(statListText, inst.getValue())
-                        : statListText;
-
-                return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, textWithAdditions));
+                return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, statListText));
             }
         }
 

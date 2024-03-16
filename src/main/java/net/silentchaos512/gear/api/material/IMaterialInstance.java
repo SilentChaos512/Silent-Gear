@@ -6,6 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
@@ -17,6 +18,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.IGearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
@@ -78,6 +80,12 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
 
     default int getTier() {
         return getTier(PartType.MAIN);
+    }
+
+    @Override
+    default Tier getHarvestTier() {
+        IMaterial material = get();
+        return material != null ? material.getHarvestTier(this) : TierHelper.weakestTier();
     }
 
     default boolean isSimple() {

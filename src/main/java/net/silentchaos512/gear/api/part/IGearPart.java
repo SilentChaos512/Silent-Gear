@@ -1,10 +1,11 @@
 package net.silentchaos512.gear.api.part;
 
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
@@ -25,6 +26,8 @@ public interface IGearPart extends IGearComponent<IPartData> {
     default int getTier() {
         return getTier(PartData.of(this));
     }
+
+    Tier getHarvestTier(IPartData part);
 
     PartType getType();
 

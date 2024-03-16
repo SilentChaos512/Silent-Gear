@@ -90,8 +90,6 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
             return mod.getValue() * Math.pow(1.1, charge.getChargeValue());
         if (stat.getStat() == ItemStats.ENCHANTMENT_VALUE)
             return mod.getValue() * (1 + charge.getChargeLevel() * (Math.sqrt(charge.getChargeability() - 1)));
-        if (stat.getStat() == ItemStats.HARVEST_LEVEL)
-            return mod.getValue() + 1;
         if (stat.getStat() == ItemStats.HARVEST_SPEED)
             return mod.getValue() + 1.5 * charge.getChargeLevel() * charge.getChargeValue();
         if (stat.getStat() == ItemStats.MELEE_DAMAGE)

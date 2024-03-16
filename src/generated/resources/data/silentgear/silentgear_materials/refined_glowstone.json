@@ -1,6 +1,7 @@
 {
   "type": "silentgear:standard",
   "simple": true,
+  "harvest_tier": "minecraft:iron",
   "availability": {
     "tier": 3,
     "categories": [
@@ -24,7 +25,6 @@
       "armor_durability": 18.0,
       "repair_value": 0.15,
       "enchantment_value": 18.0,
-      "harvest_level": 2.0,
       "harvest_speed": 14.0,
       "melee_damage": 5.0,
       "magic_damage": 3.0,

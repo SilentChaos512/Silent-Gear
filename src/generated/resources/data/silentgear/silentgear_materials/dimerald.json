@@ -1,6 +1,7 @@
 {
   "type": "silentgear:custom_compound",
   "simple": false,
+  "harvest_tier": "minecraft:diamond",
   "availability": {
     "tier": 3,
     "categories": [
@@ -27,7 +28,6 @@
       "enchantment_value": 12.0,
       "rarity": 80.0,
       "charging_value": 0.7,
-      "harvest_level": 3.0,
       "harvest_speed": 9.0,
       "melee_damage": 3.0,
       "magic_damage": 3.0,
@@ -52,9 +52,6 @@
     "tip": {
       "durability": {
         "add": 360.0
-      },
-      "harvest_level": {
-        "max": 3.0
       },
       "harvest_speed": {
         "add": 2.0
