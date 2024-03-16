@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.1-3.6.0] - 2024-03-16
+MAJOR BREAKING CHANGE! Please read...
+### Changed
+- BREAKING: Replaced the harvest level stat with a harvest tier property. This is a **breaking change** for mods and data packs! This change should fix compatibility with mods that add their own `Tier`s for block harvest checks.
+  - To fix material JSON files, simply add a `harvest_tier` property to the root of the file (same level as `type` and `simple`). The value is a string, which is the name of the Tier, such as `minecraft:iron`.
+### Fixed
+- Added a proper texture and localized name for Coating Smithing Template
+
 ## [1.20.1-3.5.4] - 2024-02-24
 ### Added
 - Some missing item descriptions in JEI (msueberkrueb) [#648]
