@@ -24,7 +24,7 @@ public class ModOreBlock extends DropExperienceBlock {
         // Harvest level tips
         int harvestLevel = guessHarvestLevel(defaultBlockState());
         Component harvestLevelName = TextUtil.misc("harvestLevel." + harvestLevel);
-        tooltip.add(TextUtil.misc("harvestLevel", harvestLevel, harvestLevelName));
+        tooltip.add(TextUtil.misc("harvestLevel", harvestLevelName));
     }
 
     private static int guessHarvestLevel(BlockState state) {
