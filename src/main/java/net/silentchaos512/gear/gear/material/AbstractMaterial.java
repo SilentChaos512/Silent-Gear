@@ -410,7 +410,7 @@ public abstract class AbstractMaterial implements IMaterial {
                 } else if (json.isJsonPrimitive()) {
                     material.categories.add(MaterialCategories.get(json.getAsString()));
                 } else {
-                    throw new JsonParseException("Expected 'categories' to be array or string");
+                    throw new JsonSyntaxException("Expected 'categories' to be array or string");
                 }
             }
         }
@@ -480,7 +480,7 @@ public abstract class AbstractMaterial implements IMaterial {
                 if (element.isJsonObject()) {
                     ret.displayProperties = MaterialDisplay.deserialize(this.name, element.getAsJsonObject());
                 } else {
-                    throw new JsonParseException("Expected 'model' to be an object");
+                    throw new JsonSyntaxException("Expected 'model' to be an object");
                 }
             } else {
                 SilentGear.LOGGER.warn("Material '{}' has no model in the data file. This may be an outdated data pack or mod.", ret.materialId);

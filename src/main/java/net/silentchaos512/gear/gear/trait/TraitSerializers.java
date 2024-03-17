@@ -1,11 +1,10 @@
 package net.silentchaos512.gear.gear.trait;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -112,7 +111,7 @@ public final class TraitSerializers {
 
         ITraitSerializer<?> serializer = REGISTRY.get(type);
         if (serializer == null) {
-            throw new JsonParseException("Invalid or unsupported trait type " + type);
+            throw new JsonSyntaxException("Invalid or unsupported trait type " + type);
         }
         return serializer.read(id, json);
     }

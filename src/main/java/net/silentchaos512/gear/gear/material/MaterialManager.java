@@ -17,11 +17,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.gear.GearJsonException;
+import net.silentchaos512.gear.gear.MaterialJsonException;
 import net.silentchaos512.gear.network.SyncMaterialsPacket;
 import net.silentchaos512.gear.util.TextUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -77,7 +80,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
                         SilentGear.LOGGER.error(MARKER, "Could not load material {} as it's null or empty", name);
                     } else {
                         // Attempt to deserialize the material
-                        IMaterial material = MaterialSerializers.deserialize(name, packName, json);
+                        IMaterial material = tryDeserialize(name, packName, json);
                         MATERIALS.put(material.getId(), material);
                         addIngredientChecks(ingredientConflicts, material, json);
                     }
@@ -87,6 +90,15 @@ public class MaterialManager implements ResourceManagerReloadListener {
 
         checkForIngredientConflicts(ingredientConflicts);
         logSkippedMaterials(skippedList);
+    }
+
+    private static IMaterial tryDeserialize(ResourceLocation name, String packName, JsonObject json) {
+        SilentGear.LOGGER.info("Deserializing material {} in pack {}", name, packName);
+        try {
+            return MaterialSerializers.deserialize(name, packName, json);
+        } catch (JsonSyntaxException ex) {
+            throw new MaterialJsonException(name, packName, ex);
+        }
     }
 
     private static void addIngredientChecks(Multimap<String, IMaterial> map, IMaterial material, JsonObject json) {

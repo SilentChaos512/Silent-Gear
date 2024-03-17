@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -18,10 +19,12 @@ import net.minecraftforge.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.gear.PartJsonException;
 import net.silentchaos512.gear.network.SyncGearPartsPacket;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -82,7 +85,7 @@ public final class PartManager implements ResourceManagerReloadListener {
                     if (json == null) {
                         SilentGear.LOGGER.error(MARKER, "Could not load part {} as it's null or empty", name);
                     } else {
-                        IGearPart part = PartSerializers.deserialize(name, json);
+                        IGearPart part = tryDeserialize(name, packName, json);
                         if (part instanceof AbstractGearPart) {
                             ((AbstractGearPart) part).packName = iresource.sourcePackId();
                         }
@@ -93,6 +96,16 @@ public final class PartManager implements ResourceManagerReloadListener {
             }
 
             SilentGear.LOGGER.info(MARKER, "Registered {} parts", MAP.size());
+        }
+    }
+
+    @NotNull
+    private static IGearPart tryDeserialize(ResourceLocation name, String packName, JsonObject json) {
+        SilentGear.LOGGER.info("Deserializing part {} in pack {}", name, packName);
+        try {
+            return PartSerializers.deserialize(name, json);
+        } catch (JsonSyntaxException ex) {
+            throw new PartJsonException(name, packName, ex);
         }
     }
 
