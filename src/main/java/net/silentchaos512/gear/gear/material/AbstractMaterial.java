@@ -333,11 +333,11 @@ public abstract class AbstractMaterial implements IMaterial {
                     if (partTypeName != null) {
                         JsonObject statsList = entry.getValue().getAsJsonObject();
                         if (statsList.has("harvest_level")) {
-                            ret.harvestTier = hackyHarvestLevelToTier(statsList.get("harvest_level").getAsInt());
+                            ret.harvestTier = hackyGuessHarvestTier(statsList.get("harvest_level"));
                             tierAssigned = true;
                             break;
                         } else if (statsList.has("silentgear:harvest_level")) {
-                            ret.harvestTier = hackyHarvestLevelToTier(statsList.get("silentgear:harvest_level").getAsInt());
+                            ret.harvestTier = hackyGuessHarvestTier(statsList.get("silentgear:harvest_level"));
                             tierAssigned = true;
                             break;
                         }
@@ -353,8 +353,11 @@ public abstract class AbstractMaterial implements IMaterial {
         }
 
         @Deprecated // TODO: Remove me!
-        Tier hackyHarvestLevelToTier(int harvestLevel) {
+        Tier hackyGuessHarvestTier(JsonElement json) {
             // Helper for hackyDeserializeHarvestTierFromOutdatedFile
+            // The key is just a dummy, it doesn't affect reading the value
+            StatInstance statInstance = StatInstance.read(StatGearKey.of(ItemStats.DURABILITY, GearType.ALL), json);
+            int harvestLevel = Math.round(statInstance.getValue());
             return switch (harvestLevel) {
                 case 0 -> Tiers.WOOD;
                 case 1 -> Tiers.STONE;
