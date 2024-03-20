@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.1-3.6.2] - 2024-03-19
+### Added
+- A temporary compatibility patch to make pre-3.6.0 material JSON files load. This should allow most mods and data packs to function like they did before. A "material has no harvest tier" warning will be logged for each material that has a "guessed" harvest tier.
+  - This will be removed no later than Minecraft 1.21
+
 ## [1.20.1-3.6.1] - 2024-03-17
 Please read the changes for 3.6.0 as well!
 ### Changed

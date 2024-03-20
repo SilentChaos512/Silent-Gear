@@ -304,6 +304,12 @@ public abstract class AbstractMaterial implements IMaterial {
                 ret.harvestTier = Tiers.WOOD;
                 return;
             }
+            // TODO: Remove me in 1.21!
+            else if (!json.has("harvest_tier")) {
+                // guess a harvest tier for outdated files
+                hackyDeserializeHarvestTierFromOutdatedFile(json, ret);
+                return;
+            }
 
             String harvestTierStr = GsonHelper.getAsString(json, "harvest_tier");
             ResourceLocation harvestTierName = new ResourceLocation(harvestTierStr);
@@ -313,6 +319,49 @@ public abstract class AbstractMaterial implements IMaterial {
             } else {
                 throw new JsonSyntaxException("Unknown harvest tier: " + harvestTierName);
             }
+        }
+
+        @Deprecated // TODO: Remove me!
+        void hackyDeserializeHarvestTierFromOutdatedFile(JsonObject json, T ret) {
+            // Guess a harvest tier based on an old harvest level stat, but also log a warning about it
+            // Remove this method in 1.21 and force harvest tiers
+            boolean tierAssigned = false;
+            JsonElement elementStats = json.get("stats");
+            if (elementStats != null && elementStats.isJsonObject()) {
+                for (Map.Entry<String, JsonElement> entry : elementStats.getAsJsonObject().entrySet()) {
+                    ResourceLocation partTypeName = SilentGear.getIdWithDefaultNamespace(entry.getKey());
+                    if (partTypeName != null) {
+                        JsonObject statsList = entry.getValue().getAsJsonObject();
+                        if (statsList.has("harvest_level")) {
+                            ret.harvestTier = hackyHarvestLevelToTier(statsList.get("harvest_level").getAsInt());
+                            tierAssigned = true;
+                            break;
+                        } else if (statsList.has("silentgear:harvest_level")) {
+                            ret.harvestTier = hackyHarvestLevelToTier(statsList.get("silentgear:harvest_level").getAsInt());
+                            tierAssigned = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!tierAssigned) {
+                // Nothing found... Make it wood as a failsafe.
+                ret.harvestTier = Tiers.WOOD;
+            }
+            SilentGear.LOGGER.warn("Material has no harvest tier, guessing it as \"{}\"", TierSortingRegistry.getName(ret.harvestTier));
+        }
+
+        @Deprecated // TODO: Remove me!
+        Tier hackyHarvestLevelToTier(int harvestLevel) {
+            // Helper for hackyDeserializeHarvestTierFromOutdatedFile
+            return switch (harvestLevel) {
+                case 0 -> Tiers.WOOD;
+                case 1 -> Tiers.STONE;
+                case 2 -> Tiers.IRON;
+                case 3 -> Tiers.DIAMOND;
+                default -> Tiers.NETHERITE;
+            };
         }
 
         //region deserialize methods
