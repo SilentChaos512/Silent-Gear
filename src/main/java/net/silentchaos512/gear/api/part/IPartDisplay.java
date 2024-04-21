@@ -3,7 +3,7 @@ package net.silentchaos512.gear.api.part;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialLayerList;
 import net.silentchaos512.gear.api.material.MaterialLayer;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.List;
 

@@ -65,8 +65,8 @@ public final class DurabilityTrait extends SimpleTrait {
 
     @Override
     public float onDurabilityDamage(TraitActionContext context, int damageTaken) {
-        Player player = context.getPlayer();
-        if (damageTaken != 0 && shouldActivate(context.getTraitLevel())) {
+        Player player = context.player();
+        if (damageTaken != 0 && shouldActivate(context.traitLevel())) {
             if (effectScale > 0 && player instanceof ServerPlayer) {
                 LibTriggers.GENERIC_INT.trigger((ServerPlayer) player, TRIGGER_BRITTLE, 1);
             }

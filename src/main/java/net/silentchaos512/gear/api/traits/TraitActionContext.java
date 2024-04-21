@@ -5,24 +5,15 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public class TraitActionContext {
-    @Nullable private final Player player;
-    private final int traitLevel;
-    private final ItemStack gear;
-
-    public TraitActionContext(@Nullable Player player, int traitLevel, ItemStack gear) {
-        this.player = player;
-        this.traitLevel = traitLevel;
-        this.gear = gear;
-    }
-
+public record TraitActionContext(@Nullable Player player, int traitLevel, ItemStack gear) {
     /**
      * Gets the player using the gear, if there is one.
      *
      * @return The user of the gear item, or null if not available
      */
+    @Override
     @Nullable
-    public Player getPlayer() {
+    public Player player() {
         return player;
     }
 
@@ -31,7 +22,8 @@ public class TraitActionContext {
      *
      * @return The trait level
      */
-    public int getTraitLevel() {
+    @Override
+    public int traitLevel() {
         return traitLevel;
     }
 
@@ -40,7 +32,8 @@ public class TraitActionContext {
      *
      * @return The gear item
      */
-    public ItemStack getGear() {
+    @Override
+    public ItemStack gear() {
         return gear;
     }
 }

@@ -6,8 +6,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
@@ -31,8 +31,7 @@ import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.lib.event.ClientTicks;
-import net.silentchaos512.lib.util.TagUtils;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -67,10 +66,10 @@ public final class TooltipHandler {
 
         ItemStack stack = event.getItemStack();
 
-        if (TagUtils.contains(SgTags.Items.GRADER_CATALYSTS, stack)) {
+        if (stack.is(SgTags.Items.GRADER_CATALYSTS)) {
             onGraderCatalystTooltip(event);
         }
-        if (TagUtils.contains(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack)) {
+        if (stack.is(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS)) {
             onStarlightChargerCatalystTooltip(event);
         }
 

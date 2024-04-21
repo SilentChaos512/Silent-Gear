@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetLoreFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.gear.part.LazyPartData;
@@ -23,7 +23,9 @@ import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class ModGiftLootTables extends VanillaGiftLoot {
@@ -95,6 +97,6 @@ public class ModGiftLootTables extends VanillaGiftLoot {
     }
 
     private static SetLoreFunction setLore(List<Component> lore) {
-        return new SetLoreFunction(new LootItemCondition[0], false, lore, null);
+        return new SetLoreFunction(Collections.emptyList(), false, lore, Optional.empty());
     }
 }

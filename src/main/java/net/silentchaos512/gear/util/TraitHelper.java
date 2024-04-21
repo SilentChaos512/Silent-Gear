@@ -28,8 +28,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -293,7 +293,7 @@ public final class TraitHelper {
         ITrait[] keys = result.keySet().toArray(new ITrait[0]);
 
         cancelTraits(result, keys);
-        MinecraftForge.EVENT_BUS.post(new GetTraitsEvent(gear, parts, result));
+        NeoForge.EVENT_BUS.post(new GetTraitsEvent(gear, parts, result));
         return result;
     }
 

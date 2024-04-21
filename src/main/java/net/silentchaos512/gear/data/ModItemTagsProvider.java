@@ -3,6 +3,7 @@ package net.silentchaos512.gear.data;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -12,17 +13,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.setup.SgBlocks;
-import net.silentchaos512.gear.setup.SgItems;
-import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
 import net.silentchaos512.gear.item.gear.GearCurioItem;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.Const;
 
 import java.util.Arrays;
@@ -210,7 +210,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         // Blueprints
         Multimap<ResourceLocation, AbstractBlueprintItem> blueprints = MultimapBuilder.linkedHashKeys().arrayListValues().build();
-        ForgeRegistries.ITEMS.getValues().stream()
+        BuiltInRegistries.ITEM.stream()
                 .filter(item -> item instanceof AbstractBlueprintItem)
                 .map(item -> (AbstractBlueprintItem) item)
                 .sorted(Comparator.comparing(blueprint -> blueprint.getItemTag().location()))

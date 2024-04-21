@@ -5,7 +5,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.FakePartData;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.List;
 

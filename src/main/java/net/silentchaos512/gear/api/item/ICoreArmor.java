@@ -3,14 +3,14 @@ package net.silentchaos512.gear.api.item;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.Set;
 

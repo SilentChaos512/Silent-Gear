@@ -2,7 +2,7 @@ package net.silentchaos512.gear.setup;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraftforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.silentchaos512.gear.command.*;
 
 public final class SgCommands {

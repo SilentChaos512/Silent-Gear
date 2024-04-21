@@ -23,8 +23,8 @@ import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.NameUtils;
-import net.silentchaos512.utils.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

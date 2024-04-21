@@ -18,7 +18,7 @@ import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.client.util;
 
-import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.Items;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.Const;

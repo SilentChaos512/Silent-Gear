@@ -9,7 +9,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.utils.EnumUtils;
+import net.silentchaos512.lib.util.EnumUtils;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;

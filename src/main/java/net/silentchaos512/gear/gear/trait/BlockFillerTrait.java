@@ -3,6 +3,7 @@ package net.silentchaos512.gear.gear.trait;
 import com.google.gson.JsonObject;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -147,9 +147,9 @@ public class BlockFillerTrait extends SimpleTrait {
             trait.targetBlockTag = BlockTags.create(new ResourceLocation(GsonHelper.getAsString(targetJson, "tag")));
         }
         if (targetJson.has("block")) {
-            trait.targetBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(GsonHelper.getAsString(targetJson, "block")));
+            trait.targetBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(GsonHelper.getAsString(targetJson, "block")));
         }
-        trait.fillBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "fill_block")));
+        trait.fillBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(GsonHelper.getAsString(json, "fill_block")));
         trait.replaceTileEntities = GsonHelper.getAsBoolean(json, "replace_tile_entities", false);
         trait.fillRangeX = GsonHelper.getAsInt(json, "fill_spread_x", 0);
         trait.fillRangeY = GsonHelper.getAsInt(json, "fill_spread_y", 0);
@@ -158,7 +158,7 @@ public class BlockFillerTrait extends SimpleTrait {
         trait.sneakMode = SneakMode.byName(GsonHelper.getAsString(json, "sneak_mode", "pass"));
         trait.damageOnUse = GsonHelper.getAsFloat(json, "damage_on_use");
         trait.cooldown = GsonHelper.getAsInt(json, "cooldown", 0);
-        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "sound")));
+        trait.sound = BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation(GsonHelper.getAsString(json, "sound")));
         trait.soundVolume = GsonHelper.getAsFloat(json, "sound_volume");
         trait.soundPitch = GsonHelper.getAsFloat(json, "sound_pitch");
     }
@@ -168,9 +168,9 @@ public class BlockFillerTrait extends SimpleTrait {
             trait.targetBlockTag = BlockTags.create(buffer.readResourceLocation());
         }
         if (buffer.readBoolean()) {
-            trait.targetBlock = ForgeRegistries.BLOCKS.getValue(buffer.readResourceLocation());
+            trait.targetBlock = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
         }
-        trait.fillBlock = ForgeRegistries.BLOCKS.getValue(buffer.readResourceLocation());
+        trait.fillBlock = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
         trait.replaceTileEntities = buffer.readBoolean();
         trait.fillRangeX = buffer.readByte();
         trait.fillRangeY = buffer.readByte();
@@ -179,7 +179,7 @@ public class BlockFillerTrait extends SimpleTrait {
         trait.sneakMode = buffer.readEnum(SneakMode.class);
         trait.damageOnUse = buffer.readFloat();
         trait.cooldown = buffer.readVarInt();
-        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(buffer.readResourceLocation());
+        trait.sound = BuiltInRegistries.SOUND_EVENT.get(buffer.readResourceLocation());
         trait.soundVolume = buffer.readFloat();
         trait.soundPitch = buffer.readFloat();
     }
@@ -202,7 +202,7 @@ public class BlockFillerTrait extends SimpleTrait {
         buffer.writeEnum(trait.sneakMode);
         buffer.writeFloat(trait.damageOnUse);
         buffer.writeVarInt(trait.cooldown);
-        buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(trait.sound)));
+        buffer.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.SOUND_EVENT.getKey(trait.sound)));
         buffer.writeFloat(trait.soundVolume);
         buffer.writeFloat(trait.soundPitch);
     }

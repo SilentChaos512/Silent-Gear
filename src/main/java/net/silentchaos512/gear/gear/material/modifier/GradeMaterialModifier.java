@@ -18,23 +18,13 @@ import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.material.MaterialModifiers;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GradeMaterialModifier implements IMaterialModifier {
-    private final MaterialGrade grade;
-
-    public GradeMaterialModifier(MaterialGrade grade) {
-        this.grade = grade;
-    }
-
-    public MaterialGrade getGrade() {
-        return grade;
-    }
-
+public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialModifier {
     @Override
     public IMaterialModifierType<?> getType() {
         return MaterialModifiers.GRADE;

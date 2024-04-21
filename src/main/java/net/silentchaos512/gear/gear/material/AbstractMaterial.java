@@ -1,7 +1,10 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.Sets;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -12,9 +15,7 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.common.TierSortingRegistry;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.VanillaIngredientSerializer;
+import net.neoforged.neoforge.common.TierSortingRegistry;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
@@ -30,7 +31,7 @@ import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.gear.util.TierHelper;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

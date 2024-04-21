@@ -3,7 +3,7 @@ package net.silentchaos512.gear.compat.caelus;
 import com.google.common.collect.Multimap;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import net.silentchaos512.gear.util.Const;
 
 public final class CaelusCompat {

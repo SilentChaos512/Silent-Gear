@@ -33,7 +33,7 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.NameUtils;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -176,11 +176,6 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
     @Override
     public int getEnchantmentValue(ItemStack stack) {
         return GearHelper.getEnchantability(stack);
-    }
-
-    @Override
-    public void onArmorTick(ItemStack stack, Level world, Player player) {
-        GearHelper.inventoryTick(stack, world, player, 0, true);
     }
 
     @Override

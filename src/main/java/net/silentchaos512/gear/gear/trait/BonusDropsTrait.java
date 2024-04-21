@@ -62,7 +62,7 @@ public final class BonusDropsTrait extends SimpleTrait {
 
     @Override
     public ItemStack addLootDrops(TraitActionContext context, ItemStack stack) {
-        if (ingredient.test(stack) && SilentGear.RANDOM.nextFloat() < this.baseChance * context.getTraitLevel()) {
+        if (ingredient.test(stack) && SilentGear.RANDOM.nextFloat() < this.baseChance * context.traitLevel()) {
             ItemStack copy = stack.copy();
             copy.setCount(Math.round(stack.getCount() * this.bonusMultiplier));
             return copy;

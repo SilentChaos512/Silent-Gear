@@ -3,6 +3,7 @@ package net.silentchaos512.gear.data.recipes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -72,7 +73,7 @@ public class CompoundingRecipeBuilder {
         return this;
     }
 
-    public void build(Consumer<FinishedRecipe> consumer) {
+    public void build(RecipeOutput consumer) {
         String name = NameUtils.fromItem(this.resultItem).getPath();
         if (resultMaterial != null) {
             name = name + "." + resultMaterial.getId().getPath();
@@ -80,7 +81,7 @@ public class CompoundingRecipeBuilder {
         build(consumer, new ResourceLocation(NameUtils.fromRecipeSerializer(serializer) + "/" + name));
     }
 
-    public void build(Consumer<FinishedRecipe> consumer, ResourceLocation recipeId) {
+    public void build(RecipeOutput consumer, ResourceLocation recipeId) {
         consumer.accept(new Result(recipeId));
     }
 

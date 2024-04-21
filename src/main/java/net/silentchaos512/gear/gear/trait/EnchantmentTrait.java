@@ -42,10 +42,10 @@ public final class EnchantmentTrait extends SimpleTrait {
 
     @Override
     public void onRecalculatePost(TraitActionContext context) {
-        ItemStack gear = context.getGear();
+        ItemStack gear = context.gear();
         GearType gearType = GearHelper.getType(gear);
 
-        int traitLevel = context.getTraitLevel();
+        int traitLevel = context.traitLevel();
         enchantments.forEach((type, list) -> {
             if (gearType.matches(type)) {
                 addEnchantments(gear, traitLevel, list);

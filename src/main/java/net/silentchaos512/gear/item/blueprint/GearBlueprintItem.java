@@ -20,8 +20,8 @@ import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.NameUtils;
-import net.silentchaos512.utils.Color;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.lib.util.Color;
+import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

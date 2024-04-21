@@ -22,7 +22,6 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.GameUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -82,10 +81,7 @@ public class GearTridentItem extends TridentItem implements ICoreWeapon {
 
     @Override
     public boolean isFoil(ItemStack stack) {
-        if (GameUtil.isClient()) {
-            return GearClientHelper.hasEffect(stack);
-        }
-        return false;
+        return GearClientHelper.hasEffect(stack);
     }
 
     @Override

@@ -26,7 +26,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -81,7 +81,7 @@ public class GearBowItem extends BowItem implements ICoreRangedWeapon {
         }
         boolean flag = !player.getProjectile(itemstack).isEmpty() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemstack) > 0;
 
-        InteractionResultHolder<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, world, player, hand, flag);
+        InteractionResultHolder<ItemStack> ret = net.neoforged.neoforge.event.EventHooks.onArrowNock(itemstack, world, player, hand, flag);
         if (ret != null) return ret;
 
         if (!player.getAbilities().instabuild && !flag) {
@@ -104,7 +104,7 @@ public class GearBowItem extends BowItem implements ICoreRangedWeapon {
             ItemStack ammoItem = player.getProjectile(stack);
 
             int i = this.getUseDuration(stack) - timeLeft;
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, player, i, !ammoItem.isEmpty() || infiniteAmmo);
+            i = net.neoforged.neoforge.event.EventHooks.onArrowLoose(stack, worldIn, player, i, !ammoItem.isEmpty() || infiniteAmmo);
             if (i < 0) return;
 
             if (!ammoItem.isEmpty() || infiniteAmmo) {

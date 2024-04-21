@@ -5,8 +5,8 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
+import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ToolActions;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.setup.SgItems;
@@ -238,7 +238,7 @@ public final class GearType {
      * "all" will match anything if {@code includeAll} is true.
      *
      * @param type       The string representation of the type
-     * @param includeAll Whether or not to consider the "all" type. This should be excluded if
+     * @param includeAll Whether to consider the "all" type. This should be excluded if
      *                   trying to match more specific types.
      * @return True if this type's name is equal to type, or if its parent matches (recursive)
      */

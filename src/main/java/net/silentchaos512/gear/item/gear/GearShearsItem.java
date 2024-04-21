@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -19,12 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
@@ -168,44 +162,6 @@ public class GearShearsItem extends ShearsItem implements ICoreTool {
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
-    }
-
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Level world = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        BlockState state = world.getBlockState(pos);
-        Player player = context.getPlayer();
-
-        if (player != null && getHoneyLevel(state) >= 5) {
-            world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
-            BeehiveBlock.dropHoneycomb(world, pos);
-            context.getItemInHand().hurtAndBreak(1, player, (playerEntity) -> {
-                playerEntity.broadcastBreakEvent(context.getHand());
-            });
-
-            BeehiveBlock block = (BeehiveBlock) state.getBlock();
-            if (!CampfireBlock.isSmokeyPos(world, pos)) {
-                if (block.hiveContainsBees(world, pos)) {
-                    block.angerNearbyBees(world, pos);
-                }
-
-                block.releaseBeesAndResetHoneyLevel(world, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
-            } else {
-                block.resetHoneyLevel(world, state, pos);
-            }
-
-            return InteractionResult.sidedSuccess(world.isClientSide);
-        }
-
-        return GearHelper.onItemUse(context);
-    }
-
-    private static int getHoneyLevel(BlockState state) {
-        if (state.getBlock() instanceof BeehiveBlock && state.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
-            return state.getValue(BeehiveBlock.HONEY_LEVEL);
-        }
-        return 0;
     }
 
     @Override

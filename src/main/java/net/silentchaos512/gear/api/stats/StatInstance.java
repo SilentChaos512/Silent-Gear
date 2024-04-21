@@ -14,8 +14,8 @@ import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.utils.Color;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.lib.util.Color;
+import net.silentchaos512.lib.util.MathUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nonnegative;

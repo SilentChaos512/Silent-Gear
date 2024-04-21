@@ -6,26 +6,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.PlayMessages;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.item.gear.GearFishingRodItem;
 
-public class GearFishingHook extends FishingHook implements IEntityAdditionalSpawnData {
-    public GearFishingHook(EntityType<? extends GearFishingHook> type, Level level) {
-        super(type, level);
+public class GearFishingHook extends FishingHook implements IEntityWithComplexSpawn {
+    public GearFishingHook(EntityType<? extends FishingHook> pEntityType, Level pLevel) {
+        super(pEntityType, pLevel);
     }
 
-    public GearFishingHook(Player player, Level level, int luck, int lureSpeed) {
-        super(player, level, luck, lureSpeed);
-    }
-
-    public GearFishingHook(PlayMessages.SpawnEntity message, Level level) {
-        this(SgEntities.FISHING_HOOK.get(), level);
+    public GearFishingHook(Player pPlayer, Level pLevel, int pLuck, int pLureSpeed) {
+        super(pPlayer, pLevel, pLuck, pLureSpeed);
     }
 
     @Override
-    protected boolean shouldStopFishing(Player player) {
+    private boolean shouldStopFishing(Player player) {
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offHand = player.getOffhandItem();
         boolean isMainHand = mainHand.getItem() instanceof GearFishingRodItem;

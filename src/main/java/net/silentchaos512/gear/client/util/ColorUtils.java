@@ -14,7 +14,7 @@ import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
 import java.util.HashMap;

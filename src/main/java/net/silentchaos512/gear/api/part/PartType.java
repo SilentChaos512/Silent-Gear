@@ -20,13 +20,13 @@ package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -223,7 +223,7 @@ public final class PartType {
     }
 
     private static Optional<CompoundPartItem> getToolHeadItem(GearType gearType) {
-        for (Item item : ForgeRegistries.ITEMS.getValues()) {
+        for (Item item : BuiltInRegistries.ITEM.stream().toList()) {
             if (item instanceof MainPartItem && gearType == ((MainPartItem) item).getGearType()) {
                 return Optional.of((CompoundPartItem) item);
             }

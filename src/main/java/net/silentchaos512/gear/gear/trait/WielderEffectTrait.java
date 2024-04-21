@@ -47,9 +47,9 @@ public class WielderEffectTrait extends SimpleTrait {
 
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
-        if (!isEquipped || context.getPlayer() == null || context.getPlayer().tickCount % 10 != 0) return;
+        if (!isEquipped || context.player() == null || context.player().tickCount % 10 != 0) return;
 
-        GearType gearType = ((ICoreItem) context.getGear().getItem()).getGearType();
+        GearType gearType = ((ICoreItem) context.gear().getItem()).getGearType();
 
         for (Map.Entry<String, List<PotionData>> entry : potions.entrySet()) {
             String type = entry.getKey();
@@ -59,7 +59,7 @@ public class WielderEffectTrait extends SimpleTrait {
     }
 
     private void applyEffects(TraitActionContext context, GearType gearType, String type, Iterable<PotionData> effects) {
-        Player player = context.getPlayer();
+        Player player = context.player();
         assert player != null; // checked in onUpdate
 
         if (gearType.matches(type) || "all".equals(type)) {
@@ -67,7 +67,7 @@ public class WielderEffectTrait extends SimpleTrait {
             boolean hasFullSet = !"armor".equals(type) || setPieceCount >= 4;
 
             for (PotionData potionData : effects) {
-                MobEffectInstance effect = potionData.getEffect(context.getTraitLevel(), setPieceCount, hasFullSet);
+                MobEffectInstance effect = potionData.getEffect(context.traitLevel(), setPieceCount, hasFullSet);
                 if (effect != null) {
                     player.addEffect(effect);
                 }

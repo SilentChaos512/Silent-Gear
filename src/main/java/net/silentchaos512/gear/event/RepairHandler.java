@@ -6,9 +6,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -107,7 +107,6 @@ public final class RepairHandler {
     private static boolean canRepairTogether(ItemStack first, ItemStack second) {
         return first.getItem() == second.getItem()
                 && first.getItem() instanceof ICoreItem
-                && second.getItem() instanceof ICoreItem
                 && GearData.getTier(first) <= GearData.getTier(second);
     }
 

@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.api.event;
 
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.StatInstance;
@@ -28,11 +28,6 @@ public class GetMaterialStatsEvent extends Event {
         this.partType = partType;
         this.modifiers = new ArrayList<>(modifiers);
         this.material = material;
-    }
-
-    @Override
-    public boolean isCancelable() {
-        return false;
     }
 
     public ItemStat getStat() {

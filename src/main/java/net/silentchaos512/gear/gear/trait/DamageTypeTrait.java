@@ -36,7 +36,7 @@ public final class DamageTypeTrait extends SimpleTrait {
     public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
         if (target.isInvertedHealAndHarm() && "holy".equals(damageType)
                 || target.fireImmune() && "chilled".equals(damageType)) {
-            return baseValue + damageBonus * context.getTraitLevel();
+            return baseValue + damageBonus * context.traitLevel();
         }
 
         return baseValue;

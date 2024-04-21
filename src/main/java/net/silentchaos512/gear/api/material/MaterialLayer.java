@@ -9,7 +9,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 public class MaterialLayer {
     protected final ResourceLocation texture;

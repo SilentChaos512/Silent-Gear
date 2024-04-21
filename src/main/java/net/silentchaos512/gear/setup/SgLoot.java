@@ -9,13 +9,13 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
@@ -31,16 +31,16 @@ import java.util.function.Supplier;
 public final class SgLoot {
     public static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, SilentGear.MOD_ID);
     public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, SilentGear.MOD_ID);
-    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, SilentGear.MOD_ID);
+    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, SilentGear.MOD_ID);
 
     // Conditions
-    public static final RegistryObject<LootItemConditionType> HAS_TRAIT =
+    public static final DeferredHolder<LootItemConditionType, LootItemConditionType> HAS_TRAIT =
             registerCondition("has_trait", () -> new LootItemConditionType(HasTraitCondition.SERIALIZER));
 
     // Functions
-    public static final RegistryObject<LootItemFunctionType> SELECT_TIER =
+    public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> SELECT_TIER =
             registerFunction("select_tier", () -> new LootItemFunctionType(SelectGearTierLootFunction.SERIALIZER));
-    public static final RegistryObject<LootItemFunctionType> SET_PARTS =
+    public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> SET_PARTS =
             registerFunction("set_parts", () -> new LootItemFunctionType(SetPartsFunction.SERIALIZER));
 
     // Modifiers
@@ -52,11 +52,11 @@ public final class SgLoot {
     private SgLoot() {
     }
 
-    private static <T extends LootItemConditionType> RegistryObject<T> registerCondition(String name, Supplier<T> condition) {
+    private static <T extends LootItemConditionType> DeferredHolder<LootItemConditionType, T> registerCondition(String name, Supplier<T> condition) {
         return LOOT_CONDITIONS.register(name, condition);
     }
 
-    private static <T extends LootItemFunctionType> RegistryObject<T> registerFunction(String name, Supplier<T> condition) {
+    private static <T extends LootItemFunctionType> DeferredHolder<LootItemFunctionType, T> registerFunction(String name, Supplier<T> condition) {
         return LOOT_FUNCTIONS.register(name, condition);
     }
 

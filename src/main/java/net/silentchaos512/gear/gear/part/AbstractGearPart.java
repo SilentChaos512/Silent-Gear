@@ -12,7 +12,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -87,7 +87,7 @@ public abstract class AbstractGearPart implements IGearPart {
     public Collection<StatInstance> getStatModifiers(IPartData part, PartType partType, StatGearKey key, ItemStack gear) {
         List<StatInstance> mods = new ArrayList<>(this.stats.get(key));
         GetStatModifierEvent event = new GetStatModifierEvent((PartData) part, (ItemStat) key.getStat(), mods);
-        MinecraftForge.EVENT_BUS.post(event);
+        NeoForge.EVENT_BUS.post(event);
         return event.getModifiers();
     }
 

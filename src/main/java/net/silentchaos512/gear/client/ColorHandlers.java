@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.client;
 
 import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -14,7 +14,7 @@ import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 public final class ColorHandlers {
     private ColorHandlers() {
@@ -28,13 +28,13 @@ public final class ColorHandlers {
         }
 
         // Tools, armor, shields, etc.
-        ForgeRegistries.ITEMS.getValues().stream()
+        BuiltInRegistries.ITEM.stream()
                 .filter(item -> item instanceof ICoreItem /*item instanceof GearArmorItem || item instanceof GearShieldItem*/)
                 .map(item -> (ICoreItem) item)
                 .forEach(item -> event.register(item.getItemColors(), item));
 
         // Gear parts
-        ForgeRegistries.ITEMS.getValues().stream()
+        BuiltInRegistries.ITEM.stream()
                 .filter(item -> item instanceof CompoundPartItem)
                 .map(item -> (CompoundPartItem) item)
                 .forEach(item -> event.register(item::getColor, item));

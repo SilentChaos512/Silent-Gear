@@ -6,9 +6,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.NeoForgeConfig;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.setup.NerfedGear;
@@ -23,68 +24,68 @@ import java.util.Map;
 
 public final class Config {
     public static final class Common {
-        static final ForgeConfigSpec spec;
+        static final ModConfigSpec spec;
         // Blueprints
-        public static final ForgeConfigSpec.EnumValue<BlueprintType> blueprintTypes;
-        public static final ForgeConfigSpec.BooleanValue spawnWithStarterBlueprints;
+        public static final ModConfigSpec.EnumValue<BlueprintType> blueprintTypes;
+        public static final ModConfigSpec.BooleanValue spawnWithStarterBlueprints;
         // Nerfed gear
-        public static final ForgeConfigSpec.BooleanValue nerfedItemsEnabled;
-        public static final ForgeConfigSpec.DoubleValue nerfedItemDurabilityMulti;
-        public static final ForgeConfigSpec.DoubleValue nerfedItemHarvestSpeedMulti;
-        static final ForgeConfigSpec.ConfigValue<List<? extends String>> nerfedItems;
+        public static final ModConfigSpec.BooleanValue nerfedItemsEnabled;
+        public static final ModConfigSpec.DoubleValue nerfedItemDurabilityMulti;
+        public static final ModConfigSpec.DoubleValue nerfedItemHarvestSpeedMulti;
+        static final ModConfigSpec.ConfigValue<List<? extends String>> nerfedItems;
         // Sinew
-        public static final ForgeConfigSpec.DoubleValue sinewDropRate;
-        static final ForgeConfigSpec.ConfigValue<List<? extends String>> sinewAnimals;
+        public static final ModConfigSpec.DoubleValue sinewDropRate;
+        static final ModConfigSpec.ConfigValue<List<? extends String>> sinewAnimals;
         // Gear
-        public static final ForgeConfigSpec.BooleanValue allowLegacyMaterialMixing;
-        public static final ForgeConfigSpec.BooleanValue allowConversionRecipes;
-        public static final ForgeConfigSpec.BooleanValue allowEnchanting;
-        public static final ForgeConfigSpec.BooleanValue forceRemoveEnchantments;
-        public static final ForgeConfigSpec.BooleanValue sendGearBrokenMessage;
-        public static final ForgeConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeStandard;
-        public static final ForgeConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeOres;
-        public static final ForgeConfigSpec.IntValue damageFactorLevels;
-        public static final ForgeConfigSpec.BooleanValue gearBreaksPermanently;
-        public static final ForgeConfigSpec.ConfigValue<Tiers> dummyToolTier;
-        public static final ForgeConfigSpec.ConfigValue<ArmorMaterials> dummyArmorMaterial;
-        public static final ForgeConfigSpec.EnumValue<MaterialGrade> graderMedianGrade;
-        public static final ForgeConfigSpec.DoubleValue graderStandardDeviation;
-        public static final ForgeConfigSpec.IntValue prospectorHammerRange;
-        public static final ForgeConfigSpec.DoubleValue repairFactorAnvil;
-        public static final ForgeConfigSpec.DoubleValue repairFactorQuick;
-        public static final ForgeConfigSpec.IntValue repairKitVeryCrudeCapacity;
-        public static final ForgeConfigSpec.IntValue repairKitCrudeCapacity;
-        public static final ForgeConfigSpec.IntValue repairKitSturdyCapacity;
-        public static final ForgeConfigSpec.IntValue repairKitCrimsonCapacity;
-        public static final ForgeConfigSpec.IntValue repairKitAzureCapacity;
-        public static final ForgeConfigSpec.DoubleValue repairKitVeryCrudeEfficiency;
-        public static final ForgeConfigSpec.DoubleValue repairKitCrudeEfficiency;
-        public static final ForgeConfigSpec.DoubleValue repairKitSturdyEfficiency;
-        public static final ForgeConfigSpec.DoubleValue repairKitCrimsonEfficiency;
-        public static final ForgeConfigSpec.DoubleValue repairKitAzureEfficiency;
-        public static final ForgeConfigSpec.DoubleValue missingRepairKitEfficiency;
-        public static final ForgeConfigSpec.IntValue sawRecursionDepth;
-        public static final ForgeConfigSpec.BooleanValue upgradesInAnvilOnly;
-        public static final ForgeConfigSpec.BooleanValue destroySwappedParts;
-        private static final Map<ItemStat, ForgeConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
+        public static final ModConfigSpec.BooleanValue allowLegacyMaterialMixing;
+        public static final ModConfigSpec.BooleanValue allowConversionRecipes;
+        public static final ModConfigSpec.BooleanValue allowEnchanting;
+        public static final ModConfigSpec.BooleanValue forceRemoveEnchantments;
+        public static final ModConfigSpec.BooleanValue sendGearBrokenMessage;
+        public static final ModConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeStandard;
+        public static final ModConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeOres;
+        public static final ModConfigSpec.IntValue damageFactorLevels;
+        public static final ModConfigSpec.BooleanValue gearBreaksPermanently;
+        public static final ModConfigSpec.ConfigValue<Tiers> dummyToolTier;
+        public static final ModConfigSpec.ConfigValue<ArmorMaterials> dummyArmorMaterial;
+        public static final ModConfigSpec.EnumValue<MaterialGrade> graderMedianGrade;
+        public static final ModConfigSpec.DoubleValue graderStandardDeviation;
+        public static final ModConfigSpec.IntValue prospectorHammerRange;
+        public static final ModConfigSpec.DoubleValue repairFactorAnvil;
+        public static final ModConfigSpec.DoubleValue repairFactorQuick;
+        public static final ModConfigSpec.IntValue repairKitVeryCrudeCapacity;
+        public static final ModConfigSpec.IntValue repairKitCrudeCapacity;
+        public static final ModConfigSpec.IntValue repairKitSturdyCapacity;
+        public static final ModConfigSpec.IntValue repairKitCrimsonCapacity;
+        public static final ModConfigSpec.IntValue repairKitAzureCapacity;
+        public static final ModConfigSpec.DoubleValue repairKitVeryCrudeEfficiency;
+        public static final ModConfigSpec.DoubleValue repairKitCrudeEfficiency;
+        public static final ModConfigSpec.DoubleValue repairKitSturdyEfficiency;
+        public static final ModConfigSpec.DoubleValue repairKitCrimsonEfficiency;
+        public static final ModConfigSpec.DoubleValue repairKitAzureEfficiency;
+        public static final ModConfigSpec.DoubleValue missingRepairKitEfficiency;
+        public static final ModConfigSpec.IntValue sawRecursionDepth;
+        public static final ModConfigSpec.BooleanValue upgradesInAnvilOnly;
+        public static final ModConfigSpec.BooleanValue destroySwappedParts;
+        private static final Map<ItemStat, ModConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
         // Other items
-        public static final ForgeConfigSpec.IntValue netherwoodCharcoalBurnTime;
+        public static final ModConfigSpec.IntValue netherwoodCharcoalBurnTime;
         // Salvager
-        public static final ForgeConfigSpec.DoubleValue salvagerMinLossRate;
-        public static final ForgeConfigSpec.DoubleValue salvagerMaxLossRate;
+        public static final ModConfigSpec.DoubleValue salvagerMinLossRate;
+        public static final ModConfigSpec.DoubleValue salvagerMaxLossRate;
         // Starlight Charger
-        public static final ForgeConfigSpec.IntValue starlightChargerChargeRate;
-        public static final ForgeConfigSpec.IntValue starlightChargerMaxCharge;
+        public static final ModConfigSpec.IntValue starlightChargerChargeRate;
+        public static final ModConfigSpec.IntValue starlightChargerMaxCharge;
         // Debug
-        public static final ForgeConfigSpec.BooleanValue extraPartAndTraitLogging;
-        public static final ForgeConfigSpec.BooleanValue statsDebugLogging;
-        public static final ForgeConfigSpec.BooleanValue modelAndTextureLogging;
-        public static final ForgeConfigSpec.BooleanValue worldGenLogging;
+        public static final ModConfigSpec.BooleanValue extraPartAndTraitLogging;
+        public static final ModConfigSpec.BooleanValue statsDebugLogging;
+        public static final ModConfigSpec.BooleanValue modelAndTextureLogging;
+        public static final ModConfigSpec.BooleanValue worldGenLogging;
         // Other
-        public static final ForgeConfigSpec.BooleanValue showWipText;
+        public static final ModConfigSpec.BooleanValue showWipText;
 
         static {
-            ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+            ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
             {
                 builder.push("item");
@@ -392,7 +393,7 @@ public final class Config {
             return isThingInList(NameUtils.fromEntity(entity), sinewAnimals);
         }
 
-        private static boolean isThingInList(ResourceLocation name, ForgeConfigSpec.ConfigValue<List<? extends String>> list) {
+        private static boolean isThingInList(ResourceLocation name, ModConfigSpec.ConfigValue<List<? extends String>> list) {
             for (String str : list.get()) {
                 ResourceLocation fromList = ResourceLocation.tryParse(str);
                 if (fromList != null && fromList.equals(name)) {
@@ -408,19 +409,19 @@ public final class Config {
     }
 
     public static final class Client {
-        static final ForgeConfigSpec spec;
+        static final ModConfigSpec spec;
 
-        public static final ForgeConfigSpec.BooleanValue allowEnchantedEffect;
-        public static final ForgeConfigSpec.BooleanValue playKachinkSound;
-        //public static final ForgeConfigSpec.BooleanValue useLiteModels;
+        public static final ModConfigSpec.BooleanValue allowEnchantedEffect;
+        public static final ModConfigSpec.BooleanValue playKachinkSound;
+        //public static final ModConfigSpec.BooleanValue useLiteModels;
         //Tooltip
-        public static final ForgeConfigSpec.BooleanValue showMaterialTooltips;
-        public static final ForgeConfigSpec.BooleanValue showPartTooltips;
-        public static final ForgeConfigSpec.BooleanValue vanillaStyleTooltips;
-        public static final ForgeConfigSpec.BooleanValue showJeiHints;
+        public static final ModConfigSpec.BooleanValue showMaterialTooltips;
+        public static final ModConfigSpec.BooleanValue showPartTooltips;
+        public static final ModConfigSpec.BooleanValue vanillaStyleTooltips;
+        public static final ModConfigSpec.BooleanValue showJeiHints;
 
         static {
-            ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+            ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
             allowEnchantedEffect = builder
                     .comment("Allow gear items to have the 'enchanted glow' effect. Set to 'false' to disable the effect.",

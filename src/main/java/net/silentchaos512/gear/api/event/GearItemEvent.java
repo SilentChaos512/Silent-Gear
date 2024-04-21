@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.api.event;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.gear.part.PartData;
 
@@ -22,10 +22,5 @@ public abstract class GearItemEvent extends Event {
 
     public PartDataList getParts() {
         return PartDataList.of(parts);
-    }
-
-    @Override
-    public boolean isCancelable() {
-        return false;
     }
 }

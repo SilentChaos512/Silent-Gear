@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ToolAction;
+import net.neoforged.neoforge.common.ToolAction;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.GearHelper;

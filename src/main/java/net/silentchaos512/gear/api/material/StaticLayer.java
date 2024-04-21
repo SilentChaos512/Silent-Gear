@@ -2,7 +2,7 @@ package net.silentchaos512.gear.api.material;
 
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 public class StaticLayer extends MaterialLayer {
     public StaticLayer(ResourceLocation texture) {

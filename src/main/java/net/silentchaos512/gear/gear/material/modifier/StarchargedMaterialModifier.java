@@ -12,7 +12,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.material.MaterialModifiers;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -89,9 +89,9 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
         if (stat.getStat() == ItemStats.ARMOR_DURABILITY)
             return mod.getValue() * Math.pow(1.1, charge.getChargeValue());
         if (stat.getStat() == ItemStats.ENCHANTMENT_VALUE)
-            return mod.getValue() * (1 + charge.getChargeLevel() * (Math.sqrt(charge.getChargeability() - 1)));
+            return mod.getValue() * (1 + charge.chargeLevel() * (Math.sqrt(charge.chargeValue() - 1)));
         if (stat.getStat() == ItemStats.HARVEST_SPEED)
-            return mod.getValue() + 1.5 * charge.getChargeLevel() * charge.getChargeValue();
+            return mod.getValue() + 1.5 * charge.chargeLevel() * charge.getChargeValue();
         if (stat.getStat() == ItemStats.MELEE_DAMAGE)
             return mod.getValue() + charge.getChargeValue();
         if (stat.getStat() == ItemStats.MAGIC_DAMAGE)

@@ -60,7 +60,7 @@ public class CancelEffectsTrait extends SimpleTrait {
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
         if (isEquipped) {
-            Player player = context.getPlayer();
+            Player player = context.player();
             if (player != null) {
                 for (MobEffect effect : this.effects) {
                     player.removeEffect(effect);

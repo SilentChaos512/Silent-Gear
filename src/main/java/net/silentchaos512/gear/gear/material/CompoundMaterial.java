@@ -9,7 +9,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -27,8 +27,8 @@ import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.gear.util.TraitHelper;
-import net.silentchaos512.utils.Color;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.lib.util.Color;
+import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -182,7 +182,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
         if (matInst != null) {
             // FIXME: Potentially bad cast, need to rework event
             event = new GetMaterialStatsEvent(matInst, stat, partType, statMods);
-            MinecraftForge.EVENT_BUS.post(event);
+            NeoForge.EVENT_BUS.post(event);
         }
 
         // Average together all modifiers of the same op. This makes things like rods with varying

@@ -8,14 +8,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.ModelPropertiesHelper;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

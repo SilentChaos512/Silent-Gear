@@ -2,9 +2,9 @@ package net.silentchaos512.gear.api.data.trait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -78,7 +78,7 @@ public class WielderEffectTraitBuilder extends TraitBuilder {
         public static PotionData of(LevelType type, MobEffect effect, int... levels) {
             PotionData ret = new PotionData();
             ret.type = type;
-            ret.effectId = Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect));
+            ret.effectId = Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(effect));
             ret.duration = TimeUtils.ticksFromSeconds(getDefaultDuration(ret.effectId));
             ret.levels = levels.clone();
             return ret;

@@ -32,7 +32,7 @@ import net.silentchaos512.gear.api.part.IPartSerializer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TierHelper;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.List;
 import java.util.function.Function;

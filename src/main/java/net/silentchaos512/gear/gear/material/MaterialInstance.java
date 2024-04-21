@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.enchantment.IStatModifierEnchantment;
 import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
@@ -32,7 +32,7 @@ import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.InventoryUtils;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -166,7 +166,7 @@ public final class MaterialInstance implements IMaterialInstance {
         }
 
         GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);
-        MinecraftForge.EVENT_BUS.post(event);
+        NeoForge.EVENT_BUS.post(event);
         return event.getModifiers();
     }
 

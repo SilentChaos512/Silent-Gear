@@ -36,10 +36,10 @@ public class TargetEffectTrait extends SimpleTrait {
 
     @Override
     public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
-        GearType type = GearHelper.getType(context.getGear());
+        GearType type = GearHelper.getType(context.gear());
         for (String typeStr : this.effects.keySet()) {
             if (type.matches(typeStr)) {
-                this.effects.get(typeStr).applyTo(target, context.getTraitLevel());
+                this.effects.get(typeStr).applyTo(target, context.traitLevel());
             }
         }
         return super.onAttackEntity(context, target, baseValue);

@@ -10,9 +10,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -30,7 +30,7 @@ public class BlockMiningSpeedTrait extends SimpleTrait {
             BlockMiningSpeedTrait::new,
             (trait, json) -> {
                 trait.speedMultiplier = GsonHelper.getAsFloat(json, "speed_multiplier", 1f);
-                trait.blocks = deserialzeBlocks(json);
+                trait.blocks = deserializeBlocks(json);
             },
             (trait, buf) -> {
                 trait.speedMultiplier = buf.readFloat();
@@ -65,7 +65,7 @@ public class BlockMiningSpeedTrait extends SimpleTrait {
         }
     }
 
-    private static Collection<TagKey<Block>> deserialzeBlocks(JsonObject json) {
+    private static Collection<TagKey<Block>> deserializeBlocks(JsonObject json) {
         JsonElement je = json.get("blocks");
         if (je.isJsonArray()) {
             Collection<TagKey<Block>> ret = Sets.newHashSet();

@@ -22,8 +22,8 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.IPartData;
@@ -37,7 +37,7 @@ import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -127,7 +127,7 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
 
     @Override
     public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        GearArrowEntity arrow = new GearArrowEntity(worldIn, shooter);
+        GearArrowEntity arrow = new GearArrowEntity(worldIn, shooter, stack);
         arrow.setArrowStack(stack);
         arrow.setBaseDamage(GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
 

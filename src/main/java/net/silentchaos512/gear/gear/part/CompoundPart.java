@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetStatModifierEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -32,7 +32,7 @@ import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.gear.util.TraitHelper;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -147,7 +147,7 @@ public class CompoundPart extends AbstractGearPart {
         }
 
         GetStatModifierEvent event = new GetStatModifierEvent((PartData) part, (ItemStat) key.getStat(), statMods);
-        MinecraftForge.EVENT_BUS.post(event);
+        NeoForge.EVENT_BUS.post(event);
 
         // Average together all modifiers of the same op. This makes things like rods with varying
         // numbers of materials more "sane".

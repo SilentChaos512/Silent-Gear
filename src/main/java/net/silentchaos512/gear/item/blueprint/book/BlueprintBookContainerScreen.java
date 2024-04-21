@@ -14,7 +14,7 @@ import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.network.Network;
 import net.silentchaos512.gear.network.SelectBlueprintFromBookPacket;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 public class BlueprintBookContainerScreen extends AbstractContainerScreen<BlueprintBookContainer> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
@@ -54,7 +54,7 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
     }

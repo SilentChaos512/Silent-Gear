@@ -84,7 +84,7 @@ public class SGearJeiPlugin implements IModPlugin {
         // Repair kit hints
         for (RepairKitItem item : SgItems.getItems(RepairKitItem.class)) {
             String itemName = NameUtils.fromItem(item).getPath();
-            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint"), "",
+            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe("",
                     CraftingBookCategory.MISC,
                     new ItemStack(item),
                     NonNullList.of(Ingredient.EMPTY,
@@ -93,7 +93,7 @@ public class SGearJeiPlugin implements IModPlugin {
                             PartMaterialIngredient.of(PartType.MAIN),
                             PartMaterialIngredient.of(PartType.MAIN)
                     ))));
-            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe(SilentGear.getId(itemName + "_fill_hint_frag"), "",
+            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe("",
                     CraftingBookCategory.MISC,
                     new ItemStack(item),
                     NonNullList.of(Ingredient.EMPTY,

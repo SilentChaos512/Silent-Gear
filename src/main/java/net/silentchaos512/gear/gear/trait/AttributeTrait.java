@@ -39,12 +39,12 @@ public class AttributeTrait extends SimpleTrait {
 
     @Override
     public void onGetAttributeModifiers(TraitActionContext context, Multimap<Attribute, AttributeModifier> map, String slot) {
-        int traitLevel = context.getTraitLevel();
+        int traitLevel = context.traitLevel();
         for (Map.Entry<String, List<ModifierData>> entry : this.modifiers.entrySet()) {
             String key = entry.getKey();
             List<ModifierData> mods = entry.getValue();
 
-            if (gearMatchesKey(context.getGear(), key, slot)) {
+            if (gearMatchesKey(context.gear(), key, slot)) {
                 for (ModifierData mod : mods) {
                     Attribute attribute = mod.getAttribute();
                     if (attribute != null) {

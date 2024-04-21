@@ -1,21 +1,3 @@
-/*
- * Silent Gear -- IAOETool
- * Copyright (C) 2018 SilentChaos512
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 3
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.silentchaos512.gear.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -37,10 +19,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.config.Config;
@@ -105,7 +87,7 @@ public interface IAoeTool {
     }
 
     default boolean isEffectiveOnBlock(ItemStack stack, BlockState state, Player player) {
-        boolean isCorrectTool = stack.getItem().isCorrectToolForDrops(stack, state) || ForgeHooks.isCorrectToolForDrops(state, player);
+        boolean isCorrectTool = stack.getItem().isCorrectToolForDrops(stack, state) || CommonHooks.isCorrectToolForDrops(state, player);
         return isCorrectTool && stack.getDestroySpeed(state) > 1f;
     }
 
@@ -155,7 +137,7 @@ public interface IAoeTool {
                         if (state.onDestroyedByPlayer(world, pos2, player, true, state.getFluidState()))
                             state.getBlock().destroy(world, pos2, state);
                     } else {
-                        int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos2);
+                        int xp = CommonHooks.onBlockBreakEvent(world, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos2);
                         if (xp == -1) continue;
                         tool.getItem().mineBlock(tool, world, state, pos2, player);
                         BlockEntity tileEntity = world.getBlockEntity(pos2);

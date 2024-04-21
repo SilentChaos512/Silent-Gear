@@ -127,7 +127,7 @@ public class LazyPartData implements IPartData {
             return LazyPartData.of(partId);
         }
 
-        Item item = GsonHelper.getAsItem(jo, "item");
+        Item item = GsonHelper.getAsItem(jo, "item").value();
         if (!(item instanceof CompoundPartItem)) {
             throw new JsonSyntaxException("Item " + item + " is not a compound part item. Try using \"part\" instead.");
         }

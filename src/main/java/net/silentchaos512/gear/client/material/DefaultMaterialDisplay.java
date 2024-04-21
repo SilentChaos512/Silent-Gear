@@ -9,7 +9,7 @@ import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 public class DefaultMaterialDisplay extends MaterialDisplay {
     public static final DefaultMaterialDisplay INSTANCE = new DefaultMaterialDisplay();

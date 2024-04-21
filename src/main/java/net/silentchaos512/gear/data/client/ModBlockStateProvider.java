@@ -1,23 +1,24 @@
 package net.silentchaos512.gear.data.client;
 
+import net.minecraft.core.Direction;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceBlock;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.generators.*;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.ModCropBlock;
 import net.silentchaos512.gear.setup.SgBlocks;
-import net.silentchaos512.lib.block.IBlockProvider;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
 
-import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
+import static net.neoforged.neoforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
 public class ModBlockStateProvider extends BlockStateProvider {
     public ModBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
@@ -129,10 +130,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         return models().getExistingFile(modLoc(blockName));
     }
 
-    private void orientableMachineBlock(IBlockProvider block, String name) {
+    private void orientableMachineBlock(DeferredBlock<? extends Block> block, String name) {
         ModelFile.ExistingModelFile offModel = getExistingModel(name);
         ModelFile.ExistingModelFile onModel = getExistingModel(name + "_on");
-        getVariantBuilder(block.asBlock()).forAllStates(state -> {
+        getVariantBuilder(block.value()).forAllStates(state -> {
             Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             boolean lit = state.getValue(BlockStateProperties.LIT);
             return ConfiguredModel.builder()

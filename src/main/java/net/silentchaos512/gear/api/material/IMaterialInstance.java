@@ -19,7 +19,7 @@ import net.silentchaos512.gear.api.util.IGearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.util.TierHelper;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

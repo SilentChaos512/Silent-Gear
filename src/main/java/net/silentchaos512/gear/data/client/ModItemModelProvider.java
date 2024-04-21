@@ -5,11 +5,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -20,7 +21,6 @@ import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
@@ -40,7 +40,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         // Blocks
         SgBlocks.BLOCKS.getEntries().stream()
-                .map(RegistryObject::get)
+                .map(DeferredHolder::get)
                 .forEach(this::blockItemModel);
 
         ModelFile itemGenerated = getExistingFile(new ResourceLocation("item/generated"));
@@ -203,7 +203,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearPart(SgItems.ADORNMENT);
     }
 
-    private ItemModelBuilder tempGearStandardTool(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+    private ItemModelBuilder tempGearStandardTool(DeferredItem<? extends ICoreItem> item, ModelFile parent) {
         String name = item.get().getGearType().getName();
         String path = item.getId().getPath();
         ModelFile mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path));
@@ -273,7 +273,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         return mainBuilder;
     }
 
-    private ItemModelBuilder tempGear(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+    private ItemModelBuilder tempGear(DeferredItem<? extends ICoreItem> item, ModelFile parent) {
         String name = item.get().getGearType().getName();
         return getBuilder(item.getId().getPath())
                 .parent(parent)
@@ -282,7 +282,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer2", "item/" + name + "/_highlight");
     }
 
-    private ItemModelBuilder tempGearBow(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+    private ItemModelBuilder tempGearBow(DeferredItem<? extends ICoreItem> item, ModelFile parent) {
         String name = item.get().getGearType().getName();
         return getBuilder(item.getId().getPath())
                 .parent(parent)
@@ -292,7 +292,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer3", "item/" + name + "/bowstring_string");
     }
 
-    private ItemModelBuilder tempGearCurio(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+    private ItemModelBuilder tempGearCurio(DeferredItem<? extends ICoreItem> item, ModelFile parent) {
         String name = item.get().getGearType().getName();
         return getBuilder(item.getId().getPath())
                 .parent(parent)
@@ -302,7 +302,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer3", "item/" + name + "/adornment_highlight");
     }
 
-    private ItemModelBuilder tempGearArmor(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+    private ItemModelBuilder tempGearArmor(DeferredItem<? extends ICoreItem> item, ModelFile parent) {
         String name = item.get().getGearType().getName();
         return getBuilder(item.getId().getPath())
                 .parent(parent)
@@ -310,7 +310,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer1", "item/" + name + "/_highlight");
     }
 
-    private ItemModelBuilder tempGearElytra(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+    private ItemModelBuilder tempGearElytra(DeferredItem<? extends ICoreItem> item, ModelFile parent) {
         String name = item.get().getGearType().getName();
         return getBuilder(item.getId().getPath())
                 .parent(parent)
@@ -319,7 +319,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer2", "item/" + name + "/binding_generic");
     }
 
-    private ItemModelBuilder tempGearArrow(ItemRegistryObject<? extends ICoreItem> item, ModelFile parent) {
+    private ItemModelBuilder tempGearArrow(DeferredItem<? extends ICoreItem> item, ModelFile parent) {
         String name = item.get().getGearType().getName();
         return getBuilder(item.getId().getPath())
                 .parent(parent)
@@ -329,7 +329,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer3", "item/" + name + "/fletching_generic");
     }
 
-    private ItemModelBuilder tempMainPart(ItemRegistryObject<MainPartItem> item) {
+    private ItemModelBuilder tempMainPart(DeferredItem<MainPartItem> item) {
         String name = item.get().getGearType().getName();
         return getBuilder(item.getId().getPath())
                 .parent(getExistingFile(new ResourceLocation("item/generated")))
@@ -338,19 +338,19 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer2", "item/part_marker");
     }
 
-    private ItemModelBuilder tempGearPart(ItemRegistryObject<CompoundPartItem> item) {
+    private ItemModelBuilder tempGearPart(DeferredItem<CompoundPartItem> item) {
         String name = item.get().getPartType().getName().getPath();
         return tempGearPart(item, "item/part/" + name);
     }
 
-    private ItemModelBuilder tempGearPart(ItemRegistryObject<CompoundPartItem> item, String texture) {
+    private ItemModelBuilder tempGearPart(DeferredItem<CompoundPartItem> item, String texture) {
         return getBuilder(item.getId().getPath())
                 .parent(getExistingFile(new ResourceLocation("item/generated")))
                 .texture("layer0", texture)
                 .texture("layer1", "item/part_marker");
     }
 
-    private ItemModelBuilder tempCoatingPart(ItemRegistryObject<CompoundPartItem> item) {
+    private ItemModelBuilder tempCoatingPart(DeferredItem<CompoundPartItem> item) {
         return getBuilder(item.getId().getPath())
                 .parent(getExistingFile(new ResourceLocation("item/generated")))
                 .texture("layer0", "item/part/coating_material")

@@ -12,10 +12,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
@@ -53,7 +53,7 @@ public class GearHudOverlay {
                 LocalPlayer player = this.mc.player;
                 if (player == null) return;
 
-                if (!options.renderDebug || options.hideGui || player.isReducedDebugInfo() || options.reducedDebugInfo().get()) {
+                if (options.hideGui || player.isReducedDebugInfo() || options.reducedDebugInfo().get()) {
                     if (this.mc.options.attackIndicator().get() == AttackIndicatorStatus.CROSSHAIR) {
                         float f = player.getAttackStrengthScale(0.0F);
                         boolean flag = false;

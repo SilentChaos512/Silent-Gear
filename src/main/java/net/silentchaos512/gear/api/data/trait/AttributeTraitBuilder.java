@@ -2,11 +2,12 @@ package net.silentchaos512.gear.api.data.trait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;
@@ -34,7 +35,7 @@ public class AttributeTraitBuilder extends TraitBuilder {
 
     public AttributeTraitBuilder addModifier(GearType gearType, String slot, Attribute attribute, AttributeModifier.Operation operation, float... values) {
         this.modifiers.computeIfAbsent(makeKey(gearType, slot), str -> new ArrayList<>())
-                .add(new Modifier(ForgeRegistries.ATTRIBUTES.getKey(attribute), operation, values));
+                .add(new Modifier(BuiltInRegistries.ATTRIBUTE.getKey(attribute), operation, values));
         return this;
     }
 

@@ -17,8 +17,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.SlingshotAmmoItem;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.lib.util.EntityHelper;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.lib.util.MathUtils;
 
 import java.util.function.Predicate;
 
@@ -88,12 +87,12 @@ public class GearSlingshotItem extends GearBowItem {
             ItemStack ammoItem = player.getProjectile(stack);
 
             int i = this.getUseDuration(stack) - timeLeft;
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, player, i, !ammoItem.isEmpty() || infiniteAmmo);
+            i = net.neoforged.neoforge.event.EventHooks.onArrowLoose(stack, worldIn, player, i, !ammoItem.isEmpty() || infiniteAmmo);
             if (i < 0) return;
 
             if (!ammoItem.isEmpty() || infiniteAmmo) {
                 if (ammoItem.isEmpty()) {
-                    ammoItem = new ItemStack(SgItems.PEBBLE);
+                    ammoItem = SgItems.PEBBLE.toStack();
                 }
 
                 float f = getPowerForTime(i);
@@ -127,7 +126,7 @@ public class GearSlingshotItem extends GearBowItem {
                             shot.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
-                        EntityHelper.spawnWithClientPacket(worldIn, shot);
+                        worldIn.addFreshEntity(shot);
                     }
 
                     worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);

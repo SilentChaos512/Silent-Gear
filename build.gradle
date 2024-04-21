@@ -1,24 +1,24 @@
-buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-    }
-}
-
 plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
     id 'maven-publish'
+    id 'net.neoforged.gradle.userdev' version '7.0.97'
     id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "com.modrinth.minotaur" version "2.+"
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'idea'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+
+version = mod_version
+group = mod_group_id
+var archiveNameNeo = "${repo_name}-${minecraft_version}-neoforge"
+base {
+    archivesName = archiveNameNeo
+}
+
+System.out.println("Version: ${version}")
+System.out.println("Archive: ${base.archivesName}")
 
 repositories {
     flatDir {
@@ -28,209 +28,134 @@ repositories {
     mavenLocal()
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-    options.compilerArgs = ['-Xlint:deprecation']
-}
-
-javadoc {
-    failOnError = false
-}
-
-archivesBaseName = project.archivesBaseName
-def versionInfo = getModVersion()
-System.out.println(versionInfo)
-def version_short = "${versionInfo['version_short']}"
-version = "${versionInfo['version']}"
-
-def gpr_creds = { // Credentials for GitHub Packages, since this is used multiple times
-    username = property('gpr.username')
-    password = property('gpr.token')
-}
-
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-}
+runs {
+    // applies to all the run configs below
+    configureEach {
+        // Recommended logging data for a userdev environment
+        // The markers can be added/remove as needed separated by commas.
+        // "SCAN": For mods scan.
+        // "REGISTRIES": For firing of registry events.
+        // "REGISTRYDUMP": For getting the contents of all registries.
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
 
-minecraft {
-    mappings channel: 'official', version: mc_version
-    copyIdeResources = true
+        // Recommended logging level for the console
+        // You can set various levels here.
+        // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+        systemProperty 'forge.logging.console.level', 'debug'
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+        modSource project.sourceSets.main
+    }
 
-    runs {
-        client {
-            workingDirectory project.file('run')
-            arg "-mixin.config=${mod_id}.mixins.json".toString()
+    client {
+        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
 
-            property 'forge.logging.console.level', 'debug'
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
+    }
 
-            mods {
-                silentgear {
-                    source sourceSets.main
-                }
-            }
+    // This run config launches GameTestServer and runs all registered gametests, then exits.
+    // By default, the server will crash when no gametests are provided.
+    // The gametest system is also enabled by default for other run configs under the /test command.
+    gameTestServer {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
 
-            // For Patchouli Mixins to not crash
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-        }
+    data {
+        // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+        // workingDirectory project.file('run-data')
 
-        server {
-            workingDirectory project.file('run')
-            arg "-mixin.config=${mod_id}.mixins.json".toString()
-
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                silentgear {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.console.level', 'debug'
-
-            args '--mod', project.mod_id, '--all',
-                    '--existing', file('src/main/resources').toString(),
-                    '--existing', file('src/generated/resources').toString(),
-                    '--output', file('src/generated/resources/')
-
-            mods {
-                silentgear {
-                    source sourceSets.main
-                }
-            }
-        }
+        // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    def gpr_creds = {
+        username = property('gpr.username')
+        password = property('gpr.token')
+    }
+
     mavenLocal()
-    maven {
-        url = uri("https://maven.pkg.github.com/silentchaos512/silentlib")
-        credentials gpr_creds
-    }
-    maven {
-        url = uri("https://maven.pkg.github.com/silentchaos512/silent-utils")
-        credentials gpr_creds
-    }
-    maven {
-        url = uri("https://maven.pkg.github.com/silentchaos512/silents-mechanisms")
-        credentials gpr_creds
-    }
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
+        url = uri("https://maven.pkg.github.com/silentchaos512/silent-gear")
+        credentials gpr_creds
+    }
+    maven {
+        url = uri("https://maven.pkg.github.com/silentchaos512/silentlib")
+        credentials gpr_creds
+    }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
-    // Curios, Caelus
     maven {
+        // Curios
         url = "https://maven.theillusivec4.top/"
-    }
-    maven {
-        url = uri("https://maven.pkg.github.com/ewyboy/world-stripper")
-        credentials gpr_creds
-    }
-    maven {
-        url 'https://maven.mcmoddev.com'
-    }
-    maven {
-        url 'https://maven.blamejared.com'
     }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${project.forge_version}"
+    implementation "net.neoforged:neoforge:${neo_version}"
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+    implementation("net.silentchaos512:silent-lib-${minecraft_version}-neoforge:${project.silentlib_version}")
 
-    implementation fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
-        exclude module: "forge"
-    }
+    // Silent Gear
+//    compileOnly("net.silentchaos512:silent-gear:${project.silentgear_version}")
 
     // JEI
-    if (project.hasProperty('jei_version')) {
+    if (project.hasProperty("jei_version")) {
         // compile against the JEI API but do not include it at runtime
-        compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
-        compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
-        // at runtime, use the full JEI jar for Forge
-        runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
-    }
-
-    if (project.hasProperty('silmech_version')) {
-        runtimeOnly("net.silentchaos512:silents-mechanisms:${project.silmech_version}") {
-            exclude module: "cc-tweaked-1.16.3"
-            exclude module: "forge"
-            exclude module: "jei-1.16.5"
-            exclude module: "silent-gear-1.16.5"
-            exclude module: "silent-lib-1.16.3"
-        }
+        compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+        compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+        // at runtime, use the full JEI jar for NeoForge
+        runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
     }
 
     // Curios
-    if (project.hasProperty('curios_version')) {
-        runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}")
-        compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}:api")
-    }
-
-    // Caelus
-    if (project.hasProperty('caelus_version')) {
-        // FIXME: Crashes with Mixin apply failed
-//        runtimeOnly ("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}")
-        compileOnly("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}:api")
-    }
-
-    // compile('com.robertx22:mine-and-slash-1.14.4:2.+') {
-    //     exclude module: 'curios'
-    // }
-
-    // Game Stages
-    if (project.hasProperty("bookshelf_version")) {
-        compileOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-${project.bookshelf_version}")
-        runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-${project.bookshelf_version}")
-    }
-    if (project.hasProperty("gamestages_version")) {
-        compileOnly fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
-        runtimeOnly fg.deobf("net.darkhax.gamestages:GameStages-${project.gamestages_version}")
-    }
-
-    // World Stripper
-    if (project.hasProperty('world_stripper_version')) {
-        runtimeOnly fg.deobf("com.ewyboy.worldstripper:World-Stripper:${project.world_stripper_version}")
-    }
-
-    // Patchouli
-    if (project.hasProperty('patchouli_version')) {
-        compileOnly fg.deobf("vazkii.patchouli:Patchouli:${project.patchouli_version}:api")
-        runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${project.patchouli_version}")
+    dependencies {
+        runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
+        compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}:api"
     }
 }
 
-jar {
-    manifest {
-        attributes(["Specification-Title"     : project.name,
-                    "Specification-Vendor"    : "SilentChaos512",
-                    "Specification-Version"   : "1",
-                    "Implementation-Title"    : project.name,
-                    "Implementation-Vendor"   : "SilentChaos512",
-                    "Implementation-Version"  : version_short,
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "MixinConfigs"            : "${mod_id}.mixins.json"])
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
+// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version, minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version, neo_version_range: neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_authors            : mod_authors, mod_description: mod_description,
+            issue_tracker_url      : issue_tracker_url, display_url: display_url,
+            silentlib_version_range: silentlib_version_range
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml']) {
+        expand replaceProperties + [project: project]
     }
 }
 
@@ -244,37 +169,34 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.getDestinationDir()
 }
 
-task apiJar(type: Jar) {
-    archiveClassifier = 'api'
-    include 'net/silentchaos512/gear/api/**/*'
-    from sourceSets.main.allSource
-    from sourceSets.main.output
-}
-
 artifacts {
-    archives javadocJar
     archives sourcesJar
-    archives apiJar
+    archives javadocJar
 }
 
-curseforge {
-    if (project.hasProperty('cf_project_id') && project.hasProperty('cf_release_type') && project.hasProperty('cf_changelog_filename') &&
-            ((project.cf_release_type == 'alpha') || (project.cf_release_type == 'beta') || (project.cf_release_type == 'release'))) {
+if (project.hasProperty('curseforge.apiKey')) {
+    curseforge {
         apiKey = property('curseforge.apiKey')
         project {
             id = project.cf_project_id
             changelog = file(project.cf_changelog_filename)
-            releaseType = project.cf_release_type
-            addGameVersion(project.mc_version)
+            releaseType = project.release_type
+            addGameVersion(project.minecraft_version)
             mainArtifact(jar) {
-//                displayName = "$project.description $display_version"
-                relations {
-                    requiredDependency 'silent-lib'
-                    optionalDependency 'caelus'
-                    optionalDependency 'curios'
-                }
             }
         }
+    }
+}
+
+if (project.hasProperty('modrinth_token')) {
+    modrinth {
+        token = property('modrinth.token')
+        projectId = project.mr_project_id
+        versionNumber = project.mod_version
+        versionType = project.release_type
+        uploadFile = jar
+        gameVersions = [project.minecraft_version]
+        loaders = ["neoforge"]
     }
 }
 
@@ -284,133 +206,28 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/silentchaos512/${project.repoName}")
-            credentials gpr_creds
+            url = uri("https://maven.pkg.github.com/silentchaos512/${project.repo_name}")
+            credentials {
+                username = property('gpr.username')
+                password = property('gpr.token')
+            }
         }
     }
     publications {
         gpr(MavenPublication) {
+            artifactId = archiveNameNeo
             from(components.java)
-            artifact apiJar
             artifact sourcesJar
             artifact javadocJar
         }
     }
 }
 
-// Version stuff
-
-def getModVersion() {
-    try {
-        return getGitVersion()
-    } catch (Exception ex) {
-        System.out.println("Git version failed, falling back to gradle.properties")
-        return makeVersionMap(project.build_version + '-' + getGitHash())
-    }
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs = ['-Xlint:deprecation']
 }
 
-def getGitVersion() {
-    // Call git command
-    def outStream = new ByteArrayOutputStream()
-    def result = exec {
-        executable = 'git'
-        args = ['describe', '--long']
-        standardOutput = outStream
-    }
-
-    def fullVersion = outStream.toString()
-    return makeVersionMap(fullVersion)
+javadoc {
+    failOnError = false
 }
-
-def getGitHash() {
-    def outStream = new ByteArrayOutputStream()
-    def result = exec {
-        executable = 'git'
-        args = ['rev-parse', 'HEAD']
-        standardOutput = outStream
-    }
-
-    return outStream.toString().trim().substring(0, 6)
-}
-
-def makeVersionMap(version) {
-    def matcher = version.trim() =~ /(\d+).(\d+).(\d+)-(.*)/
-
-    def maj = matcher[0][1]
-    def min = matcher[0][2]
-    def rev = matcher[0][3]
-    def bn = getBuildNumber()
-
-    return makeVersionMap(maj, min, rev, bn, matcher[0][4])
-}
-
-def makeVersionMap(maj, min, rev, bn, githash) {
-    def out = [:]
-    out['build.major.number'] = maj.toString()
-    out['build.minor.number'] = min.toString()
-    out['build.revision.number'] = rev.toString()
-    out['build.githash'] = githash
-    out['build.number'] = bn.toString()
-    out['version_short'] = "${maj}.${min}.${rev}".toString()
-    out['version'] = "${project.mc_version}-${maj}.${min}.${rev}".toString()
-    return out
-}
-
-// Build number tracking
-
-String getBuildNumber() {
-    def versionFile = file('version.properties')
-    if (versionFile.canRead()) {
-        Properties versionProps = new Properties()
-        versionProps.load(new FileInputStream(versionFile))
-        return versionProps['build_num'].toString()
-    }
-    return "1"
-}
-
-task incrementBuild {
-    doFirst {
-        def versionFile = file('version.properties')
-        if (versionFile.canRead()) {
-            Properties versionProps = new Properties()
-            versionProps.load(new FileInputStream(versionFile))
-            def num = versionProps['build_num'].toInteger() + 1
-            println("incrementing BuildNumber to: " + num)
-            versionProps['build_num'] = num.toString()
-            versionProps.store(versionFile.newWriter(), null)
-        } else {
-            println("version.properties file not found! Ignoring.")
-        }
-    }
-}
-build.finalizedBy incrementBuild // only increment on successful builds
-
-// Update JSON management
-
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
-
-def writeUpdateJson() {
-    def version = getModVersion()['version_short']
-    def slurper = new JsonSlurper()
-    def file = new File('update.json')
-    def json = slurper.parse(file)
-
-    // TODO: Maybe add something to create an abbreviated changelog? May not be useful...
-    if (!json[project.mc_version].containsKey(version.toString()))
-        json[project.mc_version][version.toString()] = 'https://github.com/SilentChaos512/Silent-Gear/blob/1.20.x/CHANGELOG.md'
-    json[project.mc_version] = json[project.mc_version].sort([compare: { a, b -> b.compareTo(a) }] as Comparator)
-    json['promos']["${project.mc_version}-latest"] = version
-    json['promos']["${project.mc_version}-recommended"] = version
-
-    println(json)
-    file.write(JsonOutput.prettyPrint(JsonOutput.toJson(json)))
-}
-
-task createUpdateJson {
-    doLast {
-        println('Updating update.json...')
-        writeUpdateJson()
-    }
-}
-//build.finalizedBy createUpdateJson

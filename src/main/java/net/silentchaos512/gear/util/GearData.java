@@ -12,11 +12,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.TierSortingRegistry;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.TierSortingRegistry;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -799,7 +799,7 @@ public final class GearData {
         private EventHandler() { }
 
         @SubscribeEvent
-        public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
+        public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
             Player player = event.getEntity();
             StackList.from(player.getInventory())
                     .stream()

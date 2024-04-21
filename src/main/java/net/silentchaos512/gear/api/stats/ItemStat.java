@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.StatInstance.Operation;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
 import java.util.function.Function;

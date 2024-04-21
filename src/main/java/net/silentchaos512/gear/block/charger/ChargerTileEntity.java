@@ -26,11 +26,8 @@ import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
-import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.lib.util.TimeUtils;
-import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 

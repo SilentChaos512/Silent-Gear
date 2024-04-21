@@ -8,6 +8,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -16,7 +17,6 @@ import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.lib.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -77,8 +77,9 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
 
     @Nonnull
     public static List<ItemStack> getCatalysts() {
-        return TagUtils.getItemsInTag(SgTags.Items.GRADER_CATALYSTS)
+        return BuiltInRegistries.ITEM.stream()
                 .map(ItemStack::new)
+                .filter(stack -> stack.is(SgTags.Items.GRADER_CATALYSTS))
                 .collect(Collectors.toList());
     }
 

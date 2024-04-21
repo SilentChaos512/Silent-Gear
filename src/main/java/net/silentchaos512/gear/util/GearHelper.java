@@ -30,10 +30,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.TierSortingRegistry;
-import net.minecraftforge.common.ToolAction;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.TierSortingRegistry;
+import net.neoforged.neoforge.common.ToolAction;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -53,7 +53,6 @@ import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.lib.advancements.LibTriggers;
 import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
@@ -176,11 +175,9 @@ public final class GearHelper {
             replaceAttributeModifierInMap(map, Attributes.ATTACK_SPEED, getAttackSpeedModifier(stack));
 
             // Reach distance
-            ForgeMod.BLOCK_REACH.ifPresent(attr -> {
-                float reachStat = GearData.getStat(stack, ItemStats.REACH_DISTANCE, false);
-                AttributeModifier mod = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, AttributeModifier.Operation.ADDITION);
-                map.put(attr, mod);
-            });
+            float reachStat = GearData.getStat(stack, ItemStats.REACH_DISTANCE, false);
+            AttributeModifier mod = new AttributeModifier(REACH_MODIFIER_UUID, "Gear reach", reachStat, AttributeModifier.Operation.ADDITION);
+            map.put(NeoForgeMod.BLOCK_REACH.value(), mod);
         }
 
         TraitHelper.getCachedTraits(stack).forEach((trait, level) -> trait.onGetAttributeModifiers(new TraitActionContext(null, level, stack), map, slot));
@@ -571,7 +568,7 @@ public final class GearHelper {
                 : ItemStats.ATTACK_REACH.getBaseValue();
 
         // Also check Forge reach distance, to allow curios to add more reach
-        AttributeInstance attribute = entity.getAttribute(ForgeMod.BLOCK_REACH.get());
+        AttributeInstance attribute = entity.getAttribute(NeoForgeMod.BLOCK_REACH.value());
         if (attribute != null) {
             double reachBonus = attribute.getValue() - attribute.getBaseValue();
             return base + reachBonus;
@@ -762,7 +759,7 @@ public final class GearHelper {
 
     private static Collection<Component> getNamePrefixes(ItemStack gear, PartDataList parts) {
         GearNamePrefixesEvent event = new GearNamePrefixesEvent(gear, parts);
-        MinecraftForge.EVENT_BUS.post(event);
+        NeoForge.EVENT_BUS.post(event);
         return event.getPrefixes();
     }
 

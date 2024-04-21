@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.data.trait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -76,7 +77,7 @@ public class TargetEffectTraitBuilder extends TraitBuilder {
 
                 for (MobEffectInstance inst : list) {
                     JsonObject obj = new JsonObject();
-                    obj.addProperty("effect", Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(inst.getEffect())).toString());
+                    obj.addProperty("effect", Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(inst.getEffect())).toString());
                     obj.addProperty("amplifier", inst.getAmplifier());
                     obj.addProperty("duration", inst.getDuration() / 20f);
                     array.add(obj);

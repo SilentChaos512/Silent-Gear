@@ -3,7 +3,7 @@ package net.silentchaos512.gear.client.model;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
 
 // Temporary solution for Optifine crashes. Will likely spam the log, but no helping that.

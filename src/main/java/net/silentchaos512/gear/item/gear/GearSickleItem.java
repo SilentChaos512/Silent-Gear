@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.IPlantable;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.IPlantable;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -64,7 +64,7 @@ public class GearSickleItem extends GearDiggerItem {
         Block block = state.getBlock();
         BonemealableBlock growable = (BonemealableBlock) block;
 
-        if (!growable.isValidBonemealTarget(world, pos, state, world.isClientSide)) {
+        if (!growable.isValidBonemealTarget(world, pos, state)) {
             // Fully grown crop
             NonNullList<ItemStack> drops = NonNullList.create();
             drops.addAll(Block.getDrops(state, world, pos, null, player, sickle));
@@ -167,7 +167,7 @@ public class GearSickleItem extends GearDiggerItem {
         BlockState state = player.level().getBlockState(pos);
         Block block = state.getBlock();
 
-        int xpDropped = ForgeHooks.onBlockBreakEvent(world, playerMP.gameMode.getGameModeForPlayer(), playerMP, pos);
+        int xpDropped = CommonHooks.onBlockBreakEvent(world, playerMP.gameMode.getGameModeForPlayer(), playerMP, pos);
         boolean canceled = xpDropped == -1;
         if (canceled) return false;
 

@@ -8,8 +8,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.data.trait.*;
 import net.silentchaos512.gear.api.item.GearType;
@@ -157,7 +157,7 @@ public class TraitsProvider extends TraitsProviderBase {
             }
             ret.add(new AttributeTraitBuilder(Const.Traits.MOONWALKER, maxLevel)
                     .addModifierAnySlot(GearType.ALL,
-                            ForgeMod.ENTITY_GRAVITY.get(),
+                            NeoForgeMod.ENTITY_GRAVITY.value(),
                             AttributeModifier.Operation.MULTIPLY_BASE,
                             values)
                     .withGearTypeCondition(GearType.BOOTS, GearType.CURIO)
@@ -165,13 +165,13 @@ public class TraitsProvider extends TraitsProviderBase {
         }
         ret.add(new AttributeTraitBuilder(Const.Traits.REACH, 5)
                 .addModifierAnySlot(GearType.ALL,
-                        ForgeMod.BLOCK_REACH.get(),
+                        NeoForgeMod.BLOCK_REACH.value(),
                         AttributeModifier.Operation.ADDITION,
                         0.5f, 1f, 1.5f, 2f, 3f)
         );
         ret.add(new AttributeTraitBuilder(Const.Traits.SWIFT_SWIM, 5)
                 .addModifierAnySlot(GearType.ALL,
-                        ForgeMod.SWIM_SPEED.get(),
+                        NeoForgeMod.SWIM_SPEED.value(),
                         AttributeModifier.Operation.ADDITION,
                         0.2f, 0.4f, 0.6f, 0.8f, 1f)
         );

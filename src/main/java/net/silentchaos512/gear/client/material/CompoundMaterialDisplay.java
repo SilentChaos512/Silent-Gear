@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.client.material;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.IPartData;
@@ -9,7 +9,7 @@ import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
 import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.List;
 

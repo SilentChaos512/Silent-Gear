@@ -19,8 +19,7 @@ import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.part.PartType;
@@ -149,11 +148,6 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
     @Override
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public void onArmorTick(ItemStack stack, Level world, Player player) {
-        GearHelper.inventoryTick(stack, world, player, 0, true);
     }
 
     @Override

@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
@@ -153,7 +153,7 @@ public class GearSawItem extends GearAxeItem {
                         if (isCorrectToolForDrops(result.tool, localState) && localHardness >= 0) {
                             // Block break event
                             BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, localPos, localState, result.player);
-                            MinecraftForge.EVENT_BUS.post(event);
+                            NeoForge.EVENT_BUS.post(event);
                             boolean cancel = event.isCanceled();
 
                             int xDist = xPos - startPos.getX();

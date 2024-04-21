@@ -37,10 +37,10 @@ public final class NBTTrait extends SimpleTrait {
 
     @Override
     public void onGearCrafted(TraitActionContext context) {
-        ItemStack gear = context.getGear();
+        ItemStack gear = context.gear();
         GearType gearType = GearHelper.getType(gear);
 
-        int traitLevel = context.getTraitLevel();
+        int traitLevel = context.traitLevel();
         data.forEach((type, list) -> {
             if (gearType.matches(type) || "all".equals(type)) {
                 list.stream().filter(e -> e.level == traitLevel).forEach(e -> gear.getOrCreateTag().merge(e.data));

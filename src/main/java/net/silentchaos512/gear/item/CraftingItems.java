@@ -1,21 +1,3 @@
-/*
- * Silent Gear -- CraftingItems
- * Copyright (C) 2018 SilentChaos512
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 3
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.silentchaos512.gear.item;
 
 import net.minecraft.ChatFormatting;
@@ -26,8 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -93,7 +75,7 @@ public enum CraftingItems implements ItemLike {
     RED_CARD_UPGRADE;
 
     @SuppressWarnings("NonFinalFieldInEnum")
-    private RegistryObject<ItemInternal> item = null;
+    private DeferredItem<ItemInternal> item = null;
 
     @Override
     public Item asItem() {
@@ -107,7 +89,7 @@ public enum CraftingItems implements ItemLike {
         return name().toLowerCase(Locale.ROOT);
     }
 
-    public static void register(DeferredRegister<Item> items) {
+    public static void register(DeferredRegister.Items items) {
         for (CraftingItems item : values()) {
             item.item = items.register(item.getName(), ItemInternal::new);
         }

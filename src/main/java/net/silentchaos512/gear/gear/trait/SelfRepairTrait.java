@@ -39,14 +39,14 @@ public class SelfRepairTrait extends SimpleTrait {
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
         if (shouldActivate(context)) {
-            int amount = -repairAmount * context.getTraitLevel();
-            GearHelper.attemptDamage(context.getGear(), amount, context.getPlayer(), InteractionHand.MAIN_HAND);
+            int amount = -repairAmount * context.traitLevel();
+            GearHelper.attemptDamage(context.gear(), amount, context.player(), InteractionHand.MAIN_HAND);
         }
     }
 
     private boolean shouldActivate(TraitActionContext context) {
-        if (context.getPlayer() != null && context.getPlayer().tickCount % 20 == 0) {
-            return MathUtils.tryPercentage(activationChance * context.getTraitLevel());
+        if (context.player() != null && context.player().tickCount % 20 == 0) {
+            return MathUtils.tryPercentage(activationChance * context.traitLevel());
         }
         return false;
     }

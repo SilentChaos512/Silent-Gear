@@ -1,14 +1,14 @@
 package net.silentchaos512.gear.setup;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.lib.util.NameUtils;
@@ -39,7 +39,7 @@ public final class NerfedGear {
             return;
         }
 
-        for (Item item : ForgeRegistries.ITEMS) {
+        for (Item item : BuiltInRegistries.ITEM) {
             if (isNerfedItem(item)) {
                 SilentGear.LOGGER.debug("Try nerf durability of {}", NameUtils.fromItem(item));
                 try {

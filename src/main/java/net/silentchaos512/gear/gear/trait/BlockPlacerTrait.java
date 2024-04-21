@@ -3,6 +3,7 @@ package net.silentchaos512.gear.gear.trait;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -14,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -80,14 +80,14 @@ public class BlockPlacerTrait extends SimpleTrait {
 
     private static void readJson(BlockPlacerTrait trait, JsonObject json) {
         ResourceLocation blockId = new ResourceLocation(GsonHelper.getAsString(json, "block"));
-        trait.block = ForgeRegistries.BLOCKS.getValue(blockId);
+        trait.block = BuiltInRegistries.BLOCK.get(blockId);
         if (trait.block == null) {
             throw new JsonParseException("Unknown block: " + blockId);
         }
         trait.damageOnUse = GsonHelper.getAsInt(json, "damage_on_use");
         trait.cooldown = GsonHelper.getAsInt(json, "cooldown", 0);
         ResourceLocation soundId = new ResourceLocation(GsonHelper.getAsString(json, "sound"));
-        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(soundId);
+        trait.sound = BuiltInRegistries.SOUND_EVENT.get(soundId);
         if (trait.sound == null) {
             throw new JsonParseException("Unknown sound: " + soundId);
         }
@@ -96,10 +96,10 @@ public class BlockPlacerTrait extends SimpleTrait {
     }
 
     private static void read(BlockPlacerTrait trait, FriendlyByteBuf buffer) {
-        trait.block = ForgeRegistries.BLOCKS.getValue(buffer.readResourceLocation());
+        trait.block = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
         trait.damageOnUse = buffer.readVarInt();
         trait.cooldown = buffer.readVarInt();
-        trait.sound = ForgeRegistries.SOUND_EVENTS.getValue(buffer.readResourceLocation());
+        trait.sound = BuiltInRegistries.SOUND_EVENT.get(buffer.readResourceLocation());
         trait.soundVolume = buffer.readFloat();
         trait.soundPitch = buffer.readFloat();
     }
@@ -108,7 +108,7 @@ public class BlockPlacerTrait extends SimpleTrait {
         buffer.writeResourceLocation(NameUtils.fromBlock(trait.block));
         buffer.writeVarInt(trait.damageOnUse);
         buffer.writeVarInt(trait.cooldown);
-        buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(trait.sound)));
+        buffer.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.SOUND_EVENT.getKey(trait.sound)));
         buffer.writeFloat(trait.soundVolume);
         buffer.writeFloat(trait.soundPitch);
     }

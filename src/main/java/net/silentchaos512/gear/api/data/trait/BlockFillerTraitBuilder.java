@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.api.data.trait;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.util.DataResource;
@@ -111,7 +111,7 @@ public class BlockFillerTraitBuilder extends TraitBuilder {
         json.addProperty("sneak_mode", sneakMode.name().toLowerCase(Locale.ROOT));
         json.addProperty("damage_on_use", this.damageOnUse);
         json.addProperty("cooldown", this.cooldown);
-        json.addProperty("sound", Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(this.sound)).toString());
+        json.addProperty("sound", Objects.requireNonNull(BuiltInRegistries.SOUND_EVENT.getKey(this.sound)).toString());
         json.addProperty("sound_volume", this.soundVolume);
         json.addProperty("sound_pitch", this.soundPitch);
 

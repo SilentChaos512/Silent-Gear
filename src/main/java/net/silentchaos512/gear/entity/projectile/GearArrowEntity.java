@@ -10,9 +10,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.PlayMessages;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -32,16 +30,12 @@ public class GearArrowEntity extends Arrow {
         super(type, worldIn);
     }
 
-    public GearArrowEntity(Level worldIn, double x, double y, double z) {
-        super(worldIn, x, y, z);
+    public GearArrowEntity(Level worldIn, double x, double y, double z, ItemStack pickupItemStack) {
+        super(worldIn, x, y, z, pickupItemStack);
     }
 
-    public GearArrowEntity(Level worldIn, LivingEntity shooter) {
-        super(worldIn, shooter);
-    }
-
-    public GearArrowEntity(PlayMessages.SpawnEntity message, Level world) {
-        this(SgEntities.ARROW.get(), world);
+    public GearArrowEntity(Level worldIn, LivingEntity shooter, ItemStack pickupItemStack) {
+        super(worldIn, shooter, pickupItemStack);
     }
 
     private static boolean isSameArrowStack(UUID uuid, ItemStack other) {

@@ -6,8 +6,8 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialList;
@@ -125,7 +125,7 @@ public interface IGearPart extends IGearComponent<IPartData> {
     void addInformation(PartData part, ItemStack gear, List<Component> tooltip, TooltipFlag flag);
 
     /**
-     * Whether or not the part should be displayed in tooltips and such.
+     * Whether the part should be displayed in tooltips and such.
      *
      * @return True if the part should be shown, false if it should be hidden.
      */

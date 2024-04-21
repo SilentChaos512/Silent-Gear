@@ -8,7 +8,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.*;
 import java.util.stream.Collectors;

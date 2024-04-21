@@ -6,6 +6,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
@@ -17,9 +18,9 @@ public class CompounderInfo<R extends CompoundingRecipe> {
     private final Supplier<CompounderBlock> block;
     private final Supplier<BlockEntityType<CompounderTileEntity<R>>> blockEntityType;
     private final Supplier<MenuType<? extends CompounderContainer>> containerType;
-    private final Supplier<RecipeType<R>> recipeType;
+    private final DeferredHolder<RecipeType<?>, RecipeType<R>> recipeType;
     private final Supplier<CompoundMaterialItem> outputItem;
-    private final Supplier<RecipeSerializer<?>> recipeSerializer;
+    private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> recipeSerializer;
     private final Class<R> recipeClass;
     private final int inputSlotCount;
     private final ImmutableList<IMaterialCategory> categories;
@@ -31,8 +32,8 @@ public class CompounderInfo<R extends CompoundingRecipe> {
                           Supplier<CompounderBlock> block,
                           Supplier<BlockEntityType<CompounderTileEntity<R>>> blockEntityType,
                           Supplier<MenuType<? extends CompounderContainer>> containerType,
-                          Supplier<RecipeSerializer<?>> recipeSerializer,
-                          Supplier<RecipeType<R>> recipeType,
+                          DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> recipeSerializer,
+                          DeferredHolder<RecipeType<?>, RecipeType<R>> recipeType,
                           Class<R> recipeClass) {
         this.block = block;
         this.blockEntityType = blockEntityType;

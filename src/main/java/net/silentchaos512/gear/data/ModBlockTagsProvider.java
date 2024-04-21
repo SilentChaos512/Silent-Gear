@@ -6,14 +6,14 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FluffyBlock;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgTags;
-import net.silentchaos512.lib.block.IBlockProvider;
 
 import java.util.Arrays;
 
@@ -125,8 +125,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(BlockTags.WOODEN_TRAPDOORS, SgBlocks.NETHERWOOD_TRAPDOOR);
     }
 
-    private void builder(TagKey<Block> tag, IBlockProvider... items) {
-        tag(tag).add(Arrays.stream(items).map(IBlockProvider::asBlock).toArray(Block[]::new));
+    private void builder(TagKey<Block> tag, DeferredBlock<?>... items) {
+        tag(tag).add(Arrays.stream(items).map(DeferredBlock::value).toArray(Block[]::new));
     }
 
     protected TagsProvider.TagAppender<Block> getBuilder(TagKey<Block> tag) {

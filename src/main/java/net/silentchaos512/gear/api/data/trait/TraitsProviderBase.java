@@ -2,13 +2,13 @@ package net.silentchaos512.gear.api.data.trait;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.util.DataResource;
@@ -43,7 +43,7 @@ public abstract class TraitsProviderBase implements DataProvider {
     protected static TraitBuilder cancelEffectsTrait(DataResource<ITrait> trait, MobEffect... effects) {
         JsonArray array = new JsonArray();
         for (MobEffect effect : effects) {
-            array.add(Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect)).toString());
+            array.add(Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(effect)).toString());
         }
 
         return new TraitBuilder(trait, 1, ApiConst.CANCEL_EFFECTS_TRAIT_ID)

@@ -1,23 +1,18 @@
 package net.silentchaos512.gear.block.charger;
 
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.Container;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.setup.SgMenuTypes;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
-import net.silentchaos512.lib.util.TagUtils;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.lib.util.MathUtils;
 
 public class ChargerContainer extends AbstractContainerMenu {
     private final Container inventory;
@@ -43,7 +38,7 @@ public class ChargerContainer extends AbstractContainerMenu {
         addSlot(new Slot(inventory, 1, 56, 46) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return TagUtils.contains(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS, stack);
+                return stack.is(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS);
             }
         });
         addSlot(new SlotOutputOnly(inventory, 2, 116, 35));

@@ -102,8 +102,8 @@ public final class Const {
             () -> SgBlocks.REFABRICATOR.get(),
             () -> SgBlockEntities.REFABRICATOR.get(),
             () -> SgMenuTypes.REFABRICATOR.get(),
-            () -> SgRecipes.COMPOUNDING_FABRIC.get(),
-            () -> SgRecipes.COMPOUNDING_FABRIC_TYPE.get(),
+            SgRecipes.COMPOUNDING_FABRIC,
+            SgRecipes.COMPOUNDING_FABRIC_TYPE,
             FabricCompoundingRecipe.class);
 
     private Const() {}

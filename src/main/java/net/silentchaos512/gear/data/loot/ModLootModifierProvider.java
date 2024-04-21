@@ -2,7 +2,7 @@ package net.silentchaos512.gear.data.loot;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.modifier.BonusDropsTraitLootModifier;

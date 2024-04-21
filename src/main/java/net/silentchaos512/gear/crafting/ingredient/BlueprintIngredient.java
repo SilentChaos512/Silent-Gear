@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -12,15 +13,13 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -47,7 +46,7 @@ public final class BlueprintIngredient extends Ingredient implements IGearIngred
 
     private void dissolve() {
         if (this.itemStacks == null) {
-            this.itemStacks = ForgeRegistries.ITEMS.getValues().stream()
+            this.itemStacks = BuiltInRegistries.ITEM.stream()
                     .filter(item -> item instanceof IBlueprint)
                     .map(ItemStack::new)
                     .filter(this::testBlueprint)
@@ -56,8 +55,7 @@ public final class BlueprintIngredient extends Ingredient implements IGearIngred
     }
 
     private boolean testBlueprint(ItemStack stack) {
-        if (stack.getItem() instanceof IBlueprint) {
-            IBlueprint item = (IBlueprint) stack.getItem();
+        if (stack.getItem() instanceof IBlueprint item) {
             return item.getGearType(stack) == this.gearType && item.getPartType(stack) == this.partType;
         }
         return false;

@@ -12,7 +12,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.network.KeyPressOnItemPacket;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

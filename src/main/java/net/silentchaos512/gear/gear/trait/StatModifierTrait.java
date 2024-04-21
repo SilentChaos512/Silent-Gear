@@ -52,7 +52,7 @@ public final class StatModifierTrait extends SimpleTrait {
     public float onGetStat(TraitActionContext context, ItemStat stat, float value, float damageRatio) {
         StatMod mod = this.mods.get(stat);
         if (mod != null) {
-            return mod.apply(context.getTraitLevel(), value, damageRatio);
+            return mod.apply(context.traitLevel(), value, damageRatio);
         }
         return value;
     }

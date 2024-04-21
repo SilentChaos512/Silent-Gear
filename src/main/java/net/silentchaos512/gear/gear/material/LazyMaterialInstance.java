@@ -75,7 +75,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     public MaterialGrade getGrade() {
         for (IMaterialModifier mod : this.modifiers) {
             if (mod instanceof GradeMaterialModifier) {
-                return ((GradeMaterialModifier) mod).getGrade();
+                return ((GradeMaterialModifier) mod).grade();
             }
         }
         return MaterialGrade.NONE;

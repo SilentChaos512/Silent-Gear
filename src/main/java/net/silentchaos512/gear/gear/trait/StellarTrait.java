@@ -25,11 +25,11 @@ public class StellarTrait extends WielderEffectTrait {
 
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
-        Player player = context.getPlayer();
+        Player player = context.player();
         if (player != null && player.tickCount % 20 == 0) {
-            float chance = Const.Traits.STELLAR_REPAIR_CHANCE * context.getTraitLevel();
+            float chance = Const.Traits.STELLAR_REPAIR_CHANCE * context.traitLevel();
             if (MathUtils.tryPercentage(chance)) {
-                GearHelper.attemptDamage(context.getGear(), -1, player, InteractionHand.MAIN_HAND);
+                GearHelper.attemptDamage(context.gear(), -1, player, InteractionHand.MAIN_HAND);
             }
         }
 
