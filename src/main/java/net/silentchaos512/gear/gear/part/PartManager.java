@@ -15,11 +15,12 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.PartJsonException;
-import net.silentchaos512.gear.network.SyncGearPartsPacket;
+import net.silentchaos512.gear.network.server.SPacketSyncParts;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -29,7 +30,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public final class PartManager implements ResourceManagerReloadListener {
@@ -154,7 +154,7 @@ public final class PartManager implements ResourceManagerReloadListener {
     public static IGearPart from(ItemStack stack) {
         if (stack.isEmpty()) return null;
 
-        // We can't reliable keep an IItemProvider -> IGearPart map anymore
+        // We can't reliably keep an IItemProvider -> IGearPart map anymore
         for (IGearPart part : getValues()) {
             if (part.getIngredient().test(stack)) {
                 return part;
@@ -164,17 +164,16 @@ public final class PartManager implements ResourceManagerReloadListener {
         return null;
     }
 
-    public static void handlePartSyncPacket(SyncGearPartsPacket packet, Supplier<NetworkEvent.Context> context) {
+    public static void handleSyncPacket(SPacketSyncParts data, ConfigurationPayloadContext ctx) {
         synchronized (MAP) {
             Map<ResourceLocation, IGearPart> oldParts = ImmutableMap.copyOf(MAP);
             MAP.clear();
-            for (IGearPart part : packet.getParts()) {
+            for (IGearPart part : data.parts()) {
                 part.retainData(oldParts.get(part.getId()));
                 MAP.put(part.getId(), part);
             }
             SilentGear.LOGGER.info("Read {} parts from server", MAP.size());
         }
-        context.get().setPacketHandled(true);
     }
 
     public static Collection<Component> getErrorMessages(ServerPlayer player) {

@@ -13,7 +13,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.network.CompounderUpdatePacket;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 
@@ -66,7 +66,7 @@ public class CompounderContainer extends AbstractContainerMenu {
 
     void toggleWorkEnabled() {
         this.fields.set(1, this.fields.get(1) == 0 ? 1 : 0);
-        Network.channel.sendToServer(new CompounderUpdatePacket(getWorkEnabled()));
+        SgNetwork.channel.sendToServer(new CompounderUpdatePacket(getWorkEnabled()));
     }
 
     public int getProgressArrowScale() {

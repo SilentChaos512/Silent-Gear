@@ -26,7 +26,7 @@ import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.network.ClientOutputCommandPacket;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -79,7 +79,7 @@ public final class MaterialsCommand {
         ServerPlayer player = context.getSource().getPlayerOrException();
         SilentGear.LOGGER.info("Send material dump packet to client {}", player.getScoreboardName());
         ClientOutputCommandPacket message = new ClientOutputCommandPacket(ClientOutputCommandPacket.Type.MATERIALS, includeChildren);
-        Network.channel.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        SgNetwork.channel.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         return 1;
     }
 

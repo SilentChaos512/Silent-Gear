@@ -12,7 +12,7 @@ import net.neoforged.neoforge.common.ToolAction;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.setup.SgTags;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.network.ProspectingResultPacket;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -46,7 +46,7 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
         Set<BlockState> matches = getTargetedBlocks(context, range, face);
 
         // List the ores found in chat, if any
-        Network.channel.sendTo(new ProspectingResultPacket(matches), ((ServerPlayer) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        SgNetwork.channel.sendTo(new ProspectingResultPacket(matches), ((ServerPlayer) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 
         GearHelper.attemptDamage(context.getItemInHand(), 2, player, context.getHand());
         player.getCooldowns().addCooldown(this, 20);

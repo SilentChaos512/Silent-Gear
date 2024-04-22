@@ -1,14 +1,17 @@
 package net.silentchaos512.gear.gear.material;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialSerializer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class MaterialSerializers {
@@ -56,5 +59,21 @@ public final class MaterialSerializers {
         buffer.writeResourceLocation(material.getSerializer().getName());
         IMaterialSerializer<T> serializer = (IMaterialSerializer<T>) material.getSerializer();
         serializer.write(buffer, material);
+    }
+
+    public static List<IMaterial> readAll(FriendlyByteBuf buf) {
+        int count = buf.readVarInt();
+        List<IMaterial> ret = new ArrayList<>();
+        for (int i = 0; i < count; ++i) {
+            ret.add(read(buf));
+        }
+        return ImmutableList.copyOf(ret);
+    }
+
+    public static void writeAll(List<IMaterial> materials, FriendlyByteBuf buf) {
+        buf.writeVarInt(materials.size());
+        for (IMaterial material : materials) {
+            write(material, buf);
+        }
     }
 }

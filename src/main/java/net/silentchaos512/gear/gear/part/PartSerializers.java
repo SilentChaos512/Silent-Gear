@@ -1,16 +1,19 @@
 package net.silentchaos512.gear.gear.part;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.IPartSerializer;
 import net.silentchaos512.gear.config.Config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -68,6 +71,22 @@ public final class PartSerializers {
         buffer.writeResourceLocation(type);
         IPartSerializer<T> serializer = (IPartSerializer<T>) part.getSerializer();
         serializer.write(buffer, part);
+    }
+
+    public static List<IGearPart> readAll(FriendlyByteBuf buf) {
+        int count = buf.readVarInt();
+        List<IGearPart> ret = new ArrayList<>();
+        for (int i = 0; i < count; ++i) {
+            ret.add(read(buf));
+        }
+        return ImmutableList.copyOf(ret);
+    }
+
+    public static void writeAll(List<IGearPart> materials, FriendlyByteBuf buf) {
+        buf.writeVarInt(materials.size());
+        for (IGearPart part : materials) {
+            write(part, buf);
+        }
     }
 
     private static void log(Supplier<?> msg) {

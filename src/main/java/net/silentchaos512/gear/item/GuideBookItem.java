@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.network.OpenGuideBookPacket;
 import net.silentchaos512.gear.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +26,7 @@ public class GuideBookItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         if (playerIn instanceof ServerPlayer) {
-            Network.channel.sendTo(new OpenGuideBookPacket(),
+            SgNetwork.channel.sendTo(new OpenGuideBookPacket(),
                     ((ServerPlayer) playerIn).connection.connection,
                     NetworkDirection.PLAY_TO_CLIENT);
         }

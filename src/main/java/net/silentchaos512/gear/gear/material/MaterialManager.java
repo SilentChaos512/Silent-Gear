@@ -14,10 +14,11 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.gear.MaterialJsonException;
-import net.silentchaos512.gear.network.SyncMaterialsPacket;
+import net.silentchaos512.gear.network.server.SPacketSyncMaterials;
 import net.silentchaos512.gear.util.TextUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
@@ -176,17 +177,16 @@ public class MaterialManager implements ResourceManagerReloadListener {
         return null;
     }
 
-    public static void handleSyncPacket(SyncMaterialsPacket msg, Supplier<NetworkEvent.Context> ctx) {
+    public static void handleSyncPacket(SPacketSyncMaterials data, ConfigurationPayloadContext ctx) {
         synchronized (MATERIALS) {
             Map<ResourceLocation, IMaterial> oldMaterials = ImmutableMap.copyOf(MATERIALS);
             MATERIALS.clear();
-            for (IMaterial mat : msg.getMaterials()) {
+            for (IMaterial mat : data.materials()) {
                 mat.retainData(oldMaterials.get(mat.getId()));
                 MATERIALS.put(mat.getId(), mat);
             }
             SilentGear.LOGGER.info("Read {} materials from server", MATERIALS.size());
         }
-        ctx.get().setPacketHandled(true);
     }
 
     public static Collection<Component> getErrorMessages(ServerPlayer player) {

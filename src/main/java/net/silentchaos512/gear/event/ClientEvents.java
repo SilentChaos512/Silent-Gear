@@ -12,7 +12,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.network.GearLeftClickPacket;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.util.GearHelper;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = SilentGear.MOD_ID)
@@ -30,7 +30,7 @@ public final class ClientEvents {
                 ItemStack stack = player.getMainHandItem();
 
                 if (GearHelper.isGear(stack)) {
-                    Network.channel.sendToServer(new GearLeftClickPacket());
+                    SgNetwork.channel.sendToServer(new GearLeftClickPacket());
                 }
             }
         }

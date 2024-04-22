@@ -10,7 +10,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.network.SyncGearCraftingItemsPacket;
 import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 
@@ -31,9 +31,9 @@ public final class ServerEvents {
 
         // Send crafting items packets to correct for registry changes
         SilentGear.LOGGER.debug("Sending materials crafting item correction packet");
-        Network.channel.sendTo(new SyncMaterialCraftingItemsPacket(MaterialManager.getValues()), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        SgNetwork.channel.sendTo(new SyncMaterialCraftingItemsPacket(MaterialManager.getValues()), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         SilentGear.LOGGER.debug("Sending parts crafting item correction packet");
-        Network.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        SgNetwork.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 
         TraitManager.getErrorMessages(playerMP).forEach(playerMP::sendSystemMessage);
         MaterialManager.getErrorMessages(playerMP).forEach(playerMP::sendSystemMessage);

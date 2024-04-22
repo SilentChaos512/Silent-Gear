@@ -14,10 +14,11 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
+import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.TraitJsonException;
-import net.silentchaos512.gear.network.SyncTraitsPacket;
+import net.silentchaos512.gear.network.server.SPacketSyncTraits;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -27,7 +28,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
@@ -122,17 +122,16 @@ public final class TraitManager implements ResourceManagerReloadListener {
         return get(new ResourceLocation(strId));
     }
 
-    public static void handleTraitSyncPacket(SyncTraitsPacket packet, Supplier<NetworkEvent.Context> context) {
+    public static void handleSyncPacket(SPacketSyncTraits data, ConfigurationPayloadContext ctx) {
         synchronized (TRAITS) {
             Map<ResourceLocation, ITrait> oldTraits = ImmutableMap.copyOf(TRAITS);
             TRAITS.clear();
-            for (ITrait trait : packet.getTraits()) {
+            for (ITrait trait : data.traits()) {
                 trait.retainData(oldTraits.get(trait.getId()));
                 TRAITS.put(trait.getId(), trait);
             }
             SilentGear.LOGGER.info("Read {} traits from server", TRAITS.size());
         }
-        context.get().setPacketHandled(true);
     }
 
     public static Collection<Component> getErrorMessages(ServerPlayer player) {

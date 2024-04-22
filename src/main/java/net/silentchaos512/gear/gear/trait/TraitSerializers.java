@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.gear.trait;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,9 +14,7 @@ import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.trait.condition.*;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public final class TraitSerializers {
@@ -136,6 +135,22 @@ public final class TraitSerializers {
         buffer.writeResourceLocation(type);
         ITraitSerializer<T> serializer = (ITraitSerializer<T>) trait.getSerializer();
         serializer.write(buffer, trait);
+    }
+
+    public static List<ITrait> readAll(FriendlyByteBuf buf) {
+        int count = buf.readVarInt();
+        List<ITrait> ret = new ArrayList<>();
+        for (int i = 0; i < count; ++i) {
+            ret.add(read(buf));
+        }
+        return ImmutableList.copyOf(ret);
+    }
+
+    public static void writeAll(List<ITrait> traits, FriendlyByteBuf buf) {
+        buf.writeVarInt(traits.size());
+        for (ITrait trait : traits) {
+            write(trait, buf);
+        }
     }
 
     private static void log(Supplier<?> msg) {

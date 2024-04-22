@@ -1,82 +1,42 @@
 package net.silentchaos512.gear.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.HandshakeHandler;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PlayMessages;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.gear.part.PartManager;
-import net.silentchaos512.gear.gear.trait.TraitManager;
+import net.silentchaos512.gear.network.client.AckPayload;
+import net.silentchaos512.gear.network.client.SgClientPayloadHandler;
+import net.silentchaos512.gear.network.server.SPacketSyncMaterials;
+import net.silentchaos512.gear.network.server.SPacketSyncParts;
+import net.silentchaos512.gear.network.server.SPacketSyncTraits;
+import net.silentchaos512.gear.network.server.SgServerPayloadHandler;
 import net.silentchaos512.gear.util.MismatchedVersionsException;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
-public final class Network {
-    public static final String VERSION = "sgear-net-14";
-    private static final Pattern NET_VERSION_PATTERN = Pattern.compile("sgear-net-\\d+$");
-    private static final Pattern MOD_VERSION_PATTERN = Pattern.compile("^\\d+\\.\\d+\\.\\d+$");
+public final class SgNetwork {
+    public static void register(IPayloadRegistrar registrar) {
+        registrar.configuration(SPacketSyncTraits.ID,
+                SPacketSyncTraits::new,
+                handler -> handler.client(SgClientPayloadHandler.getInstance()::handleSyncTraits));
+        registrar.configuration(SPacketSyncMaterials.ID,
+                SPacketSyncMaterials::new,
+                handler -> handler.client(SgClientPayloadHandler.getInstance()::handleSyncMaterials));
+        registrar.configuration(SPacketSyncParts.ID,
+                SPacketSyncParts::new,
+                handler -> handler.client(SgClientPayloadHandler.getInstance()::handleSyncParts));
 
-    public static SimpleChannel channel;
+        registrar.configuration(AckPayload.ID,
+                AckPayload::new,
+                handler -> handler.server((SgServerPayloadHandler.getInstance()::handleAck)));
+    }
 
     static {
-        channel = NetworkRegistry.ChannelBuilder.named(SilentGear.getId("network"))
-                .clientAcceptedVersions(s -> Objects.equals(s, VERSION))
-                .serverAcceptedVersions(s -> Objects.equals(s, VERSION))
-                .networkProtocolVersion(() -> VERSION)
-                .simpleChannel();
-
-        channel.messageBuilder(SyncTraitsPacket.class, 1)
-                .loginIndex(LoginPacket::getLoginIndex, LoginPacket::setLoginIndex)
-                .decoder(SyncTraitsPacket::fromBytes)
-                .encoder(SyncTraitsPacket::toBytes)
-                .markAsLoginPacket()
-                .consumerMainThread(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
-                    TraitManager.handleTraitSyncPacket(msg, ctx);
-                    channel.reply(new LoginPacket.Reply(), ctx.get());
-                }))
-                .add();
-        channel.messageBuilder(SyncGearPartsPacket.class, 2)
-                .loginIndex(LoginPacket::getLoginIndex, LoginPacket::setLoginIndex)
-                .decoder(SyncGearPartsPacket::fromBytes)
-                .encoder(SyncGearPartsPacket::toBytes)
-                .markAsLoginPacket()
-                .consumerMainThread(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
-                    PartManager.handlePartSyncPacket(msg, ctx);
-                    channel.reply(new LoginPacket.Reply(), ctx.get());
-                }))
-                .add();
-        channel.messageBuilder(LoginPacket.Reply.class, 3)
-                .loginIndex(LoginPacket::getLoginIndex, LoginPacket::setLoginIndex)
-                .decoder(buffer -> new LoginPacket.Reply())
-                .encoder((msg, buffer) -> {})
-                .consumerMainThread(HandshakeHandler.indexFirst((hh, msg, ctx) -> msg.handle(ctx)))
-                .add();
         channel.messageBuilder(SyncGearCraftingItemsPacket.class, 4)
                 .encoder(SyncGearCraftingItemsPacket::toBytes)
                 .decoder(SyncGearCraftingItemsPacket::fromBytes)
                 .consumerMainThread(SyncGearCraftingItemsPacket::handle)
                 .add();
-        // 5 was ShowPartsScreenPacket
-        channel.messageBuilder(SyncMaterialsPacket.class, 6)
-                .loginIndex(LoginPacket::getLoginIndex, LoginPacket::setLoginIndex)
-                .decoder(SyncMaterialsPacket::fromBytes)
-                .encoder(SyncMaterialsPacket::toBytes)
-                .markAsLoginPacket()
-                .consumerMainThread(HandshakeHandler.biConsumerFor((hh, msg, ctx) -> {
-                    MaterialManager.handleSyncPacket(msg, ctx);
-                    channel.reply(new LoginPacket.Reply(), ctx.get());
-                }))
-                .add();
-        // uwu
-        channel.messageBuilder(PlayMessages.SpawnEntity.class, 7)
-                .encoder(PlayMessages.SpawnEntity::encode)
-                .decoder(PlayMessages.SpawnEntity::decode)
-                .consumerMainThread(PlayMessages.SpawnEntity::handle)
-                .add();
+
         channel.messageBuilder(SyncMaterialCraftingItemsPacket.class, 8)
                 .decoder(SyncMaterialCraftingItemsPacket::decode)
                 .encoder(SyncMaterialCraftingItemsPacket::encode)
@@ -124,16 +84,16 @@ public final class Network {
                 .add();
     }
 
-    private Network() {}
+    private SgNetwork() {}
 
     public static void init() {}
 
-    static void writeModVersionInfoToNetwork(FriendlyByteBuf buffer) {
-        buffer.writeUtf(Network.VERSION); // Change to test error message (dedicated server only)
+    public static void writeModVersionInfoToNetwork(FriendlyByteBuf buffer) {
+        buffer.writeUtf(SgNetwork.VERSION); // Change to test error message (dedicated server only)
         buffer.writeUtf(SilentGear.getVersion());
     }
 
-    static void verifyNetworkVersion(FriendlyByteBuf buffer) {
+    public static void verifyNetworkVersion(FriendlyByteBuf buffer) {
         // Throws an exception if versions do not match and provides a less cryptic message to the player
         // NOTE: This hangs without displaying a message on SSP, but that can't happen without messing with the written
         // network version
@@ -142,10 +102,10 @@ public final class Network {
 
         SilentGear.LOGGER.debug("Read Silent Gear server version as {} ({})", serverModVersion, serverNetVersion);
 
-        if (!Network.VERSION.equals(serverNetVersion)) {
+        if (!SgNetwork.VERSION.equals(serverNetVersion)) {
             String msg = String.format("This server is running a different version of Silent Gear. Try updating Silent Gear on the client and/or server. Client version is %s (%s) and server version is %s (%s).",
                     SilentGear.getVersion(),
-                    Network.VERSION,
+                    SgNetwork.VERSION,
                     serverModVersion,
                     serverNetVersion);
             throw new MismatchedVersionsException(msg);

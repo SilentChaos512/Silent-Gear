@@ -35,7 +35,7 @@ import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
 import net.silentchaos512.gear.gear.trait.condition.AndTraitCondition;
 import net.silentchaos512.gear.network.ClientOutputCommandPacket;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -97,7 +97,7 @@ public final class TraitsCommand {
         ServerPlayer player = context.getSource().getPlayerOrException();
         SilentGear.LOGGER.info("Send traits wiki dump packet to client {}", player.getScoreboardName());
         ClientOutputCommandPacket message = new ClientOutputCommandPacket(ClientOutputCommandPacket.Type.TRAITS, true);
-        Network.channel.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        SgNetwork.channel.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         return 1;
     }
 

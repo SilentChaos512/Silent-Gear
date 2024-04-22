@@ -15,7 +15,7 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.network.KeyPressOnItemPacket;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
@@ -67,7 +67,7 @@ public class KeyTracker {
             }
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
-                Network.channel.sendToServer(new KeyPressOnItemPacket(KeyPressOnItemPacket.Type.CYCLE_NEXT, getHoveredSlot()));
+                SgNetwork.channel.sendToServer(new KeyPressOnItemPacket(KeyPressOnItemPacket.Type.CYCLE_NEXT, getHoveredSlot()));
             }
         }
         if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == CYCLE_BACK.getKey().getValue()) {
@@ -76,13 +76,13 @@ public class KeyTracker {
             }
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
-                Network.channel.sendToServer(new KeyPressOnItemPacket(KeyPressOnItemPacket.Type.CYCLE_BACK, getHoveredSlot()));
+                SgNetwork.channel.sendToServer(new KeyPressOnItemPacket(KeyPressOnItemPacket.Type.CYCLE_BACK, getHoveredSlot()));
             }
         }
         if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == OPEN_ITEM.getKey().getValue()) {
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
-                Network.channel.sendToServer(new KeyPressOnItemPacket(KeyPressOnItemPacket.Type.OPEN_ITEM, getHoveredSlot()));
+                SgNetwork.channel.sendToServer(new KeyPressOnItemPacket(KeyPressOnItemPacket.Type.OPEN_ITEM, getHoveredSlot()));
             }
         }
     }

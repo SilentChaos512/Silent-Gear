@@ -27,7 +27,7 @@ import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.setup.*;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.world.SgWorldFeatures;
@@ -63,7 +63,7 @@ class SideProxy implements IProxy {
 
         if (checkClientInstance()) {
             Config.init();
-            Network.init();
+            SgNetwork.init();
         }
 
         modEventBus.addListener(SgWorldFeatures::registerFeatures);

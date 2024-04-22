@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.item.IContainerItem;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.network.SelectBlueprintFromBookPacket;
 import net.silentchaos512.lib.util.Color;
 
@@ -39,7 +39,7 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
             Slot slot = getSlotUnderMouse();
             if (slot != null && !slot.getItem().isEmpty()) {
                 this.selected = slot.index;
-                Network.channel.sendToServer(new SelectBlueprintFromBookPacket(this.menu.bookSlot, this.selected));
+                SgNetwork.channel.sendToServer(new SelectBlueprintFromBookPacket(this.menu.bookSlot, this.selected));
 
                 if (this.minecraft != null) {
                     this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));

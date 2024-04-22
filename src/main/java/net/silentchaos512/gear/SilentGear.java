@@ -2,11 +2,17 @@ package net.silentchaos512.gear;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.network.event.OnGameConfigurationEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.silentchaos512.gear.network.SgNetwork;
+import net.silentchaos512.gear.network.config.SyncTraitsConfigurationTask;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +22,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Mod(SilentGear.MOD_ID)
+@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
@@ -29,9 +36,19 @@ public final class SilentGear {
     public static SilentGear INSTANCE;
     public static IProxy PROXY;
 
-    public SilentGear() {
+    public SilentGear(IEventBus modEventBus) {
         INSTANCE = this;
         PROXY = DistExecutor.unsafeRunForDist(() -> SideProxy.Client::new, () -> SideProxy.Server::new);
+    }
+
+    @SubscribeEvent
+    public static void registerPayloadHandler(RegisterPayloadHandlerEvent event) {
+        SgNetwork.register(event.registrar(MOD_ID).versioned("3.7.0"));
+    }
+
+    @SubscribeEvent
+    public static void onGameConfiguration(OnGameConfigurationEvent event) {
+        event.register(new SyncTraitsConfigurationTask());
     }
 
     public static String getVersion() {

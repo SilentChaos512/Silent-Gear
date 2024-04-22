@@ -40,7 +40,7 @@ import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.EnchantmentTrait;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.network.Network;
+import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.network.RecalculateStatsPacket;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
@@ -322,7 +322,7 @@ public final class GearData {
 
             if (level != null && SilentGear.PROXY.checkClientConnection() && GearHelper.isValidGear(stack) && ((ICoreItem) stack.getItem()).getRelevantStats(stack).contains(stat)) {
                 SilentGear.LOGGER.debug("Sending recalculate stats packet for item with missing {} stat: {}", stat.getStatId(), stack.getHoverName().getString());
-                Network.channel.sendToServer(new RecalculateStatsPacket(level, stack, stat));
+                SgNetwork.channel.sendToServer(new RecalculateStatsPacket(level, stack, stat));
                 // Prevent the packet from being spammed...
                 putStatInNbtIfMissing(stack, stat);
             }
