@@ -22,7 +22,6 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.CompoundMaterialDisplay;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
-import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TierHelper;
@@ -294,13 +293,6 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
     @Override
     public String getModelKey(IMaterialInstance material) {
         return IMaterial.super.getModelKey(material) + "[" + getMaterials(material).getModelKey() + "]";
-    }
-
-    @Override
-    public void updateIngredient(SyncMaterialCraftingItemsPacket msg) {
-        if (msg.isValid()) {
-            msg.getIngredient(this.materialId).ifPresent(ing -> this.ingredient = ing);
-        }
     }
 
     @Override

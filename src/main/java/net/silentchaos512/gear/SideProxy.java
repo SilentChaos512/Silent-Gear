@@ -9,7 +9,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.lifecycle.*;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
@@ -19,7 +26,6 @@ import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.compat.curios.CurioGearItemCapability;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
-import net.silentchaos512.gear.compat.gamestages.GameStagesCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
@@ -27,7 +33,6 @@ import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.item.CraftingItems;
-import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.setup.*;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.world.SgWorldFeatures;
@@ -43,9 +48,7 @@ class SideProxy implements IProxy {
     @Nullable
     private static CreativeModeTab creativeModeTab;
 
-    SideProxy() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
+    SideProxy(IEventBus modEventBus) {
         SgBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         SgBlocks.BLOCKS.register(modEventBus);
         SgCreativeTabs.CREATIVE_TABS.register(modEventBus);
@@ -63,7 +66,6 @@ class SideProxy implements IProxy {
 
         if (checkClientInstance()) {
             Config.init();
-            SgNetwork.init();
         }
 
         modEventBus.addListener(SgWorldFeatures::registerFeatures);
@@ -74,10 +76,10 @@ class SideProxy implements IProxy {
 
 //        modEventBus.addGenericListener(ItemStat.class, ItemStats::registerStats);
 
-        MinecraftForge.EVENT_BUS.addListener(SgCommands::registerAll);
-        MinecraftForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
-        MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStarted);
-        MinecraftForge.EVENT_BUS.addListener(SideProxy::serverStopping);
+        NeoForge.EVENT_BUS.addListener(SgCommands::registerAll);
+        NeoForge.EVENT_BUS.addListener(SideProxy::onAddReloadListeners);
+        NeoForge.EVENT_BUS.addListener(SideProxy::serverStarted);
+        NeoForge.EVENT_BUS.addListener(SideProxy::serverStopping);
     }
 
     private static void commonSetup(FMLCommonSetupEvent event) {
@@ -174,18 +176,20 @@ class SideProxy implements IProxy {
     }
 
     static class Client extends SideProxy {
-        Client() {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::clientSetup);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::postSetup);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandlers::onItemColors);
+        Client(IEventBus modEventBus) {
+            super(modEventBus);
 
-            MinecraftForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
-            MinecraftForge.EVENT_BUS.register(new GearHudOverlay());
-            MinecraftForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
-            MinecraftForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
+            modEventBus.addListener(Client::clientSetup);
+            modEventBus.addListener(Client::postSetup);
+            modEventBus.addListener(ColorHandlers::onItemColors);
+
+            NeoForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
+            NeoForge.EVENT_BUS.register(new GearHudOverlay());
+            NeoForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
+            NeoForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
 
             if (SilentGear.isDevBuild()) {
-                MinecraftForge.EVENT_BUS.register(new DebugOverlay());
+                NeoForge.EVENT_BUS.register(new DebugOverlay());
             }
 
             //noinspection ConstantConditions
@@ -260,8 +264,10 @@ class SideProxy implements IProxy {
     }
 
     static class Server extends SideProxy {
-        Server() {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverSetup);
+        Server(IEventBus modEventBus) {
+            super(modEventBus);
+
+            modEventBus.addListener(this::serverSetup);
         }
 
         private void serverSetup(FMLDedicatedServerSetupEvent event) {

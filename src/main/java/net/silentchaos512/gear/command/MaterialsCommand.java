@@ -14,6 +14,7 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -25,8 +26,7 @@ import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.network.ClientOutputCommandPacket;
-import net.silentchaos512.gear.network.SgNetwork;
+import net.silentchaos512.gear.network.payload.server.CommandOutputPayload;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -78,8 +78,8 @@ public final class MaterialsCommand {
     private static int runDump(CommandContext<CommandSourceStack> context, boolean includeChildren) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         SilentGear.LOGGER.info("Send material dump packet to client {}", player.getScoreboardName());
-        ClientOutputCommandPacket message = new ClientOutputCommandPacket(ClientOutputCommandPacket.Type.MATERIALS, includeChildren);
-        SgNetwork.channel.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        CommandOutputPayload message = CommandOutputPayload.materials(includeChildren);
+        PacketDistributor.PLAYER.with(player).send(message);
         return 1;
     }
 

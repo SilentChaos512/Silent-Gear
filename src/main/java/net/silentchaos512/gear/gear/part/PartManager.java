@@ -20,7 +20,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.PartJsonException;
-import net.silentchaos512.gear.network.server.SPacketSyncParts;
+import net.silentchaos512.gear.network.payload.server.SyncPartsPayload;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -164,7 +164,7 @@ public final class PartManager implements ResourceManagerReloadListener {
         return null;
     }
 
-    public static void handleSyncPacket(SPacketSyncParts data, ConfigurationPayloadContext ctx) {
+    public static void handleSyncPacket(SyncPartsPayload data, ConfigurationPayloadContext ctx) {
         synchronized (MAP) {
             Map<ResourceLocation, IGearPart> oldParts = ImmutableMap.copyOf(MAP);
             MAP.clear();

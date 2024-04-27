@@ -28,7 +28,6 @@ import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.DefaultMaterialDisplay;
 import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.material.MaterialDisplay;
-import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.lib.util.Color;
@@ -251,15 +250,6 @@ public abstract class AbstractMaterial implements IMaterial {
     @Override
     public boolean isVisible(PartType partType) {
         return this.visible;
-    }
-
-    @Override
-    public void updateIngredient(SyncMaterialCraftingItemsPacket msg) {
-        if (msg.isValid()) {
-            msg.getIngredient(this.materialId).ifPresent(ing -> this.ingredient = ing);
-            this.partSubstitutes.clear();
-            msg.getPartSubstitutes(this.materialId).forEach(this.partSubstitutes::put);
-        }
     }
 
     @Override

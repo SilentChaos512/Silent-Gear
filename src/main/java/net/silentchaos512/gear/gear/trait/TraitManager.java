@@ -18,7 +18,7 @@ import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.TraitJsonException;
-import net.silentchaos512.gear.network.server.SPacketSyncTraits;
+import net.silentchaos512.gear.network.payload.server.SyncTraitsPayload;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -122,7 +122,7 @@ public final class TraitManager implements ResourceManagerReloadListener {
         return get(new ResourceLocation(strId));
     }
 
-    public static void handleSyncPacket(SPacketSyncTraits data, ConfigurationPayloadContext ctx) {
+    public static void handleSyncPacket(SyncTraitsPayload data, ConfigurationPayloadContext ctx) {
         synchronized (TRAITS) {
             Map<ResourceLocation, ITrait> oldTraits = ImmutableMap.copyOf(TRAITS);
             TRAITS.clear();

@@ -10,7 +10,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
-import net.silentchaos512.gear.network.KeyPressOnItemPacket;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
@@ -35,19 +34,20 @@ public class ModKitItem extends Item implements ICycleItem {
     }
 
     @Override
-    public void onCycleKeyPress(ItemStack stack, KeyPressOnItemPacket.Type direction) {
+    public void onCycleKeyPress(ItemStack stack, ICycleItem.Direction direction) {
         PartType selected = getSelectedType(stack);
         List<PartType> types = getRemovableTypes();
         if (types.isEmpty()) return;
 
         if (selected == PartType.NONE) {
-            if (direction == KeyPressOnItemPacket.Type.CYCLE_BACK) {
+            if (direction == ICycleItem.Direction.BACK) {
                 setSelectedType(stack, types.get(types.size() - 1));
-            } else if (direction == KeyPressOnItemPacket.Type.CYCLE_NEXT) {
+            } else if (direction == ICycleItem.Direction.NEXT) {
                 setSelectedType(stack, types.get(0));
             }
         } else {
-            int index = types.indexOf(selected) + direction.direction;
+            int index = types.indexOf(selected) + direction.scale;
+            // Wrap around
             if (index < 0) index = types.size() - 1;
             if (index >= types.size()) index = 0;
 

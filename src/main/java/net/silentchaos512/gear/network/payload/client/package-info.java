@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package net.silentchaos512.gear.network.client;
+package net.silentchaos512.gear.network.payload.client;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

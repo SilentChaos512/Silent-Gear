@@ -1,20 +1,26 @@
-package net.silentchaos512.gear.network.server;
+package net.silentchaos512.gear.network.payload.server;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.network.SgNetwork;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public record SPacketSyncParts(List<IGearPart> parts) implements CustomPacketPayload {
+public record SyncPartsPayload(List<IGearPart> parts) implements CustomPacketPayload {
     public static final ResourceLocation ID = SilentGear.getId("sync_parts");
 
-    public SPacketSyncParts(FriendlyByteBuf buf) {
+    public SyncPartsPayload() {
+        this(ImmutableList.copyOf(PartManager.getValues()));
+    }
+
+    public SyncPartsPayload(FriendlyByteBuf buf) {
         this(readParts(buf));
     }
 

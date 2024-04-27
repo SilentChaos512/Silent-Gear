@@ -10,10 +10,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.item.IContainerItem;
-import net.silentchaos512.gear.network.SgNetwork;
-import net.silentchaos512.gear.network.SelectBlueprintFromBookPacket;
+import net.silentchaos512.gear.network.payload.client.SelectBlueprintInBookPayload;
 import net.silentchaos512.lib.util.Color;
 
 public class BlueprintBookContainerScreen extends AbstractContainerScreen<BlueprintBookContainer> {
@@ -39,7 +39,7 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
             Slot slot = getSlotUnderMouse();
             if (slot != null && !slot.getItem().isEmpty()) {
                 this.selected = slot.index;
-                SgNetwork.channel.sendToServer(new SelectBlueprintFromBookPacket(this.menu.bookSlot, this.selected));
+                PacketDistributor.SERVER.noArg().send(new SelectBlueprintInBookPayload(this.menu.bookSlot, this.selected));
 
                 if (this.minecraft != null) {
                     this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));

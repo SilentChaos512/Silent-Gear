@@ -10,9 +10,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
-import net.silentchaos512.gear.network.SgNetwork;
-import net.silentchaos512.gear.network.SyncGearCraftingItemsPacket;
-import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 
 /**
  * Handles chat error messages. Previously handled sending parts and traits to the client, but this
@@ -30,10 +27,11 @@ public final class ServerEvents {
         ServerPlayer playerMP = (ServerPlayer) player;
 
         // Send crafting items packets to correct for registry changes
-        SilentGear.LOGGER.debug("Sending materials crafting item correction packet");
-        SgNetwork.channel.sendTo(new SyncMaterialCraftingItemsPacket(MaterialManager.getValues()), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
-        SilentGear.LOGGER.debug("Sending parts crafting item correction packet");
-        SgNetwork.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        // TODO: Is this still necessary? Originally added to fix https://github.com/SilentChaos512/Silent-Gear/issues/74
+//        SilentGear.LOGGER.debug("Sending materials crafting item correction packet");
+//        SgNetwork.channel.sendTo(new SyncMaterialCraftingItemsPacket(MaterialManager.getValues()), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+//        SilentGear.LOGGER.debug("Sending parts crafting item correction packet");
+//        SgNetwork.channel.sendTo(new SyncGearCraftingItemsPacket(), playerMP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 
         TraitManager.getErrorMessages(playerMP).forEach(playerMP::sendSystemMessage);
         MaterialManager.getErrorMessages(playerMP).forEach(playerMP::sendSystemMessage);

@@ -2,6 +2,7 @@ package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -12,10 +13,10 @@ import net.neoforged.neoforge.common.ToolAction;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.setup.SgTags;
-import net.silentchaos512.gear.network.SgNetwork;
-import net.silentchaos512.gear.network.ProspectingResultPacket;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TextUtil;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,12 +47,19 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
         Set<BlockState> matches = getTargetedBlocks(context, range, face);
 
         // List the ores found in chat, if any
-        SgNetwork.channel.sendTo(new ProspectingResultPacket(matches), ((ServerPlayer) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        player.sendSystemMessage(listFoundBlocks(matches));
 
         GearHelper.attemptDamage(context.getItemInHand(), 2, player, context.getHand());
         player.getCooldowns().addCooldown(this, 20);
 
         return InteractionResult.SUCCESS;
+    }
+
+    private static Component listFoundBlocks(Collection<BlockState> blocksFound) {
+        return blocksFound.stream()
+                .map(state -> state.getBlock().getName())
+                .reduce((t1, t2) -> t1.append(", ").append(t2))
+                .orElseGet(() -> TextUtil.translate("item", "prospector_hammer.no_finds"));
     }
 
     public Set<BlockState> getTargetedBlocks(UseOnContext context, int range, Direction face) {

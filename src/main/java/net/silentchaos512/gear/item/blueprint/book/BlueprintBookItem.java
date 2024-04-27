@@ -20,7 +20,6 @@ import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.item.ICycleItem;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
-import net.silentchaos512.gear.network.KeyPressOnItemPacket;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
@@ -83,18 +82,21 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     public static void openContainer(ServerPlayer playerIn, ItemStack stack) {
-        NetworkHooks.openScreen(playerIn,
-                new SimpleMenuProvider((id, inv, z) -> new BlueprintBookContainer(id, inv, stack),
-                        Component.translatable("container.silentgear.blueprint_book")),
-                buf -> buf.writeItem(stack));
+        playerIn.openMenu(
+                new SimpleMenuProvider(
+                        (id, inv, z) -> new BlueprintBookContainer(id, inv, stack),
+                        Component.translatable("container.silentgear.blueprint_book")
+                ),
+                buf -> buf.writeItem(stack)
+        );
     }
 
     @Override
-    public void onCycleKeyPress(ItemStack stack, KeyPressOnItemPacket.Type direction) {
+    public void onCycleKeyPress(ItemStack stack, ICycleItem.Direction direction) {
         int current = getSelectedSlot(stack);
         IItemHandler inventory = getInventory(stack);
         for (int i = 1; i <= inventory.getSlots(); ++i) {
-            int index = current + (i * direction.direction);
+            int index = current + (i * direction.scale);
             if (index < 0) index += inventory.getSlots();
             if (index >= inventory.getSlots()) index -= inventory.getSlots();
 

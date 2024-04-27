@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforgespi.language.IModInfo;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -34,8 +35,7 @@ import net.silentchaos512.gear.gear.trait.SimpleTrait;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
 import net.silentchaos512.gear.gear.trait.condition.AndTraitCondition;
-import net.silentchaos512.gear.network.ClientOutputCommandPacket;
-import net.silentchaos512.gear.network.SgNetwork;
+import net.silentchaos512.gear.network.payload.server.CommandOutputPayload;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -96,8 +96,8 @@ public final class TraitsCommand {
     private static int runDumpMd(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         SilentGear.LOGGER.info("Send traits wiki dump packet to client {}", player.getScoreboardName());
-        ClientOutputCommandPacket message = new ClientOutputCommandPacket(ClientOutputCommandPacket.Type.TRAITS, true);
-        SgNetwork.channel.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        CommandOutputPayload message = CommandOutputPayload.traits();
+        PacketDistributor.PLAYER.with(player).send(message);
         return 1;
     }
 

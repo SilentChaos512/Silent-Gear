@@ -1,8 +1,19 @@
 package net.silentchaos512.gear.item;
 
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.network.KeyPressOnItemPacket;
 
 public interface ICycleItem {
-    void onCycleKeyPress(ItemStack stack, KeyPressOnItemPacket.Type direction);
+    enum Direction {
+        BACK(-1),
+        NEXT(1),
+        NEITHER(0);
+
+        public final int scale;
+
+        Direction(int scale) {
+            this.scale = scale;
+        }
+    }
+
+    void onCycleKeyPress(ItemStack stack, Direction direction);
 }

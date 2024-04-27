@@ -17,6 +17,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.TierSortingRegistry;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -40,8 +41,7 @@ import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.EnchantmentTrait;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.network.SgNetwork;
-import net.silentchaos512.gear.network.RecalculateStatsPacket;
+import net.silentchaos512.gear.network.payload.client.RecalculateStatsPayload;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -322,7 +322,9 @@ public final class GearData {
 
             if (level != null && SilentGear.PROXY.checkClientConnection() && GearHelper.isValidGear(stack) && ((ICoreItem) stack.getItem()).getRelevantStats(stack).contains(stat)) {
                 SilentGear.LOGGER.debug("Sending recalculate stats packet for item with missing {} stat: {}", stat.getStatId(), stack.getHoverName().getString());
-                SgNetwork.channel.sendToServer(new RecalculateStatsPacket(level, stack, stat));
+                Player clientPlayer = Objects.requireNonNull(SilentGear.PROXY.getClientPlayer());
+                int slot = clientPlayer.getInventory().findSlotMatchingItem(stack);
+                PacketDistributor.SERVER.noArg().send(new RecalculateStatsPayload(slot, stat));
                 // Prevent the packet from being spammed...
                 putStatInNbtIfMissing(stack, stat);
             }

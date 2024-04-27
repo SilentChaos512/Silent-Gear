@@ -1,19 +1,15 @@
 package net.silentchaos512.gear.block.compounder;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.network.CompounderUpdatePacket;
-import net.silentchaos512.gear.network.SgNetwork;
+import net.silentchaos512.gear.network.payload.client.AlloyMakerUpdatePayload;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 
@@ -66,7 +62,7 @@ public class CompounderContainer extends AbstractContainerMenu {
 
     void toggleWorkEnabled() {
         this.fields.set(1, this.fields.get(1) == 0 ? 1 : 0);
-        SgNetwork.channel.sendToServer(new CompounderUpdatePacket(getWorkEnabled()));
+        PacketDistributor.SERVER.noArg().send(new AlloyMakerUpdatePayload(getWorkEnabled()));
     }
 
     public int getProgressArrowScale() {

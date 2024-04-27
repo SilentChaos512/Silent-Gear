@@ -1,12 +1,10 @@
-package net.silentchaos512.gear.network.config;
+package net.silentchaos512.gear.network.configtask;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.network.ConfigurationTask;
 import net.neoforged.neoforge.network.configuration.ICustomConfigurationTask;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.gear.trait.TraitManager;
-import net.silentchaos512.gear.network.server.SPacketSyncTraits;
+import net.silentchaos512.gear.network.payload.server.SyncTraitsPayload;
 
 import java.util.function.Consumer;
 
@@ -15,7 +13,7 @@ public record SyncTraitsConfigurationTask() implements ICustomConfigurationTask 
 
     @Override
     public void run(Consumer<CustomPacketPayload> consumer) {
-        SPacketSyncTraits payload = new SPacketSyncTraits(ImmutableList.copyOf(TraitManager.getValues()));
+        SyncTraitsPayload payload = new SyncTraitsPayload();
         consumer.accept(payload);
     }
 

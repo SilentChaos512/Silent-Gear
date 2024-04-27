@@ -12,7 +12,7 @@ import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.network.event.OnGameConfigurationEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.silentchaos512.gear.network.SgNetwork;
-import net.silentchaos512.gear.network.config.SyncTraitsConfigurationTask;
+import net.silentchaos512.gear.network.configtask.SyncTraitsConfigurationTask;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -18,7 +18,7 @@ import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.gear.MaterialJsonException;
-import net.silentchaos512.gear.network.server.SPacketSyncMaterials;
+import net.silentchaos512.gear.network.payload.server.SyncMaterialsPayload;
 import net.silentchaos512.gear.util.TextUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
@@ -177,7 +177,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
         return null;
     }
 
-    public static void handleSyncPacket(SPacketSyncMaterials data, ConfigurationPayloadContext ctx) {
+    public static void handleSyncPacket(SyncMaterialsPayload data, ConfigurationPayloadContext ctx) {
         synchronized (MATERIALS) {
             Map<ResourceLocation, IMaterial> oldMaterials = ImmutableMap.copyOf(MATERIALS);
             MATERIALS.clear();

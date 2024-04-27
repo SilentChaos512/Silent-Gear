@@ -13,7 +13,6 @@ import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.client.material.DefaultMaterialDisplay;
 import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.network.SyncMaterialCraftingItemsPacket;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
@@ -178,8 +177,6 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
         if (stacks.length == 0) return ItemStack.EMPTY;
         return stacks[(ticks / 20) % stacks.length];
     }
-
-    void updateIngredient(SyncMaterialCraftingItemsPacket msg);
 
     @Override
     default MaterialList getMaterials(IMaterialInstance instance) {
