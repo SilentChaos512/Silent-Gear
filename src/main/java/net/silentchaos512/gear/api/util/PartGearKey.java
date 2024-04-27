@@ -73,7 +73,7 @@ public final class PartGearKey {
         }
 
         GearType gearType = GearType.get(parts[1]);
-        if (gearType.isInvalid()) {
+        if (!gearType.isValid()) {
             throw new JsonParseException("Unknown gear type: " + parts[1]);
         }
 

@@ -20,6 +20,8 @@ package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -48,42 +50,52 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class PartType {
+    public static final Codec<PartType> CODEC = ResourceLocation.CODEC
+            .flatXmap(
+                    rl -> Optional.ofNullable(PartType.get(rl))
+                            .map(DataResult::success)
+                            .orElseGet(() -> DataResult.error(() -> "Unknown part type: " + rl)),
+                    pt -> Optional.of(pt.getName())
+                            .map(DataResult::success)
+                            .orElseGet(() -> DataResult.error(() -> "Unknown part type: " + pt))
+            );
+
     private static final Map<ResourceLocation, PartType> VALUES = new LinkedHashMap<>();
     private static final Map<PartGearKey, Optional<CompoundPartItem>> ITEM_CACHE = new HashMap<>();
 
     public static final PartType NONE = create(Builder.builder(SilentGear.getId("none")));
 
     public static final PartType ADORNMENT = create(Builder.builder(SilentGear.getId("adornment"))
-            .compoundPartItem(() -> SgItems.ADORNMENT.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(SgItems.ADORNMENT)
             .defaultTexture(PartTextures.ADORNMENT_GENERIC)
             .isRemovable(true)
     );
     public static final PartType BINDING = create(Builder.builder(SilentGear.getId("binding"))
-            .compoundPartItem(() -> SgItems.BINDING.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(SgItems.BINDING)
             .defaultTexture(PartTextures.BINDING_GENERIC)
             .isRemovable(true)
     );
     public static final PartType COATING = create(Builder.builder(SilentGear.getId("coating"))
-            .compoundPartItem(() -> SgItems.COATING.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(SgItems.COATING)
             .defaultTexture(PartTextures.MAIN_GENERIC_HC)
             .isRemovable(true)
     );
     public static final PartType CORD = create(Builder.builder(SilentGear.getId("cord"))
-            .compoundPartItem(() -> SgItems.CORD.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(SgItems.CORD)
             .defaultTexture(PartTextures.BOWSTRING_STRING)
             .alias("bowstring")
     );
     public static final PartType FLETCHING = create(Builder.builder(SilentGear.getId("fletching"))
-            .compoundPartItem(() -> SgItems.FLETCHING.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(SgItems.FLETCHING)
             .defaultTexture(PartTextures.FLETCHING_GENERIC)
     );
     public static final PartType GRIP = create(Builder.builder(SilentGear.getId("grip"))
-            .compoundPartItem(() -> SgItems.GRIP.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(SgItems.GRIP)
             .defaultTexture(PartTextures.GRIP_WOOL)
             .isRemovable(true)
     );
     public static final PartType LINING = create(Builder.builder(SilentGear.getId("lining"))
-            .compoundPartItem(() -> SgItems.LINING.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(SgItems.LINING)
             .defaultTexture(PartTextures.LINING_CLOTH)
             .isRemovable(true)
     );
@@ -97,11 +109,11 @@ public final class PartType {
             .maxPerItem(Integer.MAX_VALUE)
     );
     public static final PartType ROD = create(Builder.builder(SilentGear.getId("rod"))
-            .compoundPartItem(() -> SgItems.ROD.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(SgItems.ROD)
             .defaultTexture(PartTextures.ROD_GENERIC_LC)
     );
     public static final PartType TIP = create(Builder.builder(SilentGear.getId("tip"))
-            .compoundPartItem(() -> SgItems.TIP.orElseThrow(IllegalStateException::new))
+            .compoundPartItem(SgItems.TIP)
             .defaultTexture(PartTextures.TIP_SHARP)
             .isRemovable(true)
     );
@@ -172,10 +184,6 @@ public final class PartType {
 
     public ResourceLocation getName() {
         return name;
-    }
-
-    public String getShortName() {
-        return SilentGear.shortenId(name);
     }
 
     public boolean isRemovable() {

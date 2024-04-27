@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.api.util;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -83,4 +85,19 @@ public class DataResource<T> {
         T obj = getNullable();
         return obj != null ? Optional.ofNullable(mapper.apply(obj)) : Optional.empty();
     }
+
+    public static final Codec<DataResource<IMaterial>> MATERIAL_CODEC = ResourceLocation.CODEC.flatXmap(
+            id -> DataResult.success(DataResource.material(id)),
+            res -> DataResult.success(res.objectId)
+    );
+
+    public static final Codec<DataResource<IGearPart>> PART_CODEC = ResourceLocation.CODEC.flatXmap(
+            id -> DataResult.success(DataResource.part(id)),
+            res -> DataResult.success(res.objectId)
+    );
+
+    public static final Codec<DataResource<ITrait>> TRAIT_CODEC = ResourceLocation.CODEC.flatXmap(
+            id -> DataResult.success(DataResource.trait(id)),
+            res -> DataResult.success(res.objectId)
+    );
 }

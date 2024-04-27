@@ -2,6 +2,8 @@ package net.silentchaos512.gear.api.part;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -13,10 +15,20 @@ import net.silentchaos512.lib.util.EnumUtils;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.Optional;
 import java.util.Random;
 
 public enum MaterialGrade {
     NONE(0), E(1), D(2), C(3), B(4), A(5), S(10), SS(15), SSS(25), MAX(30);
+
+    public static final Codec<MaterialGrade> CODEC = Codec.STRING.flatXmap(
+            name -> MaterialGrade.byNameOptional(name)
+                    .map(DataResult::success)
+                    .orElseGet(() -> DataResult.error(() -> "Unknown material grade: " + name)),
+            grade -> Optional.of(grade.name())
+                    .map(DataResult::success)
+                    .get()
+    );
 
     private static final String NBT_KEY = "SGear_Grade";
 
@@ -60,6 +72,15 @@ public enum MaterialGrade {
             }
         }
         return NONE;
+    }
+
+    private static Optional<MaterialGrade> byNameOptional(String name) {
+        for (MaterialGrade grade : values()) {
+            if (grade.name().equalsIgnoreCase(name)) {
+                return Optional.of(grade);
+            }
+        }
+        return Optional.empty();
     }
 
     /**

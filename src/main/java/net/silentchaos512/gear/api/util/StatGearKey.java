@@ -69,7 +69,7 @@ public final class StatGearKey {
         GearType gearType;
         if (parts.length > 1) {
             gearType = GearType.get(parts[1]);
-            if (gearType.isInvalid()) {
+            if (!gearType.isValid()) {
                 throw new JsonParseException("Unknown gear type: " + parts[1]);
             }
         } else {

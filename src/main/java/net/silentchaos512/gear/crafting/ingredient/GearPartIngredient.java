@@ -18,25 +18,18 @@
 
 package net.silentchaos512.gear.crafting.ingredient;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -44,6 +37,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public final class GearPartIngredient extends Ingredient implements IGearIngredient {
+    public static final Codec<GearPartIngredient> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            PartType.CODEC.fieldOf("part_type").forGetter(GearPartIngredient::getPartType)
+    ).apply(instance, GearPartIngredient::new));
+
     private final PartType type;
 
     private GearPartIngredient(PartType type) {
@@ -97,54 +94,5 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
     @Override
     public boolean isEmpty() {
         return false;
-    }
-
-    @Override
-    public IIngredientSerializer<? extends Ingredient> getSerializer() {
-        return Serializer.INSTANCE;
-    }
-
-    @Override
-    public JsonElement toJson() {
-        JsonObject json = new JsonObject();
-        json.addProperty("type", Serializer.NAME.toString());
-        json.addProperty("part_type", this.type.getName().toString());
-        return json;
-    }
-
-    public static final class Serializer implements IIngredientSerializer<GearPartIngredient> {
-        public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation NAME = new ResourceLocation(SilentGear.MOD_ID, "part_type");
-
-        private Serializer() {}
-
-        @Override
-        public GearPartIngredient parse(FriendlyByteBuf buffer) {
-            ResourceLocation typeName = buffer.readResourceLocation();
-            PartType type = PartType.get(typeName);
-            if (type == null) throw new JsonParseException("Unknown part type: " + typeName);
-            return new GearPartIngredient(type);
-        }
-
-        @Override
-        public GearPartIngredient parse(JsonObject json) {
-            String typeName = GsonHelper.getAsString(json, "part_type", "");
-            if (typeName.isEmpty())
-                throw new JsonSyntaxException("'part_type' is missing");
-
-            ResourceLocation id = typeName.contains(":")
-                    ? new ResourceLocation(typeName)
-                    : SilentGear.getId(typeName);
-            PartType type = PartType.get(id);
-            if (type == null)
-                throw new JsonSyntaxException("part_type " + typeName + " does not exist");
-
-            return new GearPartIngredient(type);
-        }
-
-        @Override
-        public void write(FriendlyByteBuf buffer, GearPartIngredient ingredient) {
-            buffer.writeResourceLocation(ingredient.type.getName());
-        }
     }
 }

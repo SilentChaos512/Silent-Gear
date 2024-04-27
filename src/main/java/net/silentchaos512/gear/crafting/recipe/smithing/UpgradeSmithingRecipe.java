@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraftforge.common.ForgeHooks;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.setup.SgRecipes;
@@ -28,7 +28,7 @@ public class UpgradeSmithingRecipe extends GearSmithingRecipe {
             if (gearType.isGear() && part.get().canAddToGear(gear, part) && !GearData.hasPart(gear, part.get())) {
                 ItemStack result = gear.copy();
                 GearData.addPart(result, part);
-                GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer());
+                GearData.recalculateStats(result, CommonHooks.getCraftingPlayer());
                 return result;
             }
         }

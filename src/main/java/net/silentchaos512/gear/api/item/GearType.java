@@ -2,6 +2,8 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +28,17 @@ import java.util.regex.Pattern;
  * store this in a static final field in your item class, but the location doesn't matter.
  */
 public final class GearType {
+    public static final Codec<GearType> CODEC = Codec.STRING
+            .flatXmap(
+                    s -> Optional.of(GearType.get(s))
+                            .filter(GearType::isValid)
+                            .map(DataResult::success)
+                            .orElseGet(() -> DataResult.error(() -> "Unknown gear type: " + s)),
+                    gt -> Optional.of(gt.getName())
+                            .map(DataResult::success)
+                            .orElseGet(() -> DataResult.error(() -> "Unknown gear type: " + gt))
+            );
+
     private static final Pattern VALID_NAME = Pattern.compile("[^a-z_]");
     private static final Map<String, GearType> VALUES = new HashMap<>();
     private static final Map<GearType, ICoreItem> ITEMS = new HashMap<>();
@@ -165,7 +178,7 @@ public final class GearType {
     public static GearType fromJson(JsonObject json, String key) {
         String str = GsonHelper.getAsString(json, key);
         GearType type = get(str);
-        if (type.isInvalid()) {
+        if (!type.isValid()) {
             throw new JsonSyntaxException("Unknown gear type: " + str);
         }
         return type;
@@ -261,6 +274,11 @@ public final class GearType {
         return matches(ARMOR);
     }
 
+    public boolean isValid() {
+        return this != NONE;
+    }
+
+    @Deprecated(forRemoval = true)
     public boolean isInvalid() {
         return this == NONE;
     }

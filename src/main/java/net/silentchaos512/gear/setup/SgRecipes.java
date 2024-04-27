@@ -94,15 +94,6 @@ public final class SgRecipes {
     private SgRecipes() {
     }
 
-    static {
-        // Ingredient serializers
-        CraftingHelper.register(BlueprintIngredient.Serializer.NAME, BlueprintIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(GearPartIngredient.Serializer.NAME, GearPartIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(GearTypeIngredient.Serializer.NAME, GearTypeIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(PartMaterialIngredient.Serializer.NAME, PartMaterialIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(CustomCompoundIngredient.Serializer.NAME, CustomCompoundIngredient.Serializer.INSTANCE);
-    }
-
     private static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> register(String name, Supplier<RecipeSerializer<?>> serializer) {
         return register(SilentGear.getId(name), serializer);
     }

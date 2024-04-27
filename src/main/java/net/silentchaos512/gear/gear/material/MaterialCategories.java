@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.gear.material;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 
 import java.util.HashMap;
@@ -35,4 +37,9 @@ public enum MaterialCategories implements IMaterialCategory {
             return () -> key2;
         });
     }
+
+    public static final Codec<IMaterialCategory> CODEC = Codec.STRING.flatXmap(
+            s -> DataResult.success(get(s)),
+            cat -> DataResult.success(cat.getName())
+    );
 }

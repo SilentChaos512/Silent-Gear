@@ -20,7 +20,7 @@ import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.client.model.PartTextures;
-import net.silentchaos512.gear.crafting.ingredient.CustomCompoundIngredient;
+import net.silentchaos512.gear.crafting.ingredient.CustomAlloyIngredient;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
@@ -1939,7 +1939,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     @SuppressWarnings("WeakerAccess")
     protected MaterialBuilder customCompoundBuilder(ResourceLocation id, int tier, CustomMaterialItem item) {
-        return new MaterialBuilder(id, tier, CustomCompoundIngredient.of(item, id))
+        return new MaterialBuilder(id, tier, CustomAlloyIngredient.of(item, id))
                 .type(MaterialSerializers.CUSTOM_COMPOUND, false);
     }
 

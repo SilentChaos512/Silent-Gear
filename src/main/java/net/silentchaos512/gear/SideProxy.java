@@ -54,6 +54,7 @@ class SideProxy implements IProxy {
         SgCreativeTabs.CREATIVE_TABS.register(modEventBus);
         SgEnchantments.ENCHANTMENTS.register(modEventBus);
         SgEntities.ENTITIES.register(modEventBus);
+        SgIngredientTypes.REGISTER.register(modEventBus);
         SgItems.ITEMS.register(modEventBus);
         SgLoot.LOOT_CONDITIONS.register(modEventBus);
         SgLoot.LOOT_FUNCTIONS.register(modEventBus);
