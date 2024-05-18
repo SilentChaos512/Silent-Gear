@@ -29,14 +29,12 @@ import java.util.regex.Pattern;
  */
 public final class GearType {
     public static final Codec<GearType> CODEC = Codec.STRING
-            .flatXmap(
+            .comapFlatMap(
                     s -> Optional.of(GearType.get(s))
                             .filter(GearType::isValid)
                             .map(DataResult::success)
                             .orElseGet(() -> DataResult.error(() -> "Unknown gear type: " + s)),
-                    gt -> Optional.of(gt.getName())
-                            .map(DataResult::success)
-                            .orElseGet(() -> DataResult.error(() -> "Unknown gear type: " + gt))
+                    GearType::getName
             );
 
     private static final Pattern VALID_NAME = Pattern.compile("[^a-z_]");

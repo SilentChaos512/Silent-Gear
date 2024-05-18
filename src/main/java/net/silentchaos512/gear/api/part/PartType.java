@@ -50,14 +50,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class PartType {
-    public static final Codec<PartType> CODEC = ResourceLocation.CODEC
-            .flatXmap(
+    public static final Codec<PartType> CODEC = ModResourceLocation.CODEC
+            .comapFlatMap(
                     rl -> Optional.ofNullable(PartType.get(rl))
                             .map(DataResult::success)
                             .orElseGet(() -> DataResult.error(() -> "Unknown part type: " + rl)),
-                    pt -> Optional.of(pt.getName())
-                            .map(DataResult::success)
-                            .orElseGet(() -> DataResult.error(() -> "Unknown part type: " + pt))
+                    pt -> new ModResourceLocation(pt.name)
             );
 
     private static final Map<ResourceLocation, PartType> VALUES = new LinkedHashMap<>();

@@ -8,9 +8,9 @@ import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
-import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.FabricCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.GemCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.MetalCompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.setup.*;
 

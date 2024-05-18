@@ -18,7 +18,7 @@ import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
-import net.silentchaos512.gear.block.charger.ChargerTileEntity;
+import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderTileEntity;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.TextListBuilder;
@@ -98,7 +98,7 @@ public final class TooltipHandler {
     }
 
     private static void onStarlightChargerCatalystTooltip(ItemTooltipEvent event) {
-        int tier = ChargerTileEntity.getStarlightChargerCatalystTier(event.getItemStack());
+        int tier = ChargerBlockEntity.getStarlightChargerCatalystTier(event.getItemStack());
         event.getToolTip().add(TextUtil.withColor(TextUtil.misc("starlightChargerCataylst", tier), Color.REBECCAPURPLE));
     }
 

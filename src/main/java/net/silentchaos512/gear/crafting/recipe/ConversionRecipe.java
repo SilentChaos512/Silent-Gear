@@ -3,23 +3,28 @@ package net.silentchaos512.gear.crafting.recipe;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.setup.SgRecipes;
@@ -31,14 +36,14 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     private final Map<PartType, List<IMaterialInstance>> resultMaterials = new LinkedHashMap<>();
     private final ICoreItem item;
 
-    private ConversionRecipe(ShapelessRecipe recipe) {
-        super(recipe);
+    private ConversionRecipe(String pGroup, CraftingBookCategory pCategory, ItemStack pResult, NonNullList<Ingredient> pIngredients) {
+        super(pGroup, pCategory, pResult, pIngredients);
 
-        ItemStack output = recipe.getResultItem(null);
-        if (!(output.getItem() instanceof ICoreItem)) {
-            throw new JsonParseException("result is not a gear item: " + output);
+        Item resultItem = pResult.getItem();
+        if (!(resultItem instanceof ICoreItem)) {
+            throw new JsonParseException("result is not a gear item: " + pResult);
         }
-        this.item = (ICoreItem) output.getItem();
+        this.item = (ICoreItem) resultItem;
     }
 
     private static void deserializeMaterials(JsonObject json, ConversionRecipe recipe) {
@@ -88,11 +93,6 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
-        return Config.Common.allowConversionRecipes.get() && getBaseRecipe().matches(inv, worldIn);
-    }
-
-    @Override
     public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
         ItemStack result = item.construct(getParts());
         ItemStack original = findOriginalItem(inv);
@@ -138,12 +138,45 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         return true;
     }
 
-    public static class Serializer extends ExtendedShapelessRecipe.Serializer<ConversionRecipe> {
-        public Serializer() {
-            super(ConversionRecipe::new,
-                    ConversionRecipe::deserializeMaterials,
-                    ConversionRecipe::readMaterials,
-                    ConversionRecipe::writeMaterials);
+    public static class Serializer implements RecipeSerializer<ConversionRecipe> {
+        private static final Codec<ConversionRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                                ExtraCodecs.strictOptionalField(Codec.STRING, "group", "").forGetter(recipe -> recipe.group),
+                                CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(recipe -> recipe.category),
+                                ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
+                                Ingredient.CODEC_NONEMPTY
+                                        .listOf()
+                                        .fieldOf("ingredients")
+                                        .flatXmap(
+                                                recipe -> {
+                                                    Ingredient[] aingredient = recipe.toArray(Ingredient[]::new);
+                                                    if (aingredient.length == 0) {
+                                                        return DataResult.error(() -> "No ingredients for shapeless recipe");
+                                                    } else {
+                                                        return aingredient.length > 9
+                                                                ? DataResult.error(() -> "Too many ingredients for shapeless recipe. The maximum is: %s".formatted(9))
+                                                                : DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));
+                                                    }
+                                                },
+                                                DataResult::success
+                                        )
+                                        .forGetter(p_300975_ -> p_300975_.ingredients)
+                        )
+                        .apply(instance, ConversionRecipe::new)
+        );
+
+        @Override
+        public Codec<ConversionRecipe> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public ConversionRecipe fromNetwork(FriendlyByteBuf pBuffer) {
+            return null;
+        }
+
+        @Override
+        public void toNetwork(FriendlyByteBuf pBuffer, ConversionRecipe pRecipe) {
+
         }
     }
 }

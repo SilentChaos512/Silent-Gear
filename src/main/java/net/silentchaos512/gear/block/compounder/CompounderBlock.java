@@ -32,7 +32,7 @@ import net.minecraftforge.network.NetworkHooks;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.block.IDroppableInventory;
 import net.silentchaos512.gear.block.ModContainerBlock;
-import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;

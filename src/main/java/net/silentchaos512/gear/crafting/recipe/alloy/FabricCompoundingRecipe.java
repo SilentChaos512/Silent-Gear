@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.crafting.recipe.compounder;
+package net.silentchaos512.gear.crafting.recipe.alloy;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -7,7 +7,7 @@ import net.silentchaos512.gear.setup.SgRecipes;
 
 public class FabricCompoundingRecipe extends CompoundingRecipe {
     public FabricCompoundingRecipe(ResourceLocation recipeId) {
-        super(recipeId);
+        super();
     }
 
     @Override

@@ -15,7 +15,7 @@ import net.silentchaos512.gear.setup.SgBlockEntities;
 
 import javax.annotation.Nullable;
 
-public class StarlightChargerBlock extends ModContainerBlock<ChargerTileEntity> {
+public class StarlightChargerBlock extends ModContainerBlock<ChargerBlockEntity> {
     private static final VoxelShape SHAPE;
 
     static {
@@ -27,7 +27,7 @@ public class StarlightChargerBlock extends ModContainerBlock<ChargerTileEntity> 
         SHAPE = Shapes.or(base4, top);
     }
 
-    public StarlightChargerBlock(BlockEntityType.BlockEntitySupplier<ChargerTileEntity> tileFactory, Properties properties) {
+    public StarlightChargerBlock(BlockEntityType.BlockEntitySupplier<ChargerBlockEntity> tileFactory, Properties properties) {
         super(tileFactory, properties);
     }
 
@@ -40,6 +40,6 @@ public class StarlightChargerBlock extends ModContainerBlock<ChargerTileEntity> 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.STARLIGHT_CHARGER.get(), ChargerTileEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.STARLIGHT_CHARGER.get(), ChargerBlockEntity::tick);
     }
 }

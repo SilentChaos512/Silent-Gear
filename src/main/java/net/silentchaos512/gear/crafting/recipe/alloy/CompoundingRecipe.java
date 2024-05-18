@@ -1,9 +1,10 @@
-package net.silentchaos512.gear.crafting.recipe.compounder;
+package net.silentchaos512.gear.crafting.recipe.alloy;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,7 +17,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.part.PartType;
@@ -28,28 +28,27 @@ import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
-    private final ResourceLocation recipeId;
     final List<Ingredient> ingredients = new ArrayList<>();
-    ItemStack result = ItemStack.EMPTY;
+    final ItemStack result;
 
-    public CompoundingRecipe(ResourceLocation recipeId) {
-        this.recipeId = recipeId;
+    public CompoundingRecipe(ItemStack result, List<Ingredient> ingredients) {
+        this.result = result.copy();
+        this.ingredients.addAll(ingredients);
     }
 
-    public static CompoundingRecipe makeExample(CompounderInfo<?> info, int count, CompoundingRecipe recipe) {
+    public static <R extends CompoundingRecipe> R makeExample(CompounderInfo<?> info, int count, BiFunction<ItemStack, List<Ingredient>, R> recipeFactory) {
         IMaterialCategory[] cats = info.getCategories().toArray(new IMaterialCategory[0]);
+        List<Ingredient> list = new ArrayList<>();
         for (int i = 0; i < count; ++i) {
-            recipe.ingredients.add(PartMaterialIngredient.of(PartType.MAIN, GearType.ALL, cats));
+            list.add(PartMaterialIngredient.of(PartType.MAIN, GearType.ALL, cats));
         }
-        recipe.result = new ItemStack(info.getOutputItem(), count);
-        return recipe;
+        ItemStack result = new ItemStack(info.getOutputItem(), count);
+        return recipeFactory.apply(result, list);
     }
 
     @Override
@@ -112,11 +111,6 @@ public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
     }
 
     @Override
-    public ResourceLocation getId() {
-        return this.recipeId;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return SgRecipes.COMPOUNDING.get();
     }
@@ -175,6 +169,16 @@ public class CompoundingRecipe implements Recipe<CompounderTileEntity<?>> {
             ret.result = buffer.readItem();
 
             return ret;
+        }
+
+        @Override
+        public Codec<T> codec() {
+            return null;
+        }
+
+        @Override
+        public T fromNetwork(FriendlyByteBuf pBuffer) {
+            return null;
         }
 
         @Override

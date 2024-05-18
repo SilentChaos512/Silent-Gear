@@ -17,16 +17,16 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
-import net.silentchaos512.gear.block.charger.ChargerTileEntity;
+import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.charger.StarlightChargerBlock;
 import net.silentchaos512.gear.block.compounder.CompounderBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.FabricCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.GemCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.MetalCompoundingRecipe;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -89,7 +89,7 @@ public final class SgBlocks {
                     .strength(5, 30)));
 
     public static final DeferredBlock<StarlightChargerBlock> STARLIGHT_CHARGER = register("starlight_charger", () ->
-            new StarlightChargerBlock(ChargerTileEntity::createStarlightCharger,
+            new StarlightChargerBlock(ChargerBlockEntity::createStarlightCharger,
                     BlockBehaviour.Properties.of()
                             .strength(5, 30)));
 

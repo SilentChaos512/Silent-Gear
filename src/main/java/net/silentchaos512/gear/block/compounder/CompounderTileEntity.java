@@ -11,6 +11,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -25,7 +26,7 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.block.IDroppableInventory;
-import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
@@ -40,7 +41,7 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("WeakerAccess")
-public class CompounderTileEntity<R extends CompoundingRecipe> extends LockableSidedInventoryTileEntity implements IDroppableInventory {
+public class CompounderTileEntity<R extends CompoundingRecipe> extends Container implements IDroppableInventory {
     public static final int STANDARD_INPUT_SLOTS = 4;
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 

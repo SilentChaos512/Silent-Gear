@@ -22,7 +22,6 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RepairItemRecipe;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.lib.collection.StackList;
@@ -35,8 +34,8 @@ import net.silentchaos512.lib.collection.StackList;
  * @since 0.3.2
  */
 public class RepairItemRecipeFix extends RepairItemRecipe {
-    public RepairItemRecipeFix(ResourceLocation idIn, CraftingBookCategory bookCategory) {
-        super(idIn, bookCategory);
+    public RepairItemRecipeFix(CraftingBookCategory bookCategory) {
+        super(bookCategory);
     }
 
     @Override

@@ -15,7 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.block.compounder.CompounderInfo;
 import net.silentchaos512.gear.block.compounder.CompounderScreen;
-import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 

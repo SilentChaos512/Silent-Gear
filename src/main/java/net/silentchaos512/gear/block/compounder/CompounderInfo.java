@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 
 import java.util.Collection;

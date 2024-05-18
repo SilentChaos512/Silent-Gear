@@ -19,7 +19,7 @@ public class ChargerContainer extends AbstractContainerMenu {
     private final ContainerData fields;
 
     public ChargerContainer(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf data) {
-        this(type, id, inv, new SimpleContainer(ChargerTileEntity.INVENTORY_SIZE), new SimpleContainerData(data.readByte()));
+        this(type, id, inv, new SimpleContainer(ChargerBlockEntity.INVENTORY_SIZE), new SimpleContainerData(data.readByte()));
     }
 
     public ChargerContainer(MenuType<?> type, int id, Inventory inv, Container blockInv, ContainerData fields) {
@@ -27,7 +27,7 @@ public class ChargerContainer extends AbstractContainerMenu {
         this.inventory = blockInv;
         this.fields = fields;
 
-        checkContainerSize(this.inventory, ChargerTileEntity.INVENTORY_SIZE);
+        checkContainerSize(this.inventory, ChargerBlockEntity.INVENTORY_SIZE);
 
         addSlot(new Slot(inventory, 0, 56, 23) {
             @Override

@@ -10,12 +10,11 @@ import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.crafting.ingredient.*;
 import net.silentchaos512.gear.crafting.recipe.*;
-import net.silentchaos512.gear.crafting.recipe.compounder.CompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.compounder.FabricCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.compounder.GemCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.compounder.MetalCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.FabricCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.GemCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.MetalCompoundingRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.CompoundPartSalvagingRecipe;
@@ -48,9 +47,9 @@ public final class SgRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUND_PART = register(Const.COMPOUND_PART, () ->
             ExtendedShapelessRecipe.Serializer.basic(ShapelessCompoundPartRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING = register(Const.COMPOUNDING, () ->
-            new CompoundingRecipe.Serializer<>(CompoundingRecipe::new));
+            new CompoundingRecipe.Serializer<>(recipeId -> new CompoundingRecipe()));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING_FABRIC = register(Const.COMPOUNDING_FABRIC, () ->
-            new CompoundingRecipe.Serializer<>(GemCompoundingRecipe::new));
+            new CompoundingRecipe.Serializer<>(FabricCompoundingRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING_GEM = register(Const.COMPOUNDING_GEM, () ->
             new CompoundingRecipe.Serializer<>(GemCompoundingRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING_METAL = register(Const.COMPOUNDING_METAL, () ->
