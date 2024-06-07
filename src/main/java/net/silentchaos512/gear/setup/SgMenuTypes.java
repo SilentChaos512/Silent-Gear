@@ -12,10 +12,10 @@ import net.neoforged.neoforge.network.IContainerFactory;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.block.charger.ChargerContainer;
-import net.silentchaos512.gear.block.charger.ChargerScreen;
-import net.silentchaos512.gear.block.compounder.CompounderContainer;
-import net.silentchaos512.gear.block.compounder.MetalAlloyerScreen;
+import net.silentchaos512.gear.block.charger.ChargerContainerMenu;
+import net.silentchaos512.gear.block.charger.ChargerContainerScreen;
+import net.silentchaos512.gear.block.compounder.CompoundMakerContainer;
+import net.silentchaos512.gear.block.compounder.AlloyForgeScreen;
 import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
 import net.silentchaos512.gear.block.compounder.RefabricatorScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
@@ -36,22 +36,22 @@ public final class SgMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<MetalPressContainer>> METAL_PRESS = register("metal_press",
             MetalPressContainer::new);
 
-    public static final DeferredHolder<MenuType<?>, MenuType<CompounderContainer>> METAL_ALLOYER = register("metal_alloyer",
-            (id, playerInventory, buffer) -> new CompounderContainer(getMetalAlloyer(),
+    public static final DeferredHolder<MenuType<?>, MenuType<CompoundMakerContainer>> METAL_ALLOYER = register("metal_alloyer",
+            (id, playerInventory, buffer) -> new CompoundMakerContainer(getMetalAlloyer(),
                     id,
                     playerInventory,
                     buffer,
-                    SgBlocks.METAL_ALLOYER.get().getCategories()));
+                    SgBlocks.ALLOY_FORGE.get().getCategories()));
 
-    public static final DeferredHolder<MenuType<?>, MenuType<CompounderContainer>> RECRYSTALLIZER = register("recrystallizer",
-            (id, playerInventory, buffer) -> new CompounderContainer(getRecrystallizer(),
+    public static final DeferredHolder<MenuType<?>, MenuType<CompoundMakerContainer>> RECRYSTALLIZER = register("recrystallizer",
+            (id, playerInventory, buffer) -> new CompoundMakerContainer(getRecrystallizer(),
                     id,
                     playerInventory,
                     buffer,
                     SgBlocks.RECRYSTALLIZER.get().getCategories()));
 
-    public static final DeferredHolder<MenuType<?>, MenuType<CompounderContainer>> REFABRICATOR = register("refabricator",
-            (id, playerInventory, buffer) -> new CompounderContainer(getRefabricator(),
+    public static final DeferredHolder<MenuType<?>, MenuType<CompoundMakerContainer>> REFABRICATOR = register("refabricator",
+            (id, playerInventory, buffer) -> new CompoundMakerContainer(getRefabricator(),
                     id,
                     playerInventory,
                     buffer,
@@ -60,8 +60,8 @@ public final class SgMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<SalvagerContainer>> SALVAGER = register("salvager",
             SalvagerContainer::new);
 
-    public static final DeferredHolder<MenuType<?>, MenuType<ChargerContainer>> STARLIGHT_CHARGER = register("starlight_charger",
-            ChargerContainer::createStarlightCharger);
+    public static final DeferredHolder<MenuType<?>, MenuType<ChargerContainerMenu>> STARLIGHT_CHARGER = register("starlight_charger",
+            ChargerContainerMenu::createStarlightCharger);
 
     public static final DeferredHolder<MenuType<?>, MenuType<BlueprintBookContainer>> BLUEPRINT_BOOK = register("blueprint_book",
             BlueprintBookContainer::new);
@@ -72,12 +72,12 @@ public final class SgMenuTypes {
     @OnlyIn(Dist.CLIENT)
     public static void registerScreens(FMLClientSetupEvent event) {
         MenuScreens.register(MATERIAL_GRADER.get(), GraderScreen::new);
-        MenuScreens.register(METAL_ALLOYER.get(), MetalAlloyerScreen::new);
+        MenuScreens.register(METAL_ALLOYER.get(), AlloyForgeScreen::new);
         MenuScreens.register(METAL_PRESS.get(), MetalPressScreen::new);
         MenuScreens.register(RECRYSTALLIZER.get(), RecrystallizerScreen::new);
         MenuScreens.register(REFABRICATOR.get(), RefabricatorScreen::new);
         MenuScreens.register(SALVAGER.get(), SalvagerScreen::new);
-        MenuScreens.register(STARLIGHT_CHARGER.get(), ChargerScreen::new);
+        MenuScreens.register(STARLIGHT_CHARGER.get(), ChargerContainerScreen::new);
 
         MenuScreens.register(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
     }

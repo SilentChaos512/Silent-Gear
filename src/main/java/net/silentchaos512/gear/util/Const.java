@@ -7,10 +7,10 @@ import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.block.compounder.CompounderInfo;
-import net.silentchaos512.gear.crafting.recipe.alloy.FabricCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.GemCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.MetalCompoundingRecipe;
+import net.silentchaos512.gear.block.compounder.CompoundMakerInfo;
+import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.setup.*;
 
@@ -61,22 +61,22 @@ public final class Const {
 
     // Compound-crafting block info
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final CompounderInfo<MetalCompoundingRecipe> METAL_COMPOUNDER_INFO = new CompounderInfo<>(
+    public static final CompoundMakerInfo<MetalAlloyRecipe> METAL_COMPOUNDER_INFO = new CompoundMakerInfo<>(
             ImmutableList.of(
                     MaterialCategories.METAL,
                     MaterialCategories.DUST
             ),
             4,
             () -> SgItems.ALLOY_INGOT.get(),
-            () -> SgBlocks.METAL_ALLOYER.get(),
-            () -> SgBlockEntities.METAL_ALLOYER.get(),
+            () -> SgBlocks.ALLOY_FORGE.get(),
+            () -> SgBlockEntities.ALLOY_FORGE.get(),
             () -> SgMenuTypes.METAL_ALLOYER.get(),
             () -> SgRecipes.COMPOUNDING_METAL.get(),
             () -> SgRecipes.COMPOUNDING_METAL_TYPE.get(),
-            MetalCompoundingRecipe.class);
+            MetalAlloyRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final CompounderInfo<GemCompoundingRecipe> GEM_COMPOUNDER_INFO = new CompounderInfo<>(
+    public static final CompoundMakerInfo<GemAlloyRecipe> GEM_COMPOUNDER_INFO = new CompoundMakerInfo<>(
             ImmutableList.of(
                     MaterialCategories.GEM,
                     MaterialCategories.DUST
@@ -88,10 +88,10 @@ public final class Const {
             () -> SgMenuTypes.RECRYSTALLIZER.get(),
             () -> SgRecipes.COMPOUNDING_GEM.get(),
             () -> SgRecipes.COMPOUNDING_GEM_TYPE.get(),
-            GemCompoundingRecipe.class);
+            GemAlloyRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final CompounderInfo<FabricCompoundingRecipe> FABRIC_COMPOUNDER_INFO = new CompounderInfo<>(
+    public static final CompoundMakerInfo<FabricAlloyRecipe> FABRIC_COMPOUNDER_INFO = new CompoundMakerInfo<>(
             ImmutableList.of(
                     MaterialCategories.CLOTH,
                     MaterialCategories.FIBER,
@@ -104,7 +104,7 @@ public final class Const {
             () -> SgMenuTypes.REFABRICATOR.get(),
             SgRecipes.COMPOUNDING_FABRIC,
             SgRecipes.COMPOUNDING_FABRIC_TYPE,
-            FabricCompoundingRecipe.class);
+            FabricAlloyRecipe.class);
 
     private Const() {}
 

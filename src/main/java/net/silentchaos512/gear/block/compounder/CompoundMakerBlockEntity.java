@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,25 +13,29 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.block.IDroppableInventory;
-import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
-import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
-import net.silentchaos512.lib.tile.SyncVariable;
 import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.TimeUtils;
 
@@ -41,29 +46,27 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("WeakerAccess")
-public class CompounderTileEntity<R extends CompoundingRecipe> extends Container implements IDroppableInventory {
+public class CompoundMakerBlockEntity<R extends AlloyRecipe> extends BaseContainerBlockEntity implements IDroppableInventory, WorldlyContainer, StackedContentsCompatible {
     public static final int STANDARD_INPUT_SLOTS = 4;
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
-    private final CompounderInfo<R> info;
+    private final CompoundMakerInfo<R> info;
     private final int[] allSlots;
+    private final RecipeManager.CachedCheck<CompoundMakerBlockEntity<?>, R> quickCheck;
 
-    @SyncVariable(name = "Progress")
+    private NonNullList<ItemStack> items;
+    private ItemStack outputItemHint = ItemStack.EMPTY;
     private int progress = 0;
-    @SyncVariable(name = "WorkEnabled")
     private boolean workEnabled = true;
 
     @SuppressWarnings("OverlyComplexAnonymousInnerClass") private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
-            switch (index) {
-                case 0:
-                    return progress;
-                case 1:
-                    return workEnabled ? 1 : 0;
-                default:
-                    return 0;
-            }
+            return switch (index) {
+                case 0 -> progress;
+                case 1 -> workEnabled ? 1 : 0;
+                default -> 0;
+            };
         }
 
         @Override
@@ -84,29 +87,24 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
         }
     };
 
-    public CompounderTileEntity(CompounderInfo<R> info, BlockPos pos, BlockState state) {
-        super(info.getBlockEntityType(), info.getInputSlotCount() + 2, pos, state);
+    public CompoundMakerBlockEntity(CompoundMakerInfo<R> info, BlockPos pos, BlockState state) {
+        super(info.getBlockEntityType(), pos, state);
+        this.items = NonNullList.withSize(info.getInputSlotCount() + 1, ItemStack.EMPTY);
         this.info = info;
         this.allSlots = IntStream.range(0, this.items.size()).toArray();
+        this.quickCheck = RecipeManager.createCheck(info.getRecipeType());
     }
 
     protected RecipeType<R> getRecipeType() {
         return this.info.getRecipeType();
     }
 
-    @Nullable
-    public R getRecipe() {
-        if (level == null) return null;
-        return level.getRecipeManager().getRecipeFor(getRecipeType(), this, level).orElse(null);
-    }
-
     protected CompoundMaterialItem getOutputItem(MaterialList materials) {
         return this.info.getOutputItem();
     }
 
-    protected ItemStack getWorkOutput(@Nullable R recipe, MaterialList materials) {
+    protected ItemStack getWorkOutput(@Nullable R recipe, RegistryAccess registryAccess, MaterialList materials) {
         if (recipe != null) {
-            RegistryAccess registryAccess = this.level != null ? this.level.registryAccess() : null;
             return recipe.assemble(this, registryAccess);
         }
         return getOutputItem(materials).create(materials);
@@ -142,17 +140,17 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
         return true;
     }
 
-    public static <R extends CompoundingRecipe> void tick(Level level, BlockPos pos, BlockState state, CompounderTileEntity<R> blockEntity) {
+    public static <R extends AlloyRecipe> void tick(Level level, BlockPos pos, BlockState state, CompoundMakerBlockEntity<R> blockEntity) {
         if (blockEntity.areInputsEmpty()) {
             // No point in doing anything when input slots are empty
             blockEntity.updateOutputHint(ItemStack.EMPTY);
             return;
         }
 
-        R recipe = blockEntity.getRecipe();
+        var recipe = blockEntity.quickCheck.getRecipeFor(blockEntity, level).orElse(null);
         if (recipe != null) {
             // Inputs match a custom recipe
-            blockEntity.doWork(recipe, MaterialList.empty());
+            blockEntity.doWork(recipe.value(), level.registryAccess(), MaterialList.empty());
         } else {
             // No recipe, but we might be able to make a generic compound
             MaterialList materials = blockEntity.getInputs();
@@ -161,15 +159,15 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
                 blockEntity.stopWork(true);
                 return;
             }
-            blockEntity.doWork(null, materials);
+            blockEntity.doWork(null, level.registryAccess(), materials);
         }
     }
 
-    private void doWork(@Nullable R recipe, MaterialList materials) {
+    private void doWork(@Nullable R recipe, RegistryAccess registryAccess, MaterialList materials) {
         assert level != null;
 
         ItemStack current = getItem(getOutputSlotIndex());
-        ItemStack output = getWorkOutput(recipe, materials);
+        ItemStack output = getWorkOutput(recipe, registryAccess, materials);
 
         updateOutputHint(output);
 
@@ -189,7 +187,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
             }
 
             if (progress >= WORK_TIME && !level.isClientSide) {
-                finishWork(recipe, materials, current);
+                finishWork(recipe, registryAccess, materials, current);
             }
         } else {
             stopWork(false);
@@ -208,13 +206,13 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
         }
     }
 
-    private void finishWork(@Nullable R recipe, MaterialList materials, ItemStack current) {
+    private void finishWork(@Nullable R recipe, RegistryAccess registryAccess, MaterialList materials, ItemStack current) {
         progress = 0;
         for (int i = 0; i < getInputSlotCount(); ++i) {
             removeItem(i, 1);
         }
 
-        ItemStack output = getWorkOutput(recipe, materials);
+        ItemStack output = getWorkOutput(recipe, registryAccess, materials);
         if (!current.isEmpty()) {
             current.grow(output.getCount());
         } else {
@@ -294,8 +292,53 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
     }
 
     @Override
-    public void setItem(int index, ItemStack stack) {
-        super.setItem(index, stack);
+    public int getContainerSize() {
+        return this.items.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack stack : this.items) {
+            if (!stack.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int pSlot) {
+        return this.items.get(pSlot);
+    }
+
+    @Override
+    public ItemStack removeItem(int pSlot, int pAmount) {
+        return ContainerHelper.removeItem(this.items, pSlot, pAmount);
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int pSlot) {
+        return ContainerHelper.takeItem(this.items, pSlot);
+    }
+
+    @Override
+    public void setItem(int pSlot, ItemStack pStack) {
+        ItemStack itemstack = this.items.get(pSlot);
+        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameTags(itemstack, pStack);
+        this.items.set(pSlot, pStack);
+        if (pStack.getCount() > this.getMaxStackSize()) {
+            pStack.setCount(this.getMaxStackSize());
+        }
+
+        if (pSlot < getContainerSize() - 1 && !flag) {
+            this.progress = 0;
+            this.setChanged();
+        }
+    }
+
+    @Override
+    public boolean stillValid(Player pPlayer) {
+        return Container.stillValidBlockEntity(this, pPlayer);
     }
 
     @Override
@@ -305,7 +348,7 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        return index < getInputSlotCount()/* && isSimpleMaterial(stack)*/;
+        return index < getInputSlotCount();
     }
 
     @Override
@@ -320,13 +363,13 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
 
     @Override
     protected Component getDefaultName() {
-        ResourceLocation key = ForgeRegistries.BLOCKS.getKey(this.info.getBlock());
+        ResourceLocation key = BuiltInRegistries.BLOCK.getKey(this.info.getBlock());
         return Component.translatable(Util.makeDescriptionId("container", key));
     }
 
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
-        return new CompounderContainer(this.info.getContainerType(),
+        return new CompoundMakerContainer(this.info.getContainerType(),
                 id,
                 player,
                 this,
@@ -337,19 +380,22 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
     @Override
     public void load(CompoundTag tags) {
         super.load(tags);
-        SyncVariable.Helper.readSyncVars(this, tags);
+        this.progress = tags.getInt("Progress");
+        this.workEnabled = tags.getBoolean("WorkEnabled");
     }
 
     @Override
     public void saveAdditional(CompoundTag tags) {
         super.saveAdditional(tags);
-        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.WRITE);
+        tags.putInt("Progress", this.progress);
+        tags.putBoolean("WorkEnabled", this.workEnabled);
     }
 
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag tags = super.getUpdateTag();
-        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
+        tags.putInt("Progress", this.progress);
+        tags.putBoolean("WorkEnabled", this.workEnabled);
         return tags;
     }
 
@@ -357,6 +403,21 @@ public class CompounderTileEntity<R extends CompoundingRecipe> extends Container
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         super.onDataPacket(net, packet);
         CompoundTag tags = packet.getTag();
-        SyncVariable.Helper.readSyncVars(this, tags);
+        if (tags != null) {
+            this.progress = tags.getInt("Progress");
+            this.workEnabled = tags.getBoolean("WorkEnabled");
+        }
+    }
+
+    @Override
+    public void clearContent() {
+        this.items.clear();
+    }
+
+    @Override
+    public void fillStackedContents(StackedContents pContents) {
+        for (ItemStack stack : this.items) {
+            pContents.accountStack(stack);
+        }
     }
 }

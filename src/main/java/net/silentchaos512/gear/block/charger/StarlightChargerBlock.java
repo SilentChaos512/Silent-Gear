@@ -11,11 +11,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.silentchaos512.gear.block.ModContainerBlock;
+import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifier;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 
 import javax.annotation.Nullable;
 
-public class StarlightChargerBlock extends ModContainerBlock<ChargerBlockEntity> {
+public class StarlightChargerBlock extends ModContainerBlock<ChargerBlockEntity<StarchargedMaterialModifier>> {
     private static final VoxelShape SHAPE;
 
     static {
@@ -27,7 +28,7 @@ public class StarlightChargerBlock extends ModContainerBlock<ChargerBlockEntity>
         SHAPE = Shapes.or(base4, top);
     }
 
-    public StarlightChargerBlock(BlockEntityType.BlockEntitySupplier<ChargerBlockEntity> tileFactory, Properties properties) {
+    public StarlightChargerBlock(BlockEntityType.BlockEntitySupplier<ChargerBlockEntity<StarchargedMaterialModifier>> tileFactory, Properties properties) {
         super(tileFactory, properties);
     }
 

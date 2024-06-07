@@ -13,9 +13,9 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.block.compounder.CompounderInfo;
+import net.silentchaos512.gear.block.compounder.CompoundMakerInfo;
 import net.silentchaos512.gear.block.compounder.CompounderScreen;
-import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -24,20 +24,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class CompoundingRecipeCategory implements IRecipeCategory<CompoundingRecipe> {
+public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
 
     private static final int GUI_START_X = 15;
     private static final int GUI_START_Y = 29;
     private static final int GUI_WIDTH = 147 - GUI_START_X;
     private static final int GUI_HEIGHT = 56 - GUI_START_Y;
 
-    private final CompounderInfo<?> info;
+    private final CompoundMakerInfo<?> info;
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated arrow;
     private final Component localizedName;
 
-    public CompoundingRecipeCategory(CompounderInfo<?> info, String categoryName, IGuiHelper guiHelper) {
+    public CompoundingRecipeCategory(CompoundMakerInfo<?> info, String categoryName, IGuiHelper guiHelper) {
         this.info = info;
         background = guiHelper.createDrawable(CompounderScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
         icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(info.getBlock()));
@@ -47,7 +47,7 @@ public class CompoundingRecipeCategory implements IRecipeCategory<CompoundingRec
     }
 
     @Override
-    public RecipeType<CompoundingRecipe> getRecipeType() {
+    public RecipeType<AlloyRecipe> getRecipeType() {
         if (this.info == Const.FABRIC_COMPOUNDER_INFO) {
             return SGearJeiPlugin.COMPOUNDING_FABRIC_TYPE;
         } else if (this.info == Const.GEM_COMPOUNDER_INFO) {
@@ -75,7 +75,7 @@ public class CompoundingRecipeCategory implements IRecipeCategory<CompoundingRec
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, CompoundingRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, AlloyRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < info.getInputSlotCount() && i < recipe.getIngredients().size(); ++i) {
             List<ItemStack> items = Arrays.asList(recipe.getIngredients().get(i).getItems());
             builder.addSlot(RecipeIngredientRole.INPUT, 18 * i + 17 - GUI_START_X, 35 - GUI_START_Y)
@@ -99,7 +99,7 @@ public class CompoundingRecipeCategory implements IRecipeCategory<CompoundingRec
     }
 
     @Override
-    public void draw(CompoundingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(AlloyRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         arrow.draw(guiGraphics, 93 - GUI_START_X, 34 - GUI_START_Y);
     }
 }

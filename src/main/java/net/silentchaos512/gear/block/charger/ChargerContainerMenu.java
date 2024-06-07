@@ -14,15 +14,15 @@ import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.MathUtils;
 
-public class ChargerContainer extends AbstractContainerMenu {
+public class ChargerContainerMenu extends AbstractContainerMenu {
     private final Container inventory;
     private final ContainerData fields;
 
-    public ChargerContainer(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf data) {
+    public ChargerContainerMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf data) {
         this(type, id, inv, new SimpleContainer(ChargerBlockEntity.INVENTORY_SIZE), new SimpleContainerData(data.readByte()));
     }
 
-    public ChargerContainer(MenuType<?> type, int id, Inventory inv, Container blockInv, ContainerData fields) {
+    public ChargerContainerMenu(MenuType<?> type, int id, Inventory inv, Container blockInv, ContainerData fields) {
         super(type, id);
         this.inventory = blockInv;
         this.fields = fields;
@@ -48,12 +48,12 @@ public class ChargerContainer extends AbstractContainerMenu {
         addDataSlots(this.fields);
     }
 
-    public static ChargerContainer createStarlightCharger(int id, Inventory inv, FriendlyByteBuf data) {
-        return new ChargerContainer(SgMenuTypes.STARLIGHT_CHARGER.get(), id, inv, data);
+    public static ChargerContainerMenu createStarlightCharger(int id, Inventory inv, FriendlyByteBuf data) {
+        return new ChargerContainerMenu(SgMenuTypes.STARLIGHT_CHARGER.get(), id, inv, data);
     }
 
-    public static ChargerContainer createStarlightCharger(int id, Inventory inv, Container blockInv, ContainerData fields) {
-        return new ChargerContainer(SgMenuTypes.STARLIGHT_CHARGER.get(), id, inv, blockInv, fields);
+    public static ChargerContainerMenu createStarlightCharger(int id, Inventory inv, Container blockInv, ContainerData fields) {
+        return new ChargerContainerMenu(SgMenuTypes.STARLIGHT_CHARGER.get(), id, inv, blockInv, fields);
     }
 
     public int getWorkProgress() {

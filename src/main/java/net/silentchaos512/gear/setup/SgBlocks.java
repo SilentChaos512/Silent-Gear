@@ -19,14 +19,14 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.charger.StarlightChargerBlock;
-import net.silentchaos512.gear.block.compounder.CompounderBlock;
+import net.silentchaos512.gear.block.compounder.CompoundMakerBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.crafting.recipe.alloy.FabricCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.GemCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.MetalCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -93,20 +93,20 @@ public final class SgBlocks {
                     BlockBehaviour.Properties.of()
                             .strength(5, 30)));
 
-    public static final DeferredBlock<CompounderBlock<MetalCompoundingRecipe>> METAL_ALLOYER = register("metal_alloyer", () ->
-            new CompounderBlock<>(Const.METAL_COMPOUNDER_INFO,
+    public static final DeferredBlock<CompoundMakerBlock<MetalAlloyRecipe>> ALLOY_FORGE = register("alloy_forge", () ->
+            new CompoundMakerBlock<>(Const.METAL_COMPOUNDER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
-    public static final DeferredBlock<CompounderBlock<GemCompoundingRecipe>> RECRYSTALLIZER = register("recrystallizer", () ->
-            new CompounderBlock<>(Const.GEM_COMPOUNDER_INFO,
+    public static final DeferredBlock<CompoundMakerBlock<GemAlloyRecipe>> RECRYSTALLIZER = register("recrystallizer", () ->
+            new CompoundMakerBlock<>(Const.GEM_COMPOUNDER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
-    public static final DeferredBlock<CompounderBlock<FabricCompoundingRecipe>> REFABRICATOR = register("refabricator", () ->
-            new CompounderBlock<>(Const.FABRIC_COMPOUNDER_INFO,
+    public static final DeferredBlock<CompoundMakerBlock<FabricAlloyRecipe>> REFABRICATOR = register("refabricator", () ->
+            new CompoundMakerBlock<>(Const.FABRIC_COMPOUNDER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));

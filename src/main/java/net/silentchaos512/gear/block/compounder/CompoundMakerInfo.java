@@ -8,16 +8,16 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 
 import java.util.Collection;
 import java.util.function.Supplier;
 
-public class CompounderInfo<R extends CompoundingRecipe> {
-    private final Supplier<CompounderBlock> block;
-    private final Supplier<BlockEntityType<CompounderTileEntity<R>>> blockEntityType;
-    private final Supplier<MenuType<? extends CompounderContainer>> containerType;
+public class CompoundMakerInfo<R extends AlloyRecipe> {
+    private final Supplier<CompoundMakerBlock<R>> block;
+    private final Supplier<BlockEntityType<CompoundMakerBlockEntity<R>>> blockEntityType;
+    private final Supplier<MenuType<? extends CompoundMakerContainer>> containerType;
     private final DeferredHolder<RecipeType<?>, RecipeType<R>> recipeType;
     private final Supplier<CompoundMaterialItem> outputItem;
     private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> recipeSerializer;
@@ -26,15 +26,15 @@ public class CompounderInfo<R extends CompoundingRecipe> {
     private final ImmutableList<IMaterialCategory> categories;
 
     @SuppressWarnings("ConstructorWithTooManyParameters")
-    public CompounderInfo(Collection<IMaterialCategory> categories,
-                          int inputSlotCount,
-                          Supplier<CompoundMaterialItem> outputItem,
-                          Supplier<CompounderBlock> block,
-                          Supplier<BlockEntityType<CompounderTileEntity<R>>> blockEntityType,
-                          Supplier<MenuType<? extends CompounderContainer>> containerType,
-                          DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> recipeSerializer,
-                          DeferredHolder<RecipeType<?>, RecipeType<R>> recipeType,
-                          Class<R> recipeClass) {
+    public CompoundMakerInfo(Collection<IMaterialCategory> categories,
+                             int inputSlotCount,
+                             Supplier<CompoundMaterialItem> outputItem,
+                             Supplier<CompoundMakerBlock<R>> block,
+                             Supplier<BlockEntityType<CompoundMakerBlockEntity<R>>> blockEntityType,
+                             Supplier<MenuType<? extends CompoundMakerContainer>> containerType,
+                             DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> recipeSerializer,
+                             DeferredHolder<RecipeType<?>, RecipeType<R>> recipeType,
+                             Class<R> recipeClass) {
         this.block = block;
         this.blockEntityType = blockEntityType;
         this.containerType = containerType;
@@ -46,19 +46,19 @@ public class CompounderInfo<R extends CompoundingRecipe> {
         this.recipeClass = recipeClass;
     }
 
-    public CompounderBlock getBlock() {
+    public CompoundMakerBlock<R> getBlock() {
         return block.get();
     }
 
-    public BlockEntityType<CompounderTileEntity<R>> getBlockEntityType() {
+    public BlockEntityType<CompoundMakerBlockEntity<R>> getBlockEntityType() {
         return blockEntityType.get();
     }
 
-    public BlockEntityTicker<? super CompounderTileEntity<R>> getServerBlockEntityTicker() {
-        return CompounderTileEntity::tick;
+    public BlockEntityTicker<? super CompoundMakerBlockEntity<R>> getServerBlockEntityTicker() {
+        return CompoundMakerBlockEntity::tick;
     }
 
-    public MenuType<? extends CompounderContainer> getContainerType() {
+    public MenuType<? extends CompoundMakerContainer> getContainerType() {
         return containerType.get();
     }
 

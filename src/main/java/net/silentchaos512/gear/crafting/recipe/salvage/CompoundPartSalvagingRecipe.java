@@ -19,7 +19,7 @@ import java.util.List;
 
 public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
     public CompoundPartSalvagingRecipe(ResourceLocation recipeId) {
-        super(recipeId);
+        super();
     }
 
     @Override

@@ -62,7 +62,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(SgBlocks.MATERIAL_GRADER.get())
                 .add(SgBlocks.SALVAGER.get())
                 .add(SgBlocks.STARLIGHT_CHARGER.get())
-                .add(SgBlocks.METAL_ALLOYER.get())
+                .add(SgBlocks.ALLOY_FORGE.get())
                 .add(SgBlocks.RECRYSTALLIZER.get())
                 .add(SgBlocks.REFABRICATOR.get())
                 .add(SgBlocks.METAL_PRESS.get())

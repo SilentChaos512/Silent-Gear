@@ -28,11 +28,10 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.block.IDroppableInventory;
 import net.silentchaos512.gear.block.ModContainerBlock;
-import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
@@ -41,15 +40,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CompounderBlock<R extends CompoundingRecipe> extends ModContainerBlock<CompounderTileEntity> {
+public class CompoundMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<CompoundMakerBlockEntity<R>> {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 27, 15);
 
-    private final CompounderInfo<R> info;
+    private final CompoundMakerInfo<R> info;
 
-    public CompounderBlock(CompounderInfo<R> info, Properties properties) {
-        super((pos, state) -> new CompounderTileEntity<>(info, pos, state), properties);
+    public CompoundMakerBlock(CompoundMakerInfo<R> info, Properties properties) {
+        super((pos, state) -> new CompoundMakerBlockEntity<>(info, pos, state), properties);
         this.info = info;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
     }
@@ -69,9 +68,8 @@ public class CompounderBlock<R extends CompoundingRecipe> extends ModContainerBl
 
     protected void interactWith(Level worldIn, BlockPos pos, Player player) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if (tileEntity instanceof CompounderTileEntity && player instanceof ServerPlayer) {
-            CompounderTileEntity te = (CompounderTileEntity) tileEntity;
-            NetworkHooks.openScreen((ServerPlayer) player, te, te::encodeExtraData);
+        if (tileEntity instanceof CompoundMakerBlockEntity<?> compoundMaker && player instanceof ServerPlayer) {
+            player.openMenu(compoundMaker, compoundMaker::encodeExtraData);
         }
     }
 
@@ -92,7 +90,7 @@ public class CompounderBlock<R extends CompoundingRecipe> extends ModContainerBl
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
             BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-            if (tileEntity instanceof CompounderTileEntity) {
+            if (tileEntity instanceof CompoundMakerBlockEntity) {
                 IDroppableInventory te = (IDroppableInventory) tileEntity;
                 Containers.dropContents(worldIn, pos, te.getItemsToDrop());
                 worldIn.updateNeighbourForOutputSignal(pos, this);

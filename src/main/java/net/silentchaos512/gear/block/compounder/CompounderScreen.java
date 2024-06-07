@@ -12,13 +12,13 @@ import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nonnull;
 
-public class CompounderScreen extends AbstractContainerScreen<CompounderContainer> {
+public class CompounderScreen extends AbstractContainerScreen<CompoundMakerContainer> {
     public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/compounder.png");
 
     private Button workButton;
     private boolean lastWorkEnabledValue;
 
-    public CompounderScreen(CompounderContainer screenContainer, Inventory inv, Component titleIn) {
+    public CompounderScreen(CompoundMakerContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
     }
 

@@ -5,7 +5,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
-import net.silentchaos512.gear.block.compounder.CompounderContainer;
+import net.silentchaos512.gear.block.compounder.CompoundMakerContainer;
 import net.silentchaos512.gear.item.ICycleItem;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.network.client.*;
@@ -35,7 +35,7 @@ public class SgServerPayloadHandler {
     public void handleAlloyMakerUpdate(AlloyMakerUpdatePayload data, PlayPayloadContext ctx) {
         handleData(ctx, () -> {
             ctx.player().ifPresent(player -> {
-                if (player.containerMenu instanceof CompounderContainer container) {
+                if (player.containerMenu instanceof CompoundMakerContainer container) {
                     container.setWorkEnabled(data.workEnabled());
                 }
             });

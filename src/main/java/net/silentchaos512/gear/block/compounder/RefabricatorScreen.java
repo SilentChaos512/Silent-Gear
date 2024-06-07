@@ -4,7 +4,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.network.chat.Component;
 
 public class RefabricatorScreen extends CompounderScreen {
-    public RefabricatorScreen(CompounderContainer screenContainer, Inventory inv, Component titleIn) {
+    public RefabricatorScreen(CompoundMakerContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
     }
 }

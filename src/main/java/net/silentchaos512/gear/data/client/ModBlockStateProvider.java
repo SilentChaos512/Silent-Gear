@@ -104,7 +104,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         orientableMachineBlock(SgBlocks.SALVAGER, "salvager");
 
         // Compounders
-        orientableMachineBlock(SgBlocks.METAL_ALLOYER, "metal_alloyer");
+        orientableMachineBlock(SgBlocks.ALLOY_FORGE, "metal_alloyer");
         orientableMachineBlock(SgBlocks.RECRYSTALLIZER, "recrystallizer");
         orientableMachineBlock(SgBlocks.REFABRICATOR, "refabricator");
 

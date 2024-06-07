@@ -1,13 +1,15 @@
 package net.silentchaos512.gear.crafting.recipe.alloy;
 
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.setup.SgRecipes;
 
-public class MetalCompoundingRecipe extends CompoundingRecipe {
-    public MetalCompoundingRecipe(ResourceLocation recipeId) {
-        super();
+import java.util.List;
+
+public class MetalAlloyRecipe extends AlloyRecipe {
+    public MetalAlloyRecipe(Result result, List<Ingredient> ingredients) {
+        super(result, ingredients);
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class GearSalvagingRecipe extends SalvagingRecipe {
     public GearSalvagingRecipe(ResourceLocation recipeId) {
-        super(recipeId);
+        super();
     }
 
     @Override

@@ -12,16 +12,15 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
-import net.silentchaos512.gear.block.compounder.CompounderTileEntity;
+import net.silentchaos512.gear.block.compounder.CompoundMakerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderTileEntity;
 import net.silentchaos512.gear.block.press.MetalPressTileEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerTileEntity;
-import net.silentchaos512.gear.crafting.recipe.alloy.FabricCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.GemCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.MetalCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
 import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifier;
 import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.lib.block.IBlockProvider;
 
 import java.util.Arrays;
 
@@ -34,10 +33,10 @@ public final class SgBlockEntities {
             SgBlocks.MATERIAL_GRADER
     );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CompounderTileEntity<MetalCompoundingRecipe>>> METAL_ALLOYER = register(
-            "metal_alloyer",
-            (pos, state) -> new CompounderTileEntity<>(Const.METAL_COMPOUNDER_INFO, pos, state),
-            SgBlocks.METAL_ALLOYER
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CompoundMakerBlockEntity<MetalAlloyRecipe>>> ALLOY_FORGE = register(
+            "alloy_forge",
+            (pos, state) -> new CompoundMakerBlockEntity<>(Const.METAL_COMPOUNDER_INFO, pos, state),
+            SgBlocks.ALLOY_FORGE
     );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MetalPressTileEntity>> METAL_PRESS = register(
@@ -46,15 +45,15 @@ public final class SgBlockEntities {
             SgBlocks.METAL_PRESS
     );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CompounderTileEntity<GemCompoundingRecipe>>> RECRYSTALLIZER = register(
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CompoundMakerBlockEntity<GemAlloyRecipe>>> RECRYSTALLIZER = register(
             "recrystallizer",
-            (pos, state) -> new CompounderTileEntity<>(Const.GEM_COMPOUNDER_INFO, pos, state),
+            (pos, state) -> new CompoundMakerBlockEntity<>(Const.GEM_COMPOUNDER_INFO, pos, state),
             SgBlocks.RECRYSTALLIZER
     );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CompounderTileEntity<FabricCompoundingRecipe>>> REFABRICATOR = register(
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CompoundMakerBlockEntity<FabricAlloyRecipe>>> REFABRICATOR = register(
             "refabricator",
-            (pos, state) -> new CompounderTileEntity<>(Const.FABRIC_COMPOUNDER_INFO, pos, state),
+            (pos, state) -> new CompoundMakerBlockEntity<>(Const.FABRIC_COMPOUNDER_INFO, pos, state),
             SgBlocks.REFABRICATOR
     );
 

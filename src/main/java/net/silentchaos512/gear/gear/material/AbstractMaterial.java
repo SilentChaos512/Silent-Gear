@@ -477,7 +477,7 @@ public abstract class AbstractMaterial implements IMaterial {
             if (craftingItems != null && craftingItems.isJsonObject()) {
                 JsonElement main = craftingItems.getAsJsonObject().get("main");
                 if (main != null) {
-                    ret.ingredient = Ingredient.fromJson(main);
+                    ret.ingredient = Ingredient.fromJson(main, true);
                 }
 
                 JsonElement subs = craftingItems.getAsJsonObject().get("subs");
@@ -487,7 +487,7 @@ public abstract class AbstractMaterial implements IMaterial {
                     Map<PartType, Ingredient> map = new HashMap<>();
                     jo.entrySet().forEach(entry -> {
                         PartType partType = PartType.get(new ModResourceLocation(entry.getKey()));
-                        Ingredient ingredient = Ingredient.fromJson(entry.getValue());
+                        Ingredient ingredient = Ingredient.fromJson(entry.getValue(), true);
                         map.put(partType, ingredient);
                     });
                     ret.partSubstitutes.putAll(map);
@@ -567,17 +567,18 @@ public abstract class AbstractMaterial implements IMaterial {
         }
 
         private Ingredient tempReadIngredientFix(FriendlyByteBuf buffer) {
-            if (buffer.readBoolean()) {
-                buffer.readVarInt(); // Burn Forge's -1 marker...
-                return CraftingHelper.getIngredient(buffer.readResourceLocation(), buffer);
-            }
+//            if (buffer.readBoolean()) {
+//                buffer.readVarInt(); // Burn Forge's -1 marker...
+//                return CraftingHelper.getIngredient(buffer.readResourceLocation(), buffer);
+//            }
             return Ingredient.fromNetwork(buffer);
         }
 
         private void tempWriteIngredientFix(FriendlyByteBuf buffer, Ingredient ingredient) {
-            boolean custom = ingredient.getSerializer() != VanillaIngredientSerializer.INSTANCE;
-            buffer.writeBoolean(custom);
-            CraftingHelper.write(buffer, ingredient);
+//            boolean custom = ingredient.getSerializer() != VanillaIngredientSerializer.INSTANCE;
+//            buffer.writeBoolean(custom);
+//            CraftingHelper.write(buffer, ingredient);
+            ingredient.toNetwork(buffer);
         }
 
         private void readCraftingItems(FriendlyByteBuf buffer, T material) {

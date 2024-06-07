@@ -3,6 +3,8 @@ package net.silentchaos512.gear.crafting.recipe.salvage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -27,13 +29,12 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SalvagingRecipe implements Recipe<Container> {
-
-    private final ResourceLocation recipeId;
-    protected Ingredient ingredient;
+    private final Ingredient ingredient;
     private final List<ItemStack> results = new ArrayList<>();
 
-    public SalvagingRecipe(ResourceLocation recipeId) {
-        this.recipeId = recipeId;
+    public SalvagingRecipe(Ingredient ingredient, List<ItemStack> results) {
+        this.ingredient = ingredient;
+        this.results.addAll(results);
     }
 
     public Ingredient getIngredient() {
@@ -66,11 +67,6 @@ public class SalvagingRecipe implements Recipe<Container> {
     public ItemStack getResultItem(RegistryAccess registryAccess) {
         // DO NOT USE
         return !results.isEmpty() ? results.get(0) : ItemStack.EMPTY;
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return recipeId;
     }
 
     @Override
@@ -131,27 +127,21 @@ public class SalvagingRecipe implements Recipe<Container> {
     }
 
     public static class Serializer implements RecipeSerializer<SalvagingRecipe> {
+        public static final Codec<SalvagingRecipe> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.ingredient),
+                        Codec.list(ItemStack.ITEM_WITH_COUNT_CODEC).fieldOf("results").forGetter(r -> r.results)
+                ).apply(instance, SalvagingRecipe::new)
+        );
+
         @Override
-        public SalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            SalvagingRecipe recipe = new SalvagingRecipe(recipeId);
-            recipe.ingredient = Ingredient.fromJson(json.get("ingredient"));
-            JsonArray resultsArray = json.getAsJsonArray("results");
-            for (JsonElement element : resultsArray) {
-                if (element.isJsonObject()) {
-                    Item item = GsonHelper.getAsItem(element.getAsJsonObject(), "item");
-                    int count = GsonHelper.getAsInt(element.getAsJsonObject(), "count", 1);
-                    recipe.results.add(new ItemStack(item, count));
-                } else {
-                    recipe.results.add(new ItemStack(GsonHelper.convertToItem(element, "item")));
-                }
-            }
-            return recipe;
+        public Codec<SalvagingRecipe> codec() {
+            return CODEC;
         }
 
-        @Nullable
         @Override
-        public SalvagingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            SalvagingRecipe recipe = new SalvagingRecipe(recipeId);
+        public SalvagingRecipe fromNetwork(FriendlyByteBuf pBuffer) {
+            SalvagingRecipe recipe = new SalvagingRecipe();
             recipe.ingredient = Ingredient.fromNetwork(buffer);
             int resultCount = buffer.readByte();
             for (int i = 0; i < resultCount; ++i) {

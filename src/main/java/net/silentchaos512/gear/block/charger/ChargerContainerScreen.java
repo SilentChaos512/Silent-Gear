@@ -13,10 +13,10 @@ import net.silentchaos512.gear.util.TextUtil;
 import java.util.List;
 import java.util.Optional;
 
-public class ChargerScreen extends AbstractContainerScreen<ChargerContainer> {
+public class ChargerContainerScreen extends AbstractContainerScreen<ChargerContainerMenu> {
     public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/charger.png");
 
-    public ChargerScreen(ChargerContainer screenContainer, Inventory inv, Component titleIn) {
+    public ChargerContainerScreen(ChargerContainerMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
     }
 

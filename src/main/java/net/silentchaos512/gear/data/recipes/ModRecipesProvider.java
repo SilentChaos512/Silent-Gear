@@ -669,7 +669,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerMachines(Consumer<FinishedRecipe> consumer) {
-        ExtendedShapedRecipeBuilder.vanillaBuilder(RecipeCategory.DECORATIONS, SgBlocks.METAL_ALLOYER)
+        ExtendedShapedRecipeBuilder.vanillaBuilder(RecipeCategory.DECORATIONS, SgBlocks.ALLOY_FORGE)
                 .define('/', SgTags.Items.INGOTS_CRIMSON_STEEL)
                 .define('i', Tags.Items.STORAGE_BLOCKS_IRON)
                 .define('#', Blocks.BLACKSTONE)

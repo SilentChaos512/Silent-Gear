@@ -2,9 +2,12 @@ package net.silentchaos512.gear.block.charger;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -44,6 +47,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
 
     private final ChargedMaterialModifier.Type<T> modifierType;
 
+    private NonNullList<ItemStack> items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private int progress = 0;
     private int workTime = 100;
     private int charge = 0;
@@ -275,7 +279,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
 
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
-        return ChargerContainer.createStarlightCharger(id, player, this, fields);
+        return ChargerContainerMenu.createStarlightCharger(id, player, this, fields);
     }
 
     @Override
@@ -295,72 +299,100 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
 
     @Override
     public int getContainerSize() {
-        return INVENTORY_SIZE;
+        return this.items.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        for (ItemStack stack : this.items) {
+            if (!stack.isEmpty()) {
+                return false;
+            }
+        };
+        return true;
     }
 
     @Override
     public ItemStack getItem(int pSlot) {
-        return null;
+        return this.items.get(pSlot);
     }
 
     @Override
     public ItemStack removeItem(int pSlot, int pAmount) {
-        return null;
+        return ContainerHelper.removeItem(this.items, pSlot, pAmount);
     }
 
     @Override
     public ItemStack removeItemNoUpdate(int pSlot) {
-        return null;
+        return ContainerHelper.takeItem(this.items, pSlot);
     }
 
     @Override
     public void setItem(int pSlot, ItemStack pStack) {
+        ItemStack itemstack = this.items.get(pSlot);
+        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameTags(itemstack, pStack);
+        this.items.set(pSlot, pStack);
+        if (pStack.getCount() > this.getMaxStackSize()) {
+            pStack.setCount(this.getMaxStackSize());
+        }
 
+        if (pSlot < INVENTORY_SIZE - 1 && !flag) {
+            this.progress = 0;
+            this.setChanged();
+        }
     }
 
     @Override
     public boolean stillValid(Player pPlayer) {
-        return false;
+        return Container.stillValidBlockEntity(this, pPlayer);
     }
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        if (index == 0) return GearApi.isMaterial(stack);
-        if (index == 1) return stack.is(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS);
-        return false;
+        return switch (index) {
+            case 0 -> GearApi.isMaterial(stack);
+            case 1 -> stack.is(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS);
+            default -> false;
+        };
     }
 
     @Override
     public void load(CompoundTag tags) {
         super.load(tags);
-        SyncVariable.Helper.readSyncVars(this, tags);
+        this.progress = tags.getInt("Progress");
+        this.workTime = tags.getInt("WorkTime");
+        this.charge = tags.getInt("Charge");
+        this.structureLevel = tags.getInt("StructureLevel");
     }
 
     @Override
     public void saveAdditional(CompoundTag tags) {
         super.saveAdditional(tags);
-        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.WRITE);
+        tags.putInt("Progress", this.progress);
+        tags.putInt("WorkTime", this.workTime);
+        tags.putInt("Charge", this.charge);
+        tags.putInt("StructureLevel", this.structureLevel);
     }
 
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag tags = super.getUpdateTag();
-        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
+        tags.putInt("Progress", this.progress);
+        tags.putInt("WorkTime", this.workTime);
+        tags.putInt("Charge", this.charge);
+        tags.putInt("StructureLevel", this.structureLevel);
         return tags;
     }
 
     @Override
     public void clearContent() {
-
+        this.items.clear();
     }
 
     @Override
     public void fillStackedContents(StackedContents pContents) {
-
+        for (ItemStack stack : this.items) {
+            pContents.accountStack(stack);
+        }
     }
 }

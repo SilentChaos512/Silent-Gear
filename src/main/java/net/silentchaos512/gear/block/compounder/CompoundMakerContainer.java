@@ -15,16 +15,16 @@ import net.silentchaos512.lib.util.InventoryUtils;
 
 import java.util.Collection;
 
-public class CompounderContainer extends AbstractContainerMenu {
+public class CompoundMakerContainer extends AbstractContainerMenu {
     private final Container inventory;
     private final ContainerData fields;
 
-    public CompounderContainer(MenuType<?> containerType, int id, Inventory playerInventory, FriendlyByteBuf buffer, Collection<IMaterialCategory> categories) {
+    public CompoundMakerContainer(MenuType<?> containerType, int id, Inventory playerInventory, FriendlyByteBuf buffer, Collection<IMaterialCategory> categories) {
         this(containerType, id, playerInventory, new SimpleContainer(buffer.readByte()), new SimpleContainerData(buffer.readByte()), categories);
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
-    public CompounderContainer(MenuType<?> containerType, int id, Inventory playerInventory, Container inventory, ContainerData fields, Collection<IMaterialCategory> categories) {
+    public CompoundMakerContainer(MenuType<?> containerType, int id, Inventory playerInventory, Container inventory, ContainerData fields, Collection<IMaterialCategory> categories) {
         super(containerType, id);
         this.inventory = inventory;
         this.fields = fields;
@@ -67,7 +67,7 @@ public class CompounderContainer extends AbstractContainerMenu {
 
     public int getProgressArrowScale() {
         int progress = fields.get(0);
-        return progress != 0 ? progress * 24 / CompounderTileEntity.WORK_TIME : 0;
+        return progress != 0 ? progress * 24 / CompoundMakerBlockEntity.WORK_TIME : 0;
     }
 
     @Override

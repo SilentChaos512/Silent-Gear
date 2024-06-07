@@ -11,10 +11,10 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.recipe.*;
-import net.silentchaos512.gear.crafting.recipe.alloy.CompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.FabricCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.GemCompoundingRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.MetalCompoundingRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.CompoundPartSalvagingRecipe;
@@ -34,10 +34,10 @@ public final class SgRecipes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, SilentGear.MOD_ID);
 
     // Types
-    public static final DeferredHolder<RecipeType<?>, RecipeType<CompoundingRecipe>> COMPOUNDING_TYPE = registerType(Const.COMPOUNDING);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<FabricCompoundingRecipe>> COMPOUNDING_FABRIC_TYPE = registerType(Const.COMPOUNDING_FABRIC);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<GemCompoundingRecipe>> COMPOUNDING_GEM_TYPE = registerType(Const.COMPOUNDING_GEM);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<MetalCompoundingRecipe>> COMPOUNDING_METAL_TYPE = registerType(Const.COMPOUNDING_METAL);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<AlloyRecipe>> COMPOUNDING_TYPE = registerType(Const.COMPOUNDING);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<FabricAlloyRecipe>> COMPOUNDING_FABRIC_TYPE = registerType(Const.COMPOUNDING_FABRIC);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<GemAlloyRecipe>> COMPOUNDING_GEM_TYPE = registerType(Const.COMPOUNDING_GEM);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<MetalAlloyRecipe>> COMPOUNDING_METAL_TYPE = registerType(Const.COMPOUNDING_METAL);
     public static final DeferredHolder<RecipeType<?>, RecipeType<PressingRecipe>> PRESSING_TYPE = registerType(Const.PRESSING);
     public static final DeferredHolder<RecipeType<?>, RecipeType<SalvagingRecipe>> SALVAGING_TYPE = registerType(Const.SALVAGING);
 
@@ -47,13 +47,13 @@ public final class SgRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUND_PART = register(Const.COMPOUND_PART, () ->
             ExtendedShapelessRecipe.Serializer.basic(ShapelessCompoundPartRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING = register(Const.COMPOUNDING, () ->
-            new CompoundingRecipe.Serializer<>(recipeId -> new CompoundingRecipe()));
+            new AlloyRecipe.Serializer<>(recipeId -> new AlloyRecipe()));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING_FABRIC = register(Const.COMPOUNDING_FABRIC, () ->
-            new CompoundingRecipe.Serializer<>(FabricCompoundingRecipe::new));
+            new AlloyRecipe.Serializer<>(FabricAlloyRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING_GEM = register(Const.COMPOUNDING_GEM, () ->
-            new CompoundingRecipe.Serializer<>(GemCompoundingRecipe::new));
+            new AlloyRecipe.Serializer<>(GemAlloyRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING_METAL = register(Const.COMPOUNDING_METAL, () ->
-            new CompoundingRecipe.Serializer<>(MetalCompoundingRecipe::new));
+            new AlloyRecipe.Serializer<>(MetalAlloyRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CONVERSION = register("conversion",
             ConversionRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> DAMAGE_ITEM = register(Const.DAMAGE_ITEM,
