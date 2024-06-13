@@ -18,27 +18,23 @@
 
 package net.silentchaos512.gear.crafting.recipe;
 
-import com.google.gson.JsonObject;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeHooks;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
-import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.RepairKitItem;
-import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
@@ -47,8 +43,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class QuickRepairRecipe extends CustomRecipe {
-    public QuickRepairRecipe(ResourceLocation idIn, CraftingBookCategory bookCategory) {
-        super(idIn, bookCategory);
+    public QuickRepairRecipe(CraftingBookCategory bookCategory) {
+        super(bookCategory);
     }
 
     @Override
@@ -120,7 +116,7 @@ public class QuickRepairRecipe extends CustomRecipe {
         }
 
         GearData.incrementRepairCount(gear, 1);
-        GearData.recalculateStats(gear, ForgeHooks.getCraftingPlayer());
+        GearData.recalculateStats(gear, CommonHooks.getCraftingPlayer());
         return gear;
     }
 
@@ -180,27 +176,7 @@ public class QuickRepairRecipe extends CustomRecipe {
     }
 
     @Override
-    public ResourceLocation getId() {
-        return Const.QUICK_REPAIR;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return SgRecipes.QUICK_REPAIR.get();
-    }
-
-    public static final class Serializer implements RecipeSerializer<QuickRepairRecipe> {
-        @Override
-        public QuickRepairRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            return new QuickRepairRecipe(recipeId, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public QuickRepairRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            return new QuickRepairRecipe(recipeId, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, QuickRepairRecipe recipe) {}
     }
 }

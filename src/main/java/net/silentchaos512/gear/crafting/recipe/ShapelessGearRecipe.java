@@ -1,13 +1,15 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
+import cpw.mods.util.Lazy;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Lazy;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -22,14 +24,13 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     private final ICoreItem item;
     private final Lazy<ItemStack> exampleOutput;
 
-    public ShapelessGearRecipe(ShapelessRecipe recipe) {
-        super(recipe);
+    public ShapelessGearRecipe(String pGroup, CraftingBookCategory pCategory, ItemStack pResult, NonNullList<Ingredient> pIngredients) {
+        super(pGroup, pCategory, pResult, pIngredients);
 
-        ItemStack output = recipe.getResultItem(null);
-        if (!(output.getItem() instanceof ICoreItem)) {
-            throw new JsonParseException("result is not a gear item: " + output);
+        if (!(pResult.getItem() instanceof ICoreItem)) {
+            throw new JsonParseException("result is not a gear item: " + pResult);
         }
-        this.item = (ICoreItem) output.getItem();
+        this.item = (ICoreItem) pResult.getItem();
 
         this.exampleOutput = Lazy.of(() -> {
             // Create an example item, so we're not just showing a broken item
@@ -46,7 +47,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
 
     @Override
     public boolean matches(CraftingContainer inv, Level worldIn) {
-        if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
+        if (!super.matches(inv, worldIn)) return false;
 
         GearType gearType = item.getGearType();
         Collection<PartData> parts = getParts(inv);

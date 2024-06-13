@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.crafting.recipe.smithing;
 
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -13,8 +12,8 @@ public abstract class GearSmithingRecipe extends SmithingTransformRecipe {
     protected final Ingredient addition;
     protected final ItemStack gearItem;
 
-    public GearSmithingRecipe(ResourceLocation recipeId, ItemStack gearItem, Ingredient template, Ingredient addition) {
-        super(recipeId, template, Ingredient.of(gearItem.getItem()), addition, gearItem);
+    public GearSmithingRecipe(ItemStack gearItem, Ingredient template, Ingredient addition) {
+        super(template, Ingredient.of(gearItem.getItem()), addition, gearItem);
         this.template = template;
         this.addition = addition;
         this.gearItem = gearItem;

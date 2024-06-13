@@ -1,16 +1,10 @@
 package net.silentchaos512.gear.crafting.recipe.salvage;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -21,15 +15,14 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRecipes;
-import net.silentchaos512.gear.item.CompoundPartItem;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class SalvagingRecipe implements Recipe<Container> {
-    private final Ingredient ingredient;
+    protected final Ingredient ingredient;
     private final List<ItemStack> results = new ArrayList<>();
 
     public SalvagingRecipe(Ingredient ingredient, List<ItemStack> results) {
@@ -140,21 +133,21 @@ public class SalvagingRecipe implements Recipe<Container> {
         }
 
         @Override
-        public SalvagingRecipe fromNetwork(FriendlyByteBuf pBuffer) {
-            SalvagingRecipe recipe = new SalvagingRecipe();
-            recipe.ingredient = Ingredient.fromNetwork(buffer);
-            int resultCount = buffer.readByte();
+        public SalvagingRecipe fromNetwork(FriendlyByteBuf buf) {
+            var ingredient = Ingredient.fromNetwork(buf);
+            var results = new ArrayList<ItemStack>();
+            int resultCount = buf.readByte();
             for (int i = 0; i < resultCount; ++i) {
-                recipe.results.add(buffer.readItem());
+                results.add(buf.readItem());
             }
-            return recipe;
+            return new SalvagingRecipe(ingredient, results);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, SalvagingRecipe recipe) {
-            recipe.ingredient.toNetwork(buffer);
-            buffer.writeByte(recipe.results.size());
-            recipe.results.forEach(buffer::writeItem);
+        public void toNetwork(FriendlyByteBuf buf, SalvagingRecipe recipe) {
+            recipe.ingredient.toNetwork(buf);
+            buf.writeByte(recipe.results.size());
+            recipe.results.forEach(buf::writeItem);
         }
     }
 }

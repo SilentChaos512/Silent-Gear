@@ -4,14 +4,13 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CraftedMaterialItem;
 
 public class MaterialPressingRecipe extends PressingRecipe {
-    public MaterialPressingRecipe(ResourceLocation id, Ingredient ingredient, ItemStack result) {
-        super(id, ingredient, result);
+    public MaterialPressingRecipe(String group, Ingredient ingredient, ItemStack result) {
+        super(group, ingredient, result);
 
         if (!(result.getItem() instanceof CraftedMaterialItem)) {
             throw new IllegalArgumentException("result must be a CraftedMaterialItem");

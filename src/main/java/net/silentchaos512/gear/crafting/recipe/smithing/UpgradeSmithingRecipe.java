@@ -1,13 +1,11 @@
 package net.silentchaos512.gear.crafting.recipe.smithing;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -16,8 +14,8 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 public class UpgradeSmithingRecipe extends GearSmithingRecipe {
-    public UpgradeSmithingRecipe(ResourceLocation recipeId, ItemStack gearItem, Ingredient template, Ingredient addition) {
-        super(recipeId, gearItem, template, addition);
+    public UpgradeSmithingRecipe(ItemStack gearItem, Ingredient template, Ingredient addition) {
+        super(gearItem, template, addition);
     }
 
     @Override
@@ -41,20 +39,25 @@ public class UpgradeSmithingRecipe extends GearSmithingRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<UpgradeSmithingRecipe> {
+        public static final Codec<UpgradeSmithingRecipe> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        ItemStack.SINGLE_ITEM_CODEC.fieldOf("gear").forGetter(r -> r.gearItem),
+                        Ingredient.CODEC.fieldOf("template").forGetter(r -> r.template),
+                        Ingredient.CODEC.fieldOf("addition").forGetter(r -> r.addition)
+                ).apply(instance, UpgradeSmithingRecipe::new)
+        );
+
         @Override
-        public UpgradeSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            ItemStack gearItem = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "gear"));
-            Ingredient template = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "template"));
-            Ingredient upgradeItem = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "addition"));
-            return new UpgradeSmithingRecipe(recipeId, gearItem, template, upgradeItem);
+        public Codec<UpgradeSmithingRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public UpgradeSmithingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        public UpgradeSmithingRecipe fromNetwork(FriendlyByteBuf buffer) {
             ItemStack gearItem = buffer.readItem();
             Ingredient template = Ingredient.fromNetwork(buffer);
             Ingredient addition = Ingredient.fromNetwork(buffer);
-            return new UpgradeSmithingRecipe(recipeId, gearItem, template, addition);
+            return new UpgradeSmithingRecipe(gearItem, template, addition);
         }
 
         @Override

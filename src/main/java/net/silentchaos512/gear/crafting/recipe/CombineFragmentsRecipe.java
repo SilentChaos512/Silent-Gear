@@ -4,21 +4,19 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRecipes;
-import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.lib.collection.StackList;
-import net.silentchaos512.lib.crafting.ingredient.ExclusionIngredient;
 import net.silentchaos512.lib.util.InventoryUtils;
 
 public class CombineFragmentsRecipe extends CustomRecipe {
-    public CombineFragmentsRecipe(ResourceLocation idIn, CraftingBookCategory bookCategory) {
-        super(idIn, bookCategory);
+    public CombineFragmentsRecipe(CraftingBookCategory bookCategory) {
+        super(bookCategory);
     }
 
     @Override
@@ -79,13 +77,13 @@ public class CombineFragmentsRecipe extends CustomRecipe {
         // Try to get an equivalent item from the material's ingredient
         ItemStack[] matchingStacks = material.getIngredient().getItems();
         if (matchingStacks.length < 1) {
-            if (material.getIngredient() instanceof ExclusionIngredient) {
-                // Get excluded ingredients if no others are available
-                ItemStack[] allMatches = ((ExclusionIngredient) material.getIngredient()).getMatchingStacksWithExclusions();
-                if (allMatches.length > 0) {
-                    return allMatches[0];
-                }
-            }
+//            if (material.getIngredient() instanceof ExclusionIngredient) {
+//                // Get excluded ingredients if no others are available
+//                ItemStack[] allMatches = ((ExclusionIngredient) material.getIngredient()).getMatchingStacksWithExclusions();
+//                if (allMatches.length > 0) {
+//                    return allMatches[0];
+//                }
+//            }
             return ItemStack.EMPTY;
         }
 

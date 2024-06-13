@@ -7,9 +7,8 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeHooks;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -19,8 +18,8 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
 public class ModKitRemovePartRecipe extends CustomRecipe {
-    public ModKitRemovePartRecipe(ResourceLocation idIn, CraftingBookCategory bookCategory) {
-        super(idIn, bookCategory);
+    public ModKitRemovePartRecipe(CraftingBookCategory bookCategory) {
+        super(bookCategory);
     }
 
     @Override
@@ -61,7 +60,7 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
         PartType type = ModKitItem.getSelectedType(modKit);
 
         if (GearData.removeFirstPartOfType(result, type)) {
-            GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer());
+            GearData.recalculateStats(result, CommonHooks.getCraftingPlayer());
         }
         return result;
     }

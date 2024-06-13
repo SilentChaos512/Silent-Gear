@@ -1,14 +1,12 @@
 package net.silentchaos512.gear.crafting.recipe.smithing;
 
-import com.google.gson.JsonObject;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeHooks;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -20,8 +18,8 @@ import net.silentchaos512.gear.util.GearHelper;
 import java.util.Objects;
 
 public class CoatingSmithingRecipe extends GearSmithingRecipe {
-    public CoatingSmithingRecipe(ResourceLocation recipeId, ItemStack gearItem, Ingredient template, Ingredient addition) {
-        super(recipeId, gearItem, template, addition);
+    public CoatingSmithingRecipe(ItemStack gearItem, Ingredient template, Ingredient addition) {
+        super(gearItem, template, addition);
     }
 
     @Override
@@ -40,7 +38,7 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
 
                 result.setDamageValue(0);
                 GearData.removeExcessParts(result, PartType.COATING);
-                GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer()); // Crafting player is always null?
+                GearData.recalculateStats(result, CommonHooks.getCraftingPlayer()); // Crafting player is always null?
                 return result;
             }
         }
@@ -53,20 +51,25 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<CoatingSmithingRecipe> {
+        public static final Codec<CoatingSmithingRecipe> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        ItemStack.SINGLE_ITEM_CODEC.fieldOf("gear").forGetter(r -> r.gearItem),
+                        Ingredient.CODEC.fieldOf("template").forGetter(r -> r.template),
+                        Ingredient.CODEC.fieldOf("addition").forGetter(r -> r.addition)
+                ).apply(instance, CoatingSmithingRecipe::new)
+        );
+
         @Override
-        public CoatingSmithingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            ItemStack gearItem = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "gear"));
-            Ingredient template = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "template"));
-            Ingredient upgrade = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "addition"));
-            return new CoatingSmithingRecipe(recipeId, gearItem, template, upgrade);
+        public Codec<CoatingSmithingRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public CoatingSmithingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        public CoatingSmithingRecipe fromNetwork(FriendlyByteBuf buffer) {
             ItemStack gearItem = buffer.readItem();
             Ingredient template = Ingredient.fromNetwork(buffer);
             Ingredient addition = Ingredient.fromNetwork(buffer);
-            return new CoatingSmithingRecipe(recipeId, gearItem, template, addition);
+            return new CoatingSmithingRecipe(gearItem, template, addition);
         }
 
         @Override

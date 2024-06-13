@@ -1,22 +1,21 @@
 package net.silentchaos512.gear.crafting.recipe;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeHooks;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.MainPartItem;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.collection.StackList;
@@ -24,8 +23,8 @@ import net.silentchaos512.lib.collection.StackList;
 import java.util.*;
 
 public class GearPartSwapRecipe extends CustomRecipe {
-    public GearPartSwapRecipe(ResourceLocation idIn, CraftingBookCategory bookCategory) {
-        super(idIn, bookCategory);
+    public GearPartSwapRecipe(CraftingBookCategory bookCategory) {
+        super(bookCategory);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class GearPartSwapRecipe extends CustomRecipe {
 
         GearData.writeConstructionParts(result, parts);
         GearData.removeExcessParts(result);
-        GearData.recalculateStats(result, ForgeHooks.getCraftingPlayer());
+        GearData.recalculateStats(result, CommonHooks.getCraftingPlayer());
         newParts.forEach(p -> p.onAddToGear(result));
 
         return result;

@@ -1,24 +1,24 @@
 package net.silentchaos512.gear.crafting.recipe.salvage;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GearSalvagingRecipe extends SalvagingRecipe {
-    public GearSalvagingRecipe(ResourceLocation recipeId) {
-        super();
+    public GearSalvagingRecipe(Ingredient ingredient) {
+        super(ingredient, Collections.emptyList());
     }
 
     @Override
@@ -28,7 +28,8 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
 
         PartDataList parts = GearData.getConstructionParts(input);
         for (PartData part : parts) {
-            ret.addAll(salvage(part));
+            ret.add(part.getItem());
+            //ret.addAll(salvage(part));
         }
 
         return ret;
@@ -40,24 +41,25 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<GearSalvagingRecipe> {
+        public static final Codec<GearSalvagingRecipe> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.ingredient)
+                ).apply(instance, GearSalvagingRecipe::new)
+        );
         @Override
-        public GearSalvagingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            GearSalvagingRecipe recipe = new GearSalvagingRecipe(recipeId);
-            recipe.ingredient = Ingredient.fromJson(json.get("ingredient"));
-            return recipe;
-        }
-
-        @Nullable
-        @Override
-        public GearSalvagingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            GearSalvagingRecipe recipe = new GearSalvagingRecipe(recipeId);
-            recipe.ingredient = Ingredient.fromNetwork(buffer);
-            return recipe;
+        public Codec<GearSalvagingRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, GearSalvagingRecipe recipe) {
-            recipe.ingredient.toNetwork(buffer);
+        public GearSalvagingRecipe fromNetwork(FriendlyByteBuf pBuffer) {
+            var ingredient = Ingredient.fromNetwork(pBuffer);
+            return new GearSalvagingRecipe(ingredient);
+        }
+
+        @Override
+        public void toNetwork(FriendlyByteBuf pBuffer, GearSalvagingRecipe pRecipe) {
+            pRecipe.ingredient.toNetwork(pBuffer);
         }
     }
 }

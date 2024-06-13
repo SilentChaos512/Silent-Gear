@@ -18,30 +18,26 @@
 
 package net.silentchaos512.gear.crafting.recipe;
 
-import com.google.gson.JsonObject;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
-import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.lib.collection.StackList;
 
 public class FillRepairKitRecipe extends CustomRecipe {
-    public FillRepairKitRecipe(ResourceLocation idIn, CraftingBookCategory bookCategory) {
-        super(idIn, bookCategory);
+    public FillRepairKitRecipe(CraftingBookCategory bookCategory) {
+        super(bookCategory);
     }
 
     @Override
@@ -110,27 +106,7 @@ public class FillRepairKitRecipe extends CustomRecipe {
     }
 
     @Override
-    public ResourceLocation getId() {
-        return Const.FILL_REPAIR_KIT;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return SgRecipes.FILL_REPAIR_KIT.get();
-    }
-
-    public static final class Serializer implements RecipeSerializer<FillRepairKitRecipe> {
-        @Override
-        public FillRepairKitRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            return new FillRepairKitRecipe(recipeId, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public FillRepairKitRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            return new FillRepairKitRecipe(recipeId, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, FillRepairKitRecipe recipe) {}
     }
 }

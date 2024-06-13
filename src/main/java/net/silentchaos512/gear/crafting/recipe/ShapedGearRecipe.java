@@ -1,13 +1,14 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
+import cpw.mods.util.Lazy;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Lazy;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.gear.part.PartData;
@@ -20,14 +21,13 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe implements IGea
     private final ICoreItem item;
     private final Lazy<ItemStack> exampleOutput;
 
-    public ShapedGearRecipe(ShapedRecipe recipe) {
-        super(recipe);
+    public ShapedGearRecipe(String pGroup, CraftingBookCategory pCategory, ShapedRecipePattern pPattern, ItemStack pResult, boolean pShowNotification) {
+        super(pGroup, pCategory, pPattern, pResult, pShowNotification);
 
-        ItemStack output = recipe.getResultItem(null);
-        if (!(output.getItem() instanceof ICoreItem)) {
-            throw new JsonParseException("result is not a gear item: " + output);
+        if (!(pResult.getItem() instanceof ICoreItem)) {
+            throw new JsonParseException("result is not a gear item: " + pResult);
         }
-        this.item = (ICoreItem) output.getItem();
+        this.item = (ICoreItem) pResult.getItem();
 
         this.exampleOutput = Lazy.of(() -> {
             // Create an example item, so we're not just showing a broken item
@@ -44,7 +44,7 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe implements IGea
 
     @Override
     public boolean matches(CraftingContainer inv, Level worldIn) {
-        if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
+        if (!super.matches(inv, worldIn)) return false;
 
         GearType gearType = item.getGearType();
         for (PartData part : getParts(inv)) {

@@ -1,12 +1,13 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import com.google.gson.JsonParseException;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.Container;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -14,22 +15,21 @@ import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 
 public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     private final CompoundPartItem item;
 
-    public ShapelessCompoundPartRecipe(ShapelessRecipe recipe) {
-        super(recipe);
+    public ShapelessCompoundPartRecipe(String pGroup, CraftingBookCategory pCategory, ItemStack pResult, NonNullList<Ingredient> pIngredients) {
+        super(pGroup, pCategory, pResult, pIngredients);
 
-        ItemStack output = recipe.getResultItem(null);
-        if (!(output.getItem() instanceof CompoundPartItem)) {
-            throw new JsonParseException("result is not a compound part item: " + output);
+        if (!(pResult.getItem() instanceof CompoundPartItem)) {
+            throw new IllegalArgumentException("result is not a compound part item: " + pResult);
         }
-        this.item = (CompoundPartItem) output.getItem();
+        this.item = (CompoundPartItem) pResult.getItem();
     }
 
     protected GearType getGearType() {
@@ -43,7 +43,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
 
     @Override
     public boolean matches(CraftingContainer inv, Level worldIn) {
-        if (!this.getBaseRecipe().matches(inv, worldIn)) return false;
+        if (!super.matches(inv, worldIn)) return false;
 
         IMaterial first = null;
 
@@ -70,7 +70,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
 
     @Override
     public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
-        int craftedCount = getBaseRecipe().getResultItem(registryAccess).getCount();
+        int craftedCount = super.getResultItem(registryAccess).getCount();
         return item.create(getMaterials(inv), craftedCount);
     }
 
@@ -93,7 +93,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     @Override
     public ItemStack getResultItem(RegistryAccess registryAccess) {
         // Create an example item, so we're not just showing a broken item
-        int craftedCount = getBaseRecipe().getResultItem(registryAccess).getCount();
+        int craftedCount = super.getResultItem(registryAccess).getCount();
         return item.create(MaterialList.of(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), craftedCount);
     }
 

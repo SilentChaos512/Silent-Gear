@@ -31,6 +31,8 @@ public final class Const {
     public static final ResourceLocation COMPOUNDING_FABRIC = modId("compounding/fabric");
     public static final ResourceLocation COMPOUNDING_GEM = modId("compounding/gem");
     public static final ResourceLocation COMPOUNDING_METAL = modId("compounding/metal");
+    public static final ResourceLocation CONVERSION = modId("conversion");
+    public static final ResourceLocation CRAFTING_SPECIAL_REPAIRITEM = modId("crafting_special_repairitem");
     public static final ResourceLocation DAMAGE_ITEM = modId("damage_item");
     public static final ResourceLocation FILL_REPAIR_KIT = modId("fill_repair_kit");
     public static final ResourceLocation GRADING = modId("grading");
