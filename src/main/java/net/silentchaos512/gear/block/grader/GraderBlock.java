@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.grader;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.*;
@@ -7,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -27,15 +29,20 @@ import net.silentchaos512.gear.setup.SgBlockEntities;
 
 import javax.annotation.Nullable;
 
-public class GraderBlock extends ModContainerBlock<GraderTileEntity> implements SimpleWaterloggedBlock {
+public class GraderBlock extends ModContainerBlock<GraderBlockEntity> implements SimpleWaterloggedBlock {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape SHAPE = Block.box(1, 0, 0, 15, 12, 16);
 
     public GraderBlock(Properties properties) {
-        super(GraderTileEntity::new, properties);
+        super(GraderBlockEntity::new, properties);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH).setValue(LIT, false).setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return null;
     }
 
     @Override
@@ -85,6 +92,6 @@ public class GraderBlock extends ModContainerBlock<GraderTileEntity> implements 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.MATERIAL_GRADER.get(), GraderTileEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.MATERIAL_GRADER.get(), GraderBlockEntity::tick);
     }
 }

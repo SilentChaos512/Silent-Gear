@@ -37,7 +37,7 @@ public class MetalPressContainer extends AbstractContainerMenu {
 
     public int getProgressArrowScale() {
         int progress = fields.get(0);
-        return progress != 0 ? progress * 24 / MetalPressTileEntity.WORK_TIME : 0;
+        return progress != 0 ? progress * 24 / MetalPressBlockEntity.WORK_TIME : 0;
     }
 
     @Override

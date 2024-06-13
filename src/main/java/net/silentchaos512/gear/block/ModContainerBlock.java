@@ -14,11 +14,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class ModContainerBlock<T extends BlockEntity> extends BaseEntityBlock {
+public abstract class ModContainerBlock<T extends BlockEntity> extends BaseEntityBlock {
     private final BlockEntityType.BlockEntitySupplier<T> tileFactory;
 
     public ModContainerBlock(BlockEntityType.BlockEntitySupplier<T> tileFactory, Properties properties) {
@@ -50,9 +49,8 @@ public class ModContainerBlock<T extends BlockEntity> extends BaseEntityBlock {
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!worldIn.isClientSide) {
             BlockEntity tile = worldIn.getBlockEntity(pos);
-            if (tile instanceof INamedContainerExtraData && player instanceof ServerPlayer) {
-                INamedContainerExtraData te = (INamedContainerExtraData) tile;
-                NetworkHooks.openScreen((ServerPlayer) player, te, te::encodeExtraData);
+            if (tile instanceof INamedContainerExtraData te && player instanceof ServerPlayer) {
+                player.openMenu(te, te::encodeExtraData);
             }
         }
         return InteractionResult.SUCCESS;

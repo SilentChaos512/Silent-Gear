@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.compounder;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -13,10 +14,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -46,10 +44,12 @@ public class CompoundMakerBlock<R extends AlloyRecipe> extends ModContainerBlock
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 27, 15);
 
     private final CompoundMakerInfo<R> info;
+    private final MapCodec<CompoundMakerBlock<R>> codec;
 
     public CompoundMakerBlock(CompoundMakerInfo<R> info, Properties properties) {
         super((pos, state) -> new CompoundMakerBlockEntity<>(info, pos, state), properties);
         this.info = info;
+        this.codec = simpleCodec(p -> new CompoundMakerBlock<>(info, p));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
     }
 
@@ -126,5 +126,10 @@ public class CompoundMakerBlock<R extends AlloyRecipe> extends ModContainerBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         return level.isClientSide ? null : createTickerHelper(blockEntityType, info.getBlockEntityType(), info.getServerBlockEntityTicker());
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return codec;
     }
 }

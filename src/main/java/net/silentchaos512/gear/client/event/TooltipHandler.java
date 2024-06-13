@@ -19,7 +19,7 @@ import net.silentchaos512.gear.api.stats.StatModifierMap;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
-import net.silentchaos512.gear.block.grader.GraderTileEntity;
+import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.config.Config;
@@ -93,7 +93,7 @@ public final class TooltipHandler {
     }
 
     private static void onGraderCatalystTooltip(ItemTooltipEvent event) {
-        int tier = GraderTileEntity.getCatalystTier(event.getItemStack());
+        int tier = GraderBlockEntity.getCatalystTier(event.getItemStack());
         event.getToolTip().add(TextUtil.withColor(TextUtil.misc("graderCatalyst", tier), Color.DARKORANGE));
     }
 

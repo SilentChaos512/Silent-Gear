@@ -13,8 +13,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.compounder.CompoundMakerBlockEntity;
-import net.silentchaos512.gear.block.grader.GraderTileEntity;
-import net.silentchaos512.gear.block.press.MetalPressTileEntity;
+import net.silentchaos512.gear.block.grader.GraderBlockEntity;
+import net.silentchaos512.gear.block.press.MetalPressBlockEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerTileEntity;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
@@ -27,9 +27,9 @@ import java.util.Arrays;
 public final class SgBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, SilentGear.MOD_ID);
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GraderTileEntity>> MATERIAL_GRADER = register(
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GraderBlockEntity>> MATERIAL_GRADER = register(
             "material_grader",
-            GraderTileEntity::new,
+            GraderBlockEntity::new,
             SgBlocks.MATERIAL_GRADER
     );
 
@@ -39,9 +39,9 @@ public final class SgBlockEntities {
             SgBlocks.ALLOY_FORGE
     );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MetalPressTileEntity>> METAL_PRESS = register(
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MetalPressBlockEntity>> METAL_PRESS = register(
             "metal_press",
-            MetalPressTileEntity::new,
+            MetalPressBlockEntity::new,
             SgBlocks.METAL_PRESS
     );
 

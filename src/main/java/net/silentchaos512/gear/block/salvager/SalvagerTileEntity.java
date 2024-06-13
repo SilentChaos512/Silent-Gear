@@ -21,13 +21,22 @@ package net.silentchaos512.gear.block.salvager;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
@@ -35,16 +44,14 @@ import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgRecipes;
-import net.silentchaos512.lib.tile.LockableSidedInventoryTileEntity;
-import net.silentchaos512.lib.tile.SyncVariable;
+import net.silentchaos512.lib.util.MathUtils;
 import net.silentchaos512.lib.util.TimeUtils;
-import net.silentchaos512.utils.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
-public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
+public class SalvagerTileEntity extends BaseContainerBlockEntity implements WorldlyContainer, StackedContentsCompatible {
     static final int BASE_WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
     private static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
@@ -52,7 +59,10 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
     private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, 18).toArray();
     public static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
 
-    @SyncVariable(name = "progress") int progress = 0;
+    private final RecipeManager.CachedCheck<Container, SalvagingRecipe> quickCheck;
+
+    private NonNullList<ItemStack> items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    int progress = 0;
 
     private final ContainerData fields = new ContainerData() {
         @Override
@@ -72,18 +82,68 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
     };
 
     public SalvagerTileEntity(BlockPos pos, BlockState state) {
-        super(SgBlockEntities.SALVAGER.get(), INVENTORY_SIZE, pos, state);
+        super(SgBlockEntities.SALVAGER.get(), pos, state);
+        this.quickCheck = RecipeManager.createCheck(SgRecipes.SALVAGING_TYPE.get());
     }
 
     @Nullable
     private SalvagingRecipe getRecipe(ItemStack input) {
         if (level == null || input.isEmpty()) return null;
-        return level.getRecipeManager().getRecipeFor(SgRecipes.SALVAGING_TYPE.get(), this, level).orElse(null);
+        var holder = quickCheck.getRecipeFor(this, level).orElse(null);
+        if (holder != null) {
+            return holder.value();
+        }
+        return null;
     }
 
     @Override
     public int getContainerSize() {
-        return INVENTORY_SIZE;
+        return this.items.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack stack : this.items) {
+            if (!stack.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int pSlot) {
+        return this.items.get(pSlot);
+    }
+
+    @Override
+    public ItemStack removeItem(int pSlot, int pAmount) {
+        return ContainerHelper.removeItem(this.items, pSlot, pAmount);
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int pSlot) {
+        return ContainerHelper.takeItem(this.items, pSlot);
+    }
+
+    @Override
+    public void setItem(int pSlot, ItemStack pStack) {
+        ItemStack itemstack = this.items.get(pSlot);
+        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameTags(itemstack, pStack);
+        this.items.set(pSlot, pStack);
+        if (pStack.getCount() > this.getMaxStackSize()) {
+            pStack.setCount(this.getMaxStackSize());
+        }
+
+        if (pSlot < getContainerSize() - 1 && !flag) {
+            this.progress = 0;
+            this.setChanged();
+        }
+    }
+
+    @Override
+    public boolean stillValid(Player pPlayer) {
+        return Container.stillValidBlockEntity(this, pPlayer);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, SalvagerTileEntity blockEntity) {
@@ -172,21 +232,18 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag tags = super.getUpdateTag();
-        SyncVariable.Helper.writeSyncVars(this, tags, SyncVariable.Type.PACKET);
+        tags.putInt("Progress", this.progress);
         return tags;
     }
 
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     @Override
     public int[] getSlotsForFace(Direction side) {
-        switch (side) {
-            case DOWN:
-                return SLOTS_OUTPUT;
-            case UP:
-                return SLOTS_INPUT;
-            default:
-                return SLOTS_ALL;
-        }
+        return switch (side) {
+            case DOWN -> SLOTS_OUTPUT;
+            case UP -> SLOTS_INPUT;
+            default -> SLOTS_ALL;
+        };
     }
 
     @Override
@@ -195,7 +252,7 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
             return false;
 
         ItemStack current = getItem(index);
-        if (!current.isEmpty() && !current.equals(stack, false))
+        if (!current.isEmpty() && !current.areAttachmentsCompatible(stack))
             return false;
 
         return isInputSlot(index) || super.canPlaceItem(index, stack);
@@ -237,5 +294,17 @@ public class SalvagerTileEntity extends LockableSidedInventoryTileEntity {
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
         return new SalvagerContainer(id, playerInventory, this, fields);
+    }
+
+    @Override
+    public void clearContent() {
+        this.items.clear();
+    }
+
+    @Override
+    public void fillStackedContents(StackedContents pContents) {
+        for (ItemStack stack : this.items) {
+            pContents.accountStack(stack);
+        }
     }
 }

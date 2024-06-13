@@ -16,7 +16,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.ForkingTrunkPlace
 import net.silentchaos512.gear.setup.SgBlocks;
 import org.jetbrains.annotations.Nullable;
 
-public class NetherwoodTree extends AbstractTreeGrower {
+public class NetherwoodTree extends TreeGrower {
     /*public static final TreeConfiguration NETHERWOOD_TREE_CONFIG = new TreeConfiguration.TreeConfigurationBuilder(
             BlockStateProvider.simple(SgBlocks.NETHERWOOD_LOG.asBlockState()),
             new ForkingTrunkPlacer(5, 2, 2),

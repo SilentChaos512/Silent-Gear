@@ -19,14 +19,14 @@ public class GraderScreen extends AbstractContainerScreen<GraderContainer> {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int x, int y) {
-        Component text = SgBlocks.MATERIAL_GRADER.asBlock().getName();
+        Component text = SgBlocks.MATERIAL_GRADER.get().getName();
         graphics.drawString(this.font, text.getString(), 28, 6, 0x404040, false);
 
         MaterialGrade lastAttempt = this.menu.getLastGradeAttempt();

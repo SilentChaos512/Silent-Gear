@@ -22,7 +22,7 @@ public class GraderContainer extends AbstractContainerMenu {
     final ContainerData fields;
 
     public GraderContainer(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, new SimpleContainer(GraderTileEntity.INVENTORY_SIZE), new SimpleContainerData(2));
+        this(id, playerInventory, new SimpleContainer(GraderBlockEntity.INVENTORY_SIZE), new SimpleContainerData(2));
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
@@ -31,18 +31,18 @@ public class GraderContainer extends AbstractContainerMenu {
         this.inventory = inventory;
         this.fields = fields;
 
-        checkContainerSize(this.inventory, GraderTileEntity.INVENTORY_SIZE);
+        checkContainerSize(this.inventory, GraderBlockEntity.INVENTORY_SIZE);
 
         addSlot(new Slot(inventory, 0, 26, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return GraderTileEntity.canAcceptInput(stack);
+                return GraderBlockEntity.canAcceptInput(stack);
             }
         });
         addSlot(new Slot(inventory, 1, 26, 55) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return GraderTileEntity.getCatalystTier(stack) > 0;
+                return GraderBlockEntity.getCatalystTier(stack) > 0;
             }
         });
         addSlot(new SlotOutputOnly(inventory, 2, 80, 35));
@@ -57,7 +57,7 @@ public class GraderContainer extends AbstractContainerMenu {
 
     public int getProgressArrowScale() {
         int progress = fields.get(0);
-        return progress != 0 ? progress * 24 / GraderTileEntity.BASE_ANALYZE_TIME : 0;
+        return progress != 0 ? progress * 24 / GraderBlockEntity.BASE_ANALYZE_TIME : 0;
     }
 
     public MaterialGrade getLastGradeAttempt() {
@@ -89,17 +89,17 @@ public class GraderContainer extends AbstractContainerMenu {
             final int startHotbar = size + 27;
             final int endHotbar = size + 36;
 
-            if (index >= 2 && index < GraderTileEntity.INVENTORY_SIZE) {
+            if (index >= 2 && index < GraderBlockEntity.INVENTORY_SIZE) {
                 // Remove from output slot?
                 if (!this.moveItemStackTo(stack1, startPlayer, endHotbar, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (index >= size && GraderTileEntity.canAcceptInput(stack1)) {
+            } else if (index >= size && GraderBlockEntity.canAcceptInput(stack1)) {
                 // Move from player to input slot?
                 if (!moveItemStackTo(stack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (index >= size && GraderTileEntity.getCatalystTier(stack1) > 0) {
+            } else if (index >= size && GraderBlockEntity.getCatalystTier(stack1) > 0) {
                 // Move from player to catalyst slot?
                 if (!moveItemStackTo(stack1, 1, 2, false)) {
                     return ItemStack.EMPTY;

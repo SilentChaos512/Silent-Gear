@@ -122,8 +122,8 @@ public final class SgBlocks {
                     .noCollission()
                     .randomTicks()
                     .sound(SoundType.CROP)));
-    public static final DeferredBlock<BushBlock> WILD_FLAX_PLANT = registerNoItem("wild_flax_plant", () ->
-            new BushBlock(BlockBehaviour.Properties.of()
+    public static final DeferredBlock<WildCropBlock> WILD_FLAX_PLANT = registerNoItem("wild_flax_plant", () ->
+            new WildCropBlock(BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .sound(SoundType.CROP)));
@@ -133,8 +133,8 @@ public final class SgBlocks {
                     .noCollission()
                     .randomTicks()
                     .sound(SoundType.CROP)));
-    public static final DeferredBlock<BushBlock> WILD_FLUFFY_PLANT = registerNoItem("wild_fluffy_plant", () ->
-            new BushBlock(BlockBehaviour.Properties.of()
+    public static final DeferredBlock<WildCropBlock> WILD_FLUFFY_PLANT = registerNoItem("wild_fluffy_plant", () ->
+            new WildCropBlock(BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .sound(SoundType.CROP)));
@@ -157,21 +157,21 @@ public final class SgBlocks {
     public static final DeferredBlock<FluffyBlock> BLACK_FLUFFY_BLOCK = registerFluffyBlock(DyeColor.BLACK);
 
     public static final DeferredBlock<TorchBlock> STONE_TORCH = register("stone_torch",
-            () -> new TorchBlock(BlockBehaviour.Properties.of()
-                    .noCollission()
-                    .strength(0)
-                    .lightLevel(state -> 14)
-                    .sound(SoundType.STONE),
-                    ParticleTypes.FLAME),
+            () -> new TorchBlock(ParticleTypes.FLAME,
+                    BlockBehaviour.Properties.of()
+                                .noCollission()
+                                .strength(0)
+                                .lightLevel(state -> 14)
+                                .sound(SoundType.STONE)),
             bro -> getStoneTorchItem());
     public static final DeferredBlock<WallTorchBlock> WALL_STONE_TORCH = registerNoItem("wall_stone_torch", () ->
-            new WallTorchBlock(BlockBehaviour.Properties.of()
-                    .noCollission()
-                    .strength(0)
-                    .lightLevel(state -> 14)
-                    .sound(SoundType.STONE)
-                    .lootFrom(STONE_TORCH::get),
-                    ParticleTypes.FLAME));
+            new WallTorchBlock(ParticleTypes.FLAME,
+                    BlockBehaviour.Properties.of()
+                                .noCollission()
+                                .strength(0)
+                                .lightLevel(state -> 14)
+                                .sound(SoundType.STONE)
+                                .lootFrom(STONE_TORCH)));
 
     public static final DeferredBlock<Block> NETHERWOOD_CHARCOAL_BLOCK = register("netherwood_charcoal_block",
             () -> new Block(BlockBehaviour.Properties.of()
@@ -198,15 +198,15 @@ public final class SgBlocks {
     public static final DeferredBlock<SlabBlock> NETHERWOOD_SLAB = register("netherwood_slab", () ->
             new SlabBlock(netherWoodProps(2f, 3f)));
     public static final DeferredBlock<StairBlock> NETHERWOOD_STAIRS = register("netherwood_stairs", () ->
-            new StairBlock(NETHERWOOD_PLANKS::asBlockState, netherWoodProps(2f, 3f)));
+            new StairBlock(() -> NETHERWOOD_PLANKS.get().defaultBlockState(), netherWoodProps(2f, 3f)));
     public static final DeferredBlock<FenceBlock> NETHERWOOD_FENCE = register("netherwood_fence", () ->
             new FenceBlock(netherWoodProps(2f, 3f)));
     public static final DeferredBlock<FenceGateBlock> NETHERWOOD_FENCE_GATE = register("netherwood_fence_gate", () ->
             new FenceGateBlock(netherWoodProps(2f, 3f), SoundEvents.NETHER_WOOD_FENCE_GATE_CLOSE, SoundEvents.NETHER_WOOD_FENCE_GATE_OPEN));
     public static final DeferredBlock<DoorBlock> NETHERWOOD_DOOR = register("netherwood_door", () ->
-            new DoorBlock(netherWoodProps(3f, 3f).noOcclusion(), BlockSetType.CRIMSON));
+            new DoorBlock(BlockSetType.CRIMSON, netherWoodProps(3f, 3f).noOcclusion()));
     public static final DeferredBlock<TrapDoorBlock> NETHERWOOD_TRAPDOOR = register("netherwood_trapdoor", () ->
-            new TrapDoorBlock(netherWoodProps(3f, 3f).noOcclusion(), BlockSetType.CRIMSON));
+            new TrapDoorBlock(BlockSetType.CRIMSON, netherWoodProps(3f, 3f).noOcclusion()));
     public static final DeferredBlock<LeavesBlock> NETHERWOOD_LEAVES = register("netherwood_leaves", () ->
             new LeavesBlock(BlockBehaviour.Properties.of()
                     .strength(0.2f)
