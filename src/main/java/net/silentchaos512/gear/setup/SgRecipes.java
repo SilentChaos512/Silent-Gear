@@ -37,6 +37,7 @@ public final class SgRecipes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<MetalAlloyRecipe>> COMPOUNDING_METAL_TYPE = registerType(Const.COMPOUNDING_METAL);
     public static final DeferredHolder<RecipeType<?>, RecipeType<PressingRecipe>> PRESSING_TYPE = registerType(Const.PRESSING);
     public static final DeferredHolder<RecipeType<?>, RecipeType<SalvagingRecipe>> SALVAGING_TYPE = registerType(Const.SALVAGING);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<ToolActionRecipe>> TOOL_ACTION_TYPE = registerType(Const.TOOL_ACTION);
 
     // Serializers
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CombineFragmentsRecipe>> COMBINE_FRAGMENTS = register(Const.COMBINE_FRAGMENTS, () ->
@@ -79,6 +80,8 @@ public final class SgRecipes {
             UpgradeSmithingRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GearPartSwapRecipe>> SWAP_GEAR_PART = register(Const.SWAP_GEAR_PART, () ->
             new SimpleCraftingRecipeSerializer<>(GearPartSwapRecipe::new));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ToolActionRecipe>> TOOL_ACTION = register(Const.TOOL_ACTION,
+            ToolActionRecipe.Serializer::new);
 
     // This overrides the vanilla crafting grid repair recipe, to prevent it from destroying gear items
     @SuppressWarnings("unused")

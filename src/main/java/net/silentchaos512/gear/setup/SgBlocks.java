@@ -26,6 +26,7 @@ import net.silentchaos512.gear.block.compounder.CompoundMakerBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
+import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlock;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
@@ -82,6 +83,10 @@ public final class SgBlocks {
             new GearSmithingTableBlock(BlockBehaviour.Properties.of()
                     .strength(2.5F)
                     .sound(SoundType.WOOD)));
+
+    public static final DeferredBlock<StoneAnvilBlock> STONE_ANVIL = register("stone_anvil", () ->
+            new StoneAnvilBlock(BlockBehaviour.Properties.of()
+                    .strength(3, 10)));
 
     public static final DeferredBlock<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
             new GraderBlock(BlockBehaviour.Properties.of()

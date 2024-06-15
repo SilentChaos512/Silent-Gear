@@ -16,6 +16,7 @@ import net.silentchaos512.gear.block.compounder.CompoundMakerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.block.press.MetalPressBlockEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerBlockEntity;
+import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlockEntity;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
@@ -67,6 +68,12 @@ public final class SgBlockEntities {
             "starlight_charger",
             ChargerBlockEntity::createStarlightCharger,
             SgBlocks.STARLIGHT_CHARGER
+    );
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<StoneAnvilBlockEntity>> STONE_ANVIL = register(
+            "stone_anvil",
+            StoneAnvilBlockEntity::new,
+            SgBlocks.STONE_ANVIL
     );
 
     private SgBlockEntities() {
