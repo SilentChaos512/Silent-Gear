@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.gear.material.modifier;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -25,6 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialModifier {
+    public static final Codec<GradeMaterialModifier> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                    MaterialGrade.CODEC.fieldOf("grade").forGetter(m -> m.grade)
+            ).apply(instance, GradeMaterialModifier::new)
+    );
+
     @Override
     public IMaterialModifierType<?> getType() {
         return MaterialModifiers.GRADE;
@@ -109,6 +117,11 @@ public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialMod
             JsonObject json = new JsonObject();
             json.addProperty("grade", modifier.grade.name());
             return json;
+        }
+
+        @Override
+        public Codec<GradeMaterialModifier> codec() {
+            return CODEC;
         }
     }
 }

@@ -4,6 +4,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.gson.*;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -40,6 +42,15 @@ public class MaterialManager implements ResourceManagerReloadListener {
     private static final Map<ResourceLocation, IMaterial> MATERIALS = Collections.synchronizedMap(new LinkedHashMap<>());
     private static final Collection<String> ERROR_LIST = new ArrayList<>();
     private static final Collection<String> INGREDIENT_CONFLICT_LIST = new ArrayList<>();
+
+    public static final Codec<IMaterial> BY_NAME_CODEC = ResourceLocation.CODEC.flatXmap(
+            id -> Optional.ofNullable(get(id))
+                    .map(DataResult::success)
+                    .orElseGet(() -> DataResult.error(() -> "Unknown material key: " + id)),
+            component -> Optional.of(component.getId())
+                    .map(DataResult::success)
+                    .orElseGet(() -> DataResult.error(() -> "Unknown material:" + component))
+    );
 
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {

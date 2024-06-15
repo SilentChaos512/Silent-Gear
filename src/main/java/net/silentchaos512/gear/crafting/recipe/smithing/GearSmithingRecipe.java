@@ -30,4 +30,9 @@ public abstract class GearSmithingRecipe extends SmithingTransformRecipe {
 
     @Override
     public abstract RecipeSerializer<?> getSerializer();
+
+    @FunctionalInterface
+    public interface Factory<R extends GearSmithingRecipe> {
+        R create(ItemStack gearItem, Ingredient template, Ingredient addition);
+    }
 }

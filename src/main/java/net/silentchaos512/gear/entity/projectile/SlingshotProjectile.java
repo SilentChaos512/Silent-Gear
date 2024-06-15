@@ -5,7 +5,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.setup.SgItems;
 
 public class SlingshotProjectile extends AbstractArrow {
@@ -19,6 +18,10 @@ public class SlingshotProjectile extends AbstractArrow {
 
     public SlingshotProjectile(EntityType<? extends AbstractArrow> pEntityType, LivingEntity pOwner, Level pLevel, ItemStack pPickupItemStack) {
         super(pEntityType, pOwner, pLevel, pPickupItemStack);
+    }
+
+    public SlingshotProjectile(EntityType<SlingshotProjectile> type, Level level) {
+        super(type, level, SgItems.PEBBLE.toStack());
     }
 
     @Override

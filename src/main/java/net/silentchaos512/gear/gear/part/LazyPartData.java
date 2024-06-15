@@ -1,14 +1,11 @@
 package net.silentchaos512.gear.gear.part;
 
-import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
@@ -31,16 +28,30 @@ import java.util.List;
  * like loot tables are loaded, {@code LazyPartData} can be used to represent a future part.
  */
 public class LazyPartData implements IPartData {
+    public static final Codec<LazyPartData> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                    ResourceLocation.CODEC.fieldOf("part").forGetter(lp -> lp.partId),
+                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(lp -> lp.craftingItem),
+                    Codec.list(LazyMaterialInstance.CODEC).fieldOf("materials").forGetter(lp -> lp.materials)
+            ).apply(instance, LazyPartData::new)
+    );
+
     private final ResourceLocation partId;
-    private final ItemStack craftingItem;
+    private final Item craftingItem;
+    private final List<LazyMaterialInstance> materials;
 
     public LazyPartData(ResourceLocation partId) {
         this(partId, ItemStack.EMPTY);
     }
 
     public LazyPartData(ResourceLocation partId, ItemStack craftingItem) {
+        this(partId, craftingItem.getItem(), Collections.emptyList());
+    }
+
+    public LazyPartData(ResourceLocation partId, Item craftingItem, List<LazyMaterialInstance> materials) {
         this.partId = partId;
         this.craftingItem = craftingItem;
+        this.materials = materials.stream().toList();
     }
 
     public static LazyPartData of(ResourceLocation partId) {
@@ -80,8 +91,8 @@ public class LazyPartData implements IPartData {
 
     @Override
     public ItemStack getItem() {
-        if (!this.craftingItem.isEmpty()) {
-            return this.craftingItem;
+        if (this.craftingItem instanceof CompoundPartItem compoundPartItem) {
+            return compoundPartItem.create(this.materials);
         }
         IGearPart part = get();
         if (part == null) {
@@ -99,8 +110,9 @@ public class LazyPartData implements IPartData {
     @Override
     public CompoundTag write(CompoundTag tags) {
         tags.putString("ID", partId.toString());
-        if (!this.craftingItem.isEmpty()) {
-            tags.put("Item", this.craftingItem.save(new CompoundTag()));
+        ItemStack stack = getItem();
+        if (!stack.isEmpty()) {
+            tags.put("Item", stack.save(new CompoundTag()));
         }
         return tags;
     }
@@ -114,47 +126,12 @@ public class LazyPartData implements IPartData {
         return get() != null;
     }
 
-    public static LazyPartData deserialize(JsonElement json) {
-        if (json.isJsonPrimitive()) {
-            String key = json.getAsString();
-            return new LazyPartData(new ResourceLocation(key));
-        }
-
-        JsonObject jo = json.getAsJsonObject();
-        ResourceLocation partId = new ResourceLocation(GsonHelper.getAsString(jo, "part"));
-
-        if (!jo.has("item")) {
-            return LazyPartData.of(partId);
-        }
-
-        Item item = GsonHelper.getAsItem(jo, "item").value();
-        if (!(item instanceof CompoundPartItem)) {
-            throw new JsonSyntaxException("Item " + item + " is not a compound part item. Try using \"part\" instead.");
-        }
-
-        if (!jo.has("materials") || !jo.get("materials").isJsonArray()) {
-            throw new JsonSyntaxException("\"materials\" is either missing or not a JSON array");
-        }
-        List<LazyMaterialInstance> materials = deserializeMaterials(GsonHelper.getAsJsonArray(jo, "materials"));
-
-        return LazyPartData.of(DataResource.part(partId), (CompoundPartItem) item, materials);
-
-    }
-
-    private static List<LazyMaterialInstance> deserializeMaterials(JsonArray json) {
-        List<LazyMaterialInstance> materials = Lists.newArrayList();
-        for (JsonElement je : json) {
-            materials.add(LazyMaterialInstance.deserialize(je));
-        }
-        return materials;
-    }
-
     public static List<PartData> createPartList(Collection<LazyPartData> parts) {
         List<PartData> list = new ArrayList<>();
         for (LazyPartData lazy : parts) {
             IGearPart gearPart = lazy.get();
             if (gearPart != null) {
-                PartData part = PartData.of(gearPart, lazy.craftingItem);
+                PartData part = PartData.of(gearPart, lazy.getItem());
                 list.add(part);
             }
         }

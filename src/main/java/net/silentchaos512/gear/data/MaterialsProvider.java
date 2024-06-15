@@ -8,7 +8,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.data.material.MaterialBuilder;
 import net.silentchaos512.gear.api.data.material.MaterialsProviderBase;
@@ -32,8 +32,7 @@ import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.lib.crafting.ingredient.ExclusionIngredient;
-import net.silentchaos512.utils.Color;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.ArrayList;
 import java.util.Collection;

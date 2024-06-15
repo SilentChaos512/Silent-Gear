@@ -24,7 +24,6 @@ import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
-import net.silentchaos512.gear.compat.curios.CurioGearItemCapability;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialManager;
@@ -32,7 +31,6 @@ import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
-import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.setup.*;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.world.SgWorldFeatures;
@@ -52,6 +50,7 @@ class SideProxy implements IProxy {
         SgBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         SgBlocks.BLOCKS.register(modEventBus);
         SgCreativeTabs.CREATIVE_TABS.register(modEventBus);
+        SgCriteriaTriggers.TRIGGER_TYPES.register(modEventBus);
         SgEnchantments.ENCHANTMENTS.register(modEventBus);
         SgEntities.ENTITIES.register(modEventBus);
         SgIngredientTypes.REGISTER.register(modEventBus);
@@ -90,26 +89,15 @@ class SideProxy implements IProxy {
             return Collections.emptyList();
         });
 
-        registerCompostables();
-
         NerfedGear.init();
-
-//        event.enqueueWork(GearVillages::init);
 
         Greetings.addMessage(SideProxy::detectDataLoadingFailure);
     }
 
-    private static void registerCompostables() {
-        LibHooks.registerCompostable(0.3f, SgItems.FLAX_SEEDS);
-        LibHooks.registerCompostable(0.3f, SgItems.FLUFFY_SEEDS);
-        LibHooks.registerCompostable(0.5f, CraftingItems.FLAX_FIBER);
-        LibHooks.registerCompostable(0.5f, CraftingItems.FLUFFY_PUFF);
-    }
-
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        if (ModList.get().isLoaded(Const.CURIOS)) {
+        /*if (ModList.get().isLoaded(Const.CURIOS)) {
             event.register(CurioGearItemCapability.class);
-        }
+        }*/
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {
@@ -125,10 +113,6 @@ class SideProxy implements IProxy {
         event.addListener(TraitManager.INSTANCE);
         event.addListener(PartManager.INSTANCE);
         event.addListener(MaterialManager.INSTANCE);
-
-        if (ModList.get().isLoaded("gamestages")) {
-            event.addListener(GameStagesCompat.INSTANCE);
-        }
     }
 
     private static void serverStarted(ServerStartedEvent event) {
@@ -195,10 +179,6 @@ class SideProxy implements IProxy {
 
             //noinspection ConstantConditions
             if (Minecraft.getInstance() != null) {
-//                ModelLoaderRegistry.registerLoader(Const.COMPOUND_PART_MODEL_LOADER, new CompoundPartModelLoader());
-//                ModelLoaderRegistry.registerLoader(Const.FRAGMENT_MODEL_LOADER, new FragmentModelLoader());
-//                ModelLoaderRegistry.registerLoader(Const.GEAR_MODEL_LOADER, new GearModelLoader());
-
                 ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
                 if (resourceManager instanceof ReloadableResourceManager) {
                     ((ReloadableResourceManager) resourceManager).registerReloadListener(GearDisplayManager.INSTANCE);

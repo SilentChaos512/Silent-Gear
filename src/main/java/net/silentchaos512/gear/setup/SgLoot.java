@@ -35,18 +35,18 @@ public final class SgLoot {
 
     // Conditions
     public static final DeferredHolder<LootItemConditionType, LootItemConditionType> HAS_TRAIT =
-            registerCondition("has_trait", () -> new LootItemConditionType(HasTraitCondition.SERIALIZER));
+            registerCondition("has_trait", () -> new LootItemConditionType(HasTraitCondition.CODEC));
 
     // Functions
     public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> SELECT_TIER =
-            registerFunction("select_tier", () -> new LootItemFunctionType(SelectGearTierLootFunction.SERIALIZER));
+            registerFunction("select_tier", () -> new LootItemFunctionType(SelectGearTierLootFunction.CODEC));
     public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> SET_PARTS =
-            registerFunction("set_parts", () -> new LootItemFunctionType(SetPartsFunction.SERIALIZER));
+            registerFunction("set_parts", () -> new LootItemFunctionType(SetPartsFunction.CODEC));
 
     // Modifiers
-    public static final RegistryObject<Codec<BonusDropsTraitLootModifier>> BONUS_DROPS_TRAIT =
+    public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<BonusDropsTraitLootModifier>> BONUS_DROPS_TRAIT =
             registerModifier("bonus_drops_trait", BonusDropsTraitLootModifier.CODEC);
-    public static final RegistryObject<Codec<MagmaticTraitLootModifier>> MAGMATIC_SMELTING =
+    public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<MagmaticTraitLootModifier>> MAGMATIC_SMELTING =
             registerModifier("magmatic_smelting", MagmaticTraitLootModifier.CODEC);
 
     private SgLoot() {
@@ -60,7 +60,7 @@ public final class SgLoot {
         return LOOT_FUNCTIONS.register(name, condition);
     }
 
-    private static <T extends IGlobalLootModifier> RegistryObject<Codec<T>> registerModifier(String name, Supplier<Codec<T>> codec) {
+    private static <T extends IGlobalLootModifier> DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<T>> registerModifier(String name, Supplier<Codec<T>> codec) {
         return LOOT_MODIFIERS.register(name, codec);
     }
 

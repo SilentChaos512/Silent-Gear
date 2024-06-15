@@ -95,7 +95,7 @@ public final class GearData {
      *
      * @param gear   The gear item
      * @param player The player who has the item. Can be null if no player can be obtained. You can
-     *               use {@link net.minecraftforge.common.ForgeHooks#getCraftingPlayer} the get the
+     *               use {@link net.neoforged.neoforge.common.CommonHooks#getCraftingPlayer} the get the
      *               player during crafting.
      */
     public static void recalculateStats(ItemStack gear, @Nullable Player player) {

@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,6 +41,15 @@ public final class TraitManager implements ResourceManagerReloadListener {
     private static final String DATA_PATH = "silentgear_traits";
     private static final Map<ResourceLocation, ITrait> TRAITS = Collections.synchronizedMap(new LinkedHashMap<>());
     private static final Collection<ResourceLocation> ERROR_LIST = new ArrayList<>();
+
+    public static final Codec<ITrait> BY_NAME_CODEC = ResourceLocation.CODEC.flatXmap(
+            id -> Optional.ofNullable(get(id))
+                    .map(DataResult::success)
+                    .orElseGet(() -> DataResult.error(() -> "Unknown trait key: " + id)),
+            component -> Optional.of(component.getId())
+                    .map(DataResult::success)
+                    .orElseGet(() -> DataResult.error(() -> "Unknown trait:" + component))
+    );
 
     private TraitManager() {}
 

@@ -53,6 +53,7 @@ import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.setup.SgCriteriaTriggers;
 import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
@@ -191,7 +192,7 @@ public final class GearHelper {
             if (iter.hasNext()) {
                 AttributeModifier mod = iter.next();
                 map.removeAll(key);
-                map.put(key, new AttributeModifier(mod.getId(), mod.getName(), value, mod.getOperation()));
+                map.put(key, new AttributeModifier(mod.getId(), "SGear Replaced", value, mod.getOperation()));
             }
         }
     }
@@ -296,7 +297,7 @@ public final class GearHelper {
             if (Config.Client.playKachinkSound.get()) {
                 player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 0.5f, 2.0f);
             }
-            LibTriggers.GENERIC_INT.trigger(player, DAMAGE_FACTOR_CHANGE, 1);
+            SgCriteriaTriggers.DAMAGE_FACTOR_CHANGE.get().trigger(player);
         }
     }
 

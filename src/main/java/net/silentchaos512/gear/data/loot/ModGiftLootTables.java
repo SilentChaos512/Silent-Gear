@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.data.loot;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.data.loot.packs.VanillaGiftLoot;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,10 +14,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.gear.part.LazyPartData;
-import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
-import net.silentchaos512.gear.loot.function.SetPartsFunction;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
@@ -69,7 +66,7 @@ public class ModGiftLootTables extends VanillaGiftLoot {
         }
 
         // FIXME
-        p_accept_1_.accept(SilentGear.getId("test/ldf_mallet"), LootTable.lootTable()
+/*        p_accept_1_.accept(SilentGear.getId("test/ldf_mallet"), LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(SgItems.HAMMER)
                                 .apply(SetPartsFunction.builder(ImmutableList.of(
@@ -81,7 +78,7 @@ public class ModGiftLootTables extends VanillaGiftLoot {
                                 .apply(() -> setName(Component.literal("Loliberty Defense Force Mallet")))
                                 .apply(() -> setLore(ImmutableList.of(
                                         Component.literal("Standard Issue"),
-                                        Component.literal("Protectors of Free Speech")))))));
+                                        Component.literal("Protectors of Free Speech")))))));*/
     }
 
     @Nonnull

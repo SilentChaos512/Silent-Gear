@@ -1,96 +1,100 @@
 package net.silentchaos512.gear.data.recipes;
 
-import com.google.gson.JsonObject;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
+import net.silentchaos512.gear.crafting.recipe.smithing.CoatingSmithingRecipe;
+import net.silentchaos512.gear.crafting.recipe.smithing.GearSmithingRecipe;
+import net.silentchaos512.gear.crafting.recipe.smithing.UpgradeSmithingRecipe;
 import net.silentchaos512.gear.setup.SgItems;
-import net.silentchaos512.gear.setup.SgRecipes;
-import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
-import java.util.function.Consumer;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class GearSmithingRecipeBuilder {
-    private final RecipeSerializer<?> serializer;
+public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements RecipeBuilder {
+    private final GearSmithingRecipe.Factory<R> factory;
+    private final String recipeFolder;
     private final Item gearItem;
     private final Ingredient template;
     private final Ingredient addition;
+    private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    public GearSmithingRecipeBuilder(RecipeSerializer<?> serializer, Item gearItem, Ingredient template, Ingredient addition) {
-        this.serializer = serializer;
+    public GearSmithingRecipeBuilder(GearSmithingRecipe.Factory<R> factory, String recipeFolder, Item gearItem, Ingredient template, Ingredient addition) {
+        this.factory = factory;
+        this.recipeFolder = recipeFolder;
         this.gearItem = gearItem;
         this.template = template;
         this.addition = addition;
     }
 
     public static GearSmithingRecipeBuilder coating(ItemLike gearItem) {
-        return new GearSmithingRecipeBuilder(SgRecipes.SMITHING_COATING.get(),
+        return new GearSmithingRecipeBuilder(CoatingSmithingRecipe::new,
+                "coating",
                 gearItem.asItem(),
                 Ingredient.of(SgItems.COATING_SMITHING_TEMPLATE),
-                PartMaterialIngredient.of(PartType.COATING)
-        );
+                PartMaterialIngredient.of(PartType.COATING));
     }
 
     public static GearSmithingRecipeBuilder upgrade(ItemLike gearItem, PartType partType) {
-        return new GearSmithingRecipeBuilder(SgRecipes.SMITHING_UPGRADE.get(),
+        return new GearSmithingRecipeBuilder(UpgradeSmithingRecipe::new,
+                "upgrade",
                 gearItem.asItem(),
                 Ingredient.of(Items.STICK),
-                GearPartIngredient.of(partType)
-        );
+                GearPartIngredient.of(partType));
     }
 
-    public void build(Consumer<FinishedRecipe> consumer) {
-        build(consumer, new ResourceLocation(NameUtils.fromRecipeSerializer(serializer) + "/" + NameUtils.fromItem(this.gearItem).getPath()));
+    @Override
+    public RecipeBuilder unlockedBy(String pName, Criterion<?> pCriterion) {
+        this.criteria.put(pName, pCriterion);
+        return this;
     }
 
-    public void build(Consumer<FinishedRecipe> consumer, ResourceLocation recipeId) {
-        consumer.accept(new GearSmithingRecipeBuilder.Result(recipeId, this));
+    @Override
+    public RecipeBuilder group(@Nullable String pGroupName) {
+        return this;
     }
 
-    public class Result implements FinishedRecipe {
-        private final ResourceLocation recipeId;
-        private final GearSmithingRecipeBuilder builder;
+    @Override
+    public Item getResult() {
+        return this.gearItem;
+    }
 
-        public Result(ResourceLocation recipeId, GearSmithingRecipeBuilder builder) {
-            this.recipeId = recipeId;
-            this.builder = builder;
+    public void save(RecipeOutput pRecipeOutput) {
+        String name = "smithing/" + recipeFolder + "/" + BuiltInRegistries.ITEM.getKey(gearItem).getPath();
+        save(pRecipeOutput, SilentGear.getId(name));
+    }
+
+    @Override
+    public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+        Advancement.Builder advancement$builder = null;
+        if (!this.criteria.isEmpty()) {
+            advancement$builder = pRecipeOutput.advancement()
+                    .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId))
+                    .rewards(AdvancementRewards.Builder.recipe(pId))
+                    .requirements(AdvancementRequirements.Strategy.OR);
+            this.criteria.forEach(advancement$builder::addCriterion);
         }
 
-        @Override
-        public void serializeRecipeData(JsonObject json) {
-            json.add("gear", Ingredient.of(builder.gearItem).toJson());
-            json.add("template", builder.template.toJson());
-            json.add("addition", builder.addition.toJson());
-        }
-
-        @Override
-        public ResourceLocation getId() {
-            return recipeId;
-        }
-
-        @Override
-        public RecipeSerializer<?> getType() {
-            return builder.serializer;
-        }
-
-        @Nullable
-        @Override
-        public JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getAdvancementId() {
-            return null;
-        }
+        var recipe = factory.create(new ItemStack(gearItem), template, addition);
+        var advancementHolder = advancement$builder != null
+                ? advancement$builder.build(pId.withPrefix("recipes/smithing/" + recipeFolder + "/"))
+                : null;
+        pRecipeOutput.accept(pId, recipe, advancementHolder);
     }
 }

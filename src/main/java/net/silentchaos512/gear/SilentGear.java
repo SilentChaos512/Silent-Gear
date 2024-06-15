@@ -2,12 +2,13 @@ package net.silentchaos512.gear;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.network.event.OnGameConfigurationEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
@@ -38,7 +39,9 @@ public final class SilentGear {
 
     public SilentGear(IEventBus modEventBus) {
         INSTANCE = this;
-        PROXY = DistExecutor.unsafeRunForDist(() -> SideProxy.Client::new, () -> SideProxy.Server::new);
+        PROXY = FMLEnvironment.dist == Dist.CLIENT
+                ? new SideProxy.Client(modEventBus)
+                : new SideProxy.Server(modEventBus);
     }
 
     @SubscribeEvent

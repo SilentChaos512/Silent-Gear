@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.gear.material.modifier;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -31,10 +33,16 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
     public static class Type<T extends ChargedMaterialModifier> implements IMaterialModifierType<T> {
         private final Function<Integer, T> factory;
         private final String nbtTagName;
+        private final Codec<T> codec;
 
         public Type(Function<Integer, T> factory, String nbtTagName) {
             this.factory = factory;
             this.nbtTagName = nbtTagName;
+            this.codec = RecordCodecBuilder.create(
+                    instance -> instance.group(
+                            Codec.INT.fieldOf("level").forGetter(m -> m.level)
+                    ).apply(instance, factory)
+            );
         }
 
         public int checkLevel(ItemStack stack) {
@@ -104,6 +112,11 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
             JsonObject json = new JsonObject();
             json.addProperty("level", modifier.level);
             return json;
+        }
+
+        @Override
+        public Codec<T> codec() {
+            return codec;
         }
     }
 }

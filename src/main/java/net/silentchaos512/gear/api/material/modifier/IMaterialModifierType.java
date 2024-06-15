@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.api.material.modifier;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -34,4 +35,6 @@ public interface IMaterialModifierType<T extends IMaterialModifier> {
     T deserialize(JsonObject json);
 
     JsonObject serialize(T modifier);
+
+    Codec<T> codec();
 }

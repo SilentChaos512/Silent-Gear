@@ -5,6 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -20,12 +22,21 @@ import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifie
 import net.silentchaos512.gear.util.Const;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MaterialModifiers {
+    public static final Codec<IMaterialModifierType<?>> BY_NAME_CODEC = ResourceLocation.CODEC.flatXmap(
+            id -> Optional.ofNullable(getType(id))
+                    .map(DataResult::success)
+                    .orElseGet(() -> DataResult.error(() -> "Unknown material modifier key: " + id)),
+            mod -> Optional.of(mod.getId())
+                    .map(DataResult::success)
+                    .orElseGet(() -> DataResult.error(() -> "Unknown material modifier:" + mod))
+    );
+
+    public static final Codec<IMaterialModifier> CODEC = BY_NAME_CODEC
+            .dispatch("type", IMaterialModifier::getType, IMaterialModifierType::codec);
+
     private static final Map<ResourceLocation, IMaterialModifierType<?>> MODIFIERS = new LinkedHashMap<>();
 
     public static final GradeMaterialModifier.Type GRADE = new GradeMaterialModifier.Type();

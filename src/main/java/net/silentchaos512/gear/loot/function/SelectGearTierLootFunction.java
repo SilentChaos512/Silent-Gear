@@ -1,23 +1,30 @@
 package net.silentchaos512.gear.loot.function;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.setup.SgLoot;
 import net.silentchaos512.gear.util.GearGenerator;
 
+import java.util.List;
+
 public final class SelectGearTierLootFunction extends LootItemConditionalFunction {
-    public static final Serializer SERIALIZER = new Serializer();
+    public static final Codec<SelectGearTierLootFunction> CODEC = RecordCodecBuilder.create(
+            instance -> commonFields(instance)
+                    .and(
+                            Codec.INT.optionalFieldOf("tier", 2).forGetter(f -> f.tier)
+                    )
+                    .apply(instance, SelectGearTierLootFunction::new)
+    );
+
     private final int tier;
 
-    private SelectGearTierLootFunction(LootItemCondition[] conditions, int tier) {
+    private SelectGearTierLootFunction(List<LootItemCondition> conditions, int tier) {
         super(conditions);
         this.tier = tier;
     }
@@ -35,18 +42,5 @@ public final class SelectGearTierLootFunction extends LootItemConditionalFunctio
     @Override
     public LootItemFunctionType getType() {
         return SgLoot.SELECT_TIER.get();
-    }
-
-    public static class Serializer extends LootItemConditionalFunction.Serializer<SelectGearTierLootFunction> {
-        @Override
-        public void serialize(JsonObject object, SelectGearTierLootFunction functionClazz, JsonSerializationContext serializationContext) {
-            object.addProperty("tier", functionClazz.tier);
-        }
-
-        @Override
-        public SelectGearTierLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
-            int tier = GsonHelper.getAsInt(object, "tier", 2);
-            return new SelectGearTierLootFunction(conditionsIn, tier);
-        }
     }
 }

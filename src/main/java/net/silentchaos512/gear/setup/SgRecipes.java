@@ -39,58 +39,58 @@ public final class SgRecipes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<SalvagingRecipe>> SALVAGING_TYPE = registerType(Const.SALVAGING);
 
     // Serializers
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMBINE_FRAGMENTS = register(Const.COMBINE_FRAGMENTS, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CombineFragmentsRecipe>> COMBINE_FRAGMENTS = register(Const.COMBINE_FRAGMENTS, () ->
             new SimpleCraftingRecipeSerializer<>(CombineFragmentsRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUND_PART = register(Const.COMPOUND_PART, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessCompoundPartRecipe>> COMPOUND_PART = register(Const.COMPOUND_PART, () ->
             new ExtendedShapelessRecipe.BasicSerializer<>(ShapelessCompoundPartRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING = register(Const.COMPOUNDING, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AlloyRecipe>> COMPOUNDING = register(Const.COMPOUNDING, () ->
             new AlloyRecipe.Serializer<>(AlloyRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING_FABRIC = register(Const.COMPOUNDING_FABRIC, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FabricAlloyRecipe>> COMPOUNDING_FABRIC = register(Const.COMPOUNDING_FABRIC, () ->
             new AlloyRecipe.Serializer<>(FabricAlloyRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING_GEM = register(Const.COMPOUNDING_GEM, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GemAlloyRecipe>> COMPOUNDING_GEM = register(Const.COMPOUNDING_GEM, () ->
             new AlloyRecipe.Serializer<>(GemAlloyRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMPOUNDING_METAL = register(Const.COMPOUNDING_METAL, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MetalAlloyRecipe>> COMPOUNDING_METAL = register(Const.COMPOUNDING_METAL, () ->
             new AlloyRecipe.Serializer<>(MetalAlloyRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CONVERSION = register(Const.CONVERSION,
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ConversionRecipe>> CONVERSION = register(Const.CONVERSION,
             ConversionRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> DAMAGE_ITEM = register(Const.DAMAGE_ITEM,
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SGearDamageItemRecipe>> DAMAGE_ITEM = register(Const.DAMAGE_ITEM,
             SGearDamageItemRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> FILL_REPAIR_KIT = register(Const.FILL_REPAIR_KIT, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FillRepairKitRecipe>> FILL_REPAIR_KIT = register(Const.FILL_REPAIR_KIT, () ->
             new SimpleCraftingRecipeSerializer<>(FillRepairKitRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ModKitRemovePartRecipe>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART, () ->
             new SimpleCraftingRecipeSerializer<>(ModKitRemovePartRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> PRESSING = register(Const.PRESSING, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PressingRecipe>> PRESSING = register(Const.PRESSING, () ->
             new SingleItemRecipe.Serializer<>(PressingRecipe::new) {});
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> PRESSING_MATERIAL = register(Const.PRESSING_MATERIAL, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MaterialPressingRecipe>> PRESSING_MATERIAL = register(Const.PRESSING_MATERIAL, () ->
             new SingleItemRecipe.Serializer<>(MaterialPressingRecipe::new) {});
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> QUICK_REPAIR = register(Const.QUICK_REPAIR, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<QuickRepairRecipe>> QUICK_REPAIR = register(Const.QUICK_REPAIR, () ->
             new SimpleCraftingRecipeSerializer<>(QuickRepairRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> SALVAGING = register(Const.SALVAGING,
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SalvagingRecipe>> SALVAGING = register(Const.SALVAGING,
             SalvagingRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> SALVAGING_GEAR = register(Const.SALVAGING_GEAR,
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GearSalvagingRecipe>> SALVAGING_GEAR = register(Const.SALVAGING_GEAR,
             GearSalvagingRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> SALVAGING_COMPOUND_PART = register(Const.SALVAGING_COMPOUND_PART,
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CompoundPartSalvagingRecipe>> SALVAGING_COMPOUND_PART = register(Const.SALVAGING_COMPOUND_PART,
             CompoundPartSalvagingRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> SHAPED_GEAR = register(Const.SHAPED_GEAR_CRAFTING, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapedGearRecipe>> SHAPED_GEAR = register(Const.SHAPED_GEAR_CRAFTING, () ->
             new ExtendedShapedRecipe.BasicSerializer<>(ShapedGearRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> SHAPELESS_GEAR = register(Const.SHAPELESS_GEAR_CRAFTING, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessGearRecipe>> SHAPELESS_GEAR = register(Const.SHAPELESS_GEAR_CRAFTING, () ->
             new ExtendedShapelessRecipe.BasicSerializer<>(ShapelessGearRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> SMITHING_COATING = register(Const.SMITHING_COATING,
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CoatingSmithingRecipe>> SMITHING_COATING = register(Const.SMITHING_COATING,
             CoatingSmithingRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> SMITHING_UPGRADE = register(Const.SMITHING_UPGRADE,
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<UpgradeSmithingRecipe>> SMITHING_UPGRADE = register(Const.SMITHING_UPGRADE,
             UpgradeSmithingRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> SWAP_GEAR_PART = register(Const.SWAP_GEAR_PART, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GearPartSwapRecipe>> SWAP_GEAR_PART = register(Const.SWAP_GEAR_PART, () ->
             new SimpleCraftingRecipeSerializer<>(GearPartSwapRecipe::new));
 
     // This overrides the vanilla crafting grid repair recipe, to prevent it from destroying gear items
     @SuppressWarnings("unused")
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> REPAIR_ITEM_OVERRIDE = register(Const.CRAFTING_SPECIAL_REPAIRITEM, () ->
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<RepairItemRecipeFix>> REPAIR_ITEM_OVERRIDE = register(Const.CRAFTING_SPECIAL_REPAIRITEM, () ->
             new SimpleCraftingRecipeSerializer<>(RepairItemRecipeFix::new));
 
     private SgRecipes() {
     }
 
-    private static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> register(ResourceLocation id, Supplier<RecipeSerializer<?>> serializer) {
+    private static <T extends Recipe<?>> DeferredHolder<RecipeSerializer<?>, RecipeSerializer<T>> register(ResourceLocation id, Supplier<RecipeSerializer<T>> serializer) {
         return RECIPE_SERIALIZERS.register(id.getPath(), serializer);
     }
 

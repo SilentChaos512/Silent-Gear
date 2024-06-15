@@ -1,115 +1,109 @@
 package net.silentchaos512.gear.data.recipes;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.setup.SgRecipes;
-import net.silentchaos512.lib.util.NameUtils;
+import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
+import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.function.Consumer;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
-public final class SalvagingRecipeBuilder {
+public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements RecipeBuilder {
+    private final BiFunction<Ingredient, List<ItemStack>, R> factory;
+    private final String recipeFolder;
     private final Ingredient ingredient;
-    private final RecipeSerializer<?> serializer;
-    private final Collection<ItemStack> results = new ArrayList<>();
+    private final List<ItemStack> results = new ArrayList<>();
+    private final boolean resultsMustBePresent;
+    private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    private SalvagingRecipeBuilder(Ingredient ingredient, RecipeSerializer<?> serializer) {
+    private SalvagingRecipeBuilder(BiFunction<Ingredient, List<ItemStack>, R> factory, String recipeFolder, Ingredient ingredient, boolean resultsMustBePresent) {
+        this.factory = factory;
+        this.recipeFolder = recipeFolder;
         this.ingredient = ingredient;
-        this.serializer = serializer;
+        this.resultsMustBePresent = resultsMustBePresent;
     }
 
-    public static SalvagingRecipeBuilder builder(ItemLike ingredient) {
+    public static SalvagingRecipeBuilder<SalvagingRecipe> builder(ItemLike ingredient) {
         return builder(Ingredient.of(ingredient));
     }
 
-    public static SalvagingRecipeBuilder builder(TagKey<Item> ingredient) {
+    public static SalvagingRecipeBuilder<SalvagingRecipe> builder(TagKey<Item> ingredient) {
         return builder(Ingredient.of(ingredient));
     }
 
-    public static SalvagingRecipeBuilder builder(Ingredient ingredient) {
-        return new SalvagingRecipeBuilder(ingredient, SgRecipes.SALVAGING.get());
+    public static SalvagingRecipeBuilder<SalvagingRecipe> builder(Ingredient ingredient) {
+        return new SalvagingRecipeBuilder<>(SalvagingRecipe::new, "salvaging", ingredient, true);
     }
 
-    public static SalvagingRecipeBuilder gearBuilder(ICoreItem item) {
-        return new SalvagingRecipeBuilder(Ingredient.of(item), SgRecipes.SALVAGING_GEAR.get());
+    public static SalvagingRecipeBuilder<GearSalvagingRecipe> gearBuilder(ICoreItem item) {
+        return new SalvagingRecipeBuilder<>((ingredient, __) -> new GearSalvagingRecipe(ingredient), "salvaging/gear", Ingredient.of(item), false);
     }
 
-    public SalvagingRecipeBuilder addResult(ItemLike item) {
+    public SalvagingRecipeBuilder<R> addResult(ItemLike item) {
         return addResult(item, 1);
     }
 
-    public SalvagingRecipeBuilder addResult(ItemLike item, int count) {
+    public SalvagingRecipeBuilder<R> addResult(ItemLike item, int count) {
         this.results.add(new ItemStack(item, count));
         return this;
     }
 
-    public void build(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
-        if (this.serializer == SgRecipes.SALVAGING.get() && this.results.isEmpty()) {
-            throw new IllegalStateException("Empty results for standard salvaging recipe");
-        }
-        consumer.accept(new Result(id, this));
+    @Override
+    public RecipeBuilder unlockedBy(String pName, Criterion<?> pCriterion) {
+        this.criteria.put(pName, pCriterion);
+        return this;
     }
 
-    public static class Result implements FinishedRecipe {
-        private final ResourceLocation id;
-        private final SalvagingRecipeBuilder builder;
+    @Override
+    public RecipeBuilder group(@Nullable String pGroupName) {
+        return this;
+    }
 
-        public Result(ResourceLocation id, SalvagingRecipeBuilder builder) {
-            this.id = id;
-            this.builder = builder;
+    @Override
+    public Item getResult() {
+        return !results.isEmpty() ? results.iterator().next().getItem() : Items.AIR;
+    }
+
+    @Override
+    public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+        this.ensureValid(pId);
+
+        Advancement.Builder advancement$builder = null;
+        if (!this.criteria.isEmpty()) {
+            advancement$builder = pRecipeOutput.advancement()
+                    .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId))
+                    .rewards(AdvancementRewards.Builder.recipe(pId))
+                    .requirements(AdvancementRequirements.Strategy.OR);
+            this.criteria.forEach(advancement$builder::addCriterion);
         }
 
-        @Override
-        public void serializeRecipeData(JsonObject json) {
-            json.add("ingredient", builder.ingredient.toJson());
+        var recipe = factory.apply(ingredient, results);
+        var advancementHolder = advancement$builder != null
+                ? advancement$builder.build(pId.withPrefix("recipes/" + recipeFolder + "/"))
+                : null;
+        pRecipeOutput.accept(pId, recipe, advancementHolder);
+    }
 
-            if (!builder.results.isEmpty()) {
-                JsonArray results = new JsonArray();
-                builder.results.forEach(stack -> results.add(serializeItem(stack)));
-                json.add("results", results);
-            }
-        }
-
-        private JsonObject serializeItem(ItemStack stack) {
-            JsonObject json = new JsonObject();
-            json.addProperty("item", NameUtils.fromItem(stack).toString());
-            if (stack.getCount() > 1) {
-                json.addProperty("count", stack.getCount());
-            }
-            return json;
-        }
-
-        @Override
-        public ResourceLocation getId() {
-            return id;
-        }
-
-        @Override
-        public RecipeSerializer<?> getType() {
-            return builder.serializer;
-        }
-
-        @Nullable
-        @Override
-        public JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getAdvancementId() {
-            return null;
+    private void ensureValid(ResourceLocation pId) {
+        if (resultsMustBePresent && results.isEmpty()) {
+            throw new IllegalStateException("Empty results for standard salvaging recipe");
         }
     }
 }

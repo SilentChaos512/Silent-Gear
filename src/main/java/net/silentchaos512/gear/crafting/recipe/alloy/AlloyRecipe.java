@@ -149,20 +149,25 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
         }
     }
 
+    @FunctionalInterface
+    public interface Factory<R extends AlloyRecipe> {
+        R create(Result result, List<Ingredient> ingredients);
+    }
+
     public static class Serializer<T extends AlloyRecipe> implements RecipeSerializer<T> {
-        private final BiFunction<Result, List<Ingredient>, T> factory;
+        private final Factory<T> factory;
         private final Codec<T> codec;
 
-        public static <R extends AlloyRecipe> Codec<R> makeCodec(BiFunction<Result, List<Ingredient>, R> factory) {
+        public static <R extends AlloyRecipe> Codec<R> makeCodec(Factory<R> factory) {
             return RecordCodecBuilder.create(
                     instance -> instance.group(
                             Result.CODEC.fieldOf("result").forGetter(r -> r.result),
                             Codec.list(Ingredient.CODEC_NONEMPTY).fieldOf("ingredients").forGetter(r -> r.ingredients)
-                    ).apply(instance, factory)
+                    ).apply(instance, factory::create)
             );
         }
 
-        public Serializer(BiFunction<Result, List<Ingredient>, T> factory) {
+        public Serializer(Factory<T> factory) {
             this.factory = factory;
             this.codec = makeCodec(factory);
         }
@@ -180,7 +185,7 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
             for (int i = 0; i < ingredientsSize; ++i) {
                 ingredients.add(Ingredient.fromNetwork(buf));
             }
-            return factory.apply(result, ingredients);
+            return factory.create(result, ingredients);
         }
 
         @Override

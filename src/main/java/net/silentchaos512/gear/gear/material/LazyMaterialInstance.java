@@ -5,6 +5,8 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,13 +23,21 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.client.material.DefaultMaterialDisplay;
 import net.silentchaos512.gear.gear.material.modifier.GradeMaterialModifier;
-import net.silentchaos512.utils.EnumUtils;
+import net.silentchaos512.lib.util.EnumUtils;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
 public class LazyMaterialInstance implements IMaterialInstance {
+    public static final Codec<LazyMaterialInstance> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                    ResourceLocation.CODEC.fieldOf("material").forGetter(lmi -> lmi.materialId),
+                    Codec.list(MaterialModifiers.CODEC).fieldOf("modifiers").forGetter(lmi -> new ArrayList<>(lmi.modifiers))
+            ).apply(instance, LazyMaterialInstance::new)
+    );
+
     private final ResourceLocation materialId;
     private final Collection<IMaterialModifier> modifiers;
 

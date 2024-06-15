@@ -46,7 +46,6 @@ import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class ModRecipesProvider extends LibRecipeProvider {
     private static final boolean ADD_TEST_RECIPES = false;
@@ -104,7 +103,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerTestRecipes(RecipeOutput consumer) {
-        shapedBuilder(RecipeCategory.MISC, Items.BUCKET)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.BUCKET)
                 .pattern("# #")
                 .pattern(" # ")
                 .define('#', PartMaterialIngredient.builder(PartType.MAIN)
@@ -115,11 +114,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerSpecialRecipes(RecipeOutput consumer) {
-        special(consumer, (RecipeSerializer<? extends CraftingRecipe>) SgRecipes.FILL_REPAIR_KIT.get());
-        special(consumer, (RecipeSerializer<? extends CraftingRecipe>) SgRecipes.SWAP_GEAR_PART.get());
-        special(consumer, (RecipeSerializer<? extends CraftingRecipe>) SgRecipes.QUICK_REPAIR.get());
-        special(consumer, (RecipeSerializer<? extends CraftingRecipe>) SgRecipes.COMBINE_FRAGMENTS.get());
-        special(consumer, (RecipeSerializer<? extends CraftingRecipe>) SgRecipes.MOD_KIT_REMOVE_PART.get());
+        special(consumer, SgRecipes.FILL_REPAIR_KIT.get());
+        special(consumer, SgRecipes.SWAP_GEAR_PART.get());
+        special(consumer, SgRecipes.QUICK_REPAIR.get());
+        special(consumer, SgRecipes.COMBINE_FRAGMENTS.get());
+        special(consumer, SgRecipes.MOD_KIT_REMOVE_PART.get());
     }
 
     private void registerBlueprints(RecipeOutput consumer) {
@@ -153,7 +152,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         armorBlueprint(consumer, "leggings", SgItems.LEGGINGS_BLUEPRINT, SgItems.LEGGINGS_TEMPLATE, "###", "# #", "# #");
         armorBlueprint(consumer, "boots", SgItems.BOOTS_BLUEPRINT, SgItems.BOOTS_TEMPLATE, "# #", "# #");
 
-        new ShapedRecipeBuilder(RecipeCategory.MISC, SgItems.TRIDENT_BLUEPRINT)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SgItems.TRIDENT_BLUEPRINT)
                 .define('#', SgTags.Items.BLUEPRINT_PAPER)
                 .define('H', Items.HEART_OF_THE_SEA)
                 .define('T', Items.TRIDENT)
@@ -669,7 +668,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         for (RepairKitItem item : SgItems.getItems(RepairKitItem.class)) {
             // Empty repair kit recipes
-            ExtendedShapelessRecipeBuilder.vanillaBuilder(RecipeCategory.MISC, item)
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, item)
                     .requires(item)
                     .requires(Tags.Items.RODS_WOODEN)
                     .save(consumer, SilentGear.getId(NameUtils.fromItem(item).getPath() + "_empty"));
@@ -677,7 +676,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerMachines(RecipeOutput consumer) {
-        ExtendedShapedRecipeBuilder.vanillaBuilder(RecipeCategory.DECORATIONS, SgBlocks.ALLOY_FORGE)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.ALLOY_FORGE)
                 .define('/', SgTags.Items.INGOTS_CRIMSON_STEEL)
                 .define('i', Tags.Items.STORAGE_BLOCKS_IRON)
                 .define('#', Blocks.BLACKSTONE)
@@ -686,7 +685,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#i#")
                 .save(consumer);
 
-        ExtendedShapedRecipeBuilder.vanillaBuilder(RecipeCategory.DECORATIONS, SgBlocks.RECRYSTALLIZER)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.RECRYSTALLIZER)
                 .define('/', SgTags.Items.INGOTS_AZURE_ELECTRUM)
                 .define('g', Tags.Items.STORAGE_BLOCKS_GOLD)
                 .define('d', Tags.Items.GEMS_DIAMOND)
@@ -697,7 +696,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#g#")
                 .save(consumer);
 
-        ExtendedShapedRecipeBuilder.vanillaBuilder(RecipeCategory.DECORATIONS, SgBlocks.REFABRICATOR)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.REFABRICATOR)
                 .define('/', Tags.Items.INGOTS_IRON)
                 .define('i', Tags.Items.STORAGE_BLOCKS_IRON)
                 .define('d', Tags.Items.GEMS_DIAMOND)
@@ -708,7 +707,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#i#")
                 .save(consumer);
 
-        ExtendedShapedRecipeBuilder.vanillaBuilder(RecipeCategory.DECORATIONS, SgBlocks.METAL_PRESS)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.METAL_PRESS)
                 .define('#', Tags.Items.OBSIDIAN)
                 .define('t', SgTags.Items.INGOTS_TYRIAN_STEEL)
                 .define('/', SgTags.Items.RODS_IRON)
@@ -717,7 +716,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#t#")
                 .save(consumer);
 
-        ExtendedShapedRecipeBuilder.vanillaBuilder(RecipeCategory.DECORATIONS, SgBlocks.STARLIGHT_CHARGER)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.STARLIGHT_CHARGER)
                 .define('#', Blocks.POLISHED_BLACKSTONE)
                 .define('/', SgTags.Items.STORAGE_BLOCKS_BLAZE_GOLD)
                 .define('q', Tags.Items.STORAGE_BLOCKS_QUARTZ)
@@ -769,7 +768,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerCraftingItems(RecipeOutput consumer) {
-        shapelessBuilder(RecipeCategory.MISC, SgItems.GUIDE_BOOK)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SgItems.GUIDE_BOOK)
                 .requires(Items.BOOK)
                 .requires(SgTags.Items.TEMPLATE_BOARDS)
                 .unlockedBy("has_template_board", has(SgTags.Items.TEMPLATE_BOARDS))
@@ -781,7 +780,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires()(Tags.Items.GEMS_QUARTZ)
                 .save();(consumer);*/
 
-        shapelessBuilder(RecipeCategory.MISC, CraftingItems.GLOWING_DUST, 4)
+        shapeless(RecipeCategory.MISC, CraftingItems.GLOWING_DUST, 4)
                 .requires(Items.STICK)
                 .requires(Tags.Items.DUSTS_GLOWSTONE, 2)
                 .requires(Tags.Items.GEMS_QUARTZ)
@@ -797,7 +796,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires()(ItemTags.LOGS)
                 .save();(consumer);*/
 
-        shapelessBuilder(RecipeCategory.MISC, CraftingItems.TEMPLATE_BOARD, 6)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.TEMPLATE_BOARD, 6)
                 .requires(Items.FLINT)
                 .requires(ItemTags.LOGS)
                 .save(consumer);
@@ -807,7 +806,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires()(Items.SHULKER_SHELL)
                 .save();(consumer);*/
 
-        shapelessBuilder(RecipeCategory.MISC, CraftingItems.CRUSHED_SHULKER_SHELL, 1)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.CRUSHED_SHULKER_SHELL, 1)
                 .requires(Tags.Items.OBSIDIAN)
                 .requires(Items.SHULKER_SHELL)
                 .save(consumer);
@@ -840,7 +839,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.UPGRADE_BASE))
                 .save(consumer);
 
-        shapelessBuilder(RecipeCategory.MISC, CraftingItems.WIDE_PLATE_UPGRADE)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.WIDE_PLATE_UPGRADE)
                 .requires(CraftingItems.ADVANCED_UPGRADE_BASE)
                 .requires(SgTags.Items.STORAGE_BLOCKS_CRIMSON_IRON)
                 .requires(SgTags.Items.INGOTS_CRIMSON_STEEL)
@@ -915,7 +914,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.FLUFFY_PUFF))
                 .save(consumer);
 
-        ExtendedShapelessRecipeBuilder.vanillaBuilder(RecipeCategory.MISC, Items.FEATHER)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.FEATHER)
                 .requires(CraftingItems.FLUFFY_FEATHER)
                 .save(consumer);
 
@@ -925,7 +924,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.FLUFFY_PUFF))
                 .save(consumer);
 
-        ExtendedShapelessRecipeBuilder.vanillaBuilder(RecipeCategory.MISC, Items.STRING)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STRING)
                 .requires(CraftingItems.FLUFFY_STRING)
                 .save(consumer);
 
@@ -950,25 +949,25 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.FINE_SILK))
                 .save(consumer);
 
-        ExtendedShapelessRecipeBuilder.vanillaBuilder(RecipeCategory.MISC, CraftingItems.NETHER_STAR_FRAGMENT, 9)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.NETHER_STAR_FRAGMENT, 9)
                 .requires(Items.NETHER_STAR)
                 .save(consumer);
 
-        ExtendedShapedRecipeBuilder.vanillaBuilder(RecipeCategory.MISC, Items.NETHER_STAR)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.NETHER_STAR)
                 .pattern("###")
                 .pattern("###")
                 .pattern("###")
                 .define('#', CraftingItems.NETHER_STAR_FRAGMENT)
                 .save(consumer, SilentGear.getId("nether_star_from_fragments"));
 
-        ExtendedShapelessRecipeBuilder.vanillaBuilder(RecipeCategory.MISC, CraftingItems.STARMETAL_DUST, 3)
+        shapeless(RecipeCategory.MISC, CraftingItems.STARMETAL_DUST, 3)
                 .requires(SgTags.Items.DUSTS_AZURE_ELECTRUM, 1)
                 .requires(SgTags.Items.DUSTS_AZURE_SILVER, 2)
                 .requires(SgTags.Items.DUSTS_BLAZE_GOLD, 1)
                 .requires(CraftingItems.NETHER_STAR_FRAGMENT)
                 .save(consumer);
 
-        shapelessBuilder(RecipeCategory.MISC, CraftingItems.BRONZE_INGOT, 4)
+        shapeless(RecipeCategory.MISC, CraftingItems.BRONZE_INGOT, 4)
                 .requires(Tags.Items.INGOTS_COPPER, 3)
                 .requires(Tags.Items.INGOTS_IRON, 1)
                 .save(consumer);
@@ -1219,7 +1218,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void dyeFluffyBlock(RecipeOutput consumer, ItemLike block, TagKey<Item> dye) {
-        shapedBuilder(RecipeCategory.BUILDING_BLOCKS, block, 8)
+        shaped(RecipeCategory.BUILDING_BLOCKS, block, 8)
                 .pattern("###")
                 .pattern("#d#")
                 .pattern("###")
@@ -1232,19 +1231,19 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void registerSmithing(RecipeOutput consumer) {
         SgItems.getItems(item -> item instanceof ICoreItem).forEach(item -> {
             if (((ICoreItem) item).getGearType() != GearType.ELYTRA) {
-                GearSmithingRecipeBuilder.coating(item).build(consumer);
+                GearSmithingRecipeBuilder.coating(item).save(consumer);
             }
-            GearSmithingRecipeBuilder.upgrade(item, PartType.MISC_UPGRADE).build(consumer);
+            GearSmithingRecipeBuilder.upgrade(item, PartType.MISC_UPGRADE).save(consumer);
         });
 
-        shapelessBuilder(RecipeCategory.MISC, SgItems.COATING_SMITHING_TEMPLATE)
+        shapeless(RecipeCategory.MISC, SgItems.COATING_SMITHING_TEMPLATE)
                 .requires(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
                 .requires(SgTags.Items.BLUEPRINT_PAPER)
                 .requires(SgTags.Items.GEMS_BORT)
                 .unlockedBy("has_item", has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
                 .save(consumer);
 
-        shapedBuilder(RecipeCategory.MISC, SgItems.COATING_SMITHING_TEMPLATE, 2)
+        shaped(RecipeCategory.MISC, SgItems.COATING_SMITHING_TEMPLATE, 2)
                 .pattern("dtd")
                 .pattern("dnd")
                 .pattern("ddd")
@@ -1317,34 +1316,50 @@ public class ModRecipesProvider extends LibRecipeProvider {
         SalvagingRecipeBuilder.builder(Items.DIAMOND_HORSE_ARMOR)
                 .addResult(Items.DIAMOND, 6)
                 .addResult(Items.LEATHER)
-                .build(consumer, SilentGear.getId("salvaging/diamond_horse_armor"));
+                .save(consumer, SilentGear.getId("salvaging/diamond_horse_armor"));
 
         SalvagingRecipeBuilder.builder(Items.GOLDEN_HORSE_ARMOR)
                 .addResult(Items.GOLD_INGOT, 6)
                 .addResult(Items.LEATHER)
-                .build(consumer, SilentGear.getId("salvaging/golden_horse_armor"));
+                .save(consumer, SilentGear.getId("salvaging/golden_horse_armor"));
 
         SalvagingRecipeBuilder.builder(Items.IRON_HORSE_ARMOR)
                 .addResult(Items.IRON_INGOT, 6)
                 .addResult(Items.LEATHER)
-                .build(consumer, SilentGear.getId("salvaging/iron_horse_armor"));
+                .save(consumer, SilentGear.getId("salvaging/iron_horse_armor"));
 
         SalvagingRecipeBuilder.builder(Items.CROSSBOW)
                 .addResult(Items.STICK, 3)
                 .addResult(Items.STRING, 2)
                 .addResult(Items.IRON_INGOT)
                 .addResult(Items.TRIPWIRE_HOOK)
-                .build(consumer, SilentGear.getId("salvaging/crossbow"));
+                .save(consumer, SilentGear.getId("salvaging/crossbow"));
 
         SalvagingRecipeBuilder.builder(Items.CLOCK)
                 .addResult(Items.GOLD_INGOT, 4)
                 .addResult(Items.REDSTONE)
-                .build(consumer, SilentGear.getId("salvaging/clock"));
+                .save(consumer, SilentGear.getId("salvaging/clock"));
 
         SalvagingRecipeBuilder.builder(Items.COMPASS)
                 .addResult(Items.IRON_INGOT, 4)
                 .addResult(Items.REDSTONE)
-                .build(consumer, SilentGear.getId("salvaging/compass"));
+                .save(consumer, SilentGear.getId("salvaging/compass"));
+    }
+
+    private ExtendedShapelessRecipeBuilder<ShapelessRecipe> shapeless(RecipeCategory recipeCategory, ItemLike item) {
+        return shapeless(recipeCategory, item, 1);
+    }
+
+    private ExtendedShapelessRecipeBuilder<ShapelessRecipe> shapeless(RecipeCategory recipeCategory, ItemLike item, int count) {
+        return new ExtendedShapelessRecipeBuilder.Basic<>(recipeCategory, new ItemStack(item, count), ShapelessRecipe::new);
+    }
+
+    private ExtendedShapedRecipeBuilder.Basic<ShapedRecipe> shaped(RecipeCategory recipeCategory, ItemLike item) {
+        return shaped(recipeCategory, item, 1);
+    }
+
+    private ExtendedShapedRecipeBuilder.Basic<ShapedRecipe> shaped(RecipeCategory recipeCategory, ItemLike item, int count) {
+        return new ExtendedShapedRecipeBuilder.Basic<>(recipeCategory, new ItemStack(item, count), ShapedRecipe::new);
     }
 
     private void special(RecipeOutput consumer, RecipeSerializer<? extends CraftingRecipe> serializer) {

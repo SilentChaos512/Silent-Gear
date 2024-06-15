@@ -73,8 +73,8 @@ public final class Const {
             () -> SgBlocks.ALLOY_FORGE.get(),
             () -> SgBlockEntities.ALLOY_FORGE.get(),
             () -> SgMenuTypes.METAL_ALLOYER.get(),
-            () -> SgRecipes.COMPOUNDING_METAL.get(),
-            () -> SgRecipes.COMPOUNDING_METAL_TYPE.get(),
+            SgRecipes.COMPOUNDING_METAL,
+            SgRecipes.COMPOUNDING_METAL_TYPE,
             MetalAlloyRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
@@ -88,8 +88,8 @@ public final class Const {
             () -> SgBlocks.RECRYSTALLIZER.get(),
             () -> SgBlockEntities.RECRYSTALLIZER.get(),
             () -> SgMenuTypes.RECRYSTALLIZER.get(),
-            () -> SgRecipes.COMPOUNDING_GEM.get(),
-            () -> SgRecipes.COMPOUNDING_GEM_TYPE.get(),
+            SgRecipes.COMPOUNDING_GEM,
+            SgRecipes.COMPOUNDING_GEM_TYPE,
             GemAlloyRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
