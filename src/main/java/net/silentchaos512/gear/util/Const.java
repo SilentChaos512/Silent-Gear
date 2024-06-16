@@ -48,6 +48,7 @@ public final class Const {
     public static final ResourceLocation SMITHING_COATING = modId("smithing/coating");
     public static final ResourceLocation SMITHING_UPGRADE = modId("smithing/upgrade");
     public static final ResourceLocation SWAP_GEAR_PART = modId("swap_gear_part");
+    public static final ResourceLocation TOOL_ACTION = modId("tool_action");
 
     // Mod IDs
     public static final String CAELUS = "caelus";

@@ -2,13 +2,12 @@
   "type": "silentgear:tool_action",
   "damage_to_tool": 1,
   "ingredient": {
-    "tag": "minecraft:logs"
+    "tag": "forge:ingots/azure_electrum"
   },
   "result": {
-    "count": 6,
-    "item": "silentgear:template_board"
+    "item": "silentgear:azure_electrum_dust"
   },
   "tool": {
-    "tag": "forge:knives"
+    "tag": "forge:hammers"
   }
 }

@@ -6,7 +6,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -16,6 +18,8 @@ import net.silentchaos512.gear.block.compounder.CompoundMakerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.block.press.MetalPressBlockEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerBlockEntity;
+import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlockEntity;
+import net.silentchaos512.gear.client.renderer.blockentity.StoneAnvilRenderer;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
@@ -69,11 +73,13 @@ public final class SgBlockEntities {
             SgBlocks.STARLIGHT_CHARGER
     );
 
-    private SgBlockEntities() {
-    }
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<StoneAnvilBlockEntity>> STONE_ANVIL = register(
+            "stone_anvil",
+            StoneAnvilBlockEntity::new,
+            SgBlocks.STONE_ANVIL
+    );
 
-    @OnlyIn(Dist.CLIENT)
-    public static void registerRenderers(FMLClientSetupEvent event) {
+    private SgBlockEntities() {
     }
 
     private static <T extends BlockEntity> DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> factory, DeferredBlock<?>... blocks) {
@@ -82,5 +88,14 @@ public final class SgBlockEntities {
             //noinspection ConstantConditions - null in build
             return BlockEntityType.Builder.of(factory, validBlocks).build(null);
         });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientEvents {
+        @SubscribeEvent
+        public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(STONE_ANVIL.get(), StoneAnvilRenderer::new);
+        }
     }
 }

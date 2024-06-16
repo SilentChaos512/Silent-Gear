@@ -2,13 +2,13 @@
   "type": "silentgear:tool_action",
   "damage_to_tool": 1,
   "ingredient": {
-    "tag": "minecraft:logs"
+    "tag": "forge:cobblestone"
   },
   "result": {
-    "count": 6,
-    "item": "silentgear:template_board"
+    "count": 9,
+    "item": "silentgear:pebble"
   },
   "tool": {
-    "tag": "forge:knives"
+    "tag": "forge:hammers"
   }
 }

@@ -691,6 +691,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerMachines(RecipeOutput consumer) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.STONE_ANVIL)
+                .define('#', Tags.Items.COBBLESTONE)
+                .define('/', ItemTags.DIRT)
+                .pattern(" # ")
+                .pattern("#/#")
+                .unlockedBy("has_item", has(Tags.Items.COBBLESTONE))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.ALLOY_FORGE)
                 .define('/', SgTags.Items.INGOTS_CRIMSON_STEEL)
                 .define('i', Tags.Items.STORAGE_BLOCKS_IRON)
@@ -809,30 +817,13 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(Tags.Items.DUSTS_GLOWSTONE))
                 .save(consumer);
 
-        // TODO: stone anvil recipe
-        /*damageGear(SgItems.PEBBLE, 9, 1)
-                .requires(SgTags.Items.HAMMERS)
-                .requires(Tags.Items.COBBLESTONE)
-                .save(consumer);*/
-
-        /*damageGear(CraftingItems.TEMPLATE_BOARD, 6, 1)
-                .requires()(ModTags.Items.KNIVES)
-                .requires()(ItemTags.LOGS)
-                .save();(consumer);*/
-
-        shapeless(RecipeCategory.MISC, CraftingItems.TEMPLATE_BOARD, 6)
-                .requires(Items.FLINT)
-                .requires(ItemTags.LOGS)
+        toolAction(consumer, SgTags.Items.HAMMERS, Tags.Items.COBBLESTONE, 1, SgItems.PEBBLE, 9)
                 .save(consumer);
 
-        /*damageGear(CraftingItems.CRUSHED_SHULKER_SHELL, 1, 10)
-                .requires()(ModTags.Items.HAMMERS)
-                .requires()(Items.SHULKER_SHELL)
-                .save();(consumer);*/
+        toolAction(consumer, SgTags.Items.KNIVES, ItemTags.LOGS, 1, CraftingItems.TEMPLATE_BOARD, 6)
+                .save(consumer);
 
-        shapeless(RecipeCategory.MISC, CraftingItems.CRUSHED_SHULKER_SHELL, 1)
-                .requires(Tags.Items.OBSIDIAN)
-                .requires(Items.SHULKER_SHELL)
+        toolAction(consumer, SgTags.Items.HAMMERS, Items.SHULKER_SHELL, 10, CraftingItems.CRUSHED_SHULKER_SHELL, 1)
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CraftingItems.AZURE_ELECTRUM_INGOT)
@@ -1664,6 +1655,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
         return ret;
     }
 
+    private ToolActionRecipeBuilder toolAction(RecipeOutput recipeOutput, TagKey<Item> tool, ItemLike ingredient, int damageToTool, ItemLike result, int count) {
+        return new ToolActionRecipeBuilder(Ingredient.of(tool), Ingredient.of(ingredient), damageToTool, new ItemStack(result, count));
+    }
+
+    private ToolActionRecipeBuilder toolAction(RecipeOutput recipeOutput, TagKey<Item> tool, TagKey<Item> ingredient, int damageToTool, ItemLike result, int count) {
+        return new ToolActionRecipeBuilder(Ingredient.of(tool), Ingredient.of(ingredient), damageToTool, new ItemStack(result, count));
+    }
+
     private void metals(RecipeOutput consumer, float smeltingXp, Metals metal) {
         if (metal.ore != null) {
             SimpleCookingRecipeBuilder.blasting(Ingredient.of(metal.oreTag), RecipeCategory.MISC, metal.ingot, smeltingXp, 100)
@@ -1702,12 +1701,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
 
         if (metal.dust != null) {
-            // TODO: stone anvil recipe
-            /*damageGear(metal.dust, 1, 1)
-                    .requires(SgTags.Items.HAMMERS)
-                    .requires(metal.ingotTag)
-                    .unlockedBy("has_item", hasIngot)
-                    .save(consumer);*/
+            toolAction(consumer, SgTags.Items.HAMMERS, metal.ingotTag, 1, metal.dust, 1)
+                    .save(consumer);
         }
     }
 
