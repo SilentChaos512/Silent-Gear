@@ -27,6 +27,7 @@ import net.silentchaos512.gear.block.compounder.RefabricatorScreen;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
+import net.silentchaos512.gear.crafting.recipe.ToolActionRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
@@ -59,6 +60,7 @@ public class SGearJeiPlugin implements IModPlugin {
     static final RecipeType<CraftingRecipe> GEAR_CRAFTING_TYPE = RecipeType.create(SilentGear.MOD_ID, "gear_crafting", CraftingRecipe.class);
     static final RecipeType<MaterialGraderRecipeCategory.GraderRecipe> GRADING_TYPE = RecipeType.create(SilentGear.MOD_ID, "grading", MaterialGraderRecipeCategory.GraderRecipe.class);
     static final RecipeType<SalvagingRecipe> SALVAGING_TYPE = RecipeType.create(SilentGear.MOD_ID, "salvaging", SalvagingRecipe.class);
+    static final RecipeType<ToolActionRecipe> TOOL_ACTION_TYPE = RecipeType.create(SilentGear.MOD_ID, "tool_action", ToolActionRecipe.class);
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -74,6 +76,7 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipeCategories(new CompoundingRecipeCategory(Const.METAL_COMPOUNDER_INFO, "metal", guiHelper));
         reg.addRecipeCategories(new MaterialGraderRecipeCategory(guiHelper));
         reg.addRecipeCategories(new SalvagingRecipeCategoryJei(guiHelper));
+        reg.addRecipeCategories(new ToolActionRecipeCategory(guiHelper));
     }
 
     @Override
@@ -113,6 +116,9 @@ public class SGearJeiPlugin implements IModPlugin {
         }
 
         reg.addRecipes(GEAR_CRAFTING_TYPE, getRecipes(recipeManager, SGearJeiPlugin::isGearCraftingRecipe, CraftingRecipe.class));
+
+        // Tool Action (Stone Anvil)
+        reg.addRecipes(TOOL_ACTION_TYPE, getRecipes(recipeManager, SgRecipes.TOOL_ACTION_TYPE.get(), ToolActionRecipe.class));
 
         // Compounders
         reg.addRecipes(COMPOUNDING_FABRIC_TYPE, getRecipes(recipeManager, SgRecipes.COMPOUNDING_FABRIC_TYPE.get(), AlloyRecipe.class));
@@ -171,6 +177,7 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipeCatalyst(new ItemStack(SgBlocks.ALLOY_FORGE), COMPOUNDING_METAL_TYPE);
         reg.addRecipeCatalyst(new ItemStack(SgBlocks.MATERIAL_GRADER), GRADING_TYPE);
         reg.addRecipeCatalyst(new ItemStack(SgBlocks.SALVAGER), SALVAGING_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(SgBlocks.STONE_ANVIL), TOOL_ACTION_TYPE);
     }
 
     @Override

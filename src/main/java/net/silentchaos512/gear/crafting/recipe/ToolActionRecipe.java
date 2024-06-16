@@ -27,8 +27,20 @@ public class ToolActionRecipe implements Recipe<Container> {
         this.result = result;
     }
 
+    public Ingredient getTool() {
+        return tool;
+    }
+
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
     public int getDamageToTool() {
         return damageToTool;
+    }
+
+    public ItemStack getResult() {
+        return result.copy();
     }
 
     @Override
