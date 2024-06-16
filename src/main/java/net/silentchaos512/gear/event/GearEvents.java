@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -36,18 +35,10 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.living.*;
@@ -60,14 +51,15 @@ import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartDataList;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.gear.GearArmorItem;
+import net.silentchaos512.gear.setup.SgCriteriaTriggers;
 import net.silentchaos512.gear.util.*;
-import net.silentchaos512.lib.advancements.LibTriggers;
-import net.silentchaos512.lib.util.EntityHelper;
 
 import java.util.*;
 import java.util.function.Function;
@@ -128,9 +120,8 @@ public final class GearEvents {
         if (source == null || !"player".equals(source.getMsgId())) return;
 
         Entity attacker = source.getEntity();
-        if (!(attacker instanceof Player)) return;
+        if (!(attacker instanceof Player player)) return;
 
-        Player player = (Player) attacker;
         ItemStack weapon = player.getMainHandItem();
         if (!(weapon.getItem() instanceof ICoreTool)) return;
 
@@ -143,7 +134,7 @@ public final class GearEvents {
         }
 
         int aquatic = TraitHelper.getTraitLevel(weapon, Const.Traits.AQUATIC);
-        if (aquatic > 0 && attacked.canBreatheUnderwater()) {
+        if (aquatic > 0 && !attacked.canDrownInFluidType(NeoForgeMod.WATER_TYPE.value())) {
             event.setAmount(event.getAmount() + 2 * aquatic);
         }
 
@@ -207,7 +198,7 @@ public final class GearEvents {
         float total = 0f;
         for (ItemStack stack : entity.getArmorSlots()) {
             if (stack.getItem() instanceof GearArmorItem) {
-                total += ((GearArmorItem) stack.getItem()).getArmorMagicProtection(stack);
+                total += (float) ((GearArmorItem) stack.getItem()).getArmorMagicProtection(stack);
             }
         }
         return total;
@@ -302,34 +293,26 @@ public final class GearEvents {
     public static void onGearCrafted(PlayerEvent.ItemCraftedEvent event) {
         ItemStack result = event.getCrafting();
 
-        if (GearHelper.isGear(result) && event.getEntity() instanceof ServerPlayer) {
-            // Try to trigger some advancments
-            ServerPlayer player = (ServerPlayer) event.getEntity();
+        if (GearHelper.isGear(result) && event.getEntity() instanceof ServerPlayer player) {
+            // Try to trigger some advancements
 
             // Crude tool
             if (GearData.hasPart(result, PartType.ROD, p -> p.containsMaterial(Const.Materials.WOOD_ROUGH))) {
-                LibTriggers.GENERIC_INT.trigger(player, CRAFTED_WITH_ROUGH_ROD, 1);
+                SgCriteriaTriggers.CRAFTED_WITH_ROUGH_ROD.get().trigger(player);
             }
 
-            // Repair from broken
+            // Repairs
             int brokenCount = GearData.getBrokenCount(result);
-            int repairCount = GearData.getRepairCount(result);
-            if (brokenCount > 0 && repairCount > 0) {
-                LibTriggers.GENERIC_INT.trigger(player, REPAIR_FROM_BROKEN, brokenCount);
+            int repairedCount = GearData.getRepairCount(result);
+            SgCriteriaTriggers.GEAR_REPAIRED.get().trigger(player, brokenCount, repairedCount);
+
+            // Item stats
+            for (ItemStat stat : ItemStats.allStatsOrdered()) {
+                SgCriteriaTriggers.ITEM_STAT.get().trigger(player, stat, GearData.getStat(result, stat, false));
             }
 
-            // High durability
-            LibTriggers.GENERIC_INT.trigger(player, MAX_DURABILITY, result.getMaxDamage());
-
-            PartDataList parts = GearData.getConstructionParts(result);
-
-            // Add tip upgrade?
-            if (!parts.getTips().isEmpty()) {
-                LibTriggers.GENERIC_INT.trigger(player, APPLY_TIP_UPGRADE, 1);
-            }
-
-            // Mixed materials?
-            LibTriggers.GENERIC_INT.trigger(player, UNIQUE_MAIN_PARTS, getUniqueMainMaterialCount(parts));
+            // Parts
+            SgCriteriaTriggers.HAS_PART.get().trigger(player, result);
         }
     }
 
@@ -347,8 +330,7 @@ public final class GearEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDeath(LivingDeathEvent event) {
         Entity killer = event.getSource().getEntity();
-        if (killer instanceof Player && !killer.level().isClientSide) {
-            Player player = (Player) killer;
+        if (killer instanceof Player player && !killer.level().isClientSide) {
             if (TraitHelper.hasTraitEitherHand(player, Const.Traits.CONFETTI)) {
                 for (int i = 0; i < 3; ++i) {
                     FireworkRocketEntity rocket = new FireworkRocketEntity(player.level(), event.getEntity().getX(), event.getEntity().getEyeY(), event.getEntity().getZ(), createRandomFirework());
@@ -389,7 +371,7 @@ public final class GearEvents {
 
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
-            if (!event.player.isEyeInFluid(FluidTags.WATER) && TraitHelper.hasTrait(event.player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
+            if (!event.player.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) && TraitHelper.hasTrait(event.player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
                 // Vanilla duration is 200, but that causes flickering numbers/icon
                 event.player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 210, 0, false, false, true));
             }
@@ -441,8 +423,8 @@ public final class GearEvents {
                 float gravity = 1 + moonwalker * Const.Traits.MOONWALKER_GRAVITY_MOD;
                 event.setDistance(event.getDistance() * gravity);
 
-                if (event.getEntity() instanceof ServerPlayer) {
-                    LibTriggers.GENERIC_INT.trigger((ServerPlayer) event.getEntity(), FALL_WITH_MOONWALKER, 1);
+                if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+                    SgCriteriaTriggers.FALL_WITH_MOONWALKER.get().trigger(serverPlayer);
                 }
             }
 

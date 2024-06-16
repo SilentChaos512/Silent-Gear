@@ -4,15 +4,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
@@ -20,8 +20,8 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.lib.util.EnumUtils;
 import net.silentchaos512.lib.util.TimeUtils;
-import net.silentchaos512.utils.EnumUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -174,7 +174,7 @@ public class WielderEffectTrait extends SimpleTrait {
         public static PotionData of(LevelType type, MobEffect effect, int... levels) {
             PotionData ret = new PotionData();
             ret.type = type;
-            ret.effectId = Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect));
+            ret.effectId = Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(effect));
             ret.duration = TimeUtils.ticksFromSeconds(getDefaultDuration(ret.effectId));
             ret.levels = levels.clone();
             return ret;
@@ -256,7 +256,7 @@ public class WielderEffectTrait extends SimpleTrait {
         MobEffectInstance getEffect(int traitLevel, int pieceCount, boolean hasFullSet) {
             if (this.type == LevelType.FULL_SET_ONLY && !hasFullSet) return null;
 
-            MobEffect potion = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
+            MobEffect potion = BuiltInRegistries.MOB_EFFECT.get(effectId);
             if (potion == null) return null;
 
             int effectLevel = getEffectLevel(traitLevel, pieceCount, hasFullSet);
@@ -284,7 +284,7 @@ public class WielderEffectTrait extends SimpleTrait {
                 levelsText[i] = Integer.toString(levels[i]);
             }
 
-            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
+            MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(effectId);
             String effectName;
             if (effect != null) {
                 effectName = effect.getDisplayName().getString();

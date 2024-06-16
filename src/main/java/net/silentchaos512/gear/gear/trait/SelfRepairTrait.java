@@ -1,13 +1,13 @@
 package net.silentchaos512.gear.gear.trait;
 
-import net.minecraft.world.InteractionHand;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.InteractionHand;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.lib.util.MathUtils;
 
 import java.util.Collection;
 

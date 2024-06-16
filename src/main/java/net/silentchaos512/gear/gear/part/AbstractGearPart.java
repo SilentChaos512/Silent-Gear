@@ -209,7 +209,7 @@ public abstract class AbstractGearPart implements IGearPart {
             // Crafting Items
             JsonElement craftingItem = json.get("crafting_item");
             if (craftingItem != null) {
-                part.ingredient = Ingredient.fromJson(craftingItem);
+                part.ingredient = Ingredient.fromJson(craftingItem, true);
             } else if (failOnMissingElement) {
                 throw new JsonSyntaxException("Missing 'crafting_item'");
             }

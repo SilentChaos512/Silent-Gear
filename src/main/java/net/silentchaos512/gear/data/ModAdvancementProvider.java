@@ -16,21 +16,21 @@ import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.event.GearEvents;
+import net.silentchaos512.gear.advancements.criterion.GearRepairedTrigger;
+import net.silentchaos512.gear.advancements.criterion.ItemStatTrigger;
+import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.LazyPartData;
-import net.silentchaos512.gear.gear.trait.DurabilityTrait;
 import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgCriteriaTriggers;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.NameUtils;
 
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -38,10 +38,6 @@ import java.util.function.Consumer;
 public class ModAdvancementProvider extends AdvancementProvider {
     public ModAdvancementProvider(GatherDataEvent event) {
         super(event.getGenerator().getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper(), Collections.singletonList(new Advancements()));
-    }
-
-    private static Path getPath(Path pathIn, Advancement advancementIn) {
-        return pathIn.resolve("data/" + advancementIn.getId().getNamespace() + "/advancements/" + advancementIn.getId().getPath() + ".json");
     }
 
     private static class Advancements implements AdvancementGenerator {
@@ -72,12 +68,12 @@ public class ModAdvancementProvider extends AdvancementProvider {
             AdvancementHolder kachink1 = Advancement.Builder.advancement()
                     .parent(root)
                     .display(Items.IRON_NUGGET, title("kachink1"), description("kachink1"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("kachink", genericInt(GearHelper.DAMAGE_FACTOR_CHANGE, 1))
+                    .addCriterion("kachink", SgCriteriaTriggers.DAMAGE_FACTOR_CHANGE.get().createCriterion(new PlayerTrigger.TriggerInstance(Optional.empty())))
                     .save(saver, id("kachink1"));
             AdvancementHolder kachink2 = Advancement.Builder.advancement()
                     .parent(kachink1)
                     .display(CraftingItems.DIAMOND_SHARD, title("kachink2"), description("kachink2"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("kachink", genericInt(DurabilityTrait.TRIGGER_BRITTLE, 1))
+                    .addCriterion("kachink", SgCriteriaTriggers.BRITTLE_DAMAGE.get().createCriterion(new PlayerTrigger.TriggerInstance(Optional.empty())))
                     .save(saver, id("kachink2"));
 
             /*Advancement crudeTool = Advancement.Builder.advancement()
@@ -111,7 +107,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
             AdvancementHolder repairFromBroken = Advancement.Builder.advancement()
                     .parent(repairKit)
                     .display(Items.FLINT, title("repair_from_broken"), description("repair_from_broken"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("repair", genericInt(GearEvents.REPAIR_FROM_BROKEN, 1))
+                    .addCriterion("repair", SgCriteriaTriggers.GEAR_REPAIRED.get().createCriterion(new GearRepairedTrigger.Instance(Optional.empty(), MinMaxBounds.Ints.atLeast(1), MinMaxBounds.Ints.atLeast(1))))
                     .save(saver, id("repair_from_broken"));
 
             AdvancementHolder blueprintBook = simpleGetItem(saver, SgItems.BLUEPRINT_BOOK, blueprintPaper);
@@ -206,7 +202,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
             AdvancementHolder highDurability = Advancement.Builder.advancement()
                     .parent(materialGrader)
                     .display(SgItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EMERALD)), title("high_durability"), description("high_durability"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("durability", genericInt(GearEvents.MAX_DURABILITY, 16_000))
+                    .addCriterion("durability", SgCriteriaTriggers.ITEM_STAT.get().createCriterion(new ItemStatTrigger.Instance(Optional.empty(), ItemStats.DURABILITY, MinMaxBounds.Doubles.atLeast(16_000))))
                     .save(saver, id("high_durability"));
             AdvancementHolder graderCatalyst2 = Advancement.Builder.advancement()
                     .parent(materialGrader)
@@ -248,7 +244,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
             AdvancementHolder moonwalker = Advancement.Builder.advancement()
                     .parent(azureSilver)
                     .display(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("fall_with_moonwalker_boots", genericInt(GearEvents.FALL_WITH_MOONWALKER, 1))
+                    .addCriterion("fall_with_moonwalker_boots", SgCriteriaTriggers.FALL_WITH_MOONWALKER.get().createCriterion(new PlayerTrigger.TriggerInstance(Optional.empty())))
                     .save(saver, id("moonwalker"));
 
             //endregion
@@ -287,10 +283,6 @@ public class ModAdvancementProvider extends AdvancementProvider {
                     Collections.emptyList(),
                     Optional.empty(),
                     Optional.empty()));
-        }
-
-        private static CriterionTriggerInstance genericInt(ResourceLocation id, int value) {
-            return GenericIntTrigger.Instance.instance(id, value);
         }
 
         private static Component title(String key) {

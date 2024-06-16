@@ -757,8 +757,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Sandstone
         ResourceLocation sgSandstone = modId("sandstone");
         ret.add(new MaterialBuilder(sgSandstone, 1,
-                ExclusionIngredient.of(Tags.Items.SANDSTONE,
-                        Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
+                Ingredient.of(Tags.Items.SANDSTONE))
                 .categories(MaterialCategories.ROCK)
                 //main
                 .mainStatsCommon(117, 6, 7, 7, 0.7f)
@@ -775,8 +774,8 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .displayAll(PartTextureSet.LOW_CONTRAST, 0xE3DBB0)
         );
         // Red sandstone
-        ret.add(new MaterialBuilder(modId("sandstone/red"), -1, Ingredient.of(
-                Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
+        ret.add(new MaterialBuilder(modId("sandstone/red"), -1,
+                Ingredient.of(Items.RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE))
                 .parent(sgSandstone)
                 .display(PartType.MAIN, PartTextureSet.LOW_CONTRAST, 0xD97B30)
                 .display(PartType.ROD, PartTextureSet.LOW_CONTRAST, 0xD97B30)
@@ -857,23 +856,9 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private void addWoods(Collection<MaterialBuilder> ret) {
         // Wood
-        ExclusionIngredient planksIngredient = ExclusionIngredient.of(ItemTags.PLANKS,
-                Items.ACACIA_PLANKS,
-                Items.BIRCH_PLANKS,
-                Items.DARK_OAK_PLANKS,
-                Items.JUNGLE_PLANKS,
-                Items.OAK_PLANKS,
-                Items.SPRUCE_PLANKS,
-                SgBlocks.NETHERWOOD_PLANKS,
-                Items.CRIMSON_PLANKS,
-                Items.WARPED_PLANKS
-        );
-        ExclusionIngredient woodRodSubstitute = ExclusionIngredient.of(Tags.Items.RODS_WOODEN,
-                CraftingItems.NETHERWOOD_STICK
-        );
-        ret.add(new MaterialBuilder(Const.Materials.WOOD.getId(), 0, planksIngredient)
+        ret.add(new MaterialBuilder(Const.Materials.WOOD.getId(), 0, Ingredient.of(ItemTags.PLANKS))
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.WOOD)
-                .partSubstitute(PartType.ROD, woodRodSubstitute)
+                .partSubstitute(PartType.ROD, Tags.Items.RODS_WOODEN)
                 //main
                 .mainStatsCommon(59, 8, 15, 1, 0.6f)
                 .stat(PartType.MAIN, ItemStats.REPAIR_VALUE, 0.25f)
@@ -1008,13 +993,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .displayFragment(PartTextures.CLOTH, 0x805133)
         );
         // Wool
-        ExclusionIngredient woolIngredient = ExclusionIngredient.of(ItemTags.WOOL, Items.BLACK_WOOL,
-                Items.BLUE_WOOL, Items.BROWN_WOOL, Items.CYAN_WOOL, Items.GRAY_WOOL,
-                Items.GREEN_WOOL, Items.LIGHT_BLUE_WOOL, Items.LIGHT_GRAY_WOOL, Items.LIME_WOOL,
-                Items.MAGENTA_WOOL, Items.ORANGE_WOOL, Items.PINK_WOOL, Items.PURPLE_WOOL,
-                Items.RED_WOOL, Items.WHITE_WOOL, Items.YELLOW_WOOL
-        );
-        ret.add(new MaterialBuilder(Const.Materials.WOOL.getId(), 0, woolIngredient)
+        ret.add(new MaterialBuilder(Const.Materials.WOOL.getId(), 0, Ingredient.of(ItemTags.WOOL))
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.CLOTH)
                 // main
                 .mainStatsCommon(0, 4, 7, 7, 0.7f)
@@ -1106,12 +1085,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .displayFragment(PartTextures.CLOTH, 0x7E6962)
         );
         // String
-        ExclusionIngredient stringIngredient = ExclusionIngredient.of(Tags.Items.STRING,
-                CraftingItems.FLAX_STRING,
-                CraftingItems.FLUFFY_STRING,
-                CraftingItems.SINEW_FIBER
-        );
-        ret.add(new MaterialBuilder(modId("string"), 1, stringIngredient)
+        ret.add(new MaterialBuilder(modId("string"), 1, Ingredient.of(Tags.Items.STRING))
                 .categories(MaterialCategories.ORGANIC, MaterialCategories.FIBER)
                 //binding
                 .stat(PartType.BINDING, ItemStats.REPAIR_EFFICIENCY, 0.05f, StatInstance.Operation.MUL1)

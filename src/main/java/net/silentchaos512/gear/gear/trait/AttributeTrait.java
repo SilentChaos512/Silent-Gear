@@ -5,14 +5,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -149,7 +149,7 @@ public class AttributeTrait extends SimpleTrait {
         @SuppressWarnings("TypeMayBeWeakened")
         public static ModifierData of(Attribute attribute, AttributeModifier.Operation operation, float... values) {
             ModifierData ret = new ModifierData();
-            ret.name = ForgeRegistries.ATTRIBUTES.getKey(attribute);
+            ret.name = BuiltInRegistries.ATTRIBUTE.getKey(attribute);
             ret.operation = operation;
             ret.values = values.clone();
             return ret;
@@ -222,7 +222,7 @@ public class AttributeTrait extends SimpleTrait {
 
         @Nullable
         public Attribute getAttribute() {
-            return ForgeRegistries.ATTRIBUTES.getValue(this.name);
+            return BuiltInRegistries.ATTRIBUTE.get(this.name);
         }
 
         private String getWikiLine() {

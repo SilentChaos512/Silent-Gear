@@ -28,7 +28,7 @@ public class FragmentItem extends Item {
 
     public ItemStack create(IMaterialInstance material, int count) {
         ItemStack stack = new ItemStack(this, count);
-        stack.getOrCreateTag().put(NBT_MATERIAL, material.write(new CompoundTag()));
+        stack.getOrCreateTag().put(NBT_MATERIAL, material.toNetwork(new CompoundTag()));
         return stack;
     }
 

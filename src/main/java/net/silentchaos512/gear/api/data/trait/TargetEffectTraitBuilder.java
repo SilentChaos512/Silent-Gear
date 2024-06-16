@@ -6,7 +6,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITrait;

@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.data.trait;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
@@ -9,6 +10,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.util.DataResource;
@@ -36,7 +38,7 @@ public abstract class TraitsProviderBase implements DataProvider {
                 .extraData(json -> {
                     json.addProperty("base_chance", chance);
                     json.addProperty("bonus_multiplier", multiplier);
-                    json.add("ingredient", ingredient.toJson());
+                    json.add("ingredient", Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, ingredient).getOrThrow(true, SilentGear.LOGGER::error));
                 });
     }
 

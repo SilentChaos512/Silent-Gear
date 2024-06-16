@@ -2,7 +2,6 @@ package net.silentchaos512.gear.compat.curios;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -12,8 +11,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.neoforged.neoforge.capabilities.ICapabilityProvider;
-import net.silentchaos512.gear.item.gear.GearElytraItem;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -27,57 +26,43 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CurioGearItemCapability {
-    public static ICapabilityProvider createProvider(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
-        return new CurioGearItemCapability.Provider(new CurioGearItemWrapper(stack, extraAttributes));
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerItem(
+                CuriosCapability.ITEM,
+                (stack, context) -> new GearCurio(stack, multimap -> {}),
+                SgItems.BRACELET.get(), SgItems.RING.get()
+        );
+        event.registerItem(
+                CuriosCapability.ITEM,
+                (stack, context) -> new GearCurio(stack, multimap -> {
+                    // Add armor, flight, and trait-related attributes
+                    SgItems.ELYTRA.get().addAttributes("back", stack, multimap, false);
+                }) {
+                    @Override
+                    public void curioTick(SlotContext context) {
+                        if (context.entity().level().isClientSide || !ElytraItem.isFlyEnabled(stack)) {
+                            return;
+                        }
+                        int ticksFlying = context.entity().getFallFlyingTicks();
+
+                        if ((ticksFlying + 1) % 20 == 0) {
+                            stack.hurtAndBreak(1, context.entity(), entity -> entity.broadcastBreakEvent(EquipmentSlot.CHEST));
+                        }
+                    }
+                },
+                SgItems.ELYTRA.get()
+        );
     }
 
-    public static ICapabilityProvider createElytraProvider(ItemStack stack, GearElytraItem item) {
-        //noinspection OverlyComplexAnonymousInnerClass
-        return new CurioGearItemCapability.Provider(new CurioGearItemWrapper(stack, multimap -> {
-            // Add armor, flight, and trait-related attributes
-            item.addAttributes("back", stack, multimap, false);
-        }) {
-            @Override
-            public void curioTick(SlotContext context) {
-                if (context.entity().level().isClientSide || !ElytraItem.isFlyEnabled(stack)) {
-                    return;
-                }
-                int ticksFlying = context.entity().getFallFlyingTicks();
-
-                if ((ticksFlying + 1) % 20 == 0) {
-                    stack.hurtAndBreak(1, context.entity(), entity -> entity.broadcastBreakEvent(EquipmentSlot.CHEST));
-                }
-            }
-        });
-    }
-
-    public static ICapabilityProvider createProvider(CurioGearItemWrapper curio) {
-        return new CurioGearItemCapability.Provider(curio);
-    }
-
-    public static class Provider implements ICapabilityProvider {
-        final LazyOptional<ICurio> capability;
-
-        Provider(CurioGearItemWrapper curio) {
-            this.capability = LazyOptional.of(() -> curio);
-        }
-
-        @Override
-        @Nonnull
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-            return CuriosCapability.ITEM.orEmpty(cap, this.capability);
-        }
-    }
-
-    public static class CurioGearItemWrapper implements ICurio {
+    public static class GearCurio implements ICurio {
         private final ItemStack stack;
         private final Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes;
 
-        private CurioGearItemWrapper() {
+        private GearCurio() {
             this(ItemStack.EMPTY, multimap -> {});
         }
 
-        private CurioGearItemWrapper(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
+        private GearCurio(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
             this.stack = stack;
             this.extraAttributes = extraAttributes;
         }

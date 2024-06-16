@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -136,5 +137,23 @@ public class LazyPartData implements IPartData {
             }
         }
         return list;
+    }
+
+    public static LazyPartData fromNetwork(FriendlyByteBuf buf) {
+        var partId = buf.readResourceLocation();
+        var itemId = buf.readResourceLocation();
+        var materialListSize = buf.readVarInt();
+        var materials = new ArrayList<LazyMaterialInstance>();
+        for (int i = 0; i < materialListSize; ++i) {
+            materials.add(LazyMaterialInstance.fromNetwork(buf));
+        }
+        return new LazyPartData(partId, BuiltInRegistries.ITEM.get(itemId), materials);
+    }
+
+    public void toNetwork(FriendlyByteBuf buf) {
+        buf.writeResourceLocation(partId);
+        buf.writeResourceLocation(BuiltInRegistries.ITEM.getKey(craftingItem));
+        buf.writeVarInt(materials.size());
+        materials.forEach(m -> m.toNetwork(buf));
     }
 }

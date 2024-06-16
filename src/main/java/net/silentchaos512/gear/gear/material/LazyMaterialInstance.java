@@ -104,7 +104,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public CompoundTag write(CompoundTag nbt) {
+    public CompoundTag toNetwork(CompoundTag nbt) {
         nbt.putString("ID", materialId.toString());
         if (!modifiers.isEmpty()) {
             ListTag list = new ListTag();
@@ -159,7 +159,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
         return new LazyMaterialInstance(id, modifiers);
     }
 
-    public static LazyMaterialInstance read(FriendlyByteBuf buf) {
+    public static LazyMaterialInstance fromNetwork(FriendlyByteBuf buf) {
         ResourceLocation id = buf.readResourceLocation();
         int modCount = buf.readVarInt();
         Collection<IMaterialModifier> mods = Lists.newArrayList();
@@ -170,7 +170,7 @@ public class LazyMaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
+    public void toNetwork(FriendlyByteBuf buf) {
         buf.writeResourceLocation(this.materialId);
         buf.writeVarInt(this.modifiers.size());
         this.modifiers.forEach(mod -> MaterialModifiers.writeToNetwork(mod, buf));

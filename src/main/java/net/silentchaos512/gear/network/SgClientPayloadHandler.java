@@ -16,8 +16,6 @@ import net.silentchaos512.gear.network.configtask.SyncPartsConfigurationTask;
 import net.silentchaos512.gear.network.configtask.SyncTraitsConfigurationTask;
 import net.silentchaos512.gear.network.payload.client.AckPayload;
 import net.silentchaos512.gear.network.payload.server.*;
-import net.silentchaos512.gear.network.payload.server.server.*;
-import net.silentchaos512.gear.network.server.*;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.concurrent.CompletableFuture;

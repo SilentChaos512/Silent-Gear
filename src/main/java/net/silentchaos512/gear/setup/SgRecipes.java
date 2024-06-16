@@ -53,8 +53,6 @@ public final class SgRecipes {
             new AlloyRecipe.Serializer<>(MetalAlloyRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ConversionRecipe>> CONVERSION = register(Const.CONVERSION,
             ConversionRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SGearDamageItemRecipe>> DAMAGE_ITEM = register(Const.DAMAGE_ITEM,
-            SGearDamageItemRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FillRepairKitRecipe>> FILL_REPAIR_KIT = register(Const.FILL_REPAIR_KIT, () ->
             new SimpleCraftingRecipeSerializer<>(FillRepairKitRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ModKitRemovePartRecipe>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART, () ->

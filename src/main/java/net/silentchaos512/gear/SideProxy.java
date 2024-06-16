@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.*;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -18,13 +17,11 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.silentchaos512.gear.client.ColorHandlers;
-import net.silentchaos512.gear.client.DebugOverlay;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
-import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
@@ -32,7 +29,6 @@ import net.silentchaos512.gear.gear.part.CompoundPart;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.setup.*;
-import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.world.SgWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
@@ -101,9 +97,6 @@ class SideProxy implements IProxy {
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {
-        if (ModList.get().isLoaded(Const.CURIOS)) {
-            CuriosCompat.imcEnqueue(event);
-        }
     }
 
     private static void imcProcess(InterModProcessEvent event) {
@@ -174,7 +167,7 @@ class SideProxy implements IProxy {
             NeoForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
 
             if (SilentGear.isDevBuild()) {
-                NeoForge.EVENT_BUS.register(new DebugOverlay());
+                //NeoForge.EVENT_BUS.register(new DebugOverlay());
             }
 
             //noinspection ConstantConditions

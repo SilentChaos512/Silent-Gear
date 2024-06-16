@@ -12,6 +12,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.network.event.OnGameConfigurationEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.network.configtask.SyncTraitsConfigurationTask;
 import net.silentchaos512.gear.util.ModResourceLocation;
@@ -42,6 +43,10 @@ public final class SilentGear {
         PROXY = FMLEnvironment.dist == Dist.CLIENT
                 ? new SideProxy.Client(modEventBus)
                 : new SideProxy.Server(modEventBus);
+
+        if (ModList.get().isLoaded("curios")) {
+            CuriosCompat.registerEventHandlers(modEventBus);
+        }
     }
 
     @SubscribeEvent

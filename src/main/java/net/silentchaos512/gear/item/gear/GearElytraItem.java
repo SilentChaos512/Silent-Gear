@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -27,7 +26,6 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.compat.caelus.CaelusCompat;
-import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.Const;
@@ -158,15 +156,6 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
     @Override
     public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
         return TraitHelper.hasTrait(stack, Const.Traits.BRILLIANT);
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        if (ModList.get().isLoaded(Const.CURIOS)) {
-            return CuriosCompat.createElytraProvider(stack, this);
-        }
-        return super.initCapabilities(stack, nbt);
     }
 
     @Override

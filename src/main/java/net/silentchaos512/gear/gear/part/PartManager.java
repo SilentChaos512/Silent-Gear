@@ -50,7 +50,7 @@ public final class PartManager implements ResourceManagerReloadListener {
                     .orElseGet(() -> DataResult.error(() -> "Unknown part key: " + id)),
             component -> Optional.of(component.getId())
                     .map(DataResult::success)
-                    .orElseGet(() -> DataResult.error(() -> "Unknown part:" + component))
+                    .orElseGet(() -> DataResult.error(() -> "Unknown part: " + component))
     );
 
     private PartManager() {

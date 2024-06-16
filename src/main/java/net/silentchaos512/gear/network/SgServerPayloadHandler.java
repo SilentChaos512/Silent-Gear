@@ -8,7 +8,6 @@ import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import net.silentchaos512.gear.block.compounder.CompoundMakerContainer;
 import net.silentchaos512.gear.item.ICycleItem;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
-import net.silentchaos512.gear.network.client.*;
 import net.silentchaos512.gear.network.payload.client.*;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;

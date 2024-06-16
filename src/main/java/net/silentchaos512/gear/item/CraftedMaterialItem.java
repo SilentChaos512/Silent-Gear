@@ -53,7 +53,7 @@ public class CraftedMaterialItem extends Item implements IColoredMaterialItem {
 
     public ItemStack create(IMaterialInstance material, int count) {
         ItemStack result = new ItemStack(this, count);
-        result.getOrCreateTag().put(NBT_MATERIAL, material.write(new CompoundTag()));
+        result.getOrCreateTag().put(NBT_MATERIAL, material.toNetwork(new CompoundTag()));
         return result;
     }
 

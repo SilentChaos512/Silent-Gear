@@ -20,7 +20,7 @@ public class CompoundMakerInfo<R extends AlloyRecipe> {
     private final Supplier<MenuType<? extends CompoundMakerContainer>> containerType;
     private final DeferredHolder<RecipeType<?>, RecipeType<R>> recipeType;
     private final Supplier<CompoundMaterialItem> outputItem;
-    private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> recipeSerializer;
+    private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<R>> recipeSerializer;
     private final Class<R> recipeClass;
     private final int inputSlotCount;
     private final ImmutableList<IMaterialCategory> categories;
@@ -32,7 +32,7 @@ public class CompoundMakerInfo<R extends AlloyRecipe> {
                              Supplier<CompoundMakerBlock<R>> block,
                              Supplier<BlockEntityType<CompoundMakerBlockEntity<R>>> blockEntityType,
                              Supplier<MenuType<? extends CompoundMakerContainer>> containerType,
-                             DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> recipeSerializer,
+                             DeferredHolder<RecipeSerializer<?>, RecipeSerializer<R>> recipeSerializer,
                              DeferredHolder<RecipeType<?>, RecipeType<R>> recipeType,
                              Class<R> recipeClass) {
         this.block = block;

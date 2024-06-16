@@ -37,14 +37,14 @@ public class SalvagerScreen extends AbstractContainerScreen<SalvagerContainer> {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int x, int y) {
-        MutableComponent text = SgBlocks.SALVAGER.asBlock().getName();
+        MutableComponent text = SgBlocks.SALVAGER.get().getName();
         graphics.drawString(this.font, text.getString(), 28, 6, 0x404040, false);
     }
 

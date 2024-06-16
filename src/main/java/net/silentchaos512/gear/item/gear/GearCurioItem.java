@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.color.item.ItemColor;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
@@ -28,7 +26,6 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -64,15 +61,6 @@ public class GearCurioItem extends Item implements ICoreItem {
 
     public String getSlot() {
         return slot;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        if (ModList.get().isLoaded(Const.CURIOS)) {
-            return CuriosCompat.createProvider(stack);
-        }
-        return super.initCapabilities(stack, nbt);
     }
 
     @Override

@@ -4,15 +4,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
@@ -110,7 +110,7 @@ public final class EnchantmentTrait extends SimpleTrait {
         ListTag tagList = gear.getEnchantmentTags();
         for (int i = 0; i < tagList.size(); ++i) {
             CompoundTag nbt = tagList.getCompound(i);
-            Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(nbt.getString("id")));
+            Enchantment enchantment = BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(nbt.getString("id")));
 
             if (enchantment != null) {
                 int level = nbt.getInt("lvl");
@@ -297,7 +297,7 @@ public final class EnchantmentTrait extends SimpleTrait {
 
         @Nullable
         Enchantment getEnchantment() {
-            return ForgeRegistries.ENCHANTMENTS.getValue(enchantmentId);
+            return BuiltInRegistries.ENCHANTMENT.get(enchantmentId);
         }
 
         int getLevel(int traitLevel) {

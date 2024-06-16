@@ -77,7 +77,7 @@ public final class MaterialList implements List<IMaterialInstance> {
 
     private static CompoundTag serializeMaterialWithCount(IMaterialInstance material, int count) {
         CompoundTag ret = new CompoundTag();
-        material.write(ret);
+        material.toNetwork(ret);
         if (count > 1) {
             ret.putByte("Count", (byte) count);
         }

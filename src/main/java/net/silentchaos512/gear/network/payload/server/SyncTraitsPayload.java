@@ -8,7 +8,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
-import net.silentchaos512.gear.network.SgNetwork;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -26,13 +25,11 @@ public record SyncTraitsPayload(List<ITrait> traits) implements CustomPacketPayl
 
     @NotNull
     private static List<ITrait> readTraits(FriendlyByteBuf buf) {
-        SgNetwork.verifyNetworkVersion(buf);
         return TraitSerializers.readAll(buf);
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        SgNetwork.writeModVersionInfoToNetwork(buf);
         TraitSerializers.writeAll(this.traits, buf);
     }
 

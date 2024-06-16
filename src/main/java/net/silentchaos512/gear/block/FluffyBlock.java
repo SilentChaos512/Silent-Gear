@@ -14,13 +14,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.setup.SgTags;
 
 public class FluffyBlock extends Block {
     static {
-        MinecraftForge.EVENT_BUS.addListener(FluffyBlock::onGetBreakSpeed);
+        NeoForge.EVENT_BUS.addListener(FluffyBlock::onGetBreakSpeed);
     }
 
     private final DyeColor dyeColor;

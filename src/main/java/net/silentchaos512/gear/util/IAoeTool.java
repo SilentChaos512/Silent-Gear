@@ -19,11 +19,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.Tags;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.config.Config;
 import org.joml.Matrix4f;
@@ -201,7 +198,7 @@ public interface IAoeTool {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
+    //@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
     final class HighlightHandler {
         private HighlightHandler() {}
 

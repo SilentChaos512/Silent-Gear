@@ -24,6 +24,7 @@ import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.setup.SgRecipes;
+import net.silentchaos512.gear.util.Const;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -40,14 +41,13 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
         this.ingredients.addAll(ingredients);
     }
 
-    public static <R extends AlloyRecipe> R makeExample(CompoundMakerInfo<?> info, int count, BiFunction<ItemStack, List<Ingredient>, R> recipeFactory) {
+    public static <R extends AlloyRecipe> R makeExample(CompoundMakerInfo<?> info, int count, BiFunction<Result, List<Ingredient>, R> recipeFactory) {
         IMaterialCategory[] cats = info.getCategories().toArray(new IMaterialCategory[0]);
         List<Ingredient> list = new ArrayList<>();
         for (int i = 0; i < count; ++i) {
             list.add(PartMaterialIngredient.of(PartType.MAIN, GearType.ALL, cats));
         }
-        ItemStack result = new ItemStack(info.getOutputItem(), count);
-        return recipeFactory.apply(result, list);
+        return recipeFactory.apply(new Result(info.getOutputItem(), count, Const.Materials.EXAMPLE), list);
     }
 
     @Override

@@ -4,6 +4,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.*;
@@ -45,15 +48,15 @@ public final class SgBlocks {
     private static final Map<Block, Block> STRIPPED_WOOD = new HashMap<>();
 
     public static final DeferredBlock<DropExperienceBlock> BORT_ORE = register("bort_ore", () ->
-            getOre(SoundType.STONE));
+            getOre(UniformInt.of(3, 7), SoundType.STONE));
     public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_BORT_ORE = register("deepslate_bort_ore", () ->
-            getOre(SoundType.STONE));
+            getOre(UniformInt.of(3, 7), SoundType.STONE));
     public static final DeferredBlock<DropExperienceBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
-            getOre(SoundType.NETHER_GOLD_ORE));
+            getOre(ConstantInt.of(0), SoundType.NETHER_GOLD_ORE));
     public static final DeferredBlock<DropExperienceBlock> BLACKSTONE_CRIMSON_IRON_ORE = register("blackstone_crimson_iron_ore", () ->
-            getOre(SoundType.GILDED_BLACKSTONE));
+            getOre(ConstantInt.of(0), SoundType.GILDED_BLACKSTONE));
     public static final DeferredBlock<DropExperienceBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
-            getOre(SoundType.STONE));
+            getOre(ConstantInt.of(0), SoundType.STONE));
 
     public static final DeferredBlock<Block> RAW_CRIMSON_IRON_BLOCK = register("raw_crimson_iron_block", () ->
             getRawOreBlock(SoundType.NETHER_GOLD_ORE));
@@ -234,15 +237,15 @@ public final class SgBlocks {
         STRIPPED_WOOD.put(NETHERWOOD_WOOD.get(), STRIPPED_NETHERWOOD_WOOD.get());
     }
 
-    private static DropExperienceBlock getOre(SoundType soundType) {
-        return new ModOreBlock(BlockBehaviour.Properties.of()
+    private static DropExperienceBlock getOre(IntProvider xpDrop, SoundType soundType) {
+        return new ModOreBlock(xpDrop, BlockBehaviour.Properties.of()
                 .strength(4, 10)
                 .requiresCorrectToolForDrops()
                 .sound(soundType));
     }
 
     private static Block getRawOreBlock(SoundType soundType) {
-        return new ModOreBlock(BlockBehaviour.Properties.of()
+        return new ModOreBlock(ConstantInt.of(0), BlockBehaviour.Properties.of()
                 .strength(4, 20)
                 .requiresCorrectToolForDrops()
                 .sound(soundType));

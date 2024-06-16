@@ -120,7 +120,11 @@ public final class Const {
         public static final DataResource<IMaterial> EMERALD = DataResource.material("emerald");
         public static final DataResource<IMaterial> EXAMPLE = DataResource.material("example");
         public static final DataResource<IMaterial> FEATHER = DataResource.material("feather");
+        public static final DataResource<IMaterial> GOLD = DataResource.material("gold");
+        public static final DataResource<IMaterial> LEATHER = DataResource.material("leather");
+        public static final DataResource<IMaterial> NETHERITE = DataResource.material("netherite");
         public static final DataResource<IMaterial> IRON = DataResource.material("iron");
+        public static final DataResource<IMaterial> STONE = DataResource.material("stone");
         public static final DataResource<IMaterial> STRING = DataResource.material("string");
         public static final DataResource<IMaterial> TYRIAN_STEEL = DataResource.material("tyrian_steel");
 
@@ -135,12 +139,21 @@ public final class Const {
 
     public static final class Parts {
         public static final DataResource<IGearPart> ARMOR_BODY = DataResource.part("armor_body");
+        public static final DataResource<IGearPart> AXE_HEAD = DataResource.part("axe_head");
         public static final DataResource<IGearPart> BINDING = DataResource.part("binding");
+        public static final DataResource<IGearPart> BOOTS_PLATES = DataResource.part("boots_plates");
+        public static final DataResource<IGearPart> CHESTPLATE_PLATES = DataResource.part("chestplate_plates");
+        public static final DataResource<IGearPart> COATING = DataResource.part("coating");
         public static final DataResource<IGearPart> GRIP = DataResource.part("grip");
+        public static final DataResource<IGearPart> HELMET_PLATES = DataResource.part("helmet_plates");
+        public static final DataResource<IGearPart> HOE_HEAD = DataResource.part("hoe_head");
+        public static final DataResource<IGearPart> LEGGINGS_PLATES = DataResource.part("leggings_plates");
         public static final DataResource<IGearPart> MISC_SPOON = DataResource.part("misc/spoon");
         public static final DataResource<IGearPart> PICKAXE_HEAD = DataResource.part("pickaxe_head");
         public static final DataResource<IGearPart> RED_CARD = DataResource.part("misc/red_card");
         public static final DataResource<IGearPart> ROD = DataResource.part("rod");
+        public static final DataResource<IGearPart> SHOVEL_HEAD = DataResource.part("shovel_head");
+        public static final DataResource<IGearPart> SWORD_BLADE = DataResource.part("sword_blade");
         public static final DataResource<IGearPart> TIP = DataResource.part("tip");
 
         private Parts() {}

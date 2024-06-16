@@ -49,7 +49,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
                     .orElseGet(() -> DataResult.error(() -> "Unknown material key: " + id)),
             component -> Optional.of(component.getId())
                     .map(DataResult::success)
-                    .orElseGet(() -> DataResult.error(() -> "Unknown material:" + component))
+                    .orElseGet(() -> DataResult.error(() -> "Unknown material: " + component))
     );
 
     @Override
@@ -179,12 +179,27 @@ public class MaterialManager implements ResourceManagerReloadListener {
     public static IMaterial from(ItemStack stack) {
         if (stack.isEmpty()) return null;
 
+        var matches = new ArrayList<IMaterial>();
+
         for (IMaterial material : getValues()) {
             if (material.getIngredient().test(stack)) {
-                return material;
+                matches.add(material);
             }
         }
 
+        // Try to find child materials before parents
+        if (matches.size() > 1) {
+            for (IMaterial material : matches) {
+                if (material.getParent() != null) {
+                    return material;
+                }
+            }
+        }
+
+        // First match or null
+        if (!matches.isEmpty()) {
+            return matches.get(0);
+        }
         return null;
     }
 

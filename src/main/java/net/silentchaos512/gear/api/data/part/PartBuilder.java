@@ -2,12 +2,14 @@ package net.silentchaos512.gear.api.data.part;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
 import net.silentchaos512.gear.api.material.MaterialLayer;
@@ -152,7 +154,7 @@ public class PartBuilder {
             json.add("gear_types", this.upgradeGearTypes.serialize());
         }
 
-        json.add("crafting_item", this.ingredient.toJson());
+        json.add("crafting_item", Ingredient.CODEC.encodeStart(JsonOps.INSTANCE, ingredient).getOrThrow(true, SilentGear.LOGGER::error));
 
         json.add("name", Component.Serializer.toJsonTree(this.name));
 

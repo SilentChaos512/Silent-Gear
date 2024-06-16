@@ -49,7 +49,7 @@ public interface IMaterial extends IGearComponent<IMaterialInstance> {
     /**
      * Gets the parent of the material. Child materials will inherit some properties of their
      * parent, such as stats and traits. This is useful for creating materials that vary only in
-     * color (eg wood). Most materials should not have a parent. Methods will need to check this if
+     * color (e.g. wood). Most materials should not have a parent. Methods will need to check this if
      * they need to inherit properties.
      *
      * @return The parent, or null if there is no parent

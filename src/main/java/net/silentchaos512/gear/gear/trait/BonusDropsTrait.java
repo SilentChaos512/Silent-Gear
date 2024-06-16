@@ -47,7 +47,7 @@ public final class BonusDropsTrait extends SimpleTrait {
     }
 
     private void readIngredient(JsonElement json) {
-        this.ingredient = Ingredient.fromJson(json);
+        this.ingredient = Ingredient.fromJson(json, true);
 
         // For wiki output
         if (json.isJsonObject()) {

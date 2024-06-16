@@ -8,7 +8,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
-import net.silentchaos512.gear.network.SgNetwork;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -26,13 +25,11 @@ public record SyncMaterialsPayload(List<IMaterial> materials) implements CustomP
 
     @NotNull
     private static List<IMaterial> readMaterials(FriendlyByteBuf buf) {
-        SgNetwork.verifyNetworkVersion(buf);
         return MaterialSerializers.readAll(buf);
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        SgNetwork.writeModVersionInfoToNetwork(buf);
         MaterialSerializers.writeAll(this.materials, buf);
     }
 

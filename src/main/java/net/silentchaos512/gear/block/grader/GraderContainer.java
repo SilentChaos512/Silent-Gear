@@ -1,21 +1,17 @@
 package net.silentchaos512.gear.block.grader;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerListener;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.setup.SgMenuTypes;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
+import net.silentchaos512.lib.util.EnumUtils;
 import net.silentchaos512.lib.util.InventoryUtils;
-import net.silentchaos512.utils.EnumUtils;
 
 public class GraderContainer extends AbstractContainerMenu {
     private final Container inventory;

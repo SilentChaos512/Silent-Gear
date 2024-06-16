@@ -18,16 +18,16 @@
 
 package net.silentchaos512.gear.gear.trait;
 
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.lib.advancements.LibTriggers;
-import net.silentchaos512.utils.MathUtils;
+import net.silentchaos512.gear.setup.SgCriteriaTriggers;
+import net.silentchaos512.lib.util.MathUtils;
 
 import java.util.Collection;
 
@@ -68,7 +68,7 @@ public final class DurabilityTrait extends SimpleTrait {
         Player player = context.player();
         if (damageTaken != 0 && shouldActivate(context.traitLevel())) {
             if (effectScale > 0 && player instanceof ServerPlayer) {
-                LibTriggers.GENERIC_INT.trigger((ServerPlayer) player, TRIGGER_BRITTLE, 1);
+                SgCriteriaTriggers.BRITTLE_DAMAGE.get().trigger((ServerPlayer) player);
             }
             return Math.round(damageTaken + effectScale);
         }

@@ -349,7 +349,7 @@ public class CompoundMaterial implements IMaterial { // TODO: Extend AbstractMat
             if (craftingItems != null && craftingItems.isJsonObject()) {
                 JsonElement main = craftingItems.getAsJsonObject().get("main");
                 if (main != null) {
-                    ret.ingredient = Ingredient.fromJson(main);
+                    ret.ingredient = Ingredient.fromJson(main, true);
                 }
             } else {
                 throw new JsonSyntaxException("Expected 'crafting_items' to be an object");

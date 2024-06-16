@@ -34,6 +34,7 @@ import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
+import net.silentchaos512.gear.util.JsonHelper;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
@@ -451,9 +452,9 @@ public class MaterialBuilder {
 
         if (!this.loadConditions.isEmpty()) {
             JsonArray array = new JsonArray();
-            for (ICondition condition : this.loadConditions) {
+            /*for (ICondition condition : this.loadConditions) {
                 array.add(CraftingHelper.serialize(condition));
-            }
+            }*/
             json.add("conditions", array);
         }
 
@@ -491,11 +492,11 @@ public class MaterialBuilder {
 
         JsonObject craftingItems = new JsonObject();
         if (this.ingredient != Ingredient.EMPTY) {
-            craftingItems.add("main", this.ingredient.toJson());
+            craftingItems.add("main", JsonHelper.encodeIngredient(this.ingredient));
         }
         if (!this.partSubstitutes.isEmpty()) {
             JsonObject subs = new JsonObject();
-            this.partSubstitutes.forEach((type, ing) -> subs.add(SilentGear.shortenId(type.getName()), ing.toJson()));
+            this.partSubstitutes.forEach((type, ing) -> subs.add(SilentGear.shortenId(type.getName()), JsonHelper.encodeIngredient(ing)));
             craftingItems.add("subs", subs);
         }
         json.add("crafting_items", craftingItems);

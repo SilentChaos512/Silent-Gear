@@ -3,11 +3,11 @@ package net.silentchaos512.gear.gear.trait;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -35,7 +35,7 @@ public class CancelEffectsTrait extends SimpleTrait {
     private static void deserialize(CancelEffectsTrait trait, JsonObject json) {
         JsonArray array = json.getAsJsonArray("effects");
         for (JsonElement element : array) {
-            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(element.getAsString()));
+            MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(element.getAsString()));
             if (effect != null) {
                 trait.effects.add(effect);
             }
@@ -45,7 +45,7 @@ public class CancelEffectsTrait extends SimpleTrait {
     private static void decode(CancelEffectsTrait trait, FriendlyByteBuf buffer) {
         int count = buffer.readByte();
         for (int i = 0; i < count; ++i) {
-            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(buffer.readResourceLocation());
+            MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(buffer.readResourceLocation());
             if (effect != null) {
                 trait.effects.add(effect);
             }
@@ -54,7 +54,7 @@ public class CancelEffectsTrait extends SimpleTrait {
 
     private static void encode(CancelEffectsTrait trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.effects.size());
-        trait.effects.forEach(effect -> buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect))));
+        trait.effects.forEach(effect -> buffer.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(effect))));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class CancelEffectsTrait extends SimpleTrait {
         Collection<String> ret = super.getExtraWikiLines();
         ret.add("  - Cancels these effects: " +
                 this.effects.stream()
-                        .map(e -> "`" + ForgeRegistries.MOB_EFFECTS.getKey(e) + "`")
+                        .map(e -> "`" + BuiltInRegistries.MOB_EFFECT.getKey(e) + "`")
                         .collect(Collectors.joining(", "))
         );
         return ret;

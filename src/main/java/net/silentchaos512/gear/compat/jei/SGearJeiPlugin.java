@@ -32,13 +32,13 @@ import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
-import net.silentchaos512.gear.setup.SgBlocks;
-import net.silentchaos512.gear.setup.SgItems;
-import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -84,24 +84,32 @@ public class SGearJeiPlugin implements IModPlugin {
         // Repair kit hints
         for (RepairKitItem item : SgItems.getItems(RepairKitItem.class)) {
             String itemName = NameUtils.fromItem(item).getPath();
-            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe("",
-                    CraftingBookCategory.MISC,
-                    new ItemStack(item),
-                    NonNullList.of(Ingredient.EMPTY,
-                            Ingredient.of(item),
-                            PartMaterialIngredient.of(PartType.MAIN),
-                            PartMaterialIngredient.of(PartType.MAIN),
-                            PartMaterialIngredient.of(PartType.MAIN)
-                    ))));
-            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new ShapelessRecipe("",
-                    CraftingBookCategory.MISC,
-                    new ItemStack(item),
-                    NonNullList.of(Ingredient.EMPTY,
-                            Ingredient.of(item),
-                            Ingredient.of(SgItems.FRAGMENT),
-                            Ingredient.of(SgItems.FRAGMENT),
-                            Ingredient.of(SgItems.FRAGMENT)
-                    ))));
+            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new RecipeHolder<>(
+                    SilentGear.getId(itemName),
+                    new ShapelessRecipe("",
+                            CraftingBookCategory.MISC,
+                            new ItemStack(item),
+                            NonNullList.of(Ingredient.EMPTY,
+                                    Ingredient.of(item),
+                                    PartMaterialIngredient.of(PartType.MAIN),
+                                    PartMaterialIngredient.of(PartType.MAIN),
+                                    PartMaterialIngredient.of(PartType.MAIN)
+                            )
+                    )
+            )));
+            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new RecipeHolder<>(
+                    SilentGear.getId(itemName + "_fragments"),
+                    new ShapelessRecipe("",
+                            CraftingBookCategory.MISC,
+                            new ItemStack(item),
+                            NonNullList.of(Ingredient.EMPTY,
+                                    Ingredient.of(item),
+                                    Ingredient.of(SgItems.FRAGMENT),
+                                    Ingredient.of(SgItems.FRAGMENT),
+                                    Ingredient.of(SgItems.FRAGMENT)
+                            )
+                    )
+            )));
         }
 
         reg.addRecipes(GEAR_CRAFTING_TYPE, getRecipes(recipeManager, SGearJeiPlugin::isGearCraftingRecipe, CraftingRecipe.class));
@@ -112,12 +120,13 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipes(COMPOUNDING_METAL_TYPE, getRecipes(recipeManager, SgRecipes.COMPOUNDING_METAL_TYPE.get(), AlloyRecipe.class));
 
         for (int i = 2; i <= 4; ++i) {
-            reg.addRecipes(COMPOUNDING_FABRIC_TYPE, Collections.singletonList(AlloyRecipe.makeExample(Const.FABRIC_COMPOUNDER_INFO,
-                    i, new FabricAlloyRecipe(SilentGear.getId("fabric_example_" + i)))));
-            reg.addRecipes(COMPOUNDING_GEM_TYPE, Collections.singletonList(AlloyRecipe.makeExample(Const.GEM_COMPOUNDER_INFO,
-                    i, new GemAlloyRecipe(SilentGear.getId("gem_example_" + i)))));
-            reg.addRecipes(COMPOUNDING_METAL_TYPE, Collections.singletonList(AlloyRecipe.makeExample(Const.METAL_COMPOUNDER_INFO,
-                    i, new MetalAlloyRecipe(SilentGear.getId("metal_example_" + i)))));
+            reg.addRecipes(COMPOUNDING_FABRIC_TYPE, Collections.singletonList(
+                    AlloyRecipe.makeExample(Const.FABRIC_COMPOUNDER_INFO, i, FabricAlloyRecipe::new)
+            ));
+            reg.addRecipes(COMPOUNDING_GEM_TYPE, Collections.singletonList(
+                    AlloyRecipe.makeExample(Const.GEM_COMPOUNDER_INFO, i, GemAlloyRecipe::new)));
+            reg.addRecipes(COMPOUNDING_METAL_TYPE, Collections.singletonList(
+                    AlloyRecipe.makeExample(Const.METAL_COMPOUNDER_INFO, i, MetalAlloyRecipe::new)));
         }
 
         // Grading
@@ -133,23 +142,23 @@ public class SGearJeiPlugin implements IModPlugin {
         }
     }
 
-    private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, net.minecraft.world.item.crafting.RecipeType recipeType, Class<R> recipeClass) {
-        return getRecipes(recipeManager, r -> r.getType() == recipeType, recipeClass);
+    private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, net.minecraft.world.item.crafting.RecipeType<?> recipeType, Class<R> recipeClass) {
+        return getRecipes(recipeManager, r -> r.value().getType() == recipeType, recipeClass);
     }
 
     private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, RecipeSerializer<?> recipeSerializer, Class<R> recipeClass) {
-        return getRecipes(recipeManager, r -> r.getSerializer() == recipeSerializer, recipeClass);
+        return getRecipes(recipeManager, r -> r.value().getSerializer() == recipeSerializer, recipeClass);
     }
 
-    private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, Predicate<Recipe<?>> predicate, Class<R> recipeClass) {
+    private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, Predicate<? super RecipeHolder<?>> predicate, Class<R> recipeClass) {
         return recipeManager.getRecipes().stream()
                 .filter(predicate)
                 .map(recipeClass::cast)
                 .collect(Collectors.toList());
     }
 
-    private static boolean isGearCraftingRecipe(Recipe<?> recipe) {
-        RecipeSerializer<?> serializer = recipe.getSerializer();
+    private static boolean isGearCraftingRecipe(RecipeHolder<?> recipe) {
+        RecipeSerializer<?> serializer = recipe.value().getSerializer();
         return serializer == SgRecipes.SHAPED_GEAR.get() || serializer == SgRecipes.SHAPELESS_GEAR.get() || serializer == SgRecipes.COMPOUND_PART.get();
     }
 

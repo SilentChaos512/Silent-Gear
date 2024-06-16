@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.api.stats;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -13,12 +15,21 @@ import java.util.*;
  * Stats used by all gear types
  */
 public final class ItemStats {
+    public static final Codec<ItemStat> BY_NAME_CODEC = ResourceLocation.CODEC.flatXmap(
+            id -> Optional.ofNullable(byName(id))
+                    .map(DataResult::success)
+                    .orElseGet(() -> DataResult.error(() -> "Unknown item stat: " + id)),
+            stat -> Optional.of(stat.getStatId())
+                    .map(DataResult::success)
+                    .orElseGet(() -> DataResult.error(() -> "Unknown item stat: " + stat))
+    );
+
     private static final Map<ResourceLocation, ItemStat> REGISTRY = new LinkedHashMap<>();
 
     static final List<ItemStat> STATS_IN_ORDER = new ArrayList<>();
 
     // Generic
-    public static final ItemStat DURABILITY = register(new ItemStat(SilentGear.getId("durability"), 0f, 0f,Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
+    public static final ItemStat DURABILITY = register(new ItemStat(SilentGear.getId("durability"), 0f, 0f, Integer.MAX_VALUE, Color.STEELBLUE, new ItemStat.Properties()
             .displayAsInt()
             .affectedByGrades(true)
             .synergyApplies()
@@ -126,7 +137,8 @@ public final class ItemStats {
                     .synergyApplies()
     ));
 
-    private ItemStats() {}
+    private ItemStats() {
+    }
 
     public static ItemStat register(ItemStat stat) {
         REGISTRY.put(stat.getStatId(), stat);

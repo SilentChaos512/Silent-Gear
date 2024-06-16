@@ -48,7 +48,7 @@ public final class TraitManager implements ResourceManagerReloadListener {
                     .orElseGet(() -> DataResult.error(() -> "Unknown trait key: " + id)),
             component -> Optional.of(component.getId())
                     .map(DataResult::success)
-                    .orElseGet(() -> DataResult.error(() -> "Unknown trait:" + component))
+                    .orElseGet(() -> DataResult.error(() -> "Unknown trait: " + component))
     );
 
     private TraitManager() {}

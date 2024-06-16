@@ -1,11 +1,8 @@
 package net.silentchaos512.gear.network;
 
 import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
-import net.silentchaos512.gear.network.client.*;
 import net.silentchaos512.gear.network.payload.client.*;
 import net.silentchaos512.gear.network.payload.server.*;
-import net.silentchaos512.gear.network.payload.server.server.*;
-import net.silentchaos512.gear.network.server.*;
 
 public final class SgNetwork {
     public static void register(IPayloadRegistrar registrar) {

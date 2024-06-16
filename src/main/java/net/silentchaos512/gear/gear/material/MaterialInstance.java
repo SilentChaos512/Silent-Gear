@@ -279,7 +279,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public CompoundTag write(CompoundTag nbt) {
+    public CompoundTag toNetwork(CompoundTag nbt) {
         nbt.putString("ID", material.getId().toString());
         nbt.put("Item", item.save(new CompoundTag()));
         return nbt;
@@ -315,7 +315,7 @@ public final class MaterialInstance implements IMaterialInstance {
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
+    public void toNetwork(FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(this.material.getId());
         buffer.writeEnum(this.grade);
     }

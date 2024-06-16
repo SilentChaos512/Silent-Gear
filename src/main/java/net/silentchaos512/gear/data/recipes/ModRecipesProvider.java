@@ -1,8 +1,6 @@
 package net.silentchaos512.gear.data.recipes;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -12,40 +10,43 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.Tags;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.crafting.ingredient.BlueprintIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
-import net.silentchaos512.gear.crafting.recipe.ShapedGearRecipe;
-import net.silentchaos512.gear.crafting.recipe.ShapelessCompoundPartRecipe;
-import net.silentchaos512.gear.crafting.recipe.ShapelessGearRecipe;
+import net.silentchaos512.gear.crafting.recipe.*;
+import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
-import net.silentchaos512.gear.setup.SgBlocks;
-import net.silentchaos512.gear.setup.SgItems;
-import net.silentchaos512.gear.setup.SgRecipes;
-import net.silentchaos512.gear.setup.SgTags;
+import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.gear.GearArmorItem;
+import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.SgRecipes;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.data.recipe.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.recipe.ExtendedShapelessRecipeBuilder;
-import net.silentchaos512.lib.data.recipe.ExtendedSingleItemRecipeBuilder;
 import net.silentchaos512.lib.data.recipe.LibRecipeProvider;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class ModRecipesProvider extends LibRecipeProvider {
     private static final boolean ADD_TEST_RECIPES = false;
@@ -114,11 +115,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerSpecialRecipes(RecipeOutput consumer) {
-        special(consumer, SgRecipes.FILL_REPAIR_KIT.get());
-        special(consumer, SgRecipes.SWAP_GEAR_PART.get());
-        special(consumer, SgRecipes.QUICK_REPAIR.get());
-        special(consumer, SgRecipes.COMBINE_FRAGMENTS.get());
-        special(consumer, SgRecipes.MOD_KIT_REMOVE_PART.get());
+        special(consumer, SgRecipes.FILL_REPAIR_KIT.get(), FillRepairKitRecipe::new);
+        special(consumer, SgRecipes.SWAP_GEAR_PART.get(), GearPartSwapRecipe::new);
+        special(consumer, SgRecipes.QUICK_REPAIR.get(), QuickRepairRecipe::new);
+        special(consumer, SgRecipes.COMBINE_FRAGMENTS.get(), CombineFragmentsRecipe::new);
+        special(consumer, SgRecipes.MOD_KIT_REMOVE_PART.get(), ModKitRemovePartRecipe::new);
     }
 
     private void registerBlueprints(RecipeOutput consumer) {
@@ -495,8 +496,20 @@ public class ModRecipesProvider extends LibRecipeProvider {
         return new ExtendedShapelessRecipeBuilder.Basic<>(category, item.toStack(), ShapelessGearRecipe::new);
     }
 
+    private ExtendedShapelessRecipeBuilder.Basic<ShapelessGearRecipe> shapelessGear(RecipeCategory category, ItemLike item) {
+        return new ExtendedShapelessRecipeBuilder.Basic<>(category, new ItemStack(item), ShapelessGearRecipe::new);
+    }
+
     private ExtendedShapedRecipeBuilder.Basic<ShapedGearRecipe> shapedGear(RecipeCategory category, DeferredItem<?> item) {
         return new ExtendedShapedRecipeBuilder.Basic<>(category, item.toStack(), ShapedGearRecipe::new);
+    }
+
+    private ExtendedShapedRecipeBuilder.Basic<ShapedGearRecipe> shapedGear(RecipeCategory category, ItemLike item) {
+        return new ExtendedShapedRecipeBuilder.Basic<>(category, new ItemStack(item), ShapedGearRecipe::new);
+    }
+
+    private ExtendedShapelessRecipeBuilder.Basic<ShapelessCompoundPartRecipe> shapelessPart(RecipeCategory category, ItemLike item) {
+        return new ExtendedShapelessRecipeBuilder.Basic<>(category, new ItemStack(item), ShapelessCompoundPartRecipe::new);
     }
 
     private void registerGear(RecipeOutput consumer) {
@@ -595,15 +608,15 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .save(consumer, SilentGear.getId("gear/rough/axe"));
 
         // Coonversion recipes
-        toolConversion(consumer, SgItems.SWORD, Items.NETHERITE_SWORD, Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD);
-        toolConversion(consumer, SgItems.PICKAXE, Items.NETHERITE_PICKAXE, Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE);
-        toolConversion(consumer, SgItems.SHOVEL, Items.NETHERITE_SHOVEL, Items.DIAMOND_SHOVEL, Items.GOLDEN_SHOVEL, Items.IRON_SHOVEL, Items.STONE_SHOVEL, Items.WOODEN_SHOVEL);
-        toolConversion(consumer, SgItems.AXE, Items.NETHERITE_AXE, Items.DIAMOND_AXE, Items.GOLDEN_AXE, Items.IRON_AXE, Items.STONE_AXE, Items.WOODEN_AXE);
-        toolConversion(consumer, SgItems.HOE, Items.NETHERITE_HOE, Items.DIAMOND_HOE, Items.GOLDEN_HOE, Items.IRON_HOE, Items.STONE_HOE, Items.WOODEN_HOE);
-        armorConversion(consumer, SgItems.HELMET, Items.NETHERITE_HELMET, Items.DIAMOND_HELMET, Items.GOLDEN_HELMET, Items.IRON_HELMET, Items.LEATHER_HELMET);
-        armorConversion(consumer, SgItems.CHESTPLATE, Items.NETHERITE_CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.IRON_CHESTPLATE, Items.LEATHER_CHESTPLATE);
-        armorConversion(consumer, SgItems.LEGGINGS, Items.NETHERITE_LEGGINGS, Items.DIAMOND_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.IRON_LEGGINGS, Items.LEATHER_LEGGINGS);
-        armorConversion(consumer, SgItems.BOOTS, Items.NETHERITE_BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
+        toolConversion(consumer, SgItems.SWORD, Const.Parts.SWORD_BLADE, 2, Items.NETHERITE_SWORD, Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD);
+        toolConversion(consumer, SgItems.PICKAXE, Const.Parts.PICKAXE_HEAD, 3, Items.NETHERITE_PICKAXE, Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE);
+        toolConversion(consumer, SgItems.SHOVEL, Const.Parts.SHOVEL_HEAD, 1, Items.NETHERITE_SHOVEL, Items.DIAMOND_SHOVEL, Items.GOLDEN_SHOVEL, Items.IRON_SHOVEL, Items.STONE_SHOVEL, Items.WOODEN_SHOVEL);
+        toolConversion(consumer, SgItems.AXE, Const.Parts.AXE_HEAD, 3, Items.NETHERITE_AXE, Items.DIAMOND_AXE, Items.GOLDEN_AXE, Items.IRON_AXE, Items.STONE_AXE, Items.WOODEN_AXE);
+        toolConversion(consumer, SgItems.HOE, Const.Parts.HOE_HEAD, 2, Items.NETHERITE_HOE, Items.DIAMOND_HOE, Items.GOLDEN_HOE, Items.IRON_HOE, Items.STONE_HOE, Items.WOODEN_HOE);
+        armorConversion(consumer, SgItems.HELMET, Const.Parts.HELMET_PLATES, 5, Items.NETHERITE_HELMET, Items.DIAMOND_HELMET, Items.GOLDEN_HELMET, Items.IRON_HELMET, Items.LEATHER_HELMET);
+        armorConversion(consumer, SgItems.CHESTPLATE, Const.Parts.CHESTPLATE_PLATES, 8, Items.NETHERITE_CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.IRON_CHESTPLATE, Items.LEATHER_CHESTPLATE);
+        armorConversion(consumer, SgItems.LEGGINGS, Const.Parts.LEGGINGS_PLATES, 7, Items.NETHERITE_LEGGINGS, Items.DIAMOND_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.IRON_LEGGINGS, Items.LEATHER_LEGGINGS);
+        armorConversion(consumer, SgItems.BOOTS, Const.Parts.BOOTS_PLATES, 4, Items.NETHERITE_BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
     }
 
     private void registerModifierKits(RecipeOutput consumer) {
@@ -732,39 +745,39 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .withCustomMaterial(Const.Materials.DIMERALD)
                 .addIngredient(Tags.Items.GEMS_DIAMOND)
                 .addIngredient(Tags.Items.GEMS_EMERALD)
-                .build(consumer);
+                .save(consumer);
 
         CompoundingRecipeBuilder.metalBuilder(SgItems.CUSTOM_INGOT, 1)
                 .withCustomMaterial(DataResource.material("high_carbon_steel"))
                 .addIngredient(Tags.Items.INGOTS_IRON)
                 .addIngredient(ItemTags.COALS, 3)
-                .build(consumer);
+                .save(consumer);
 
         CompoundingRecipeBuilder.metalBuilder(CraftingItems.TYRIAN_STEEL_INGOT, 4)
                 .addIngredient(SgTags.Items.INGOTS_CRIMSON_STEEL)
                 .addIngredient(SgTags.Items.INGOTS_AZURE_ELECTRUM)
                 .addIngredient(CraftingItems.CRUSHED_SHULKER_SHELL)
                 .addIngredient(Items.NETHERITE_SCRAP)
-                .build(consumer);
+                .save(consumer);
 
         CompoundingRecipeBuilder.metalBuilder(CraftingItems.BLAZE_GOLD_INGOT, 1)
                 .addIngredient(Tags.Items.INGOTS_GOLD)
                 .addIngredient(Items.BLAZE_POWDER, 2)
-                .build(consumer);
+                .save(consumer);
 
         CompoundingRecipeBuilder.metalBuilder(CraftingItems.CRIMSON_STEEL_INGOT, 3)
                 .addIngredient(SgTags.Items.STORAGE_BLOCKS_CRIMSON_IRON)
                 .addIngredient(Tags.Items.RODS_BLAZE, 2)
                 .addIngredient(Items.MAGMA_CREAM)
-                .build(consumer);
+                .save(consumer);
     }
 
     private void registerPressing(RecipeOutput consumer) {
-        ExtendedSingleItemRecipeBuilder.builder(SgRecipes.PRESSING_MATERIAL.get(),
-                        RecipeCategory.MISC,
-                        PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
-                        SgItems.SHEET_METAL, 2)
-                .build(consumer);
+        new SingleItemRecipeBuilder(RecipeCategory.MISC,
+                MaterialPressingRecipe::new,
+                PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
+                SgItems.SHEET_METAL, 2
+        ).save(consumer);
     }
 
     private void registerCraftingItems(RecipeOutput consumer) {
@@ -786,10 +799,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires(Tags.Items.GEMS_QUARTZ)
                 .save(consumer);
 
-        damageGear(SgItems.PEBBLE, 9, 1)
+        // TODO: stone anvil recipe
+        /*damageGear(SgItems.PEBBLE, 9, 1)
                 .requires(SgTags.Items.HAMMERS)
                 .requires(Tags.Items.COBBLESTONE)
-                .save(consumer);
+                .save(consumer);*/
 
         /*damageGear(CraftingItems.TEMPLATE_BOARD, 6, 1)
                 .requires()(ModTags.Items.KNIVES)
@@ -1362,29 +1376,24 @@ public class ModRecipesProvider extends LibRecipeProvider {
         return new ExtendedShapedRecipeBuilder.Basic<>(recipeCategory, new ItemStack(item, count), ShapedRecipe::new);
     }
 
-    private void special(RecipeOutput consumer, RecipeSerializer<? extends CraftingRecipe> serializer) {
-        SpecialRecipeBuilder.special(serializer).save(consumer, NameUtils.fromRecipeSerializer(serializer).toString());
-    }
-
-    private ExtendedShapelessRecipeBuilder damageGear(ItemLike result, int count, int damage) {
-        return shapelessBuilder(SgRecipes.DAMAGE_ITEM.get(), RecipeCategory.MISC, result, count)
-                .addExtraData(json -> json.addProperty("damage", damage));
+    private void special(RecipeOutput consumer, RecipeSerializer<? extends CraftingRecipe> serializer, Function<CraftingBookCategory, Recipe<?>> factory) {
+        SpecialRecipeBuilder.special(factory).save(consumer, NameUtils.fromRecipeSerializer(serializer).toString());
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
     private void toolRecipes(RecipeOutput consumer, String name, int mainCount, ItemLike tool, ItemLike toolHead, GearBlueprintItem blueprintItem) {
         // Tool head
-        shapelessBuilder(SgRecipes.COMPOUND_PART.get(), RecipeCategory.TOOLS, toolHead)
+        shapelessPart(RecipeCategory.TOOLS, toolHead)
                 .requires(BlueprintIngredient.of(blueprintItem))
                 .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + name + "_head"));
         // Tool from head and rod
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.TOOLS, tool)
+        shapelessGear(RecipeCategory.TOOLS, tool)
                 .requires(toolHead)
                 .requires(GearPartIngredient.of(PartType.ROD))
                 .save(consumer, SilentGear.getId("gear/" + name));
         // Quick tool (mains and rods, skipping head)
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.TOOLS, tool)
+        shapelessGear(RecipeCategory.TOOLS, tool)
                 .requires(BlueprintIngredient.of(blueprintItem))
                 .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .requires(GearPartIngredient.of(PartType.ROD))
@@ -1394,18 +1403,18 @@ public class ModRecipesProvider extends LibRecipeProvider {
     @SuppressWarnings("MethodWithTooManyParameters")
     private void bowRecipes(RecipeOutput consumer, String name, int mainCount, ItemLike tool, ItemLike toolHead, GearBlueprintItem blueprintItem) {
         // Main part
-        shapelessBuilder(SgRecipes.COMPOUND_PART.get(), RecipeCategory.COMBAT, toolHead)
+        shapelessPart(RecipeCategory.COMBAT, toolHead)
                 .requires(BlueprintIngredient.of(blueprintItem))
                 .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + name + "_main"));
         // Tool from main, rod, and cord
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.COMBAT, tool)
+        shapelessGear(RecipeCategory.COMBAT, tool)
                 .requires(toolHead)
                 .requires(GearPartIngredient.of(PartType.ROD))
                 .requires(GearPartIngredient.of(PartType.CORD))
                 .save(consumer, SilentGear.getId("gear/" + name));
         // Quick tool (main materials, rod, and cord, skipping main part)
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.COMBAT, tool)
+        shapelessGear(RecipeCategory.COMBAT, tool)
                 .requires(BlueprintIngredient.of(blueprintItem))
                 .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
                 .requires(GearPartIngredient.of(PartType.ROD))
@@ -1416,18 +1425,18 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void arrowRecipes(RecipeOutput consumer, String name, ItemLike arrow, ItemLike arrowHead, GearBlueprintItem blueprintItem) {
         BlueprintIngredient blueprint = BlueprintIngredient.of(blueprintItem);
         // Arrow head
-        shapelessBuilder(SgRecipes.COMPOUND_PART.get(), RecipeCategory.COMBAT, arrowHead)
+        shapelessPart(RecipeCategory.COMBAT, arrowHead)
                 .requires(blueprint)
                 .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.PROJECTILE))
                 .save(consumer, SilentGear.getId("gear/" + name + "_head"));
         // Arrows from head
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.COMBAT, arrow)
+        shapelessGear(RecipeCategory.COMBAT, arrow)
                 .requires(arrowHead)
                 .requires(GearPartIngredient.of(PartType.ROD))
                 .requires(GearPartIngredient.of(PartType.FLETCHING))
                 .save(consumer, SilentGear.getId("gear/" + name));
         // Quick arrows
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.COMBAT, arrow)
+        shapelessGear(RecipeCategory.COMBAT, arrow)
                 .requires(BlueprintIngredient.of(blueprintItem))
                 .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
                 .requires(GearPartIngredient.of(PartType.ROD))
@@ -1436,39 +1445,39 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void armorRecipes(RecipeOutput consumer, int mainCount, GearArmorItem armor, ItemLike plates, GearBlueprintItem blueprintItem) {
-        shapelessBuilder(SgRecipes.COMPOUND_PART.get(), RecipeCategory.COMBAT, plates)
+        shapelessPart(RecipeCategory.COMBAT, plates)
                 .requires(BlueprintIngredient.of(blueprintItem))
                 .requires(PartMaterialIngredient.of(PartType.MAIN, armor.getGearType()), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(plates).getPath()));
 
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.COMBAT, armor)
+        shapelessGear(RecipeCategory.COMBAT, armor)
                 .requires(plates)
                 .save(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(armor).getPath()));
 
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.COMBAT, armor)
+        shapelessGear(RecipeCategory.COMBAT, armor)
                 .requires(plates)
                 .requires(GearPartIngredient.of(PartType.LINING))
                 .save(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(armor).getPath() + "_with_lining"));
     }
 
     private void curioRecipes(RecipeOutput consumer, String name, int mainCount, ItemLike curioItem, ItemLike curioMain, GearBlueprintItem blueprint) {
-        shapelessBuilder(SgRecipes.COMPOUND_PART.get(), RecipeCategory.MISC, curioMain)
+        shapelessPart(RecipeCategory.MISC, curioMain)
                 .requires(BlueprintIngredient.of(blueprint))
                 .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + name + "_main_only"));
 
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.MISC, curioItem)
+        shapelessGear(RecipeCategory.MISC, curioItem)
                 .requires(BlueprintIngredient.of(SgItems.JEWELER_TOOLS.get()))
                 .requires(curioMain)
                 .save(consumer, SilentGear.getId("gear/" + name));
 
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.MISC, curioItem)
+        shapelessGear(RecipeCategory.MISC, curioItem)
                 .requires(BlueprintIngredient.of(SgItems.JEWELER_TOOLS.get()))
                 .requires(curioMain)
                 .requires(GearPartIngredient.of(PartType.ADORNMENT))
                 .save(consumer, SilentGear.getId("gear/" + name + "_with_gem"));
 
-        shapelessBuilder(SgRecipes.SHAPELESS_GEAR.get(), RecipeCategory.MISC, curioItem)
+        shapelessGear(RecipeCategory.MISC, curioItem)
                 .requires(BlueprintIngredient.of(blueprint))
                 .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), mainCount)
                 .requires(GearPartIngredient.of(PartType.ADORNMENT))
@@ -1526,54 +1535,67 @@ public class ModRecipesProvider extends LibRecipeProvider {
         builderTemplate.save(consumer);
     }
 
-    private static final Map<Tier, ResourceLocation> TOOL_MATERIALS = ImmutableMap.<Tier, ResourceLocation>builder()
-            .put(Tiers.NETHERITE, SilentGear.getId("diamond"))
-            .put(Tiers.DIAMOND, SilentGear.getId("diamond"))
-            .put(Tiers.GOLD, SilentGear.getId("gold"))
-            .put(Tiers.IRON, SilentGear.getId("iron"))
-            .put(Tiers.STONE, SilentGear.getId("stone"))
-            .put(Tiers.WOOD, SilentGear.getId("wood"))
+    private ShapelessConversionBuilder shapelessConversion(RecipeCategory category, ICoreItem result, List<LazyPartData> parts) {
+        return new ShapelessConversionBuilder(category, result, parts);
+    }
+
+    private static final Map<Tier, DataResource<IMaterial>> TOOL_MATERIALS = ImmutableMap.<Tier, DataResource<IMaterial>>builder()
+            .put(Tiers.NETHERITE, Const.Materials.DIAMOND) // Yes, diamond is correct, this is for the main part
+            .put(Tiers.DIAMOND, Const.Materials.DIAMOND)
+            .put(Tiers.GOLD, Const.Materials.GOLD)
+            .put(Tiers.IRON, Const.Materials.IRON)
+            .put(Tiers.STONE, Const.Materials.STONE)
+            .put(Tiers.WOOD, Const.Materials.WOOD)
             .build();
-    private static final Map<ArmorMaterial, ResourceLocation> ARMOR_MATERIALS = ImmutableMap.<ArmorMaterial, ResourceLocation>builder()
-            .put(ArmorMaterials.DIAMOND, SilentGear.getId("diamond"))
-            .put(ArmorMaterials.GOLD, SilentGear.getId("gold"))
-            .put(ArmorMaterials.IRON, SilentGear.getId("iron"))
-            .put(ArmorMaterials.LEATHER, SilentGear.getId("leather"))
+    private static final Map<ArmorMaterial, DataResource<IMaterial>> ARMOR_MATERIALS = ImmutableMap.<ArmorMaterial, DataResource<IMaterial>>builder()
+            .put(ArmorMaterials.NETHERITE, Const.Materials.DIAMOND) // Again, this is correct (see TOOL_MATERIALS)
+            .put(ArmorMaterials.DIAMOND, Const.Materials.DIAMOND)
+            .put(ArmorMaterials.GOLD, Const.Materials.GOLD)
+            .put(ArmorMaterials.IRON, Const.Materials.IRON)
+            .put(ArmorMaterials.LEATHER, Const.Materials.LEATHER)
             .build();
 
-    private void toolConversion(RecipeOutput consumer, ItemLike result, Item... toolItems) {
+    private void toolConversion(RecipeOutput consumer, DeferredItem<? extends ICoreItem> result, DataResource<IGearPart> mainPart, int mainCount, Item... toolItems) {
         for (Item input : toolItems) {
             assert input instanceof TieredItem;
             Tier tier = ((TieredItem) input).getTier();
-            ResourceLocation coating = tier == Tiers.NETHERITE ? SilentGear.getId("netherite") : null;
-            shapelessBuilder(SgRecipes.CONVERSION.get(), RecipeCategory.MISC, result)
+            DataResource<IMaterial> coating = tier == Tiers.NETHERITE ? Const.Materials.NETHERITE : null;
+            shapelessConversion(RecipeCategory.MISC, result.get(),
+                    buildConversionParts(
+                            result.get().getGearType(),
+                            mainPart,
+                            TOOL_MATERIALS.getOrDefault(tier, Const.Materials.EMERALD), mainCount,
+                            Const.Materials.WOOD,
+                            coating
+                    )
+            )
                     .requires(input)
-                    .addExtraData(json -> {
-                        ResourceLocation material = TOOL_MATERIALS.getOrDefault(tier, SilentGear.getId("emerald"));
-                        json.getAsJsonObject("result").add("materials", buildMaterials(material, SilentGear.getId("wood"), coating));
-                    })
                     .save(consumer, SilentGear.getId("gear/convert/" + NameUtils.fromItem(input).getPath()));
         }
     }
 
-    private void armorConversion(RecipeOutput consumer, ItemLike result, Item... armorItems) {
+    private void armorConversion(RecipeOutput consumer, DeferredItem<? extends ICoreItem> result, DataResource<IGearPart> mainPart, int mainCount, Item... armorItems) {
         for (Item input : armorItems) {
             assert input instanceof ArmorItem;
             ArmorMaterial armorMaterial = ((ArmorItem) input).getMaterial();
-            ResourceLocation coating = armorMaterial == ArmorMaterials.NETHERITE ? SilentGear.getId("netherite") : null;
-            shapelessBuilder(SgRecipes.CONVERSION.get(), RecipeCategory.MISC, result)
+            DataResource<IMaterial> coating = armorMaterial == ArmorMaterials.NETHERITE ? Const.Materials.NETHERITE : null;
+            shapelessConversion(RecipeCategory.MISC, result.get(),
+                    buildConversionParts(
+                            result.get().getGearType(),
+                            mainPart,
+                            ARMOR_MATERIALS.getOrDefault(armorMaterial, Const.Materials.EMERALD), mainCount,
+                            null,
+                            coating
+                    )
+            )
                     .requires(input)
-                    .addExtraData(json -> {
-                        ResourceLocation material = ARMOR_MATERIALS.getOrDefault(armorMaterial, SilentGear.getId("emerald"));
-                        json.getAsJsonObject("result").add("materials", buildMaterials(material, null, coating));
-                    })
                     .save(consumer, SilentGear.getId("gear/convert/" + NameUtils.fromItem(input).getPath()));
         }
     }
 
     private static void gearSalvage(RecipeOutput consumer, ICoreItem item) {
         SalvagingRecipeBuilder.gearBuilder(item)
-                .build(consumer, SilentGear.getId("salvaging/gear/" + NameUtils.fromItem(item).getPath()));
+                .save(consumer, SilentGear.getId("salvaging/gear/" + NameUtils.fromItem(item).getPath()));
     }
 
     private static void vanillaSalvage(RecipeOutput consumer, ItemLike gear, ItemLike main, int mainCount, int rodCount) {
@@ -1581,7 +1603,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private static void vanillaSalvage(RecipeOutput consumer, ItemLike gear, ItemLike main, int mainCount, int rodCount, @Nullable ItemLike secondary) {
-        SalvagingRecipeBuilder builder = SalvagingRecipeBuilder.builder(gear).addResult(main, mainCount);
+        var builder = SalvagingRecipeBuilder.builder(gear).addResult(main, mainCount);
         if (secondary != null) {
             builder.addResult(secondary);
         }
@@ -1589,19 +1611,44 @@ public class ModRecipesProvider extends LibRecipeProvider {
             builder.addResult(Items.STICK, rodCount);
         }
         ResourceLocation inputId = NameUtils.fromItem(gear);
-        builder.build(consumer, SilentGear.getId("salvaging/" + inputId.getPath()));
+        builder.save(consumer, SilentGear.getId("salvaging/" + inputId.getPath()));
     }
 
-    private static JsonObject buildMaterials(ResourceLocation main, @Nullable ResourceLocation rod, @Nullable ResourceLocation coating) {
-        JsonObject json = new JsonObject();
-        json.add("main", LazyMaterialInstance.of(main).serialize());
+    private static List<LazyPartData> buildConversionParts(
+            GearType gearType,
+            DataResource<IGearPart> mainPart, DataResource<IMaterial> main, int mainCount,
+            @Nullable DataResource<IMaterial> rod,
+            @Nullable DataResource<IMaterial> coating
+    ) {
+        List<LazyPartData> ret = new ArrayList<>();
+        List<LazyMaterialInstance> mainMaterials = new ArrayList<>();
+        for (int i = 0; i < mainCount; ++i) {
+            mainMaterials.add(LazyMaterialInstance.of(main));
+        }
+
+        ret.add(LazyPartData.of(
+                mainPart,
+                mainPart.get().getType().getCompoundPartItem(gearType).get(),
+                mainMaterials
+        ));
+
         if (rod != null) {
-            json.add("rod", LazyMaterialInstance.of(rod).serialize());
+            ret.add(LazyPartData.of(
+                    Const.Parts.ROD,
+                    Const.Parts.ROD.get().getType().getCompoundPartItem(gearType).get(),
+                    rod
+            ));
         }
+
         if (coating != null) {
-            json.add("coating", LazyMaterialInstance.of(coating).serialize());
+            ret.add(LazyPartData.of(
+                    Const.Parts.COATING,
+                    Const.Parts.COATING.get().getType().getCompoundPartItem(gearType).get(),
+                    coating
+            ));
         }
-        return json;
+
+        return ret;
     }
 
     private void metals(RecipeOutput consumer, float smeltingXp, Metals metal) {
@@ -1625,7 +1672,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
             compressionRecipes(consumer, metal.rawOreBlock, metal.rawOre, null);
         }
 
-        InventoryChangeTrigger.TriggerInstance hasIngot = has(metal.ingotTag);
+        var hasIngot = has(metal.ingotTag);
 
         if (metal.block != null) {
             compressionRecipes(consumer, metal.block, metal.ingot, metal.nugget);
@@ -1642,11 +1689,12 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
 
         if (metal.dust != null) {
-            damageGear(metal.dust, 1, 1)
+            // TODO: stone anvil recipe
+            /*damageGear(metal.dust, 1, 1)
                     .requires(SgTags.Items.HAMMERS)
                     .requires(metal.ingotTag)
                     .unlockedBy("has_item", hasIngot)
-                    .save(consumer);
+                    .save(consumer);*/
         }
     }
 

@@ -157,7 +157,7 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
         return Color.VALUE_WHITE;
     }
 
-    CompoundTag write(CompoundTag nbt);
+    CompoundTag toNetwork(CompoundTag nbt);
 
     String getModelKey();
 
@@ -181,7 +181,7 @@ public interface IMaterialInstance extends IGearComponentInstance<IMaterial> {
         return json;
     }
 
-    void write(FriendlyByteBuf buffer);
+    void toNetwork(FriendlyByteBuf buffer);
 
     default boolean allowedInPart(PartType partType) {
         IMaterial material = get();

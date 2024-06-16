@@ -4,13 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
@@ -120,7 +120,7 @@ public class TargetEffectTrait extends SimpleTrait {
 
                 for (MobEffectInstance inst : list) {
                     JsonObject obj = new JsonObject();
-                    obj.addProperty("effect", Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(inst.getEffect())).toString());
+                    obj.addProperty("effect", Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(inst.getEffect())).toString());
                     obj.addProperty("amplifier", inst.getAmplifier());
                     obj.addProperty("duration", inst.getDuration() / 20f);
                     array.add(obj);
@@ -162,7 +162,7 @@ public class TargetEffectTrait extends SimpleTrait {
 
             JsonObject json = jsonElement.getAsJsonObject();
             ResourceLocation effectId = new ResourceLocation(GsonHelper.getAsString(json, "effect"));
-            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
+            MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(effectId);
             if (effect == null) {
                 throw new JsonParseException("Unknown effect ID: " + effectId);
             }
@@ -183,7 +183,7 @@ public class TargetEffectTrait extends SimpleTrait {
 
                 for (int j = 0; j < listSize; ++j) {
                     ResourceLocation effectId = buffer.readResourceLocation();
-                    MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
+                    MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(effectId);
                     if (effect == null) {
                         throw new JsonParseException("Unknown effect ID: " + effectId);
                     }
@@ -206,7 +206,7 @@ public class TargetEffectTrait extends SimpleTrait {
                 buffer.writeByte(entry.getValue().size());
 
                 for (MobEffectInstance effect : entry.getValue()) {
-                    buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect.getEffect())));
+                    buffer.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(effect.getEffect())));
                     buffer.writeByte(effect.getAmplifier());
                     buffer.writeVarInt(effect.getDuration());
                 }
