@@ -51,7 +51,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
-public class SalvagerTileEntity extends BaseContainerBlockEntity implements WorldlyContainer, StackedContentsCompatible {
+public class SalvagerBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, StackedContentsCompatible {
     static final int BASE_WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
     private static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
@@ -81,7 +81,7 @@ public class SalvagerTileEntity extends BaseContainerBlockEntity implements Worl
         }
     };
 
-    public SalvagerTileEntity(BlockPos pos, BlockState state) {
+    public SalvagerBlockEntity(BlockPos pos, BlockState state) {
         super(SgBlockEntities.SALVAGER.get(), pos, state);
         this.quickCheck = RecipeManager.createCheck(SgRecipes.SALVAGING_TYPE.get());
     }
@@ -146,7 +146,7 @@ public class SalvagerTileEntity extends BaseContainerBlockEntity implements Worl
         return Container.stillValidBlockEntity(this, pPlayer);
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, SalvagerTileEntity blockEntity) {
+    public static void tick(Level level, BlockPos pos, BlockState state, SalvagerBlockEntity blockEntity) {
         ItemStack input = blockEntity.getItem(0);
         SalvagingRecipe recipe = blockEntity.getRecipe(input);
         if (recipe != null) {
@@ -306,5 +306,18 @@ public class SalvagerTileEntity extends BaseContainerBlockEntity implements Worl
         for (ItemStack stack : this.items) {
             pContents.accountStack(stack);
         }
+    }
+
+    @Override
+    public void load(CompoundTag tags) {
+        super.load(tags);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(tags, this.items);
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag pTag) {
+        super.saveAdditional(pTag);
+        ContainerHelper.saveAllItems(pTag, this.items);
     }
 }

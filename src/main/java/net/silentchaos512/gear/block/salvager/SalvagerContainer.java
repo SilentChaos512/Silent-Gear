@@ -38,7 +38,7 @@ public class SalvagerContainer extends AbstractContainerMenu {
     private final ContainerData fields;
 
     public SalvagerContainer(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, new SimpleContainer(SalvagerTileEntity.INVENTORY_SIZE), new SimpleContainerData(1));
+        this(id, playerInventory, new SimpleContainer(SalvagerBlockEntity.INVENTORY_SIZE), new SimpleContainerData(1));
     }
 
     @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
@@ -63,7 +63,7 @@ public class SalvagerContainer extends AbstractContainerMenu {
 
     public int getProgressArrowScale() {
         int progress = fields.get(0);
-        return progress != 0 ? progress * 24 / SalvagerTileEntity.BASE_WORK_TIME : 0;
+        return progress != 0 ? progress * 24 / SalvagerBlockEntity.BASE_WORK_TIME : 0;
     }
 
     @Override

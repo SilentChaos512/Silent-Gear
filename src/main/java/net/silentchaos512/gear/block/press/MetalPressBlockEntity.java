@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -175,10 +175,6 @@ public class MetalPressBlockEntity extends BaseContainerBlockEntity implements W
         return new MetalPressContainer(id, player, this, this.fields);
     }
 
-    void encodeExtraData(FriendlyByteBuf buffer) {
-        buffer.writeByte(this.fields.getCount());
-    }
-
     @Override
     public int getContainerSize() {
         return this.items.size();
@@ -239,5 +235,18 @@ public class MetalPressBlockEntity extends BaseContainerBlockEntity implements W
         for (ItemStack stack : this.items) {
             pContents.accountStack(stack);
         }
+    }
+
+    @Override
+    public void load(CompoundTag tags) {
+        super.load(tags);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(tags, this.items);
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag pTag) {
+        super.saveAdditional(pTag);
+        ContainerHelper.saveAllItems(pTag, this.items);
     }
 }

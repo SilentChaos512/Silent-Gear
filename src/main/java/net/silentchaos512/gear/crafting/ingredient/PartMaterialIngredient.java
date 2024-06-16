@@ -36,9 +36,11 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
             Codec.INT.optionalFieldOf("max_tier", Integer.MAX_VALUE).forGetter(ing -> ing.maxTier),
             MaterialGrade.CODEC.optionalFieldOf("min_grade", MaterialGrade.NONE).forGetter(ing -> ing.minGrade),
             MaterialGrade.CODEC.optionalFieldOf("max_grade", MaterialGrade.NONE).forGetter(ing -> ing.maxGrade),
-            DataResource.MATERIAL_CODEC.optionalFieldOf("material", null).forGetter(ing -> ing.material),
+            DataResource.MATERIAL_CODEC.optionalFieldOf("material").forGetter(ing -> Optional.ofNullable(ing.material)),
             MaterialCategories.CODEC.listOf().optionalFieldOf("categories", Collections.emptyList()).forGetter(ing -> ImmutableList.copyOf(ing.categories))
-    ).apply(instance, PartMaterialIngredient::new));
+    ).apply(instance, ((pt, gt, minTier, maxTier, minGrade, maxGrade, material, categories) -> {
+        return new PartMaterialIngredient(pt, gt, minTier, maxTier, minGrade, maxGrade, material.orElse(null), categories);
+    })));
 
     private final PartType partType;
     private final GearType gearType;

@@ -380,6 +380,8 @@ public class CompoundMakerBlockEntity<R extends AlloyRecipe> extends BaseContain
     @Override
     public void load(CompoundTag tags) {
         super.load(tags);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(tags, this.items);
         this.progress = tags.getInt("Progress");
         this.workEnabled = tags.getBoolean("WorkEnabled");
     }
@@ -389,6 +391,7 @@ public class CompoundMakerBlockEntity<R extends AlloyRecipe> extends BaseContain
         super.saveAdditional(tags);
         tags.putInt("Progress", this.progress);
         tags.putBoolean("WorkEnabled", this.workEnabled);
+        ContainerHelper.saveAllItems(tags, this.items);
     }
 
     @Override

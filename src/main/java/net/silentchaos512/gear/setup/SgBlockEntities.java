@@ -15,7 +15,7 @@ import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.compounder.CompoundMakerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.block.press.MetalPressBlockEntity;
-import net.silentchaos512.gear.block.salvager.SalvagerTileEntity;
+import net.silentchaos512.gear.block.salvager.SalvagerBlockEntity;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
@@ -57,9 +57,9 @@ public final class SgBlockEntities {
             SgBlocks.REFABRICATOR
     );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SalvagerTileEntity>> SALVAGER = register(
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SalvagerBlockEntity>> SALVAGER = register(
             "salvager",
-            SalvagerTileEntity::new,
+            SalvagerBlockEntity::new,
             SgBlocks.SALVAGER
     );
 

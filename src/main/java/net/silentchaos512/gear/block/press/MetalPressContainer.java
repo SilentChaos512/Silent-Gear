@@ -19,7 +19,7 @@ public class MetalPressContainer extends AbstractContainerMenu {
     private final ContainerData fields;
 
     public MetalPressContainer(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, new SimpleContainer(2), new SimpleContainerData(buffer.readByte()));
+        this(id, playerInventory, new SimpleContainer(2), new SimpleContainerData(1));
     }
 
     public MetalPressContainer(int id, Inventory playerInventory, Container inventory, ContainerData fields) {

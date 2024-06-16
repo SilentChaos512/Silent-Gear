@@ -49,14 +49,14 @@ import net.silentchaos512.gear.setup.SgBlockEntities;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class SalvagerBlock extends ModContainerBlock<SalvagerTileEntity> {
+public class SalvagerBlock extends ModContainerBlock<SalvagerBlockEntity> {
     private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final VoxelShape SHAPE = box(1, 0, 1, 15, 16, 15);
     public static final MapCodec<SalvagerBlock> CODEC = simpleCodec(SalvagerBlock::new);
 
     public SalvagerBlock(Properties builder) {
-        super(SalvagerTileEntity::new, builder);
+        super(SalvagerBlockEntity::new, builder);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH).setValue(LIT, false));
     }
 
@@ -73,7 +73,7 @@ public class SalvagerBlock extends ModContainerBlock<SalvagerTileEntity> {
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if (tileEntity instanceof SalvagerTileEntity salvager) {
+        if (tileEntity instanceof SalvagerBlockEntity salvager) {
             player.openMenu(salvager);
             return InteractionResult.SUCCESS;
         }
@@ -101,6 +101,6 @@ public class SalvagerBlock extends ModContainerBlock<SalvagerTileEntity> {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.SALVAGER.get(), SalvagerTileEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.SALVAGER.get(), SalvagerBlockEntity::tick);
     }
 }

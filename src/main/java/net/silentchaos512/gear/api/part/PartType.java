@@ -64,36 +64,36 @@ public final class PartType {
     public static final PartType NONE = create(Builder.builder(SilentGear.getId("none")));
 
     public static final PartType ADORNMENT = create(Builder.builder(SilentGear.getId("adornment"))
-            .compoundPartItem(SgItems.ADORNMENT)
+            .compoundPartItem(() -> SgItems.ADORNMENT.get())
             .defaultTexture(PartTextures.ADORNMENT_GENERIC)
             .isRemovable(true)
     );
     public static final PartType BINDING = create(Builder.builder(SilentGear.getId("binding"))
-            .compoundPartItem(SgItems.BINDING)
+            .compoundPartItem(() -> SgItems.BINDING.get())
             .defaultTexture(PartTextures.BINDING_GENERIC)
             .isRemovable(true)
     );
     public static final PartType COATING = create(Builder.builder(SilentGear.getId("coating"))
-            .compoundPartItem(SgItems.COATING)
+            .compoundPartItem(() -> SgItems.COATING.get())
             .defaultTexture(PartTextures.MAIN_GENERIC_HC)
             .isRemovable(true)
     );
     public static final PartType CORD = create(Builder.builder(SilentGear.getId("cord"))
-            .compoundPartItem(SgItems.CORD)
+            .compoundPartItem(() -> SgItems.CORD.get())
             .defaultTexture(PartTextures.BOWSTRING_STRING)
             .alias("bowstring")
     );
     public static final PartType FLETCHING = create(Builder.builder(SilentGear.getId("fletching"))
-            .compoundPartItem(SgItems.FLETCHING)
+            .compoundPartItem(() -> SgItems.FLETCHING.get())
             .defaultTexture(PartTextures.FLETCHING_GENERIC)
     );
     public static final PartType GRIP = create(Builder.builder(SilentGear.getId("grip"))
-            .compoundPartItem(SgItems.GRIP)
+            .compoundPartItem(() -> SgItems.GRIP.get())
             .defaultTexture(PartTextures.GRIP_WOOL)
             .isRemovable(true)
     );
     public static final PartType LINING = create(Builder.builder(SilentGear.getId("lining"))
-            .compoundPartItem(SgItems.LINING)
+            .compoundPartItem(() -> SgItems.LINING.get())
             .defaultTexture(PartTextures.LINING_CLOTH)
             .isRemovable(true)
     );
@@ -107,11 +107,11 @@ public final class PartType {
             .maxPerItem(Integer.MAX_VALUE)
     );
     public static final PartType ROD = create(Builder.builder(SilentGear.getId("rod"))
-            .compoundPartItem(SgItems.ROD)
+            .compoundPartItem(() -> SgItems.ROD.get())
             .defaultTexture(PartTextures.ROD_GENERIC_LC)
     );
     public static final PartType TIP = create(Builder.builder(SilentGear.getId("tip"))
-            .compoundPartItem(SgItems.TIP)
+            .compoundPartItem(() -> SgItems.TIP.get())
             .defaultTexture(PartTextures.TIP_SHARP)
             .isRemovable(true)
     );
@@ -278,7 +278,7 @@ public final class PartType {
         }
 
         public Builder compoundPartItem(Supplier<CompoundPartItem> item) {
-            return compoundPartItem(gt -> Optional.ofNullable(item.get()));
+            return this.compoundPartItem(gt -> Optional.ofNullable(item.get()));
         }
 
         public Builder compoundPartItem(Function<GearType, Optional<CompoundPartItem>> itemGetter) {

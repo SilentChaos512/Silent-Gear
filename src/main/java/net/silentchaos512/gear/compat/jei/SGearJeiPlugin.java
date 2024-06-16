@@ -153,6 +153,7 @@ public class SGearJeiPlugin implements IModPlugin {
     private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, Predicate<? super RecipeHolder<?>> predicate, Class<R> recipeClass) {
         return recipeManager.getRecipes().stream()
                 .filter(predicate)
+                .map(RecipeHolder::value)
                 .map(recipeClass::cast)
                 .collect(Collectors.toList());
     }

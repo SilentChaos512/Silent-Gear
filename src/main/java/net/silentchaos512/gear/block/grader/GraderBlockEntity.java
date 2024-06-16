@@ -211,6 +211,8 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
     @Override
     public void load(CompoundTag tags) {
         super.load(tags);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(tags, this.items);
         this.progress = tags.getInt("Progress");
     }
 
@@ -218,6 +220,7 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
     public void saveAdditional(CompoundTag tags) {
         super.saveAdditional(tags);
         tags.putInt("Progress", this.progress);
+        ContainerHelper.saveAllItems(tags, this.items);
     }
 
     @Override

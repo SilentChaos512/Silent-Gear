@@ -359,6 +359,8 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
     @Override
     public void load(CompoundTag tags) {
         super.load(tags);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(tags, this.items);
         this.progress = tags.getInt("Progress");
         this.workTime = tags.getInt("WorkTime");
         this.charge = tags.getInt("Charge");
@@ -372,6 +374,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
         tags.putInt("WorkTime", this.workTime);
         tags.putInt("Charge", this.charge);
         tags.putInt("StructureLevel", this.structureLevel);
+        ContainerHelper.saveAllItems(tags, this.items);
     }
 
     @Override

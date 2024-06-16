@@ -73,8 +73,8 @@ public final class Const {
             () -> SgBlocks.ALLOY_FORGE.get(),
             () -> SgBlockEntities.ALLOY_FORGE.get(),
             () -> SgMenuTypes.METAL_ALLOYER.get(),
-            SgRecipes.COMPOUNDING_METAL,
-            SgRecipes.COMPOUNDING_METAL_TYPE,
+            () -> SgRecipes.COMPOUNDING_METAL.get(),
+            () -> SgRecipes.COMPOUNDING_METAL_TYPE.get(),
             MetalAlloyRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
@@ -88,8 +88,8 @@ public final class Const {
             () -> SgBlocks.RECRYSTALLIZER.get(),
             () -> SgBlockEntities.RECRYSTALLIZER.get(),
             () -> SgMenuTypes.RECRYSTALLIZER.get(),
-            SgRecipes.COMPOUNDING_GEM,
-            SgRecipes.COMPOUNDING_GEM_TYPE,
+            () -> SgRecipes.COMPOUNDING_GEM.get(),
+            () -> SgRecipes.COMPOUNDING_GEM_TYPE.get(),
             GemAlloyRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
@@ -104,8 +104,8 @@ public final class Const {
             () -> SgBlocks.REFABRICATOR.get(),
             () -> SgBlockEntities.REFABRICATOR.get(),
             () -> SgMenuTypes.REFABRICATOR.get(),
-            SgRecipes.COMPOUNDING_FABRIC,
-            SgRecipes.COMPOUNDING_FABRIC_TYPE,
+            () -> SgRecipes.COMPOUNDING_FABRIC.get(),
+            () -> SgRecipes.COMPOUNDING_FABRIC_TYPE.get(),
             FabricAlloyRecipe.class);
 
     private Const() {}
