@@ -797,6 +797,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires(Items.STICK)
                 .requires(Tags.Items.DUSTS_GLOWSTONE, 2)
                 .requires(Tags.Items.GEMS_QUARTZ)
+                .unlockedBy("has_item", has(Tags.Items.DUSTS_GLOWSTONE))
                 .save(consumer);
 
         // TODO: stone anvil recipe
@@ -810,7 +811,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires()(ItemTags.LOGS)
                 .save();(consumer);*/
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.TEMPLATE_BOARD, 6)
+        shapeless(RecipeCategory.MISC, CraftingItems.TEMPLATE_BOARD, 6)
                 .requires(Items.FLINT)
                 .requires(ItemTags.LOGS)
                 .save(consumer);
@@ -820,7 +821,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires()(Items.SHULKER_SHELL)
                 .save();(consumer);*/
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.CRUSHED_SHULKER_SHELL, 1)
+        shapeless(RecipeCategory.MISC, CraftingItems.CRUSHED_SHULKER_SHELL, 1)
                 .requires(Tags.Items.OBSIDIAN)
                 .requires(Items.SHULKER_SHELL)
                 .save(consumer);
@@ -928,7 +929,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.FLUFFY_PUFF))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.FEATHER)
+        shapeless(RecipeCategory.MISC, Items.FEATHER)
                 .requires(CraftingItems.FLUFFY_FEATHER)
                 .save(consumer);
 
@@ -938,7 +939,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.FLUFFY_PUFF))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STRING)
+        shapeless(RecipeCategory.MISC, Items.STRING)
                 .requires(CraftingItems.FLUFFY_STRING)
                 .save(consumer);
 
@@ -963,15 +964,16 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.FINE_SILK))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.NETHER_STAR_FRAGMENT, 9)
+        shapeless(RecipeCategory.MISC, CraftingItems.NETHER_STAR_FRAGMENT, 9)
                 .requires(Items.NETHER_STAR)
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.NETHER_STAR)
+        shaped(RecipeCategory.MISC, Items.NETHER_STAR)
                 .pattern("###")
                 .pattern("###")
                 .pattern("###")
                 .define('#', CraftingItems.NETHER_STAR_FRAGMENT)
+                .unlockedBy("has_item", has(Items.NETHER_STAR))
                 .save(consumer, SilentGear.getId("nether_star_from_fragments"));
 
         shapeless(RecipeCategory.MISC, CraftingItems.STARMETAL_DUST, 3)
@@ -979,11 +981,13 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires(SgTags.Items.DUSTS_AZURE_SILVER, 2)
                 .requires(SgTags.Items.DUSTS_BLAZE_GOLD, 1)
                 .requires(CraftingItems.NETHER_STAR_FRAGMENT)
+                .unlockedBy("has_item", has(CraftingItems.NETHER_STAR_FRAGMENT))
                 .save(consumer);
 
         shapeless(RecipeCategory.MISC, CraftingItems.BRONZE_INGOT, 4)
                 .requires(Tags.Items.INGOTS_COPPER, 3)
                 .requires(Tags.Items.INGOTS_IRON, 1)
+                .unlockedBy("has_item", has(Tags.Items.INGOTS_COPPER))
                 .save(consumer);
 
         // TODO: Maybe should organize these better...

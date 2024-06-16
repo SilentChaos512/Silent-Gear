@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
       "silentgear:green_fluffy_block"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

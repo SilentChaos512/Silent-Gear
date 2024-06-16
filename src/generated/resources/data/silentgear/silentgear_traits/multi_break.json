@@ -8,11 +8,7 @@
     "translate": "trait.silentgear.multi_break.desc"
   },
   "extra_wiki_lines": [
-    {
-      "text": "  - This trait has never been coded ~~and has almost achieved meme status~~"
-    },
-    {
-      "text": "  - Intended effect: mine multiple blocks like vein miner"
-    }
+    "  - This trait has never been coded ~~and has almost achieved meme status~~",
+    "  - Intended effect: mine multiple blocks like vein miner"
   ]
 }

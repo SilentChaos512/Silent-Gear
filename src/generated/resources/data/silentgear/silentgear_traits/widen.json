@@ -14,11 +14,7 @@
     "translate": "trait.silentgear.widen.desc"
   },
   "extra_wiki_lines": [
-    {
-      "text": "  - Adds the trait level to the effect radius"
-    },
-    {
-      "text": "  - Level 1 = 5x5, 2 = 7x7, 3 = 9x9"
-    }
+    "  - Adds the trait level to the effect radius",
+    "  - Level 1 = 5x5, 2 = 7x7, 3 = 9x9"
   ]
 }

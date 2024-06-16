@@ -8,8 +8,6 @@
     "translate": "trait.silentgear.snow_walker.desc"
   },
   "extra_wiki_lines": [
-    {
-      "text": "Allows the player to walk on powder snow without sinking. This will work on any armor or curio."
-    }
+    "Allows the player to walk on powder snow without sinking. This will work on any armor or curio."
   ]
 }

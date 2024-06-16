@@ -8,11 +8,7 @@
     "translate": "trait.silentgear.indestructible.desc"
   },
   "extra_wiki_lines": [
-    {
-      "text": "  - The damage (durability lost) of the item will remain the same as when the trait was added"
-    },
-    {
-      "text": "  - The item can still be repaired if desired"
-    }
+    "  - The damage (durability lost) of the item will remain the same as when the trait was added",
+    "  - The item can still be repaired if desired"
   ]
 }

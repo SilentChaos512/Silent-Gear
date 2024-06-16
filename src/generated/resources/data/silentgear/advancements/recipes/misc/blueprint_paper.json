@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_paper",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_paper"
     ]
   ],
   "rewards": {
     "recipes": [
       "silentgear:blueprint_paper"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

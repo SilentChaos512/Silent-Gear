@@ -10,7 +10,7 @@
   "attribute_modifiers": {
     "all": [
       {
-        "attribute": "forge:swim_speed",
+        "attribute": "neoforge:swim_speed",
         "operation": 0,
         "value": [
           0.2,

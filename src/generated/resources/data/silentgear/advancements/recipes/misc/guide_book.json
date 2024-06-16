@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_template_board",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_template_board"
     ]
   ],
   "rewards": {
     "recipes": [
       "silentgear:guide_book"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

@@ -17,9 +17,7 @@
     "silentgear:flammable"
   ],
   "extra_wiki_lines": [
-    {
-      "text": "  - The item cannot be destroyed by fire or lava"
-    }
+    "  - The item cannot be destroyed by fire or lava"
   ],
   "potion_effects": {
     "armor": [

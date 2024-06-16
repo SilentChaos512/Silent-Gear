@@ -13,9 +13,7 @@
   },
   "crafting_items": {
     "main": {
-      "type": "silentgear:custom_compound",
-      "item": "silentgear:custom_ingot",
-      "material": "silentgear:high_carbon_steel"
+      "item": "silentgear:custom_ingot"
     }
   },
   "name": {

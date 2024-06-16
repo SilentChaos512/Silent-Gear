@@ -14,8 +14,6 @@
     "translate": "trait.silentgear.void_ward.desc"
   },
   "extra_wiki_lines": [
-    {
-      "text": "When void damage is taken, the player is launched upward and given a levitation and slow falling effect"
-    }
+    "When void damage is taken, the player is launched upward and given a levitation and slow falling effect"
   ]
 }

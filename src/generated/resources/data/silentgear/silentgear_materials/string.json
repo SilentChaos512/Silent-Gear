@@ -14,21 +14,7 @@
   },
   "crafting_items": {
     "main": {
-      "type": "silentlib:exclusion",
-      "value": {
-        "tag": "forge:string"
-      },
-      "exclusions": [
-        {
-          "item": "silentgear:flax_string"
-        },
-        {
-          "item": "silentgear:fluffy_string"
-        },
-        {
-          "item": "silentgear:sinew_fiber"
-        }
-      ]
+      "tag": "forge:string"
     }
   },
   "name": {

@@ -19,8 +19,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "silentgear:select_tier",
-              "tier": 2
+              "function": "silentgear:select_tier"
             }
           ],
           "name": "silentgear:boots",

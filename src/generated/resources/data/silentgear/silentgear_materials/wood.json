@@ -14,51 +14,11 @@
   },
   "crafting_items": {
     "main": {
-      "type": "silentlib:exclusion",
-      "value": {
-        "tag": "minecraft:planks"
-      },
-      "exclusions": [
-        {
-          "item": "minecraft:acacia_planks"
-        },
-        {
-          "item": "minecraft:birch_planks"
-        },
-        {
-          "item": "minecraft:dark_oak_planks"
-        },
-        {
-          "item": "minecraft:jungle_planks"
-        },
-        {
-          "item": "minecraft:oak_planks"
-        },
-        {
-          "item": "minecraft:spruce_planks"
-        },
-        {
-          "item": "silentgear:netherwood_planks"
-        },
-        {
-          "item": "minecraft:crimson_planks"
-        },
-        {
-          "item": "minecraft:warped_planks"
-        }
-      ]
+      "tag": "minecraft:planks"
     },
     "subs": {
       "rod": {
-        "type": "silentlib:exclusion",
-        "value": {
-          "tag": "forge:rods/wooden"
-        },
-        "exclusions": [
-          {
-            "item": "silentgear:netherwood_stick"
-          }
-        ]
+        "tag": "forge:rods/wooden"
       }
     }
   },

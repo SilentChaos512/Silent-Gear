@@ -14,8 +14,6 @@
     "translate": "trait.silentgear.magmatic.desc"
   },
   "extra_wiki_lines": [
-    {
-      "text": "Smelted drops are not affected by fortune to prevent item duplication"
-    }
+    "Smelted drops are not affected by fortune to prevent item duplication"
   ]
 }

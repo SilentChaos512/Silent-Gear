@@ -11,9 +11,7 @@
     "silentgear:cursed"
   ],
   "extra_wiki_lines": [
-    {
-      "text": "  - **Luck has nothing to do with the Fortune enchantment!** It affects loot from some loot tables, but not most. It does not increase drops from normal ores. Please read here for more information: https://minecraft.gamepedia.com/Luck"
-    }
+    "  - **Luck has nothing to do with the Fortune enchantment!** It affects loot from some loot tables, but not most. It does not increase drops from normal ores. Please read here for more information: https://minecraft.gamepedia.com/Luck"
   ],
   "attribute_modifiers": {
     "all": [

@@ -10,7 +10,7 @@
   "attribute_modifiers": {
     "all": [
       {
-        "attribute": "forge:block_reach",
+        "attribute": "neoforge:block_reach",
         "operation": 0,
         "value": [
           0.5,
