@@ -27,16 +27,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.nether_plants.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:nether_banana"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.nether_plants.title"
     }

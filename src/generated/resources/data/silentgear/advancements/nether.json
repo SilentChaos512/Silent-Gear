@@ -13,8 +13,6 @@
     "description": {
       "translate": "advancements.silentgear.nether.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minecraft:obsidian"
     },

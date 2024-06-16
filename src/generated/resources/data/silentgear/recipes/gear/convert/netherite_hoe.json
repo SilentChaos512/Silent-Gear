@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:netherite_hoe"
@@ -7,16 +8,22 @@
   ],
   "result": {
     "item": "silentgear:hoe",
-    "materials": {
-      "coating": {
-        "material": "silentgear:netherite"
+    "parts": [
+      {
+        "item": "silentgear:hoe_head",
+        "materials": [],
+        "part": "silentgear:hoe_head"
       },
-      "main": {
-        "material": "silentgear:diamond"
+      {
+        "item": "silentgear:rod",
+        "materials": [],
+        "part": "silentgear:rod"
       },
-      "rod": {
-        "material": "silentgear:wood"
+      {
+        "item": "silentgear:coating",
+        "materials": [],
+        "part": "silentgear:coating"
       }
-    }
+    ]
   }
 }

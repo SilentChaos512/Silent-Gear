@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "silentgear:sheet_metal"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "impossible"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "silentgear:sheet_metal"
+    ]
+  }
+}

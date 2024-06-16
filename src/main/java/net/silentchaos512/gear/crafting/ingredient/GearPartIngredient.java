@@ -24,10 +24,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.setup.SgIngredientTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
@@ -51,6 +53,11 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
 
     public static GearPartIngredient of(PartType type) {
         return new GearPartIngredient(type);
+    }
+
+    @Override
+    public IngredientType<?> getType() {
+        return SgIngredientTypes.PART.get();
     }
 
     @Override

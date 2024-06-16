@@ -1,17 +1,21 @@
 {
   "type": "silentgear:compound_part",
+  "category": "misc",
   "ingredients": [
     {
       "type": "silentgear:blueprint",
-      "part_type": "silentgear:tip"
+      "gear_type": "part",
+      "part_type": "tip"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:tip"
+      "gear_type": "tool",
+      "part_type": "tip"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:tip"
+      "gear_type": "tool",
+      "part_type": "tip"
     }
   ],
   "result": {

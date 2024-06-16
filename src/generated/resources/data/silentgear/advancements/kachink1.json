@@ -2,24 +2,16 @@
   "parent": "silentgear:root",
   "criteria": {
     "kachink": {
-      "conditions": {
-        "type": "silentgear:damage_factor_change",
-        "value": 1
-      },
-      "trigger": "silentlib:generic_int"
+      "trigger": "silentgear:damage_factor_change"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.kachink1.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minecraft:iron_nugget"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.kachink1.title"
     }

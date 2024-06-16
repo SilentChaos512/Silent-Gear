@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/crimson_steel"
+            "tag": "forge:gems/bort"
           }
         ]
       },
@@ -13,21 +13,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:crimson_steel_dust"
+        "recipe": "silentgear:refabricator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
-      "silentgear:crimson_steel_dust"
+      "silentgear:refabricator"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

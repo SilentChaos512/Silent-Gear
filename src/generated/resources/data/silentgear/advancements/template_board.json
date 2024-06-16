@@ -15,16 +15,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.template_board.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:template_board"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.template_board.title"
     }

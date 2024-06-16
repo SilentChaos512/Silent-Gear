@@ -15,17 +15,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.tip_upgrade.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:tip",
       "nbt": "{Materials:[{ID:\"silentgear:example\"}]}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.tip_upgrade.title"
     }

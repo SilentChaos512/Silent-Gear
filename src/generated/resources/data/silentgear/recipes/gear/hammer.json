@@ -1,12 +1,13 @@
 {
   "type": "silentgear:gear_crafting",
+  "category": "equipment",
   "ingredients": [
     {
       "item": "silentgear:hammer_head"
     },
     {
       "type": "silentgear:part_type",
-      "part_type": "silentgear:rod"
+      "part_type": "rod"
     }
   ],
   "result": {

@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:iron_helmet"
@@ -7,10 +8,12 @@
   ],
   "result": {
     "item": "silentgear:helmet",
-    "materials": {
-      "main": {
-        "material": "silentgear:iron"
+    "parts": [
+      {
+        "item": "silentgear:helmet_plates",
+        "materials": [],
+        "part": "silentgear:helmet_plates"
       }
-    }
+    ]
   }
 }

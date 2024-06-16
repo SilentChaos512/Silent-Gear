@@ -15,16 +15,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.blueprint_book.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:blueprint_book"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.blueprint_book.title"
     }

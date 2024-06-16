@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:leather_chestplate"
@@ -7,10 +8,12 @@
   ],
   "result": {
     "item": "silentgear:chestplate",
-    "materials": {
-      "main": {
-        "material": "silentgear:leather"
+    "parts": [
+      {
+        "item": "silentgear:chestplate_plates",
+        "materials": [],
+        "part": "silentgear:chestplate_plates"
       }
-    }
+    ]
   }
 }

@@ -13,16 +13,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.grader_catalyst_2.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:blazing_dust"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.grader_catalyst_2.title"
     }

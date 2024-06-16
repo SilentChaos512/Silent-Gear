@@ -1,44 +1,46 @@
 {
   "type": "silentgear:compound_part",
+  "category": "equipment",
   "ingredients": [
     {
       "type": "silentgear:blueprint",
-      "gear_type": "leggings"
+      "gear_type": "leggings",
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
       "gear_type": "leggings",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
       "gear_type": "leggings",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
       "gear_type": "leggings",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
       "gear_type": "leggings",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
       "gear_type": "leggings",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
       "gear_type": "leggings",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
       "gear_type": "leggings",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     }
   ],
   "result": {

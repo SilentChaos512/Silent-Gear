@@ -12,7 +12,7 @@
         "metal"
       ],
       "gear_type": "curio",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     }
   },
   "pattern": [
@@ -22,6 +22,5 @@
   ],
   "result": {
     "item": "silentgear:bracelet_blueprint"
-  },
-  "show_notification": true
+  }
 }

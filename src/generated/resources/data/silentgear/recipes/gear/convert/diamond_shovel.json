@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:diamond_shovel"
@@ -7,13 +8,17 @@
   ],
   "result": {
     "item": "silentgear:shovel",
-    "materials": {
-      "main": {
-        "material": "silentgear:diamond"
+    "parts": [
+      {
+        "item": "silentgear:shovel_head",
+        "materials": [],
+        "part": "silentgear:shovel_head"
       },
-      "rod": {
-        "material": "silentgear:wood"
+      {
+        "item": "silentgear:rod",
+        "materials": [],
+        "part": "silentgear:rod"
       }
-    }
+    ]
   }
 }

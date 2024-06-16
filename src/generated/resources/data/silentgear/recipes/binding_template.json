@@ -8,11 +8,13 @@
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:binding"
+      "gear_type": "tool",
+      "part_type": "binding"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:binding"
+      "gear_type": "tool",
+      "part_type": "binding"
     }
   ],
   "result": {

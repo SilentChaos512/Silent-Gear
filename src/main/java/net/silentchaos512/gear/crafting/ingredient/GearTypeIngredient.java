@@ -4,8 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.setup.SgIngredientTypes;
 import net.silentchaos512.gear.setup.SgItems;
 
 import javax.annotation.Nullable;
@@ -28,6 +30,11 @@ public final class GearTypeIngredient extends Ingredient {
 
     public static GearTypeIngredient of(GearType type) {
         return new GearTypeIngredient(type);
+    }
+
+    @Override
+    public IngredientType<?> getType() {
+        return SgIngredientTypes.GEAR_TYPE.get();
     }
 
     private GearType getGearType() {

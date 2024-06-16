@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:netherite_leggings"
@@ -7,13 +8,17 @@
   ],
   "result": {
     "item": "silentgear:leggings",
-    "materials": {
-      "coating": {
-        "material": "silentgear:netherite"
+    "parts": [
+      {
+        "item": "silentgear:legging_plates",
+        "materials": [],
+        "part": "silentgear:leggings_plates"
       },
-      "main": {
-        "material": "silentgear:emerald"
+      {
+        "item": "silentgear:coating",
+        "materials": [],
+        "part": "silentgear:coating"
       }
-    }
+    ]
   }
 }

@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:stone_sword"
@@ -7,13 +8,17 @@
   ],
   "result": {
     "item": "silentgear:sword",
-    "materials": {
-      "main": {
-        "material": "silentgear:stone"
+    "parts": [
+      {
+        "item": "silentgear:sword_blade",
+        "materials": [],
+        "part": "silentgear:sword_blade"
       },
-      "rod": {
-        "material": "silentgear:wood"
+      {
+        "item": "silentgear:rod",
+        "materials": [],
+        "part": "silentgear:rod"
       }
-    }
+    ]
   }
 }

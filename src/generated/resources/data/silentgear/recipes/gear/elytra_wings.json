@@ -1,9 +1,11 @@
 {
   "type": "silentgear:compound_part",
+  "category": "equipment",
   "ingredients": [
     {
       "type": "silentgear:blueprint",
-      "gear_type": "elytra"
+      "gear_type": "elytra",
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
@@ -12,7 +14,7 @@
         "sheet"
       ],
       "gear_type": "elytra",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
@@ -21,7 +23,7 @@
         "sheet"
       ],
       "gear_type": "elytra",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
@@ -30,7 +32,7 @@
         "sheet"
       ],
       "gear_type": "elytra",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
@@ -39,7 +41,7 @@
         "sheet"
       ],
       "gear_type": "elytra",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
@@ -48,7 +50,7 @@
         "sheet"
       ],
       "gear_type": "elytra",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
@@ -57,7 +59,7 @@
         "sheet"
       ],
       "gear_type": "elytra",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     }
   ],
   "result": {

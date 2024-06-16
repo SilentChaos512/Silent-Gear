@@ -1,12 +1,13 @@
 {
   "type": "silentgear:gear_crafting",
+  "category": "equipment",
   "ingredients": [
     {
       "item": "silentgear:helmet_plates"
     },
     {
       "type": "silentgear:part_type",
-      "part_type": "silentgear:lining"
+      "part_type": "lining"
     }
   ],
   "result": {

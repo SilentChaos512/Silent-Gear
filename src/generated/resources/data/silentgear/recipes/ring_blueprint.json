@@ -7,7 +7,12 @@
       "tag": "silentgear:blueprint_paper"
     },
     "/": {
-      "item": "minecraft:stick"
+      "type": "silentgear:material",
+      "categories": [
+        "metal"
+      ],
+      "gear_type": "curio",
+      "part_type": "main"
     }
   },
   "pattern": [

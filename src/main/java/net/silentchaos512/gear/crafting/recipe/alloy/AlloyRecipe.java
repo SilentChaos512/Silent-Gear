@@ -26,10 +26,8 @@ import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.Const;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
@@ -119,31 +117,39 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
         return SgRecipes.COMPOUNDING_TYPE.get();
     }
 
-    public record Result(Item item, int count, DataResource<IMaterial> material) {
+    public record Result(Item item, int count, Optional<DataResource<IMaterial>> material) {
         public static final Codec<Result> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                         BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(r -> r.item),
                         Codec.INT.optionalFieldOf("count", 1).forGetter(r -> r.count),
-                        DataResource.MATERIAL_CODEC.fieldOf("material").forGetter(r -> r.material)
+                        DataResource.MATERIAL_CODEC.optionalFieldOf("material").forGetter(r -> r.material)
                 ).apply(instance, Result::new)
         );
+
+        public Result(Item item, int count, @Nullable DataResource<IMaterial> material) {
+            this(item, count, Optional.ofNullable(material));
+        }
 
         public static Result fromNetwork(FriendlyByteBuf buf) {
             var item = BuiltInRegistries.ITEM.get(buf.readResourceLocation());
             var count = buf.readByte();
-            var material = DataResource.material(buf.readResourceLocation());
+            var materialPresent = buf.readBoolean();
+            Optional<DataResource<IMaterial>> material = materialPresent
+                    ? Optional.of(DataResource.material(buf.readResourceLocation()))
+                    : Optional.empty();
             return new Result(item, count, material);
         }
 
         public void toNetwork(FriendlyByteBuf buf) {
             buf.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item));
             buf.writeByte(count);
-            buf.writeResourceLocation(material.getId());
+            buf.writeBoolean(material.isPresent());
+            material.ifPresent(mat -> buf.writeResourceLocation(mat.getId()));
         }
 
         public ItemStack getResult() {
-            if (item instanceof CustomMaterialItem customMaterialItem) {
-                return customMaterialItem.create(LazyMaterialInstance.of(material), count);
+            if (item instanceof CustomMaterialItem customMaterialItem && material.isPresent()) {
+                return customMaterialItem.create(LazyMaterialInstance.of(material.get()), count);
             }
             return new ItemStack(item);
         }

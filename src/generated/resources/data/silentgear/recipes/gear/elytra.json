@@ -1,12 +1,13 @@
 {
   "type": "silentgear:gear_crafting",
+  "category": "equipment",
   "ingredients": [
     {
       "item": "silentgear:elytra_wings"
     },
     {
       "type": "silentgear:part_type",
-      "part_type": "silentgear:binding"
+      "part_type": "binding"
     }
   ],
   "result": {

@@ -15,17 +15,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.sickle.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:sickle",
       "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.sickle.title"
     }

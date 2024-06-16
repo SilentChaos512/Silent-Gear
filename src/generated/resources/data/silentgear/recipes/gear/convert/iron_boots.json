@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:iron_boots"
@@ -7,10 +8,12 @@
   ],
   "result": {
     "item": "silentgear:boots",
-    "materials": {
-      "main": {
-        "material": "silentgear:iron"
+    "parts": [
+      {
+        "item": "silentgear:boot_plates",
+        "materials": [],
+        "part": "silentgear:boots_plates"
       }
-    }
+    ]
   }
 }

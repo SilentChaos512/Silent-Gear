@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:netherite_helmet"
@@ -7,13 +8,17 @@
   ],
   "result": {
     "item": "silentgear:helmet",
-    "materials": {
-      "coating": {
-        "material": "silentgear:netherite"
+    "parts": [
+      {
+        "item": "silentgear:helmet_plates",
+        "materials": [],
+        "part": "silentgear:helmet_plates"
       },
-      "main": {
-        "material": "silentgear:emerald"
+      {
+        "item": "silentgear:coating",
+        "materials": [],
+        "part": "silentgear:coating"
       }
-    }
+    ]
   }
 }

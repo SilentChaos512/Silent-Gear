@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:diamond_pickaxe"
@@ -7,13 +8,17 @@
   ],
   "result": {
     "item": "silentgear:pickaxe",
-    "materials": {
-      "main": {
-        "material": "silentgear:diamond"
+    "parts": [
+      {
+        "item": "silentgear:pickaxe_head",
+        "materials": [],
+        "part": "silentgear:pickaxe_head"
       },
-      "rod": {
-        "material": "silentgear:wood"
+      {
+        "item": "silentgear:rod",
+        "materials": [],
+        "part": "silentgear:rod"
       }
-    }
+    ]
   }
 }

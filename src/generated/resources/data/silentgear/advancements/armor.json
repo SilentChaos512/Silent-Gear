@@ -51,17 +51,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.armor.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:helmet",
       "nbt": "{Damage:0,SGear_Data:{Properties:{}}}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.armor.title"
     }

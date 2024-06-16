@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:netherite_sword"
@@ -7,16 +8,22 @@
   ],
   "result": {
     "item": "silentgear:sword",
-    "materials": {
-      "coating": {
-        "material": "silentgear:netherite"
+    "parts": [
+      {
+        "item": "silentgear:sword_blade",
+        "materials": [],
+        "part": "silentgear:sword_blade"
       },
-      "main": {
-        "material": "silentgear:diamond"
+      {
+        "item": "silentgear:rod",
+        "materials": [],
+        "part": "silentgear:rod"
       },
-      "rod": {
-        "material": "silentgear:wood"
+      {
+        "item": "silentgear:coating",
+        "materials": [],
+        "part": "silentgear:coating"
       }
-    }
+    ]
   }
 }

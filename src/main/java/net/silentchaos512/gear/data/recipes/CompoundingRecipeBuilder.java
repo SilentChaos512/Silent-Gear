@@ -33,7 +33,7 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
     private final List<Ingredient> ingredients = new ArrayList<>();
     private final Item resultItem;
     private final int resultCount;
-    private DataResource<IMaterial> resultMaterial;
+    @Nullable private DataResource<IMaterial> resultMaterial;
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
     public CompoundingRecipeBuilder(AlloyRecipe.Factory<R> factory, String recipeFolder, ItemLike resultItem, int count) {

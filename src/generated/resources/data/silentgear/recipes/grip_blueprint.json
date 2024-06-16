@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
   "group": "silentgear:blueprints/grip",
   "ingredients": [
     {
@@ -10,7 +11,8 @@
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:grip"
+      "gear_type": "tool",
+      "part_type": "grip"
     }
   ],
   "result": {

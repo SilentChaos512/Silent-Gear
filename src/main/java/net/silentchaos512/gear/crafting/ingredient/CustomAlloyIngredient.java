@@ -7,10 +7,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CustomMaterialItem;
+import net.silentchaos512.gear.setup.SgIngredientTypes;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -43,6 +45,11 @@ public class CustomAlloyIngredient extends Ingredient {
 
     public static CustomAlloyIngredient of(CustomMaterialItem item, ResourceLocation materialId) {
         return new CustomAlloyIngredient(item, materialId);
+    }
+
+    @Override
+    public IngredientType<?> getType() {
+        return SgIngredientTypes.CUSTOM_ALLOY.get();
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
@@ -18,6 +19,7 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
+import net.silentchaos512.gear.setup.SgIngredientTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
@@ -99,6 +101,11 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
 
     public static Builder builder(PartType partType, GearType gearType) {
         return new Builder(partType, gearType);
+    }
+
+    @Override
+    public IngredientType<?> getType() {
+        return SgIngredientTypes.MATERIAL.get();
     }
 
     @Override
@@ -185,7 +192,7 @@ public final class PartMaterialIngredient extends Ingredient implements IGearIng
         return false;
     }
 
-   public static class Builder {
+    public static class Builder {
         private final PartType partType;
         private final GearType gearType;
         private int minTier = 0;

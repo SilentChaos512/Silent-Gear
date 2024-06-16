@@ -1,17 +1,21 @@
 {
   "type": "silentgear:compound_part",
+  "category": "equipment",
   "ingredients": [
     {
       "type": "silentgear:blueprint",
-      "gear_type": "shears"
+      "gear_type": "shears",
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main"
+      "gear_type": "tool",
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main"
+      "gear_type": "tool",
+      "part_type": "main"
     }
   ],
   "result": {

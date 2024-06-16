@@ -1,5 +1,6 @@
 {
   "type": "silentgear:conversion",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:diamond_hoe"
@@ -7,13 +8,17 @@
   ],
   "result": {
     "item": "silentgear:hoe",
-    "materials": {
-      "main": {
-        "material": "silentgear:diamond"
+    "parts": [
+      {
+        "item": "silentgear:hoe_head",
+        "materials": [],
+        "part": "silentgear:hoe_head"
       },
-      "rod": {
-        "material": "silentgear:wood"
+      {
+        "item": "silentgear:rod",
+        "materials": [],
+        "part": "silentgear:rod"
       }
-    }
+    ]
   }
 }

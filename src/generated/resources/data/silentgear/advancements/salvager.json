@@ -15,16 +15,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.salvager.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:salvager"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.salvager.title"
     }

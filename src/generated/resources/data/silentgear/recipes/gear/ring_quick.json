@@ -1,9 +1,11 @@
 {
   "type": "silentgear:gear_crafting",
+  "category": "misc",
   "ingredients": [
     {
       "type": "silentgear:blueprint",
-      "gear_type": "ring"
+      "gear_type": "ring",
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
@@ -11,7 +13,7 @@
         "metal"
       ],
       "gear_type": "curio",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
@@ -19,11 +21,11 @@
         "metal"
       ],
       "gear_type": "curio",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:part_type",
-      "part_type": "silentgear:adornment"
+      "part_type": "adornment"
     }
   ],
   "result": {

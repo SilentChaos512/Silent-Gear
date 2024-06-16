@@ -13,7 +13,9 @@
   },
   "crafting_items": {
     "main": {
-      "item": "silentgear:custom_gem"
+      "item": "silentgear:custom_gem",
+      "material": "silentgear:dimerald",
+      "type": "silentgear:custom_compound"
     }
   },
   "name": {

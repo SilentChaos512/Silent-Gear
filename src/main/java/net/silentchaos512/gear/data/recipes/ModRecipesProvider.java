@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.data.recipes;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -681,7 +683,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         for (RepairKitItem item : SgItems.getItems(RepairKitItem.class)) {
             // Empty repair kit recipes
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, item)
+            shapeless(RecipeCategory.MISC, item)
                     .requires(item)
                     .requires(Tags.Items.RODS_WOODEN)
                     .save(consumer, SilentGear.getId(NameUtils.fromItem(item).getPath() + "_empty"));
@@ -696,6 +698,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("/#/")
                 .pattern("/ /")
                 .pattern("#i#")
+                .unlockedBy("has_item", has(SgTags.Items.INGOTS_CRIMSON_STEEL))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.RECRYSTALLIZER)
@@ -707,6 +710,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("/e/")
                 .pattern("/d/")
                 .pattern("#g#")
+                .unlockedBy("has_item", has(SgTags.Items.INGOTS_AZURE_ELECTRUM))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.REFABRICATOR)
@@ -718,6 +722,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("/ /")
                 .pattern("dbd")
                 .pattern("#i#")
+                .unlockedBy("has_item", has(SgTags.Items.GEMS_BORT))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.METAL_PRESS)
@@ -727,6 +732,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#t#")
                 .pattern("/ /")
                 .pattern("#t#")
+                .unlockedBy("has_item", has(SgTags.Items.INGOTS_TYRIAN_STEEL))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.STARLIGHT_CHARGER)
@@ -737,6 +743,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("qgq")
                 .pattern("#g#")
                 .pattern("#/#")
+                .unlockedBy("has_item", has(SgTags.Items.INGOTS_BLAZE_GOLD))
                 .save(consumer);
     }
 
@@ -777,7 +784,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 MaterialPressingRecipe::new,
                 PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
                 SgItems.SHEET_METAL, 2
-        ).save(consumer);
+        ).unlockedBy("impossible", CriteriaTriggers.IMPOSSIBLE.createCriterion(new ImpossibleTrigger.TriggerInstance()))
+                .save(consumer);
     }
 
     private void registerCraftingItems(RecipeOutput consumer) {
@@ -787,6 +795,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_template_board", has(SgTags.Items.TEMPLATE_BOARDS))
                 .save(consumer);
 
+        // TODO: stone anvil recipe
         /*damageGear(CraftingItems.GLOWING_DUST, 4, 4)
                 .requires()(ModTags.Items.HAMMERS)
                 .requires()(Tags.Items.DUSTS_GLOWSTONE, 2)
@@ -1485,7 +1494,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires(BlueprintIngredient.of(blueprint))
                 .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), mainCount)
                 .requires(GearPartIngredient.of(PartType.ADORNMENT))
-                .save(consumer, SilentGear.getId("gear/" + name + "quick"));
+                .save(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
 
     private void toolBlueprint(RecipeOutput consumer, String group, ItemLike blueprint, ItemLike template, String... pattern) {
@@ -1632,14 +1641,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         ret.add(LazyPartData.of(
                 mainPart,
-                mainPart.get().getType().getCompoundPartItem(gearType).get(),
+                PartType.MAIN.getCompoundPartItem(gearType).orElseThrow(),
                 mainMaterials
         ));
 
         if (rod != null) {
             ret.add(LazyPartData.of(
                     Const.Parts.ROD,
-                    Const.Parts.ROD.get().getType().getCompoundPartItem(gearType).get(),
+                    SgItems.ROD.get(),
                     rod
             ));
         }
@@ -1647,7 +1656,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         if (coating != null) {
             ret.add(LazyPartData.of(
                     Const.Parts.COATING,
-                    Const.Parts.COATING.get().getType().getCompoundPartItem(gearType).get(),
+                    SgItems.COATING.get(),
                     coating
             ));
         }

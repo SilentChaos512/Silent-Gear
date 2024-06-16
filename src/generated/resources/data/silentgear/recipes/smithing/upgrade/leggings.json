@@ -2,11 +2,9 @@
   "type": "silentgear:smithing/upgrade",
   "addition": {
     "type": "silentgear:part_type",
-    "part_type": "silentgear:misc_upgrade"
+    "part_type": "misc_upgrade"
   },
-  "gear": {
-    "item": "silentgear:leggings"
-  },
+  "gear": "silentgear:leggings",
   "template": {
     "item": "minecraft:stick"
   }

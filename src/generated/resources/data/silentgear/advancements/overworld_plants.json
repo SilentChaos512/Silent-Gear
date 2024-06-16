@@ -51,16 +51,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.overworld_plants.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:flax_fiber"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.overworld_plants.title"
     }

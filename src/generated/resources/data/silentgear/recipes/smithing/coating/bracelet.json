@@ -2,11 +2,10 @@
   "type": "silentgear:smithing/coating",
   "addition": {
     "type": "silentgear:material",
-    "part_type": "silentgear:coating"
+    "gear_type": "tool",
+    "part_type": "coating"
   },
-  "gear": {
-    "item": "silentgear:bracelet"
-  },
+  "gear": "silentgear:bracelet",
   "template": {
     "item": "silentgear:coating_smithing_template"
   }

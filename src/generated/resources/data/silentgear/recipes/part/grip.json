@@ -1,13 +1,16 @@
 {
   "type": "silentgear:compound_part",
+  "category": "misc",
   "ingredients": [
     {
       "type": "silentgear:blueprint",
-      "part_type": "silentgear:grip"
+      "gear_type": "part",
+      "part_type": "grip"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:grip"
+      "gear_type": "tool",
+      "part_type": "grip"
     }
   ],
   "result": {

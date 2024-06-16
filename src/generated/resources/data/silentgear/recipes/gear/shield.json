@@ -1,23 +1,25 @@
 {
   "type": "silentgear:gear_crafting",
+  "category": "equipment",
   "ingredients": [
     {
       "type": "silentgear:blueprint",
-      "gear_type": "shield"
+      "gear_type": "shield",
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
       "gear_type": "armor",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
       "gear_type": "armor",
-      "part_type": "silentgear:main"
+      "part_type": "main"
     },
     {
       "type": "silentgear:part_type",
-      "part_type": "silentgear:rod"
+      "part_type": "rod"
     }
   ],
   "result": {

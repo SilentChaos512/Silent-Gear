@@ -2,24 +2,16 @@
   "parent": "silentgear:kachink1",
   "criteria": {
     "kachink": {
-      "conditions": {
-        "type": "silentgear:brittle_proc",
-        "value": 1
-      },
-      "trigger": "silentlib:generic_int"
+      "trigger": "silentgear:brittle_proc"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.kachink2.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:diamond_shard"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.kachink2.title"
     }

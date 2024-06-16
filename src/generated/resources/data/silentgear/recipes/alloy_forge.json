@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "#": {
       "item": "minecraft:blackstone"
@@ -17,6 +18,6 @@
     "#i#"
   ],
   "result": {
-    "item": "silentgear:metal_alloyer"
+    "item": "silentgear:alloy_forge"
   }
 }

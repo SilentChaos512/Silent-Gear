@@ -1,12 +1,13 @@
 {
-  "type": "silentgear:pressing/material",
+  "type": "silentgear:pressing",
   "count": 2,
   "ingredient": {
     "type": "silentgear:material",
     "categories": [
       "metal"
     ],
-    "part_type": "silentgear:main"
+    "gear_type": "tool",
+    "part_type": "main"
   },
   "result": "silentgear:sheet_metal"
 }

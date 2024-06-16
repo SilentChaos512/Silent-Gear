@@ -1,17 +1,21 @@
 {
   "type": "silentgear:compound_part",
+  "category": "equipment",
   "ingredients": [
     {
       "type": "silentgear:blueprint",
-      "gear_type": "fishing_rod"
+      "gear_type": "fishing_rod",
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main"
+      "gear_type": "tool",
+      "part_type": "main"
     },
     {
       "type": "silentgear:material",
-      "part_type": "silentgear:main"
+      "gear_type": "tool",
+      "part_type": "main"
     }
   ],
   "result": {

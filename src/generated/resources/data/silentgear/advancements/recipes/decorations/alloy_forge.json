@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/crimson_iron"
+            "tag": "forge:ingots/crimson_steel"
           }
         ]
       },
@@ -13,21 +13,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:crimson_iron_dust"
+        "recipe": "silentgear:alloy_forge"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
-      "silentgear:crimson_iron_dust"
+      "silentgear:alloy_forge"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

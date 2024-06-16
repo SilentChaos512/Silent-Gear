@@ -15,16 +15,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.silentgear.crimson_repair_kit.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "silentgear:crimson_repair_kit"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.silentgear.crimson_repair_kit.title"
     }

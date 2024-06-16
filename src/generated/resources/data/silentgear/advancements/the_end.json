@@ -13,8 +13,6 @@
     "description": {
       "translate": "advancements.silentgear.the_end.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minecraft:end_stone"
     },

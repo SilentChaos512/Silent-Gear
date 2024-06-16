@@ -8,10 +8,12 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
+import net.silentchaos512.gear.setup.SgIngredientTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
@@ -40,6 +42,11 @@ public final class BlueprintIngredient extends Ingredient implements IGearIngred
     public static <T extends Item & IBlueprint> BlueprintIngredient of(T item) {
         ItemStack stack = new ItemStack(item);
         return new BlueprintIngredient(item.getPartType(stack), item.getGearType(stack));
+    }
+
+    @Override
+    public IngredientType<?> getType() {
+        return SgIngredientTypes.BLUEPRINT.get();
     }
 
     private void dissolve() {

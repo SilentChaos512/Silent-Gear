@@ -8,7 +8,8 @@
     },
     "/": {
       "type": "silentgear:material",
-      "part_type": "silentgear:cord"
+      "gear_type": "tool",
+      "part_type": "cord"
     }
   },
   "pattern": [
@@ -18,6 +19,5 @@
   ],
   "result": {
     "item": "silentgear:cord_template"
-  },
-  "show_notification": true
+  }
 }
