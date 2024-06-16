@@ -30,13 +30,13 @@ public class StoneAnvilRenderer implements BlockEntityRenderer<StoneAnvilBlockEn
 
         if (!item.isEmpty()) {
             pPoseStack.pushPose();
-            pPoseStack.translate(0.5F, 0.44921875F, 0.5F);
+            pPoseStack.translate(0.5f, 0.9375f, 0.5f);
             Direction direction1 = Direction.from2DDataValue((direction.get2DDataValue()) % 4);
             float f = -direction1.toYRot();
             pPoseStack.mulPose(Axis.YP.rotationDegrees(f));
             pPoseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            pPoseStack.translate(-0.3125F, -0.3125F, 0.0F);
-            pPoseStack.scale(0.375F, 0.375F, 0.375F);
+//            pPoseStack.translate(-0.3125F, -0.3125F, 0.0F);
+            pPoseStack.scale(0.5f, 0.5f, 0.5f);
             this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, pPackedLight, pPackedOverlay, pPoseStack, pBuffer, pBlockEntity.getLevel(), i);
             pPoseStack.popPose();
         }

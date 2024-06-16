@@ -99,6 +99,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // Crafters and Machines
         simpleBlock(SgBlocks.GEAR_SMITHING_TABLE.get(), getExistingModel("gear_smithing_table"));
         simpleBlock(SgBlocks.STARLIGHT_CHARGER.get(), getExistingModel("starlight_charger"));
+        simpleBlock(SgBlocks.STONE_ANVIL.get(), getExistingModel("stone_anvil"));
         orientableMachineBlock(SgBlocks.MATERIAL_GRADER, "material_grader");
         orientableMachineBlock(SgBlocks.METAL_PRESS, "metal_press");
         orientableMachineBlock(SgBlocks.SALVAGER, "salvager");

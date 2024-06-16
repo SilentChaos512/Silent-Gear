@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -25,24 +26,33 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class StoneAnvilBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<StoneAnvilBlock> CODEC = simpleCodec(StoneAnvilBlock::new);
 
-    private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 14, 16);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    private static final VoxelShape SHAPE = Shapes.or(
+            Block.box(1, 0, 0, 15, 13, 16),
+            Block.box(0, 0, 1, 16, 13, 15),
+            Block.box(1, 13, 1, 15, 14, 15)
+    );
 
     public StoneAnvilBlock(Properties pProperties) {
         super(pProperties);
         this.registerDefaultState(
-                this.stateDefinition
-                        .any()
+                defaultBlockState()
                         .setValue(WATERLOGGED, false)
                         .setValue(FACING, Direction.NORTH)
         );
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(WATERLOGGED, FACING);
     }
 
     @Override

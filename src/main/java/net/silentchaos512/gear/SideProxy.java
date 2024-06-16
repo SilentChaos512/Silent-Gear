@@ -182,8 +182,6 @@ class SideProxy implements IProxy {
         }
 
         private static void clientSetup(FMLClientSetupEvent event) {
-            SgBlockEntities.registerRenderers(event);
-            SgMenuTypes.registerScreens(event);
             ModItemModelProperties.register(event);
         }
 

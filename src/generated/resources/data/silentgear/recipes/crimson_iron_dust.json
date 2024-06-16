@@ -2,13 +2,12 @@
   "type": "silentgear:tool_action",
   "damage_to_tool": 1,
   "ingredient": {
-    "tag": "minecraft:logs"
+    "tag": "forge:ingots/crimson_iron"
   },
   "result": {
-    "count": 6,
-    "item": "silentgear:template_board"
+    "item": "silentgear:crimson_iron_dust"
   },
   "tool": {
-    "tag": "forge:knives"
+    "tag": "forge:hammers"
   }
 }

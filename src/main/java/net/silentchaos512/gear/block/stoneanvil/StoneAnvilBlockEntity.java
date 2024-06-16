@@ -66,8 +66,8 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
         if (!this.item.isEmpty()) {
             dropItem(this.item);
             this.clearContent();
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-            level.gameEvent(GameEvent.BLOCK_CHANGE, getBlockPos(), GameEvent.Context.of(getBlockState()));
+            level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
+            this.markUpdated();
             return true;
         }
         return false;
@@ -87,6 +87,8 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
                 tool.hurt(damage, SilentGear.RANDOM_SOURCE, serverPlayer);
             }
             level.playSound(null, getBlockPos(), SoundEvents.STONE_HIT, SoundSource.PLAYERS, 1f, 1f);
+            level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
+            this.markUpdated();
 
             return true;
         }
@@ -95,7 +97,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     }
 
     public void dropItem(ItemStack stack) {
-        Containers.dropItemStack(level, getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ(), stack);
+        Containers.dropItemStack(level, getBlockPos().getX(), getBlockPos().getY() + 1.0, getBlockPos().getZ(), stack);
     }
 
     private void markUpdated() {
@@ -120,9 +122,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
-        if (!this.item.isEmpty()) {
-            pTag.put("Item", this.item.save(new CompoundTag()));
-        }
+        pTag.put("Item", this.item.save(new CompoundTag()));
     }
 
     @Nullable
@@ -134,9 +134,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag tag = new CompoundTag();
-        if (!this.item.isEmpty()) {
-            tag.put("Item", this.item.save(new CompoundTag()));
-        }
+        tag.put("Item", this.item.save(new CompoundTag()));
         return tag;
     }
 }

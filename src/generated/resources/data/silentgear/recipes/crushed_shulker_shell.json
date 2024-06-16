@@ -1,15 +1,13 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    {
-      "tag": "forge:obsidian"
-    },
-    {
-      "item": "minecraft:shulker_shell"
-    }
-  ],
+  "type": "silentgear:tool_action",
+  "damage_to_tool": 10,
+  "ingredient": {
+    "item": "minecraft:shulker_shell"
+  },
   "result": {
     "item": "silentgear:crushed_shulker_shell"
+  },
+  "tool": {
+    "tag": "forge:hammers"
   }
 }

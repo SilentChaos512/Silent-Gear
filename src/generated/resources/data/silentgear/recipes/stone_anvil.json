@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "forge:cobblestone"
+    },
+    "/": {
+      "tag": "minecraft:dirt"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#/#"
+  ],
+  "result": {
+    "item": "silentgear:stone_anvil"
+  }
+}

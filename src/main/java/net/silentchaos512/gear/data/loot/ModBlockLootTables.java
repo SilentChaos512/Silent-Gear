@@ -96,6 +96,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         dropSelf(SgBlocks.REFABRICATOR.get());
         dropSelf(SgBlocks.SALVAGER.get());
         dropSelf(SgBlocks.STARLIGHT_CHARGER.get());
+        dropSelf(SgBlocks.STONE_ANVIL.get());
 
         dropSelf(SgBlocks.WHITE_FLUFFY_BLOCK.get());
         dropSelf(SgBlocks.ORANGE_FLUFFY_BLOCK.get());
