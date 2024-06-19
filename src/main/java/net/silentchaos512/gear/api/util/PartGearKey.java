@@ -10,12 +10,12 @@ import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class PartGearKey {
-    private static final Map<Pair<GearType, PartType>, PartGearKey> CACHE = new HashMap<>();
+    private static final Map<Pair<GearType, PartType>, PartGearKey> CACHE = new ConcurrentHashMap<>();
 
     private final String key;
     private final GearType gearType;
