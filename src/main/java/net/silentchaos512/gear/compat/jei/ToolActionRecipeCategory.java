@@ -31,7 +31,7 @@ public class ToolActionRecipeCategory implements IRecipeCategory<ToolActionRecip
     public ToolActionRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
         icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(SgBlocks.STONE_ANVIL));
-        localizedName = TextUtil.translate("jei", "category.toolAction");
+        localizedName = TextUtil.translate("jei", "category.tool_action");
     }
 
     @Override
