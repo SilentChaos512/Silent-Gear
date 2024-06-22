@@ -1,5 +1,5 @@
 {
-  "type": "forge:add_features",
+  "type": "neoforge:add_features",
   "biomes": "#minecraft:is_end",
   "features": "silentgear:azure_silver_ore",
   "step": "underground_ores"

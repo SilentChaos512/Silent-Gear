@@ -1,5 +1,5 @@
 {
-  "type": "forge:add_features",
+  "type": "neoforge:add_features",
   "biomes": "#minecraft:is_nether",
   "features": "silentgear:crimson_iron_ore",
   "step": "underground_ores"
