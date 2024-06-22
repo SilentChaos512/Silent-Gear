@@ -203,6 +203,10 @@ if (project.hasProperty('modrinth_token')) {
         uploadFile = jar
         gameVersions = [project.minecraft_version]
         loaders = ["neoforge"]
+        changelog = new File("CHANGELOG.md").text
+        dependencies = {
+            required.project "silent-lib"
+        }
     }
 }
 
