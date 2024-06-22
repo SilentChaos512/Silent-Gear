@@ -7,10 +7,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CraftedMaterialItem;
+import net.silentchaos512.gear.setup.SgRecipes;
 
 public class MaterialPressingRecipe extends PressingRecipe {
     public MaterialPressingRecipe(String group, Ingredient ingredient, ItemStack result) {
-        super(group, ingredient, result);
+        super(SgRecipes.PRESSING_MATERIAL.get(), group, ingredient, result);
 
         if (!(result.getItem() instanceof CraftedMaterialItem)) {
             throw new IllegalArgumentException("result must be a CraftedMaterialItem");
