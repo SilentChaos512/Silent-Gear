@@ -4,6 +4,7 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,11 +50,16 @@ import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.core.component.GearConstructionData;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.setup.SgCriteriaTriggers;
+import net.silentchaos512.gear.setup.SgDataComponents;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
@@ -74,7 +80,7 @@ import java.util.stream.Stream;
 public final class GearHelper {
     public static final ResourceLocation DAMAGE_FACTOR_CHANGE = SilentGear.getId("damage_factor_change");
     public static Tiers DEFAULT_DUMMY_TIER = Tiers.WOOD;
-    public static ArmorMaterials DEFAULT_DUMMY_ARMOR_MATERIAL = ArmorMaterials.LEATHER;
+    public static Holder<ArmorMaterial> DEFAULT_DUMMY_ARMOR_MATERIAL = ArmorMaterials.LEATHER;
 
     private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
@@ -214,7 +220,9 @@ public final class GearHelper {
     }
 
     public static boolean getIsRepairable(ItemStack gear, MaterialInstance material) {
-        PartData part = GearData.getPrimaryPart(gear);
+        var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
+        if (data == null) return false;
+        var part = data.getPrimaryPart();
         return part != null && material.getTier(PartType.MAIN) >= part.getTier() && material.getRepairValue(gear) > 0;
     }
 
@@ -381,11 +389,15 @@ public final class GearHelper {
     //endregion
 
     public static Item.Properties getBaseItemProperties() {
-        return new Item.Properties().stacksTo(1).durability(100);
+        return new Item.Properties()
+                .stacksTo(1)
+                .durability(100)
+                .component(SgDataComponents.GEAR_CONSTRUCTION, new GearConstructionData(PartDataList.empty(), false, 0, 0))
+                .component(SgDataComponents.GEAR_PROPERTIES, new GearPropertiesData(Map.of()));
     }
 
     public static GearType getType(ItemStack gear) {
-        return getType(gear, GearType.NONE);
+        return getType(gear, GearTypes.NONE.get());
     }
 
     public static GearType getType(ItemStack gear, GearType defaultType) {
@@ -617,7 +629,7 @@ public final class GearHelper {
         return entity == null ? null : new EntityHitResult(entity, vector3d);
     }
 
-    public static int getEnchantability(ItemStack stack) {
+    public static int getEnchantmentValue(ItemStack stack) {
         if (Config.Common.allowEnchanting.get()) {
             return GearData.getStatInt(stack, ItemStats.ENCHANTMENT_VALUE);
         }
@@ -697,15 +709,15 @@ public final class GearHelper {
     }
 
     private static DataResource<IMaterial> selectMaterialForSample(PartType partType, GearType gearType, DataResource<IMaterial> main) {
-        if (partType == PartType.ROD) {
+        if (partType == PartTypes.ROD.get()) {
             return Const.Materials.WOOD;
-        } else if (partType == PartType.CORD) {
+        } else if (partType == PartTypes.CORD.get()) {
             return Const.Materials.STRING;
-        } else if (partType == PartType.FLETCHING) {
+        } else if (partType == PartTypes.FLETCHING.get()) {
             return Const.Materials.FEATHER;
-        } else if (partType == PartType.BINDING) {
+        } else if (partType == PartTypes.BINDING.get()) {
             return Const.Materials.STRING;
-        } else if (partType == PartType.ADORNMENT) {
+        } else if (partType == PartTypes.SETTING.get()) {
             return getRandomMaterial(partType, gearType);
         }
         return main;
@@ -731,7 +743,8 @@ public final class GearHelper {
     }
 
     public static Component getDisplayName(ItemStack gear) {
-        PartData part = GearData.getPrimaryPart(gear);
+        var data = GearData.getConstruction(gear);
+        var part = data.getPrimaryPart();
         if (part == null) return Component.translatable(gear.getDescriptionId());
 
         Component partName = part.getMaterialName(gear);
@@ -743,15 +756,15 @@ public final class GearHelper {
 
         if (gear.getItem() instanceof ICoreTool) {
             ICoreItem item = (ICoreItem) gear.getItem();
-            if (item.requiresPartOfType(PartType.ROD) && GearData.getPartOfType(gear, PartType.ROD) == null) {
+            if (item.requiresPartOfType(PartTypes.ROD.get()) && GearData.getPartOfType(gear, PartTypes.ROD.get()) == null) {
                 result = Component.translatable(gear.getDescriptionId() + ".noRod", gearName);
-            } else if (item.requiresPartOfType(PartType.CORD) && GearData.getPartOfType(gear, PartType.CORD) == null) {
+            } else if (item.requiresPartOfType(PartTypes.CORD.get()) && GearData.getPartOfType(gear, PartTypes.CORD.get()) == null) {
                 result = Component.translatable(gear.getDescriptionId() + ".unstrung", gearName);
             }
         }
 
         // Prefixes
-        for (Component t : getNamePrefixes(gear, GearData.getConstructionParts(gear))) {
+        for (Component t : getNamePrefixes(gear, data.parts())) {
             result = t.copy().append(Component.literal(" ")).append(result);
         }
 
@@ -767,7 +780,8 @@ public final class GearHelper {
     public static Collection<IPartData> getExamplePartsFromRecipe(GearType gearType, Iterable<Ingredient> ingredients) {
         Map<PartType, IPartData> map = new LinkedHashMap<>();
 
-        PartType.MAIN.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(p -> map.put(PartType.MAIN, p));
+        var mainType = PartTypes.MAIN.get();
+        mainType.makeCompoundPart(gearType, Const.Materials.EXAMPLE).ifPresent(p -> map.put(mainType, p));
 
         for (Ingredient ingredient : ingredients) {
             if (ingredient instanceof IGearIngredient) {

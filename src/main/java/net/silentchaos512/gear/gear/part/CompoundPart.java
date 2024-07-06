@@ -207,7 +207,7 @@ public class CompoundPart extends AbstractGearPart {
     }
 
     @Override
-    public MaterialList getMaterials(IPartData part) {
+    public List<IMaterialInstance> getMaterials(IPartData part) {
         return CompoundPartItem.getMaterials(part.getItem());
     }
 

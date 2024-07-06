@@ -1,13 +1,15 @@
 package net.silentchaos512.gear.crafting.ingredient;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
@@ -18,14 +20,22 @@ import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public final class BlueprintIngredient extends Ingredient implements IGearIngredient {
-    public static final Codec<BlueprintIngredient> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            PartType.CODEC.fieldOf("part_type").forGetter(BlueprintIngredient::getPartType),
-            GearType.CODEC.fieldOf("gear_type").forGetter(BlueprintIngredient::getGearType)
-    ).apply(instance, BlueprintIngredient::new));
+public final class BlueprintIngredient implements ICustomIngredient, IGearIngredient {
+    public static final MapCodec<BlueprintIngredient> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                    PartType.CODEC.fieldOf("part_type").forGetter(BlueprintIngredient::getPartType),
+                    GearType.CODEC.fieldOf("gear_type").forGetter(BlueprintIngredient::getGearType)
+            ).apply(instance, BlueprintIngredient::new)
+    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, BlueprintIngredient> STREAM_CODEC = StreamCodec.composite(
+            PartType.STREAM_CODEC, ingredient -> ingredient.partType,
+            GearType.STREAM_CODEC, ingredient -> ingredient.gearType,
+            BlueprintIngredient::new
+    );
 
     private final PartType partType;
     private final GearType gearType;
@@ -34,7 +44,6 @@ public final class BlueprintIngredient extends Ingredient implements IGearIngred
     private ItemStack[] itemStacks;
 
     private BlueprintIngredient(PartType partType, GearType gearType) {
-        super(Stream.of());
         this.partType = partType;
         this.gearType = gearType;
     }
@@ -75,19 +84,14 @@ public final class BlueprintIngredient extends Ingredient implements IGearIngred
     }
 
     @Override
-    public ItemStack[] getItems() {
+    public Stream<ItemStack> getItems() {
         this.dissolve();
         //noinspection AssignmentOrReturnOfFieldWithMutableType,ConstantConditions
-        return this.itemStacks;
+        return Arrays.stream(this.itemStacks);
     }
 
     @Override
     public boolean isSimple() {
-        return false;
-    }
-
-    @Override
-    public boolean isEmpty() {
         return false;
     }
 

@@ -1,31 +1,30 @@
 package net.silentchaos512.gear.api.util;
 
-import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.setup.SgRegistries;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
-public final class PartGearKey {
-    private static final Map<Pair<GearType, PartType>, PartGearKey> CACHE = new HashMap<>();
-
-    private final String key;
-    private final GearType gearType;
-    private final PartType partType;
-
-    private PartGearKey(GearType gearType, PartType partType) {
-        this.key = SilentGear.shortenId(partType.getName()) + "/" + gearType.getName();
-        this.gearType = gearType;
-        this.partType = partType;
-    }
+public record PartGearKey (
+        GearType gearType,
+        PartType partType
+){
+    private static final Map<Pair<GearType, PartType>, PartGearKey> CACHE = new ConcurrentHashMap<>();
+    
+    public static final Codec<PartGearKey> CODEC = Codec.STRING
+            .comapFlatMap(PartGearKey::tryParseKey, PartGearKey::key)
+            .stable();
 
     public static PartGearKey of(GearType gearType, IPartData part) {
         return of(gearType, part.getType());
@@ -37,14 +36,14 @@ public final class PartGearKey {
     }
 
     public static PartGearKey ofAll(PartType partType) {
-        return of(GearType.ALL, partType);
+        return of(GearTypes.ALL.get(), partType);
     }
 
     @Nullable
     public PartGearKey getParent() {
-        GearType parent = this.gearType.getParent();
+        var parent = this.gearType.parent();
         if (parent != null) {
-            return of(parent, this.partType);
+            return of(parent.get(), this.partType);
         }
         return null;
     }
@@ -61,51 +60,27 @@ public final class PartGearKey {
         return partType.getDisplayName(0).append(" / ").append(gearType.getDisplayName());
     }
 
-    public static PartGearKey read(String key) {
-        String[] parts = key.split("/");
-        if (parts.length != 2) {
-            throw new JsonParseException("invalid key: " + key);
+    private static DataResult<PartGearKey> tryParseKey(String str) {
+        var split = str.split("/");
+        if (split.length != 2) {
+            return DataResult.error(() -> "Invalid key: " + str);
         }
-
-        PartType partType = PartType.getNonNull(Objects.requireNonNull(SilentGear.getIdWithDefaultNamespace(parts[0])));
-        if (partType.isInvalid()) {
-            throw new JsonParseException("Unknown part type: " + parts[0]);
+        var partTypeId = SilentGear.getIdWithDefaultNamespace(split[0]);
+        var gearTypeId = SilentGear.getIdWithDefaultNamespace(split[1]);
+        var gearType = SgRegistries.GEAR_TYPES.get(partTypeId);
+        if (gearType == null || gearType == GearTypes.NONE.get()) {
+            return DataResult.error(() -> "Unknown gear type: " + gearTypeId);
         }
-
-        GearType gearType = GearType.get(parts[1]);
-        if (!gearType.isValid()) {
-            throw new JsonParseException("Unknown gear type: " + parts[1]);
+        var partType = SgRegistries.PART_TYPES.get(partTypeId);
+        if (partType == null || partType == PartTypes.NONE.get()) {
+            return DataResult.error(() -> "Unknown part type: " + partTypeId);
         }
-
-        return new PartGearKey(gearType, partType);
+        return DataResult.success(of(gearType, partType));
     }
 
-    public static PartGearKey fromNetwork(FriendlyByteBuf buf) {
-        GearType gearType = GearType.get(buf.readUtf());
-        PartType partType = Objects.requireNonNull(PartType.get(buf.readResourceLocation()));
-        return of(gearType, partType);
-    }
-
-    public void toNetwork(FriendlyByteBuf buf) {
-        buf.writeUtf(gearType.getName());
-        buf.writeResourceLocation(partType.getName());
-    }
-
-    @Override
-    public String toString() {
-        return key;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PartGearKey that = (PartGearKey) o;
-        return Objects.equals(key, that.key);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key);
+    private String key() {
+        var partTypeShortStr = SilentGear.shortenId(SgRegistries.PART_TYPES.getKey(partType()));
+        var gearTypeShortStr = SilentGear.shortenId(SgRegistries.GEAR_TYPES.getKey(gearType()));
+        return partTypeShortStr + "/" + gearTypeShortStr;
     }
 }

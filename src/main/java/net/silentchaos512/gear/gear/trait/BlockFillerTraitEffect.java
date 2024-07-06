@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
+import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -29,12 +30,12 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 
-public class BlockFillerTrait extends SimpleTrait {
-    public static final ITraitSerializer<BlockFillerTrait> SERIALIZER = new Serializer<>(ApiConst.BLOCK_FILLER_TRAIT_ID,
-            BlockFillerTrait::new,
-            BlockFillerTrait::readJson,
-            BlockFillerTrait::read,
-            BlockFillerTrait::write);
+public class BlockFillerTraitEffect extends TraitEffect {
+    public static final ITraitSerializer<BlockFillerTraitEffect> SERIALIZER = new Serializer<>(ApiConst.BLOCK_FILLER_TRAIT_ID,
+            BlockFillerTraitEffect::new,
+            BlockFillerTraitEffect::readJson,
+            BlockFillerTraitEffect::read,
+            BlockFillerTraitEffect::write);
 
     @Nullable private Block targetBlock;
     @Nullable private TagKey<Block> targetBlockTag;
@@ -51,7 +52,7 @@ public class BlockFillerTrait extends SimpleTrait {
     private float soundVolume = 1.0f;
     private float soundPitch = 1.0f;
 
-    public BlockFillerTrait(ResourceLocation id) {
+    public BlockFillerTraitEffect(ResourceLocation id) {
         super(id, SERIALIZER);
     }
 
@@ -141,7 +142,7 @@ public class BlockFillerTrait extends SimpleTrait {
                 || (targetBlock != null && state.is(targetBlock));
     }
 
-    private static void readJson(BlockFillerTrait trait, JsonObject json) {
+    private static void readJson(BlockFillerTraitEffect trait, JsonObject json) {
         JsonObject targetJson = GsonHelper.getAsJsonObject(json, "target");
         if (targetJson.has("tag")) {
             trait.targetBlockTag = BlockTags.create(new ResourceLocation(GsonHelper.getAsString(targetJson, "tag")));
@@ -163,7 +164,7 @@ public class BlockFillerTrait extends SimpleTrait {
         trait.soundPitch = GsonHelper.getAsFloat(json, "sound_pitch");
     }
 
-    private static void read(BlockFillerTrait trait, FriendlyByteBuf buffer) {
+    private static void read(BlockFillerTraitEffect trait, FriendlyByteBuf buffer) {
         if (buffer.readBoolean()) {
             trait.targetBlockTag = BlockTags.create(buffer.readResourceLocation());
         }
@@ -184,7 +185,7 @@ public class BlockFillerTrait extends SimpleTrait {
         trait.soundPitch = buffer.readFloat();
     }
 
-    private static void write(BlockFillerTrait trait, FriendlyByteBuf buffer) {
+    private static void write(BlockFillerTraitEffect trait, FriendlyByteBuf buffer) {
         buffer.writeBoolean(trait.targetBlockTag != null);
         if (trait.targetBlockTag != null) {
             buffer.writeResourceLocation(trait.targetBlockTag.location());

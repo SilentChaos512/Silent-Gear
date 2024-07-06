@@ -5,7 +5,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.part.PartType;
 
 import javax.annotation.Nullable;
@@ -17,14 +16,6 @@ public interface IGearComponent<D> extends IStatModProvider<D>, ITraitProvider<D
      * @return The ingredient to match
      */
     Ingredient getIngredient();
-
-    /**
-     * Gets the materials this object was made with, assuming it is a compound part/material.
-     *
-     * @param instance The object (part, material)
-     * @return List of materials used to craft this object, or an empty list if not applicable
-     */
-    MaterialList getMaterials(D instance);
 
     /**
      * Determine if this component can be used to craft parts of a given type and for a given gear

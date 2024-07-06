@@ -23,6 +23,7 @@ import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.PartJsonException;
 import net.silentchaos512.gear.network.payload.server.SyncPartsPayload;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -141,12 +142,12 @@ public final class PartManager implements ResourceManagerReloadListener {
 
     @Deprecated
     public static Collection<IGearPart> getMains() {
-        return getPartsOfType(PartType.MAIN);
+        return getPartsOfType(PartTypes.MAIN.get());
     }
 
     @Deprecated
     public static Collection<IGearPart> getRods() {
-        return getPartsOfType(PartType.ROD);
+        return getPartsOfType(PartTypes.ROD.get());
     }
 
     @Nullable

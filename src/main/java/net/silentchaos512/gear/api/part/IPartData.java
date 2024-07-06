@@ -1,27 +1,31 @@
 package net.silentchaos512.gear.api.part;
 
-import com.google.gson.JsonObject;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.MaterialList;
+import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.IGearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.LazyPartData;
 import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TierHelper;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents an instance of an {@link IGearPart}. In most cases, {@link PartData} should be used.
@@ -41,8 +45,6 @@ public interface IPartData extends IGearComponentInstance<IGearPart> {
     @Deprecated
     default ItemStack getCraftingItem() {return getItem();}
 
-    CompoundTag write(CompoundTag nbt);
-
     default int getTier() {
         IGearPart part = get();
         return part != null ? part.getTier() : 0;
@@ -56,18 +58,30 @@ public interface IPartData extends IGearComponentInstance<IGearPart> {
 
     default PartType getType() {
         IGearPart part = get();
-        return part != null ? part.getType() : PartType.NONE;
+        return part != null ? part.getType() : PartTypes.NONE.get();
     }
 
     default GearType getGearType() {
         IGearPart part = get();
-        return part != null ? part.getGearType() : GearType.ALL;
+        return part != null ? part.getGearType() : GearTypes.ALL.get();
     }
 
-    @Override
-    default MaterialList getMaterials() {
+    default List<IMaterialInstance> getMaterials() {
         IGearPart part = get();
-        return part != null ? part.getMaterials(this) : MaterialList.empty();
+        return part != null ? part.getMaterials(this) : Collections.emptyList();
+    }
+
+    default boolean containsMaterial(DataResource<IMaterial> materialIn) {
+        if (materialIn.isPresent()) {
+            for (IGearComponentInstance<IMaterial> mat : this.getMaterials()) {
+                IMaterial material = mat.get();
+                if (material != null && material.equals(materialIn.get())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -113,19 +127,20 @@ public interface IPartData extends IGearComponentInstance<IGearPart> {
         return Color.VALUE_WHITE;
     }
 
+    default Component getMaterialName(ItemStack gear) {
+        return Component.empty();
+    }
+
     String getModelKey();
+
+    default int getColor(ItemStack gear) {
+        return getColor(gear, 0, 0);
+    }
+
+    int getColor(ItemStack gear, int layer, int animationFrame);
 
     default void onAddToGear(ItemStack gear) {
     }
 
-    default JsonObject serialize() {
-        JsonObject json = new JsonObject();
-        json.addProperty("part", getId().toString());
-
-        ItemStack stack = getItem();
-        if (!stack.isEmpty()) {
-        }
-
-        return json;
-    }
+    void onRemoveFromGear(ItemStack gear);
 }

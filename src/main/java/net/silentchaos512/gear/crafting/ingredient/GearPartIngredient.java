@@ -1,29 +1,13 @@
-/*
- * Silent Gear -- GearPartIngredient
- * Copyright (C) 2018 SilentChaos512
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 3
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.silentchaos512.gear.crafting.ingredient;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.part.IGearPart;
 import net.silentchaos512.gear.api.part.PartType;
@@ -38,16 +22,20 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public final class GearPartIngredient extends Ingredient implements IGearIngredient {
-    public static final Codec<GearPartIngredient> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            PartType.CODEC.fieldOf("part_type").forGetter(GearPartIngredient::getPartType)
-    ).apply(instance, GearPartIngredient::new));
+public final class GearPartIngredient implements ICustomIngredient, IGearIngredient {
+    public static final MapCodec<GearPartIngredient> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                    PartType.CODEC.fieldOf("part_type").forGetter(GearPartIngredient::getPartType)
+            ).apply(instance, GearPartIngredient::new)
+    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, GearPartIngredient> STREAM_CODEC = StreamCodec.composite(
+            PartType.STREAM_CODEC, ingredient -> ingredient.type,
+            GearPartIngredient::new
+    );
 
     private final PartType type;
 
     private GearPartIngredient(PartType type) {
-        // Note: gear parts are NOT loaded at this time!
-        super(Stream.of());
         this.type = type;
     }
 
@@ -80,26 +68,20 @@ public final class GearPartIngredient extends Ingredient implements IGearIngredi
     }
 
     @Override
-    public ItemStack[] getItems() {
+    public Stream<ItemStack> getItems() {
         // Although gear parts are not available when the ingredient is constructed,
         // they are available later on
         Collection<IGearPart> parts = PartManager.getPartsOfType(this.type);
         if (!parts.isEmpty()) {
             return parts.stream()
                     .flatMap(part -> Stream.of(part.getIngredient().getItems()))
-                    .filter(stack -> !stack.isEmpty())
-                    .toArray(ItemStack[]::new);
+                    .filter(stack -> !stack.isEmpty());
         }
-        return super.getItems();
+        return Stream.empty();
     }
 
     @Override
     public boolean isSimple() {
-        return false;
-    }
-
-    @Override
-    public boolean isEmpty() {
         return false;
     }
 }

@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.api.util;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
@@ -89,14 +91,25 @@ public class DataResource<T> {
             DataResource::material,
             DataResource::getId
     );
-
     public static final Codec<DataResource<IGearPart>> PART_CODEC = ResourceLocation.CODEC.xmap(
             DataResource::part,
             DataResource::getId
     );
-
     public static final Codec<DataResource<ITrait>> TRAIT_CODEC = ResourceLocation.CODEC.xmap(
             DataResource::trait,
             DataResource::getId
+    );
+
+    public static final StreamCodec<FriendlyByteBuf, DataResource<IMaterial>> MATERIAL_STREAM_CODEC = StreamCodec.of(
+            (buf, d) -> buf.writeResourceLocation(d.getId()),
+            buf -> DataResource.material(buf.readResourceLocation())
+    );
+    public static final StreamCodec<FriendlyByteBuf, DataResource<IGearPart>> PART_STREAM_CODEC = StreamCodec.of(
+            (buf, d) -> buf.writeResourceLocation(d.getId()),
+            buf -> DataResource.part(buf.readResourceLocation())
+    );
+    public static final StreamCodec<FriendlyByteBuf, DataResource<ITrait>> TRAIT_STREAM_CODEC = StreamCodec.of(
+            (buf, d) -> buf.writeResourceLocation(d.getId()),
+            buf -> DataResource.trait(buf.readResourceLocation())
     );
 }

@@ -114,7 +114,7 @@ public class GearShieldItem extends ShieldItem implements ICoreItem {
 
     @Override
     public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantability(stack);
+        return GearHelper.getEnchantmentValue(stack);
     }
 
     @Override

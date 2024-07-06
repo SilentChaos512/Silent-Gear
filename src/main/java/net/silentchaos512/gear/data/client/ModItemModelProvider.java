@@ -200,7 +200,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearPart(SgItems.LINING, "item/part/lining_cloth");
         tempGearPart(SgItems.CORD);
         tempGearPart(SgItems.FLETCHING);
-        tempGearPart(SgItems.ADORNMENT);
+        tempGearPart(SgItems.SETTING);
     }
 
     private ItemModelBuilder tempGearStandardTool(DeferredItem<? extends ICoreItem> item, ModelFile parent) {

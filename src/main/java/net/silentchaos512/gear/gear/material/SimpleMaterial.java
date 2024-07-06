@@ -5,8 +5,8 @@ import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.IMaterialSerializer;
 import net.silentchaos512.gear.api.part.PartType;
 
-public class PartMaterial extends AbstractMaterial { // TODO: Rename to SimpleMaterial?
-    public PartMaterial(ResourceLocation id, String packName) {
+public class SimpleMaterial extends AbstractMaterial {
+    public SimpleMaterial(ResourceLocation id, String packName) {
         super(id, packName);
     }
 

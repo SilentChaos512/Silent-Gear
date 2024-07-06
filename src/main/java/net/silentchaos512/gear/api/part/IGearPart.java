@@ -10,12 +10,14 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.util.IGearComponent;
 import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.gear.part.PartData;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 
 public interface IGearPart extends IGearComponent<IPartData> {
@@ -48,9 +50,8 @@ public interface IGearPart extends IGearComponent<IPartData> {
      */
     default void retainData(@Nullable IGearPart oldPart) {}
 
-    @Override
-    default MaterialList getMaterials(IPartData part) {
-        return MaterialList.empty();
+    default List<IMaterialInstance> getMaterials(IPartData part) {
+        return Collections.emptyList();
     }
 
     /**

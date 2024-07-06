@@ -303,7 +303,7 @@ public final class GearEvents {
 
             // Repairs
             int brokenCount = GearData.getBrokenCount(result);
-            int repairedCount = GearData.getRepairCount(result);
+            int repairedCount = GearData.getRepairedCount(result);
             SgCriteriaTriggers.GEAR_REPAIRED.get().trigger(player, brokenCount, repairedCount);
 
             // Item stats

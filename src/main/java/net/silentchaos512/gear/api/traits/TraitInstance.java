@@ -5,26 +5,35 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.TooltipFlag;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.gear.trait.TraitSerializers;
-import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public final class TraitInstance implements ITraitInstance {
+    public static final Codec<TraitInstance> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                    DataResource.TRAIT_CODEC.fieldOf("trait").forGetter(t -> t.trait),
+                    ExtraCodecs.POSITIVE_INT.fieldOf("level").forGetter(t -> t.level),
+                    Codec.list(ITraitCondition.CODEC).optionalFieldOf("conditions").forGetter(t -> Optional.of(new ArrayList<>(t.conditions)))
+            ).apply(instance, TraitInstance::new)
+    );
+
     private final DataResource<ITrait> trait;
     private final int level;
     private final ImmutableList<ITraitCondition> conditions;
@@ -34,11 +43,15 @@ public final class TraitInstance implements ITraitInstance {
     }
 
     private TraitInstance(DataResource<ITrait> trait, int level, ITraitCondition... conditions) {
+        this(trait, level, Arrays.asList(conditions));
+    }
+
+    private TraitInstance(DataResource<ITrait> trait, int level, List<ITraitCondition> conditions) {
         this.trait = trait;
         this.level = level;
         this.conditions = ImmutableList.<ITraitCondition>builder()
                 .add(trait.isPresent() ? trait.get().getConditions().toArray(new ITraitCondition[0]) : new ITraitCondition[0])
-                .add(conditions)
+                .addAll(conditions)
                 .build();
     }
 

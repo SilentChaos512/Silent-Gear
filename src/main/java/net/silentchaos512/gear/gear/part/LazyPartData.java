@@ -3,7 +3,6 @@ package net.silentchaos512.gear.gear.part;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -106,16 +105,6 @@ public class LazyPartData implements IPartData {
     public Component getDisplayName(PartType type, ItemStack gear) {
         IGearPart part = get();
         return part != null ? part.getDisplayName(this, type, gear) : Component.literal("INVALID");
-    }
-
-    @Override
-    public CompoundTag write(CompoundTag tags) {
-        tags.putString("ID", partId.toString());
-        ItemStack stack = getItem();
-        if (!stack.isEmpty()) {
-            tags.put("Item", stack.save(new CompoundTag()));
-        }
-        return tags;
     }
 
     @Override

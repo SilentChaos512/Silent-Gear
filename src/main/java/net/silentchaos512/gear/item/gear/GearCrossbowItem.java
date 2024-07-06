@@ -396,7 +396,7 @@ public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon 
 
     @Override
     public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantability(stack);
+        return GearHelper.getEnchantmentValue(stack);
     }
 
     @Override

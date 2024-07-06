@@ -4,13 +4,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.lib.util.EnumUtils;
 
 import javax.annotation.Nonnegative;
@@ -29,8 +32,7 @@ public enum MaterialGrade {
                     .map(DataResult::success)
                     .get()
     );
-
-    private static final String NBT_KEY = "SGear_Grade";
+    public static final StreamCodec<FriendlyByteBuf, MaterialGrade> STREAM_CODEC = NeoForgeStreamCodecs.enumCodec(MaterialGrade.class);
 
     public final int bonusPercent;
 
@@ -49,18 +51,8 @@ public enum MaterialGrade {
     }
 
     public static MaterialGrade fromStack(ItemStack stack) {
-        if (!stack.isEmpty() && stack.hasTag()) {
-            return fromNbt(stack.getOrCreateTag());
-        }
-        return NONE;
-    }
-
-    public static MaterialGrade fromNbt(CompoundTag tag) {
-        if (tag.contains(NBT_KEY)) {
-            String str = tag.getString(NBT_KEY);
-            return fromString(str);
-        }
-        return NONE;
+        var grade = stack.get(SgDataComponents.MATERIAL_GRADE);
+        return grade != null ? grade : NONE;
     }
 
     public static MaterialGrade fromString(String str) {
@@ -115,15 +107,7 @@ public enum MaterialGrade {
 
     public void setGradeOnStack(@Nonnull ItemStack stack) {
         if (!stack.isEmpty()) {
-            writeToNbt(stack.getOrCreateTag());
-        }
-    }
-
-    public void writeToNbt(CompoundTag tag) {
-        if (this == NONE) {
-            tag.remove(NBT_KEY);
-        } else {
-            tag.putString(NBT_KEY, name());
+            stack.set(SgDataComponents.MATERIAL_GRADE, this);
         }
     }
 

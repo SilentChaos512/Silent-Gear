@@ -415,7 +415,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerCompoundParts(RecipeOutput consumer) {
-        compoundPart(SgItems.ADORNMENT, 1)
+        compoundPart(SgItems.SETTING, 1)
                 .requires(BlueprintIngredient.of(SgItems.JEWELER_TOOLS.get()))
                 .requires(CraftingItems.BORT)
                 .requires(PartMaterialIngredient.of(PartType.ADORNMENT))

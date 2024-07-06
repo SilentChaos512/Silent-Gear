@@ -17,7 +17,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.advancements.criterion.GearRepairedTrigger;
-import net.silentchaos512.gear.advancements.criterion.ItemStatTrigger;
+import net.silentchaos512.gear.advancements.criterion.GearPropertyTrigger;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.part.LazyPartData;
@@ -202,7 +202,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
             AdvancementHolder highDurability = Advancement.Builder.advancement()
                     .parent(materialGrader)
                     .display(SgItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EMERALD)), title("high_durability"), description("high_durability"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("durability", SgCriteriaTriggers.ITEM_STAT.get().createCriterion(new ItemStatTrigger.Instance(Optional.empty(), ItemStats.DURABILITY, MinMaxBounds.Doubles.atLeast(16_000))))
+                    .addCriterion("durability", SgCriteriaTriggers.ITEM_STAT.get().createCriterion(new GearPropertyTrigger.Instance(Optional.empty(), ItemStats.DURABILITY, MinMaxBounds.Doubles.atLeast(16_000))))
                     .save(saver, id("high_durability"));
             AdvancementHolder graderCatalyst2 = Advancement.Builder.advancement()
                     .parent(materialGrader)

@@ -1,24 +1,23 @@
 package net.silentchaos512.gear.api.item;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.common.ToolAction;
-import net.neoforged.neoforge.common.ToolActions;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.api.property.NumberPropertyType;
+import net.silentchaos512.gear.api.stats.IItemStat;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
 
 /**
  * Used for classifying gear for certain purposes, such as rendering. For example, any armor type
@@ -28,332 +27,175 @@ import java.util.regex.Pattern;
  * store this in a static final field in your item class, but the location doesn't matter.
  */
 public final class GearType {
-    public static final Codec<GearType> CODEC = Codec.STRING
-            .comapFlatMap(
-                    s -> Optional.of(GearType.get(s))
-                            .filter(GearType::isValid)
-                            .map(DataResult::success)
-                            .orElseGet(() -> DataResult.error(() -> "Unknown gear type: " + s)),
-                    GearType::getName
-            );
+    public static final Codec<GearType> CODEC = CodecUtils.byModNameCodec(SgRegistries.GEAR_TYPES);
+    public static final StreamCodec<RegistryFriendlyByteBuf, GearType> STREAM_CODEC = ByteBufCodecs.registry(SgRegistries.GEAR_TYPES_KEY);
 
-    private static final Pattern VALID_NAME = Pattern.compile("[^a-z_]");
-    private static final Map<String, GearType> VALUES = new HashMap<>();
     private static final Map<GearType, ICoreItem> ITEMS = new HashMap<>();
 
-    // A non-existent gear type which matches nothing
-    public static final GearType NONE = getOrCreate("none");
-    // A gear type which matches everything
-    public static final GearType ALL = getOrCreate("all");
-    // Yeah, I know...
-    public static final GearType PART = getOrCreate("part");
-    public static final GearType FRAGMENT = getOrCreate("fragment");
-
-    public static final GearType PROJECTILE = getOrCreate("projectile", ALL);
-
-    // Parent of everything except armor
-    public static final GearType TOOL = getOrCreate("tool", ALL);
-    public static final GearType WEAPON = getOrCreate("weapon", TOOL);
-    // Harvest tools
-    public static final GearType HARVEST_TOOL = getOrCreate("harvest_tool", TOOL);
-    public static final GearType AXE = getOrCreate("axe", HARVEST_TOOL, b ->
-            b.toolActions(ToolActions.DEFAULT_AXE_ACTIONS));
-    public static final GearType PICKAXE = getOrCreate("pickaxe", HARVEST_TOOL, b ->
-            b.toolActions(ToolActions.DEFAULT_PICKAXE_ACTIONS));
-    public static final GearType SHOVEL = getOrCreate("shovel", HARVEST_TOOL, b ->
-            b.toolActions(ToolActions.DEFAULT_SHOVEL_ACTIONS));
-    public static final GearType EXCAVATOR = getOrCreate("excavator", SHOVEL, b ->
-            b.toolActions(ToolActions.SHOVEL_DIG));
-    public static final GearType HAMMER = getOrCreate("hammer", PICKAXE, b ->
-            b.toolActions(ToolActions.PICKAXE_DIG));
-    public static final GearType SAW = getOrCreate("saw", AXE, b ->
-            b.toolActions(ToolActions.AXE_DIG));
-    public static final GearType HOE = getOrCreate("hoe", HARVEST_TOOL, b ->
-            b.toolActions(ToolActions.DEFAULT_HOE_ACTIONS));
-    public static final GearType MATTOCK = getOrCreate("mattock", HARVEST_TOOL, b ->
-            b.toolActions(ToolActions.AXE_DIG, ToolActions.HOE_DIG, ToolActions.HOE_TILL, ToolActions.SHOVEL_DIG));
-    public static final GearType PAXEL = getOrCreate("paxel", HARVEST_TOOL, b ->
-            b.toolActions(
-                    ToolActions.AXE_DIG,
-                    ToolActions.AXE_SCRAPE,
-                    ToolActions.AXE_STRIP,
-                    ToolActions.AXE_WAX_OFF,
-                    ToolActions.PICKAXE_DIG,
-                    ToolActions.SHOVEL_DIG
-            )
-    );
-    public static final GearType PROSPECTOR_HAMMER = getOrCreate("prospector_hammer", PICKAXE, b ->
-            b.toolActions(ToolActions.DEFAULT_PICKAXE_ACTIONS));
-    public static final GearType SHEARS = getOrCreate("shears", HARVEST_TOOL, b ->
-            b.toolActions(ToolActions.DEFAULT_SHEARS_ACTIONS));
-    public static final GearType SICKLE = getOrCreate("sickle", HARVEST_TOOL, b ->
-            b.toolActions(ToolActions.HOE_DIG));
-    // Melee weapons (swords)
-    public static final GearType MELEE_WEAPON = getOrCreate("melee_weapon", WEAPON);
-    public static final GearType DAGGER = getOrCreate("dagger", MELEE_WEAPON, b ->
-            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
-    public static final GearType KATANA = getOrCreate("katana", MELEE_WEAPON, b ->
-            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
-    public static final GearType KNIFE = getOrCreate("knife", MELEE_WEAPON, b ->
-            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
-    public static final GearType MACHETE = getOrCreate("machete", MELEE_WEAPON, b ->
-            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
-    public static final GearType SPEAR = getOrCreate("spear", MELEE_WEAPON, b ->
-            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
-    public static final GearType SWORD = getOrCreate("sword", MELEE_WEAPON, b ->
-            b.toolActions(ToolActions.DEFAULT_SWORD_ACTIONS));
-    public static final GearType TRIDENT = getOrCreate("trident", MELEE_WEAPON);
-    // Ranged weapons (bows)
-    public static final GearType RANGED_WEAPON = getOrCreate("ranged_weapon", WEAPON);
-    public static final GearType BOW = getOrCreate("bow", RANGED_WEAPON);
-    public static final GearType CROSSBOW = getOrCreate("crossbow", RANGED_WEAPON);
-    public static final GearType SLINGSHOT = getOrCreate("slingshot", RANGED_WEAPON);
-    // Other
-    public static final GearType FISHING_ROD = getOrCreate("fishing_rod", TOOL);
-    public static final GearType SHIELD = getOrCreate("shield", TOOL, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(337f / 15f));
-    // Armor
-    public static final GearType ARMOR = getOrCreate("armor", ALL, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY));
-    public static final GearType BOOTS = getOrCreate("boots", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(13));
-    public static final GearType CHESTPLATE = getOrCreate("chestplate", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(16));
-    public static final GearType ELYTRA = getOrCreate("elytra", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(25));
-    public static final GearType HELMET = getOrCreate("helmet", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(11));
-    public static final GearType LEGGINGS = getOrCreate("leggings", ARMOR, b ->
-            b.durabilityStat(() -> ItemStats.ARMOR_DURABILITY).armorDurabilityMultiplier(15));
-    // Projectiles
-    public static final GearType ARROW = getOrCreate("arrow", PROJECTILE);
-
-    // Curios
-    public static final GearType CURIO = getOrCreate("curio", ALL);
-    public static final GearType BRACELET = getOrCreate("bracelet", CURIO);
-    public static final GearType RING = getOrCreate("ring", CURIO);
-
-    /**
-     * Gets the gear type of the given name, or null if it does not exist.
-     *
-     * @param name The gear type name
-     * @return The gear type, or null if it does not exist
-     */
-    public static GearType get(String name) {
-        return VALUES.getOrDefault(name, NONE);
-    }
-
-    /**
-     * Gets or creates a new gear type without a parent. This should NOT be used in most cases. If
-     * the gear type already exists, the existing instance is not modified in any way.
-     *
-     * @param name The gear type name. Must be unique and contain only lowercase letters and
-     *             underscores.
-     * @return The newly created gear type, or the existing instance if it already exists
-     * @throws IllegalArgumentException if the name is invalid
-     */
-    public static GearType getOrCreate(String name) {
-        return getOrCreate(name, null, b -> {
-        });
-    }
-
-    public static GearType getOrCreate(String name, @Nullable GearType parent) {
-        return getOrCreate(name, parent, b -> {
-        });
-    }
-
-    public static GearType getOrCreate(String name, @Nullable GearType parent, Consumer<Builder> propertiesBuilder) {
-        if (VALID_NAME.matcher(name).find()) {
-            throw new IllegalArgumentException("Invalid name: " + name);
-        }
-        return VALUES.computeIfAbsent(name, s -> {
-            Builder builder = Builder.of(name, parent);
-            propertiesBuilder.accept(builder);
-            return builder.build();
-        });
-    }
-
-    public static GearType fromJson(JsonObject json, String key) {
-        String str = GsonHelper.getAsString(json, key);
-        GearType type = get(str);
-        if (!type.isValid()) {
-            throw new JsonSyntaxException("Unknown gear type: " + str);
-        }
-        return type;
-    }
-
-    private final String name;
     @Nullable
-    private final GearType parent;
+    private final Supplier<GearType> parent;
     private final int animationFrames;
-    private final Supplier<ItemStat> durabilityStat;
-    private final float armorDurabilityMultiplier;
     private final Set<ToolAction> toolActions;
+    private final float armorDurabilityMultiplier;
+    private final Supplier<NumberPropertyType> durabilityStat;
+    private final Set<IItemStat> relevantStats;
+    private final Set<IItemStat> excludedStats;
 
-    private GearType(String name, @Nullable GearType parent, int animationFrames, Supplier<ItemStat> durabilityStat, float armorDurabilityMultiplier, Set<ToolAction> toolActions) {
-        this.name = name;
+    /**
+     *
+     */
+    public GearType(
+            @Nullable Supplier<GearType> parent,
+            int animationFrames,
+            Set<ToolAction> toolActions,
+            float armorDurabilityMultiplier,
+            Supplier<NumberPropertyType> durabilityStat,
+            Set<IItemStat> relevantStats, // TODO: Get rid of this? Allow item stats to determine compatible items.
+            Set<IItemStat> excludedStats // TODO: Get rid of this? It's not necessary to limit what stats an item can choose to have.
+    ) {
         this.parent = parent;
         this.animationFrames = animationFrames;
-        this.durabilityStat = durabilityStat;
-        this.armorDurabilityMultiplier = armorDurabilityMultiplier;
         this.toolActions = toolActions;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets the parent gear type, if there is one. The parent type may also have a parent.
-     *
-     * @return The parent type
-     */
-    @Nullable
-    public GearType getParent() {
-        return parent;
-    }
-
-    public int getAnimationFrames() {
-        return animationFrames;
-    }
-
-    public ItemStat getDurabilityStat() {
-        return durabilityStat.get();
-    }
-
-    public float getArmorDurabilityMultiplier() {
-        return armorDurabilityMultiplier;
+        this.armorDurabilityMultiplier = armorDurabilityMultiplier;
+        this.durabilityStat = durabilityStat;
+        this.relevantStats = ImmutableSet.copyOf(relevantStats);
+        this.excludedStats = ImmutableSet.copyOf(excludedStats);
     }
 
     public boolean canPerformAction(ToolAction action) {
         return toolActions.contains(action);
     }
 
-    /**
-     * Check if this type's name matches the given string, or if its parent type does. The type
-     * "all" will match anything.
-     *
-     * @param type The string representation of the type
-     * @return True if this type's name is equal to type, or if its parent matches (recursive)
-     */
-    public boolean matches(String type) {
+    public boolean matches(GearType type) {
         return matches(type, true);
     }
 
-    public boolean matches(GearType type) {
-        return matches(type.name, true);
-    }
-
     /**
-     * Check if this type's name matches the given string, or if its parent type does. The type
-     * "all" will match anything if {@code includeAll} is true.
+     * Check if this type equals the given type, or if its parent type does. The type {@code ALL} will match anything
+     * if {@code includeAll} is true.
      *
      * @param type       The string representation of the type
-     * @param includeAll Whether to consider the "all" type. This should be excluded if
-     *                   trying to match more specific types.
-     * @return True if this type's name is equal to type, or if its parent matches (recursive)
+     * @param includeAll Whether to consider the ALL type. This should be false if trying to match more specific types.
+     * @return True if this type is equal to {@code type}, or if its parent matches (recursive)
      */
-    public boolean matches(String type, boolean includeAll) { //FIXME: The way includesAll is handled does not make sense anymore
-        if (type.contains("/")) {
-            return matches(type.split("/")[1], includeAll);
-        }
-        return (includeAll && "all".equals(type)) || name.equals(type) || (parent != null && parent.matches(type, includeAll));
-    }
-
     public boolean matches(GearType type, boolean includeAll) {
-        return matches(type.name, includeAll);
+        return (includeAll && GearTypes.ALL.get().equals(type))
+                || this.equals(type)
+                || (parent != null && parent.get().matches(type, includeAll));
     }
 
     public boolean isGear() {
-        return matches(ALL, false);
+        return matches(GearTypes.ALL.get(), false);
     }
 
     public boolean isArmor() {
-        return matches(ARMOR);
-    }
-
-    public boolean isValid() {
-        return this != NONE;
-    }
-
-    @Deprecated(forRemoval = true)
-    public boolean isInvalid() {
-        return this == NONE;
+        return matches(GearTypes.ARMOR.get(), false);
     }
 
     public Component getDisplayName() {
-        return Component.translatable("gearType.silentgear." + this.name);
-    }
-
-    public Optional<ICoreItem> getItem() {
-        return Optional.ofNullable(ITEMS.computeIfAbsent(this, gearType -> {
-            return SgItems.getItems(ICoreItem.class).stream()
-                    .filter(item -> item.getGearType() == gearType)
-                    .findAny().orElse(null);
-        }));
-    }
-
-    public Collection<ItemStat> getRelevantStats() {
-        return getItem()
-                .map(item -> (Collection<ItemStat>) item.getRelevantStats(ItemStack.EMPTY))
-                .orElse(ItemStats.allStatsOrdered());
-    }
-
-    public Set<ItemStat> getExcludedStats() {
-        return getItem()
-                .map(item -> item.getExcludedStats(ItemStack.EMPTY))
-                .orElse(Collections.emptySet());
+        var name = SgRegistries.GEAR_TYPES.getKey(this);
+        if (name == null) {
+            return Component.literal("Unknown Gear Type");
+        }
+        return Component.translatable("gearType." + name.getNamespace() + "." + name.getPath());
     }
 
     public GearTypeMatcher getMatcher(boolean matchParents) {
         return new GearTypeMatcher(matchParents, this);
     }
 
+    @Nullable
+    public Supplier<GearType> parent() {
+        return parent;
+    }
+
+    public int animationFrames() {
+        return animationFrames;
+    }
+
+    public Set<ToolAction> toolActions() {
+        return toolActions;
+    }
+
+    public float armorDurabilityMultiplier() {
+        return armorDurabilityMultiplier;
+    }
+
+    public Supplier<NumberPropertyType> durabilityStat() {
+        return durabilityStat;
+    }
+
+    public Set<IItemStat> relevantStats() {
+        return relevantStats;
+    }
+
+    public Set<IItemStat> excludedStats() {
+        return excludedStats;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GearType gearType = (GearType) o;
-        return name.equals(gearType.name);
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (GearType) obj;
+        return Objects.equals(this.parent, that.parent) &&
+                this.animationFrames == that.animationFrames &&
+                Objects.equals(this.toolActions, that.toolActions) &&
+                Float.floatToIntBits(this.armorDurabilityMultiplier) == Float.floatToIntBits(that.armorDurabilityMultiplier) &&
+                Objects.equals(this.durabilityStat, that.durabilityStat) &&
+                Objects.equals(this.relevantStats, that.relevantStats) &&
+                Objects.equals(this.excludedStats, that.excludedStats);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(parent, animationFrames, toolActions, armorDurabilityMultiplier, durabilityStat, relevantStats, excludedStats);
     }
 
     @Override
     public String toString() {
-        return "GearType{" +
-                "name='" + name + '\'' +
-                ", parent=" + parent +
-                '}';
+        return "GearType[" +
+                "parent=" + parent + ", " +
+                "animationFrames=" + animationFrames + ", " +
+                "toolActions=" + toolActions + ", " +
+                "armorDurabilityMultiplier=" + armorDurabilityMultiplier + ", " +
+                "durabilityStat=" + durabilityStat + ", " +
+                "relevantStats=" + relevantStats + ", " +
+                "excludedStats=" + excludedStats + ']';
     }
 
+
     public static class Builder {
-        private final String name;
         @Nullable
-        private final GearType parent;
+        private final Supplier<GearType> parent;
         private int animationFrames = 1;
-        private Supplier<ItemStat> durabilityStat = () -> ItemStats.DURABILITY;
+        private Supplier<NumberPropertyType> durabilityStat = GearProperties.DURABILITY;
         private float armorDurabilityMultiplier = 1f;
         private Set<ToolAction> toolActions = Collections.emptySet();
+        private final Set<IItemStat> relevantStats = new LinkedHashSet<>();
+        private final Set<IItemStat> excludedStats = new LinkedHashSet<>();
 
-        private Builder(String name, @Nullable GearType parent) {
-            this.name = name;
+        private Builder(@Nullable Supplier<GearType> parent) {
             this.parent = parent;
         }
 
-        public static Builder of(String name) {
-            return of(name, null);
+        public static Builder of() {
+            return of(null);
         }
 
-        public static Builder of(String name, @Nullable GearType parent) {
-            return new Builder(name, parent);
+        public static Builder of(@Nullable Supplier<GearType> parent) {
+            return new Builder(parent);
         }
 
         public GearType build() {
-            return new GearType(name, parent, animationFrames, durabilityStat, armorDurabilityMultiplier, toolActions);
+            return new GearType(parent,
+                    animationFrames,
+                    toolActions,
+                    armorDurabilityMultiplier,
+                    durabilityStat,
+                    relevantStats,
+                    excludedStats
+            );
         }
 
         public Builder animationFrames(int animationFrames) {
@@ -361,7 +203,7 @@ public final class GearType {
             return this;
         }
 
-        public Builder durabilityStat(Supplier<ItemStat> durabilityStat) {
+        public Builder durabilityStat(Supplier<NumberPropertyType> durabilityStat) {
             this.durabilityStat = durabilityStat;
             return this;
         }
@@ -378,6 +220,24 @@ public final class GearType {
 
         public Builder toolActions(Set<ToolAction> actions) {
             this.toolActions = Collections.unmodifiableSet(actions);
+            return this;
+        }
+
+        public Builder relevantStats(IItemStat... stats) {
+            return relevantStats(Arrays.asList(stats));
+        }
+
+        public Builder relevantStats(Collection<IItemStat> stats) {
+            relevantStats.addAll(stats);
+            return this;
+        }
+
+        public Builder excludedStats(IItemStat... stats) {
+            return excludedStats(Arrays.asList(stats));
+        }
+
+        private Builder excludedStats(Collection<IItemStat> stats) {
+            excludedStats.addAll(stats);
             return this;
         }
     }

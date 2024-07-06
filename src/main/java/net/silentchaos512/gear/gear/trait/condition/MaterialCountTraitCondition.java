@@ -1,15 +1,18 @@
 package net.silentchaos512.gear.gear.trait.condition;
 
-import com.google.gson.JsonObject;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
-import net.silentchaos512.gear.api.traits.ITraitConditionSerializer;
+import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.IGearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
@@ -17,15 +20,19 @@ import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
 
-public class MaterialCountTraitCondition implements ITraitCondition {
-    public static final Serializer SERIALIZER = new Serializer();
+public record MaterialCountTraitCondition(int requiredCount) implements ITraitCondition {
+    public static final MapCodec<MaterialCountTraitCondition> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                    ExtraCodecs.POSITIVE_INT.fieldOf("count").forGetter(c -> c.requiredCount)
+            ).apply(instance, MaterialCountTraitCondition::new)
+    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, MaterialCountTraitCondition> STREAM_CODEC = StreamCodec.of(
+            (buf, con) -> ByteBufCodecs.BYTE.encode(buf, (byte) con.requiredCount),
+            buf -> new MaterialCountTraitCondition(ByteBufCodecs.BYTE.decode(buf))
+    );
+    public static final TraitConditionSerializer<MaterialCountTraitCondition> SERIALIZER = new TraitConditionSerializer<>(CODEC, STREAM_CODEC);
+
     private static final ResourceLocation NAME = SilentGear.getId("material_count");
-
-    private final int requiredCount;
-
-    public MaterialCountTraitCondition(int requiredCount) {
-        this.requiredCount = requiredCount;
-    }
 
     @Override
     public ResourceLocation getId() {
@@ -33,7 +40,7 @@ public class MaterialCountTraitCondition implements ITraitCondition {
     }
 
     @Override
-    public ITraitConditionSerializer<?> getSerializer() {
+    public TraitConditionSerializer<?> serializer() {
         return SERIALIZER;
     }
 
@@ -54,33 +61,5 @@ public class MaterialCountTraitCondition implements ITraitCondition {
     @Override
     public MutableComponent getDisplayText() {
         return TextUtil.translate("trait.condition", "material_count", this.requiredCount);
-    }
-
-    public static class Serializer implements ITraitConditionSerializer<MaterialCountTraitCondition> {
-        @Override
-        public ResourceLocation getId() {
-            return MaterialCountTraitCondition.NAME;
-        }
-
-        @Override
-        public MaterialCountTraitCondition deserialize(JsonObject json) {
-            return new MaterialCountTraitCondition(GsonHelper.getAsInt(json, "count"));
-        }
-
-        @Override
-        public void serialize(MaterialCountTraitCondition value, JsonObject json) {
-            json.addProperty("count", value.requiredCount);
-        }
-
-        @Override
-        public MaterialCountTraitCondition read(FriendlyByteBuf buffer) {
-            int count = buffer.readByte();
-            return new MaterialCountTraitCondition(count);
-        }
-
-        @Override
-        public void write(MaterialCountTraitCondition condition, FriendlyByteBuf buffer) {
-            buffer.writeByte(condition.requiredCount);
-        }
     }
 }

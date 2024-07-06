@@ -90,7 +90,7 @@ public class GearHoeItem extends HoeItem implements ICoreTool {
 
     @Override
     public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantability(stack);
+        return GearHelper.getEnchantmentValue(stack);
     }
 
     @Override

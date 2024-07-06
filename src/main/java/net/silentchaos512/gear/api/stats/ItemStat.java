@@ -32,7 +32,7 @@ public class ItemStat implements IItemStat {
     private final boolean affectedByGrades;
     private final boolean displayAsInt;
     private final DisplayFormat displayFormat;
-    private final Function<Float, Float> missingRodFunction;
+    @Deprecated private final Function<Float, Float> missingRodFunction;
 
     public ItemStat(ResourceLocation name, float defaultValue, float minValue, float maxValue, ChatFormatting nameColor, Properties properties) {
         this(name, defaultValue, minValue, maxValue, new Color(nameColor.getColor() != null ? nameColor.getColor() : Color.VALUE_WHITE), properties);

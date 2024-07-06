@@ -1,12 +1,12 @@
 package net.silentchaos512.gear.gear.part;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -18,15 +18,20 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.lib.util.InventoryUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
 public final class PartData implements IPartData {
+    public static final Codec<PartData> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                    PartManager.BY_NAME_CODEC.fieldOf("part").forGetter(p -> p.part),
+                    ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(p -> p.craftingItem)
+            ).apply(instance, PartData::new)
+    );
+
     private static final Map<ResourceLocation, PartData> CACHE_UNGRADED_PARTS = new HashMap<>();
-    public static final String NBT_ID = "ID";
 
     private final IGearPart part;
     private final ItemStack craftingItem;
@@ -104,28 +109,6 @@ public final class PartData implements IPartData {
         return null;
     }
 
-    @Nullable
-    public static PartData read(CompoundTag tags) {
-        ResourceLocation id = SilentGear.getIdWithDefaultNamespace(tags.getString(NBT_ID));
-        if (id == null) return null;
-
-        IGearPart part = PartManager.get(id);
-        if (part == null) return null;
-
-        ItemStack craftingItem = ItemStack.of(tags.getCompound("Item"));
-        return of(part, craftingItem);
-    }
-
-    @Override
-    public CompoundTag write(@Nonnull CompoundTag tags) {
-        tags.putString(NBT_ID, part.getId().toString());
-
-        CompoundTag itemTag = new CompoundTag();
-        this.craftingItem.save(itemTag);
-        tags.put("Item", itemTag);
-        return tags;
-    }
-
     @Override
     public ResourceLocation getId() {
         return part.getId();
@@ -176,6 +159,7 @@ public final class PartData implements IPartData {
         return part.getDisplayName(this, gear);
     }
 
+    @Override
     public Component getMaterialName(ItemStack gear) {
         return part.getMaterialName(this, gear);
     }
@@ -185,10 +169,7 @@ public final class PartData implements IPartData {
         return part.getModelKey(this);
     }
 
-    public int getColor(ItemStack gear) {
-        return getColor(gear, 0, 0);
-    }
-
+    @Override
     public int getColor(ItemStack gear, int layer, int animationFrame) {
         return part.getColor(this, gear, layer, animationFrame);
     }
@@ -198,6 +179,7 @@ public final class PartData implements IPartData {
         this.part.onAddToGear(gear, this);
     }
 
+    @Override
     public void onRemoveFromGear(ItemStack gear) {
         this.part.onRemoveFromGear(gear, this);
     }
@@ -215,7 +197,7 @@ public final class PartData implements IPartData {
         if (o == null || getClass() != o.getClass()) return false;
         PartData partData = (PartData) o;
         return part.equals(partData.part) &&
-                InventoryUtils.canItemsStack(craftingItem, partData.craftingItem);
+                ItemStack.isSameItemSameComponents(craftingItem, partData.craftingItem);
     }
 
     @Override

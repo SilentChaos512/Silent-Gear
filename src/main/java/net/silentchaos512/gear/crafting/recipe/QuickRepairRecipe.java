@@ -18,8 +18,8 @@
 
 package net.silentchaos512.gear.crafting.recipe;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -28,13 +28,13 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.setup.SgRecipes;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
@@ -97,7 +97,7 @@ public class QuickRepairRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
@@ -115,7 +115,7 @@ public class QuickRepairRecipe extends CustomRecipe {
             }
         }
 
-        GearData.incrementRepairCount(gear, 1);
+        GearData.incrementRepairedCount(gear, 1);
         GearData.recalculateStats(gear, CommonHooks.getCraftingPlayer());
         return gear;
     }
@@ -123,7 +123,7 @@ public class QuickRepairRecipe extends CustomRecipe {
     private static void repairWithLooseMaterials(ItemStack gear, ItemStack repairKit, Collection<ItemStack> mats) {
         float repairValue = getRepairValueFromMaterials(gear, mats);
         float kitEfficiency = getKitEfficiency(repairKit);
-        float gearRepairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
+        float gearRepairEfficiency = GearData.getProperties(gear).getNumber(GearProperties.REPAIR_EFFICIENCY);
         gear.setDamageValue(gear.getDamageValue() - Math.round(repairValue * kitEfficiency * gearRepairEfficiency));
     }
 
@@ -138,7 +138,7 @@ public class QuickRepairRecipe extends CustomRecipe {
 
         // Repair efficiency instance tool class
         if (gear.getItem() instanceof ICoreItem) {
-            float repairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
+            float repairEfficiency = GearData.getProperties(gear).getNumber(GearProperties.REPAIR_EFFICIENCY);
             if (repairEfficiency > 0) {
                 repairValue *= repairEfficiency;
             }

@@ -17,8 +17,8 @@ import java.util.Map;
 public final class MaterialSerializers {
     private static final Map<ResourceLocation, IMaterialSerializer<?>> REGISTRY = new HashMap<>();
 
-    public static final AbstractMaterial.Serializer<PartMaterial> STANDARD = register( // TODO: Rename to silentgear:simple?
-            new AbstractMaterial.Serializer<>(SilentGear.getId("standard"), PartMaterial::new));
+    public static final AbstractMaterial.Serializer<SimpleMaterial> STANDARD = register( // TODO: Rename to silentgear:simple?
+            new AbstractMaterial.Serializer<>(SilentGear.getId("standard"), SimpleMaterial::new));
     public static final CompoundMaterial.Serializer COMPOUND = register(
             new CompoundMaterial.Serializer());
     public static final AbstractMaterial.Serializer<CustomCompoundMaterial> CUSTOM_COMPOUND = register(

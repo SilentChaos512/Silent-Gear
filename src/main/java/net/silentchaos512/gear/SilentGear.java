@@ -7,14 +7,17 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.network.event.OnGameConfigurationEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.event.RegisterConfigurationTasksEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.network.SgNetwork;
 import net.silentchaos512.gear.network.configtask.SyncTraitsConfigurationTask;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.ModResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +27,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Mod(SilentGear.MOD_ID)
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
@@ -44,18 +47,21 @@ public final class SilentGear {
                 ? new SideProxy.Client(modEventBus)
                 : new SideProxy.Server(modEventBus);
 
+        modEventBus.register(GearTypes.GEAR_TYPES);
+        modEventBus.register(PartTypes.PART_TYPES);
+
         if (ModList.get().isLoaded("curios")) {
             CuriosCompat.registerEventHandlers(modEventBus);
         }
     }
 
     @SubscribeEvent
-    public static void registerPayloadHandler(RegisterPayloadHandlerEvent event) {
-        SgNetwork.register(event.registrar(MOD_ID).versioned("3.7.0"));
+    public static void registerPayloadHandler(RegisterPayloadHandlersEvent event) {
+        SgNetwork.register(event.registrar(MOD_ID).versioned("4.0"));
     }
 
     @SubscribeEvent
-    public static void onGameConfiguration(OnGameConfigurationEvent event) {
+    public static void onGameConfiguration(RegisterConfigurationTasksEvent event) {
         event.register(new SyncTraitsConfigurationTask());
     }
 

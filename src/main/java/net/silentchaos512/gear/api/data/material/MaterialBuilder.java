@@ -34,7 +34,7 @@ import net.silentchaos512.gear.client.material.MaterialDisplay;
 import net.silentchaos512.gear.client.model.PartTextures;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.PartTextureSet;
-import net.silentchaos512.gear.util.JsonHelper;
+import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
@@ -492,11 +492,11 @@ public class MaterialBuilder {
 
         JsonObject craftingItems = new JsonObject();
         if (this.ingredient != Ingredient.EMPTY) {
-            craftingItems.add("main", JsonHelper.encodeIngredient(this.ingredient));
+            craftingItems.add("main", CodecUtils.encodeIngredient(this.ingredient));
         }
         if (!this.partSubstitutes.isEmpty()) {
             JsonObject subs = new JsonObject();
-            this.partSubstitutes.forEach((type, ing) -> subs.add(SilentGear.shortenId(type.getName()), JsonHelper.encodeIngredient(ing)));
+            this.partSubstitutes.forEach((type, ing) -> subs.add(SilentGear.shortenId(type.getName()), CodecUtils.encodeIngredient(ing)));
             craftingItems.add("subs", subs);
         }
         json.add("crafting_items", craftingItems);

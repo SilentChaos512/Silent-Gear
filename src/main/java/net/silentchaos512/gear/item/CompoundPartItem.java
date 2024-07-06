@@ -97,7 +97,7 @@ public class CompoundPartItem extends Item {
         return result;
     }
 
-    public static MaterialList getMaterials(ItemStack stack) {
+    public static List<IMaterialInstance> getMaterials(ItemStack stack) {
         ListTag materialListNbt = stack.getOrCreateTag().getList(NBT_MATERIALS, Tag.TAG_COMPOUND);
         return MaterialList.deserializeNbt(materialListNbt);
     }

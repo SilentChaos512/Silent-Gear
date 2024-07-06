@@ -27,7 +27,6 @@ import net.silentchaos512.gear.client.model.ModelErrorLogging;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.part.PartData;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -43,7 +42,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
+public class GearArmorItem extends ArmorItem implements ICoreArmor {
     // Just copied from ArmorItem, access transformers are too flaky
     private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     // sum = 1, starts with boots
@@ -175,7 +174,7 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
 
     @Override
     public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantability(stack);
+        return GearHelper.getEnchantmentValue(stack);
     }
 
     @Override
@@ -244,8 +243,9 @@ public class GearArmorItem extends DyeableArmorItem implements ICoreArmor {
     }
 
     private static int getArmorColor(ItemStack stack) {
-        // Gets the outer-most (coating or main) part and compute its color
-        PartData part = GearData.getCoatingOrMainPart(stack);
+        // Gets the outermost (coating or main) part and compute its color
+        var data = GearData.getConstruction(stack);
+        var part = data.getCoatingOrMainPart();
         if (part != null) {
             return part.getColor(stack);
         }

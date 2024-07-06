@@ -7,7 +7,6 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 
 import java.util.Optional;
 
@@ -28,9 +27,9 @@ public class GearRepairedTrigger extends SimpleCriterionTrigger<GearRepairedTrig
     ) implements SimpleCriterionTrigger.SimpleInstance {
         public static final Codec<Instance> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                        ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
-                        ExtraCodecs.strictOptionalField(MinMaxBounds.Ints.CODEC, "broken_count", MinMaxBounds.Ints.ANY).forGetter(Instance::brokenCount),
-                        ExtraCodecs.strictOptionalField(MinMaxBounds.Ints.CODEC, "repaired_count", MinMaxBounds.Ints.ANY).forGetter(Instance::repairedCount)
+                        EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+                        MinMaxBounds.Ints.CODEC.optionalFieldOf("broken_count", MinMaxBounds.Ints.ANY).forGetter(Instance::brokenCount),
+                        MinMaxBounds.Ints.CODEC.optionalFieldOf("repaired_count", MinMaxBounds.Ints.ANY).forGetter(Instance::repairedCount)
                 ).apply(instance, Instance::new)
         );
 

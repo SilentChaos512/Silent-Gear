@@ -20,29 +20,21 @@ import java.util.function.Supplier;
 public final class TraitSerializers {
     // TODO: Change to Forge registry?
     private static final Map<ResourceLocation, ITraitSerializer<?>> REGISTRY = new HashMap<>();
-    private static final Map<ResourceLocation, ITraitConditionSerializer<?>> CONDITIONS = new HashMap<>();
 
     static {
-        registerCondition(NotTraitCondition.SERIALIZER);
-        registerCondition(AndTraitCondition.SERIALIZER);
-        registerCondition(OrTraitCondition.SERIALIZER);
-        registerCondition(GearTypeTraitCondition.SERIALIZER);
-        registerCondition(MaterialCountTraitCondition.SERIALIZER);
-        registerCondition(MaterialRatioTraitCondition.SERIALIZER);
-
         register(SimpleTrait.SERIALIZER);
         register(DamageTypeTrait.SERIALIZER);
-        register(DurabilityTrait.SERIALIZER);
+        register(DurabilityTraitEffect.SERIALIZER);
         register(EnchantmentTrait.SERIALIZER);
         register(NBTTrait.SERIALIZER);
         register(WielderEffectTrait.SERIALIZER);
         register(StatModifierTrait.SERIALIZER);
-        register(AttributeTrait.SERIALIZER);
+        register(AttributeTraitEffect.SERIALIZER);
         register(BlockPlacerTrait.SERIALIZER);
-        register(BlockFillerTrait.SERIALIZER);
+        register(BlockFillerTraitEffect.SERIALIZER);
         register(SynergyTrait.SERIALIZER);
         register(TargetEffectTrait.SERIALIZER);
-        register(BonusDropsTrait.SERIALIZER);
+        register(BonusDropsTraitEffect.SERIALIZER);
         register(CancelEffectsTrait.SERIALIZER);
         register(SelfRepairTrait.SERIALIZER);
         register(StellarTrait.SERIALIZER);
@@ -50,15 +42,6 @@ public final class TraitSerializers {
     }
 
     private TraitSerializers() {}
-
-    public static <S extends ITraitConditionSerializer<T>, T extends ITraitCondition> S registerCondition(S serializer) {
-        if (CONDITIONS.containsKey(serializer.getId())) {
-            throw new IllegalArgumentException("Duplicate trait condition serializer " + serializer.getId());
-        }
-        SilentGear.LOGGER.info(TraitManager.MARKER, "Registered condition serializer '{}'", serializer.getId());
-        CONDITIONS.put(serializer.getId(), serializer);
-        return serializer;
-    }
 
     public static <S extends ITraitSerializer<T>, T extends ITrait> S register(S serializer) {
         if (REGISTRY.containsKey(serializer.getName())) {
@@ -76,31 +59,6 @@ public final class TraitSerializers {
             throw new JsonSyntaxException("Unknown trait condition type: " + type);
         }
         return serializer.deserialize(json);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends ITraitCondition> JsonObject serializeCondition(T condition) {
-        ITraitConditionSerializer<T> serializer = (ITraitConditionSerializer<T>) CONDITIONS.get(condition.getId());
-        if (serializer == null) {
-            throw new JsonSyntaxException("Unknown trait condition type: " + condition.getId());
-        }
-        return serializer.serialize(condition);
-    }
-
-    public static ITraitCondition readCondition(FriendlyByteBuf buffer) {
-        ResourceLocation type = buffer.readResourceLocation();
-        ITraitConditionSerializer<?> serializer = CONDITIONS.get(type);
-        if (serializer == null) {
-            throw new IllegalArgumentException("Unknown trait condition type: " + type);
-        }
-        return serializer.read(buffer);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends ITraitCondition> void writeCondition(T condition, FriendlyByteBuf buffer) {
-        ITraitConditionSerializer<T> serializer = (ITraitConditionSerializer<T>) condition.getSerializer();
-        buffer.writeResourceLocation(serializer.getId());
-        serializer.write(condition, buffer);
     }
 
     public static ITrait deserialize(ResourceLocation id, JsonObject json) {

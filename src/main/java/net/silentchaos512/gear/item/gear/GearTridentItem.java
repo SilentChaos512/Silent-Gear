@@ -56,7 +56,7 @@ public class GearTridentItem extends TridentItem implements ICoreWeapon {
 
     @Override
     public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantability(stack);
+        return GearHelper.getEnchantmentValue(stack);
     }
 
     @Override

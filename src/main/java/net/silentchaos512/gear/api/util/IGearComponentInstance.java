@@ -22,8 +22,6 @@ public interface IGearComponentInstance<T extends IGearComponent<?>> {
 
     ItemStack getItem();
 
-    MaterialList getMaterials();
-
     Tier getHarvestTier();
 
     float getStat(PartType partType, StatGearKey key, ItemStack gear);
@@ -56,17 +54,4 @@ public interface IGearComponentInstance<T extends IGearComponent<?>> {
     Component getDisplayName(PartType type, ItemStack gear);
 
     int getNameColor(PartType partType, GearType gearType);
-
-    default boolean containsMaterial(DataResource<IMaterial> materialIn) {
-        if (materialIn.isPresent()) {
-            for (IGearComponentInstance<IMaterial> mat : this.getMaterials()) {
-                IMaterial material = mat.get();
-                if (material != null && material.equals(materialIn.get())) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 }

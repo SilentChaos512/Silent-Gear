@@ -19,17 +19,13 @@
 package net.silentchaos512.gear.api.part;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-public final class PartDataList implements List<PartData> {
-    private final List<PartData> list = new ArrayList<>();
+public class PartDataList implements List<IPartData> {
+    final List<IPartData> list = new ArrayList<>();
 
     private PartDataList() {
     }
@@ -38,64 +34,49 @@ public final class PartDataList implements List<PartData> {
         return new PartDataList();
     }
 
-    public static PartDataList of(Collection<PartData> c) {
+    public static PartDataList of(Collection<IPartData> c) {
         PartDataList ret = new PartDataList();
         ret.list.addAll(c);
         return ret;
     }
 
-    public static PartDataList of(PartData... parts) {
+    public static PartDataList of(IPartData... parts) {
         PartDataList ret = new PartDataList();
         Collections.addAll(ret.list, parts);
         return ret;
     }
 
-    @Deprecated
-    public static PartDataList from(Collection<ItemStack> stacks) {
-        PartDataList ret = new PartDataList();
-        // Get part data for each stack, if it is a part. Silently ignore non-parts.
-        stacks.stream().map(PartData::from).filter(Objects::nonNull).forEach(ret.list::add);
+    public static PartDataList.Immutable immutable(Collection<? extends IPartData> c) {
+        PartDataList.Immutable ret = new Immutable();
+        ret.list.addAll(c);
         return ret;
     }
 
-    @Deprecated
-    public PartDataList getUniqueParts(boolean mainsOnly) {
-        PartDataList result = PartDataList.of();
-        for (PartData data : (mainsOnly ? getMains() : this.list)) {
-            if (result.stream().map(PartData::get).noneMatch(part -> part == data.get())) {
-                result.add(data);
-            }
-        }
-        return result;
+    public static PartDataList.Immutable immutable(IPartData... parts) {
+        PartDataList.Immutable ret = new Immutable();
+        Collections.addAll(ret.list, parts);
+        return ret;
     }
 
-    @Nullable
-    public PartData getPrimaryMain() {
-        for (PartData data : this.list)
-            if (data.getType() == PartType.MAIN)
-                return data;
-        return null;
+    public List<IPartData> getMains() {
+        return getPartsOfType(PartTypes.MAIN.get());
     }
 
-    public List<PartData> getMains() {
-        return getPartsOfType(PartType.MAIN);
+    public List<IPartData> getRods() {
+        return getPartsOfType(PartTypes.ROD.get());
     }
 
-    public List<PartData> getRods() {
-        return getPartsOfType(PartType.ROD);
+    public List<IPartData> getTips() {
+        return getPartsOfType(PartTypes.TIP.get());
     }
 
-    public List<PartData> getTips() {
-        return getPartsOfType(PartType.TIP);
-    }
-
-    public List<PartData> getPartsOfType(PartType type) {
+    public List<IPartData> getPartsOfType(PartType type) {
         return getParts(part -> part.getType() == type);
     }
 
-    public List<PartData> getParts(Predicate<PartData> predicate) {
-        ImmutableList.Builder<PartData> builder = ImmutableList.builder();
-        for (PartData partData : this.list) {
+    public List<IPartData> getParts(Predicate<IPartData> predicate) {
+        ImmutableList.Builder<IPartData> builder = ImmutableList.builder();
+        for (IPartData partData : this.list) {
             if (predicate.test(partData)) {
                 builder.add(partData);
             }
@@ -103,50 +84,25 @@ public final class PartDataList implements List<PartData> {
         return builder.build();
     }
 
-    /**
-     * Convenience method which wraps the part in {@link PartData} for you. Useful for ungraded
-     * parts and parts without a unique crafting stack.
-     *
-     * @param part The gear part
-     * @return {@code true} (as specified by {@link Collection#add})
-     */
-    @SuppressWarnings("UnusedReturnValue")
-    public boolean addPart(IGearPart part) {
-        return this.list.add(PartData.of(part));
-    }
-
-    public int getPartsWithTrait(ITrait trait) {
-        int count = 0;
-        for (PartData part : this) {
-            for (TraitInstance inst : part.getTraits()) {
-                if (inst.getTrait() == trait) {
-                    count++;
-                    break;
-                }
-            }
-        }
-        return count;
-    }
-
     //region List overrides
 
     @Override
-    public boolean add(PartData arg0) {
+    public boolean add(IPartData arg0) {
         return this.list.add(arg0);
     }
 
     @Override
-    public void add(int arg0, PartData arg1) {
+    public void add(int arg0, IPartData arg1) {
         this.list.add(arg0, arg1);
     }
 
     @Override
-    public boolean addAll(Collection<? extends PartData> arg0) {
+    public boolean addAll(Collection<? extends IPartData> arg0) {
         return this.list.addAll(arg0);
     }
 
     @Override
-    public boolean addAll(int arg0, Collection<? extends PartData> arg1) {
+    public boolean addAll(int arg0, Collection<? extends IPartData> arg1) {
         return this.list.addAll(arg0, arg1);
     }
 
@@ -166,7 +122,7 @@ public final class PartDataList implements List<PartData> {
     }
 
     @Override
-    public PartData get(int arg0) {
+    public IPartData get(int arg0) {
         return this.list.get(arg0);
     }
 
@@ -181,7 +137,7 @@ public final class PartDataList implements List<PartData> {
     }
 
     @Override
-    public Iterator<PartData> iterator() {
+    public Iterator<IPartData> iterator() {
         return this.list.iterator();
     }
 
@@ -191,12 +147,12 @@ public final class PartDataList implements List<PartData> {
     }
 
     @Override
-    public ListIterator<PartData> listIterator() {
+    public ListIterator<IPartData> listIterator() {
         return this.list.listIterator();
     }
 
     @Override
-    public ListIterator<PartData> listIterator(int arg0) {
+    public ListIterator<IPartData> listIterator(int arg0) {
         return this.list.listIterator(arg0);
     }
 
@@ -206,7 +162,7 @@ public final class PartDataList implements List<PartData> {
     }
 
     @Override
-    public PartData remove(int arg0) {
+    public IPartData remove(int arg0) {
         return this.list.remove(arg0);
     }
 
@@ -221,7 +177,7 @@ public final class PartDataList implements List<PartData> {
     }
 
     @Override
-    public PartData set(int arg0, PartData arg1) {
+    public IPartData set(int arg0, IPartData arg1) {
         return this.list.set(arg0, arg1);
     }
 
@@ -231,7 +187,7 @@ public final class PartDataList implements List<PartData> {
     }
 
     @Override
-    public List<PartData> subList(int arg0, int arg1) {
+    public List<IPartData> subList(int arg0, int arg1) {
         return this.list.subList(arg0, arg1);
     }
 
@@ -243,6 +199,58 @@ public final class PartDataList implements List<PartData> {
     @Override
     public <T> T[] toArray(T[] arg0) {
         return this.list.toArray(arg0);
+    }
+
+    public static class Immutable extends PartDataList {
+        @Override
+        public boolean add(IPartData arg0) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void add(int arg0, IPartData arg1) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends IPartData> arg0) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean addAll(int arg0, Collection<? extends IPartData> arg1) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean remove(Object arg0) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public IPartData remove(int arg0) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> arg0) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> arg0) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public IPartData set(int arg0, IPartData arg1) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     //endregion

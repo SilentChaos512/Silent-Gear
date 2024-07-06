@@ -32,7 +32,7 @@ public final class PartsProvider extends PartsProviderBase {
     public Collection<PartBuilder> getParts() {
         Collection<PartBuilder> ret = new ArrayList<>();
 
-        ret.add(part("adornment", GearType.CURIO, PartType.ADORNMENT, SgItems.ADORNMENT));
+        ret.add(part("adornment", GearType.CURIO, PartType.ADORNMENT, SgItems.SETTING));
         ret.add(part("binding", GearType.TOOL, PartType.BINDING, SgItems.BINDING));
         ret.add(part("bowstring", GearType.RANGED_WEAPON, PartType.CORD, SgItems.CORD));
         ret.add(part("coating", GearType.ALL, PartType.COATING, SgItems.COATING)

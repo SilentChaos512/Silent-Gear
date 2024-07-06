@@ -13,6 +13,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.GsonHelper;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.util.StatGearKey;
 
 import javax.annotation.Nonnull;
@@ -20,28 +21,28 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
+public class StatModifierMap implements Multimap<StatGearKey, GearProperty<?>> {
     public static final StatModifierMap EMPTY_STAT_MAP = new StatModifierMap();
 
-    private final Multimap<StatGearKey, StatInstance> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
+    private final Multimap<StatGearKey, GearProperty<?>> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
-    public static MutableComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces) {
+    public static MutableComponent formatText(Collection<GearProperty<?>> mods, ItemStat stat, int maxDecimalPlaces) {
         return formatText(mods, stat, maxDecimalPlaces, false);
     }
 
-    public static MutableComponent formatText(Collection<StatInstance> mods, ItemStat stat, int maxDecimalPlaces, boolean addModColors) {
+    public static MutableComponent formatText(Collection<GearProperty<?>> mods, ItemStat stat, int maxDecimalPlaces, boolean addModColors) {
         if (mods.size() == 1) {
-            StatInstance inst = mods.iterator().next();
+            GearProperty<?> inst = mods.iterator().next();
             int decimalPlaces = inst.getPreferredDecimalPlaces(stat, maxDecimalPlaces);
             return inst.getFormattedText(stat, decimalPlaces, addModColors);
         }
 
         // Sort modifiers by operation
         MutableComponent result = Component.literal("");
-        List<StatInstance> toSort = new ArrayList<>(mods);
+        List<GearProperty<?>> toSort = new ArrayList<>(mods);
         toSort.sort(Comparator.comparing(inst -> inst.getOp().ordinal()));
 
-        for (StatInstance inst : toSort) {
+        for (GearProperty<?> inst : toSort) {
             if (!result.getSiblings().isEmpty()) {
                 result.append(", ");
             }
@@ -91,7 +92,7 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
     }
 
     @Override
-    public boolean put(@Nullable StatGearKey key, @Nullable StatInstance value) {
+    public boolean put(@Nullable StatGearKey key, @Nullable GearProperty<?> value) {
         return this.map.put(key, value);
     }
 
@@ -101,22 +102,22 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
     }
 
     @Override
-    public boolean putAll(@Nullable StatGearKey key, @Nonnull Iterable<? extends StatInstance> values) {
+    public boolean putAll(@Nullable StatGearKey key, @Nonnull Iterable<? extends GearProperty<?>> values) {
         return this.map.putAll(key, values);
     }
 
     @Override
-    public boolean putAll(@Nonnull Multimap<? extends StatGearKey, ? extends StatInstance> multimap) {
+    public boolean putAll(@Nonnull Multimap<? extends StatGearKey, ? extends GearProperty<?>> multimap) {
         return this.map.putAll(multimap);
     }
 
     @Override
-    public Collection<StatInstance> replaceValues(@Nullable StatGearKey key, @Nonnull Iterable<? extends StatInstance> values) {
+    public Collection<GearProperty<?>> replaceValues(@Nullable StatGearKey key, @Nonnull Iterable<? extends GearProperty<?>> values) {
         return this.map.replaceValues(key, values);
     }
 
     @Override
-    public Collection<StatInstance> removeAll(@Nullable Object key) {
+    public Collection<GearProperty<?>> removeAll(@Nullable Object key) {
         return this.map.removeAll(key);
     }
 
@@ -125,12 +126,12 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
         this.map.clear();
     }
 
-    public Collection<StatInstance> get(IItemStat stat, GearType gearType) {
+    public Collection<GearProperty<?>> get(IItemStat stat, GearType gearType) {
         return get(StatGearKey.of(stat, gearType));
     }
 
     @Override
-    public Collection<StatInstance> get(@Nullable StatGearKey key) {
+    public Collection<GearProperty<?>> get(@Nullable StatGearKey key) {
         if (key == null || this.map.containsKey(key)) {
             return this.map.get(key);
         }
@@ -173,17 +174,17 @@ public class StatModifierMap implements Multimap<StatGearKey, StatInstance> {
     }
 
     @Override
-    public Collection<StatInstance> values() {
+    public Collection<GearProperty<?>> values() {
         return this.map.values();
     }
 
     @Override
-    public Collection<Entry<StatGearKey, StatInstance>> entries() {
+    public Collection<Entry<StatGearKey, GearProperty<?>>> entries() {
         return this.map.entries();
     }
 
     @Override
-    public Map<StatGearKey, Collection<StatInstance>> asMap() {
+    public Map<StatGearKey, Collection<GearProperty<?>>> asMap() {
         return this.map.asMap();
     }
 

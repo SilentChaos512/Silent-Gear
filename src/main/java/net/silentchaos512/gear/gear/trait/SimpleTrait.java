@@ -6,6 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -20,10 +24,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.api.traits.ITraitCondition;
-import net.silentchaos512.gear.api.traits.ITraitSerializer;
-import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.api.traits.*;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -32,26 +33,29 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SimpleTrait implements ITrait {
-    public static final Serializer<SimpleTrait> SERIALIZER = new Serializer<>(ApiConst.SIMPLE_TRAIT_ID, SimpleTrait::new);
+    public static final Serializer SERIALIZER = new Serializer(ApiConst.SIMPLE_TRAIT_ID, SimpleTrait::new);
 
-    private final ResourceLocation objId;
-    private final ITraitSerializer<?> serializer;
-    int maxLevel;
-    ImmutableList<ITraitCondition> conditions = ImmutableList.of();
-    Set<String> cancelsWith = new HashSet<>();
-    Component displayName;
-    Component description;
-    boolean hidden;
-    final Collection<Component> wikiLines = new ArrayList<>();
+    private final int maxLevel;
+    private final Component displayName;
+    private final Component description;
+    private final List<TraitEffect> effects = new ArrayList<>();
+    private final List<ITraitCondition> conditions = new ArrayList<>();
+    private final List<Component> wikiLines = new ArrayList<>();
 
-    @Deprecated
-    public SimpleTrait(ResourceLocation id) {
-        this(id, SERIALIZER);
-    }
-
-    public SimpleTrait(ResourceLocation id, ITraitSerializer<?> serializer) {
-        this.objId = id;
-        this.serializer = serializer;
+    public SimpleTrait(
+            int maxLevel,
+            Component displayName,
+            Component description,
+            List<TraitEffect> effects,
+            List<ITraitCondition> conditions,
+            List<Component> wikiLines
+    ) {
+        this.maxLevel = maxLevel;
+        this.displayName = displayName;
+        this.description = description;
+        this.effects.addAll(effects);
+        this.conditions.addAll(conditions);
+        this.wikiLines.addAll(wikiLines);
     }
 
     @Override
@@ -184,27 +188,19 @@ public class SimpleTrait implements ITrait {
         return Objects.hash(objId);
     }
 
-    public static final class Serializer<T extends SimpleTrait> implements ITraitSerializer<T> {
-        private final ResourceLocation serializerId;
-        private final Function<ResourceLocation, T> factory;
-        @Nullable private final BiConsumer<T, JsonObject> deserializeJson;
-        @Nullable private final BiConsumer<T, FriendlyByteBuf> readFromNetwork;
-        @Nullable private final BiConsumer<T, FriendlyByteBuf> writeToNetwork;
+    public static final class Serializer implements ITraitSerializer<SimpleTrait> {
+        private final Codec<SimpleTrait> CODEC = RecordCodecBuilder.create(
+                instance -> instance.group(
+                        ExtraCodecs.POSITIVE_INT.fieldOf("max_level").forGetter(t -> t.maxLevel),
+                        ComponentSerialization.CODEC.fieldOf("name").forGetter(t -> t.displayName),
+                        ComponentSerialization.CODEC.fieldOf("description").forGetter(t -> t.description),
+                        Codec.list(TraitEffect.CODEC).fieldOf("effects").forGetter(t -> Optional.of(t.effects)),
+                        Codec.list(ITraitCondition.CODEC).optionalFieldOf("conditions").forGetter(t -> Optional.of(t.conditions)),
+                        Codec.list(ComponentSerialization.CODEC).optionalFieldOf("extra_wiki_lines").forGetter(t -> Optional.of(t.wikiLines))
+                ).apply(instance, SimpleTrait::new)
+        );
 
-        public Serializer(ResourceLocation serializerId, Function<ResourceLocation, T> factory) {
-            this(serializerId, factory, null, null, null);
-        }
-
-        public Serializer(ResourceLocation serializerId,
-                          Function<ResourceLocation, T> factory,
-                          @Nullable BiConsumer<T, JsonObject> deserializeJson,
-                          @Nullable BiConsumer<T, FriendlyByteBuf> readFromNetwork,
-                          @Nullable BiConsumer<T, FriendlyByteBuf> writeToNetwork) {
-            this.serializerId = serializerId;
-            this.factory = factory;
-            this.deserializeJson = deserializeJson;
-            this.readFromNetwork = readFromNetwork;
-            this.writeToNetwork = writeToNetwork;
+        public Serializer(ResourceLocation serializerId) {
         }
 
         @Override

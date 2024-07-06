@@ -2,6 +2,9 @@ package net.silentchaos512.gear.gear.material;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 
 import java.util.HashMap;
@@ -41,5 +44,10 @@ public enum MaterialCategories implements IMaterialCategory {
     public static final Codec<IMaterialCategory> CODEC = Codec.STRING.flatXmap(
             s -> DataResult.success(get(s)),
             cat -> DataResult.success(cat.getName())
+    );
+
+    public static final StreamCodec<FriendlyByteBuf, IMaterialCategory> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8, IMaterialCategory::getName,
+            MaterialCategories::get
     );
 }

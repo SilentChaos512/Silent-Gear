@@ -17,6 +17,8 @@ import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.item.gear.*;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.util.TimeUtils;
 
 import javax.annotation.Nullable;
@@ -68,175 +70,175 @@ public final class SgItems {
             new BlueprintBookItem(unstackableProps().rarity(Rarity.UNCOMMON)));
     // Blueprints
     public static final DeferredItem<PartBlueprintItem> JEWELER_TOOLS = register("jeweler_tools", () ->
-            new JewelerKitItem(PartType.ADORNMENT, false, unstackableProps()));
-    public static final DeferredItem<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartType.ROD, false);
-    public static final DeferredItem<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartType.TIP, false);
-    public static final DeferredItem<PartBlueprintItem> COATING_BLUEPRINT = registerPartBlueprint(PartType.COATING, false);
-    public static final DeferredItem<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartType.GRIP, false);
-    public static final DeferredItem<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartType.BINDING, false);
-    public static final DeferredItem<PartBlueprintItem> LINING_BLUEPRINT = registerPartBlueprint(PartType.LINING, false);
-    public static final DeferredItem<PartBlueprintItem> CORD_BLUEPRINT = registerPartBlueprint(PartType.CORD, false);
-    public static final DeferredItem<PartBlueprintItem> FLETCHING_BLUEPRINT = registerPartBlueprint(PartType.FLETCHING, false);
-    public static final DeferredItem<GearBlueprintItem> SWORD_BLUEPRINT = registerGearBlueprint(GearType.SWORD, false);
-    public static final DeferredItem<GearBlueprintItem> KATANA_BLUEPRINT = registerGearBlueprint(GearType.KATANA, false);
-    public static final DeferredItem<GearBlueprintItem> MACHETE_BLUEPRINT = registerGearBlueprint(GearType.MACHETE, false);
-    public static final DeferredItem<GearBlueprintItem> SPEAR_BLUEPRINT = registerGearBlueprint(GearType.SPEAR, false);
-    public static final DeferredItem<GearBlueprintItem> TRIDENT_BLUEPRINT = registerGearBlueprint(GearType.TRIDENT, false);
-    public static final DeferredItem<GearBlueprintItem> KNIFE_BLUEPRINT = registerGearBlueprint(GearType.KNIFE, false);
-    public static final DeferredItem<GearBlueprintItem> DAGGER_BLUEPRINT = registerGearBlueprint(GearType.DAGGER, false);
-    public static final DeferredItem<GearBlueprintItem> PICKAXE_BLUEPRINT = registerGearBlueprint(GearType.PICKAXE, false);
-    public static final DeferredItem<GearBlueprintItem> SHOVEL_BLUEPRINT = registerGearBlueprint(GearType.SHOVEL, false);
-    public static final DeferredItem<GearBlueprintItem> AXE_BLUEPRINT = registerGearBlueprint(GearType.AXE, false);
-    public static final DeferredItem<GearBlueprintItem> PAXEL_BLUEPRINT = registerGearBlueprint(GearType.PAXEL, false);
-    public static final DeferredItem<GearBlueprintItem> HAMMER_BLUEPRINT = registerGearBlueprint(GearType.HAMMER, false);
-    public static final DeferredItem<GearBlueprintItem> EXCAVATOR_BLUEPRINT = registerGearBlueprint(GearType.EXCAVATOR, false);
-    public static final DeferredItem<GearBlueprintItem> SAW_BLUEPRINT = registerGearBlueprint(GearType.SAW, false);
-    public static final DeferredItem<GearBlueprintItem> HOE_BLUEPRINT = registerGearBlueprint(GearType.HOE, false);
-    public static final DeferredItem<GearBlueprintItem> MATTOCK_BLUEPRINT = registerGearBlueprint(GearType.MATTOCK, false);
-    public static final DeferredItem<GearBlueprintItem> PROSPECTOR_HAMMER_BLUEPRINT = registerGearBlueprint(GearType.PROSPECTOR_HAMMER, false);
-    public static final DeferredItem<GearBlueprintItem> SICKLE_BLUEPRINT = registerGearBlueprint(GearType.SICKLE, false);
-    public static final DeferredItem<GearBlueprintItem> SHEARS_BLUEPRINT = registerGearBlueprint(GearType.SHEARS, false);
-    public static final DeferredItem<GearBlueprintItem> FISHING_ROD_BLUEPRINT = registerGearBlueprint(GearType.FISHING_ROD, false);
-    public static final DeferredItem<GearBlueprintItem> BOW_BLUEPRINT = registerGearBlueprint(GearType.BOW, false);
-    public static final DeferredItem<GearBlueprintItem> CROSSBOW_BLUEPRINT = registerGearBlueprint(GearType.CROSSBOW, false);
-    public static final DeferredItem<GearBlueprintItem> SLINGSHOT_BLUEPRINT = registerGearBlueprint(GearType.SLINGSHOT, false);
-    public static final DeferredItem<GearBlueprintItem> SHIELD_BLUEPRINT = registerGearBlueprint(GearType.SHIELD, false);
-    public static final DeferredItem<GearBlueprintItem> HELMET_BLUEPRINT = registerGearBlueprint(GearType.HELMET, false);
-    public static final DeferredItem<GearBlueprintItem> CHESTPLATE_BLUEPRINT = registerGearBlueprint(GearType.CHESTPLATE, false);
-    public static final DeferredItem<GearBlueprintItem> LEGGINGS_BLUEPRINT = registerGearBlueprint(GearType.LEGGINGS, false);
-    public static final DeferredItem<GearBlueprintItem> BOOTS_BLUEPRINT = registerGearBlueprint(GearType.BOOTS, false);
-    public static final DeferredItem<GearBlueprintItem> ELYTRA_BLUEPRINT = registerGearBlueprint(GearType.ELYTRA, false);
-    public static final DeferredItem<GearBlueprintItem> ARROW_BLUEPRINT = registerGearBlueprint(GearType.ARROW, false);
-    public static final DeferredItem<GearBlueprintItem> RING_BLUEPRINT = registerGearBlueprint(GearType.RING, false);
-    public static final DeferredItem<GearBlueprintItem> BRACELET_BLUEPRINT = registerGearBlueprint(GearType.BRACELET, false);
+            new JewelerKitItem(PartTypes.SETTING.get(), false, unstackableProps()));
+    public static final DeferredItem<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartTypes.ROD.get(), false);
+    public static final DeferredItem<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartTypes.TIP.get(), false);
+    public static final DeferredItem<PartBlueprintItem> COATING_BLUEPRINT = registerPartBlueprint(PartTypes.COATING.get(), false);
+    public static final DeferredItem<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartTypes.GRIP.get(), false);
+    public static final DeferredItem<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartTypes.BINDING.get(), false);
+    public static final DeferredItem<PartBlueprintItem> LINING_BLUEPRINT = registerPartBlueprint(PartTypes.LINING.get(), false);
+    public static final DeferredItem<PartBlueprintItem> CORD_BLUEPRINT = registerPartBlueprint(PartTypes.CORD.get(), false);
+    public static final DeferredItem<PartBlueprintItem> FLETCHING_BLUEPRINT = registerPartBlueprint(PartTypes.FLETCHING.get(), false);
+    public static final DeferredItem<GearBlueprintItem> SWORD_BLUEPRINT = registerGearBlueprint(GearTypes.SWORD.get(), false);
+    public static final DeferredItem<GearBlueprintItem> KATANA_BLUEPRINT = registerGearBlueprint(GearTypes.KATANA.get(), false);
+    public static final DeferredItem<GearBlueprintItem> MACHETE_BLUEPRINT = registerGearBlueprint(GearTypes.MACHETE.get(), false);
+    public static final DeferredItem<GearBlueprintItem> SPEAR_BLUEPRINT = registerGearBlueprint(GearTypes.SPEAR.get(), false);
+    public static final DeferredItem<GearBlueprintItem> TRIDENT_BLUEPRINT = registerGearBlueprint(GearTypes.TRIDENT.get(), false);
+    public static final DeferredItem<GearBlueprintItem> KNIFE_BLUEPRINT = registerGearBlueprint(GearTypes.KNIFE.get(), false);
+    public static final DeferredItem<GearBlueprintItem> DAGGER_BLUEPRINT = registerGearBlueprint(GearTypes.DAGGER.get(), false);
+    public static final DeferredItem<GearBlueprintItem> PICKAXE_BLUEPRINT = registerGearBlueprint(GearTypes.PICKAXE.get(), false);
+    public static final DeferredItem<GearBlueprintItem> SHOVEL_BLUEPRINT = registerGearBlueprint(GearTypes.SHOVEL.get(), false);
+    public static final DeferredItem<GearBlueprintItem> AXE_BLUEPRINT = registerGearBlueprint(GearTypes.AXE.get(), false);
+    public static final DeferredItem<GearBlueprintItem> PAXEL_BLUEPRINT = registerGearBlueprint(GearTypes.PAXEL.get(), false);
+    public static final DeferredItem<GearBlueprintItem> HAMMER_BLUEPRINT = registerGearBlueprint(GearTypes.HAMMER.get(), false);
+    public static final DeferredItem<GearBlueprintItem> EXCAVATOR_BLUEPRINT = registerGearBlueprint(GearTypes.EXCAVATOR.get(), false);
+    public static final DeferredItem<GearBlueprintItem> SAW_BLUEPRINT = registerGearBlueprint(GearTypes.SAW.get(), false);
+    public static final DeferredItem<GearBlueprintItem> HOE_BLUEPRINT = registerGearBlueprint(GearTypes.HOE.get(), false);
+    public static final DeferredItem<GearBlueprintItem> MATTOCK_BLUEPRINT = registerGearBlueprint(GearTypes.MATTOCK.get(), false);
+    public static final DeferredItem<GearBlueprintItem> PROSPECTOR_HAMMER_BLUEPRINT = registerGearBlueprint(GearTypes.PROSPECTOR_HAMMER.get(), false);
+    public static final DeferredItem<GearBlueprintItem> SICKLE_BLUEPRINT = registerGearBlueprint(GearTypes.SICKLE.get(), false);
+    public static final DeferredItem<GearBlueprintItem> SHEARS_BLUEPRINT = registerGearBlueprint(GearTypes.SHEARS.get(), false);
+    public static final DeferredItem<GearBlueprintItem> FISHING_ROD_BLUEPRINT = registerGearBlueprint(GearTypes.FISHING_ROD.get(), false);
+    public static final DeferredItem<GearBlueprintItem> BOW_BLUEPRINT = registerGearBlueprint(GearTypes.BOW.get(), false);
+    public static final DeferredItem<GearBlueprintItem> CROSSBOW_BLUEPRINT = registerGearBlueprint(GearTypes.CROSSBOW.get(), false);
+    public static final DeferredItem<GearBlueprintItem> SLINGSHOT_BLUEPRINT = registerGearBlueprint(GearTypes.SLINGSHOT.get(), false);
+    public static final DeferredItem<GearBlueprintItem> SHIELD_BLUEPRINT = registerGearBlueprint(GearTypes.SHIELD.get(), false);
+    public static final DeferredItem<GearBlueprintItem> HELMET_BLUEPRINT = registerGearBlueprint(GearTypes.HELMET.get(), false);
+    public static final DeferredItem<GearBlueprintItem> CHESTPLATE_BLUEPRINT = registerGearBlueprint(GearTypes.CHESTPLATE.get(), false);
+    public static final DeferredItem<GearBlueprintItem> LEGGINGS_BLUEPRINT = registerGearBlueprint(GearTypes.LEGGINGS.get(), false);
+    public static final DeferredItem<GearBlueprintItem> BOOTS_BLUEPRINT = registerGearBlueprint(GearTypes.BOOTS.get(), false);
+    public static final DeferredItem<GearBlueprintItem> ELYTRA_BLUEPRINT = registerGearBlueprint(GearTypes.ELYTRA.get(), false);
+    public static final DeferredItem<GearBlueprintItem> ARROW_BLUEPRINT = registerGearBlueprint(GearTypes.ARROW.get(), false);
+    public static final DeferredItem<GearBlueprintItem> RING_BLUEPRINT = registerGearBlueprint(GearTypes.RING.get(), false);
+    public static final DeferredItem<GearBlueprintItem> BRACELET_BLUEPRINT = registerGearBlueprint(GearTypes.BRACELET.get(), false);
     // Templates
-    public static final DeferredItem<PartBlueprintItem> ROD_TEMPLATE = registerPartBlueprint(PartType.ROD, true);
-    public static final DeferredItem<PartBlueprintItem> TIP_TEMPLATE = registerPartBlueprint(PartType.TIP, true);
-    public static final DeferredItem<PartBlueprintItem> COATING_TEMPLATE = registerPartBlueprint(PartType.COATING, true);
-    public static final DeferredItem<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartType.GRIP, true);
-    public static final DeferredItem<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartType.BINDING, true);
-    public static final DeferredItem<PartBlueprintItem> LINING_TEMPLATE = registerPartBlueprint(PartType.LINING, true);
-    public static final DeferredItem<PartBlueprintItem> CORD_TEMPLATE = registerPartBlueprint(PartType.CORD, true);
-    public static final DeferredItem<PartBlueprintItem> FLETCHING_TEMPLATE = registerPartBlueprint(PartType.FLETCHING, true);
-    public static final DeferredItem<GearBlueprintItem> SWORD_TEMPLATE = registerGearBlueprint(GearType.SWORD, true);
-    public static final DeferredItem<GearBlueprintItem> KATANA_TEMPLATE = registerGearBlueprint(GearType.KATANA, true);
-    public static final DeferredItem<GearBlueprintItem> MACHETE_TEMPLATE = registerGearBlueprint(GearType.MACHETE, true);
-    public static final DeferredItem<GearBlueprintItem> SPEAR_TEMPLATE = registerGearBlueprint(GearType.SPEAR, true);
-    public static final DeferredItem<GearBlueprintItem> TRIDENT_TEMPLATE = registerGearBlueprint(GearType.TRIDENT, true);
-    public static final DeferredItem<GearBlueprintItem> KNIFE_TEMPLATE = registerGearBlueprint(GearType.KNIFE, true);
-    public static final DeferredItem<GearBlueprintItem> DAGGER_TEMPLATE = registerGearBlueprint(GearType.DAGGER, true);
-    public static final DeferredItem<GearBlueprintItem> PICKAXE_TEMPLATE = registerGearBlueprint(GearType.PICKAXE, true);
-    public static final DeferredItem<GearBlueprintItem> SHOVEL_TEMPLATE = registerGearBlueprint(GearType.SHOVEL, true);
-    public static final DeferredItem<GearBlueprintItem> AXE_TEMPLATE = registerGearBlueprint(GearType.AXE, true);
-    public static final DeferredItem<GearBlueprintItem> PAXEL_TEMPLATE = registerGearBlueprint(GearType.PAXEL, true);
-    public static final DeferredItem<GearBlueprintItem> HAMMER_TEMPLATE = registerGearBlueprint(GearType.HAMMER, true);
-    public static final DeferredItem<GearBlueprintItem> EXCAVATOR_TEMPLATE = registerGearBlueprint(GearType.EXCAVATOR, true);
-    public static final DeferredItem<GearBlueprintItem> SAW_TEMPLATE = registerGearBlueprint(GearType.SAW, true);
-    public static final DeferredItem<GearBlueprintItem> HOE_TEMPLATE = registerGearBlueprint(GearType.HOE, true);
-    public static final DeferredItem<GearBlueprintItem> MATTOCK_TEMPLATE = registerGearBlueprint(GearType.MATTOCK, true);
-    public static final DeferredItem<GearBlueprintItem> PROSPECTOR_HAMMER_TEMPLATE = registerGearBlueprint(GearType.PROSPECTOR_HAMMER, true);
-    public static final DeferredItem<GearBlueprintItem> SICKLE_TEMPLATE = registerGearBlueprint(GearType.SICKLE, true);
-    public static final DeferredItem<GearBlueprintItem> SHEARS_TEMPLATE = registerGearBlueprint(GearType.SHEARS, true);
-    public static final DeferredItem<GearBlueprintItem> FISHING_ROD_TEMPLATE = registerGearBlueprint(GearType.FISHING_ROD, true);
-    public static final DeferredItem<GearBlueprintItem> BOW_TEMPLATE = registerGearBlueprint(GearType.BOW, true);
-    public static final DeferredItem<GearBlueprintItem> CROSSBOW_TEMPLATE = registerGearBlueprint(GearType.CROSSBOW, true);
-    public static final DeferredItem<GearBlueprintItem> SLINGSHOT_TEMPLATE = registerGearBlueprint(GearType.SLINGSHOT, true);
-    public static final DeferredItem<GearBlueprintItem> SHIELD_TEMPLATE = registerGearBlueprint(GearType.SHIELD, true);
-    public static final DeferredItem<GearBlueprintItem> HELMET_TEMPLATE = registerGearBlueprint(GearType.HELMET, true);
-    public static final DeferredItem<GearBlueprintItem> CHESTPLATE_TEMPLATE = registerGearBlueprint(GearType.CHESTPLATE, true);
-    public static final DeferredItem<GearBlueprintItem> LEGGINGS_TEMPLATE = registerGearBlueprint(GearType.LEGGINGS, true);
-    public static final DeferredItem<GearBlueprintItem> BOOTS_TEMPLATE = registerGearBlueprint(GearType.BOOTS, true);
-    public static final DeferredItem<GearBlueprintItem> ELYTRA_TEMPLATE = registerGearBlueprint(GearType.ELYTRA, true);
-    public static final DeferredItem<GearBlueprintItem> ARROW_TEMPLATE = registerGearBlueprint(GearType.ARROW, true);
-    public static final DeferredItem<GearBlueprintItem> RING_TEMPLATE = registerGearBlueprint(GearType.RING, true);
-    public static final DeferredItem<GearBlueprintItem> BRACELET_TEMPLATE = registerGearBlueprint(GearType.BRACELET, true);
+    public static final DeferredItem<PartBlueprintItem> ROD_TEMPLATE = registerPartBlueprint(PartTypes.ROD.get(), true);
+    public static final DeferredItem<PartBlueprintItem> TIP_TEMPLATE = registerPartBlueprint(PartTypes.TIP.get(), true);
+    public static final DeferredItem<PartBlueprintItem> COATING_TEMPLATE = registerPartBlueprint(PartTypes.COATING.get(), true);
+    public static final DeferredItem<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartTypes.GRIP.get(), true);
+    public static final DeferredItem<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartTypes.BINDING.get(), true);
+    public static final DeferredItem<PartBlueprintItem> LINING_TEMPLATE = registerPartBlueprint(PartTypes.LINING.get(), true);
+    public static final DeferredItem<PartBlueprintItem> CORD_TEMPLATE = registerPartBlueprint(PartTypes.CORD.get(), true);
+    public static final DeferredItem<PartBlueprintItem> FLETCHING_TEMPLATE = registerPartBlueprint(PartTypes.FLETCHING.get(), true);
+    public static final DeferredItem<GearBlueprintItem> SWORD_TEMPLATE = registerGearBlueprint(GearTypes.SWORD.get(), true);
+    public static final DeferredItem<GearBlueprintItem> KATANA_TEMPLATE = registerGearBlueprint(GearTypes.KATANA.get(), true);
+    public static final DeferredItem<GearBlueprintItem> MACHETE_TEMPLATE = registerGearBlueprint(GearTypes.MACHETE.get(), true);
+    public static final DeferredItem<GearBlueprintItem> SPEAR_TEMPLATE = registerGearBlueprint(GearTypes.SPEAR.get(), true);
+    public static final DeferredItem<GearBlueprintItem> TRIDENT_TEMPLATE = registerGearBlueprint(GearTypes.TRIDENT.get(), true);
+    public static final DeferredItem<GearBlueprintItem> KNIFE_TEMPLATE = registerGearBlueprint(GearTypes.KNIFE.get(), true);
+    public static final DeferredItem<GearBlueprintItem> DAGGER_TEMPLATE = registerGearBlueprint(GearTypes.DAGGER.get(), true);
+    public static final DeferredItem<GearBlueprintItem> PICKAXE_TEMPLATE = registerGearBlueprint(GearTypes.PICKAXE.get(), true);
+    public static final DeferredItem<GearBlueprintItem> SHOVEL_TEMPLATE = registerGearBlueprint(GearTypes.SHOVEL.get(), true);
+    public static final DeferredItem<GearBlueprintItem> AXE_TEMPLATE = registerGearBlueprint(GearTypes.AXE.get(), true);
+    public static final DeferredItem<GearBlueprintItem> PAXEL_TEMPLATE = registerGearBlueprint(GearTypes.PAXEL.get(), true);
+    public static final DeferredItem<GearBlueprintItem> HAMMER_TEMPLATE = registerGearBlueprint(GearTypes.HAMMER.get(), true);
+    public static final DeferredItem<GearBlueprintItem> EXCAVATOR_TEMPLATE = registerGearBlueprint(GearTypes.EXCAVATOR.get(), true);
+    public static final DeferredItem<GearBlueprintItem> SAW_TEMPLATE = registerGearBlueprint(GearTypes.SAW.get(), true);
+    public static final DeferredItem<GearBlueprintItem> HOE_TEMPLATE = registerGearBlueprint(GearTypes.HOE.get(), true);
+    public static final DeferredItem<GearBlueprintItem> MATTOCK_TEMPLATE = registerGearBlueprint(GearTypes.MATTOCK.get(), true);
+    public static final DeferredItem<GearBlueprintItem> PROSPECTOR_HAMMER_TEMPLATE = registerGearBlueprint(GearTypes.PROSPECTOR_HAMMER.get(), true);
+    public static final DeferredItem<GearBlueprintItem> SICKLE_TEMPLATE = registerGearBlueprint(GearTypes.SICKLE.get(), true);
+    public static final DeferredItem<GearBlueprintItem> SHEARS_TEMPLATE = registerGearBlueprint(GearTypes.SHEARS.get(), true);
+    public static final DeferredItem<GearBlueprintItem> FISHING_ROD_TEMPLATE = registerGearBlueprint(GearTypes.FISHING_ROD.get(), true);
+    public static final DeferredItem<GearBlueprintItem> BOW_TEMPLATE = registerGearBlueprint(GearTypes.BOW.get(), true);
+    public static final DeferredItem<GearBlueprintItem> CROSSBOW_TEMPLATE = registerGearBlueprint(GearTypes.CROSSBOW.get(), true);
+    public static final DeferredItem<GearBlueprintItem> SLINGSHOT_TEMPLATE = registerGearBlueprint(GearTypes.SLINGSHOT.get(), true);
+    public static final DeferredItem<GearBlueprintItem> SHIELD_TEMPLATE = registerGearBlueprint(GearTypes.SHIELD.get(), true);
+    public static final DeferredItem<GearBlueprintItem> HELMET_TEMPLATE = registerGearBlueprint(GearTypes.HELMET.get(), true);
+    public static final DeferredItem<GearBlueprintItem> CHESTPLATE_TEMPLATE = registerGearBlueprint(GearTypes.CHESTPLATE.get(), true);
+    public static final DeferredItem<GearBlueprintItem> LEGGINGS_TEMPLATE = registerGearBlueprint(GearTypes.LEGGINGS.get(), true);
+    public static final DeferredItem<GearBlueprintItem> BOOTS_TEMPLATE = registerGearBlueprint(GearTypes.BOOTS.get(), true);
+    public static final DeferredItem<GearBlueprintItem> ELYTRA_TEMPLATE = registerGearBlueprint(GearTypes.ELYTRA.get(), true);
+    public static final DeferredItem<GearBlueprintItem> ARROW_TEMPLATE = registerGearBlueprint(GearTypes.ARROW.get(), true);
+    public static final DeferredItem<GearBlueprintItem> RING_TEMPLATE = registerGearBlueprint(GearTypes.RING.get(), true);
+    public static final DeferredItem<GearBlueprintItem> BRACELET_TEMPLATE = registerGearBlueprint(GearTypes.BRACELET.get(), true);
     //endregion
 
     //region Compound Parts and Tool Heads
     // Tool Heads
     public static final DeferredItem<MainPartItem> SWORD_BLADE = registerCompoundPart("sword_blade", () ->
-            new MainPartItem(GearType.SWORD, unstackableProps()));
+            new MainPartItem(GearTypes.SWORD.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> KATANA_BLADE = registerCompoundPart("katana_blade", () ->
-            new MainPartItem(GearType.KATANA, unstackableProps()));
+            new MainPartItem(GearTypes.KATANA.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> MACHETE_BLADE = registerCompoundPart("machete_blade", () ->
-            new MainPartItem(GearType.MACHETE, unstackableProps()));
+            new MainPartItem(GearTypes.MACHETE.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> SPEAR_TIP = registerCompoundPart("spear_tip", () ->
-            new MainPartItem(GearType.SPEAR, unstackableProps()));
+            new MainPartItem(GearTypes.SPEAR.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> TRIDENT_PRONGS = registerCompoundPart("trident_prongs", () ->
-            new MainPartItem(GearType.TRIDENT, unstackableProps()));
+            new MainPartItem(GearTypes.TRIDENT.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> KNIFE_BLADE = registerCompoundPart("knife_blade", () ->
-            new MainPartItem(GearType.KNIFE, unstackableProps()));
+            new MainPartItem(GearTypes.KNIFE.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> DAGGER_BLADE = registerCompoundPart("dagger_blade", () ->
-            new MainPartItem(GearType.DAGGER, unstackableProps()));
+            new MainPartItem(GearTypes.DAGGER.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> PICKAXE_HEAD = registerCompoundPart("pickaxe_head", () ->
-            new MainPartItem(GearType.PICKAXE, unstackableProps()));
+            new MainPartItem(GearTypes.PICKAXE.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> SHOVEL_HEAD = registerCompoundPart("shovel_head", () ->
-            new MainPartItem(GearType.SHOVEL, unstackableProps()));
+            new MainPartItem(GearTypes.SHOVEL.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> AXE_HEAD = registerCompoundPart("axe_head", () ->
-            new MainPartItem(GearType.AXE, unstackableProps()));
+            new MainPartItem(GearTypes.AXE.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> PAXEL_HEAD = registerCompoundPart("paxel_head", () ->
-            new MainPartItem(GearType.PAXEL, unstackableProps()));
+            new MainPartItem(GearTypes.PAXEL.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> HAMMER_HEAD = registerCompoundPart("hammer_head", () ->
-            new MainPartItem(GearType.HAMMER, unstackableProps()));
+            new MainPartItem(GearTypes.HAMMER.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> EXCAVATOR_HEAD = registerCompoundPart("excavator_head", () ->
-            new MainPartItem(GearType.EXCAVATOR, unstackableProps()));
+            new MainPartItem(GearTypes.EXCAVATOR.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> SAW_BLADE = registerCompoundPart("saw_blade", () ->
-            new MainPartItem(GearType.SAW, unstackableProps()));
+            new MainPartItem(GearTypes.SAW.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> HOE_HEAD = registerCompoundPart("hoe_head", () ->
-            new MainPartItem(GearType.HOE, unstackableProps()));
+            new MainPartItem(GearTypes.HOE.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> MATTOCK_HEAD = registerCompoundPart("mattock_head", () ->
-            new MainPartItem(GearType.MATTOCK, unstackableProps()));
+            new MainPartItem(GearTypes.MATTOCK.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> PROSPECTOR_HAMMER_HEAD = registerCompoundPart("prospector_hammer_head", () ->
-            new MainPartItem(GearType.PROSPECTOR_HAMMER, unstackableProps()));
+            new MainPartItem(GearTypes.PROSPECTOR_HAMMER.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> SICKLE_BLADE = registerCompoundPart("sickle_blade", () ->
-            new MainPartItem(GearType.SICKLE, unstackableProps()));
+            new MainPartItem(GearTypes.SICKLE.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> SHEARS_BLADES = registerCompoundPart("shears_blades", () ->
-            new MainPartItem(GearType.SHEARS, unstackableProps()));
+            new MainPartItem(GearTypes.SHEARS.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> FISHING_REEL_AND_HOOK = registerCompoundPart("fishing_reel_and_hook", () ->
-            new MainPartItem(GearType.FISHING_ROD, unstackableProps()));
+            new MainPartItem(GearTypes.FISHING_ROD.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> BOW_LIMBS = registerCompoundPart("bow_limbs", () ->
-            new MainPartItem(GearType.BOW, unstackableProps()));
+            new MainPartItem(GearTypes.BOW.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> CROSSBOW_LIMBS = registerCompoundPart("crossbow_limbs", () ->
-            new MainPartItem(GearType.CROSSBOW, unstackableProps()));
+            new MainPartItem(GearTypes.CROSSBOW.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> SLINGSHOT_LIMBS = registerCompoundPart("slingshot_limbs", () ->
-            new MainPartItem(GearType.SLINGSHOT, unstackableProps()));
+            new MainPartItem(GearTypes.SLINGSHOT.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> SHIELD_PLATE = registerCompoundPart("shield_plate", () ->
-            new MainPartItem(GearType.SHIELD, new Item.Properties().stacksTo(1)));
+            new MainPartItem(GearTypes.SHIELD.get(), new Item.Properties().stacksTo(1)));
     public static final DeferredItem<MainPartItem> HELMET_PLATES = registerCompoundPart("helmet_plates", () ->
-            new MainPartItem(GearType.HELMET, unstackableProps()));
+            new MainPartItem(GearTypes.HELMET.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> CHESTPLATE_PLATES = registerCompoundPart("chestplate_plates", () ->
-            new MainPartItem(GearType.CHESTPLATE, unstackableProps()));
+            new MainPartItem(GearTypes.CHESTPLATE.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> LEGGING_PLATES = registerCompoundPart("legging_plates", () ->
-            new MainPartItem(GearType.LEGGINGS, unstackableProps()));
+            new MainPartItem(GearTypes.LEGGINGS.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> BOOT_PLATES = registerCompoundPart("boot_plates", () ->
-            new MainPartItem(GearType.BOOTS, unstackableProps()));
+            new MainPartItem(GearTypes.BOOTS.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> ELYTRA_WINGS = registerCompoundPart("elytra_wings", () ->
-            new MainPartItem(GearType.ELYTRA, unstackableProps()));
+            new MainPartItem(GearTypes.ELYTRA.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> ARROW_HEADS = registerCompoundPart("arrow_heads", () ->
-            new MainPartItem(GearType.ARROW, unstackableProps()));
+            new MainPartItem(GearTypes.ARROW.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> RING_SHANK = registerCompoundPart("ring_shank", () ->
-            new MainPartItem(GearType.RING, unstackableProps()));
+            new MainPartItem(GearTypes.RING.get(), unstackableProps()));
     public static final DeferredItem<MainPartItem> BRACELET_BAND = registerCompoundPart("bracelet_band", () ->
-            new MainPartItem(GearType.BRACELET, unstackableProps()));
+            new MainPartItem(GearTypes.BRACELET.get(), unstackableProps()));
     // Compound Parts
     public static final DeferredItem<CompoundPartItem> ROD = registerCompoundPart("rod", () ->
-            new CompoundPartItem(PartType.ROD, baseProps()));
+            new CompoundPartItem(PartTypes.ROD.get(), baseProps()));
     public static final DeferredItem<CompoundPartItem> TIP = registerCompoundPart("tip", () ->
-            new CompoundPartItem(PartType.TIP, baseProps()));
+            new CompoundPartItem(PartTypes.TIP.get(), baseProps()));
     public static final DeferredItem<CompoundPartItem> COATING = registerCompoundPart("coating", () ->
-            new CompoundPartItem(PartType.COATING, baseProps()));
+            new CompoundPartItem(PartTypes.COATING.get(), baseProps()));
     public static final DeferredItem<CompoundPartItem> GRIP = registerCompoundPart("grip", () ->
-            new CompoundPartItem(PartType.GRIP, baseProps()));
+            new CompoundPartItem(PartTypes.GRIP.get(), baseProps()));
     public static final DeferredItem<CompoundPartItem> BINDING = registerCompoundPart("binding", () ->
-            new CompoundPartItem(PartType.BINDING, baseProps()));
+            new CompoundPartItem(PartTypes.BINDING.get(), baseProps()));
     public static final DeferredItem<CompoundPartItem> LINING = registerCompoundPart("lining", () ->
-            new CompoundPartItem(PartType.LINING, baseProps()));
+            new CompoundPartItem(PartTypes.LINING.get(), baseProps()));
     public static final DeferredItem<CompoundPartItem> CORD = registerCompoundPart("cord", () ->
-            new CompoundPartItem(PartType.CORD, baseProps()));
+            new CompoundPartItem(PartTypes.CORD.get(), baseProps()));
     public static final DeferredItem<CompoundPartItem> FLETCHING = registerCompoundPart("fletching", () ->
-            new CompoundPartItem(PartType.FLETCHING, baseProps()));
-    public static final DeferredItem<CompoundPartItem> ADORNMENT = registerCompoundPart("adornment", () ->
-            new CompoundPartItem(PartType.ADORNMENT, baseProps()));
+            new CompoundPartItem(PartTypes.FLETCHING.get(), baseProps()));
+    public static final DeferredItem<CompoundPartItem> SETTING = registerCompoundPart("setting", () ->
+            new CompoundPartItem(PartTypes.SETTING.get(), baseProps()));
     //endregion
 
     // Compound materials
@@ -271,11 +273,11 @@ public final class SgItems {
 
     public static final DeferredItem<Item> NETHER_BANANA = register("nether_banana", () ->
             new Item(baseProps()
-                    .food(new FoodProperties.Builder().nutrition(5).saturationMod(0.4f).build())));
+                    .food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.4f).build())));
     public static final DeferredItem<Item> GOLDEN_NETHER_BANANA = register("golden_nether_banana", () ->
             new Item(baseProps()
-                    .food(new FoodProperties.Builder().nutrition(10).saturationMod(1.0f)
-                            .alwaysEat()
+                    .food(new FoodProperties.Builder().nutrition(10).saturationModifier(1.0f)
+                            .alwaysEdible()
                             .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, TimeUtils.ticksFromMinutes(10)), 1f)
                             .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
                             .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
@@ -288,24 +290,24 @@ public final class SgItems {
                 }
             });
 
-    public static final DeferredItem<GearSwordItem> SWORD = register("sword", () -> new GearSwordItem(GearType.SWORD));
-    public static final DeferredItem<GearSwordItem> KATANA = register("katana", () -> new GearSwordItem(GearType.KATANA));
-    public static final DeferredItem<GearMacheteItem> MACHETE = register("machete", () -> new GearMacheteItem(GearType.MACHETE));
-    public static final DeferredItem<GearSwordItem> SPEAR = register("spear", () -> new GearSwordItem(GearType.SPEAR));
+    public static final DeferredItem<GearSwordItem> SWORD = register("sword", () -> new GearSwordItem(GearTypes.SWORD.get()));
+    public static final DeferredItem<GearSwordItem> KATANA = register("katana", () -> new GearSwordItem(GearTypes.KATANA.get()));
+    public static final DeferredItem<GearMacheteItem> MACHETE = register("machete", () -> new GearMacheteItem(GearTypes.MACHETE.get()));
+    public static final DeferredItem<GearSwordItem> SPEAR = register("spear", () -> new GearSwordItem(GearTypes.SPEAR.get()));
     public static final DeferredItem<GearTridentItem> TRIDENT = register("trident", () -> new GearTridentItem());
-    public static final DeferredItem<GearDaggerItem> KNIFE = register("knife", () -> new GearDaggerItem(GearType.KNIFE));
-    public static final DeferredItem<GearDaggerItem> DAGGER = register("dagger", () -> new GearDaggerItem(GearType.DAGGER));
-    public static final DeferredItem<GearPickaxeItem> PICKAXE = register("pickaxe", () -> new GearPickaxeItem(GearType.PICKAXE));
-    public static final DeferredItem<GearShovelItem> SHOVEL = register("shovel", () -> new GearShovelItem(GearType.SHOVEL));
-    public static final DeferredItem<GearAxeItem> AXE = register("axe", () -> new GearAxeItem(GearType.AXE));
-    public static final DeferredItem<GearPaxelItem> PAXEL = register("paxel", () -> new GearPaxelItem(GearType.PAXEL));
-    public static final DeferredItem<GearHammerItem> HAMMER = register("hammer", () -> new GearHammerItem(GearType.HAMMER));
-    public static final DeferredItem<GearExcavatorItem> EXCAVATOR = register("excavator", () -> new GearExcavatorItem(GearType.EXCAVATOR));
-    public static final DeferredItem<GearSawItem> SAW = register("saw", () -> new GearSawItem(GearType.SAW));
-    public static final DeferredItem<GearProspectorHammerItem> PROSPECTOR_HAMMER = register("prospector_hammer", () -> new GearProspectorHammerItem(GearType.PROSPECTOR_HAMMER));
-    public static final DeferredItem<GearHoeItem> HOE = register("hoe", () -> new GearHoeItem(GearType.HOE));
+    public static final DeferredItem<GearDaggerItem> KNIFE = register("knife", () -> new GearDaggerItem(GearTypes.KNIFE.get()));
+    public static final DeferredItem<GearDaggerItem> DAGGER = register("dagger", () -> new GearDaggerItem(GearTypes.DAGGER.get()));
+    public static final DeferredItem<GearPickaxeItem> PICKAXE = register("pickaxe", () -> new GearPickaxeItem(GearTypes.PICKAXE.get()));
+    public static final DeferredItem<GearShovelItem> SHOVEL = register("shovel", () -> new GearShovelItem(GearTypes.SHOVEL.get()));
+    public static final DeferredItem<GearAxeItem> AXE = register("axe", () -> new GearAxeItem(GearTypes.AXE.get()));
+    public static final DeferredItem<GearPaxelItem> PAXEL = register("paxel", () -> new GearPaxelItem(GearTypes.PAXEL.get()));
+    public static final DeferredItem<GearHammerItem> HAMMER = register("hammer", () -> new GearHammerItem(GearTypes.HAMMER.get()));
+    public static final DeferredItem<GearExcavatorItem> EXCAVATOR = register("excavator", () -> new GearExcavatorItem(GearTypes.EXCAVATOR.get()));
+    public static final DeferredItem<GearSawItem> SAW = register("saw", () -> new GearSawItem(GearTypes.SAW.get()));
+    public static final DeferredItem<GearProspectorHammerItem> PROSPECTOR_HAMMER = register("prospector_hammer", () -> new GearProspectorHammerItem(GearTypes.PROSPECTOR_HAMMER.get()));
+    public static final DeferredItem<GearHoeItem> HOE = register("hoe", () -> new GearHoeItem(GearTypes.HOE.get()));
     public static final DeferredItem<GearMattockItem> MATTOCK = register("mattock", () -> new GearMattockItem());
-    public static final DeferredItem<GearSickleItem> SICKLE = register("sickle", () -> new GearSickleItem(GearType.SICKLE));
+    public static final DeferredItem<GearSickleItem> SICKLE = register("sickle", () -> new GearSickleItem(GearTypes.SICKLE.get()));
     public static final DeferredItem<GearShearsItem> SHEARS = register("shears", () -> new GearShearsItem());
     public static final DeferredItem<GearFishingRodItem> FISHING_ROD = register("fishing_rod", GearFishingRodItem::new);
     public static final DeferredItem<GearBowItem> BOW = register("bow", () -> new GearBowItem());
@@ -322,9 +324,9 @@ public final class SgItems {
     public static final DeferredItem<GearElytraItem> ELYTRA = register("elytra", () -> new GearElytraItem(unstackableProps()));
 
     public static final DeferredItem<GearCurioItem> RING = register("ring", () ->
-            new GearCurioItem(GearType.RING, "ring", unstackableProps()));
+            new GearCurioItem(GearTypes.RING.get(), "ring", unstackableProps()));
     public static final DeferredItem<GearCurioItem> BRACELET = register("bracelet", () ->
-            new GearCurioItem(GearType.BRACELET, "bracelet", unstackableProps()));
+            new GearCurioItem(GearTypes.BRACELET.get(), "bracelet", unstackableProps()));
 
     private SgItems() {}
 
@@ -345,12 +347,12 @@ public final class SgItems {
     }
 
     private static DeferredItem<GearBlueprintItem> registerGearBlueprint(GearType gearType, boolean singleUse) {
-        String name = gearType.getName() + "_" + (singleUse ? "template" : "blueprint");
+        String name = SgRegistries.GEAR_TYPES.getKey(gearType).getPath() + "_" + (singleUse ? "template" : "blueprint");
         return register(name, () -> new GearBlueprintItem(gearType, singleUse, baseProps()));
     }
 
     private static DeferredItem<PartBlueprintItem> registerPartBlueprint(PartType partType, boolean singleUse) {
-        String name = partType.getName().getPath() + "_" + (singleUse ? "template" : "blueprint");
+        String name = SgRegistries.PART_TYPES.getKey(partType).getPath() + "_" + (singleUse ? "template" : "blueprint");
         return register(name, () -> new PartBlueprintItem(partType, singleUse, baseProps()));
     }
 

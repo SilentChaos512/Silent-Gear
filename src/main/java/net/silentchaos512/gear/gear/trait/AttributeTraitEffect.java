@@ -17,23 +17,24 @@ import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class AttributeTrait extends SimpleTrait {
-    public static final ITraitSerializer<AttributeTrait> SERIALIZER = new Serializer<>(
+public class AttributeTraitEffect extends TraitEffect {
+    public static final ITraitSerializer<AttributeTraitEffect> SERIALIZER = new Serializer<>(
             ApiConst.ATTRIBUTE_TRAIT_ID,
-            AttributeTrait::new,
-            AttributeTrait::readJson,
-            AttributeTrait::readBuffer,
-            AttributeTrait::writeBuffer
+            AttributeTraitEffect::new,
+            AttributeTraitEffect::readJson,
+            AttributeTraitEffect::readBuffer,
+            AttributeTraitEffect::writeBuffer
     );
 
     private final Map<String, List<ModifierData>> modifiers = new HashMap<>();
 
-    public AttributeTrait(ResourceLocation id) {
+    public AttributeTraitEffect(ResourceLocation id) {
         super(id, SERIALIZER);
     }
 
@@ -70,7 +71,7 @@ public class AttributeTrait extends SimpleTrait {
                 && GearHelper.isValidSlot(gear, slotType);
     }
 
-    private static void readJson(AttributeTrait trait, JsonObject json) {
+    private static void readJson(AttributeTraitEffect trait, JsonObject json) {
         if (!json.has("attribute_modifiers")) {
             throw new JsonParseException("Attribute trait '" + trait.getId() + "' is missing 'attribute_modifiers' object");
         }
@@ -99,7 +100,7 @@ public class AttributeTrait extends SimpleTrait {
         }
     }
 
-    private static void readBuffer(AttributeTrait trait, FriendlyByteBuf buffer) {
+    private static void readBuffer(AttributeTraitEffect trait, FriendlyByteBuf buffer) {
         trait.modifiers.clear();
         int gearTypeCount = buffer.readByte();
 
@@ -116,7 +117,7 @@ public class AttributeTrait extends SimpleTrait {
         }
     }
 
-    private static void writeBuffer(AttributeTrait trait, FriendlyByteBuf buffer) {
+    private static void writeBuffer(AttributeTraitEffect trait, FriendlyByteBuf buffer) {
         buffer.writeByte(trait.modifiers.size());
         for (Map.Entry<String, List<ModifierData>> entry : trait.modifiers.entrySet()) {
             buffer.writeUtf(entry.getKey());
@@ -130,7 +131,7 @@ public class AttributeTrait extends SimpleTrait {
 
     @Override
     public Collection<String> getExtraWikiLines() {
-        Collection<String> ret = super.getExtraWikiLines();
+        Collection<String> ret = new ArrayList<>();
         this.modifiers.forEach((type, list) -> {
             ret.add("  - " + type);
             list.forEach(mod -> {
@@ -143,7 +144,7 @@ public class AttributeTrait extends SimpleTrait {
     public static class ModifierData {
         private ResourceLocation name;
         private float[] values;
-        private AttributeModifier.Operation operation = AttributeModifier.Operation.ADDITION;
+        private AttributeModifier.Operation operation = AttributeModifier.Operation.ADD_VALUE;
         private final Map<String, UUID> uuidMap = new HashMap<>();
 
         @SuppressWarnings("TypeMayBeWeakened")

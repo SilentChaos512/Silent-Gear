@@ -1,11 +1,15 @@
 package net.silentchaos512.gear.crafting.recipe.alloy;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -13,10 +17,8 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterial;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.block.compounder.CompoundMakerBlockEntity;
 import net.silentchaos512.gear.block.compounder.CompoundMakerInfo;
@@ -24,6 +26,9 @@ import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.setup.SgRecipes;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.Const;
 
 import javax.annotation.Nullable;
@@ -43,7 +48,8 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
         IMaterialCategory[] cats = info.getCategories().toArray(new IMaterialCategory[0]);
         List<Ingredient> list = new ArrayList<>();
         for (int i = 0; i < count; ++i) {
-            list.add(PartMaterialIngredient.of(PartType.MAIN, GearType.ALL, cats));
+            var partMaterialIngredient = PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.ALL.get(), cats);
+            list.add(new Ingredient(partMaterialIngredient));
         }
         return recipeFactory.apply(new Result(info.getOutputItem(), count, Const.Materials.EXAMPLE), list);
     }
@@ -81,7 +87,7 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
     }
 
     @Override
-    public ItemStack assemble(CompoundMakerBlockEntity<?> inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CompoundMakerBlockEntity<?> inv, HolderLookup.Provider registryAccess) {
         return this.result.getResult();
     }
 
@@ -91,7 +97,7 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider registryAccess) {
         return this.result.getResult();
     }
 
@@ -117,39 +123,28 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
         return SgRecipes.COMPOUNDING_TYPE.get();
     }
 
-    public record Result(Item item, int count, Optional<DataResource<IMaterial>> material) {
+    public record Result(
+            Item item,
+            int count,
+            @Nullable DataResource<IMaterial> material
+    ) {
         public static final Codec<Result> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                         BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(r -> r.item),
                         Codec.INT.optionalFieldOf("count", 1).forGetter(r -> r.count),
-                        DataResource.MATERIAL_CODEC.optionalFieldOf("material").forGetter(r -> r.material)
-                ).apply(instance, Result::new)
+                        DataResource.MATERIAL_CODEC.optionalFieldOf("material").forGetter(r -> Optional.ofNullable(r.material))
+                ).apply(instance, (item, count, material) -> new Result(item, count, material.orElse(null)))
+        );
+        public static final StreamCodec<RegistryFriendlyByteBuf, Result> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.registry(Registries.ITEM), r -> r.item,
+                ByteBufCodecs.VAR_INT, r -> r.count,
+                DataResource.MATERIAL_STREAM_CODEC, r -> r.material,
+                Result::new
         );
 
-        public Result(Item item, int count, @Nullable DataResource<IMaterial> material) {
-            this(item, count, Optional.ofNullable(material));
-        }
-
-        public static Result fromNetwork(FriendlyByteBuf buf) {
-            var item = BuiltInRegistries.ITEM.get(buf.readResourceLocation());
-            var count = buf.readByte();
-            var materialPresent = buf.readBoolean();
-            Optional<DataResource<IMaterial>> material = materialPresent
-                    ? Optional.of(DataResource.material(buf.readResourceLocation()))
-                    : Optional.empty();
-            return new Result(item, count, material);
-        }
-
-        public void toNetwork(FriendlyByteBuf buf) {
-            buf.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item));
-            buf.writeByte(count);
-            buf.writeBoolean(material.isPresent());
-            material.ifPresent(mat -> buf.writeResourceLocation(mat.getId()));
-        }
-
         public ItemStack getResult() {
-            if (item instanceof CustomMaterialItem customMaterialItem && material.isPresent()) {
-                return customMaterialItem.create(LazyMaterialInstance.of(material.get()), count);
+            if (item instanceof CustomMaterialItem customMaterialItem && material != null) {
+                return customMaterialItem.create(LazyMaterialInstance.of(material), count);
             }
             return new ItemStack(item);
         }
@@ -161,44 +156,37 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
     }
 
     public static class Serializer<T extends AlloyRecipe> implements RecipeSerializer<T> {
-        private final Factory<T> factory;
-        private final Codec<T> codec;
+        private final MapCodec<T> codec;
+        private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec;
 
-        public static <R extends AlloyRecipe> Codec<R> makeCodec(Factory<R> factory) {
-            return RecordCodecBuilder.create(
+        public Serializer(Factory<T> factory) {
+            this.codec = RecordCodecBuilder.mapCodec(
                     instance -> instance.group(
                             Result.CODEC.fieldOf("result").forGetter(r -> r.result),
                             Codec.list(Ingredient.CODEC_NONEMPTY).fieldOf("ingredients").forGetter(r -> r.ingredients)
                     ).apply(instance, factory::create)
             );
-        }
-
-        public Serializer(Factory<T> factory) {
-            this.factory = factory;
-            this.codec = makeCodec(factory);
+            this.streamCodec = StreamCodec.of(
+                    (buf, r) -> {
+                        Result.STREAM_CODEC.encode(buf, r.result);
+                        CodecUtils.encodeList(buf, r.ingredients, Ingredient.CONTENTS_STREAM_CODEC);
+                    },
+                    buf -> {
+                        var result = Result.STREAM_CODEC.decode(buf);
+                        var ingredients = CodecUtils.decodeList(buf, Ingredient.CONTENTS_STREAM_CODEC);
+                        return factory.create(result, ingredients);
+                    }
+            );
         }
 
         @Override
-        public Codec<T> codec() {
+        public MapCodec<T> codec() {
             return codec;
         }
 
         @Override
-        public T fromNetwork(FriendlyByteBuf buf) {
-            var result = Result.fromNetwork(buf);
-            var ingredientsSize = buf.readByte();
-            var ingredients = new ArrayList<Ingredient>();
-            for (int i = 0; i < ingredientsSize; ++i) {
-                ingredients.add(Ingredient.fromNetwork(buf));
-            }
-            return factory.create(result, ingredients);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, T recipe) {
-            recipe.result.toNetwork(buf);
-            buf.writeByte(recipe.ingredients.size());
-            recipe.ingredients.forEach(ingredient -> ingredient.toNetwork(buf));
+        public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
+            return streamCodec;
         }
     }
 }

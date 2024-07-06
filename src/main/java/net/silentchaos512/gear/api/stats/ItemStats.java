@@ -14,6 +14,7 @@ import java.util.*;
 /**
  * Stats used by all gear types
  */
+@Deprecated(forRemoval = true)
 public final class ItemStats {
     public static final Codec<ItemStat> BY_NAME_CODEC = ResourceLocation.CODEC.flatXmap(
             id -> Optional.ofNullable(byName(id))
