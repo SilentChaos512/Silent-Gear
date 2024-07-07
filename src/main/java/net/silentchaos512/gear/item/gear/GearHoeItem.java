@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -63,7 +64,7 @@ public class GearHoeItem extends HoeItem implements ICoreTool {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return GearHelper.isCorrectToolForDrops(stack, state, null);
+        return GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_HOE);
     }
 
     //region Standard tool overrides
