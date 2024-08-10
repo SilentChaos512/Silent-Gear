@@ -17,14 +17,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.gear.GearJsonException;
-import net.silentchaos512.gear.gear.MaterialJsonException;
+ import net.silentchaos512.gear.gear.MaterialJsonException;
 import net.silentchaos512.gear.network.SyncMaterialsPacket;
 import net.silentchaos512.gear.util.TextUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -42,6 +40,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
 
     private static final String DATA_PATH = "silentgear_materials";
     private static final Map<ResourceLocation, IMaterial> MATERIALS = Collections.synchronizedMap(new LinkedHashMap<>());
+    private static final List<IMaterial> ROOT_MATERIAL_LIST = new ArrayList<>();
     private static final Collection<String> ERROR_LIST = new ArrayList<>();
     private static final Collection<String> INGREDIENT_CONFLICT_LIST = new ArrayList<>();
 
@@ -86,6 +85,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
                     }
                 }
             }
+            recreateMaterialCache();
         }
 
         checkForIngredientConflicts(ingredientConflicts);
@@ -131,20 +131,17 @@ public class MaterialManager implements ResourceManagerReloadListener {
         }
     }
 
-    public static List<IMaterial> getValues() {
-        return getValues(true);
+    public static Collection<IMaterial> getValues() {
+        synchronized (MATERIALS) {
+            return MATERIALS.values();
+        }
     }
 
-    public static List<IMaterial> getValues(boolean includeChildren) {
-        synchronized (MATERIALS) {
-            List<IMaterial> list = new ArrayList<>();
-            for (IMaterial m : MATERIALS.values()) {
-                if (includeChildren || m.getParent() == null) {
-                    list.add(m);
-                }
-            }
-            return list;
+    public static Collection<IMaterial> getValues(boolean includeChildren) {
+        if (includeChildren) {
+            return getValues();
         }
+        return Collections.unmodifiableList(ROOT_MATERIAL_LIST);
     }
 
     public static List<IMaterial> getChildren(IMaterial material) {
@@ -189,6 +186,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
                 mat.retainData(oldMaterials.get(mat.getId()));
                 MATERIALS.put(mat.getId(), mat);
             }
+            recreateMaterialCache();
             SilentGear.LOGGER.info("Read {} materials from server", MATERIALS.size());
         }
         ctx.get().setPacketHandled(true);
@@ -207,5 +205,16 @@ public class MaterialManager implements ResourceManagerReloadListener {
             ret.add(Component.literal("[Silent Gear] ").append(text));
         });
         return ret;
+    }
+
+    private static void recreateMaterialCache() {
+        synchronized (MATERIALS) {
+            ROOT_MATERIAL_LIST.clear();
+            for (IMaterial mat : MATERIALS.values()) {
+                if (mat.getParent() == null) {
+                    ROOT_MATERIAL_LIST.add(mat);
+                }
+            }
+        }
     }
 }
