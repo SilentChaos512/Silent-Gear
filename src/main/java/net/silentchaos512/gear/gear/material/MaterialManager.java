@@ -13,11 +13,13 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.IMaterial;
- import net.silentchaos512.gear.gear.MaterialJsonException;
+import net.silentchaos512.gear.gear.MaterialJsonException;
 import net.silentchaos512.gear.network.SyncMaterialsPacket;
 import net.silentchaos512.gear.util.TextUtil;
 import org.apache.commons.io.IOUtils;
@@ -41,6 +43,7 @@ public class MaterialManager implements ResourceManagerReloadListener {
     private static final String DATA_PATH = "silentgear_materials";
     private static final Map<ResourceLocation, IMaterial> MATERIALS = Collections.synchronizedMap(new LinkedHashMap<>());
     private static final List<IMaterial> ROOT_MATERIAL_LIST = new ArrayList<>();
+    private static final Map<Item, IMaterial> MATERIAL_LOOKUP_MAP = Collections.synchronizedMap(new IdentityHashMap<>());
     private static final Collection<String> ERROR_LIST = new ArrayList<>();
     private static final Collection<String> INGREDIENT_CONFLICT_LIST = new ArrayList<>();
 
@@ -169,10 +172,9 @@ public class MaterialManager implements ResourceManagerReloadListener {
     public static IMaterial from(ItemStack stack) {
         if (stack.isEmpty()) return null;
 
-        for (IMaterial material : getValues()) {
-            if (material.getIngredient().test(stack)) {
-                return material;
-            }
+        IMaterial lookup = MATERIAL_LOOKUP_MAP.get(stack.getItem());
+        if (lookup != null && lookup.getIngredient().test(stack)) {
+            return lookup;
         }
 
         return null;
@@ -210,9 +212,24 @@ public class MaterialManager implements ResourceManagerReloadListener {
     private static void recreateMaterialCache() {
         synchronized (MATERIALS) {
             ROOT_MATERIAL_LIST.clear();
+            MATERIAL_LOOKUP_MAP.clear();
             for (IMaterial mat : MATERIALS.values()) {
                 if (mat.getParent() == null) {
                     ROOT_MATERIAL_LIST.add(mat);
+                }
+                for (ItemStack itemStack : mat.getIngredient().getItems()) {
+                    Item item = itemStack.getItem();
+                    if (Blocks.BARRIER.asItem().equals(item)) {
+                        // When a material has no valid ingredients for it (e.g. no items with the tag
+                        // `forge:ingots/bismuth_brass` exist for bismuth_brass material), Ingredient.getItems() returns
+                        // a single Barrier item. Just ignore it because it means the material isn't obtainable anyway.
+                        continue;
+                    }
+
+                    IMaterial prevMat = MATERIAL_LOOKUP_MAP.put(item, mat);
+                    if (prevMat != null) {
+                        SilentGear.LOGGER.error("Registered more than one material ({}, {}) for the same item ({})!", mat, prevMat, item);
+                    }
                 }
             }
         }

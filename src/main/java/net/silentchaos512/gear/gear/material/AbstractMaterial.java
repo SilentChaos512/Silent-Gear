@@ -49,7 +49,7 @@ public abstract class AbstractMaterial implements IMaterial {
     protected int tier = -1;
     protected Tier harvestTier = Tiers.IRON;
     protected Ingredient ingredient = Ingredient.EMPTY;
-    protected final Map<PartType, Ingredient> partSubstitutes = new HashMap<>();
+    protected Map<PartType, Ingredient> partSubstitutes = Map.of();
 
     protected final Map<PartType, StatModifierMap> stats = new LinkedHashMap<>();
     protected final Map<PartType, List<TraitInstance>> traits = new LinkedHashMap<>();
@@ -256,8 +256,7 @@ public abstract class AbstractMaterial implements IMaterial {
     public void updateIngredient(SyncMaterialCraftingItemsPacket msg) {
         if (msg.isValid()) {
             msg.getIngredient(this.materialId).ifPresent(ing -> this.ingredient = ing);
-            this.partSubstitutes.clear();
-            msg.getPartSubstitutes(this.materialId).forEach(this.partSubstitutes::put);
+            this.partSubstitutes = Map.copyOf(msg.getPartSubstitutes(this.materialId));
         }
     }
 
@@ -499,7 +498,7 @@ public abstract class AbstractMaterial implements IMaterial {
                         Ingredient ingredient = Ingredient.fromJson(entry.getValue());
                         map.put(partType, ingredient);
                     });
-                    ret.partSubstitutes.putAll(map);
+                    ret.partSubstitutes = Map.copyOf(map);
                 }
             } else {
                 throw new JsonSyntaxException("Expected 'crafting_items' to be an object");
@@ -594,11 +593,13 @@ public abstract class AbstractMaterial implements IMaterial {
 
             // Part subs
             int subCount = buffer.readByte();
+            Map.Entry<PartType, Ingredient>[] subs = new Map.Entry[subCount];
             for (int i = 0; i < subCount; ++i) {
                 PartType partType = PartType.get(buffer.readResourceLocation());
                 Ingredient ingredient = tempReadIngredientFix(buffer);
-                material.partSubstitutes.put(partType, ingredient);
+                subs[i] = Map.entry(partType, ingredient);
             }
+            material.partSubstitutes = Map.ofEntries(subs);
         }
 
         private void readDisplayProperties(FriendlyByteBuf buf, T material) {
