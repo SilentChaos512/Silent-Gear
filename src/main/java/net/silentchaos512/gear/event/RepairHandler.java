@@ -79,8 +79,9 @@ public final class RepairHandler {
     }
 
     private static void applyName(AnvilUpdateEvent event, ItemStack stack) {
-        if (!event.getName().isEmpty()) {
-            stack.setHoverName(Component.literal(event.getName()));
+        var name = event.getName();
+        if (name != null && !name.isEmpty()) {
+            stack.setHoverName(Component.literal(name));
         }
     }
 
