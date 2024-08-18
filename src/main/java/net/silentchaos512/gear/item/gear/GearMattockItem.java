@@ -14,6 +14,7 @@ public class GearMattockItem extends GearHoeItem {
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
         return GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_AXE)
-                || GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_SHOVEL);
+                || GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_SHOVEL)
+                || GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_HOE);
     }
 }
