@@ -1,9 +1,11 @@
 package net.silentchaos512.gear.crafting.recipe.salvage;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -12,14 +14,14 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.gear.part.CompoundPart;
-import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.CoreGearPart;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRecipes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SalvagingRecipe implements Recipe<Container> {
     protected final Ingredient ingredient;
@@ -45,7 +47,7 @@ public class SalvagingRecipe implements Recipe<Container> {
 
     @Deprecated
     @Override
-    public ItemStack assemble(Container inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(Container inv, HolderLookup.Provider registryAccess) {
         // DO NOT USE
         return getResultItem(registryAccess);
     }
@@ -57,9 +59,9 @@ public class SalvagingRecipe implements Recipe<Container> {
 
     @Deprecated
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider registryAccess) {
         // DO NOT USE
-        return !results.isEmpty() ? results.get(0) : ItemStack.EMPTY;
+        return !results.isEmpty() ? results.getFirst() : ItemStack.EMPTY;
     }
 
     @Override
@@ -85,69 +87,48 @@ public class SalvagingRecipe implements Recipe<Container> {
      * @param part The part
      * @return The list of items to return
      */
-    public static List<ItemStack> salvage(PartData part) {
-        if (part.get() instanceof CompoundPart && part.getItem().getItem() instanceof CompoundPartItem) {
-            int craftedCount = ((CompoundPartItem) part.getItem().getItem()).getCraftedCount(part.getItem());
+    public static List<ItemStack> salvagePart(PartInstance part) {
+        ItemStack partStack = part.getItem();
+        if (part.get() instanceof CoreGearPart && partStack.getItem() instanceof CompoundPartItem compoundPartItem) {
+            List<MaterialInstance> materialsInPart = CompoundPartItem.getMaterials(partStack);
+            int craftedCount = materialsInPart.size();
             if (craftedCount < 1) {
-                SilentGear.LOGGER.warn("Compound part's crafted count is less than 1? {}", part.getItem());
-                return Collections.singletonList(part.getItem());
+                SilentGear.LOGGER.warn("Compound part's crafted count is less than 1? {}", partStack);
+                return List.of(partStack);
             }
 
-            List<IMaterialInstance> materials = part.getMaterials();
-            Map<IMaterialInstance, Integer> fragments = new LinkedHashMap<>();
-
-            for (IMaterialInstance material : materials) {
-                int fragmentCount = 8 / craftedCount;
-                fragments.merge(material.onSalvage(), fragmentCount, Integer::sum);
+            List<ItemStack> result = new ArrayList<>();
+            var partMaterials = part.getMaterials();
+            for (var material : partMaterials) {
+                var salvagedMaterial = material.onSalvage();
+                result.add(salvagedMaterial.getItem());
             }
-
-            List<ItemStack> ret = new ArrayList<>();
-            for (Map.Entry<IMaterialInstance, Integer> entry : fragments.entrySet()) {
-                IMaterialInstance material = entry.getKey();
-                int count = entry.getValue();
-                int fulls = count / 8;
-                int frags = count % 8;
-                if (fulls > 0) {
-                    ret.add(material.getItem());
-                }
-                if (frags > 0) {
-                    ret.add(SgItems.FRAGMENT.get().create(material, frags));
-                }
-            }
-            return ret;
+            return result;
         }
-        return Collections.singletonList(part.getItem());
+        return List.of(partStack);
     }
 
     public static class Serializer implements RecipeSerializer<SalvagingRecipe> {
-        public static final Codec<SalvagingRecipe> CODEC = RecordCodecBuilder.create(
+        public static final MapCodec<SalvagingRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
                         Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.ingredient),
-                        Codec.list(ItemStack.ITEM_WITH_COUNT_CODEC).fieldOf("results").forGetter(r -> r.results)
+                        Codec.list(ItemStack.CODEC).fieldOf("results").forGetter(r -> r.results)
                 ).apply(instance, SalvagingRecipe::new)
+        );
+        public static final StreamCodec<RegistryFriendlyByteBuf, SalvagingRecipe> STREAM_CODEC = StreamCodec.composite(
+                Ingredient.CONTENTS_STREAM_CODEC, r -> r.ingredient,
+                ItemStack.LIST_STREAM_CODEC, r -> r.results,
+                SalvagingRecipe::new
         );
 
         @Override
-        public Codec<SalvagingRecipe> codec() {
+        public MapCodec<SalvagingRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public SalvagingRecipe fromNetwork(FriendlyByteBuf buf) {
-            var ingredient = Ingredient.fromNetwork(buf);
-            var results = new ArrayList<ItemStack>();
-            int resultCount = buf.readByte();
-            for (int i = 0; i < resultCount; ++i) {
-                results.add(buf.readItem());
-            }
-            return new SalvagingRecipe(ingredient, results);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, SalvagingRecipe recipe) {
-            recipe.ingredient.toNetwork(buf);
-            buf.writeByte(recipe.results.size());
-            recipe.results.forEach(buf::writeItem);
+        public StreamCodec<RegistryFriendlyByteBuf, SalvagingRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

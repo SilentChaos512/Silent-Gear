@@ -5,22 +5,22 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.Serializer;
 
 import java.util.List;
 
 public interface ITraitCondition {
-    Codec<ITraitCondition> DISPATCH_CODEC = SgRegistries.TRAIT_CONDITIONS.byNameCodec()
+    Codec<ITraitCondition> DISPATCH_CODEC = SgRegistries.TRAIT_CONDITION.byNameCodec()
             .dispatch(
                     ITraitCondition::serializer,
                     Serializer::codec
             );
-    StreamCodec<RegistryFriendlyByteBuf, TraitConditionSerializer<?>> REGISTRY_STREAM_CODEC = ByteBufCodecs.registry(SgRegistries.TRAIT_CONDITIONS_KEY);
+    StreamCodec<RegistryFriendlyByteBuf, TraitConditionSerializer<?>> REGISTRY_STREAM_CODEC = ByteBufCodecs.registry(SgRegistries.TRAIT_CONDITION_KEY);
     StreamCodec<RegistryFriendlyByteBuf, ITraitCondition> STREAM_CODEC = StreamCodec.of(
             (buf, c) -> {
                 REGISTRY_STREAM_CODEC.encode(buf, c.serializer());
@@ -32,12 +32,9 @@ public interface ITraitCondition {
             }
     );
 
-    @Deprecated(forRemoval = true)
-    ResourceLocation getId();
-
     TraitConditionSerializer<?> serializer();
 
-    boolean matches(ITrait trait, PartGearKey key, ItemStack gear, List<? extends IGearComponentInstance<?>> components);
+    boolean matches(Trait trait, PartGearKey key, ItemStack gear, List<? extends GearComponentInstance<?>> components);
 
     MutableComponent getDisplayText();
 }

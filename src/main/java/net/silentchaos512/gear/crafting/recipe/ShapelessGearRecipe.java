@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -50,11 +50,11 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
         if (!super.matches(inv, worldIn)) return false;
 
         GearType gearType = item.getGearType();
-        Collection<PartData> parts = getParts(inv);
+        Collection<PartInstance> parts = getParts(inv);
 
         if (parts.isEmpty()) return false;
 
-        for (PartData part : parts) {
+        for (PartInstance part : parts) {
             if (!part.isCraftingAllowed(gearType, inv)) {
                 return false;
             }
@@ -64,7 +64,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
         return item.construct(getParts(inv));
     }
 
@@ -74,7 +74,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider registryAccess) {
         return exampleOutput.get();
     }
 

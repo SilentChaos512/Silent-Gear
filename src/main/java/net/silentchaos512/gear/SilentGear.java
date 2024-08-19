@@ -11,11 +11,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.network.event.RegisterConfigurationTasksEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.network.SgNetwork;
-import net.silentchaos512.gear.network.configtask.SyncTraitsConfigurationTask;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.ModResourceLocation;
@@ -47,8 +45,8 @@ public final class SilentGear {
                 ? new SideProxy.Client(modEventBus)
                 : new SideProxy.Server(modEventBus);
 
-        modEventBus.register(GearTypes.GEAR_TYPES);
-        modEventBus.register(PartTypes.PART_TYPES);
+        modEventBus.register(GearTypes.REGISTRAR);
+        modEventBus.register(PartTypes.REGISTRAR);
 
         if (ModList.get().isLoaded("curios")) {
             CuriosCompat.registerEventHandlers(modEventBus);
@@ -57,12 +55,7 @@ public final class SilentGear {
 
     @SubscribeEvent
     public static void registerPayloadHandler(RegisterPayloadHandlersEvent event) {
-        SgNetwork.register(event.registrar(MOD_ID).versioned("4.0"));
-    }
-
-    @SubscribeEvent
-    public static void onGameConfiguration(RegisterConfigurationTasksEvent event) {
-        event.register(new SyncTraitsConfigurationTask());
+        SgNetwork.register(event);
     }
 
     public static String getVersion() {

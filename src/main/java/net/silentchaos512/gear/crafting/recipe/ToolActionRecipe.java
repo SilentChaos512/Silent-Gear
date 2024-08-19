@@ -1,9 +1,10 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -52,7 +53,7 @@ public class ToolActionRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack assemble(Container pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(Container pContainer, HolderLookup.Provider pRegistryAccess) {
         return result.copy();
     }
 
@@ -62,7 +63,7 @@ public class ToolActionRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider pRegistryAccess) {
         return result.copy();
     }
 
@@ -77,35 +78,42 @@ public class ToolActionRecipe implements Recipe<Container> {
     }
 
     public static class Serializer implements RecipeSerializer<ToolActionRecipe> {
-        public static final Codec<ToolActionRecipe> CODEC = RecordCodecBuilder.create(
+        public static final MapCodec<ToolActionRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
                         Ingredient.CODEC_NONEMPTY.fieldOf("tool").forGetter(r -> r.tool),
                         Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.ingredient),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("damage_to_tool").forGetter(r -> r.damageToTool),
-                        ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("result").forGetter(r -> r.result)
+                        ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result)
                 ).apply(instance, ToolActionRecipe::new)
+        );
+        public static final StreamCodec<RegistryFriendlyByteBuf, ToolActionRecipe> STREAM_CODEC = StreamCodec.of(
+                Serializer::toNetwork,
+                Serializer::fromNetwork
         );
 
         @Override
-        public Codec<ToolActionRecipe> codec() {
+        public MapCodec<ToolActionRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public ToolActionRecipe fromNetwork(FriendlyByteBuf pBuffer) {
-            var tool = Ingredient.fromNetwork(pBuffer);
-            var ingredient = Ingredient.fromNetwork(pBuffer);
-            var damageToTool = pBuffer.readVarInt();
-            var result = pBuffer.readItem();
+        public StreamCodec<RegistryFriendlyByteBuf, ToolActionRecipe> streamCodec() {
+            return STREAM_CODEC;
+        }
+
+        public static ToolActionRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
+            var tool = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
+            var ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
+            var damageToTool = buf.readVarInt();
+            var result = ItemStack.STREAM_CODEC.decode(buf);
             return new ToolActionRecipe(tool, ingredient, damageToTool, result);
         }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf pBuffer, ToolActionRecipe pRecipe) {
-            pRecipe.tool.toNetwork(pBuffer);
-            pRecipe.ingredient.toNetwork(pBuffer);
-            pBuffer.writeVarInt(pRecipe.damageToTool);
-            pBuffer.writeItem(pRecipe.result);
+        public static void toNetwork(RegistryFriendlyByteBuf buf, ToolActionRecipe recipe) {
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.tool);
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.ingredient);
+            buf.writeVarInt(recipe.damageToTool);
+            ItemStack.STREAM_CODEC.encode(buf, recipe.result);
         }
     }
 }

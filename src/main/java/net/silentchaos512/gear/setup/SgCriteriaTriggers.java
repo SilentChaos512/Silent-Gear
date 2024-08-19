@@ -21,7 +21,7 @@ public class SgCriteriaTriggers {
     public static final DeferredHolder<CriterionTrigger<?>, PlayerTrigger> FALL_WITH_MOONWALKER = register("fall_with_moonwalker", PlayerTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, GearRepairedTrigger> GEAR_REPAIRED = register("gear_repair", GearRepairedTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, HasPartTrigger> HAS_PART = register("has_part", HasPartTrigger::new);
-    public static final DeferredHolder<CriterionTrigger<?>, GearPropertyTrigger> ITEM_STAT = register("item_stat", GearPropertyTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, GearPropertyTrigger> GEAR_PROPERTY = register("property_value", GearPropertyTrigger::new);
 
     private static <T extends CriterionTrigger<?>> DeferredHolder<CriterionTrigger<?>, T> register(String name, Supplier<T> factory) {
         return TRIGGER_TYPES.register(name, factory);

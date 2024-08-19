@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.util;
 
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
@@ -9,17 +10,43 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CodecUtils {
     private CodecUtils() {
         throw new IllegalAccessError("Utility class");
+    }
+
+    public static <T> StreamCodec<RegistryFriendlyByteBuf, TagKey<T>> tagStreamCodec(ResourceKey<? extends Registry<T>> registryKey) {
+        return StreamCodec.of(
+                (buf, val) -> buf.writeResourceLocation(val.location()),
+                buf -> TagKey.create(registryKey, buf.readResourceLocation())
+        );
+    }
+
+    public static <T> Codec<List<T>> singleOrListCodec(Codec<T> codec) {
+        return Codec.either(
+                codec,
+                Codec.list(codec)
+        ).xmap(
+                either -> either.map(Collections::singletonList, list -> list),
+                list -> {
+                    if (list.size() == 1) {
+                        return Either.left(list.getFirst());
+                    }
+                    return Either.right(list);
+                }
+        );
     }
 
     public static <B extends FriendlyByteBuf, T> void encodeList(B buf, Collection<T> list, StreamCodec<B, T> streamCodec) {

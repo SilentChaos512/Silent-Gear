@@ -14,28 +14,25 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforgespi.language.IModInfo;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
-import net.silentchaos512.gear.api.traits.ITraitSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.PartManager;
-import net.silentchaos512.gear.gear.trait.SimpleTrait;
-import net.silentchaos512.gear.gear.trait.TraitManager;
-import net.silentchaos512.gear.gear.trait.TraitSerializers;
+import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.gear.trait.condition.AndTraitCondition;
 import net.silentchaos512.gear.network.payload.server.CommandOutputPayload;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -46,8 +43,8 @@ import java.util.stream.Collectors;
 
 public final class TraitsCommand {
     private static final SuggestionProvider<CommandSourceStack> TRAIT_ID_SUGGESTIONS = (ctx, builder) ->
-            SharedSuggestionProvider.suggestResource(TraitManager.getValues().stream().map(ITrait::getId), builder);
-    private static final String TRAITS_DATA_PATH = "https://github.com/SilentChaos512/Silent-Gear/tree/1.18.x/src/generated/resources/data/silentgear/silentgear_traits/";
+            SharedSuggestionProvider.suggestResource(SgRegistries.TRAIT.stream().map(SgRegistries.TRAIT::getKey), builder);
+    private static final String TRAITS_DATA_PATH = "https://github.com/SilentChaos512/Silent-Gear/tree/1.21.x/src/generated/resources/data/silentgear/silentgear_traits/";
 
     private TraitsCommand() {}
 
@@ -68,9 +65,9 @@ public final class TraitsCommand {
     }
 
     private static int runDescribe(CommandContext<CommandSourceStack> context, ResourceLocation traitId) {
-        ITrait trait = TraitManager.get(traitId);
+        Trait trait = SgRegistries.TRAIT.get(traitId);
         if (trait == null) {
-            context.getSource().sendFailure(Component.translatable("command.silentgear.traits.traitNotFound", traitId));
+            context.getSource().sendFailure(Component.translatable("command.silentgear.traits.traitNotFound"));
             return 0;
         }
 
@@ -78,17 +75,23 @@ public final class TraitsCommand {
         context.getSource().sendSuccess(() -> trait.getDescription(1), true);
         context.getSource().sendSuccess(() -> Component.translatable("command.silentgear.traits.maxLevel", trait.getMaxLevel()), true);
         context.getSource().sendSuccess(() -> Component.literal("Object: " + trait), true);
-        context.getSource().sendSuccess(() -> Component.literal("Serializer: " + trait.getSerializer()), true);
+        // Effects
+        if (!trait.getEffects().isEmpty()) {
+            context.getSource().sendSuccess(() -> Component.literal("Effects:"), true);
+        }
+        for (var effect : trait.getEffects()) {
+            context.getSource().sendSuccess(() -> Component.literal("- " + SgRegistries.TRAIT_EFFECT_TYPE.getKey(effect.type())), true);
+        }
 
         return 1;
     }
 
     private static int runList(CommandContext<CommandSourceStack> context) {
-        String listStr = TraitManager.getValues().stream()
-                .map(trait -> trait.getId().toString())
+        String listStr = SgRegistries.TRAIT.stream()
+                .map(trait -> SgRegistries.TRAIT.getKey(trait).toString())
                 .collect(Collectors.joining(", "));
         context.getSource().sendSuccess(() -> Component.literal(listStr), true);
-        context.getSource().sendSuccess(() -> Component.literal("Total: " + TraitManager.getValues().size()), true);
+        context.getSource().sendSuccess(() -> Component.literal("Total: " + SgRegistries.TRAIT.keySet().size()), true);
 
         return 1;
     }
@@ -97,7 +100,7 @@ public final class TraitsCommand {
         ServerPlayer player = context.getSource().getPlayerOrException();
         SilentGear.LOGGER.info("Send traits wiki dump packet to client {}", player.getScoreboardName());
         CommandOutputPayload message = CommandOutputPayload.traits();
-        PacketDistributor.PLAYER.with(player).send(message);
+        PacketDistributor.sendToPlayer(player, message);
         return 1;
     }
 
@@ -126,28 +129,31 @@ public final class TraitsCommand {
             writer.write("The following mods and data packs have added traits to the output. Running the dump command yourself may produce different results.\n\n");
             writer.write(getDataSources() + "\n");
 
-            writer.write("## Trait Types\n\n");
+            // FIXME: Replace with a list of trait effects
+            writer.write("## Trait Effects\n\n");
+            writer.write("This part of the command was not coded! Please bug SilentChaos512 to fix it. :)\n");
+            /*writer.write("## Trait Types\n\n");
             writer.write("These are trait serializers. You can define custom instances of these types using data packs.\n");
             writer.write("Code for traits and their serializers can be found in `net.silentchaos512.gear.gear.trait`.\n\n");
             writer.write("Note that \"simple\" traits are often used where custom code is required.\n");
             writer.write("They are not especially useful when just defined by a data pack.\n\n");
 
             for (ITraitSerializer<?> serializer : TraitSerializers.getSerializers()) {
-                String typeName = serializer instanceof SimpleTrait.Serializer ? ((SimpleTrait.Serializer) serializer).getTypeName() : "";
+                String typeName = serializer instanceof Trait.Serializer ? ((Trait.Serializer) serializer).getTypeName() : "";
                 writer.write("- `" + serializer.getName() + "`");
                 if (!typeName.isEmpty()) {
                     writer.write(" _(" + typeName + ")_");
                 }
                 writer.write("\n");
-            }
+            }*/
 
             writer.write("\n## List of Traits");
 
-            List<ResourceLocation> ids = new ArrayList<>(TraitManager.getKeys());
-            ids.sort(Comparator.comparing(id -> Objects.requireNonNull(TraitManager.get(id)).getDisplayName(0).getString()));
+            List<ResourceLocation> ids = new ArrayList<>(SgRegistries.TRAIT.keySet());
+            ids.sort(Comparator.comparing(id -> Objects.requireNonNull(SgRegistries.TRAIT.get(id)).getDisplayName(0).getString()));
 
             for (ResourceLocation id : ids) {
-                ITrait trait = TraitManager.get(id);
+                Trait trait = SgRegistries.TRAIT.get(id);
                 assert trait != null;
 
                 writer.write("\n");
@@ -167,13 +173,18 @@ public final class TraitsCommand {
                 }
 
                 writer.write("- ID: `" + id + "`\n");
-                writer.write("- Type: `" + trait.getSerializer().getName() + "`\n");
                 writer.write("- Max Level: " + trait.getMaxLevel() + "\n");
+                if (!trait.getEffects().isEmpty()) {
+                    writer.write("- Effects:\n");
+                }
+                for (var effect : trait.getEffects()) {
+                    writer.write("  - `" + SgRegistries.TRAIT_EFFECT_TYPE.getKey(effect.type()) + "`");
+                }
 
-                Collection<String> cancelsWithSet = trait.getCancelsWithSet().stream().map(s -> "`" + s + "`").collect(Collectors.toList());
+                /*Collection<String> cancelsWithSet = trait.getCancelsWithSet().stream().map(s -> "`" + s + "`").collect(Collectors.toList());
                 if (!cancelsWithSet.isEmpty()) {
                     writer.write("- Cancels With: " + String.join(", ", cancelsWithSet) + "\n");
-                }
+                }*/
 
                 Collection<String> wikiLines = trait.getExtraWikiLines();
                 if (!wikiLines.isEmpty()) {
@@ -207,19 +218,19 @@ public final class TraitsCommand {
         return text;
     }
 
-    private static String getMaterialsWithTrait(ITrait trait) {
+    private static String getMaterialsWithTrait(Trait trait) {
         StringBuilder str = new StringBuilder();
         boolean foundAny = false;
 
-        for (IMaterial material : MaterialManager.getValues(false)) {
+        for (Material material : SgRegistries.MATERIAL.getValues(false)) {
             MaterialInstance instance = MaterialInstance.of(material);
             Collection<PartType> typesWithTrait = new ArrayList<>();
 
-            for (PartType partType : PartType.getValues()) {
-                Collection<TraitInstance> traits = instance.getTraits(partType);
+            for (PartType partType : SgRegistries.PART_TYPE) {
+                Collection<TraitInstance> traits = instance.getTraits(PartGearKey.of(GearTypes.ALL.get(), partType));
 
                 for (TraitInstance inst : traits) {
-                    if (inst.getTrait().equals(trait) && material.isVisible(partType)) {
+                    if (inst.getTrait().equals(trait)) {
                         typesWithTrait.add(partType);
                         break;
                     }
@@ -233,11 +244,11 @@ public final class TraitsCommand {
                 foundAny = true;
 
                 str.append("**")
-                        .append(instance.getDisplayName(PartType.MAIN).getString())
+                        .append(instance.getDisplayName(PartTypes.MAIN.get()).getString())
                         .append("**")
                         .append(" _(")
                         .append(typesWithTrait.stream().map(pt ->
-                                pt.getDisplayName(0).getString()).collect(Collectors.joining(", ")))
+                                pt.getDisplayName().getString()).collect(Collectors.joining(", ")))
                         .append(")_");
             }
         }
@@ -245,20 +256,20 @@ public final class TraitsCommand {
         return str.toString();
     }
 
-    private static String getPartsWithTrait(ITrait trait) {
+    private static String getPartsWithTrait(Trait trait) {
         StringBuilder str = new StringBuilder();
         boolean foundAny = false;
 
-        for (IGearPart part : PartManager.getValues()) {
-            PartData partData = PartData.of(part);
-            for (TraitInstance inst : partData.getTraits()) {
+        for (GearPart part : SgRegistries.PART) {
+            PartInstance partData = PartInstance.of(part);
+            for (TraitInstance inst : partData.getTraits(PartGearKey.of(GearTypes.ALL, PartTypes.MAIN))) {
                 if (inst.getTrait().equals(trait) && part.isVisible()) {
                     if (foundAny) {
                         str.append(", ");
                     }
                     foundAny = true;
 
-                    str.append("**").append(partData.getDisplayName(ItemStack.EMPTY).getString()).append("**");
+                    str.append("**").append(partData.getDisplayName(partData.getType()).getString()).append("**");
                 }
             }
         }
@@ -268,8 +279,8 @@ public final class TraitsCommand {
 
     private static String getDataSources() {
         Set<String> sourceSet = new LinkedHashSet<>();
-        for (ITrait trait : TraitManager.getValues()) {
-            sourceSet.add(trait.getId().getNamespace());
+        for (Trait trait : SgRegistries.TRAIT) {
+            sourceSet.add(SgRegistries.TRAIT.getKey(trait).getNamespace());
         }
 
         StringBuilder ret = new StringBuilder();

@@ -1,26 +1,29 @@
 package net.silentchaos512.gear.item.blueprint;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.neoforged.fml.ModList;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.TextUtil;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
-    final boolean singleUse;
+    final BlueprintType type;
 
-    AbstractBlueprintItem(Properties properties, boolean singleUse) {
+    AbstractBlueprintItem(Properties properties, BlueprintType type) {
         super(properties);
-        this.singleUse = singleUse;
+        this.type = type;
+        if (this.type == BlueprintType.BLUEPRINT) {
+            properties.component(DataComponents.RARITY, Rarity.UNCOMMON);
+        }
     }
 
     public abstract TagKey<Item> getItemTag();
@@ -28,7 +31,7 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     protected abstract Component getCraftedName(ItemStack stack);
 
     public boolean isSingleUse() {
-        return this.singleUse;
+        return this.type == BlueprintType.TEMPLATE;
     }
 
     @Override
@@ -40,24 +43,19 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
 
     @Override
     public boolean hasCraftingRemainingItem(ItemStack stack) {
-        return !this.singleUse;
+        return this.type == BlueprintType.BLUEPRINT;
     }
 
     boolean isDisabled() {
-        BlueprintType config = Config.Common.blueprintTypes.get();
-        return this.singleUse && !config.allowTemplate()
-                || !this.singleUse && !config.allowBlueprint();
+        BlueprintType.ConfigOption config = Config.Common.blueprintTypes.get();
+        return this.type == BlueprintType.TEMPLATE && !config.allowTemplate()
+                || this.type == BlueprintType.BLUEPRINT && !config.allowBlueprint();
     }
 
     @Override
     public Component getName(ItemStack stack) {
-        String key = "item.silentgear." + (this.singleUse ? "template" : "blueprint");
+        String key = "item.silentgear." + this.type.name().toLowerCase(Locale.ROOT);
         return Component.translatable(key, this.getCraftedName(stack));
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.singleUse ? Rarity.COMMON : Rarity.UNCOMMON;
     }
 
     public boolean hasStandardModel() {
@@ -65,7 +63,7 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flags) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flags) {
         if (!isDisabled()) {
             if (Config.Client.showJeiHints.get()) {
                 // JEI hints
@@ -76,13 +74,6 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
                     // JEI is not installed? Educate the ultra noobs.
                     tooltip.add(TextUtil.misc("jeiNotInstalled").withStyle(ChatFormatting.DARK_RED));
                 }
-            }
-
-            // Legacy material mixing allowed?
-            if (Config.Common.allowLegacyMaterialMixing.get()) {
-                tooltip.add(TextUtil.translate("item", "blueprint.mixing.enabled").withStyle(ChatFormatting.GREEN));
-            } else {
-                tooltip.add(TextUtil.translate("item", "blueprint.mixing.disabled").withStyle(ChatFormatting.RED));
             }
         }
     }

@@ -27,6 +27,7 @@ import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class GearSickleItem extends GearDiggerItem {
     private static final int DURABILITY_USAGE = 3;
@@ -49,7 +50,7 @@ public class GearSickleItem extends GearDiggerItem {
         HARVEST_STATES.put(block, state);
     }
 
-    public GearSickleItem(GearType gearType) {
+    public GearSickleItem(Supplier<GearType> gearType) {
         super(gearType, BlockTags.LEAVES, GearHelper.getBaseItemProperties());
     }
 

@@ -16,26 +16,23 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.material.IMaterialDisplay;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.material.MaterialLayer;
-import net.silentchaos512.gear.api.part.IGearPart;
-import net.silentchaos512.gear.api.part.IPartData;
-import net.silentchaos512.gear.api.part.PartDataList;
+import net.silentchaos512.gear.api.material.TextureType;
+import net.silentchaos512.gear.api.part.GearPart;
+import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.stats.*;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.api.util.StatGearKey;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.trait.EnchantmentTrait;
-import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.SgDataComponents;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -59,7 +56,7 @@ public final class GearData {
             return data;
         }
         // FIXME
-        GearPropertiesData newData = recalculateStats(gear);
+        GearPropertiesData newData = recalculateStats(gear, null);
         gear.set(SgDataComponents.GEAR_PROPERTIES, newData);
         return newData;
     }
@@ -73,18 +70,10 @@ public final class GearData {
      */
     public static GearConstructionData getConstruction(ItemStack gear) {
         var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
-        return data != null ? data : new GearConstructionData(PartDataList.empty(), false, 0, 0);
-    }
-
-    /**
-     * Recalculate gear stats and setup NBT.
-     *
-     * @param stack The gear item
-     * @deprecated Prefer using {@link #recalculateStats(ItemStack, Player)}
-     */
-    @Deprecated
-    public static void recalculateStats(ItemStack stack) {
-        recalculateStats(stack, null);
+        if (data == null) {
+            throw new IllegalArgumentException("Not a gear item: " + gear);
+        }
+        return data;
     }
 
     /**
@@ -115,21 +104,21 @@ public final class GearData {
         if (checkNonGearItem(gear, "recalculateStats")) return;
 
         // TODO: What's the point of this? Traits not calculated yet, right?
-        TraitHelper.activateTraits(gear, 0f, (trait, level, value) -> {
-            trait.onRecalculatePre(new TraitActionContext(player, level, gear));
+        TraitHelper.activateTraits(gear, 0f, (trait, value) -> {
+            trait.getTrait().onRecalculatePre(new TraitActionContext(player, trait, gear));
             return 0f;
         });
 
         final String playerName = player != null ? player.getScoreboardName() : "somebody";
         final String playersItemText = String.format("%s's %s", playerName, gear.getHoverName().getString());
 
-        var construction = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
-        if (construction == null) {
-            SilentGear.LOGGER.error("{}: gear item has no construction data?", playersItemText);
+        GearConstructionData gearConstructionData = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
+        if (gearConstructionData == null) {
+            SilentGear.LOGGER.error("{}: gear item has no gearConstructionData data?", playersItemText);
             return;
         }
 
-        final PartDataList parts = construction.parts();
+        final PartList parts = gearConstructionData.parts();
         final ICoreItem item = (ICoreItem) gear.getItem();
         final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
 
@@ -137,13 +126,13 @@ public final class GearData {
             // We should recalculate the item's stats!
             SilentGear.LOGGER.debug("Recalculating for {}", playersItemText);
 
-            Map<ITrait, Integer> traits = TraitHelper.getTraits(gear, item.getGearType(), parts);
+            Map<Trait, Integer> traits = TraitHelper.getTraitsFromParts(gear, item.getGearType(), parts);
 
             // Get all stat modifiers from all parts and item class modifiers
-            StatModifierMap stats = getStatModifiers(gear, item, parts);
+            GearPropertyMap stats = getStatModifiers(gear, item, parts);
 
             // For debugging
-            Map<ItemStat, Float> oldStatValues = getCurrentStatsForDebugging(gear);
+            GearPropertiesData oldGearProperties = getProperties(gear);
 
             // Cache traits in properties compound as well
             ListTag traitList = new ListTag();
@@ -163,9 +152,9 @@ public final class GearData {
 
                 final float initialValue = stat.compute(stat.getBaseValue(), true, item.getGearType(), statGearType, modifiers);
                 // Allow traits to modify stat
-                final float withTraits = TraitHelper.activateTraits(gear, initialValue, (trait, level, val) -> {
-                    TraitActionContext context = new TraitActionContext(player, level, gear);
-                    return trait.onGetStat(context, stat, val, damageRatio);
+                final float withTraits = TraitHelper.activateTraits(gear, initialValue, (trait, val) -> {
+                    TraitActionContext context = new TraitActionContext(player, trait, gear);
+                    return trait.getTrait().onGetProperty(context, stat, val, damageRatio);
                 });
                 final float value = Config.Common.getStatWithMultiplier(stat, withTraits);
                 if (!Mth.equal(value, 0f) || stats.containsKey(key)) {
@@ -195,8 +184,8 @@ public final class GearData {
 
             // Remove trait-added enchantments then let traits re-add them
             EnchantmentTrait.removeTraitEnchantments(gear);
-            TraitHelper.activateTraits(gear, 0f, (trait, level, value) -> {
-                trait.onRecalculatePost(new TraitActionContext(player, level, gear));
+            TraitHelper.activateTraits(gear, 0f, (trait, value) -> {
+                trait.getTrait().onRecalculatePost(new TraitActionContext(player, trait, gear));
                 return 0f;
             });
         } else {
@@ -207,25 +196,14 @@ public final class GearData {
         updateRenderingInfo(gear, parts);
     }
 
-    @Nullable
-    private static Map<ItemStat, Float> getCurrentStatsForDebugging(ItemStack stack) {
-        // Get current stats from the item, this is used for logging stat changes
-        if (Config.Common.statsDebugLogging.get()) {
-            Map<ItemStat, Float> map = new HashMap<>();
-            ItemStats.allStatsOrdered().forEach(stat -> map.put(stat, getStat(stack, stat, false)));
-            return map;
-        }
-        return null;
-    }
-
-    private static void printStatsForDebugging(ItemStack stack, StatModifierMap stats, @Nullable Map<ItemStat, Float> oldStats) {
+    private static void printStatsForDebugging(ItemStack stack, GearPropertyMap stats, @Nullable Map<ItemStat, Float> oldStats) {
         // Prints stats that have changed for debugging purposes
         if (oldStats != null && SilentGear.LOGGER.isDebugEnabled()) {
             GearType gearType = GearHelper.getType(stack);
             Map<ItemStat, Float> newStats = getCurrentStatsForDebugging(stack);
             assert newStats != null;
 
-            for (ItemStat stat : stats.getStats()) {
+            for (ItemStat stat : stats.getPropertyTypes()) {
                 float oldValue = oldStats.get(stat);
                 float newValue = newStats.get(stat);
                 float change = newValue - oldValue;
@@ -234,51 +212,37 @@ public final class GearData {
                         oldValue,
                         newValue,
                         change < 0 ? change : "+" + change,
-                        StatModifierMap.formatText(stats.get(stat, gearType), stat, 5).getString()
+                        GearPropertyMap.formatText(stats.getValues(stat, gearType), stat, 5).getString()
                 );
             }
         }
     }
 
-    private static String calculateModelKey(ItemStack stack, Collection<? extends IPartData> parts) {
+    public static String getModelKey(ItemStack stack, int animationFrame) {
+        var key = stack.get(SgDataComponents.GEAR_MODEL_KEY);
+        if (key == null) return "null";
+        return key + (animationFrame > 0 ? "_" + animationFrame : "");
+    }
+
+    private static String calculateModelKey(ItemStack stack, Collection<? extends PartInstance> parts) {
         StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + ":");
 
-        for (IPartData part : parts) {
+        for (PartInstance part : parts) {
             s.append(part.getModelKey()).append(',');
         }
 
         return s.toString();
     }
 
-    public static StatModifierMap getStatModifiers(ItemStack stack, ICoreItem item, PartDataList parts) {
-        GearType gearType = item.getGearType();
-        StatModifierMap stats = new StatModifierMap();
-
-        for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(stack))) {
-            StatGearKey itemKey = StatGearKey.of(stat, gearType);
-
-            for (IPartData part : parts) {
-                for (StatInstance mod : part.getStatModifiers(itemKey, stack)) {
-                    StatInstance modCopy = StatInstance.of(mod.getValue(), mod.getOp(), itemKey);
-                    stats.put(modCopy.getKey(), modCopy);
-                }
-            }
-        }
-
-        return stats;
-    }
-
     private static int calculateModelIndex(ItemStack gear) {
         var data = getConstruction(gear);
         var coatingOrMainPart = data.getCoatingOrMainPart();
-        if (coatingOrMainPart == null || coatingOrMainPart.getMaterials().isEmpty()) {
+        if (coatingOrMainPart == null || coatingOrMainPart.getMaterial().isEmpty()) {
             // Data packs may not be fully loaded yet, or something else has gone wrong
             return -1;
         }
-        IMaterialInstance mainMaterial = coatingOrMainPart.getMaterials().getFirst();
-        IMaterialDisplay main = mainMaterial.getDisplayProperties();
-        MaterialLayer firstLayer = main.getLayerList(GearHelper.getType(gear), PartTypes.MAIN.get(), mainMaterial).getFirstLayer();
-        boolean highContrast = firstLayer == null || !firstLayer.getTextureId().toString().endsWith("lc");
+        MaterialInstance mainMaterial = coatingOrMainPart.getMaterial().get();
+        boolean highContrast = mainMaterial.getMainTextureType() == TextureType.HIGH_CONTRAST;
 
         int ret = highContrast ? 3 : 2;
 
@@ -292,6 +256,24 @@ public final class GearData {
         return ret;
     }
 
+    public static GearPropertyMap getStatModifiers(ItemStack stack, ICoreItem item, PartList parts) {
+        GearType gearType = item.getGearType();
+        GearPropertyMap stats = new GearPropertyMap();
+
+        for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(stack))) {
+            StatGearKey itemKey = StatGearKey.of(stat, gearType);
+
+            for (PartData part : parts) {
+                for (StatInstance mod : part.getStatModifiers(itemKey, stack)) {
+                    StatInstance modCopy = StatInstance.of(mod.getValue(), mod.getOp(), itemKey);
+                    stats.put(modCopy.getKey(), modCopy);
+                }
+            }
+        }
+
+        return stats;
+    }
+
     //region Part getters and checks
 
     /**
@@ -302,11 +284,11 @@ public final class GearData {
      * @return The first part of the given type, or null if there is none
      */
     @Nullable
-    public static IPartData getPartOfType(ItemStack stack, PartType type) {
+    public static PartInstance getPartOfType(ItemStack stack, PartType type) {
         var data = stack.get(SgDataComponents.GEAR_CONSTRUCTION);
         if (data == null) return null;
 
-        for (IPartData part : data.parts()) {
+        for (PartInstance part : data.parts()) {
             if (part.getType() == type) {
                 return part;
             }
@@ -326,7 +308,7 @@ public final class GearData {
         var data = stack.get(SgDataComponents.GEAR_CONSTRUCTION);
         if (data == null) return false;
 
-        for (IPartData part : data.parts()) {
+        for (PartInstance part : data.parts()) {
             if (part.getType() == type) {
                 return true;
             }
@@ -342,10 +324,10 @@ public final class GearData {
      * @param gear The gear item
      * @param part The upgrade part
      */
-    public static void addUpgradePart(ItemStack gear, PartData part) {
+    public static void addUpgradePart(ItemStack gear, PartInstance part) {
         if (!GearHelper.isGear(gear)) return;
 
-        PartDataList parts = getConstructionParts(gear);
+        PartList parts = getConstruction(gear).parts();
 
         // Make sure the upgrade is valid for the gear type
         if (!part.get().canAddToGear(gear, part))
@@ -359,7 +341,7 @@ public final class GearData {
         part.onAddToGear(gear);
 
         // Other upgrades allow no exact duplicates, but any number of total upgrades
-        for (IPartData partInList : parts) {
+        for (PartInstance partInList : parts) {
             if (partInList.get() == part.get()) {
                 return;
             }
@@ -369,8 +351,8 @@ public final class GearData {
         writeConstructionParts(gear, parts);
     }
 
-    public static boolean hasPart(ItemStack gear, PartType partType, Predicate<IPartData> predicate) {
-        for (IPartData partData : getConstructionParts(gear)) {
+    public static boolean hasPart(ItemStack gear, PartType partType, Predicate<PartInstance> predicate) {
+        for (PartInstance partData : getConstruction(gear).parts()) {
             if (predicate.test(partData)) {
                 return true;
             }
@@ -386,7 +368,7 @@ public final class GearData {
      * @param part The part to check for
      * @return True if the item has the part in its construction, false otherwise
      */
-    public static boolean hasPart(ItemStack gear, IGearPart part) {
+    public static boolean hasPart(ItemStack gear, GearPart part) {
         if (checkNonGearItem(gear, "hasPart")) return false;
 
         String partId = part.getId().toString();
@@ -401,7 +383,7 @@ public final class GearData {
      * @param part The part to check for
      * @return True if the item has the part in its construction, false otherwise
      */
-    public static boolean hasPart(ItemStack gear, DataResource<IGearPart> part) {
+    public static boolean hasPart(ItemStack gear, DataResource<GearPart> part) {
         if (checkNonGearItem(gear, "hasPart")) return false;
 
         String partId = part.getId().toString();
@@ -412,7 +394,7 @@ public final class GearData {
         var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
         if (data == null) return false;
 
-        for (IPartData part : data.parts()) {
+        for (PartInstance part : data.parts()) {
             if (part.getId().toString().equalsIgnoreCase(partId)) {
                 return true;
             }
@@ -421,11 +403,11 @@ public final class GearData {
         return false;
     }
 
-    public static void addOrReplacePart(ItemStack gear, PartData part) {
+    public static void addOrReplacePart(ItemStack gear, PartInstance part) {
         PartType partType = part.getType();
-        PartDataList parts = getConstructionParts(gear);
-        List<IPartData> partsOfType = parts.getPartsOfType(partType);
-        IPartData removedPart = null;
+        PartList parts = getConstruction(gear).parts();
+        List<PartInstance> partsOfType = parts.getPartsOfType(partType);
+        PartInstance removedPart = null;
 
         if (!partsOfType.isEmpty() && partsOfType.size() >= partType.maxPerItem()) {
             removedPart = partsOfType.getFirst();
@@ -437,19 +419,19 @@ public final class GearData {
         writeConstructionParts(gear, parts);
     }
 
-    public static void addPart(ItemStack gear, PartData part) {
-        PartDataList parts = getConstructionParts(gear);
+    public static void addPart(ItemStack gear, PartInstance part) {
+        PartList parts = getConstruction(gear).parts();
         parts.add(part);
         writeConstructionParts(gear, parts);
         part.onAddToGear(gear);
     }
 
     public static boolean removeFirstPartOfType(ItemStack gear, PartType type) {
-        PartDataList parts = getConstructionParts(gear);
-        List<IPartData> partsOfType = new ArrayList<>(parts.getPartsOfType(type));
+        PartList parts = getConstruction(gear).parts();
+        List<PartInstance> partsOfType = new ArrayList<>(parts.getPartsOfType(type));
 
         if (!partsOfType.isEmpty()) {
-            IPartData removed = partsOfType.removeFirst();
+            PartInstance removed = partsOfType.removeFirst();
             parts.remove(removed);
             writeConstructionParts(gear, parts);
             removed.onRemoveFromGear(gear);
@@ -459,12 +441,12 @@ public final class GearData {
         return false;
     }
 
-    public static void writeConstructionParts(ItemStack gear, Collection<? extends IPartData> parts) {
+    public static void writeConstructionParts(ItemStack gear, Collection<PartInstance> parts) {
         if (checkNonGearItem(gear, "writeConstructionParts")) return;
 
         var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
         var newData = new GearConstructionData(
-                PartDataList.immutable(parts),
+                PartList.immutable(parts),
                 data != null && data.isExample(),
                 data != null ? data.brokenCount() : 0,
                 data != null ? data.repairedCount() : 0

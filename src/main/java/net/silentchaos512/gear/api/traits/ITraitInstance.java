@@ -1,14 +1,12 @@
 package net.silentchaos512.gear.api.traits;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
-import net.silentchaos512.gear.gear.trait.TraitSerializers;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
@@ -19,14 +17,14 @@ public interface ITraitInstance {
     ResourceLocation getTraitId();
 
     @Nullable
-    ITrait getTrait();
+    Trait getTrait();
 
     int getLevel();
 
     Collection<ITraitCondition> getConditions();
 
-    default boolean conditionsMatch(PartGearKey key, ItemStack gear, List<? extends IGearComponentInstance<?>> components) {
-        ITrait trait = getTrait();
+    default boolean conditionsMatch(PartGearKey key, ItemStack gear, List<? extends GearComponentInstance<?>> components) {
+        Trait trait = getTrait();
         if (trait == null) return true;
 
         for (ITraitCondition condition : getConditions()) {
@@ -36,21 +34,6 @@ public interface ITraitInstance {
         }
 
         return true;
-    }
-
-    default JsonObject serialize() {
-        JsonObject json = new JsonObject();
-        json.addProperty("name", getTraitId().toString());
-        json.addProperty("level", getLevel());
-        Collection<ITraitCondition> conditions = getConditions();
-        if (!conditions.isEmpty()) {
-            JsonArray array = new JsonArray();
-            for (ITraitCondition condition : conditions) {
-                array.add(TraitSerializers.serializeCondition(condition));
-            }
-            json.add("conditions", array);
-        }
-        return json;
     }
 
     default MutableComponent getConditionsText() {

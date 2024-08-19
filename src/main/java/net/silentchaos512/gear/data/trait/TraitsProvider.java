@@ -2,21 +2,22 @@ package net.silentchaos512.gear.data.trait;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.data.trait.*;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.gear.trait.StellarTrait;
+import net.silentchaos512.gear.gear.trait.effect.*;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgTags;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.Const;
 
 import java.util.ArrayList;
@@ -35,119 +36,149 @@ public class TraitsProvider extends TraitsProviderBase {
 
         // Simple
 
-        ret.add(TraitBuilder.simple(Const.Traits.ANCIENT, 5)
-                .withGearTypeCondition(GearType.TOOL));
-        ret.add(TraitBuilder.simple(Const.Traits.BOUNCE, 1)
-                .withGearTypeCondition(GearType.ARMOR));
-        ret.add(TraitBuilder.simple(Const.Traits.BRILLIANT, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.CONFETTI, 5)
-                .withGearTypeCondition(GearType.WEAPON));
-        ret.add(TraitBuilder.simple(Const.Traits.FIREPROOF, 1)
-                .extraWikiLines("  - The item cannot be destroyed by fire or lava"));
-        ret.add(TraitBuilder.simple(Const.Traits.FLAMMABLE, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.INDESTRUCTIBLE, 1)
-                .extraWikiLines("  - The damage (durability lost) of the item will remain the same as when the trait was added",
-                        "  - The item can still be repaired if desired"));
-        ret.add(TraitBuilder.simple(Const.Traits.JABBERWOCKY, 1)
-                .withGearTypeCondition(GearType.HARVEST_TOOL)
+        ret.add(TraitBuilder.of(Const.Traits.ANCIENT, 5)
+                .withGearTypeCondition(GearTypes.TOOL)
+        );
+        ret.add(TraitBuilder.of(Const.Traits.BOUNCE, 1)
+                .withGearTypeCondition(GearTypes.ARMOR)
+        );
+        ret.add(TraitBuilder.of(Const.Traits.BRILLIANT, 1));
+        ret.add(TraitBuilder.of(Const.Traits.CONFETTI, 5)
+                .withGearTypeCondition(GearTypes.WEAPON));
+        ret.add(TraitBuilder.of(Const.Traits.FIREPROOF, 1)
+                .extraWikiLines("  - The item cannot be destroyed by fire or lava")
+        );
+        ret.add(TraitBuilder.of(Const.Traits.FLAMMABLE, 1));
+        ret.add(TraitBuilder.of(Const.Traits.INDESTRUCTIBLE, 1)
+                .extraWikiLines(
+                        "  - The damage (durability lost) of the item will remain the same as when the trait was added",
+                        "  - The item can still be repaired if desired"
+                )
+        );
+        ret.add(TraitBuilder.of(Const.Traits.JABBERWOCKY, 1)
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL)
                 .extraWikiLines("Something may happen if you mine certain blocks with this"));
-        ret.add(TraitBuilder.simple(Const.Traits.LUSTROUS, 5)
-                .withGearTypeCondition(GearType.HARVEST_TOOL));
-        ret.add(TraitBuilder.simple(Const.Traits.MAGMATIC, 1)
-                .withGearTypeCondition(GearType.HARVEST_TOOL)
+        ret.add(TraitBuilder.of(Const.Traits.LUSTROUS, 5)
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL));
+        ret.add(TraitBuilder.of(Const.Traits.MAGMATIC, 1)
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL)
                 .extraWikiLines("Smelted drops are not affected by fortune to prevent item duplication"));
-        ret.add(TraitBuilder.simple(Const.Traits.MAGNETIC, 5)
+        ret.add(TraitBuilder.of(Const.Traits.MAGNETIC, 5)
                 .extraWikiLines("Higher levels increase range"));
-        ret.add(TraitBuilder.simple(Const.Traits.MULTI_BREAK, 5)
+        ret.add(TraitBuilder.of(Const.Traits.MULTI_BREAK, 5)
                 .extraWikiLines("  - This trait has never been coded ~~and has almost achieved meme status~~",
                         "  - Intended effect: mine multiple blocks like vein miner"));
-        ret.add(TraitBuilder.simple(Const.Traits.RED_CARD, 1));
-        ret.add(TraitBuilder.simple(Const.Traits.SNOW_WALKER, 1)
+        ret.add(TraitBuilder.of(Const.Traits.RED_CARD, 1));
+        ret.add(TraitBuilder.of(Const.Traits.SNOW_WALKER, 1)
                 .extraWikiLines("Allows the player to walk on powder snow without sinking. This will work on any armor or curio."));
-        ret.add(TraitBuilder.simple(Const.Traits.SPOON, 1)
-                .withGearTypeCondition(GearType.PICKAXE));
-        ret.add(TraitBuilder.simple(Const.Traits.TURTLE, 1)
-                .withGearTypeCondition(GearType.HELMET, GearType.CURIO));
-        ret.add(TraitBuilder.simple(Const.Traits.VOID_WARD, 1)
-                .withGearTypeCondition(GearType.ARMOR)
+        ret.add(TraitBuilder.of(Const.Traits.SPOON, 1)
+                .withGearTypeCondition(GearTypes.PICKAXE));
+        ret.add(TraitBuilder.of(Const.Traits.TURTLE, 1)
+                .withGearTypeCondition(GearTypes.HELMET, GearTypes.CURIO));
+        ret.add(TraitBuilder.of(Const.Traits.VOID_WARD, 1)
+                .withGearTypeCondition(GearTypes.ARMOR)
                 .extraWikiLines("When void damage is taken, the player is launched upward and given a levitation and slow falling effect"));
-        ret.add(TraitBuilder.simple(Const.Traits.WIDEN, 3)
-                .withGearTypeCondition(GearType.HARVEST_TOOL)
+        ret.add(TraitBuilder.of(Const.Traits.WIDEN, 3)
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL)
                 .extraWikiLines("  - Adds the trait level to the effect radius",
                         "  - Level 1 = 5x5, 2 = 7x7, 3 = 9x9"));
 
         // Synergy
 
-        ret.add(new SynergyTraitBuilder(Const.Traits.CRUDE, 5, -0.04f)
+        ret.add(TraitBuilder.of(Const.Traits.CRUDE, 5)
+                .effects(new SynergyTraitEffect(-0.04f))
                 .cancelsWith(Const.Traits.RUSTIC)
                 .cancelsWith(Const.Traits.SYNERGISTIC)
         );
-        ret.add(new SynergyTraitBuilder(Const.Traits.RUSTIC, 5, 0.05f)
-                .setRange(0.749f, 1.001f)
+        ret.add(TraitBuilder.of(Const.Traits.RUSTIC, 5)
+                .effects(new SynergyTraitEffect(0.05f, 0.749f, 1.001f))
                 .cancelsWith(Const.Traits.SYNERGISTIC)
         );
-        ret.add(new SynergyTraitBuilder(Const.Traits.SYNERGISTIC, 5, 0.04f)
-                .setRangeMin(1f)
+        ret.add(TraitBuilder.of(Const.Traits.SYNERGISTIC, 5)
+                .effects(new SynergyTraitEffect(0.04f, 1f, Float.MAX_VALUE))
                 .cancelsWith(Const.Traits.CRUDE)
         );
 
         // Durability
 
-        ret.add(new DurabilityTraitBuilder(Const.Traits.BENDING, 5, -1, 0.075f)
+        ret.add(TraitBuilder.of(Const.Traits.BENDING, 5)
+                .effects(new DurabilityTraitEffect(0.075f, 1))
                 .cancelsWith(Const.Traits.FLEXIBLE));
-        ret.add(new DurabilityTraitBuilder(Const.Traits.BRITTLE, 5, 1, 0.1f)
+        ret.add(TraitBuilder.of(Const.Traits.BRITTLE, 5)
+                .effects(new DurabilityTraitEffect(0.1f, 1))
                 .cancelsWith(Const.Traits.MALLEABLE));
-        ret.add(new DurabilityTraitBuilder(Const.Traits.FLEXIBLE, 5, -1, 0.075f)
+        ret.add(TraitBuilder.of(Const.Traits.FLEXIBLE, 5)
+                .effects(new DurabilityTraitEffect(0.075f, -1))
                 .cancelsWith(Const.Traits.BENDING));
-        ret.add(new DurabilityTraitBuilder(Const.Traits.MALLEABLE, 5, -1, 0.1f)
+        ret.add(TraitBuilder.of(Const.Traits.MALLEABLE, 5)
+                .effects(new DurabilityTraitEffect(0.1f, -1))
                 .cancelsWith(Const.Traits.BRITTLE));
-        ret.add(new DurabilityTraitBuilder(Const.Traits.STURDY, 5, -1, 0.175f)
+        ret.add(TraitBuilder.of(Const.Traits.STURDY, 5)
+                .effects(new DurabilityTraitEffect(0.175f, -1))
                 .cancelsWith(Const.Traits.BRITTLE));
 
         // Self Repair
 
-        ret.add(selfRepairTrait(Const.Traits.RENEW, 5, 0.018f, 1));
+        ret.add(TraitBuilder.of(Const.Traits.RENEW, 5)
+                .effects(new SelfRepairTraitEffect(0.018f, 1))
+        );
 
         // Attribute
 
-        ret.add(new AttributeTraitBuilder(Const.Traits.BASTION, 5)
-                .addModifierAnySlot(GearType.ALL,
-                        Attributes.ARMOR,
-                        AttributeModifier.Operation.ADDITION,
-                        1, 2, 3, 4, 5)
-                .withGearTypeCondition(GearType.ARMOR, GearType.CURIO)
+        ret.add(TraitBuilder.of(Const.Traits.BASTION, 5)
+                .effects(
+                        AttributeTraitEffect.builder()
+                                .addAnySlot(GearTypes.ALL,
+                                        Attributes.ARMOR,
+                                        AttributeModifier.Operation.ADD_VALUE,
+                                        1, 2, 3, 4, 5)
+                                .build()
+                )
+                .withGearTypeCondition(GearTypes.ARMOR, GearTypes.CURIO)
         );
-        ret.add(new AttributeTraitBuilder(Const.Traits.CURSED, 7)
-                .addModifierAnySlot(GearType.ALL,
-                        Attributes.LUCK,
-                        AttributeModifier.Operation.ADDITION,
-                        -0.5f, -1f, -1.5f, -2f, -3f, -4f, -5f)
+        ret.add(TraitBuilder.of(Const.Traits.CURSED, 7)
+                .effects(AttributeTraitEffect.builder()
+                        .addAnySlot(GearTypes.ALL,
+                                Attributes.LUCK,
+                                AttributeModifier.Operation.ADD_VALUE,
+                                -0.5f, -1f, -1.5f, -2f, -3f, -4f, -5f)
+                        .build()
+                )
                 .cancelsWith(Const.Traits.LUCKY)
                 .extraWikiLines("  - Please see the extra info on the Lucky trait and this wiki page: https://minecraft.gamepedia.com/Luck")
         );
-        ret.add(new AttributeTraitBuilder(Const.Traits.LUCKY, 7)
-                .addModifierAnySlot(GearType.ALL,
-                        Attributes.LUCK,
-                        AttributeModifier.Operation.ADDITION,
-                        0.5f, 1f, 1.5f, 2f, 3f, 4f, 5f)
+        ret.add(TraitBuilder.of(Const.Traits.LUCKY, 7)
+                .effects(AttributeTraitEffect.builder()
+                        .addAnySlot(GearTypes.ALL,
+                                Attributes.LUCK,
+                                AttributeModifier.Operation.ADD_VALUE,
+                                0.5f, 1f, 1.5f, 2f, 3f, 4f, 5f)
+                        .build()
+                )
                 .cancelsWith(Const.Traits.CURSED)
                 .extraWikiLines("  - **Luck has nothing to do with the Fortune enchantment!** It affects loot from some loot tables, but not most. It does not increase drops from normal ores. Please read here for more information: https://minecraft.gamepedia.com/Luck")
         );
-        ret.add(new AttributeTraitBuilder(Const.Traits.HEAVY, 5)
-                .addArmorModifier(
-                        Attributes.MOVEMENT_SPEED,
-                        AttributeModifier.Operation.MULTIPLY_BASE,
-                        -0.01f, -0.02f, -0.03f, -0.04f, -0.05f)
+        ret.add(TraitBuilder.of(Const.Traits.HEAVY, 5)
+                .effects(AttributeTraitEffect.builder()
+                        .addArmorSlots(
+                                Attributes.MOVEMENT_SPEED,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_BASE,
+                                -0.01f, -0.02f, -0.03f, -0.04f, -0.05f)
+                        .build()
+                )
                 .cancelsWith(Const.Traits.LIGHT)
-                .withGearTypeCondition(GearType.ARMOR)
+                .withGearTypeCondition(GearTypes.ARMOR)
         );
-        ret.add(new AttributeTraitBuilder(Const.Traits.LIGHT, 5)
-                .addArmorModifier(
-                        Attributes.MOVEMENT_SPEED,
-                        AttributeModifier.Operation.MULTIPLY_BASE,
-                        0.01f, 0.02f, 0.03f, 0.04f, 0.05f)
+        ret.add(TraitBuilder.of(Const.Traits.LIGHT, 5)
+                .effects(AttributeTraitEffect.builder()
+                        .addArmorSlots(
+                                Attributes.MOVEMENT_SPEED,
+                                AttributeModifier.Operation.ADD_MULTIPLIED_BASE,
+                                0.01f, 0.02f, 0.03f, 0.04f, 0.05f)
+                        .build()
+                )
                 .cancelsWith(Const.Traits.HEAVY)
-                .withGearTypeCondition(GearType.ARMOR)
+                .withGearTypeCondition(GearTypes.ARMOR)
         );
         {
             int maxLevel = 5;
@@ -155,151 +186,242 @@ public class TraitsProvider extends TraitsProviderBase {
             for (int i = 0; i < maxLevel; ++i) {
                 values[i] = Const.Traits.MOONWALKER_GRAVITY_MOD * (i + 1);
             }
-            ret.add(new AttributeTraitBuilder(Const.Traits.MOONWALKER, maxLevel)
-                    .addModifierAnySlot(GearType.ALL,
-                            NeoForgeMod.ENTITY_GRAVITY.value(),
-                            AttributeModifier.Operation.MULTIPLY_BASE,
-                            values)
-                    .withGearTypeCondition(GearType.BOOTS, GearType.CURIO)
+            ret.add(TraitBuilder.of(Const.Traits.MOONWALKER, maxLevel)
+                    .effects(
+                            AttributeTraitEffect.builder()
+                                    .addAnySlot(GearTypes.ALL,
+                                            Attributes.GRAVITY,
+                                            AttributeModifier.Operation.ADD_MULTIPLIED_BASE,
+                                            values)
+                                    .build()
+                    )
+                    .withGearTypeCondition(GearTypes.BOOTS, GearTypes.CURIO)
             );
         }
-        ret.add(new AttributeTraitBuilder(Const.Traits.REACH, 5)
-                .addModifierAnySlot(GearType.ALL,
-                        NeoForgeMod.BLOCK_REACH.value(),
-                        AttributeModifier.Operation.ADDITION,
-                        0.5f, 1f, 1.5f, 2f, 3f)
+        ret.add(TraitBuilder.of(Const.Traits.REACH, 5)
+                .effects(
+                        AttributeTraitEffect.builder()
+                                .addAnySlot(GearTypes.ALL,
+                                        Attributes.BLOCK_INTERACTION_RANGE,
+                                        AttributeModifier.Operation.ADD_VALUE,
+                                        0.5f, 1f, 1.5f, 2f, 3f)
+                                .build()
+                )
         );
-        ret.add(new AttributeTraitBuilder(Const.Traits.SWIFT_SWIM, 5)
-                .addModifierAnySlot(GearType.ALL,
-                        NeoForgeMod.SWIM_SPEED.value(),
-                        AttributeModifier.Operation.ADDITION,
-                        0.2f, 0.4f, 0.6f, 0.8f, 1f)
+        ret.add(TraitBuilder.of(Const.Traits.SWIFT_SWIM, 5)
+                .effects(
+                        AttributeTraitEffect.builder()
+                                .addAnySlot(GearTypes.ALL,
+                                        NeoForgeMod.SWIM_SPEED,
+                                        AttributeModifier.Operation.ADD_VALUE,
+                                        0.2f, 0.4f, 0.6f, 0.8f, 1f)
+                                .build()
+                )
         );
 
         // Enchantment
 
-        ret.add(new EnchantmentTraitBuilder(Const.Traits.FIERY, 2)
-                .addEnchantments(GearType.MELEE_WEAPON, Enchantments.FIRE_ASPECT, 1, 2)
-                .addEnchantments(GearType.RANGED_WEAPON, Enchantments.FLAMING_ARROWS, 1)
-                .withGearTypeCondition(GearType.WEAPON)
+        // FIXME: Bring back enchantment trait
+        ret.add(new TraitBuilder(Const.Traits.FIERY, 2));
+        ret.add(new TraitBuilder(Const.Traits.SILKY, 1));
+
+        /*ret.add(new EnchantmentTraitBuilder(Const.Traits.FIERY, 2)
+                .addEnchantments(GearTypes.MELEE_WEAPON, Enchantments.FIRE_ASPECT, 1, 2)
+                .addEnchantments(GearTypes.RANGED_WEAPON, Enchantments.FLAMING_ARROWS, 1)
+                .withGearTypeCondition(GearTypes.WEAPON)
         );
         ret.add(new EnchantmentTraitBuilder(Const.Traits.SILKY, 1)
-                .addEnchantments(GearType.HARVEST_TOOL, Enchantments.SILK_TOUCH, 1)
-                .withGearTypeCondition(GearType.HARVEST_TOOL)
-        );
+                .addEnchantments(GearTypes.HARVEST_TOOL, Enchantments.SILK_TOUCH, 1)
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL)
+        );*/
 
         // Wielder Effect (Potion)
 
-        ret.add(new WielderEffectTraitBuilder(Const.Traits.ADAMANT, 5)
-                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.PIECE_COUNT, MobEffects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
+        ret.add(TraitBuilder.of(Const.Traits.ADAMANT, 5)
+                .effects(
+                        WielderEffectTraitEffect.builder()
+                                .add(GearTypes.ARMOR, WielderEffectTraitEffect.LevelType.PIECE_COUNT, MobEffects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
+                                .build()
+                )
         );
-        ret.add(new WielderEffectTraitBuilder(Const.Traits.AQUATIC, 5)
-                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.FULL_SET_ONLY, MobEffects.WATER_BREATHING, 1)
+        ret.add(TraitBuilder.of(Const.Traits.AQUATIC, 5)
+                .effects(
+                        WielderEffectTraitEffect.builder()
+                                .add(GearTypes.ARMOR, WielderEffectTraitEffect.LevelType.FULL_SET_ONLY, MobEffects.WATER_BREATHING, 1)
+                                .build()
+                )
         );
-        ret.add(new WielderEffectTraitBuilder(Const.Traits.FLAME_WARD, 1)
-                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.FULL_SET_ONLY, MobEffects.FIRE_RESISTANCE, 1)
+        ret.add(TraitBuilder.of(Const.Traits.FLAME_WARD, 1)
+                .effects(
+                        WielderEffectTraitEffect.builder()
+                                .add(GearTypes.ARMOR, WielderEffectTraitEffect.LevelType.FULL_SET_ONLY, MobEffects.FIRE_RESISTANCE, 1)
+                                .build()
+                )
                 .overridesTrait(Const.Traits.FLAMMABLE)
-                .withGearTypeCondition(GearType.ARMOR)
+                .withGearTypeCondition(GearTypes.ARMOR)
                 .extraWikiLines("  - The item cannot be destroyed by fire or lava")
         );
-        ret.add(new WielderEffectTraitBuilder(Const.Traits.KITTY_VISION, 1)
-                .addEffect(GearType.HELMET, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
-                .addEffect(GearType.CURIO, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
-                .withGearTypeCondition(GearType.HELMET, GearType.CURIO)
+        ret.add(TraitBuilder.of(Const.Traits.KITTY_VISION, 1)
+                .effects(
+                        WielderEffectTraitEffect.builder()
+                                .add(GearTypes.HELMET, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
+                                .add(GearTypes.CURIO, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.NIGHT_VISION, 1)
+                                .build()
+                )
+                .withGearTypeCondition(GearTypes.HELMET, GearTypes.CURIO)
         );
-        ret.add(new WielderEffectTraitBuilder(Const.Traits.MIGHTY, 5)
-                .addEffect(GearType.TOOL, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
-                .addEffect(GearType.TOOL, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 1, 2, 3)
-                .addEffect(GearType.CURIO, WielderEffectTraitBuilder.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 2, 2, 3)
-                .withGearTypeCondition(GearType.TOOL, GearType.CURIO)
+        ret.add(TraitBuilder.of(Const.Traits.MIGHTY, 5)
+                .effects(
+                        WielderEffectTraitEffect.builder()
+                                .add(GearTypes.TOOL, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
+                                .add(GearTypes.TOOL, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 1, 2, 3)
+                                .add(GearTypes.CURIO, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 2, 2, 3)
+                                .build()
+                )
+                .withGearTypeCondition(GearTypes.TOOL, GearTypes.CURIO)
         );
-        ret.add(new WielderEffectTraitBuilder(Const.Traits.STELLAR, 5, StellarTrait.SERIALIZER.getName())
-                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.PIECE_COUNT, MobEffects.MOVEMENT_SPEED, 0, 1, 2, 3)
-                .addEffect(GearType.ARMOR, WielderEffectTraitBuilder.LevelType.PIECE_COUNT, MobEffects.JUMP, 1, 2, 3, 4)
-                .extraWikiLines(String.format("  - Has a %d%% chance per level to restore 1 durability each second",
-                        (int) (100 * Const.Traits.STELLAR_REPAIR_CHANCE)))
+        ret.add(TraitBuilder.of(Const.Traits.STELLAR, 5)
+                .effects(
+                        new SelfRepairTraitEffect(0.02f, 1),
+                        WielderEffectTraitEffect.builder()
+                                .add(GearTypes.ARMOR,
+                                        WielderEffectTraitEffect.LevelType.PIECE_COUNT,
+                                        MobEffects.MOVEMENT_SPEED,
+                                        0, 1, 2, 3
+                                )
+                                .add(GearTypes.ARMOR,
+                                        WielderEffectTraitEffect.LevelType.PIECE_COUNT,
+                                        MobEffects.JUMP,
+                                        1, 2, 3, 4
+                                )
+                                .build()
+                )
         );
 
         // Target Effect
 
-        ret.add(new TargetEffectTraitBuilder(Const.Traits.VENOM, 5)
-                .withDurationByLevel(GearType.TOOL, MobEffects.POISON, 0, 4.0f)
-                .withGearTypeCondition(GearType.TOOL)
+        ret.add(TraitBuilder.of(Const.Traits.VENOM, 5)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        TargetEffectTraitEffect.builder()
+                                .addWithDurationByLevel(GearTypes.TOOL, MobEffects.POISON, 5, 4.0f)
+                                .build()
+                )
         );
 
         // Stat mod
 
-        ret.add(new StatModifierTraitBuilder(Const.Traits.ACCELERATE, 5)
-                .addStatMod(ItemStats.HARVEST_SPEED, 2f, true, false)
-                .addStatMod(ItemStats.ATTACK_SPEED, 0.01f, true, false)
-                .addStatMod(ItemStats.RANGED_SPEED, 0.01f, true, false)
-                .withGearTypeCondition(GearType.TOOL)
+        ret.add(new TraitBuilder(Const.Traits.ACCELERATE, 5)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.HARVEST_SPEED, 2f, true, false)
+                                .add(GearProperties.ATTACK_SPEED, 0.01f, true, false)
+                                .add(GearProperties.DRAW_SPEED, 0.01f, true, false)
+                                .build()
+                )
         );
-        ret.add(new StatModifierTraitBuilder(Const.Traits.BULKY, 5)
-                .addStatMod(ItemStats.ATTACK_SPEED, -0.075f, true, false)
-                .withGearTypeCondition(GearType.TOOL)
+        ret.add(new TraitBuilder(Const.Traits.BULKY, 5)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.ATTACK_SPEED, -0.075f, true, false)
+                                .build()
+                )
         );
-        ret.add(new StatModifierTraitBuilder(Const.Traits.CHIPPING, 5)
-                .addStatMod(ItemStats.ARMOR, -0.075f, true, true)
-                .addStatMod(ItemStats.HARVEST_SPEED, 0.25f, true, true)
+        ret.add(new TraitBuilder(Const.Traits.CHIPPING, 5)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.ARMOR, -0.075f, true, true)
+                                .add(GearProperties.HARVEST_SPEED, 0.25f, true, true)
+                                .build()
+                )
         );
-        ret.add(new StatModifierTraitBuilder(Const.Traits.CRUSHING, 5)
-                .addStatMod(ItemStats.ARMOR, 0.05f, true, true)
-                .addStatMod(ItemStats.MELEE_DAMAGE, -0.1667f, true, true)
+        ret.add(new TraitBuilder(Const.Traits.CRUSHING, 5)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.ARMOR, 0.05f, true, true)
+                                .add(GearProperties.ATTACK_DAMAGE, -0.1667f, true, true)
+                                .build()
+                )
         );
-        ret.add(new StatModifierTraitBuilder(Const.Traits.ERODED, 5)
-                .addStatMod(ItemStats.MELEE_DAMAGE, -0.15f, true, true)
-                .addStatMod(ItemStats.HARVEST_SPEED, 0.15f, true, true)
+        ret.add(new TraitBuilder(Const.Traits.ERODED, 5)
+                .withGearTypeCondition(GearTypes.TOOL)
                 .cancelsWith(Const.Traits.JAGGED)
-                .withGearTypeCondition(GearType.TOOL)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.ATTACK_DAMAGE, -0.15f, true, true)
+                                .add(GearProperties.HARVEST_SPEED, 0.15f, true, true)
+                                .build()
+                )
         );
-        ret.add(new StatModifierTraitBuilder(Const.Traits.HARD, 5)
-                .addStatMod(ItemStats.HARVEST_SPEED, 0.05f, true, true)
-                .addStatMod(ItemStats.RANGED_DAMAGE, -0.1f, true, true)
+        ret.add(new TraitBuilder(Const.Traits.HARD, 5)
+                .withGearTypeCondition(GearTypes.TOOL)
                 .cancelsWith(Const.Traits.SOFT)
-                .withGearTypeCondition(GearType.TOOL)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.HARVEST_SPEED, 0.05f, true, true)
+                                .add(GearProperties.RANGED_DAMAGE, -0.1f, true, true)
+                                .build()
+                )
         );
-        ret.add(new StatModifierTraitBuilder(Const.Traits.JAGGED, 5)
-                .addStatMod(ItemStats.MELEE_DAMAGE, 0.1667f, true, true)
-                .addStatMod(ItemStats.RANGED_DAMAGE, -0.1667f, true, true)
+        ret.add(new TraitBuilder(Const.Traits.JAGGED, 5)
+                .withGearTypeCondition(GearTypes.TOOL)
                 .cancelsWith(Const.Traits.ERODED)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.ATTACK_DAMAGE, 0.1667f, true, true)
+                                .add(GearProperties.RANGED_DAMAGE, -0.1667f, true, true)
+                                .build()
+                )
         );
-        ret.add(new StatModifierTraitBuilder(Const.Traits.ORGANIC, 5)
-                .addStatMod(ItemStats.ENCHANTMENT_VALUE, 0.1f, true, true)
-                .addStatMod(ItemStats.MAGIC_DAMAGE, -0.15f, true, true)
-                .cancelsWith(Const.Traits.ERODED)
+        ret.add(new TraitBuilder(Const.Traits.ORGANIC, 5)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.ENCHANTMENT_VALUE, 0.1f, true, true)
+                                .add(GearProperties.MAGIC_DAMAGE, -0.15f, true, true)
+                                .build()
+                )
         );
-        ret.add(new StatModifierTraitBuilder(Const.Traits.SHARP, 5)
-                .addStatMod(ItemStats.HARVEST_SPEED, 0.125f, true, true)
-                .addStatMod(ItemStats.MELEE_DAMAGE, 0.125f, true, true)
-                .withGearTypeCondition(GearType.TOOL)
+        ret.add(new TraitBuilder(Const.Traits.SHARP, 5)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.HARVEST_SPEED, 0.125f, true, true)
+                                .add(GearProperties.ATTACK_DAMAGE, 0.125f, true, true)
+                                .build()
+                )
         );
-        ret.add(new StatModifierTraitBuilder(Const.Traits.SOFT, 5)
-                .addStatMod(ItemStats.HARVEST_SPEED, -0.15f, true, true)
+        ret.add(new TraitBuilder(Const.Traits.SOFT, 5)
+                .withGearTypeCondition(GearTypes.TOOL)
                 .cancelsWith(Const.Traits.HARD)
-                .withGearTypeCondition(GearType.TOOL)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.HARVEST_SPEED, -0.15f, true, true)
+                                .build()
+                )
         );
 
         // Block placers
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.CRACKLER, 1, Blocks.BASALT, 3)
-                .withGearTypeCondition(GearType.TOOL));
+                .withGearTypeCondition(GearTypes.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.FLOATSTONER, 1, Blocks.END_STONE, 3)
-                .withGearTypeCondition(GearType.TOOL));
+                .withGearTypeCondition(GearTypes.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.IGNITE, 1, Blocks.FIRE, 1)
                 .sound(SoundEvents.FLINTANDSTEEL_USE, 1f, 1f)
-                .withGearTypeCondition(GearType.TOOL)
+                .withGearTypeCondition(GearTypes.TOOL)
         );
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.RACKER, 1, Blocks.NETHERRACK, 3)
-                .withGearTypeCondition(GearType.TOOL));
+                .withGearTypeCondition(GearTypes.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.REFRACTIVE, 1, SgBlocks.PHANTOM_LIGHT.get(), 5)
                 .sound(SoundEvents.AMETHYST_BLOCK_STEP, 0.75f, 0.5f)
-                .withGearTypeCondition(GearType.TOOL)
+                .withGearTypeCondition(GearTypes.TOOL)
         );
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.TERMINUS, 1, Blocks.STONE, 3)
-                .withGearTypeCondition(GearType.TOOL));
+                .withGearTypeCondition(GearTypes.TOOL));
         ret.add(new BlockPlacerTraitBuilder(Const.Traits.VULCAN, 1, Blocks.OBSIDIAN, 20)
                 .cooldown(100)
-                .withGearTypeCondition(GearType.TOOL)
+                .withGearTypeCondition(GearTypes.TOOL)
         );
 
         // Block fillers
@@ -311,19 +433,41 @@ public class TraitsProvider extends TraitsProviderBase {
         // Misfits
 
         ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.of(SgTags.Items.GOLD_DIGGER_DROPS))
-                .withGearTypeCondition(GearType.HARVEST_TOOL));
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL));
         ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.of(SgTags.Items.IMPERIAL_DROPS))
-                .withGearTypeCondition(GearType.HARVEST_TOOL));
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL));
 
         ret.add(cancelEffectsTrait(Const.Traits.CURE_POISON, MobEffects.POISON));
         ret.add(cancelEffectsTrait(Const.Traits.CURE_WITHER, MobEffects.WITHER));
 
-        ret.add(damageTypeTrait(Const.Traits.CHILLED, 5, "chilled", 2)
-                .withGearTypeCondition(GearType.WEAPON));
-        ret.add(damageTypeTrait(Const.Traits.HOLY, 5, "holy", 2)
-                .withGearTypeCondition(GearType.WEAPON));
 
-        ret.add(new BlockMiningSpeedTraitBuilder(Const.Traits.GREEDY, 5, 0.2f, Tags.Blocks.ORES));
+        ret.add(TraitBuilder.of(Const.Traits.CHILLED, 5)
+                .withGearTypeCondition(GearTypes.WEAPON)
+                .effects(
+                        ExtraDamageTraitEffect.affectingFireImmune(2.0f)
+                )
+        );
+        ret.add(TraitBuilder.of(Const.Traits.HOLY, 5)
+                .withGearTypeCondition(GearTypes.WEAPON)
+                .effects(
+                        ExtraDamageTraitEffect.affecting(EntityTypeTags.UNDEAD, 2.0f)
+                )
+        );
+
+        ret.add(TraitBuilder.of(Const.Traits.GREEDY, 5)
+                .effects(
+                        new BlockMiningSpeedTraitEffect(
+                                Tags.Blocks.ORES,
+                                0.2f
+                        ),
+                        new ItemMagnetTraitEffect(
+                                0.06f,
+                                2f,
+                                Ingredient.of(SgTags.Items.GREEDY_MAGNET_ATTRACTED),
+                                "ores and gems"
+                        )
+                )
+        );
 
         return ret;
     }

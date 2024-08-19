@@ -7,11 +7,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -101,16 +99,11 @@ public enum CraftingItems implements ItemLike {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
             String descKey = this.getDescriptionId() + ".desc";
             if (I18n.exists(descKey)) {
                 tooltip.add(Component.translatable(descKey).withStyle(ChatFormatting.ITALIC));
             }
         }
-
-        /*@Override
-        public boolean isBeaconPayment(ItemStack stack) {
-            return this.isIn(Tags.Items.INGOTS) || this == GLITTERY_DUST.asItem();
-        }*/
     }
 }

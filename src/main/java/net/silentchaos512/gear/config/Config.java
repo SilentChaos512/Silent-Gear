@@ -1,19 +1,20 @@
 package net.silentchaos512.gear.config;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.NeoForgeConfig;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.setup.NerfedGear;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
+import net.silentchaos512.gear.setup.NerfedGear;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.IAoeTool;
 import net.silentchaos512.lib.util.NameUtils;
@@ -21,12 +22,13 @@ import net.silentchaos512.lib.util.NameUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public final class Config {
     public static final class Common {
         static final ModConfigSpec spec;
         // Blueprints
-        public static final ModConfigSpec.EnumValue<BlueprintType> blueprintTypes;
+        public static final ModConfigSpec.EnumValue<BlueprintType.ConfigOption> blueprintTypes;
         public static final ModConfigSpec.BooleanValue spawnWithStarterBlueprints;
         // Nerfed gear
         public static final ModConfigSpec.BooleanValue nerfedItemsEnabled;
@@ -35,9 +37,9 @@ public final class Config {
         static final ModConfigSpec.ConfigValue<List<? extends String>> nerfedItems;
         // Sinew
         public static final ModConfigSpec.DoubleValue sinewDropRate;
+        @Deprecated(forRemoval = true) // FIXME: use a tag, you fool...
         static final ModConfigSpec.ConfigValue<List<? extends String>> sinewAnimals;
         // Gear
-        public static final ModConfigSpec.BooleanValue allowLegacyMaterialMixing;
         public static final ModConfigSpec.BooleanValue allowConversionRecipes;
         public static final ModConfigSpec.BooleanValue allowEnchanting;
         public static final ModConfigSpec.BooleanValue forceRemoveEnchantments;
@@ -46,8 +48,6 @@ public final class Config {
         public static final ModConfigSpec.EnumValue<IAoeTool.MatchMode> matchModeOres;
         public static final ModConfigSpec.IntValue damageFactorLevels;
         public static final ModConfigSpec.BooleanValue gearBreaksPermanently;
-        public static final ModConfigSpec.ConfigValue<Tiers> dummyToolTier;
-        public static final ModConfigSpec.ConfigValue<ArmorMaterials> dummyArmorMaterial;
         public static final ModConfigSpec.EnumValue<MaterialGrade> graderMedianGrade;
         public static final ModConfigSpec.DoubleValue graderStandardDeviation;
         public static final ModConfigSpec.IntValue prospectorHammerRange;
@@ -95,7 +95,7 @@ public final class Config {
                     builder.push("blueprint");
                     blueprintTypes = builder
                             .comment("Allowed blueprint types. Valid values are: BOTH, BLUEPRINT, and TEMPLATE")
-                            .defineEnum("typesAllowed", BlueprintType.BOTH);
+                            .defineEnum("typesAllowed", BlueprintType.ConfigOption.BOTH);
                     spawnWithStarterBlueprints = builder
                             .comment("When joining a new world, should players be given a blueprint package?",
                                     "The blueprint package gives some blueprints when used (right-click).",
@@ -149,7 +149,7 @@ public final class Config {
                         "Changes require a restart!");
                 builder.push("nerfedItems");
                 nerfedItemsEnabled = builder
-                        .comment("Enable this feature. If false, the other settings in this category are ignored.")
+                        .comment("Enable this feature. If false, the other settings in this group are ignored.")
                         .define("enabled", false);
                 nerfedItemDurabilityMulti = builder
                         .comment("Multiplies max durability by this value. If the result would be zero, a value of 1 is assigned.")
@@ -184,11 +184,6 @@ public final class Config {
                 builder.comment("Settings for gear (tools, weapons, and armor)");
                 builder.push("gear");
 
-                allowLegacyMaterialMixing = builder
-                        .comment("Allow parts to be crafted with mixed materials in a crafting grid, like earlier versions.",
-                                "In 1.17, mixing is normally only allowed in compound-crafting blocks.")
-                        .define("allowLegacyMaterialMixing", false);
-
                 allowConversionRecipes = builder
                         .comment("If set to false all conversion recipes (type 'silentgear:conversion') will be disabled",
                                 "An example of a conversion recipe is placing a vanilla stone pickaxe into a crafting grid to make a Silent Gear stone pickaxe",
@@ -207,18 +202,6 @@ public final class Config {
                 gearBreaksPermanently = builder
                         .comment("If true, gear breaks permanently, like vanilla tools and armor")
                         .define("breaksPermanently", false);
-
-                dummyToolTier = builder
-                        .comment("The item tier assigned to gear tool items.",
-                                "Leave this alone unless you are trying to work around mod compatibility issues!",
-                                "Normally, this value is not used for anything. But some mods mistakenly check it.")
-                        .defineEnum("dummyToolTier", GearHelper.DEFAULT_DUMMY_TIER);
-
-                dummyArmorMaterial = builder
-                        .comment("The armor material assigned to the gear armor items.",
-                                "Leave this alone unless you are trying to work around mod compatibility issues!",
-                                "Normally, this value is not used for anything. But some mods mistakenly check it.")
-                        .defineEnum("dummyArmorMaterial", GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL.value());
 
                 {
                     builder.push("enchanting");

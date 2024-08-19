@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.crafting.recipe.smithing;
 
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -20,7 +20,7 @@ public abstract class GearSmithingRecipe extends SmithingTransformRecipe {
     }
 
     @Override
-    public ItemStack assemble(Container inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(Container inv, HolderLookup.Provider registryAccess) {
         ItemStack gear = inv.getItem(1).copy();
         ItemStack upgradeItem = inv.getItem(2);
         return applyUpgrade(gear, upgradeItem);

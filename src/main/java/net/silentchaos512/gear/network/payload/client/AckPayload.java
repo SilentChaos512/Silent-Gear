@@ -1,25 +1,13 @@
 package net.silentchaos512.gear.network.payload.client;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.network.ConfigurationTask;
 import net.silentchaos512.gear.SilentGear;
 
-public record AckPayload(ConfigurationTask.Type type) implements CustomPacketPayload {
-    public static final ResourceLocation ID = SilentGear.getId("ack");
-
-    public AckPayload(FriendlyByteBuf buf) {
-        this(new ConfigurationTask.Type(buf.readUtf()));
-    }
+public record AckPayload() implements CustomPacketPayload {
+    public static final Type<AckPayload> TYPE = new Type<>(SilentGear.getId("ack"));
 
     @Override
-    public void write(FriendlyByteBuf friendlyByteBuf) {
-        friendlyByteBuf.writeUtf(this.type.id());
-    }
-
-    @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

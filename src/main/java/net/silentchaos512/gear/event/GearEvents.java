@@ -1,10 +1,9 @@
 package net.silentchaos512.gear.event;
 
 import com.google.common.collect.ImmutableList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -24,10 +23,10 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
@@ -44,21 +43,19 @@ import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.BlockDropsEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.api.material.MaterialList;
-import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.property.NumberPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.gear.part.CompoundPart;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.gear.GearArmorItem;
 import net.silentchaos512.gear.setup.SgCriteriaTriggers;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.*;
 
 import java.util.*;
@@ -102,8 +99,8 @@ public final class GearEvents {
         if (!(weapon.getItem() instanceof ICoreTool)) return;
 
         final float baseDamage = event.getAmount();
-        final float newDamage = TraitHelper.activateTraits(weapon, baseDamage, (trait, level, value) ->
-                trait.onAttackEntity(new TraitActionContext(player, level, weapon), attacked, value));
+        final float newDamage = TraitHelper.activateTraits(weapon, baseDamage, (trait, value) ->
+                trait.getTrait().onAttackEntity(new TraitActionContext(player, trait, weapon), attacked, value));
 
         if (Math.abs(newDamage - baseDamage) > 0.0001f) {
             event.setCanceled(true);
@@ -176,7 +173,7 @@ public final class GearEvents {
     public static void onFurnaceFuelBurnTimeEvent(FurnaceFuelBurnTimeEvent event) {
         ItemStack stack = event.getItemStack();
         if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
-            float durability = GearData.getStat(stack, GearHelper.getDurabilityStat(stack));
+            float durability = stack.getMaxDamage();
             event.setBurnTime((int) (durability * BURN_TICKS_PER_DURABILITY));
         }
     }
@@ -270,20 +267,20 @@ public final class GearEvents {
     );
 
     @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        if (event.getPlayer() == null) return;
+    public static void onBlockBreak(BlockDropsEvent event) {
+        if (event.getBreaker() == null) return;
 
-        ItemStack tool = event.getPlayer().getMainHandItem();
+        ItemStack tool = event.getTool();
         if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
 
         int ancientLevel = TraitHelper.getTraitLevel(tool, Const.Traits.ANCIENT);
         if (ancientLevel > 0) {
-            int bonusXp = (int) (event.getExpToDrop() * Const.Traits.ANCIENT_XP_BOOST * ancientLevel);
-            event.setExpToDrop(event.getExpToDrop() + bonusXp);
+            int bonusXp = (int) (event.getDroppedExperience() * Const.Traits.ANCIENT_XP_BOOST * ancientLevel); // TODO: Make it a trait effect
+            event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
         }
 
-        if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().is(Tags.Blocks.ORES_DIAMOND) && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, tool) == 0) {
-            Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getPlayer().getCommandSenderWorld());
+        if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().is(Tags.Blocks.ORES_DIAMOND) && tool.getEnchantmentLevel(Enchantments.SILK_TOUCH) == 0) {
+            Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getBreaker().getCommandSenderWorld());
             entity.teleportTo(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);
             event.getLevel().addFreshEntity(entity);
         }
@@ -297,7 +294,7 @@ public final class GearEvents {
             // Try to trigger some advancements
 
             // Crude tool
-            if (GearData.hasPart(result, PartType.ROD, p -> p.containsMaterial(Const.Materials.WOOD_ROUGH))) {
+            if (GearData.hasPart(result, PartTypes.ROD.get(), p -> p.containsMaterial(Const.Materials.WOOD_ROUGH))) {
                 SgCriteriaTriggers.CRAFTED_WITH_ROUGH_ROD.get().trigger(player);
             }
 
@@ -306,25 +303,17 @@ public final class GearEvents {
             int repairedCount = GearData.getRepairedCount(result);
             SgCriteriaTriggers.GEAR_REPAIRED.get().trigger(player, brokenCount, repairedCount);
 
-            // Item stats
-            for (ItemStat stat : ItemStats.allStatsOrdered()) {
-                SgCriteriaTriggers.ITEM_STAT.get().trigger(player, stat, GearData.getStat(result, stat, false));
+            // Number properties
+            for (var propertyType : SgRegistries.GEAR_PROPERTY) {
+                GearPropertyValue<?> property = GearData.getProperties(result).get(propertyType);
+                if (property instanceof NumberPropertyValue numberProperty) {
+                    SgCriteriaTriggers.GEAR_PROPERTY.get().trigger(player, propertyType, numberProperty.value());
+                }
             }
 
             // Parts
             SgCriteriaTriggers.HAS_PART.get().trigger(player, result);
         }
-    }
-
-    private static int getUniqueMainMaterialCount(PartDataList parts) {
-        for (PartData part : parts) {
-            if (part.get() instanceof CompoundPart && part.getType() == PartType.MAIN) {
-                MaterialList materials = CompoundPartItem.getMaterials(part.getItem());
-                return SynergyUtils.getUniques(materials).size();
-            }
-        }
-
-        return 1;
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -342,47 +331,45 @@ public final class GearEvents {
 
     private static ItemStack createRandomFirework() {
         ItemStack ret = new ItemStack(Items.FIREWORK_ROCKET);
-        CompoundTag nbt = ret.getOrCreateTagElement("Fireworks");
-        nbt.putByte("Flight", (byte) (SilentGear.RANDOM.nextInt(3) + 1));
-        CompoundTag explosion = new CompoundTag();
-        explosion.putByte("Type", (byte) SilentGear.RANDOM.nextInt(FireworkRocketItem.Shape.values().length));
-        ListTag colors = new ListTag();
-        for (int i = 0; i < SilentGear.RANDOM.nextInt(4) + 1; ++i) {
-            DyeColor dye = DyeColor.values()[SilentGear.RANDOM.nextInt(DyeColor.values().length)];
-            SilentGear.LOGGER.debug(dye);
-            colors.add(IntTag.valueOf(dye.getFireworkColor()));
-        }
-        explosion.put("Colors", colors);
-        ListTag explosions = new ListTag();
-        explosions.add(explosion);
-        nbt.put("Explosions", explosions);
+        int flightDuration = SilentGear.RANDOM.nextInt(3) + 1;
+        var shape = FireworkExplosion.Shape.values()[SilentGear.RANDOM.nextInt(FireworkExplosion.Shape.values().length)];
+        var fireworkColor = DyeColor.values()[SilentGear.RANDOM.nextInt(DyeColor.values().length)].getFireworkColor();
+        var fireworkExplosion = new FireworkExplosion(
+                shape,
+                IntList.of(fireworkColor),
+                IntList.of(),
+                false,
+                false
+        );
+        ret.set(DataComponents.FIREWORKS, new Fireworks(flightDuration, Collections.singletonList(fireworkExplosion)));
         return ret;
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!event.player.level().isClientSide && event.phase == TickEvent.Phase.START) {
-            int magnetic = Math.max(TraitHelper.getHighestLevelEitherHand(event.player, Const.Traits.MAGNETIC),
-                    TraitHelper.getHighestLevelCurio(event.player, Const.Traits.MAGNETIC));
+    public static void onPlayerTick(PlayerTickEvent.Pre event) {
+        var player = event.getEntity();
+        if (!player.level().isClientSide) {
+            int magnetic = Math.max(TraitHelper.getHighestLevelEitherHand(player, Const.Traits.MAGNETIC),
+                    TraitHelper.getHighestLevelCurio(player, Const.Traits.MAGNETIC));
 
             if (magnetic > 0) {
-                tickMagnetic(event.player, magnetic);
+                tickMagnetic(player, magnetic);
             }
 
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
-            if (!event.player.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) && TraitHelper.hasTrait(event.player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
+            if (!player.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
                 // Vanilla duration is 200, but that causes flickering numbers/icon
-                event.player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 210, 0, false, false, true));
+                player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 210, 0, false, false, true));
             }
 
             // Void Ward trait
-            if (event.player.getY() < -64 && TraitHelper.hasTraitArmor(event.player, Const.Traits.VOID_WARD)) {
+            if (player.getY() < -64 && TraitHelper.hasTraitArmor(player, Const.Traits.VOID_WARD)) {
                 // A small boost to get the player out of the void, then levitation and slow falling
                 // to allow them to navigate back to safety
-                event.player.push(0, 10, 0);
-                event.player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 400, 3, true, false));
-                event.player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 9, true, false));
+                player.push(0, 10, 0);
+                player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 400, 3, true, false));
+                player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 9, true, false));
             }
         }
     }
@@ -449,17 +436,18 @@ public final class GearEvents {
     private static final Map<Entity, Vec3> BOUNCE_TICKS = new HashMap<>();
 
 //    @SubscribeEvent
-    public static void onPlayerTickBouncing(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && !event.player.isFallFlying() && BOUNCE_TICKS.containsKey(event.player)) {
-//            event.player.moveForced(event.player.getPosX(), event.player.getPosY() + 0.1, event.player.getPosZ());
-            Vec3 motion = BOUNCE_TICKS.get(event.player);
-            event.player.setDeltaMovement(motion.x, motion.y * 20, motion.z); // why * 20?
-            event.player.setOnGround(false);
-            BOUNCE_TICKS.remove(event.player);
+    public static void onPlayerTickBouncing(PlayerTickEvent.Post event) {
+        var player = event.getEntity();
+        if (!player.isFallFlying() && BOUNCE_TICKS.containsKey(player)) {
+//            player.moveForced(player.getPosX(), player.getPosY() + 0.1, player.getPosZ());
+            Vec3 motion = BOUNCE_TICKS.get(player);
+            player.setDeltaMovement(motion.x, motion.y * 20, motion.z); // why * 20?
+            player.setOnGround(false);
+            BOUNCE_TICKS.remove(player);
             SilentGear.LOGGER.debug("bounce {}", motion);
 
-            if (event.player.getDeltaMovement().y < 0) {
-                bounceEntity(event.player);
+            if (player.getDeltaMovement().y < 0) {
+                bounceEntity(player);
             }
         }
     }

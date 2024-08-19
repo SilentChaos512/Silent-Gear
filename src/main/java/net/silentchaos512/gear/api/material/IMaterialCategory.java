@@ -8,7 +8,7 @@ public interface IMaterialCategory {
     String getName();
 
     default Component getDisplayName() {
-        return TextUtil.translate("material.category", getName());
+        return TextUtil.translate("material.group", getName());
     }
 
     default boolean matches(IMaterialCategory other) {

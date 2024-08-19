@@ -1,51 +1,82 @@
 package net.silentchaos512.gear.core.component;
 
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.property.GearProperty;
-import net.silentchaos512.gear.api.property.GearPropertyType;
-import net.silentchaos512.gear.api.property.NumberPropertyType;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.property.NumberProperty;
+import net.silentchaos512.gear.setup.SgRegistries;
 
 import javax.annotation.Nullable;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public record GearPropertiesData(
-        Map<GearPropertyType<?, ?>, GearProperty<?>> properties
+        Map<GearProperty<?, ?>, GearPropertyValue<?>> properties
 ) {
+    public static final StreamCodec<RegistryFriendlyByteBuf, GearPropertiesData> STREAM_CODEC = StreamCodec.of(
+            GearPropertiesData::encode,
+            GearPropertiesData::decode
+    );
+
     @Nullable
-    public <V, P extends GearProperty<V>> P get(Supplier<GearPropertyType<V, P>> propertyType) {
+    public <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> V get(Supplier<P> propertyType) {
         return get(propertyType.get());
     }
 
-    public <V, P extends GearProperty<V>> P getOrDefault(Supplier<GearPropertyType<V, P>> propertyType, P defaultValue) {
+    public <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> V getOrDefault(Supplier<P> propertyType, V defaultValue) {
         return getOrDefault(propertyType.get(), defaultValue);
     }
 
     @Nullable
-    public <V, P extends GearProperty<V>> P get(GearPropertyType<V, P> propertyType) {
+    public <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> V get(P propertyType) {
         //noinspection unchecked
-        return (P) properties.get(propertyType);
+        return (V) properties.get(propertyType);
     }
 
-    public <V, P extends GearProperty<V>> P getOrDefault(GearPropertyType<V, P> propertyType, P defaultValue) {
+    public <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> V getOrDefault(P propertyType, V defaultValue) {
         //noinspection unchecked
-        return (P) properties.getOrDefault(propertyType, defaultValue);
+        return (V) properties.getOrDefault(propertyType, defaultValue);
     }
 
-    public float getNumber(Supplier<NumberPropertyType> propertyType) {
+    public float getNumber(Supplier<NumberProperty> propertyType) {
         return getNumber(propertyType, propertyType.get().getDefaultValue());
     }
 
-    public float getNumber(Supplier<NumberPropertyType> propertyType, float defaultValue) {
+    public float getNumber(Supplier<NumberProperty> propertyType, float defaultValue) {
         var property = get(propertyType.get());
         return property != null ? property.value() : defaultValue;
     }
 
-    public float getNumber(NumberPropertyType propertyType) {
+    public float getNumber(NumberProperty propertyType) {
         return getNumber(propertyType, propertyType.getDefaultValue());
     }
 
-    public float getNumber(NumberPropertyType propertyType, float defaultValue) {
+    public float getNumber(NumberProperty propertyType, float defaultValue) {
         var property = get(propertyType);
         return property != null ? property.value() : defaultValue;
+    }
+
+    private static void encode(RegistryFriendlyByteBuf buf, GearPropertiesData data) {
+        buf.writeVarInt(data.properties.size());
+        data.properties.forEach((property, value) -> {
+            var key = SgRegistries.GEAR_PROPERTY.getKey(property);
+            assert key != null;
+            buf.writeResourceLocation(key);
+            property.rawStreamCodec().encode(buf, value);
+        });
+    }
+
+    private static GearPropertiesData decode(RegistryFriendlyByteBuf buf) {
+        Map<GearProperty<?, ?>, GearPropertyValue<?>> map = new LinkedHashMap<>();
+        int count = buf.readVarInt();
+        for (int i = 0; i < count; ++i) {
+            var property = SgRegistries.GEAR_PROPERTY.get(buf.readResourceLocation());
+            assert property != null;
+            var value = property.rawStreamCodec().decode(buf);
+            map.put(property, value);
+        }
+        return new GearPropertiesData(map);
     }
 }

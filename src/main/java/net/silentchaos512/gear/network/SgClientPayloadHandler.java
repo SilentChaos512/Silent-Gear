@@ -3,19 +3,14 @@ package net.silentchaos512.gear.network;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.command.MaterialsCommand;
 import net.silentchaos512.gear.command.TraitsCommand;
-import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.gear.part.PartManager;
-import net.silentchaos512.gear.gear.trait.TraitManager;
-import net.silentchaos512.gear.network.configtask.SyncMaterialsConfigurationTask;
-import net.silentchaos512.gear.network.configtask.SyncPartsConfigurationTask;
-import net.silentchaos512.gear.network.configtask.SyncTraitsConfigurationTask;
 import net.silentchaos512.gear.network.payload.client.AckPayload;
 import net.silentchaos512.gear.network.payload.server.*;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.concurrent.CompletableFuture;
@@ -27,39 +22,31 @@ public class SgClientPayloadHandler {
         return INSTANCE;
     }
 
-    private static CompletableFuture<Void> handleConfigurationData(final ConfigurationPayloadContext ctx, Runnable handler) {
-        return ctx.workHandler().submitAsync(handler)
+    private static CompletableFuture<Void> handleData(final IPayloadContext ctx, Runnable handler) {
+        return ctx.enqueueWork(handler)
                 .exceptionally(e -> {
-                    ctx.packetHandler().disconnect(Component.translatable("network.silentgear.failure", e.getMessage()));
+                    ctx.disconnect(Component.translatable("network.silentgear.failure", e.getMessage()));
                     return null;
                 });
     }
 
-    private static void handleData(final PlayPayloadContext ctx, Runnable handler) {
-        ctx.workHandler().submitAsync(handler)
-                .exceptionally(e -> {
-                    ctx.packetHandler().disconnect(Component.translatable("network.silentgear.failure", e.getMessage()));
-                    return null;
-                });
+    public void handleSyncTraits(final SyncTraitsPayload data, final IPayloadContext ctx) {
+        handleData(ctx, () -> SgRegistries.TRAIT.handleSyncPacket(data, ctx))
+                .thenAccept(v -> ctx.reply(new AckPayload()));
     }
 
-    public void handleSyncTraits(SyncTraitsPayload data, ConfigurationPayloadContext ctx) {
-        handleConfigurationData(ctx, () -> TraitManager.handleSyncPacket(data, ctx))
-                .thenAccept(v -> ctx.replyHandler().send(new AckPayload(SyncTraitsConfigurationTask.TYPE)));
+    public void handleSyncMaterials(final SyncMaterialsPayload data, final IPayloadContext ctx) {
+        handleData(ctx, () -> SgRegistries.MATERIAL.handleSyncPacket(data, ctx))
+                .thenAccept(v -> ctx.reply(new AckPayload()));
     }
 
-    public void handleSyncMaterials(SyncMaterialsPayload data, ConfigurationPayloadContext ctx) {
-        handleConfigurationData(ctx, () -> MaterialManager.handleSyncPacket(data, ctx))
-                .thenAccept(v -> ctx.replyHandler().send(new AckPayload(SyncMaterialsConfigurationTask.TYPE)));
+    public void handleSyncParts(final SyncPartsPayload data, final IPayloadContext ctx) {
+        handleData(ctx, () -> SgRegistries.PART.handleSyncPacket(data, ctx))
+                .thenAccept(v -> ctx.reply(new AckPayload()));
     }
 
-    public void handleSyncParts(SyncPartsPayload data, ConfigurationPayloadContext ctx) {
-        handleConfigurationData(ctx, () -> PartManager.handleSyncPacket(data, ctx))
-                .thenAccept(v -> ctx.replyHandler().send(new AckPayload(SyncPartsConfigurationTask.TYPE)));
-    }
-
-    public void handleCommandOutput(CommandOutputPayload data, PlayPayloadContext ctx) {
-        switch (data.type()) {
+    public void handleCommandOutput(CommandOutputPayload data, IPayloadContext ctx) {
+        switch (data.commandType()) {
             case MATERIALS:
                 MaterialsCommand.runDumpClient(data.includeChildren());
                 break;
@@ -67,13 +54,13 @@ public class SgClientPayloadHandler {
                 TraitsCommand.runDumpMdClient();
                 break;
             default:
-                SilentGear.LOGGER.error("Unknown ClientOutputCommandPacket.Type: {}", data.type());
+                SilentGear.LOGGER.error("Unknown ClientOutputCommandPacket.Type: {}", data.commandType());
         }
     }
 
-    public void handleOpenGuideBook(OpenGuideBookPayload data, PlayPayloadContext ctx) {
+    public void handleOpenGuideBook(OpenGuideBookPayload data, IPayloadContext ctx) {
         handleData(ctx, () -> {
-            ctx.player().ifPresent(player -> {
+            Player player = ctx.player();
                 // Open a guide book if I ever program one lol
                 // Instead, just display a message that links the GitHub wiki
                 String wikiUrl = "https://github.com/SilentChaos512/Silent-Gear/wiki";
@@ -83,7 +70,6 @@ public class SgClientPayloadHandler {
                                 .withStyle(ChatFormatting.UNDERLINE)
                                 .withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
                                         wikiUrl)))));
-            });
         });
     }
 }

@@ -1,16 +1,15 @@
 package net.silentchaos512.gear.util;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
-public class Serializer<V> {
+public class Serializer<B, V> {
     private final MapCodec<V> codec;
-    private final StreamCodec<RegistryFriendlyByteBuf, V> streamCodec;
+    private final StreamCodec<B, V> streamCodec;
 
     public Serializer(
             MapCodec<V> codec,
-            StreamCodec<RegistryFriendlyByteBuf, V> streamCodec
+            StreamCodec<B, V> streamCodec
     ) {
         this.codec = codec;
         this.streamCodec = streamCodec;
@@ -20,7 +19,7 @@ public class Serializer<V> {
         return codec;
     }
 
-    public StreamCodec<RegistryFriendlyByteBuf, V> streamCodec() {
+    public StreamCodec<B, V> streamCodec() {
         return streamCodec;
     }
 }

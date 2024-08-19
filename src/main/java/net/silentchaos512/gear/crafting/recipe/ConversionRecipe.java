@@ -3,12 +3,14 @@ package net.silentchaos512.gear.crafting.recipe;
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.ExtraCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
@@ -16,20 +18,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.part.IPartData;
-import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.gear.part.LazyPartData;
-import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.api.part.PartList;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public final class ConversionRecipe extends ExtendedShapelessRecipe {
     private final Result result;
@@ -51,16 +48,15 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
         ItemStack result = item.construct(getParts());
         ItemStack original = findOriginalItem(inv);
         if (!original.isEmpty()) {
-            // Copy relevant NBT
+            // Copy relevant data components
             result.setDamageValue(original.getDamageValue());
             if (original.isEnchanted()) {
                 // Copy enchantments
-                Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(original);
-                EnchantmentHelper.setEnchantments(enchantments, result);
+                result.set(DataComponents.ENCHANTMENTS, original.getEnchantments());
             }
         }
         return result;
@@ -77,11 +73,10 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         return ItemStack.EMPTY;
     }
 
-    private Collection<? extends IPartData> getParts() {
-        PartDataList ret = PartDataList.of();
+    private Collection<PartInstance> getParts() {
+        PartList ret = PartList.of();
         //noinspection OverlyLongLambda
-        this.result.parts.forEach(lazy -> {
-            PartData part = PartData.from(lazy.getItem());
+        this.result.parts.forEach(part -> {
             if (part != null) {
                 ret.add(part);
             }
@@ -94,35 +89,36 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         return true;
     }
 
-    public record Result(Item item, List<LazyPartData> parts) {
+    public record Result(Item item, List<PartInstance> parts) {
         public static final Codec<Result> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                         BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(r -> r.item),
-                        Codec.list(LazyPartData.CODEC).fieldOf("parts").forGetter(r -> r.parts)
+                        Codec.list(PartInstance.CODEC).fieldOf("parts").forGetter(r -> r.parts)
                 ).apply(instance, Result::new)
         );
 
-        public static Result fromNetwork(FriendlyByteBuf buf) {
+        public static Result fromNetwork(RegistryFriendlyByteBuf buf) {
             var item = BuiltInRegistries.ITEM.get(buf.readResourceLocation());
-            var parts = new ArrayList<LazyPartData>();
+            var parts = new ArrayList<PartInstance>();
             int partListSize = buf.readByte();
             for (int i = 0; i < partListSize; ++i) {
-                parts.add(LazyPartData.fromNetwork(buf));
+                parts.add(PartInstance.STREAM_CODEC.decode(buf));
             }
             return new Result(item, parts);
         }
 
-        public void toNetwork(FriendlyByteBuf buf) {
+        public void toNetwork(RegistryFriendlyByteBuf buf) {
             buf.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item));
             buf.writeByte(parts.size());
-            parts.forEach(p -> p.toNetwork(buf));
+            parts.forEach(part -> PartInstance.STREAM_CODEC.encode(buf, part));
         }
     }
 
     public static class Serializer implements RecipeSerializer<ConversionRecipe> {
-        private static final Codec<ConversionRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                                ExtraCodecs.strictOptionalField(Codec.STRING, "group", "").forGetter(recipe -> recipe.group),
-                                CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(recipe -> recipe.category),
+        private static final MapCodec<ConversionRecipe> CODEC = RecordCodecBuilder.mapCodec(
+                instance -> instance.group(
+                                Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group),
+                                CraftingBookCategory.CODEC.fieldOf("group").orElse(CraftingBookCategory.MISC).forGetter(recipe -> recipe.category),
                                 Result.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
                                 Ingredient.CODEC_NONEMPTY
                                         .listOf()
@@ -144,32 +140,39 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
                         )
                         .apply(instance, ConversionRecipe::new)
         );
+        public static final StreamCodec<RegistryFriendlyByteBuf, ConversionRecipe> STREAM_CODEC = StreamCodec.of(
+                Serializer::toNetwork,
+                Serializer::fromNetwork
+        );
 
         @Override
-        public Codec<ConversionRecipe> codec() {
+        public MapCodec<ConversionRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public ConversionRecipe fromNetwork(FriendlyByteBuf buf) {
+        public StreamCodec<RegistryFriendlyByteBuf, ConversionRecipe> streamCodec() {
+            return STREAM_CODEC;
+        }
+
+        public static ConversionRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             var group = buf.readUtf();
             var bookCategory = buf.readEnum(CraftingBookCategory.class);
             var result = Result.fromNetwork(buf);
             var ingredients = NonNullList.<Ingredient>create();
-            var ingredientListSize = buf.readByte();
+            var ingredientListSize = buf.readVarInt();
             for (int i = 0; i < ingredientListSize; ++i) {
-                ingredients.add(Ingredient.fromNetwork(buf));
+                ingredients.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
             }
             return new ConversionRecipe(group, bookCategory, result, ingredients);
         }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, ConversionRecipe recipe) {
+        public static void toNetwork(RegistryFriendlyByteBuf buf, ConversionRecipe recipe) {
             buf.writeUtf(recipe.group);
             buf.writeEnum(recipe.category);
             recipe.result.toNetwork(buf);
-            buf.writeByte(recipe.ingredients.size());
-            recipe.ingredients.forEach(ing -> ing.toNetwork(buf));
+            buf.writeVarInt(recipe.ingredients.size());
+            recipe.ingredients.forEach(ing -> Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ing));
         }
     }
 }

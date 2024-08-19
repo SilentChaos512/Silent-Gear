@@ -12,21 +12,21 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.stats.StatModifierMap;
-import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.api.property.GearProperty;
+import net.silentchaos512.gear.api.property.GearPropertyMap;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.network.payload.server.CommandOutputPayload;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearTypes;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 public final class MaterialsCommand {
     private static final SuggestionProvider<CommandSourceStack> MATERIAL_ID_SUGGESTIONS = (ctx, builder) ->
-            SharedSuggestionProvider.suggestResource(MaterialManager.getValues().stream().map(IMaterial::getId), builder);
+            SharedSuggestionProvider.suggestResource(SgRegistries.MATERIAL.keySet(), builder);
 
     private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
 
@@ -67,8 +67,8 @@ public final class MaterialsCommand {
     }
 
     private static int runList(CommandContext<CommandSourceStack> context) {
-        String listStr = MaterialManager.getValues().stream()
-                .map(mat -> mat.getId().toString())
+        String listStr = SgRegistries.MATERIAL.keySet().stream()
+                .map(ResourceLocation::toString)
                 .collect(Collectors.joining(", "));
         context.getSource().sendSuccess(() -> Component.literal(listStr), true);
 
@@ -79,7 +79,7 @@ public final class MaterialsCommand {
         ServerPlayer player = context.getSource().getPlayerOrException();
         SilentGear.LOGGER.info("Send material dump packet to client {}", player.getScoreboardName());
         CommandOutputPayload message = CommandOutputPayload.materials(includeChildren);
-        PacketDistributor.PLAYER.with(player).send(message);
+        PacketDistributor.sendToPlayer(player, message);
         return 1;
     }
 
@@ -100,17 +100,17 @@ public final class MaterialsCommand {
         }
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
-            StringBuilder builder = new StringBuilder("Pack\tName\tType\tID\tParent\tTraits\tTier\t");
-            ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getString()).append("\t"));
+            StringBuilder builder = new StringBuilder("Pack\tName\tType\tID\tParent\t");
+            SgRegistries.GEAR_PROPERTY.forEach(prop -> builder.append(prop.getDisplayName().getString()).append("\t"));
             writer.write(builder + "\n");
 
-            List<PartType> partTypes = new ArrayList<>(PartType.getValues());
-            partTypes.sort((o1, o2) -> Comparator.comparing(o -> ((PartType) o).getDisplayName(0).getString()).compare(o1, o2));
+            List<PartType> partTypes = new ArrayList<>(SgRegistries.PART_TYPE.stream().toList());
+            partTypes.sort((o1, o2) -> Comparator.comparing(o -> ((PartType) o).getDisplayName().getString()).compare(o1, o2));
             for (PartType partType : partTypes) {
-                for (IMaterial material : MaterialManager.getValues()) {
+                for (Material material : SgRegistries.MATERIAL) {
                     if (includeChildren || getParentId(material).isEmpty()) {
                         MaterialInstance inst = MaterialInstance.of(material);
-                        if (material.allowedInPart(inst, partType)) {
+                        if (material.isAllowedInPart(inst, partType)) {
                             writer.write(makeTsvLine(inst, partType) + "\n");
                         }
                     }
@@ -129,32 +129,25 @@ public final class MaterialsCommand {
         StringBuilder builder = new StringBuilder();
         appendTsv(builder, material.get().getPackName());
         appendTsv(builder, material.getDisplayName(partType).getString());
-        int tier = material.getTier(partType);
-//        appendTsv(builder, partType.getDisplayName(tier).getFormattedText());
-        appendTsv(builder, partType.getDisplayName(0).getString());
+        appendTsv(builder, partType.getDisplayName().getString());
         appendTsv(builder, material.getId().toString());
         appendTsv(builder, getParentId(material.get()));
 
-        // Traits
-        appendTsv(builder, material.getTraits(partType).stream()
-                .map(t -> t.getTrait().getDisplayName(t.getLevel()).getString())
-                .collect(Collectors.joining(", ")));
-
-        appendTsv(builder, tier);
-
-        // Stats
-        for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> statModifiers = material.getStatModifiers(partType, StatGearKey.of(stat, GearType.ALL));
-            appendTsv(builder, FORMAT_CODES.matcher(StatModifierMap.formatText(statModifiers, stat, 5).getString()).replaceAll(""));
+        // Properties
+        for (var property : SgRegistries.GEAR_PROPERTY) {
+            var mods = material.getPropertyModifiers(partType, PropertyKey.of(property, GearTypes.ALL.get()));
+            //noinspection unchecked
+            var formattedText = GearPropertyMap.formatText((Collection<GearPropertyValue<?>>) mods, (GearProperty<?, GearPropertyValue<?>>) property, 5);
+            appendTsv(builder, FORMAT_CODES.matcher(formattedText.getString()).replaceAll(""));
         }
 
         return builder.toString();
     }
 
-    private static String getParentId(IMaterial material) {
-        IMaterial parent = material.getParent();
+    private static String getParentId(Material material) {
+        Material parent = material.getParent();
         if (parent != null) {
-            return parent.getId().toString();
+            return SgRegistries.MATERIAL.getKey(material).toString();
         }
         return "";
     }

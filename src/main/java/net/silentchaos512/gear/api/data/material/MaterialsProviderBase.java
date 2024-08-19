@@ -5,6 +5,8 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.data.DataGenerators;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,15 +26,15 @@ public abstract class MaterialsProviderBase implements DataProvider {
         this.modId = modId;
     }
 
-    protected abstract Collection<MaterialBuilder> getMaterials();
+    protected abstract Collection<MaterialBuilder<?>> getMaterials();
 
-    protected ResourceLocation modId(String path) {
-        return new ResourceLocation(this.modId, path);
+    protected DataResource<Material> modId(String path) {
+        return DataResource.material(new ResourceLocation(this.modId, path));
     }
 
     @SuppressWarnings("WeakerAccess")
-    protected static ResourceLocation forgeId(String path) {
-        return new ResourceLocation("forge", path);
+    protected static ResourceLocation commonId(String path) {
+        return new ResourceLocation("c", path);
     }
 
     @Override

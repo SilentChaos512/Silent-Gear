@@ -20,6 +20,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
 import net.silentchaos512.gear.item.gear.GearCurioItem;
+import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgTags;
@@ -131,27 +132,59 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         builder(SgTags.Items.FRUITS, SgItems.NETHER_BANANA);
         builder(Tags.Items.SEEDS, SgItems.FLAX_SEEDS, SgItems.FLUFFY_SEEDS);
-        builder(Tags.Items.STRING, CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER);
+        builder(Tags.Items.STRINGS, CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER);
 
-        builder(SgTags.Items.AXES, SgItems.AXE, SgItems.SAW, SgItems.MACHETE, SgItems.MATTOCK, SgItems.PAXEL);
-        builder(SgTags.Items.BOOTS, SgItems.BOOTS);
-        builder(SgTags.Items.BOWS, SgItems.BOW);
-        builder(SgTags.Items.CHESTPLATES, SgItems.CHESTPLATE);
-        builder(SgTags.Items.CROSSBOWS, SgItems.CROSSBOW);
-        builder(SgTags.Items.ELYTRA, SgItems.ELYTRA);
-        builder(SgTags.Items.HAMMERS, SgItems.HAMMER, SgItems.PROSPECTOR_HAMMER);
-        builder(SgTags.Items.HELMETS, SgItems.HELMET);
-        builder(SgTags.Items.HOES, SgItems.HOE, SgItems.MATTOCK);
-        builder(SgTags.Items.KNIVES, SgItems.KNIFE, SgItems.DAGGER);
-        tag(makeWrapper("forge", "tools/knives")).addTag(SgTags.Items.KNIVES); // alt tag that some mods are apparently using :(
-        builder(SgTags.Items.LEGGINGS, SgItems.LEGGINGS);
-        builder(SgTags.Items.PICKAXES, SgItems.HAMMER, SgItems.PAXEL, SgItems.PICKAXE);
-        builder(SgTags.Items.SAWS, SgItems.SAW);
-        builder(Tags.Items.SHEARS, SgItems.SHEARS);
-        builder(SgTags.Items.SHIELDS, SgItems.SHIELD);
-        builder(SgTags.Items.SHOVELS, SgItems.EXCAVATOR, SgItems.MATTOCK, SgItems.PAXEL, SgItems.SHOVEL);
-        builder(SgTags.Items.SICKLES, SgItems.SICKLE);
-        builder(SgTags.Items.SWORDS, SgItems.DAGGER, SgItems.KATANA, SgItems.MACHETE, SgItems.SWORD);
+        builder(ItemTags.HEAD_ARMOR,
+                GearItemSets.HELMET.gearItem());
+        builder(ItemTags.CHEST_ARMOR,
+                GearItemSets.CHESTPLATE.gearItem());
+        builder(ItemTags.LEG_ARMOR,
+                GearItemSets.LEGGINGS.gearItem());
+        builder(ItemTags.FOOT_ARMOR,
+                GearItemSets.BOOTS.gearItem());
+        builder(SgTags.Items.ARMORS_ELYTRA,
+                GearItemSets.ELYTRA.gearItem());
+        builder(ItemTags.AXES,
+                GearItemSets.AXE.gearItem(),
+                GearItemSets.SAW.gearItem(),
+                GearItemSets.MACHETE.gearItem(),
+                GearItemSets.MATTOCK.gearItem(),
+                GearItemSets.PAXEL.gearItem());
+        builder(Tags.Items.TOOLS_BOWS,
+                GearItemSets.BOW.gearItem());
+        builder(Tags.Items.TOOLS_CROSSBOWS,
+                GearItemSets.CROSSBOW.gearItem());
+        builder(SgTags.Items.HAMMERS,
+                GearItemSets.HAMMER.gearItem(),
+                GearItemSets.PROSPECTOR_HAMMER.gearItem());
+        builder(ItemTags.HOES,
+                GearItemSets.HOE.gearItem(),
+                GearItemSets.MATTOCK.gearItem());
+        builder(SgTags.Items.KNIVES,
+                GearItemSets.KNIFE.gearItem(),
+                GearItemSets.DAGGER.gearItem());
+        builder(ItemTags.PICKAXES,
+                GearItemSets.HAMMER.gearItem(),
+                GearItemSets.PAXEL.gearItem(),
+                GearItemSets.PICKAXE.gearItem());
+        builder(SgTags.Items.TOOLS_SAWS,
+                GearItemSets.SAW.gearItem());
+        builder(Tags.Items.TOOLS_SHEARS,
+                GearItemSets.SHEARS.gearItem());
+        builder(Tags.Items.TOOLS_SHIELDS,
+                GearItemSets.SHIELD.gearItem());
+        builder(ItemTags.SHOVELS,
+                GearItemSets.EXCAVATOR.gearItem(),
+                GearItemSets.MATTOCK.gearItem(),
+                GearItemSets.PAXEL.gearItem(),
+                GearItemSets.SHOVEL.gearItem());
+        builder(SgTags.Items.TOOLS_SICKLES,
+                GearItemSets.SICKLE.gearItem());
+        builder(ItemTags.SWORDS,
+                GearItemSets.DAGGER.gearItem(),
+                GearItemSets.KATANA.gearItem(),
+                GearItemSets.MACHETE.gearItem(),
+                GearItemSets.SWORD.gearItem());
 
         // Minecraft
         copy(BlockTags.LEAVES, ItemTags.LEAVES);
@@ -164,14 +197,18 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
         copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
 
-        tag(ItemTags.ARROWS).add(SgItems.ARROW.get());
+        tag(ItemTags.ARROWS).add(GearItemSets.ARROW.gearItem());
         builder(ItemTags.PIGLIN_LOVED,
                 SgBlocks.BLAZE_GOLD_BLOCK,
                 SgItems.GOLDEN_NETHER_BANANA,
                 CraftingItems.BLAZE_GOLD_DUST,
                 CraftingItems.BLAZE_GOLD_INGOT);
 
-        builder(ItemTags.CLUSTER_MAX_HARVESTABLES, SgItems.PICKAXE, SgItems.PAXEL, SgItems.PROSPECTOR_HAMMER);
+        builder(ItemTags.CLUSTER_MAX_HARVESTABLES,
+                GearItemSets.PICKAXE.gearItem(),
+                GearItemSets.PAXEL.gearItem(),
+                GearItemSets.PROSPECTOR_HAMMER.gearItem()
+        );
 
         // Silent Gear
 
@@ -207,6 +244,13 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         tag(SgTags.Items.IMPERIAL_DROPS).addTag(Tags.Items.GEMS);
         tag(SgTags.Items.GOLD_DIGGER_DROPS).addTag(Tags.Items.NUGGETS);
+        tag(SgTags.Items.GREEDY_MAGNET_ATTRACTED)
+                .addTag(Tags.Items.GEMS)
+                .addTag(Tags.Items.ORES)
+                .addTag(Tags.Items.INGOTS)
+                .addTag(Tags.Items.NUGGETS)
+                .add(Items.ANCIENT_DEBRIS)
+                .add(Items.NETHERITE_SCRAP);
 
         // Blueprints
         Multimap<ResourceLocation, AbstractBlueprintItem> blueprints = MultimapBuilder.linkedHashKeys().arrayListValues().build();
@@ -226,7 +270,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         SgItems.getItems(GearCurioItem.class).forEach(item ->
                 builder(makeWrapper(Const.CURIOS, item.getSlot()), item));
 
-        builder(makeWrapper(Const.CURIOS, "back"), SgItems.ELYTRA);
+        builder(makeWrapper(Const.CURIOS, "back"), GearItemSets.ELYTRA.gearItem());
     }
 
     private TagKey<Item> makeWrapper(String namespace, String path) {

@@ -18,9 +18,10 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.config.Config;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class GearSawItem extends GearAxeItem {
-    public GearSawItem(GearType gearType) {
+    public GearSawItem(Supplier<GearType> gearType) {
         super(gearType);
     }
 

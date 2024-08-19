@@ -21,7 +21,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.Tags;
-import net.silentchaos512.gear.api.GearApi;
 import net.silentchaos512.gear.config.Config;
 import org.joml.Matrix4f;
 
@@ -31,7 +30,7 @@ import java.util.List;
 
 public interface IAoeTool {
     default int getAoeRadius(ItemStack stack) {
-        return 1 + GearApi.getTraitLevel(stack, Const.Traits.WIDEN);
+        return 1 + TraitHelper.getTraitLevel(stack, Const.Traits.WIDEN);
     }
 
     /**

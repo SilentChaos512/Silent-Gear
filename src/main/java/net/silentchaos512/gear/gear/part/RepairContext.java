@@ -14,9 +14,9 @@ public class RepairContext {
 
     private final Type type;
     private final ItemStack gear;
-    private final PartData material;
+    private final PartInstance material;
 
-    public RepairContext(Type type, ItemStack gear, PartData material) {
+    public RepairContext(Type type, ItemStack gear, PartInstance material) {
         this.type = type;
         this.gear = gear;
         this.material = material;
@@ -30,7 +30,7 @@ public class RepairContext {
         return gear;
     }
 
-    public PartData getMaterial() {
+    public PartInstance getMaterial() {
         return material;
     }
 }

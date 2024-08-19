@@ -10,8 +10,10 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.GearHelper;
 
+import java.util.function.Supplier;
+
 public class GearPaxelItem extends GearPickaxeItem {
-    public GearPaxelItem(GearType gearType) {
+    public GearPaxelItem(Supplier<GearType> gearType) {
         super(gearType);
     }
 

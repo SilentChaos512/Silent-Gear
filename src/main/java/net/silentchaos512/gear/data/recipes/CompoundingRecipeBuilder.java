@@ -14,7 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
@@ -33,7 +33,7 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
     private final List<Ingredient> ingredients = new ArrayList<>();
     private final Item resultItem;
     private final int resultCount;
-    @Nullable private DataResource<IMaterial> resultMaterial;
+    @Nullable private DataResource<Material> resultMaterial;
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
     public CompoundingRecipeBuilder(AlloyRecipe.Factory<R> factory, String recipeFolder, ItemLike resultItem, int count) {
@@ -55,7 +55,7 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
         return new CompoundingRecipeBuilder<>(FabricAlloyRecipe::new, "fabric", result, count);
     }
 
-    public CompoundingRecipeBuilder<R> withCustomMaterial(DataResource<IMaterial> material) {
+    public CompoundingRecipeBuilder<R> withCustomMaterial(DataResource<Material> material) {
         this.resultMaterial = material;
         return this;
     }

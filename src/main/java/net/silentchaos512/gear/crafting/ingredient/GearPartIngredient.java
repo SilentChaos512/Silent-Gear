@@ -9,9 +9,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
-import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.setup.SgIngredientTypes;
 import net.silentchaos512.gear.util.TextUtil;
@@ -55,7 +55,7 @@ public final class GearPartIngredient implements ICustomIngredient, IGearIngredi
 
     @Override
     public Optional<Component> getJeiHint() {
-        MutableComponent typeText = this.type.getDisplayName(0);
+        MutableComponent typeText = this.type.getDisplayName();
         MutableComponent text = TextUtil.withColor(typeText, Color.GOLD);
         return Optional.of(TextUtil.translate("jei", "partType", text));
     }
@@ -63,7 +63,7 @@ public final class GearPartIngredient implements ICustomIngredient, IGearIngredi
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        PartData part = PartData.from(stack);
+        PartInstance part = PartInstance.from(stack);
         return part != null && part.getType().equals(type);
     }
 
@@ -71,7 +71,7 @@ public final class GearPartIngredient implements ICustomIngredient, IGearIngredi
     public Stream<ItemStack> getItems() {
         // Although gear parts are not available when the ingredient is constructed,
         // they are available later on
-        Collection<IGearPart> parts = PartManager.getPartsOfType(this.type);
+        Collection<GearPart> parts = PartManager.getPartsOfType(this.type);
         if (!parts.isEmpty()) {
             return parts.stream()
                     .flatMap(part -> Stream.of(part.getIngredient().getItems()))

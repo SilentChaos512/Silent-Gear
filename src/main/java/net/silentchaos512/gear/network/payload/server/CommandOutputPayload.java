@@ -1,37 +1,42 @@
 package net.silentchaos512.gear.network.payload.server;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 
-public record CommandOutputPayload(Type type, boolean includeChildren) implements CustomPacketPayload {
-    public enum Type {
-        MATERIALS, TRAITS;
-    }
+public record CommandOutputPayload(
+        CommandType commandType,
+        boolean includeChildren
+) implements CustomPacketPayload {
+    public static final Type<CommandOutputPayload> TYPE = new Type<>(SilentGear.getId("command_output"));
 
-    public static final ResourceLocation ID = SilentGear.getId("command_client_output");
+    public static final StreamCodec<FriendlyByteBuf, CommandOutputPayload> STREAM_CODEC = StreamCodec.of(
+            (buf, data) -> {
+                buf.writeBoolean(data.commandType == CommandType.MATERIALS);
+                buf.writeBoolean(data.includeChildren);
+            },
+            buf -> {
+                var commandType = buf.readBoolean() ? CommandType.MATERIALS : CommandType.TRAITS;
+                var includeChildren = buf.readBoolean();
+                return new CommandOutputPayload(commandType, includeChildren);
+            }
+    );
 
     public static CommandOutputPayload materials(boolean includeChildren) {
-        return new CommandOutputPayload(Type.MATERIALS, includeChildren);
+        return new CommandOutputPayload(CommandType.MATERIALS, includeChildren);
     }
 
     public static CommandOutputPayload traits() {
-        return new CommandOutputPayload(Type.TRAITS, true);
-    }
-
-    public CommandOutputPayload(FriendlyByteBuf buf) {
-        this(buf.readBoolean() ? Type.MATERIALS : Type.TRAITS, buf.readBoolean());
+        return new CommandOutputPayload(CommandType.TRAITS, true);
     }
 
     @Override
-    public void write(FriendlyByteBuf friendlyByteBuf) {
-        friendlyByteBuf.writeBoolean(type == Type.MATERIALS);
-        friendlyByteBuf.writeBoolean(includeChildren);
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    @Override
-    public ResourceLocation id() {
-        return ID;
+    public enum CommandType {
+        MATERIALS, TRAITS;
     }
 }

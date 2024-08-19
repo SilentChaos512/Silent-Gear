@@ -10,9 +10,10 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.util.IAoeTool;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class GearExcavatorItem extends GearShovelItem implements IAoeTool {
-    public GearExcavatorItem(GearType gearType) {
+    public GearExcavatorItem(Supplier<GearType> gearType) {
         super(gearType);
     }
 

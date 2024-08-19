@@ -5,15 +5,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
-import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
+import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.util.Color;
 
 public final class ColorHandlers {
@@ -44,15 +41,6 @@ public final class ColorHandlers {
             IColoredMaterialItem coloredMaterialItem = (IColoredMaterialItem) item;
             event.register(coloredMaterialItem::getColor, item);
         });
-
-        // Fragments
-        event.register((stack, tintIndex) -> {
-            IMaterialInstance material = FragmentItem.getMaterial(stack);
-            if (material == null) {
-                return Color.VALUE_WHITE;
-            }
-            return material.getDisplayProperties().getLayerColor(GearType.ALL, PartType.MAIN, material, 0);
-        }, SgItems.FRAGMENT);
     }
 
     /**
@@ -65,9 +53,9 @@ public final class ColorHandlers {
     public static int getShieldColor(ItemStack stack, int tintIndex) {
         switch (tintIndex) {
             case 0:
-                return ColorUtils.getBlendedColor(stack, PartType.ROD);
+                return ColorUtils.getBlendedColor(stack, PartTypes.ROD.get());
             case 1:
-                return ColorUtils.getBlendedColor(stack, PartType.MAIN);
+                return ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
             default:
                 return Color.VALUE_WHITE;
         }

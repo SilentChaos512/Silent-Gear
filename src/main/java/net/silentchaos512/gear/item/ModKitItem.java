@@ -3,34 +3,32 @@ package net.silentchaos512.gear.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.setup.SgDataComponents;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModKitItem extends Item implements ICycleItem {
-    private static final String NBT_SELECTED = "SelectedType";
-
     public ModKitItem(Properties properties) {
         super(properties);
     }
 
     public static PartType getSelectedType(ItemStack stack) {
-        String key = stack.getOrCreateTag().getString(NBT_SELECTED);
-        return PartType.getNonNull(new ResourceLocation(key));
+        var type = stack.get(SgDataComponents.PART_TYPE);
+        return type != null ? type : PartTypes.NONE.get();
     }
 
-    public static void setSelectedType(ItemStack stack, PartType type) {
-        stack.getOrCreateTag().putString(NBT_SELECTED, type.getName().toString());
+    private static void setSelectedType(ItemStack stack, PartType type) {
+        stack.set(SgDataComponents.PART_TYPE, type);
     }
 
     @Override
@@ -39,11 +37,11 @@ public class ModKitItem extends Item implements ICycleItem {
         List<PartType> types = getRemovableTypes();
         if (types.isEmpty()) return;
 
-        if (selected == PartType.NONE) {
+        if (selected == PartTypes.NONE.get()) {
             if (direction == ICycleItem.Direction.BACK) {
-                setSelectedType(stack, types.get(types.size() - 1));
+                setSelectedType(stack, types.getLast());
             } else if (direction == ICycleItem.Direction.NEXT) {
-                setSelectedType(stack, types.get(0));
+                setSelectedType(stack, types.getFirst());
             }
         } else {
             int index = types.indexOf(selected) + direction.scale;
@@ -57,7 +55,7 @@ public class ModKitItem extends Item implements ICycleItem {
 
     private static List<PartType> getRemovableTypes() {
         List<PartType> list = new ArrayList<>();
-        for (PartType partType : PartType.getValues()) {
+        for (PartType partType : SgRegistries.PART_TYPE) {
             if (partType.isRemovable()) {
                 list.add(partType);
             }
@@ -66,10 +64,10 @@ public class ModKitItem extends Item implements ICycleItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
         PartType selected = getSelectedType(stack);
         tooltip.add(TextUtil.withColor(TextUtil.translate("item", "mod_kit.selected"), Color.SKYBLUE)
-                .append(selected.getDisplayName(0).withStyle(ChatFormatting.GRAY)));
+                .append(selected.getDisplayName().withStyle(ChatFormatting.GRAY)));
 
         tooltip.add(TextUtil.translate("item", "mod_kit.keyHint",
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),

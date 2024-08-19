@@ -5,7 +5,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
-import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
@@ -20,9 +20,9 @@ public class TierHelper {
      * @param components The material or part list
      * @return The highest Tier of all the materials or parts
      */
-    public static Tier getHighestTier(Collection<? extends IGearComponentInstance<?>> components) {
+    public static Tier getHighestTier(Collection<? extends GearComponentInstance<?>> components) {
         Tier max = weakestTier();
-        for (IGearComponentInstance<?> comp : components) {
+        for (GearComponentInstance<?> comp : components) {
             Tier tier = comp.getHarvestTier();
             if (TierSortingRegistry.getTiersLowerThan(tier).size() > TierSortingRegistry.getTiersLowerThan(max).size()) {
                 max = tier;

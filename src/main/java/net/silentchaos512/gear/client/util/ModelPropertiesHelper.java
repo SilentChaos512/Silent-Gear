@@ -14,7 +14,7 @@ public final class ModelPropertiesHelper {
 
     @Nullable
     public static ItemPropertyFunction get(ItemStack stack, ResourceLocation id) {
-        return ItemProperties.getProperty(stack.getItem(), id);
+        return ItemProperties.getProperty(stack, id);
     }
 
     public static float getValue(ItemStack stack, ResourceLocation id, @Nullable ClientLevel world, @Nullable LivingEntity entity) {

@@ -20,12 +20,17 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.util.MathUtils;
 
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class GearSlingshotItem extends GearBowItem {
     /**
      * Extra damage added by "power" enchantment. Bows are 0.5.
      */
     private static final float POWER_SCALE = 0.35f;
+
+    public GearSlingshotItem(Supplier<GearType> gearType) {
+        super(gearType);
+    }
 
     @Override
     public GearType getGearType() {

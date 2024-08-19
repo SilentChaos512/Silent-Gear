@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.api.event;
 
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.part.PartList;
+import net.silentchaos512.gear.gear.trait.Trait;
 
 import java.util.Map;
 
@@ -14,14 +14,14 @@ import java.util.Map;
  */
 @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
 public class GetTraitsEvent extends GearItemEvent {
-    private final Map<ITrait, Integer> traits;
+    private final Map<Trait, Integer> traits;
 
-    public GetTraitsEvent(ItemStack gear, PartDataList parts, Map<ITrait, Integer> traits) {
+    public GetTraitsEvent(ItemStack gear, PartList parts, Map<Trait, Integer> traits) {
         super(gear, parts);
         this.traits = traits;
     }
 
-    public Map<ITrait, Integer> getTraits() {
+    public Map<Trait, Integer> getTraits() {
         return traits;
     }
 }

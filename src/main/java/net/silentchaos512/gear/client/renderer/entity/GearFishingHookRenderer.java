@@ -122,7 +122,7 @@ public class GearFishingHookRenderer extends EntityRenderer<GearFishingHook> {
         f3 /= f6;
         f4 /= f6;
         f5 /= f6;
-        p_174122_.vertex(p_174123_.pose(), f, f1, f2).color(0, 0, 0, 255).normal(p_174123_.normal(), f3, f4, f5).endVertex();
+        p_174122_.vertex(p_174123_, f, f1, f2).color(0, 0, 0, 255).normal(p_174123_, f3, f4, f5).endVertex();
     }
 
     public @NotNull ResourceLocation getTextureLocation(GearFishingHook p_114703_) {

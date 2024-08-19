@@ -13,8 +13,8 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.block.compounder.CompoundMakerInfo;
-import net.silentchaos512.gear.block.compounder.CompounderScreen;
+import net.silentchaos512.gear.block.compounder.AlloyMakerInfo;
+import net.silentchaos512.gear.block.compounder.AlloyMakerScreen;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
@@ -31,19 +31,19 @@ public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
     private static final int GUI_WIDTH = 147 - GUI_START_X;
     private static final int GUI_HEIGHT = 56 - GUI_START_Y;
 
-    private final CompoundMakerInfo<?> info;
+    private final AlloyMakerInfo<?> info;
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawableAnimated arrow;
     private final Component localizedName;
 
-    public CompoundingRecipeCategory(CompoundMakerInfo<?> info, String categoryName, IGuiHelper guiHelper) {
+    public CompoundingRecipeCategory(AlloyMakerInfo<?> info, String categoryName, IGuiHelper guiHelper) {
         this.info = info;
-        background = guiHelper.createDrawable(CompounderScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
+        background = guiHelper.createDrawable(AlloyMakerScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
         icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(info.getBlock()));
-        arrow = guiHelper.drawableBuilder(CompounderScreen.TEXTURE, 176, 14, 24, 17)
+        arrow = guiHelper.drawableBuilder(AlloyMakerScreen.TEXTURE, 176, 14, 24, 17)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
-        localizedName = TextUtil.translate("jei", "category.compounding." + categoryName);
+        localizedName = TextUtil.translate("jei", "group.compounding." + categoryName);
     }
 
     @Override

@@ -16,17 +16,14 @@ import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.advancements.criterion.GearRepairedTrigger;
 import net.silentchaos512.gear.advancements.criterion.GearPropertyTrigger;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
-import net.silentchaos512.gear.gear.part.LazyPartData;
-import net.silentchaos512.gear.setup.SgBlocks;
-import net.silentchaos512.gear.setup.SgCriteriaTriggers;
-import net.silentchaos512.gear.setup.SgItems;
-import net.silentchaos512.gear.setup.SgTags;
+import net.silentchaos512.gear.advancements.criterion.GearRepairedTrigger;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.RepairKitItem;
+import net.silentchaos512.gear.setup.*;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.util.NameUtils;
@@ -41,15 +38,16 @@ public class ModAdvancementProvider extends AdvancementProvider {
     }
 
     private static class Advancements implements AdvancementGenerator {
+        @SuppressWarnings("unused")
         @Override
         public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-            ItemStack rootIcon = SgItems.PICKAXE.toStack();
+            ItemStack rootIcon = new ItemStack(GearItemSets.PICKAXE.gearItem());
             GearData.writeConstructionParts(rootIcon, ImmutableList.of(
-                    LazyPartData.of(Const.Parts.PICKAXE_HEAD, SgItems.PICKAXE_HEAD.get(), Const.Materials.CRIMSON_STEEL),
-                    LazyPartData.of(Const.Parts.ROD, SgItems.ROD.get(), Const.Materials.BLAZE_GOLD),
-                    LazyPartData.of(Const.Parts.TIP, SgItems.TIP.get(), Const.Materials.AZURE_ELECTRUM),
-                    LazyPartData.of(Const.Parts.GRIP, SgItems.GRIP.get(), Const.Materials.WOOL_BLACK),
-                    LazyPartData.of(Const.Parts.BINDING, SgItems.BINDING.get(), Const.Materials.STRING)
+                    PartInstance.create(Const.Parts.PICKAXE_HEAD, GearItemSets.PICKAXE.mainPart(), Const.Materials.CRIMSON_STEEL),
+                    PartInstance.create(Const.Parts.ROD, SgItems.ROD.get(), Const.Materials.BLAZE_GOLD),
+                    PartInstance.create(Const.Parts.TIP, SgItems.TIP.get(), Const.Materials.AZURE_ELECTRUM),
+                    PartInstance.create(Const.Parts.GRIP, SgItems.GRIP.get(), Const.Materials.WOOL_BLACK),
+                    PartInstance.create(Const.Parts.BINDING, SgItems.BINDING.get(), Const.Materials.STRING)
             ));
             AdvancementHolder root = Advancement.Builder.advancement()
                     .display(rootIcon, title("root"), description("root"), new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/adventure.png"), AdvancementType.TASK, false, false, false)
@@ -112,56 +110,56 @@ public class ModAdvancementProvider extends AdvancementProvider {
 
             AdvancementHolder blueprintBook = simpleGetItem(saver, SgItems.BLUEPRINT_BOOK, blueprintPaper);
 
-            AdvancementHolder tipUpgrade = simpleGetItem(saver, SgItems.TIP, SgItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), templateBoard, "tip_upgrade");
+            AdvancementHolder tipUpgrade = simpleGetItem(saver, SgItems.TIP, SgItems.TIP.get().create(MaterialInstance.of(Const.Materials.EXAMPLE)), templateBoard, "tip_upgrade");
 
             //region Gear
 
             AdvancementHolder armor = Advancement.Builder.advancement()
                     .parent(blueprintPaper)
-                    .display(SgItems.HELMET, title("armor"), description("armor"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("helmet", getItem(SgItems.HELMET))
-                    .addCriterion("chestplate", getItem(SgItems.CHESTPLATE))
-                    .addCriterion("leggings", getItem(SgItems.LEGGINGS))
-                    .addCriterion("boots", getItem(SgItems.BOOTS))
+                    .display(GearItemSets.HELMET.gearItem(), title("armor"), description("armor"), null, AdvancementType.TASK, true, true, false)
+                    .addCriterion("helmet", getItem(GearItemSets.HELMET.gearItem()))
+                    .addCriterion("chestplate", getItem(GearItemSets.CHESTPLATE.gearItem()))
+                    .addCriterion("leggings", getItem(GearItemSets.LEGGINGS.gearItem()))
+                    .addCriterion("boots", getItem(GearItemSets.BOOTS.gearItem()))
                     .requirements(AdvancementRequirements.Strategy.OR)
                     .save(saver, id("armor"));
 
             AdvancementHolder bow = Advancement.Builder.advancement()
                     .parent(blueprintPaper)
-                    .display(SgItems.BOW, title("bow"), description("bow"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("get_item", getItem(SgItems.BOW))
+                    .display(GearItemSets.BOW.gearItem(), title("bow"), description("bow"), null, AdvancementType.TASK, true, true, false)
+                    .addCriterion("get_item", getItem(GearItemSets.BOW.gearItem()))
                     .save(saver, id("bow"));
             AdvancementHolder standardTools = Advancement.Builder.advancement()
                     .parent(blueprintPaper)
-                    .display(SgItems.PICKAXE, title("standard_tools"), description("standard_tools"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("pickaxe", getItem(SgItems.PICKAXE))
-                    .addCriterion("shovel", getItem(SgItems.SHOVEL))
-                    .addCriterion("axe", getItem(SgItems.AXE))
+                    .display(GearItemSets.PICKAXE.gearItem(), title("standard_tools"), description("standard_tools"), null, AdvancementType.TASK, true, true, false)
+                    .addCriterion("pickaxe", getItem(GearItemSets.PICKAXE.gearItem()))
+                    .addCriterion("shovel", getItem(GearItemSets.SHOVEL.gearItem()))
+                    .addCriterion("axe", getItem(GearItemSets.AXE.gearItem()))
                     .requirements(AdvancementRequirements.Strategy.AND)
                     .save(saver, id("standard_tools"));
             AdvancementHolder swords = Advancement.Builder.advancement()
                     .parent(blueprintPaper)
-                    .display(SgItems.SWORD, title("swords"), description("swords"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("sword", getItem(SgItems.SWORD))
-                    .addCriterion("katana", getItem(SgItems.KATANA))
-                    .addCriterion("machete", getItem(SgItems.MACHETE))
+                    .display(GearItemSets.SWORD.gearItem(), title("swords"), description("swords"), null, AdvancementType.TASK, true, true, false)
+                    .addCriterion("sword", getItem(GearItemSets.SWORD.gearItem()))
+                    .addCriterion("katana", getItem(GearItemSets.KATANA.gearItem()))
+                    .addCriterion("machete", getItem(GearItemSets.MACHETE.gearItem()))
                     .requirements(AdvancementRequirements.Strategy.AND)
                     .save(saver, id("swords"));
 
             AdvancementHolder bigJobTools = Advancement.Builder.advancement()
                     .parent(standardTools)
-                    .display(SgItems.HAMMER, title("big_job_tools"), description("big_job_tools"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("hammer", getItem(SgItems.HAMMER))
-                    .addCriterion("excavator", getItem(SgItems.EXCAVATOR))
-                    .addCriterion("lumber_axe", getItem(SgItems.SAW))
+                    .display(GearItemSets.HAMMER.gearItem(), title("big_job_tools"), description("big_job_tools"), null, AdvancementType.TASK, true, true, false)
+                    .addCriterion("hammer", getItem(GearItemSets.HAMMER.gearItem()))
+                    .addCriterion("excavator", getItem(GearItemSets.EXCAVATOR.gearItem()))
+                    .addCriterion("lumber_axe", getItem(GearItemSets.SAW.gearItem()))
                     .requirements(AdvancementRequirements.Strategy.AND)
                     .save(saver, id("big_job_tools"));
 
-            AdvancementHolder crossbow = simpleGetItem(saver, SgItems.CROSSBOW, bow);
+            AdvancementHolder crossbow = simpleGetItem(saver, GearItemSets.CROSSBOW.gearItem(), bow);
 
-            AdvancementHolder mattock = simpleGetItem(saver, SgItems.MATTOCK, standardTools);
+            AdvancementHolder mattock = simpleGetItem(saver, GearItemSets.MATTOCK.gearItem(), standardTools);
 
-            AdvancementHolder sickle = simpleGetItem(saver, SgItems.SICKLE, mattock);
+            AdvancementHolder sickle = simpleGetItem(saver, GearItemSets.SICKLE.gearItem(), mattock);
 
             //endregion
 
@@ -201,8 +199,8 @@ public class ModAdvancementProvider extends AdvancementProvider {
 
             AdvancementHolder highDurability = Advancement.Builder.advancement()
                     .parent(materialGrader)
-                    .display(SgItems.TIP.get().create(LazyMaterialInstance.of(Const.Materials.EMERALD)), title("high_durability"), description("high_durability"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("durability", SgCriteriaTriggers.ITEM_STAT.get().createCriterion(new GearPropertyTrigger.Instance(Optional.empty(), ItemStats.DURABILITY, MinMaxBounds.Doubles.atLeast(16_000))))
+                    .display(SgItems.TIP.get().create(MaterialInstance.of(Const.Materials.EMERALD)), title("high_durability"), description("high_durability"), null, AdvancementType.TASK, true, true, false)
+                    .addCriterion("durability", SgCriteriaTriggers.GEAR_PROPERTY.get().createCriterion(new GearPropertyTrigger.Instance(Optional.empty(), GearProperties.DURABILITY.get(), MinMaxBounds.Doubles.atLeast(16_000))))
                     .save(saver, id("high_durability"));
             AdvancementHolder graderCatalyst2 = Advancement.Builder.advancement()
                     .parent(materialGrader)
@@ -239,8 +237,8 @@ public class ModAdvancementProvider extends AdvancementProvider {
                     .addCriterion("get_ingot", getItem(CraftingItems.AZURE_ELECTRUM_INGOT))
                     .save(saver, id("azure_electrum"));
 
-            ItemStack azureSilverBoots = SgItems.BOOTS.toStack();
-            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(LazyPartData.of(Const.Parts.ARMOR_BODY, SgItems.BOOT_PLATES.get(), LazyMaterialInstance.of(Const.Materials.AZURE_SILVER))));
+            ItemStack azureSilverBoots = new ItemStack(GearItemSets.BOOTS.gearItem());
+            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(PartInstance.create(Const.Parts.ARMOR_BODY, GearItemSets.BOOTS.mainPart(), Const.Materials.AZURE_SILVER)));
             AdvancementHolder moonwalker = Advancement.Builder.advancement()
                     .parent(azureSilver)
                     .display(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, AdvancementType.TASK, true, true, false)
@@ -275,14 +273,9 @@ public class ModAdvancementProvider extends AdvancementProvider {
         }
 
         private static Criterion<InventoryChangeTrigger.TriggerInstance> getItem(TagKey<Item> tag) {
-            return InventoryChangeTrigger.TriggerInstance.hasItems(new ItemPredicate(Optional.of(tag),
-                    Optional.empty(),
-                    MinMaxBounds.Ints.ANY,
-                    MinMaxBounds.Ints.ANY,
-                    Collections.emptyList(),
-                    Collections.emptyList(),
-                    Optional.empty(),
-                    Optional.empty()));
+            return InventoryChangeTrigger.TriggerInstance.hasItems(
+                    ItemPredicate.Builder.item().of(tag).build()
+            );
         }
 
         private static Component title(String key) {

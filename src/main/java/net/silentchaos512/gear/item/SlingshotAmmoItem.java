@@ -13,7 +13,6 @@ import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
 import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.util.TextUtil;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class SlingshotAmmoItem extends ArrowItem implements ISlingshotAmmo {
@@ -27,7 +26,7 @@ public class SlingshotAmmoItem extends ArrowItem implements ISlingshotAmmo {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
         tooltip.add(TextUtil.translate("item", "slingshot_ammo.desc").withStyle(ChatFormatting.ITALIC));
     }
 }

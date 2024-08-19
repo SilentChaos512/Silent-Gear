@@ -10,11 +10,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
-import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -64,7 +64,7 @@ public record AndTraitCondition(List<ITraitCondition> children) implements ITrai
     }
 
     @Override
-    public boolean matches(ITrait trait, PartGearKey key, ItemStack gear, List<? extends IGearComponentInstance<?>> components) {
+    public boolean matches(Trait trait, PartGearKey key, ItemStack gear, List<? extends GearComponentInstance<?>> components) {
         for (ITraitCondition child : this.children) {
             if (!child.matches(trait, key, gear, components)) {
                 return false;

@@ -7,14 +7,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
-import net.silentchaos512.gear.block.compounder.CompoundMakerBlockEntity;
+import net.silentchaos512.gear.block.compounder.AlloyMakerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.block.press.MetalPressBlockEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerBlockEntity;
@@ -37,9 +37,9 @@ public final class SgBlockEntities {
             SgBlocks.MATERIAL_GRADER
     );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CompoundMakerBlockEntity<MetalAlloyRecipe>>> ALLOY_FORGE = register(
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<MetalAlloyRecipe>>> ALLOY_FORGE = register(
             "alloy_forge",
-            (pos, state) -> new CompoundMakerBlockEntity<>(Const.METAL_COMPOUNDER_INFO, pos, state),
+            (pos, state) -> new AlloyMakerBlockEntity<>(Const.METAL_COMPOUNDER_INFO, pos, state),
             SgBlocks.ALLOY_FORGE
     );
 
@@ -49,15 +49,15 @@ public final class SgBlockEntities {
             SgBlocks.METAL_PRESS
     );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CompoundMakerBlockEntity<GemAlloyRecipe>>> RECRYSTALLIZER = register(
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<GemAlloyRecipe>>> RECRYSTALLIZER = register(
             "recrystallizer",
-            (pos, state) -> new CompoundMakerBlockEntity<>(Const.GEM_COMPOUNDER_INFO, pos, state),
+            (pos, state) -> new AlloyMakerBlockEntity<>(Const.GEM_COMPOUNDER_INFO, pos, state),
             SgBlocks.RECRYSTALLIZER
     );
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CompoundMakerBlockEntity<FabricAlloyRecipe>>> REFABRICATOR = register(
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<FabricAlloyRecipe>>> REFABRICATOR = register(
             "refabricator",
-            (pos, state) -> new CompoundMakerBlockEntity<>(Const.FABRIC_COMPOUNDER_INFO, pos, state),
+            (pos, state) -> new AlloyMakerBlockEntity<>(Const.FABRIC_COMPOUNDER_INFO, pos, state),
             SgBlocks.REFABRICATOR
     );
 
@@ -91,7 +91,7 @@ public final class SgBlockEntities {
     }
 
     @OnlyIn(Dist.CLIENT)
-    @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientEvents {
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

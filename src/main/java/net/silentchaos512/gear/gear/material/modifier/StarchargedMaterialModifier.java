@@ -2,15 +2,16 @@ package net.silentchaos512.gear.gear.material.modifier;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ChargedProperties;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.SplitItemStat;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.util.StatGearKey;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.property.NumberProperty;
+import net.silentchaos512.gear.api.property.NumberPropertyValue;
+import net.silentchaos512.gear.api.util.ChargedProperties;
+import net.silentchaos512.gear.api.util.PropertyKey;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialModifiers;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
@@ -29,15 +30,15 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
     }
 
     @Override
-    public List<StatInstance> modifyStats(IMaterialInstance material, PartType partType, StatGearKey key, List<StatInstance> statMods) {
-        List<StatInstance> ret = new ArrayList<>();
+    public List<GearPropertyValue<?>> modifyStats(MaterialInstance material, PartType partType, PropertyKey<?, ?> key, List<GearPropertyValue<?>> modifiers) {
+        List<GearPropertyValue<?>> ret = new ArrayList<>();
 
-        if (key.getStat() == ItemStats.CHARGING_VALUE) {
+        if (key.property() == GearProperties.CHARGING_VALUE.get()) {
             return ret;
         }
 
-        for (StatInstance mod : statMods) {
-            StatInstance newMod = modifyStat(key, mod, getChargedProperties(material));
+        for (GearPropertyValue<?> mod : modifiers) {
+            GearPropertyValue<?> newMod = modifyStat(key, mod, getChargedProperties(material));
             ret.add(newMod != null ? newMod : mod);
         }
 
@@ -62,55 +63,49 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
     }
 
     @Nullable
-    private static StatInstance modifyStat(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
-        if (stat.getStat() == ItemStats.CHARGING_VALUE) {
+    private static GearPropertyValue<?> modifyStat(PropertyKey<?, ?> key, GearPropertyValue<?> mod, ChargedProperties charge) {
+        if (key.property() == GearProperties.CHARGING_VALUE.get()) {
             return null;
         }
 
-        if (isSupportedModifierOp(mod)) {
-            float modifiedStatValue = (float) getModifiedStatValue(stat, mod, charge);
-
-            if (stat.getStat() instanceof SplitItemStat splitItemStat) {
-                // For stats like armor, split the bonus evenly between all gear types
-                if (!splitItemStat.getSplitTypes().contains(stat.getGearType())) {
-                    modifiedStatValue = mod.getValue() + (modifiedStatValue - mod.getValue()) * splitItemStat.getSplitTypes().size();
-                }
-            }
-
-            return mod.copySetValue(modifiedStatValue);
+        if (mod instanceof NumberPropertyValue numberPropertyValue && isSupportedModifierOp(numberPropertyValue)) {
+            //noinspection unchecked
+            var numberPropertyKey = (PropertyKey<Float, NumberPropertyValue>) key;
+            var modifiedStatValue = (float) getModifiedStatValue(numberPropertyKey, numberPropertyValue, charge);
+            return new NumberPropertyValue(modifiedStatValue, numberPropertyValue.operation());
         }
         return null;
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    private static double getModifiedStatValue(StatGearKey stat, StatInstance mod, ChargedProperties charge) {
-        if (stat.getStat() == ItemStats.DURABILITY)
-            return mod.getValue() * Math.pow(1.25, charge.getChargeValue());
-        if (stat.getStat() == ItemStats.ARMOR_DURABILITY)
-            return mod.getValue() * Math.pow(1.1, charge.getChargeValue());
-        if (stat.getStat() == ItemStats.ENCHANTMENT_VALUE)
-            return mod.getValue() * (1 + charge.chargeLevel() * (Math.sqrt(charge.chargeValue() - 1)));
-        if (stat.getStat() == ItemStats.HARVEST_SPEED)
-            return mod.getValue() + 1.5 * charge.chargeLevel() * charge.getChargeValue();
-        if (stat.getStat() == ItemStats.MELEE_DAMAGE)
-            return mod.getValue() + charge.getChargeValue();
-        if (stat.getStat() == ItemStats.MAGIC_DAMAGE)
-            return mod.getValue() + charge.getChargeValue();
-        if (stat.getStat() == ItemStats.RANGED_DAMAGE)
-            return mod.getValue() + charge.getChargeValue() / 2.0;
-        if (stat.getStat() == ItemStats.ARMOR)
-            return mod.getValue() + charge.getChargeValue() / 2.0;
-        if (stat.getStat() == ItemStats.ARMOR_TOUGHNESS)
-            return mod.getValue() + charge.getChargeValue() / 2.0;
-        if (stat.getStat() == ItemStats.MAGIC_ARMOR)
-            return mod.getValue() + charge.getChargeValue() / 2.0;
+    private static double getModifiedStatValue(PropertyKey<Float, NumberPropertyValue> key, NumberPropertyValue mod, ChargedProperties charge) {
+        if (key.property() == GearProperties.DURABILITY.get())
+            return mod.value() * Math.pow(1.25, charge.getChargeValue());
+        if (key.property() == GearProperties.ARMOR_DURABILITY.get())
+            return mod.value() * Math.pow(1.1, charge.getChargeValue());
+        if (key.property() == GearProperties.ENCHANTMENT_VALUE.get())
+            return mod.value() * (1 + charge.chargeLevel() * (Math.sqrt(charge.chargeValue() - 1)));
+        if (key.property() == GearProperties.HARVEST_SPEED.get())
+            return mod.value() + 1.5 * charge.chargeLevel() * charge.getChargeValue();
+        if (key.property() == GearProperties.ATTACK_DAMAGE.get())
+            return mod.value() + charge.getChargeValue();
+        if (key.property() == GearProperties.MAGIC_DAMAGE.get())
+            return mod.value() + charge.getChargeValue();
+        if (key.property() == GearProperties.RANGED_DAMAGE.get())
+            return mod.value() + charge.getChargeValue() / 2.0;
+        if (key.property() == GearProperties.ARMOR.get())
+            return mod.value() + charge.getChargeValue() * 2.0;
+        if (key.property() == GearProperties.ARMOR_TOUGHNESS.get())
+            return mod.value() + charge.getChargeValue() * 2.0;
+        if (key.property() == GearProperties.MAGIC_ARMOR.get())
+            return mod.value() + charge.getChargeValue() * 2.0;
 
-        return mod.getValue();
+        return mod.value();
     }
 
-    private static boolean isSupportedModifierOp(StatInstance mod) {
-        return mod.getOp() == StatInstance.Operation.AVG
-                || mod.getOp() == StatInstance.Operation.MAX
-                || mod.getOp() == StatInstance.Operation.ADD;
+    private static boolean isSupportedModifierOp(NumberPropertyValue mod) {
+        return mod.operation() == NumberProperty.Operation.AVERAGE
+                || mod.operation() == NumberProperty.Operation.MAX
+                || mod.operation() == NumberProperty.Operation.ADD;
     }
 }

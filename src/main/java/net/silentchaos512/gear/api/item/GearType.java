@@ -7,8 +7,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.common.ToolAction;
-import net.silentchaos512.gear.api.property.NumberPropertyType;
-import net.silentchaos512.gear.api.stats.IItemStat;
+import net.silentchaos512.gear.api.property.GearPropertyGroup;
+import net.silentchaos512.gear.api.property.GearProperty;
+import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -19,47 +20,33 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
-/**
- * Used for classifying gear for certain purposes, such as rendering. For example, any armor type
- * can be matched individually (helmet, chestplate, etc.), or all together with "armor".
- * <p>
- * New gear types can be added with {@link #getOrCreate(String, GearType)}. It is recommended to
- * store this in a static final field in your item class, but the location doesn't matter.
- */
-public final class GearType {
-    public static final Codec<GearType> CODEC = CodecUtils.byModNameCodec(SgRegistries.GEAR_TYPES);
-    public static final StreamCodec<RegistryFriendlyByteBuf, GearType> STREAM_CODEC = ByteBufCodecs.registry(SgRegistries.GEAR_TYPES_KEY);
+public record GearType(
+        Supplier<GearType> parent,
+        int animationFrames,
+        Set<ToolAction> toolActions,
+        float armorDurabilityMultiplier,
+        Supplier<NumberProperty> durabilityStat,
+        Set<GearPropertyGroup> relevantPropertyGroups
+) {
+    public static final Codec<GearType> CODEC = CodecUtils.byModNameCodec(SgRegistries.GEAR_TYPE);
+    public static final StreamCodec<RegistryFriendlyByteBuf, GearType> STREAM_CODEC = ByteBufCodecs.registry(SgRegistries.GEAR_TYPE_KEY);
 
     private static final Map<GearType, ICoreItem> ITEMS = new HashMap<>();
 
-    @Nullable
-    private final Supplier<GearType> parent;
-    private final int animationFrames;
-    private final Set<ToolAction> toolActions;
-    private final float armorDurabilityMultiplier;
-    private final Supplier<NumberPropertyType> durabilityStat;
-    private final Set<IItemStat> relevantStats;
-    private final Set<IItemStat> excludedStats;
-
-    /**
-     *
-     */
     public GearType(
             @Nullable Supplier<GearType> parent,
             int animationFrames,
             Set<ToolAction> toolActions,
             float armorDurabilityMultiplier,
-            Supplier<NumberPropertyType> durabilityStat,
-            Set<IItemStat> relevantStats, // TODO: Get rid of this? Allow item stats to determine compatible items.
-            Set<IItemStat> excludedStats // TODO: Get rid of this? It's not necessary to limit what stats an item can choose to have.
+            Supplier<NumberProperty> durabilityStat,
+            Set<GearPropertyGroup> relevantPropertyGroups
     ) {
         this.parent = parent;
         this.animationFrames = animationFrames;
         this.toolActions = toolActions;
         this.armorDurabilityMultiplier = armorDurabilityMultiplier;
         this.durabilityStat = durabilityStat;
-        this.relevantStats = ImmutableSet.copyOf(relevantStats);
-        this.excludedStats = ImmutableSet.copyOf(excludedStats);
+        this.relevantPropertyGroups = ImmutableSet.copyOf(relevantPropertyGroups);
     }
 
     public boolean canPerformAction(ToolAction action) {
@@ -93,7 +80,7 @@ public final class GearType {
     }
 
     public Component getDisplayName() {
-        var name = SgRegistries.GEAR_TYPES.getKey(this);
+        var name = SgRegistries.GEAR_TYPE.getKey(this);
         if (name == null) {
             return Component.literal("Unknown Gear Type");
         }
@@ -109,71 +96,31 @@ public final class GearType {
         return parent;
     }
 
-    public int animationFrames() {
-        return animationFrames;
-    }
-
-    public Set<ToolAction> toolActions() {
-        return toolActions;
-    }
-
-    public float armorDurabilityMultiplier() {
-        return armorDurabilityMultiplier;
-    }
-
-    public Supplier<NumberPropertyType> durabilityStat() {
-        return durabilityStat;
-    }
-
-    public Set<IItemStat> relevantStats() {
-        return relevantStats;
-    }
-
-    public Set<IItemStat> excludedStats() {
-        return excludedStats;
-    }
-
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (GearType) obj;
-        return Objects.equals(this.parent, that.parent) &&
-                this.animationFrames == that.animationFrames &&
-                Objects.equals(this.toolActions, that.toolActions) &&
-                Float.floatToIntBits(this.armorDurabilityMultiplier) == Float.floatToIntBits(that.armorDurabilityMultiplier) &&
-                Objects.equals(this.durabilityStat, that.durabilityStat) &&
-                Objects.equals(this.relevantStats, that.relevantStats) &&
-                Objects.equals(this.excludedStats, that.excludedStats);
+    public Set<GearPropertyGroup> relevantPropertyGroups() {
+        if (relevantPropertyGroups.isEmpty()) {
+            return parent.get().relevantPropertyGroups();
+        }
+        return relevantPropertyGroups;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(parent, animationFrames, toolActions, armorDurabilityMultiplier, durabilityStat, relevantStats, excludedStats);
+    public boolean isPropertyRelevant(GearProperty<?, ?> propertyType) {
+        for (GearPropertyGroup group : relevantPropertyGroups) {
+            if (propertyType.getGroup() == group) {
+                return true;
+            }
+        }
+        return false;
     }
-
-    @Override
-    public String toString() {
-        return "GearType[" +
-                "parent=" + parent + ", " +
-                "animationFrames=" + animationFrames + ", " +
-                "toolActions=" + toolActions + ", " +
-                "armorDurabilityMultiplier=" + armorDurabilityMultiplier + ", " +
-                "durabilityStat=" + durabilityStat + ", " +
-                "relevantStats=" + relevantStats + ", " +
-                "excludedStats=" + excludedStats + ']';
-    }
-
 
     public static class Builder {
         @Nullable
         private final Supplier<GearType> parent;
         private int animationFrames = 1;
-        private Supplier<NumberPropertyType> durabilityStat = GearProperties.DURABILITY;
+        private Supplier<NumberProperty> durabilityStat = GearProperties.DURABILITY;
         private float armorDurabilityMultiplier = 1f;
         private Set<ToolAction> toolActions = Collections.emptySet();
-        private final Set<IItemStat> relevantStats = new LinkedHashSet<>();
-        private final Set<IItemStat> excludedStats = new LinkedHashSet<>();
+        private final Set<GearPropertyGroup> relevantPropertyGroups = new LinkedHashSet<>();
 
         private Builder(@Nullable Supplier<GearType> parent) {
             this.parent = parent;
@@ -193,8 +140,7 @@ public final class GearType {
                     toolActions,
                     armorDurabilityMultiplier,
                     durabilityStat,
-                    relevantStats,
-                    excludedStats
+                    relevantPropertyGroups
             );
         }
 
@@ -203,7 +149,7 @@ public final class GearType {
             return this;
         }
 
-        public Builder durabilityStat(Supplier<NumberPropertyType> durabilityStat) {
+        public Builder durabilityStat(Supplier<NumberProperty> durabilityStat) {
             this.durabilityStat = durabilityStat;
             return this;
         }
@@ -223,21 +169,12 @@ public final class GearType {
             return this;
         }
 
-        public Builder relevantStats(IItemStat... stats) {
-            return relevantStats(Arrays.asList(stats));
+        public Builder relevantPropertyGroups(GearPropertyGroup... propertyGroups) {
+            return relevantPropertyGroups(Arrays.asList(propertyGroups));
         }
 
-        public Builder relevantStats(Collection<IItemStat> stats) {
-            relevantStats.addAll(stats);
-            return this;
-        }
-
-        public Builder excludedStats(IItemStat... stats) {
-            return excludedStats(Arrays.asList(stats));
-        }
-
-        private Builder excludedStats(Collection<IItemStat> stats) {
-            excludedStats.addAll(stats);
+        public Builder relevantPropertyGroups(Collection<GearPropertyGroup> propertyGroups) {
+            propertyGroups.addAll(Builder.this.relevantPropertyGroups);
             return this;
         }
     }

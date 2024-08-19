@@ -20,15 +20,16 @@ import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
-import net.silentchaos512.gear.client.material.GearDisplayManager;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
-import net.silentchaos512.gear.gear.part.CompoundPart;
+import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.setup.*;
+import net.silentchaos512.gear.setup.gear.*;
 import net.silentchaos512.gear.world.SgWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
@@ -43,6 +44,14 @@ class SideProxy implements IProxy {
     private static CreativeModeTab creativeModeTab;
 
     SideProxy(IEventBus modEventBus) {
+        GearProperties.REGISTRAR.register(modEventBus);
+        GearPropertyTypes.REGISTRAR.register(modEventBus);
+        GearTypes.REGISTRAR.register(modEventBus);
+        PartTypes.REGISTRAR.register(modEventBus);
+        TraitEffectTypes.REGISTRAR.register(modEventBus);
+        MaterialSerializers.REGISTRAR.register(modEventBus);
+        PartSerializers.REGISTRAR.register(modEventBus);
+
         SgBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         SgBlocks.BLOCKS.register(modEventBus);
         SgCreativeTabs.CREATIVE_TABS.register(modEventBus);
@@ -104,9 +113,9 @@ class SideProxy implements IProxy {
     }
 
     private static void onAddReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(TraitManager.INSTANCE);
-        event.addListener(PartManager.INSTANCE);
-        event.addListener(MaterialManager.INSTANCE);
+        event.addListener(SgRegistries.TRAIT);
+        event.addListener(SgRegistries.MATERIAL);
+        event.addListener(SgRegistries.PART);
     }
 
     private static void serverStarted(ServerStartedEvent event) {
@@ -114,9 +123,9 @@ class SideProxy implements IProxy {
         SilentGear.LOGGER.info(TraitManager.MARKER, "Traits loaded: {}", TraitManager.getValues().size());
         SilentGear.LOGGER.info(PartManager.MARKER, "Parts loaded: {}", PartManager.getValues().size());
         SilentGear.LOGGER.info(PartManager.MARKER, "- Compound: {}", PartManager.getValues().stream()
-                .filter(part -> part instanceof CompoundPart).count());
+                .filter(part -> part instanceof CoreGearPart).count());
         SilentGear.LOGGER.info(PartManager.MARKER, "- Simple: {}", PartManager.getValues().stream()
-                .filter(part -> !(part instanceof CompoundPart)).count());
+                .filter(part -> !(part instanceof CoreGearPart)).count());
         SilentGear.LOGGER.info(MaterialManager.MARKER, "Materials loaded: {}", MaterialManager.getValues().size());
         SilentGear.LOGGER.info(MaterialManager.MARKER, "- Standard: {}", MaterialManager.getValues().stream()
                 .filter(mat -> mat.getSerializer() == MaterialSerializers.STANDARD).count());
@@ -251,7 +260,7 @@ class SideProxy implements IProxy {
     public static Component detectDataLoadingFailure(Player player) {
         // Check if parts/traits have loaded. If not, a mod has likely broken the data loading process.
         // We should inform the user and tell them what to look for in the log.
-        if (MaterialManager.getValues().isEmpty() || PartManager.getValues().isEmpty() || TraitManager.getValues().isEmpty()) {
+        if (SgRegistries.MATERIAL.keySet().isEmpty() || SgRegistries.PART.keySet().isEmpty() || SgRegistries.TRAIT.keySet().isEmpty()) {
             String msg = "Materials, parts, and/or traits have not loaded! This may be caused by a broken mod, even those not related to Silent Gear. Search your log for \"Failed to reload data packs\" to find the error.";
             SilentGear.LOGGER.error(msg);
             return Component.literal(msg);

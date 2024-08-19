@@ -25,18 +25,14 @@ import net.silentchaos512.gear.util.GearHelper;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearShovelItem extends ShovelItem implements ICoreTool {
-    private final GearType gearType;
+    private final Supplier<GearType> gearType;
 
-    public GearShovelItem(GearType gearType) {
+    public GearShovelItem(Supplier<GearType> gearType) {
         super(GearHelper.DEFAULT_DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
-    }
-
-    @Override
-    public Tier getTier() {
-        return Config.Common.isLoaded() ? Config.Common.dummyToolTier.get() : GearHelper.DEFAULT_DUMMY_TIER;
     }
 
     @Override
@@ -54,7 +50,7 @@ public class GearShovelItem extends ShovelItem implements ICoreTool {
 
     @Override
     public GearType getGearType() {
-        return gearType;
+        return gearType.get();
     }
 
     @Override

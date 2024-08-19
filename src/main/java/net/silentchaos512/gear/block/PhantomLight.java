@@ -1,21 +1,3 @@
-/*
- * Silent Gear -- PhantomLight
- * Copyright (C) 2018 SilentChaos512
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 3
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.silentchaos512.gear.block;
 
 import net.minecraft.core.BlockPos;
@@ -57,7 +39,6 @@ public class PhantomLight extends Block implements SimpleWaterloggedBlock {
         builder.add(WATERLOGGED);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
@@ -70,13 +51,11 @@ public class PhantomLight extends Block implements SimpleWaterloggedBlock {
         return defaultBlockState().setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return VOXEL_SHAPE;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
         return true;

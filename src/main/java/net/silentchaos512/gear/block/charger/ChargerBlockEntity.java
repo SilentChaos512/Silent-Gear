@@ -2,10 +2,12 @@ package net.silentchaos512.gear.block.charger;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
@@ -21,10 +23,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.GearApi;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
-import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.block.INamedContainerExtraData;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -34,6 +33,8 @@ import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifie
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgTags;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.MathUtils;
 import net.silentchaos512.lib.util.NameUtils;
@@ -110,9 +111,11 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
     }
 
     protected int getWorkTime(ItemStack input) {
-        IMaterialInstance material = GearApi.getMaterial(input);
+        MaterialInstance material = MaterialInstance.from(input);
         if (material != null) {
-            return 100 * material.getTier();
+            float rarity = material.getProperty(PartTypes.MAIN.get(), GearProperties.RARITY.get());
+            float clampedRarity = Mth.clamp(rarity, 5, 500);
+            return (int) (5 * rarity);
         }
         return -1;
     }
@@ -157,7 +160,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
 
     protected void chargeMaterial(ItemStack output, int level) {
         T mod = modifierType.create(level);
-        modifierType.write(mod, output);
+        modifierType.addModifier(mod, output);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, ChargerBlockEntity<?> blockEntity) {
@@ -174,7 +177,8 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
 
         ItemStack input = blockEntity.getItem(0);
         ItemStack catalyst = blockEntity.getItem(1);
-        if (input.isEmpty() || catalyst.isEmpty() || !(GearApi.isMaterial(input))) {
+        MaterialInstance material = MaterialInstance.from(input);
+        if (input.isEmpty() || catalyst.isEmpty() || material != null) {
             return;
         }
 
@@ -239,17 +243,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
         }
 
         return output.getCount() < output.getMaxStackSize()
-                && input.equals(output)
-                && getMaterialChargeLevel(output) == chargeTier
-                && getGrade(input) == getGrade(output);
-    }
-
-    private static MaterialGrade getGrade(ItemStack stack) {
-        IMaterialInstance material = GearApi.getMaterial(stack);
-        if (material != null) {
-            return material.getGrade();
-        }
-        return MaterialGrade.NONE;
+                && ItemStack.isSameItemSameComponents(input, output);
     }
 
     protected boolean checkStructureLevel() {
@@ -275,6 +269,16 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
     @Override
     protected Component getDefaultName() {
         return TextUtil.translate("container", "material_charger");
+    }
+
+    @Override
+    protected NonNullList<ItemStack> getItems() {
+        return items;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> pItems) {
+        this.items = pItems;
     }
 
     @Override
@@ -330,7 +334,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
     @Override
     public void setItem(int pSlot, ItemStack pStack) {
         ItemStack itemstack = this.items.get(pSlot);
-        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameTags(itemstack, pStack);
+        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, pStack);
         this.items.set(pSlot, pStack);
         if (pStack.getCount() > this.getMaxStackSize()) {
             pStack.setCount(this.getMaxStackSize());
@@ -350,17 +354,17 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
         return switch (index) {
-            case 0 -> GearApi.isMaterial(stack);
+            case 0 -> MaterialInstance.from(stack) != null;
             case 1 -> stack.is(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS);
             default -> false;
         };
     }
 
     @Override
-    public void load(CompoundTag tags) {
-        super.load(tags);
+    protected void loadAdditional(CompoundTag tags, HolderLookup.Provider provider) {
+        super.loadAdditional(tags, provider);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tags, this.items);
+        ContainerHelper.loadAllItems(tags, this.items, provider);
         this.progress = tags.getInt("Progress");
         this.workTime = tags.getInt("WorkTime");
         this.charge = tags.getInt("Charge");
@@ -368,18 +372,18 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
     }
 
     @Override
-    public void saveAdditional(CompoundTag tags) {
-        super.saveAdditional(tags);
+    public void saveAdditional(CompoundTag tags, HolderLookup.Provider provider) {
+        super.saveAdditional(tags, provider);
         tags.putInt("Progress", this.progress);
         tags.putInt("WorkTime", this.workTime);
         tags.putInt("Charge", this.charge);
         tags.putInt("StructureLevel", this.structureLevel);
-        ContainerHelper.saveAllItems(tags, this.items);
+        ContainerHelper.saveAllItems(tags, this.items, provider);
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag tags = super.getUpdateTag();
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag tags = super.getUpdateTag(provider);
         tags.putInt("Progress", this.progress);
         tags.putInt("WorkTime", this.workTime);
         tags.putInt("Charge", this.charge);

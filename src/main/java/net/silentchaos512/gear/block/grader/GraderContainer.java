@@ -32,7 +32,7 @@ public class GraderContainer extends AbstractContainerMenu {
         addSlot(new Slot(inventory, 0, 26, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return GraderBlockEntity.canAcceptInput(stack);
+                return GraderBlockEntity.canGrade(stack);
             }
         });
         addSlot(new Slot(inventory, 1, 26, 55) {
@@ -90,7 +90,7 @@ public class GraderContainer extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(stack1, startPlayer, endHotbar, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (index >= size && GraderBlockEntity.canAcceptInput(stack1)) {
+            } else if (index >= size && GraderBlockEntity.canGrade(stack1)) {
                 // Move from player to input slot?
                 if (!moveItemStackTo(stack1, 0, 1, false)) {
                     return ItemStack.EMPTY;

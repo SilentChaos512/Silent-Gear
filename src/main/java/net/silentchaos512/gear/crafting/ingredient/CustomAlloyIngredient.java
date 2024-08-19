@@ -14,8 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.setup.SgIngredientTypes;
@@ -34,30 +34,30 @@ public class CustomAlloyIngredient implements ICustomIngredient {
                             .orElseGet(() -> DataResult.error(() -> "Item is not a CustomMaterialItem: " + id)),
                     item -> DataResult.success(BuiltInRegistries.ITEM.getKey(item))
             ).fieldOf("item").forGetter(ing -> ing.item),
-            ResourceLocation.CODEC.fieldOf("material").forGetter(ing -> ing.material)
+            DataResource.MATERIAL_CODEC.fieldOf("material").forGetter(ing -> ing.material)
     ).apply(instance, CustomAlloyIngredient::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, CustomAlloyIngredient> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.registry(Registries.ITEM), ingredient -> ingredient.item,
-            ResourceLocation.STREAM_CODEC, ingredient -> ingredient.material,
+            DataResource.MATERIAL_STREAM_CODEC, ingredient -> ingredient.material,
             CustomAlloyIngredient::new
     );
 
     private final CustomMaterialItem item;
-    private final ResourceLocation material;
+    private final DataResource<Material> material;
 
     private ItemStack[] itemStacks;
 
-    protected CustomAlloyIngredient(Item item, ResourceLocation materialId) {
+    protected CustomAlloyIngredient(Item item, DataResource<Material> material) {
         this.item = (CustomMaterialItem) item;
-        this.material = materialId;
+        this.material = material;
     }
 
-    public static CustomAlloyIngredient of(CustomMaterialItem item, IMaterial material) {
-        return of(item, material.getId());
+    public static CustomAlloyIngredient of(CustomMaterialItem item, Material material) {
+        return of(item, DataResource.material(material));
     }
 
-    public static CustomAlloyIngredient of(CustomMaterialItem item, ResourceLocation materialId) {
-        return new CustomAlloyIngredient(item, materialId);
+    public static CustomAlloyIngredient of(CustomMaterialItem item, DataResource<Material> material) {
+        return new CustomAlloyIngredient(item, material);
     }
 
     @Override
@@ -70,12 +70,12 @@ public class CustomAlloyIngredient implements ICustomIngredient {
         if (stack == null || stack.isEmpty() || !stack.getItem().equals(this.item)) return false;
 
         MaterialInstance material = CustomMaterialItem.getMaterial(stack);
-        return material != null && material.getId().equals(this.material);
+        return material != null && material.getId().equals(this.material.getId());
     }
 
     private void dissolve() {
         if (this.itemStacks == null) {
-            var itemValue = new Ingredient.ItemValue(item.create(LazyMaterialInstance.of(material)));
+            var itemValue = new Ingredient.ItemValue(item.create(MaterialInstance.of(this.material)));
             this.itemStacks = itemValue.getItems().toArray(new ItemStack[0]);
         }
     }

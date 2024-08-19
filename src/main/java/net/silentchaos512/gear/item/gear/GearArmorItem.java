@@ -2,45 +2,37 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.material.IMaterialDisplay;
-import net.silentchaos512.gear.api.material.MaterialLayer;
-import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.client.model.ModelErrorLogging;
+import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
-import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.lib.util.Color;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearArmorItem extends ArmorItem implements ICoreArmor {
     // Just copied from ArmorItem, access transformers are too flaky
@@ -54,29 +46,16 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
 
-    public GearArmorItem(ArmorItem.Type type) {
-        super(GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL, type, GearHelper.getBaseItemProperties());
-    }
+    private final Supplier<GearType> gearType;
 
-    @Override
-    public ArmorMaterial getMaterial() {
-        return Config.Common.isLoaded() ? Config.Common.dummyArmorMaterial.get() : GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL;
+    public GearArmorItem(Supplier<GearType> gearType, ArmorItem.Type armorType) {
+        super(GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL, armorType, GearHelper.getBaseItemProperties());
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        switch (this.getType()) {
-            case HELMET:
-                return GearType.HELMET;
-            case CHESTPLATE:
-                return GearType.CHESTPLATE;
-            case LEGGINGS:
-                return GearType.LEGGINGS;
-            case BOOTS:
-                return GearType.BOOTS;
-            default:
-                throw new IllegalStateException("Don't know the gear type for " + NameUtils.fromItem(this));
-        }
+        return this.gearType.get();
     }
 
     @Override
@@ -88,25 +67,25 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
 
     @Override
     public float getRepairModifier(ItemStack stack) {
-        return getGearType().getArmorDurabilityMultiplier();
+        return getGearType().armorDurabilityMultiplier();
     }
 
-    public double getArmorProtection(ItemStack stack) {
+    public float getArmorProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return GearData.getStat(stack, ItemStats.ARMOR);
+        return GearData.getProperties(stack).getNumber(GearProperties.ARMOR);
     }
 
-    public double getArmorToughness(ItemStack stack) {
+    public float getArmorToughness(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return GearData.getStat(stack, ItemStats.ARMOR_TOUGHNESS);
+        return GearData.getProperties(stack).getNumber(GearProperties.ARMOR_TOUGHNESS);
     }
 
-    public double getArmorMagicProtection(ItemStack stack) {
+    public float getArmorMagicProtection(ItemStack stack) {
         if (GearHelper.isBroken(stack)) return 0;
-        return GearData.getStat(stack, ItemStats.MAGIC_ARMOR);
+        return GearData.getProperties(stack).getNumber(GearProperties.MAGIC_ARMOR);
     }
 
-    private static double getGenericArmorProtection(ItemStack stack) {
+    private static float getGenericArmorProtection(ItemStack stack) {
         Item item = stack.getItem();
         if (item instanceof GearArmorItem)
             return ((GearArmorItem) item).getArmorProtection(stack);
@@ -123,21 +102,22 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
         return Math.round(total);
     }
 
-    @Nonnull
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> multimap = LinkedHashMultimap.create();
+    public ItemAttributeModifiers getAttributeModifiers(ItemStack stack) {
+        var builder = ItemAttributeModifiers.builder();
+        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
         if (slot == this.getType().getSlot()) {
             UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
-            multimap.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADDITION));
-            multimap.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADDITION));
-            float knockbackResistance = GearData.getStat(stack, ItemStats.KNOCKBACK_RESISTANCE) / 10f;
+            var equipmentSlotGroup = EquipmentSlotGroup.bySlot(slot);
+            builder.add(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+            builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+            float knockbackResistance = GearData.getProperties(stack).getNumber(GearProperties.KNOCKBACK_RESISTANCE) / 10f;
             if (knockbackResistance > 0) {
-                multimap.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", knockbackResistance, AttributeModifier.Operation.ADDITION));
+                builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", knockbackResistance, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
             }
-            return GearHelper.getAttributeModifiers(slot, stack, multimap);
+            GearHelper.addAttributeModifiers(stack, builder);
         }
-        return multimap;
+        return builder.build();
     }
 
     //endregion
@@ -146,8 +126,8 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int maxDamageFactor = GearData.getStatInt(stack, getDurabilityStat());
-        return (int) getGearType().getArmorDurabilityMultiplier() * maxDamageFactor;
+        int maxDamageFactor = (int) GearData.getProperties(stack).getNumber(getDurabilityStat());
+        return (int) getGearType().armorDurabilityMultiplier() * maxDamageFactor;
     }
 
     @Override
@@ -160,10 +140,10 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        return GearHelper.damageItem(stack, amount, entity, t -> {
-            GearHelper.onBroken(stack, t instanceof Player ? (Player) t : null, this.getType().getSlot());
-            onBroken.accept(t);
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Runnable onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, () -> {
+            GearHelper.onBroken(stack, entity instanceof Player ? (Player) entity : null, this.getType().getSlot());
+            onBroken.run();
         });
     }
 
@@ -191,55 +171,24 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
 
     //region Client-side methods and rendering horrors
 
+
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        // In order for colors to work, it seems the following must be true:
-        // 1. Armor texture must be named using the vanilla convention
-        // 2. Return value of this may NOT be cached... wat? Not a big deal I guess.
-        // 3. You got lucky. The tiniest change can break everything for no apparent reason.
-
+    public @Nullable ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
         // Empty texture if broken
-        if (GearHelper.isBroken(stack))
-            return SilentGear.MOD_ID + ":textures/models/armor/empty.png";
+        if (GearHelper.isBroken(stack)) {
+            return SilentGear.getId("textures/models/armor/empty.png");
+        }
 
-        int layer = slot == EquipmentSlot.LEGS ? 2 : 1;
-        // Overlay - default to a blank texture
-        if ("overlay".equals(type))
-            return SilentGear.MOD_ID + ":textures/models/armor/all_layer_" + layer + "_overlay.png";
-
-        // New material-based armor
-        MaterialInstance material = GearData.getPrimaryArmorMaterial(stack);
-        if (material != null) {
-            IMaterialDisplay materialModel = material.getDisplayProperties();
-            PartType partType = GearData.hasPartOfType(stack, PartType.COATING) ? PartType.COATING : PartType.MAIN;
-            MaterialLayer materialLayer = materialModel.getLayerList(this.getGearType(), partType, material).getFirstLayer();
-            if (materialLayer != null) {
-                ResourceLocation tex = materialLayer.getTextureId();
-                return tex.getNamespace() + ":textures/models/armor/"
-                        + tex.getPath()
-                        + "_layer_" + layer
-                        + (type != null ? "_" + type : "")
-                        + ".png";
+        var primaryPart = GearData.getConstruction(stack).getCoatingOrMainPart();
+        if (primaryPart != null) {
+            var primaryMaterial = primaryPart.getMaterialNullable();
+            if (primaryMaterial != null) {
+                var mainTextureType = primaryMaterial.getMainTextureType();
+                return mainTextureType.getArmorTexture(innerModel);
             }
         }
 
-        return "silentgear:textures/models/armor/main_generic_hc_layer_" + layer + (type != null ? "_" + type : "") + ".png";
-    }
-
-    @Override
-    public boolean hasCustomColor(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public int getColor(ItemStack stack) {
-        try {
-            return ARMOR_COLORS.get(GearData.getModelKey(stack, 0), () -> getArmorColor(stack));
-        } catch (ExecutionException e) {
-            ModelErrorLogging.notifyOfException(e, "armor model");
-        }
-
-        return Color.VALUE_WHITE;
+        return TextureType.HIGH_CONTRAST.getArmorTexture(innerModel);
     }
 
     private static int getArmorColor(ItemStack stack) {
@@ -253,12 +202,6 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
     }
 
     @Override
-    public void clearColor(ItemStack stack) {}
-
-    @Override
-    public void setColor(ItemStack stack, int color) {}
-
-    @Override
     public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }
@@ -269,8 +212,8 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
+        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
     }
 
     @Override

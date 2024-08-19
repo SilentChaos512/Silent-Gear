@@ -19,9 +19,10 @@ import net.silentchaos512.gear.util.TextUtil;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class GearProspectorHammerItem extends GearPickaxeItem {
-    public GearProspectorHammerItem(GearType gearType) {
+    public GearProspectorHammerItem(Supplier<GearType> gearType) {
         super(gearType);
     }
 

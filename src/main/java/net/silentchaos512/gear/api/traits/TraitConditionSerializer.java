@@ -5,7 +5,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.util.Serializer;
 
-public class TraitConditionSerializer<V extends ITraitCondition> extends Serializer<V> {
+public class TraitConditionSerializer<V extends ITraitCondition> extends Serializer<RegistryFriendlyByteBuf, V> {
     public TraitConditionSerializer(MapCodec<V> codec, StreamCodec<RegistryFriendlyByteBuf, V> streamCodec) {
         super(codec, streamCodec);
     }

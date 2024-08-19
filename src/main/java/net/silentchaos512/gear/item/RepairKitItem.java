@@ -1,32 +1,28 @@
 package net.silentchaos512.gear.item;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Tuple;
-import net.minecraft.util.Mth;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStats;
+import net.minecraft.world.item.TooltipFlag;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.RepairContext;
+import net.silentchaos512.gear.setup.SgDataComponents;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TextUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class RepairKitItem extends Item {
-    private static final String NBT_STORAGE = "Storage";
-
     private final Supplier<Integer> capacity;
     private final Supplier<Double> efficiency;
 
@@ -37,42 +33,27 @@ public class RepairKitItem extends Item {
     }
 
     public boolean addMaterial(ItemStack repairKit, ItemStack materialStack) {
-        Tuple<IMaterialInstance, Float> tuple = getMaterialAndValue(materialStack);
+        var material = MaterialInstance.from(materialStack);
+        if (material == null) return false;
 
-        if (tuple != null) {
-            IMaterialInstance mat = tuple.getA();
-            float value = tuple.getB();
+        var materialValue = getMaterialValue(material);
 
-            if (getStoredMaterialAmount(repairKit) > getKitCapacity() - value) {
-                // Repair kit is full
-                return false;
-            }
-
-            String key = getShorthandKey(mat);
-            CompoundTag storageTag = repairKit.getOrCreateTagElement(NBT_STORAGE);
-            float current = storageTag.getFloat(key);
-            storageTag.putFloat(key, current + value);
-            return true;
+        if (getTotalStoredMaterialAmount(repairKit) > getKitCapacity() - materialValue) {
+            // Repair kit is full
+            return false;
         }
 
-        return false;
+        var materialStorage = new HashMap<>(repairKit.getOrDefault(SgDataComponents.MATERIAL_STORAGE, Collections.emptyMap()));
+        materialStorage.merge(material, materialValue, Float::sum);
+        repairKit.set(SgDataComponents.MATERIAL_STORAGE, ImmutableMap.copyOf(materialStorage));
+
+        return true;
     }
 
-    @Nullable
-    private static Tuple<IMaterialInstance, Float> getMaterialAndValue(ItemStack stack) {
-        if (stack.getItem() instanceof FragmentItem) {
-            IMaterialInstance material = FragmentItem.getMaterial(stack);
-            if (material != null) {
-                return new Tuple<>(material, 0.125f);
-            }
-            return null;
-        }
-
-        MaterialInstance mat = MaterialInstance.from(stack);
-        if (mat != null) {
-            return new Tuple<>(mat, 1f);
-        }
-        return null;
+    private float getMaterialValue(MaterialInstance material) {
+        // TODO: Consider modifiers like grades? Maybe base this on the ratio between modified
+        //  and unmodified durability?
+        return 1f;
     }
 
     private int getKitCapacity() {
@@ -84,11 +65,11 @@ public class RepairKitItem extends Item {
     }
 
     private static float getStoredAmount(ItemStack stack, MaterialInstance material) {
-        CompoundTag nbt = stack.getOrCreateTagElement(NBT_STORAGE);
-        return nbt.getFloat(getShorthandKey(material));
+        var materialStorage = stack.get(SgDataComponents.MATERIAL_STORAGE);
+        return materialStorage != null ? materialStorage.getOrDefault(material, 0f) : 0f;
     }
 
-    private static float getStoredMaterialAmount(ItemStack repairKit) {
+    private static float getTotalStoredMaterialAmount(ItemStack repairKit) {
         float sum = 0f;
         for (float amount : getStoredMaterials(repairKit).values()) {
             sum += amount;
@@ -97,32 +78,14 @@ public class RepairKitItem extends Item {
     }
 
     private static Map<MaterialInstance, Float> getStoredMaterials(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTagElement(NBT_STORAGE);
-        List<MaterialInstance> list = nbt.getAllKeys().stream()
-                .map(MaterialInstance::readShorthand)
-                .filter(Objects::nonNull)
-                .sorted(Comparator.<MaterialInstance, Integer>comparing(mat1 -> mat1.getTier(PartType.MAIN))
-                        .thenComparing(mat1 -> mat1.getDisplayName(PartType.MAIN, ItemStack.EMPTY).plainCopy().getString()))
-                .collect(Collectors.toList());
-
-        Map<MaterialInstance, Float> ret = new LinkedHashMap<>();
-        list.forEach(mat -> {
-            float value = nbt.getFloat(getShorthandKey(mat));
-            ret.put(mat, value);
-        });
-        return ret;
-    }
-
-    @Nonnull
-    private static String getShorthandKey(IMaterialInstance mat) {
-        return MaterialInstance.writeShorthand(mat);
+        return new HashMap<>(stack.getOrDefault(SgDataComponents.MATERIAL_STORAGE, Collections.emptyMap()));
     }
 
     private Pair<Map<MaterialInstance, Float>, Integer> getMaterialsToRepair(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType) {
         // Materials should be sorted by tier (ascending)
         Map<MaterialInstance, Float> stored = getStoredMaterials(repairKit);
         Map<MaterialInstance, Float> used = new HashMap<>();
-        float gearRepairEfficiency = GearData.getStat(gear, ItemStats.REPAIR_EFFICIENCY);
+        float gearRepairEfficiency = GearData.getProperties(gear).getNumber(GearProperties.REPAIR_EFFICIENCY);
         float kitEfficiency = this.getRepairEfficiency(repairType);
         int damageLeft = gear.getDamageValue();
 
@@ -160,28 +123,26 @@ public class RepairKitItem extends Item {
     }
 
     public void removeRepairMaterials(ItemStack repairKit, Map<MaterialInstance, Float> toRemove) {
-        CompoundTag nbt = repairKit.getOrCreateTagElement(NBT_STORAGE);
-        for (Map.Entry<MaterialInstance, Float> entry : toRemove.entrySet()) {
-            MaterialInstance mat = entry.getKey();
-            Float amount = entry.getValue();
-
-            String key = getShorthandKey(mat);
-            float newValue = nbt.getFloat(key) - amount;
-
-            if (newValue < 0.01f) {
-                nbt.remove(key);
-            } else {
-                nbt.putFloat(key, newValue);
+        var storedMaterials = getStoredMaterials(repairKit);
+        toRemove.forEach((material, value) -> {
+            if (storedMaterials.containsKey(material)) {
+                var newValue = storedMaterials.get(material) - value;
+                if (newValue < 0.01f) {
+                    storedMaterials.remove(material);
+                } else {
+                    storedMaterials.put(material, newValue);
+                }
             }
-        }
+        });
+        repairKit.set(SgDataComponents.MATERIAL_STORAGE, storedMaterials);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
         tooltip.add(TextUtil.translate("item", "repair_kit.efficiency",
                 (int) (this.getRepairEfficiency(RepairContext.Type.QUICK) * 100)));
         tooltip.add(TextUtil.translate("item", "repair_kit.capacity",
-                format(getStoredMaterialAmount(stack)),
+                format(getTotalStoredMaterialAmount(stack)),
                 getKitCapacity()));
 
         Map<MaterialInstance, Float> storedMaterials = getStoredMaterials(stack);
@@ -194,7 +155,7 @@ public class RepairKitItem extends Item {
 
         for (Map.Entry<MaterialInstance, Float> entry : storedMaterials.entrySet()) {
             tooltip.add(TextUtil.translate("item", "repair_kit.material",
-                    entry.getKey().getDisplayNameWithModifiers(PartType.MAIN, ItemStack.EMPTY),
+                    entry.getKey().getDisplayNameWithModifiers(PartTypes.MAIN.get(), ItemStack.EMPTY),
                     format(entry.getValue())));
         }
     }
@@ -206,7 +167,7 @@ public class RepairKitItem extends Item {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return Math.round(13f * getStoredMaterialAmount(stack) / getKitCapacity());
+        return Math.round(13f * getTotalStoredMaterialAmount(stack) / getKitCapacity());
     }
 
     @Override

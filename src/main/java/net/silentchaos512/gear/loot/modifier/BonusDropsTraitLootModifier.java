@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.loot.modifier;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 public class BonusDropsTraitLootModifier extends LootModifier {
-    public static final Supplier<Codec<BonusDropsTraitLootModifier>> CODEC = Suppliers.memoize(() ->
-            RecordCodecBuilder.create(inst ->
+    public static final Supplier<MapCodec<BonusDropsTraitLootModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.mapCodec(inst ->
                     codecStart(inst).apply(inst, BonusDropsTraitLootModifier::new)));
 
     public BonusDropsTraitLootModifier(LootItemCondition[] conditionsIn) {
@@ -33,9 +33,9 @@ public class BonusDropsTraitLootModifier extends LootModifier {
 
         if (tool != null && GearHelper.isGear(tool)) {
             //noinspection OverlyLongLambda
-            TraitHelper.activateTraits(tool, 0, (trait, level, value) -> {
+            TraitHelper.activateTraits(tool, 0, (trait, value) -> {
                 generatedLoot.forEach(lootStack -> {
-                    ItemStack stack = trait.addLootDrops(new TraitActionContext(null, level, tool), lootStack);
+                    ItemStack stack = trait.getTrait().addLootDrops(new TraitActionContext(null, trait, tool), lootStack);
                     if (!stack.isEmpty()) {
                         ret.add(stack);
                     }
@@ -48,7 +48,7 @@ public class BonusDropsTraitLootModifier extends LootModifier {
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC.get();
     }
 }

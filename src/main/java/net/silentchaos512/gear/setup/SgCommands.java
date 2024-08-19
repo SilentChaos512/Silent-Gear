@@ -14,7 +14,7 @@ public final class SgCommands {
         SetDamageCommand.register(dispatcher);
         MaterialsCommand.register(dispatcher);
         PartsCommand.register(dispatcher);
-        StatsCommand.register(dispatcher);
+        PropertiesCommand.register(dispatcher);
         TraitsCommand.register(dispatcher);
         RandomGearCommand.register(dispatcher);
     }

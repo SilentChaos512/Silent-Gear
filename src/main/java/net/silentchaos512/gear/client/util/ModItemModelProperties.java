@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.client.util;
 
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Items;
@@ -53,7 +54,8 @@ public final class ModItemModelProperties {
             return entity != null && CrossbowItem.isCharged(stack) ? 1.0F : 0.0F;
         });
         ItemProperties.register(SgItems.CROSSBOW.get(), new ResourceLocation("firework"), (stack, level, entity, par4) -> {
-            return entity != null && CrossbowItem.isCharged(stack) && CrossbowItem.containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.0F : 0.0F;
+            var chargedProjectile = stack.get(DataComponents.CHARGED_PROJECTILES);
+            return entity != null && chargedProjectile != null && chargedProjectile.contains(Items.FIREWORK_ROCKET) ? 1.0F : 0.0F;
         });
 
         ItemProperties.register(SgItems.SHIELD.get(), new ResourceLocation("blocking"), (stack, level, entity, par4) -> {

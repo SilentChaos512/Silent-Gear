@@ -3,15 +3,15 @@ package net.silentchaos512.gear.util;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.part.IGearPart;
-import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.block.compounder.CompoundMakerInfo;
+import net.silentchaos512.gear.block.compounder.AlloyMakerInfo;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.*;
 
 public final class Const {
@@ -64,7 +64,7 @@ public final class Const {
 
     // Compound-crafting block info
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final CompoundMakerInfo<MetalAlloyRecipe> METAL_COMPOUNDER_INFO = new CompoundMakerInfo<>(
+    public static final AlloyMakerInfo<MetalAlloyRecipe> METAL_COMPOUNDER_INFO = new AlloyMakerInfo<>(
             ImmutableList.of(
                     MaterialCategories.METAL,
                     MaterialCategories.DUST
@@ -79,7 +79,7 @@ public final class Const {
             MetalAlloyRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final CompoundMakerInfo<GemAlloyRecipe> GEM_COMPOUNDER_INFO = new CompoundMakerInfo<>(
+    public static final AlloyMakerInfo<GemAlloyRecipe> GEM_COMPOUNDER_INFO = new AlloyMakerInfo<>(
             ImmutableList.of(
                     MaterialCategories.GEM,
                     MaterialCategories.DUST
@@ -94,7 +94,7 @@ public final class Const {
             GemAlloyRecipe.class);
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final CompoundMakerInfo<FabricAlloyRecipe> FABRIC_COMPOUNDER_INFO = new CompoundMakerInfo<>(
+    public static final AlloyMakerInfo<FabricAlloyRecipe> FABRIC_COMPOUNDER_INFO = new AlloyMakerInfo<>(
             ImmutableList.of(
                     MaterialCategories.CLOTH,
                     MaterialCategories.FIBER,
@@ -112,124 +112,125 @@ public final class Const {
     private Const() {}
 
     public static final class Materials {
-        public static final DataResource<IMaterial> AZURE_ELECTRUM = DataResource.material("azure_electrum");
-        public static final DataResource<IMaterial> AZURE_SILVER = DataResource.material("azure_silver");
-        public static final DataResource<IMaterial> BLAZE_GOLD = DataResource.material("blaze_gold");
-        public static final DataResource<IMaterial> CRIMSON_STEEL = DataResource.material("crimson_steel");
-        public static final DataResource<IMaterial> DIAMOND = DataResource.material("diamond");
-        public static final DataResource<IMaterial> DIMERALD = DataResource.material("dimerald");
-        public static final DataResource<IMaterial> EMERALD = DataResource.material("emerald");
-        public static final DataResource<IMaterial> EXAMPLE = DataResource.material("example");
-        public static final DataResource<IMaterial> FEATHER = DataResource.material("feather");
-        public static final DataResource<IMaterial> GOLD = DataResource.material("gold");
-        public static final DataResource<IMaterial> LEATHER = DataResource.material("leather");
-        public static final DataResource<IMaterial> NETHERITE = DataResource.material("netherite");
-        public static final DataResource<IMaterial> IRON = DataResource.material("iron");
-        public static final DataResource<IMaterial> STONE = DataResource.material("stone");
-        public static final DataResource<IMaterial> STRING = DataResource.material("string");
-        public static final DataResource<IMaterial> TYRIAN_STEEL = DataResource.material("tyrian_steel");
+        public static final DataResource<Material> AZURE_ELECTRUM = DataResource.material("azure_electrum");
+        public static final DataResource<Material> AZURE_SILVER = DataResource.material("azure_silver");
+        public static final DataResource<Material> BLAZE_GOLD = DataResource.material("blaze_gold");
+        public static final DataResource<Material> CRIMSON_STEEL = DataResource.material("crimson_steel");
+        public static final DataResource<Material> DIAMOND = DataResource.material("diamond");
+        public static final DataResource<Material> DIMERALD = DataResource.material("dimerald");
+        public static final DataResource<Material> EMERALD = DataResource.material("emerald");
+        public static final DataResource<Material> EMPTY = DataResource.material("empty");
+        public static final DataResource<Material> EXAMPLE = DataResource.material("example");
+        public static final DataResource<Material> FEATHER = DataResource.material("feather");
+        public static final DataResource<Material> GOLD = DataResource.material("gold");
+        public static final DataResource<Material> LEATHER = DataResource.material("leather");
+        public static final DataResource<Material> NETHERITE = DataResource.material("netherite");
+        public static final DataResource<Material> IRON = DataResource.material("iron");
+        public static final DataResource<Material> STONE = DataResource.material("stone");
+        public static final DataResource<Material> STRING = DataResource.material("string");
+        public static final DataResource<Material> TYRIAN_STEEL = DataResource.material("tyrian_steel");
 
-        public static final DataResource<IMaterial> WOOD = DataResource.material("wood");
-        public static final DataResource<IMaterial> WOOD_ROUGH = DataResource.material("wood/rough");
-        public static final DataResource<IMaterial> WOOL = DataResource.material("wool");
-        public static final DataResource<IMaterial> WOOL_BLACK = DataResource.material("wool/black");
+        public static final DataResource<Material> WOOD = DataResource.material("wood");
+        public static final DataResource<Material> WOOD_ROUGH = DataResource.material("wood/rough");
+        public static final DataResource<Material> WOOL = DataResource.material("wool");
+        public static final DataResource<Material> WOOL_BLACK = DataResource.material("wool/black");
 
         private Materials() {}
 
     }
 
     public static final class Parts {
-        public static final DataResource<IGearPart> ARMOR_BODY = DataResource.part("armor_body");
-        public static final DataResource<IGearPart> AXE_HEAD = DataResource.part("axe_head");
-        public static final DataResource<IGearPart> BINDING = DataResource.part("binding");
-        public static final DataResource<IGearPart> BOOTS_PLATES = DataResource.part("boots_plates");
-        public static final DataResource<IGearPart> CHESTPLATE_PLATES = DataResource.part("chestplate_plates");
-        public static final DataResource<IGearPart> COATING = DataResource.part("coating");
-        public static final DataResource<IGearPart> GRIP = DataResource.part("grip");
-        public static final DataResource<IGearPart> HELMET_PLATES = DataResource.part("helmet_plates");
-        public static final DataResource<IGearPart> HOE_HEAD = DataResource.part("hoe_head");
-        public static final DataResource<IGearPart> LEGGINGS_PLATES = DataResource.part("leggings_plates");
-        public static final DataResource<IGearPart> MISC_SPOON = DataResource.part("misc/spoon");
-        public static final DataResource<IGearPart> PICKAXE_HEAD = DataResource.part("pickaxe_head");
-        public static final DataResource<IGearPart> RED_CARD = DataResource.part("misc/red_card");
-        public static final DataResource<IGearPart> ROD = DataResource.part("rod");
-        public static final DataResource<IGearPart> SHOVEL_HEAD = DataResource.part("shovel_head");
-        public static final DataResource<IGearPart> SWORD_BLADE = DataResource.part("sword_blade");
-        public static final DataResource<IGearPart> TIP = DataResource.part("tip");
+        public static final DataResource<GearPart> ARMOR_BODY = DataResource.part("armor_body");
+        public static final DataResource<GearPart> AXE_HEAD = DataResource.part("axe_head");
+        public static final DataResource<GearPart> BINDING = DataResource.part("binding");
+        public static final DataResource<GearPart> BOOTS_PLATES = DataResource.part("boots_plates");
+        public static final DataResource<GearPart> CHESTPLATE_PLATES = DataResource.part("chestplate_plates");
+        public static final DataResource<GearPart> COATING = DataResource.part("coating");
+        public static final DataResource<GearPart> GRIP = DataResource.part("grip");
+        public static final DataResource<GearPart> HELMET_PLATES = DataResource.part("helmet_plates");
+        public static final DataResource<GearPart> HOE_HEAD = DataResource.part("hoe_head");
+        public static final DataResource<GearPart> LEGGINGS_PLATES = DataResource.part("leggings_plates");
+        public static final DataResource<GearPart> MISC_SPOON = DataResource.part("misc/spoon");
+        public static final DataResource<GearPart> PICKAXE_HEAD = DataResource.part("pickaxe_head");
+        public static final DataResource<GearPart> RED_CARD = DataResource.part("misc/red_card");
+        public static final DataResource<GearPart> ROD = DataResource.part("rod");
+        public static final DataResource<GearPart> SHOVEL_HEAD = DataResource.part("shovel_head");
+        public static final DataResource<GearPart> SWORD_BLADE = DataResource.part("sword_blade");
+        public static final DataResource<GearPart> TIP = DataResource.part("tip");
 
         private Parts() {}
     }
 
     public static final class Traits {
-        public static final DataResource<ITrait> ACCELERATE = DataResource.trait("accelerate");
-        public static final DataResource<ITrait> ADAMANT = DataResource.trait("adamant");
-        public static final DataResource<ITrait> ANCIENT = DataResource.trait("ancient");
-        public static final DataResource<ITrait> AQUATIC = DataResource.trait("aquatic");
-        public static final DataResource<ITrait> BASTION = DataResource.trait("bastion");
-        public static final DataResource<ITrait> BENDING = DataResource.trait("bending");
-        public static final DataResource<ITrait> BOUNCE = DataResource.trait("bounce");
-        public static final DataResource<ITrait> BRILLIANT = DataResource.trait("brilliant");
-        public static final DataResource<ITrait> BRITTLE = DataResource.trait("brittle");
-        public static final DataResource<ITrait> BULKY = DataResource.trait("bulky");
-        public static final DataResource<ITrait> CHILLED = DataResource.trait("chilled");
-        public static final DataResource<ITrait> CHIPPING = DataResource.trait("chipping");
-        public static final DataResource<ITrait> CONFETTI = DataResource.trait("confetti");
-        public static final DataResource<ITrait> CRACKLER = DataResource.trait("crackler");
-        public static final DataResource<ITrait> CRUDE = DataResource.trait("crude");
-        public static final DataResource<ITrait> CRUSHING = DataResource.trait("crushing");
-        public static final DataResource<ITrait> CURE_POISON = DataResource.trait("cure_poison");
-        public static final DataResource<ITrait> CURE_WITHER = DataResource.trait("cure_wither");
-        public static final DataResource<ITrait> CURSED = DataResource.trait("cursed");
-        public static final DataResource<ITrait> SWIFT_SWIM = DataResource.trait("swift_swim");
-        public static final DataResource<ITrait> ERODED = DataResource.trait("eroded");
-        public static final DataResource<ITrait> FIERY = DataResource.trait("fiery");
-        public static final DataResource<ITrait> FIREPROOF = DataResource.trait("fireproof");
-        public static final DataResource<ITrait> FLAME_WARD = DataResource.trait("flame_ward");
-        public static final DataResource<ITrait> FLAMMABLE = DataResource.trait("flammable");
-        public static final DataResource<ITrait> FLEXIBLE = DataResource.trait("flexible");
-        public static final DataResource<ITrait> FLOATSTONER = DataResource.trait("floatstoner");
-        public static final DataResource<ITrait> GOLD_DIGGER = DataResource.trait("gold_digger");
-        public static final DataResource<ITrait> GREEDY = DataResource.trait("greedy");
-        public static final DataResource<ITrait> HARD = DataResource.trait("hard");
-        public static final DataResource<ITrait> HEAVY = DataResource.trait("heavy");
-        public static final DataResource<ITrait> HOLY = DataResource.trait("holy");
-        public static final DataResource<ITrait> INDESTRUCTIBLE = DataResource.trait("indestructible");
-        public static final DataResource<ITrait> IGNITE = DataResource.trait("ignite");
-        public static final DataResource<ITrait> IMPERIAL = DataResource.trait("imperial");
-        public static final DataResource<ITrait> JABBERWOCKY = DataResource.trait("jabberwocky");
-        public static final DataResource<ITrait> JAGGED = DataResource.trait("jagged");
-        public static final DataResource<ITrait> KITTY_VISION = DataResource.trait("kitty_vision");
-        public static final DataResource<ITrait> LIGHT = DataResource.trait("light");
-        public static final DataResource<ITrait> LUCKY = DataResource.trait("lucky");
-        public static final DataResource<ITrait> LUSTROUS = DataResource.trait("lustrous");
-        public static final DataResource<ITrait> MAGMATIC = DataResource.trait("magmatic");
-        public static final DataResource<ITrait> MAGNETIC = DataResource.trait("magnetic");
-        public static final DataResource<ITrait> MALLEABLE = DataResource.trait("malleable");
-        public static final DataResource<ITrait> MIGHTY = DataResource.trait("mighty");
-        public static final DataResource<ITrait> MOONWALKER = DataResource.trait("moonwalker");
-        public static final DataResource<ITrait> MULTI_BREAK = DataResource.trait("multi_break");
-        public static final DataResource<ITrait> ORGANIC = DataResource.trait("organic");
-        public static final DataResource<ITrait> RACKER = DataResource.trait("racker");
-        public static final DataResource<ITrait> REACH = DataResource.trait("reach");
-        public static final DataResource<ITrait> RED_CARD = DataResource.trait("red_card");
-        public static final DataResource<ITrait> REFRACTIVE = DataResource.trait("refractive");
-        public static final DataResource<ITrait> RENEW = DataResource.trait("renew");
-        public static final DataResource<ITrait> ROAD_MAKER = DataResource.trait("road_maker");
-        public static final DataResource<ITrait> RUSTIC = DataResource.trait("rustic");
-        public static final DataResource<ITrait> SHARP = DataResource.trait("sharp");
-        public static final DataResource<ITrait> SILKY = DataResource.trait("silky");
-        public static final DataResource<ITrait> SNOW_WALKER = DataResource.trait("snow_walker");
-        public static final DataResource<ITrait> SOFT = DataResource.trait("soft");
-        public static final DataResource<ITrait> SPOON = DataResource.trait("spoon");
-        public static final DataResource<ITrait> STELLAR = DataResource.trait("stellar");
-        public static final DataResource<ITrait> STURDY = DataResource.trait("sturdy");
-        public static final DataResource<ITrait> SYNERGISTIC = DataResource.trait("synergistic");
-        public static final DataResource<ITrait> TERMINUS = DataResource.trait("terminus");
-        public static final DataResource<ITrait> TURTLE = DataResource.trait("turtle");
-        public static final DataResource<ITrait> VENOM = DataResource.trait("venom");
-        public static final DataResource<ITrait> VOID_WARD = DataResource.trait("void_ward");
-        public static final DataResource<ITrait> VULCAN = DataResource.trait("vulcan");
-        public static final DataResource<ITrait> WIDEN = DataResource.trait("widen");
+        public static final DataResource<Trait> ACCELERATE = DataResource.trait("accelerate");
+        public static final DataResource<Trait> ADAMANT = DataResource.trait("adamant");
+        public static final DataResource<Trait> ANCIENT = DataResource.trait("ancient");
+        public static final DataResource<Trait> AQUATIC = DataResource.trait("aquatic");
+        public static final DataResource<Trait> BASTION = DataResource.trait("bastion");
+        public static final DataResource<Trait> BENDING = DataResource.trait("bending");
+        public static final DataResource<Trait> BOUNCE = DataResource.trait("bounce");
+        public static final DataResource<Trait> BRILLIANT = DataResource.trait("brilliant");
+        public static final DataResource<Trait> BRITTLE = DataResource.trait("brittle");
+        public static final DataResource<Trait> BULKY = DataResource.trait("bulky");
+        public static final DataResource<Trait> CHILLED = DataResource.trait("chilled");
+        public static final DataResource<Trait> CHIPPING = DataResource.trait("chipping");
+        public static final DataResource<Trait> CONFETTI = DataResource.trait("confetti");
+        public static final DataResource<Trait> CRACKLER = DataResource.trait("crackler");
+        public static final DataResource<Trait> CRUDE = DataResource.trait("crude");
+        public static final DataResource<Trait> CRUSHING = DataResource.trait("crushing");
+        public static final DataResource<Trait> CURE_POISON = DataResource.trait("cure_poison");
+        public static final DataResource<Trait> CURE_WITHER = DataResource.trait("cure_wither");
+        public static final DataResource<Trait> CURSED = DataResource.trait("cursed");
+        public static final DataResource<Trait> SWIFT_SWIM = DataResource.trait("swift_swim");
+        public static final DataResource<Trait> ERODED = DataResource.trait("eroded");
+        public static final DataResource<Trait> FIERY = DataResource.trait("fiery");
+        public static final DataResource<Trait> FIREPROOF = DataResource.trait("fireproof");
+        public static final DataResource<Trait> FLAME_WARD = DataResource.trait("flame_ward");
+        public static final DataResource<Trait> FLAMMABLE = DataResource.trait("flammable");
+        public static final DataResource<Trait> FLEXIBLE = DataResource.trait("flexible");
+        public static final DataResource<Trait> FLOATSTONER = DataResource.trait("floatstoner");
+        public static final DataResource<Trait> GOLD_DIGGER = DataResource.trait("gold_digger");
+        public static final DataResource<Trait> GREEDY = DataResource.trait("greedy");
+        public static final DataResource<Trait> HARD = DataResource.trait("hard");
+        public static final DataResource<Trait> HEAVY = DataResource.trait("heavy");
+        public static final DataResource<Trait> HOLY = DataResource.trait("holy");
+        public static final DataResource<Trait> INDESTRUCTIBLE = DataResource.trait("indestructible");
+        public static final DataResource<Trait> IGNITE = DataResource.trait("ignite");
+        public static final DataResource<Trait> IMPERIAL = DataResource.trait("imperial");
+        public static final DataResource<Trait> JABBERWOCKY = DataResource.trait("jabberwocky");
+        public static final DataResource<Trait> JAGGED = DataResource.trait("jagged");
+        public static final DataResource<Trait> KITTY_VISION = DataResource.trait("kitty_vision");
+        public static final DataResource<Trait> LIGHT = DataResource.trait("light");
+        public static final DataResource<Trait> LUCKY = DataResource.trait("lucky");
+        public static final DataResource<Trait> LUSTROUS = DataResource.trait("lustrous");
+        public static final DataResource<Trait> MAGMATIC = DataResource.trait("magmatic");
+        public static final DataResource<Trait> MAGNETIC = DataResource.trait("magnetic");
+        public static final DataResource<Trait> MALLEABLE = DataResource.trait("malleable");
+        public static final DataResource<Trait> MIGHTY = DataResource.trait("mighty");
+        public static final DataResource<Trait> MOONWALKER = DataResource.trait("moonwalker");
+        public static final DataResource<Trait> MULTI_BREAK = DataResource.trait("multi_break");
+        public static final DataResource<Trait> ORGANIC = DataResource.trait("organic");
+        public static final DataResource<Trait> RACKER = DataResource.trait("racker");
+        public static final DataResource<Trait> REACH = DataResource.trait("reach");
+        public static final DataResource<Trait> RED_CARD = DataResource.trait("red_card");
+        public static final DataResource<Trait> REFRACTIVE = DataResource.trait("refractive");
+        public static final DataResource<Trait> RENEW = DataResource.trait("renew");
+        public static final DataResource<Trait> ROAD_MAKER = DataResource.trait("road_maker");
+        public static final DataResource<Trait> RUSTIC = DataResource.trait("rustic");
+        public static final DataResource<Trait> SHARP = DataResource.trait("sharp");
+        public static final DataResource<Trait> SILKY = DataResource.trait("silky");
+        public static final DataResource<Trait> SNOW_WALKER = DataResource.trait("snow_walker");
+        public static final DataResource<Trait> SOFT = DataResource.trait("soft");
+        public static final DataResource<Trait> SPOON = DataResource.trait("spoon");
+        public static final DataResource<Trait> STELLAR = DataResource.trait("stellar");
+        public static final DataResource<Trait> STURDY = DataResource.trait("sturdy");
+        public static final DataResource<Trait> SYNERGISTIC = DataResource.trait("synergistic");
+        public static final DataResource<Trait> TERMINUS = DataResource.trait("terminus");
+        public static final DataResource<Trait> TURTLE = DataResource.trait("turtle");
+        public static final DataResource<Trait> VENOM = DataResource.trait("venom");
+        public static final DataResource<Trait> VOID_WARD = DataResource.trait("void_ward");
+        public static final DataResource<Trait> VULCAN = DataResource.trait("vulcan");
+        public static final DataResource<Trait> WIDEN = DataResource.trait("widen");
 
         // Misc constants
         public static final float ANCIENT_XP_BOOST = 0.25f;

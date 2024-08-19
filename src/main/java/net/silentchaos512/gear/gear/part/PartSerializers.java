@@ -1,97 +1,23 @@
 package net.silentchaos512.gear.gear.part;
 
-import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import com.mojang.serialization.Codec;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.part.IGearPart;
-import net.silentchaos512.gear.api.part.IPartSerializer;
-import net.silentchaos512.gear.config.Config;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
+import net.silentchaos512.gear.api.part.GearPart;
+import net.silentchaos512.gear.api.part.PartSerializer;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.util.Serializer;
 
 public final class PartSerializers {
-    public static final CompoundPart.Serializer COMPOUND_PART = new CompoundPart.Serializer(SilentGear.getId("compound_part"), CompoundPart::new);
-    public static final UpgradePart.Serializer UPGRADE_PART = new UpgradePart.Serializer(SilentGear.getId("misc_upgrade"), UpgradePart::new);
+    public static final Codec<GearPart> DISPATCH_CODEC = SgRegistries.PART_SERIALIZER.byNameCodec()
+            .dispatch(
+                    GearPart::getSerializer,
+                    Serializer::codec
+            );
 
-    private static final Map<ResourceLocation, IPartSerializer<?>> REGISTRY = new HashMap<>();
+    public static final DeferredRegister<PartSerializer<?>> REGISTRAR = DeferredRegister.create(SgRegistries.PART_SERIALIZER_KEY, SilentGear.MOD_ID);
 
-    static {
-        register(COMPOUND_PART);
-        register(UPGRADE_PART);
-    }
-
-    private PartSerializers() {}
-
-    public static <S extends IPartSerializer<T>, T extends IGearPart> S register(S serializer) {
-        if (REGISTRY.containsKey(serializer.getName())) {
-            throw new IllegalArgumentException("Duplicate part serializer " + serializer.getName());
-        }
-        SilentGear.LOGGER.info(PartManager.MARKER, "Registered part serializer '{}'", serializer.getName());
-        REGISTRY.put(serializer.getName(), serializer);
-        return serializer;
-    }
-
-    public static IGearPart deserialize(ResourceLocation id, JsonObject json) {
-        String typeStr = GsonHelper.getAsString(json, "type");
-        ResourceLocation type = SilentGear.getIdWithDefaultNamespace(typeStr);
-        log(() -> "deserialize " + id + " (type " + type + ")");
-
-        IPartSerializer<?> serializer = REGISTRY.get(type);
-        if (serializer == null) {
-            throw new JsonSyntaxException("Invalid or unsupported part type " + type);
-        }
-        return serializer.read(id, json);
-    }
-
-    public static IGearPart read(FriendlyByteBuf buffer) {
-        ResourceLocation id = buffer.readResourceLocation();
-        ResourceLocation type = buffer.readResourceLocation();
-        log(() -> "read " + id + " (type " + type + ")");
-        IPartSerializer<?> serializer = REGISTRY.get(type);
-        if (serializer == null) {
-            throw new IllegalArgumentException("Unknown part serializer " + type);
-        }
-        return serializer.read(id, buffer);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends IGearPart> void write(T part, FriendlyByteBuf buffer) {
-        ResourceLocation id = part.getId();
-        ResourceLocation type = part.getSerializer().getName();
-        log(() -> "write " + id + " (type " + type + ")");
-        buffer.writeResourceLocation(id);
-        buffer.writeResourceLocation(type);
-        IPartSerializer<T> serializer = (IPartSerializer<T>) part.getSerializer();
-        serializer.write(buffer, part);
-    }
-
-    public static List<IGearPart> readAll(FriendlyByteBuf buf) {
-        int count = buf.readVarInt();
-        List<IGearPart> ret = new ArrayList<>();
-        for (int i = 0; i < count; ++i) {
-            ret.add(read(buf));
-        }
-        return ImmutableList.copyOf(ret);
-    }
-
-    public static void writeAll(List<IGearPart> materials, FriendlyByteBuf buf) {
-        buf.writeVarInt(materials.size());
-        for (IGearPart part : materials) {
-            write(part, buf);
-        }
-    }
-
-    private static void log(Supplier<?> msg) {
-        if (Config.Common.extraPartAndTraitLogging.get()) {
-            SilentGear.LOGGER.info(PartManager.MARKER, msg.get());
-        }
-    }
+    public static final DeferredHolder<PartSerializer<?>, CoreGearPart.Serializer> CORE = REGISTRAR.register("core", CoreGearPart.Serializer::new);
+    public static final DeferredHolder<PartSerializer<?>, UpgradeGearPart.Serializer> UPGRADE = REGISTRAR.register("upgrade", UpgradeGearPart.Serializer::new);
 }

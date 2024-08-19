@@ -13,7 +13,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.network.payload.server.OpenGuideBookPayload;
 import net.silentchaos512.gear.util.TextUtil;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -24,14 +23,14 @@ public class GuideBookItem extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
-        if (playerIn instanceof ServerPlayer) {
-            PacketDistributor.PLAYER.with((ServerPlayer) playerIn).send(new OpenGuideBookPayload());
+        if (playerIn instanceof ServerPlayer serverPlayer) {
+            PacketDistributor.sendToPlayer(serverPlayer, new OpenGuideBookPayload());
         }
         return super.use(worldIn, playerIn, handIn);
     }
 
     @Override
-    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack p_41421_, TooltipContext context, List<Component> p_41423_, TooltipFlag p_41424_) {
         p_41423_.add(TextUtil.translate("item", "guide_book.unimplemented1").withStyle(ChatFormatting.ITALIC));
         p_41423_.add(TextUtil.translate("item", "guide_book.unimplemented2").withStyle(ChatFormatting.ITALIC));
     }

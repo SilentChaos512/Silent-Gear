@@ -3,27 +3,25 @@ package net.silentchaos512.gear.client.util;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.part.PartDataList;
+import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.gear.part.CompoundPart;
-import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.CoreGearPart;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.event.ClientTicks;
@@ -37,33 +35,22 @@ public final class GearClientHelper {
     }
 
     public static int getColor(ItemStack stack, PartType layer) {
-        PartData part = GearData.getPartOfType(stack, layer);
+        PartInstance part = GearData.getPartOfType(stack, layer);
         if (part != null) {
             return part.getColor(stack, 0, 0);
         }
         return Color.VALUE_WHITE;
     }
 
-    public static void addInformation(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
+    public static void addInformation(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         GearTooltipFlag flagTC = flag instanceof GearTooltipFlag
                 ? (GearTooltipFlag) flag
                 : GearTooltipFlag.withModifierKeys(flag.isAdvanced(), true, true);
-        addInformation(stack, world, tooltip, flagTC);
+        addInformation(stack, context, tooltip, flagTC);
     }
 
-    public static void addInformation(ItemStack stack, Level world, List<Component> tooltip, GearTooltipFlag flag) {
-        /*
-        LoaderState state = Loader.instance().getLoaderState();
-        if (state == LoaderState.INITIALIZATION || state == LoaderState.SERVER_ABOUT_TO_START || state == LoaderState.SERVER_STOPPING) {
-            // Skip tooltips during block/item remapping
-            // JEI tooltip caches are done in AVAILABLE, in-game is SERVER_STARTED
-            return;
-        }
-        */
-
-        if (!(stack.getItem() instanceof ICoreItem)) return;
-
-        ICoreItem item = (ICoreItem) stack.getItem();
+    public static void addInformation(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, GearTooltipFlag flag) {
+        if (!(stack.getItem() instanceof ICoreItem item)) return;
 
         if (GearHelper.isBroken(stack)) {
             tooltip.add(Math.min(1, tooltip.size()), TextUtil.withColor(misc("broken"), Color.FIREBRICK));
@@ -74,7 +61,7 @@ public final class GearClientHelper {
             tooltip.add(Math.min(2, tooltip.size()), TextUtil.withColor(misc("exampleOutput2"), Color.YELLOW));
         }
 
-        PartDataList constructionParts = GearData.getConstructionParts(stack);
+        PartList constructionParts = GearData.getConstructionParts(stack);
 
         if (constructionParts.getMains().isEmpty()) {
             tooltip.add(TextUtil.withColor(misc("invalidParts"), Color.FIREBRICK));
@@ -86,7 +73,7 @@ public final class GearClientHelper {
         if (!Config.Client.vanillaStyleTooltips.get()) {
             // Let parts add information if they need to
             Collections.reverse(constructionParts);
-            for (PartData data : constructionParts) {
+            for (PartInstance data : constructionParts) {
                 data.get().addInformation(data, stack, tooltip, flag);
             }
         }
@@ -160,7 +147,7 @@ public final class GearClientHelper {
     }
 
     private static void addTraitsInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag) {
-        Map<ITrait, Integer> traits = TraitHelper.getCachedTraits(stack);
+        Map<ITrait, Integer> traits = TraitHelper.getTraits(stack);
         List<ITrait> visibleTraits = new ArrayList<>();
         for (ITrait t : traits.keySet()) {
             if (t != null && t.showInTooltip(flag)) {
@@ -210,10 +197,10 @@ public final class GearClientHelper {
         return Component.translatable("stat.silentgear." + key, formatArgs);
     }
 
-    public static void tooltipListParts(ItemStack gear, List<Component> tooltip, Collection<PartData> parts, GearTooltipFlag flag) {
+    public static void tooltipListParts(ItemStack gear, List<Component> tooltip, Collection<PartInstance> parts, GearTooltipFlag flag) {
         TextListBuilder builder = new TextListBuilder();
 
-        for (PartData part : parts) {
+        for (PartInstance part : parts) {
             if (part.get().isVisible()) {
                 int partNameColor = Color.blend(part.getColor(gear), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
                 MutableComponent partNameText = TextUtil.withColor(part.getDisplayName(gear).copy(), partNameColor);
@@ -222,7 +209,7 @@ public final class GearClientHelper {
                         : partNameText);
 
                 // List materials for compound parts
-                if (part.get() instanceof CompoundPart) {
+                if (part.get() instanceof CoreGearPart) {
                     builder.indent();
                     for (IMaterialInstance material : CompoundPartItem.getMaterials(part.getItem())) {
                         int nameColor = material.getNameColor(part.getType(), GearType.ALL);

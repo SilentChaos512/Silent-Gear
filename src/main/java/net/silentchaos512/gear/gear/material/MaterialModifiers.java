@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.gear.material.modifier.ChargedMaterialModifier;
@@ -40,7 +39,10 @@ public class MaterialModifiers {
     private static final Map<ResourceLocation, IMaterialModifierType<?>> MODIFIERS = new LinkedHashMap<>();
 
     public static final GradeMaterialModifier.Type GRADE = new GradeMaterialModifier.Type();
-    public static final ChargedMaterialModifier.Type<StarchargedMaterialModifier> STARCHARGED = new ChargedMaterialModifier.Type<>(StarchargedMaterialModifier::new, "SG_Starcharged");
+    public static final ChargedMaterialModifier.Type<StarchargedMaterialModifier> STARCHARGED = new ChargedMaterialModifier.Type<>(
+            StarchargedMaterialModifier::new,
+            "SG_Starcharged"
+    );
 
     static {
         registerType(Const.GRADE, GRADE);
@@ -65,7 +67,7 @@ public class MaterialModifiers {
         return MODIFIERS.values();
     }
 
-    public static Collection<IMaterialModifier> readFromMaterial(IMaterialInstance material) {
+    public static Collection<IMaterialModifier> readFromMaterial(MaterialInstance material) {
         Collection<IMaterialModifier> ret = new ArrayList<>();
 
         for (IMaterialModifierType<?> type : MODIFIERS.values()) {
@@ -76,66 +78,6 @@ public class MaterialModifiers {
         }
 
         return ret;
-    }
-
-    public static Collection<IMaterialModifier> readFromJson(JsonArray array) {
-        Collection<IMaterialModifier> ret = Lists.newArrayList();
-
-        for (JsonElement je : array) {
-            JsonObject jo = je.getAsJsonObject();
-            ResourceLocation typeName = new ResourceLocation(GsonHelper.getAsString(jo, "type"));
-            IMaterialModifierType<?> type = getType(typeName);
-            if (type == null) {
-                throw new JsonSyntaxException("Unknown material modifier type: " + typeName);
-            }
-            ret.add(type.deserialize(jo));
-        }
-
-        return ret;
-    }
-
-    public static IMaterialModifier readFromNetwork(FriendlyByteBuf buf) {
-        ResourceLocation typeName = buf.readResourceLocation();
-        IMaterialModifierType<?> type = getType(typeName);
-        if (type == null) {
-            throw new IllegalStateException("Unknown material modifier type: " + typeName);
-        }
-        return type.readFromNetwork(buf);
-    }
-
-    public static <T extends IMaterialModifier> void writeToNetwork(T modifier, FriendlyByteBuf buf) {
-        //noinspection unchecked
-        IMaterialModifierType<T> type = (IMaterialModifierType<T>) modifier.getType();
-        buf.writeResourceLocation(type.getId());
-        type.writeToNetwork(modifier, buf);
-    }
-
-    @Nullable
-    public static IMaterialModifier readNbt(CompoundTag tag) {
-        ResourceLocation id = ResourceLocation.tryParse(tag.getString("ID"));
-        if (id == null) {
-            return null;
-        }
-
-        IMaterialModifierType<?> type = MaterialModifiers.getType(id);
-        if (type == null) {
-            return null;
-        }
-
-        return type.read(tag);
-    }
-
-    @Nullable
-    public static <T extends IMaterialModifier> CompoundTag writeNbt(T modifier) {
-        //noinspection unchecked
-        IMaterialModifierType<T> type = (IMaterialModifierType<T>) modifier.getType();
-        CompoundTag tag = new CompoundTag();
-        type.write(modifier, tag);
-        if (!tag.isEmpty()) {
-            tag.putString("ID", type.getId().toString());
-            return tag;
-        }
-        return null;
     }
 
     public static <T extends IMaterialModifier> void writeToItem(T modifier, ItemStack stack) {

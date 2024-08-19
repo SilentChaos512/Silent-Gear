@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.network;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
-import net.silentchaos512.gear.block.compounder.CompoundMakerContainer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.silentchaos512.gear.block.compounder.AlloyMakerContainer;
 import net.silentchaos512.gear.item.ICycleItem;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.network.payload.client.*;
@@ -19,91 +19,85 @@ public class SgServerPayloadHandler {
         return INSTANCE;
     }
 
-    private static void handleData(final PlayPayloadContext ctx, Runnable handler) {
-        ctx.workHandler().submitAsync(handler)
+    private static void handleData(final IPayloadContext ctx, Runnable handler) {
+        ctx.enqueueWork(handler)
                 .exceptionally(e -> {
-                    ctx.packetHandler().disconnect(Component.translatable("network.silentgear.failure", e.getMessage()));
+                    ctx.disconnect(Component.translatable("network.silentgear.failure", e.getMessage()));
                     return null;
                 });
     }
 
-    public void handleAck(AckPayload data, ConfigurationPayloadContext ctx) {
-        ctx.taskCompletedHandler().onTaskCompleted(data.type());
+    public void handleAck(AckPayload data, IPayloadContext ctx) {
     }
 
-    public void handleAlloyMakerUpdate(AlloyMakerUpdatePayload data, PlayPayloadContext ctx) {
+    public void handleAlloyMakerUpdate(AlloyMakerUpdatePayload data, IPayloadContext ctx) {
         handleData(ctx, () -> {
-            ctx.player().ifPresent(player -> {
-                if (player.containerMenu instanceof CompoundMakerContainer container) {
-                    container.setWorkEnabled(data.workEnabled());
-                }
-            });
+            Player player = ctx.player();
+            if (player.containerMenu instanceof AlloyMakerContainer container) {
+                container.setWorkEnabled(data.workEnabled());
+            }
         });
     }
 
-    public void handleSwingGear(SwingGearPayload data, PlayPayloadContext ctx) {
+    public void handleSwingGear(SwingGearPayload data, IPayloadContext ctx) {
         handleData(ctx, () -> {
-            ctx.player().ifPresent(player -> {
-                ItemStack stack = player.getMainHandItem();
+            Player player = ctx.player();
+            ItemStack stack = player.getMainHandItem();
+            if (GearHelper.isGear(stack)) {
+                GearHelper.onItemSwing(stack, player);
+            }
+        });
+    }
+
+    public void handleKeyPressOnItem(KeyPressOnItemPayload data, IPayloadContext ctx) {
+        handleData(ctx, () -> {
+            Player player = ctx.player();
+            if (data.slot() >= 0 && data.slot() < player.containerMenu.slots.size()) {
+                Slot inventorySlot = player.containerMenu.getSlot(data.slot());
+                ItemStack stack = inventorySlot.getItem();
+
+                if (!stack.isEmpty()) {
+                    switch (data.keyPressType()) {
+                        case CYCLE_BACK:
+                        case CYCLE_NEXT:
+                            if (stack.getItem() instanceof ICycleItem cycleItem) {
+                                cycleItem.onCycleKeyPress(stack, data.keyPressType().direction);
+                                player.containerMenu.slotsChanged(inventorySlot.container);
+                            }
+                            break;
+                        case OPEN_ITEM:
+                            // TODO
+                            break;
+                    }
+                }
+            }
+        });
+    }
+
+    public void handleRecalculateStats(RecalculateStatsPayload data, IPayloadContext ctx) {
+        handleData(ctx, () -> {
+            Player player = ctx.player();
+            if (data.slot() >= 0 && data.slot() < player.getInventory().getContainerSize()) {
+                ItemStack stack = player.getInventory().getItem(data.slot());
+
                 if (GearHelper.isGear(stack)) {
-                    GearHelper.onItemSwing(stack, player);
+                    GearData.recalculateStats(stack, player);
+                    GearData.putStatInNbtIfMissing(stack, data.triggerStat());
                 }
-            });
+            }
         });
     }
 
-    public void handleKeyPressOnItem(KeyPressOnItemPayload data, PlayPayloadContext ctx) {
+    public void handleSelectBlueprintInBook(SelectBlueprintInBookPayload data, IPayloadContext ctx) {
         handleData(ctx, () -> {
-            ctx.player().ifPresent(player -> {
-                if (data.slot() >= 0 && data.slot() < player.containerMenu.slots.size()) {
-                    Slot inventorySlot = player.containerMenu.getSlot(data.slot());
-                    ItemStack stack = inventorySlot.getItem();
+            Player player = ctx.player();
+            if (data.bookSlot() >= 0 && data.bookSlot() < player.containerMenu.slots.size()) {
+                ItemStack book = player.containerMenu.getSlot(data.bookSlot()).getItem();
 
-                    if (!stack.isEmpty()) {
-                        switch (data.type()) {
-                            case CYCLE_BACK:
-                            case CYCLE_NEXT:
-                                if (stack.getItem() instanceof ICycleItem cycleItem) {
-                                    cycleItem.onCycleKeyPress(stack, data.type().direction);
-                                    player.containerMenu.slotsChanged(inventorySlot.container);
-                                }
-                                break;
-                            case OPEN_ITEM:
-                                // TODO
-                                break;
-                        }
-                    }
+                if (!book.isEmpty() && book.getItem() instanceof BlueprintBookItem) {
+                    BlueprintBookItem.setSelectedSlot(book, data.blueprintSlot());
                 }
-            });
-        });
-    }
-
-    public void handleRecalculateStats(RecalculateStatsPayload data, PlayPayloadContext ctx) {
-        handleData(ctx, () -> {
-            ctx.player().ifPresent(player -> {
-                if (data.slot() >= 0 && data.slot() < player.getInventory().getContainerSize()) {
-                    ItemStack stack = player.getInventory().getItem(data.slot());
-
-                    if (GearHelper.isGear(stack)) {
-                        GearData.recalculateStats(stack, player);
-                        GearData.putStatInNbtIfMissing(stack, data.triggerStat());
-                    }
-                }
-            });
-        });
-    }
-
-    public void handleSelectBlueprintInBook(SelectBlueprintInBookPayload data, PlayPayloadContext ctx) {
-        handleData(ctx, () -> {
-            ctx.player().ifPresent(player -> {
-                if (data.bookSlot() >= 0 && data.bookSlot() < player.containerMenu.slots.size()) {
-                    ItemStack book = player.containerMenu.getSlot(data.bookSlot()).getItem();
-
-                    if (!book.isEmpty() && book.getItem() instanceof BlueprintBookItem) {
-                        BlueprintBookItem.setSelectedSlot(book, data.blueprintSlot());
-                    }
-                }
-            });
+            }
         });
     }
 }

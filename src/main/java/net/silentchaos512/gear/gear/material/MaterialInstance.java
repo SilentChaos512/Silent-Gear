@@ -1,120 +1,111 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.neoforged.neoforge.common.NeoForge;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.enchantment.IStatModifierEnchantment;
-import net.silentchaos512.gear.api.event.GetMaterialStatsEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.*;
+import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
-import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ChargedProperties;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
-import net.silentchaos512.gear.api.util.StatGearKey;
-import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.api.util.DataResource;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.api.util.PropertyKey;
+import net.silentchaos512.gear.gear.part.RepairContext;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public final class MaterialInstance implements IMaterialInstance {
+public final class MaterialInstance implements GearComponentInstance<Material> {
+    public static final Codec<MaterialInstance> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                    DataResource.MATERIAL_CODEC.fieldOf("material").forGetter(m -> m.material),
+                    ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(m -> m.item)
+            ).apply(instance, MaterialInstance::new)
+    );
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, MaterialInstance> STREAM_CODEC = StreamCodec.composite(
+            DataResource.MATERIAL_STREAM_CODEC, m -> m.material,
+            ItemStack.STREAM_CODEC, m -> m.item,
+            MaterialInstance::new
+    );
+
     private static final Map<ResourceLocation, MaterialInstance> QUICK_CACHE = new HashMap<>();
 
-    private final IMaterial material;
-    @Deprecated private final MaterialGrade grade;
+    private final DataResource<Material> material;
     private final ItemStack item;
     private ImmutableList<IMaterialModifier> modifiers = ImmutableList.of(); // Start empty, build when needed
 
-    private MaterialInstance(IMaterial material) {
-        this(material, MaterialGrade.NONE, material.getDisplayItem(PartType.MAIN, 0));
+    private MaterialInstance(DataResource<Material> material) {
+        this(material, material.isPresent() ? material.get().getDisplayItem(PartTypes.MAIN.get(), 0) : ItemStack.EMPTY);
     }
 
-    private MaterialInstance(IMaterial material, MaterialGrade grade) {
-        this(material, grade, material.getDisplayItem(PartType.MAIN, 0));
-    }
-
-    private MaterialInstance(IMaterial material, ItemStack craftingItem) {
-        this(material, MaterialGrade.NONE, craftingItem);
-    }
-
-    private MaterialInstance(IMaterial material, MaterialGrade grade, ItemStack craftingItem) {
+    private MaterialInstance(DataResource<Material> material, ItemStack craftingItem) {
         this.material = material;
-        this.grade = grade;
         this.item = craftingItem.copy();
         if (!this.item.isEmpty()) {
             this.item.setCount(1);
         }
     }
 
-    public static MaterialInstance of(IMaterial material) {
+    public static MaterialInstance of(DataResource<Material> material) {
         return QUICK_CACHE.computeIfAbsent(material.getId(), id -> new MaterialInstance(material));
     }
 
-    public static MaterialInstance of(IMaterial material, MaterialGrade grade) {
-        return new MaterialInstance(material, grade);
+    public static MaterialInstance of(Material material) {
+        return of(DataResource.material(SgRegistries.MATERIAL.getKey(material)));
     }
 
-    public static MaterialInstance of(IMaterial material, ItemStack craftingItem) {
-        return new MaterialInstance(material, MaterialGrade.fromStack(craftingItem), craftingItem);
+    public static MaterialInstance of(DataResource<Material> material, ItemStack craftingItem) {
+        return new MaterialInstance(material, craftingItem);
     }
 
-    public static MaterialInstance of(IMaterial material, MaterialGrade grade, ItemStack craftingItem) {
-        return new MaterialInstance(material, grade, craftingItem);
-    }
-
-    public static IMaterialInstance of(DataResource<IMaterial> material, ItemStack craftingItem) {
-        if (material.isPresent())
-            return of(material.get(), craftingItem);
-        return LazyMaterialInstance.of(material, MaterialGrade.fromStack(craftingItem));
+    public static MaterialInstance of(Material material, ItemStack craftingItem) {
+        return of(DataResource.material(SgRegistries.MATERIAL.getKey(material)), craftingItem);
     }
 
     @Nullable
     public static MaterialInstance from(ItemStack stack) {
-        IMaterial material = MaterialManager.from(stack);
+        Material material = SgRegistries.MATERIAL.fromItem(stack);
         if (material != null) {
             return of(material, stack);
         }
         return null;
     }
 
-    @Override
     public ResourceLocation getId() {
         return material.getId();
     }
 
     @Nonnull
-    @Override
-    public IMaterial get() {
-        return material;
+    public Material get() {
+        return material.get();
     }
 
-    @Override
-    public MaterialGrade getGrade() {
-        return grade;
+    @Nullable
+    public Material getNullable() {
+        return material.getNullable();
     }
 
-    @Override
     public Collection<IMaterialModifier> getModifiers() {
         if (modifiers.isEmpty()) {
             modifiers = ImmutableList.copyOf(MaterialModifiers.readFromMaterial(this));
@@ -122,9 +113,15 @@ public final class MaterialInstance implements IMaterialInstance {
         return modifiers;
     }
 
-    @Override
-    public MaterialList getMaterials() {
-        return material.getMaterials(this);
+    @Nullable
+    public <T extends IMaterialModifier> T getModifier(IMaterialModifierType<T> modifierType) {
+        for (var modifier : getModifiers()) {
+            if (modifier.getType() == modifierType) {
+                //noinspection unchecked
+                return (T) modifier;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -132,91 +129,31 @@ public final class MaterialInstance implements IMaterialInstance {
         return item;
     }
 
-    @Override
     public Collection<IMaterialCategory> getCategories() {
-        return material.getCategories(this);
+        var mat = getNullable();
+        return mat != null ? mat.getCategories(this) : Collections.emptySet();
     }
 
-    @Override
     public Ingredient getIngredient() {
-        return material.getIngredient();
-    }
-
-    @Override
-    public int getTier(PartType partType) {
-        return this.material.getTier(this, partType);
-    }
-
-    @Override
-    public Collection<StatInstance> getStatModifiers(PartType partType, StatGearKey key, ItemStack gear) {
-        List<StatInstance> mods = new ArrayList<>(material.getStatModifiers(this, partType, key, gear));
-
-        ItemStat stat = ItemStats.get(key.getStat());
-        if (stat == null) {
-            SilentGear.LOGGER.warn("Unknown item stat: {}", key.getStat().getStatId());
-            SilentGear.LOGGER.catching(new NullPointerException());
-            return mods;
-        }
-
-//        getEnchantmentModifiedStats(mods, key);
-
-        // Material modifiers (grades, starcharged, etc.)
-        for (IMaterialModifier materialModifier : getModifiers()) {
-            mods = materialModifier.modifyStats(this, partType, key, mods);
-        }
-
-        GetMaterialStatsEvent event = new GetMaterialStatsEvent(this, stat, partType, mods);
-        NeoForge.EVENT_BUS.post(event);
-        return event.getModifiers();
-    }
-
-    @Deprecated
-    private void getEnchantmentModifiedStats(List<StatInstance> mods, StatGearKey key) {
-        if (key.getStat() == ItemStats.CHARGING_VALUE) {
-            return;
-        }
-
-        // Search for materials that stats
-        for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(this.item).entrySet()) {
-            Enchantment enchantment = entry.getKey();
-            Integer level = entry.getValue();
-
-            if (enchantment instanceof IStatModifierEnchantment) {
-                IStatModifierEnchantment statModifierEnchantment = (IStatModifierEnchantment) enchantment;
-                ChargedProperties charge = new ChargedProperties(level, getChargeability());
-
-                // Replace modifiers with updated ones (if provided)
-                for (int i = 0; i < mods.size(); i++) {
-                    StatInstance mod = mods.get(i);
-                    StatInstance newMod = statModifierEnchantment.modifyStat(key, mod, charge);
-                    if (newMod != null) {
-                        mods.remove(i);
-                        mods.add(i, newMod);
-                    }
-                }
-            }
-        }
-    }
-
-    private float getChargeability() {
-        return getStat(PartType.MAIN, ItemStats.CHARGING_VALUE);
-    }
-
-    @Override
-    public float getStat(PartType partType, StatGearKey key, ItemStack gear) {
-        ItemStat stat = ItemStats.get(key.getStat());
-        if (stat == null) return key.getStat().getDefaultValue();
-
-        return stat.compute(stat.getDefaultValue(), getStatModifiers(partType, key));
-    }
-
-    @Override
-    public Collection<TraitInstance> getTraits(PartGearKey partKey, ItemStack gear) {
-        return material.getTraits(this, partKey, gear);
+        var mat = getNullable();
+        return mat != null ? mat.getIngredient() : Ingredient.EMPTY;
     }
 
     public boolean canRepair(ItemStack gear) {
-        return material.allowedInPart(this, PartType.MAIN) && GearData.getTier(gear) <= this.getTier(PartType.MAIN);
+        if (!material.isPresent() || !material.get().isAllowedInPart(this, PartTypes.MAIN.get())) {
+            return false;
+        }
+
+        var gearConstructionData = GearData.getConstruction(gear);
+        var primaryPart = gearConstructionData.getPrimaryPart();
+        if (primaryPart != null) {
+            var partMaterial = primaryPart.getPrimaryMaterial();
+            if (partMaterial != null) {
+                return this.material.get().canRepair(partMaterial);
+            }
+        }
+
+        return false;
     }
 
     public int getRepairValue(ItemStack gear) {
@@ -225,8 +162,8 @@ public final class MaterialInstance implements IMaterialInstance {
 
     public int getRepairValue(ItemStack gear, RepairContext.Type type) {
         if (this.canRepair(gear)) {
-            float durability = getStat(PartType.MAIN, GearHelper.getDurabilityStat(gear));
-            float repairValueMulti = getStat(PartType.MAIN, ItemStats.REPAIR_VALUE);
+            float durability = getProperty(PartTypes.MAIN.get(), GearHelper.getDurabilityProperty(gear));
+            float repairValueMulti = getProperty(PartTypes.MAIN.get(), GearProperties.REPAIR_VALUE.get());
             float itemRepairModifier = GearHelper.getRepairModifier(gear);
             float typeBonus = 1f + type.getBonusEfficiency();
             return Math.round(durability * repairValueMulti * itemRepairModifier * typeBonus) + 1;
@@ -234,122 +171,31 @@ public final class MaterialInstance implements IMaterialInstance {
         return 0;
     }
 
-    @Nullable
-    public static MaterialInstance read(CompoundTag nbt) {
-        ResourceLocation id = ResourceLocation.tryParse(nbt.getString("ID"));
-        IMaterial material = MaterialManager.get(id);
-        if (material == null) return null;
-
-        ItemStack stack = readOrGetDefaultItem(material, nbt);
-        return of(material, stack);
+    public int getColor(GearType gearType, PartType partType) {
+        var mat = getNullable();
+        return mat != null ? mat.getColor(this, partType, gearType) : Color.VALUE_WHITE;
     }
 
-    private static ItemStack readOrGetDefaultItem(IMaterial material, CompoundTag nbt) {
-        ItemStack stack = ItemStack.of(nbt.getCompound("Item"));
-        if (stack.isEmpty()) {
-            // Item is missing from NBT, so pick something from the ingredient
-            ItemStack defaultItem = getDefaultItem(material);
-            readModifiers(nbt, defaultItem);
-            return defaultItem;
-        }
-        return stack;
-    }
-
-    private static void readModifiers(CompoundTag nbt, ItemStack defaultItem) {
-        if (!nbt.contains("Modifiers")) {
-            return;
-        }
-
-        ListTag list = nbt.getList("Modifiers", Tag.TAG_COMPOUND);
-        for (int i = 0; i < list.size(); ++i) {
-            CompoundTag compoundTag = list.getCompound(i);
-            IMaterialModifier mod = MaterialModifiers.readNbt(compoundTag);
-            if (mod != null) {
-                MaterialModifiers.writeToItem(mod, defaultItem);
-            }
-        }
-    }
-
-    private static ItemStack getDefaultItem(IMaterial material) {
-        ItemStack[] array = material.getIngredient().getItems();
-        if (array.length > 0) {
-            return array[0].copy();
-        }
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public CompoundTag toNetwork(CompoundTag nbt) {
-        nbt.putString("ID", material.getId().toString());
-        nbt.put("Item", item.save(new CompoundTag()));
-        return nbt;
-    }
-
-    public int getPrimaryColor(GearType gearType, PartType partType) {
-        IMaterialDisplay model = getDisplayProperties();
-        MaterialLayer layer = model.getLayerList(gearType, partType, this).getFirstLayer();
-        if (layer != null) {
-            return layer.getColor();
-        }
-        return Color.VALUE_WHITE;
+    public TextureType getMainTextureType() {
+        var mat = getNullable();
+        return mat != null ? mat.getMainTextureType(this) : TextureType.LOW_CONTRAST;
     }
 
     @Override
     public Component getDisplayName(PartType partType, ItemStack gear) {
-        return material.getDisplayName(this, partType, gear);
+        var mat = getNullable();
+        return mat != null ? mat.getDisplayName(this, partType) : Component.literal(getId().toString());
     }
 
-    @Override
-    public IMaterialDisplay getDisplayProperties() {
-        return this.material.getDisplayProperties(this);
-    }
-
-    @Override
     public String getModelKey() {
-        return this.material.getModelKey(this);
+        var mat = getNullable();
+        return mat != null ? mat.getModelKey(this) : "null";
     }
 
     @Override
     public int getNameColor(PartType partType, GearType gearType) {
-        return material.getNameColor(this, partType, gearType);
-    }
-
-    @Override
-    public void toNetwork(FriendlyByteBuf buffer) {
-        buffer.writeResourceLocation(this.material.getId());
-        buffer.writeEnum(this.grade);
-    }
-
-    @Nullable
-    public static MaterialInstance readShorthand(String str) {
-        if (str.contains("#")) {
-            String[] parts = str.split("#");
-            ResourceLocation id = SilentGear.getIdWithDefaultNamespace(parts[0]);
-            IMaterial material = MaterialManager.get(id);
-            if (material != null) {
-                MaterialGrade grade = MaterialGrade.fromString(parts[1]);
-                return new MaterialInstance(material, grade);
-            }
-
-            return null;
-        }
-
-        ResourceLocation id = SilentGear.getIdWithDefaultNamespace(str);
-        IMaterial material = MaterialManager.get(id);
-        if (material != null) {
-            return new MaterialInstance(material);
-        }
-
-        return null;
-    }
-
-    @Deprecated
-    public static String writeShorthand(IMaterialInstance material) {
-        String id = SilentGear.shortenId(material.getId());
-        if (material.getGrade() != MaterialGrade.NONE) {
-            return id + "#" + material.getGrade();
-        }
-        return id;
+        var mat = getNullable();
+        return mat != null ? mat.getNameColor(this, partType, gearType) : Color.VALUE_WHITE;
     }
 
     @Override
@@ -357,13 +203,91 @@ public final class MaterialInstance implements IMaterialInstance {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MaterialInstance that = (MaterialInstance) o;
-        return material.equals(that.material) &&
-                grade == that.grade &&
-                InventoryUtils.canItemsStack(item, that.item);
+        return this.getId().equals(that.getId()) &&
+                ItemStack.isSameItemSameComponents(item, that.item);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(material, grade, item);
+        return Objects.hash(material, item);
+    }
+
+    public boolean hasAnyCategory(Collection<IMaterialCategory> others) {
+        for (IMaterialCategory cat1 : this.getCategories()) {
+            for (IMaterialCategory cat2 : others) {
+                if (cat1.matches(cat2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isSimple() {
+        Material mat = getNullable();
+        return mat != null && mat.isSimple();
+    }
+
+    @Override
+    public <T, V extends GearPropertyValue<T>> T getProperty(PartType partType, PropertyKey<T, V> key) {
+        Material material = getNullable();
+        if (material != null) {
+            return material.getProperty(this, partType, key);
+        }
+        return key.property().getDefaultValue();
+    }
+
+    public Set<PartType> getPartTypes() {
+        Material material = getNullable();
+        if (material != null) {
+            return material.getPartTypes(this);
+        }
+        return Collections.emptySet();
+    }
+
+    @Override
+    public <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(PartType partType, PropertyKey<T, V> key) {
+        Material material = getNullable();
+        if (material == null) {
+            return Collections.emptyList();
+        }
+        return material.getPropertyModifiers(this, partType, key);
+    }
+
+    @Override
+    public Collection<TraitInstance> getTraits(PartGearKey key) {
+        Material material = getNullable();
+        if (material == null) {
+            return Collections.emptyList();
+        }
+        return material.getTraits(this, key);
+    }
+
+    public MutableComponent getDisplayNameWithModifiers(PartType partType, ItemStack gear) {
+        MutableComponent name = getDisplayName(partType, gear).copy();
+        for (IMaterialModifier modifier : getModifiers()) {
+            name = modifier.modifyMaterialName(name);
+        }
+        return name;
+    }
+
+    public Component getDisplayNamePrefix(PartType partType) {
+        var material = getNullable();
+        return material != null ? material.getDisplayNamePrefix(partType) : Component.empty();
+    }
+
+    public boolean allowedInPart(PartType partType) {
+        Material material = getNullable();
+        return material != null && material.isAllowedInPart(this, partType);
+    }
+
+    public boolean isCraftingAllowed(PartType partType, GearType gearType) {
+        Material material = getNullable();
+        return material != null && material.isCraftingAllowed(this, partType, gearType);
+    }
+
+    public MaterialInstance onSalvage() {
+        Material material = getNullable();
+        return material != null ? material.onSalvage(this) : this;
     }
 }

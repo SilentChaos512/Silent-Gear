@@ -3,6 +3,7 @@ package net.silentchaos512.gear.data.recipes;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
+import net.minecraft.core.Holder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -13,12 +14,13 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.DataResource;
@@ -27,10 +29,11 @@ import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
-import net.silentchaos512.gear.gear.part.LazyPartData;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CraftingItems;
+import net.silentchaos512.gear.item.GearItemSet;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.gear.GearArmorItem;
@@ -38,6 +41,7 @@ import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.setup.SgTags;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.data.recipe.ExtendedShapedRecipeBuilder;
 import net.silentchaos512.lib.data.recipe.ExtendedShapelessRecipeBuilder;
@@ -51,10 +55,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class ModRecipesProvider extends LibRecipeProvider {
-    private static final boolean ADD_TEST_RECIPES = false;
+    private static final boolean ADD_TEST_RECIPES = true;
 
-    public ModRecipesProvider(DataGenerator generatorIn) {
-        super(generatorIn, SilentGear.MOD_ID);
+    public ModRecipesProvider(GatherDataEvent event) {
+        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), SilentGear.MOD_ID);
     }
 
     @Override
@@ -109,10 +113,10 @@ public class ModRecipesProvider extends LibRecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.BUCKET)
                 .pattern("# #")
                 .pattern(" # ")
-                .define('#', PartMaterialIngredient.builder(PartType.MAIN)
+                .define('#', new Ingredient(PartMaterialIngredient.builder(PartTypes.MAIN.get())
                         .withMaterial(DataResource.material("copper"))
                         .withGrade(MaterialGrade.A, null).build()
-                )
+                ))
                 .save(consumer, modId("graded_mat_test"));
     }
 
@@ -120,7 +124,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
         special(consumer, SgRecipes.FILL_REPAIR_KIT.get(), FillRepairKitRecipe::new);
         special(consumer, SgRecipes.SWAP_GEAR_PART.get(), GearPartSwapRecipe::new);
         special(consumer, SgRecipes.QUICK_REPAIR.get(), QuickRepairRecipe::new);
-        special(consumer, SgRecipes.COMBINE_FRAGMENTS.get(), CombineFragmentsRecipe::new);
         special(consumer, SgRecipes.MOD_KIT_REMOVE_PART.get(), ModKitRemovePartRecipe::new);
     }
 
@@ -190,7 +193,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SgItems.RING_BLUEPRINT)
                 .group("silentgear:blueprints/ring")
                 .define('#', SgTags.Items.BLUEPRINT_PAPER)
-                .define('/', PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL))
+                .define('/', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.CURIO, MaterialCategories.METAL))
                 .pattern(" #/")
                 .pattern("# #")
                 .pattern("/# ")
@@ -208,7 +211,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SgItems.RING_TEMPLATE)
                 .group("silentgear:blueprints/ring")
                 .define('#', SgTags.Items.TEMPLATE_BOARDS)
-                .define('/', PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL))
+                .define('/', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.CURIO, MaterialCategories.METAL))
                 .pattern(" #/")
                 .pattern("# #")
                 .pattern("/# ")
@@ -218,7 +221,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SgItems.BRACELET_BLUEPRINT)
                 .group("silentgear:blueprints/bracelet")
                 .define('#', SgTags.Items.BLUEPRINT_PAPER)
-                .define('/', PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL))
+                .define('/', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.CURIO, MaterialCategories.METAL))
                 .pattern("###")
                 .pattern("# #")
                 .pattern("/#/")
@@ -236,7 +239,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SgItems.BRACELET_TEMPLATE)
                 .group("silentgear:blueprints/bracelet")
                 .define('#', SgTags.Items.TEMPLATE_BOARDS)
-                .define('/', PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL))
+                .define('/', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.CURIO, MaterialCategories.METAL))
                 .pattern("###")
                 .pattern("# #")
                 .pattern("/#/")
@@ -545,7 +548,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         shapelessGear(RecipeCategory.COMBAT, SgItems.SHIELD)
                 .requires(BlueprintIngredient.of(SgItems.SHIELD_BLUEPRINT.get()))
-                .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.ARMOR), 2)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.ARMOR), 2)
                 .requires(GearPartIngredient.of(PartType.ROD))
                 .save(consumer, SilentGear.getId("gear/shield"));
 
@@ -556,7 +559,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         compoundPart(RecipeCategory.COMBAT, SgItems.ELYTRA_WINGS, 1)
                 .requires(BlueprintIngredient.of(SgItems.ELYTRA_BLUEPRINT.get()))
-                .requires(PartMaterialIngredient.of(PartType.MAIN,
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(),
                         GearType.ELYTRA,
                         MaterialCategories.CLOTH,
                         MaterialCategories.SHEET), 6)
@@ -572,40 +575,40 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#")
                 .pattern("#")
                 .pattern("/")
-                .define('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
+                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL))
                 .define('/', SgTags.Items.RODS_ROUGH)
                 .save(consumer, SilentGear.getId("gear/rough/sword"));
         shapedGear(RecipeCategory.COMBAT, SgItems.DAGGER)
                 .pattern("#")
                 .pattern("/")
-                .define('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
+                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL))
                 .define('/', SgTags.Items.RODS_ROUGH)
                 .save(consumer, SilentGear.getId("gear/rough/dagger"));
         shapedGear(RecipeCategory.COMBAT, SgItems.KNIFE)
                 .pattern(" #")
                 .pattern("/ ")
-                .define('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
+                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL))
                 .define('/', SgTags.Items.RODS_ROUGH)
                 .save(consumer, SilentGear.getId("gear/rough/knife"));
         shapedGear(RecipeCategory.TOOLS, SgItems.PICKAXE)
                 .pattern("###")
                 .pattern(" / ")
                 .pattern(" / ")
-                .define('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
+                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL))
                 .define('/', SgTags.Items.RODS_ROUGH)
                 .save(consumer, SilentGear.getId("gear/rough/pickaxe"));
         shapedGear(RecipeCategory.TOOLS, SgItems.SHOVEL)
                 .pattern("#")
                 .pattern("/")
                 .pattern("/")
-                .define('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
+                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL))
                 .define('/', SgTags.Items.RODS_ROUGH)
                 .save(consumer, SilentGear.getId("gear/rough/shovel"));
         shapedGear(RecipeCategory.TOOLS, SgItems.AXE)
                 .pattern("##")
                 .pattern("#/")
                 .pattern(" /")
-                .define('#', PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
+                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL))
                 .define('/', SgTags.Items.RODS_ROUGH)
                 .save(consumer, SilentGear.getId("gear/rough/axe"));
 
@@ -790,7 +793,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void registerPressing(RecipeOutput consumer) {
         new SingleItemRecipeBuilder(RecipeCategory.MISC,
                 MaterialPressingRecipe::new,
-                PartMaterialIngredient.of(PartType.MAIN, MaterialCategories.METAL),
+                PartMaterialIngredient.of(PartTypes.MAIN.get(), MaterialCategories.METAL),
                 SgItems.SHEET_METAL, 2
         ).unlockedBy("impossible", CriteriaTriggers.IMPOSSIBLE.createCriterion(new ImpossibleTrigger.TriggerInstance()))
                 .save(consumer);
@@ -1385,11 +1388,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
-    private void toolRecipes(RecipeOutput consumer, String name, int mainCount, ItemLike tool, ItemLike toolHead, GearBlueprintItem blueprintItem) {
+    private void toolRecipes(RecipeOutput consumer, String name, int mainCount, GearItemSet<?> itemSet) {
         // Tool head
-        shapelessPart(RecipeCategory.TOOLS, toolHead)
-                .requires(BlueprintIngredient.of(blueprintItem))
-                .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
+        shapelessPart(RecipeCategory.TOOLS, itemSet.mainPart())
+                .requires(BlueprintIngredient.of(itemSet.blueprint()))
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + name + "_head"));
         // Tool from head and rod
         shapelessGear(RecipeCategory.TOOLS, tool)
@@ -1399,7 +1402,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Quick tool (mains and rods, skipping head)
         shapelessGear(RecipeCategory.TOOLS, tool)
                 .requires(BlueprintIngredient.of(blueprintItem))
-                .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL), mainCount)
                 .requires(GearPartIngredient.of(PartType.ROD))
                 .save(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
@@ -1409,7 +1412,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Main part
         shapelessPart(RecipeCategory.COMBAT, toolHead)
                 .requires(BlueprintIngredient.of(blueprintItem))
-                .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + name + "_main"));
         // Tool from main, rod, and cord
         shapelessGear(RecipeCategory.COMBAT, tool)
@@ -1420,7 +1423,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Quick tool (main materials, rod, and cord, skipping main part)
         shapelessGear(RecipeCategory.COMBAT, tool)
                 .requires(BlueprintIngredient.of(blueprintItem))
-                .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL), mainCount)
                 .requires(GearPartIngredient.of(PartType.ROD))
                 .requires(GearPartIngredient.of(PartType.CORD))
                 .save(consumer, SilentGear.getId("gear/" + name + "_quick"));
@@ -1431,7 +1434,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Arrow head
         shapelessPart(RecipeCategory.COMBAT, arrowHead)
                 .requires(blueprint)
-                .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.PROJECTILE))
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.PROJECTILE))
                 .save(consumer, SilentGear.getId("gear/" + name + "_head"));
         // Arrows from head
         shapelessGear(RecipeCategory.COMBAT, arrow)
@@ -1442,7 +1445,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Quick arrows
         shapelessGear(RecipeCategory.COMBAT, arrow)
                 .requires(BlueprintIngredient.of(blueprintItem))
-                .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.TOOL))
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.TOOL))
                 .requires(GearPartIngredient.of(PartType.ROD))
                 .requires(GearPartIngredient.of(PartType.FLETCHING))
                 .save(consumer, SilentGear.getId("gear/" + name + "_quick"));
@@ -1451,7 +1454,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void armorRecipes(RecipeOutput consumer, int mainCount, GearArmorItem armor, ItemLike plates, GearBlueprintItem blueprintItem) {
         shapelessPart(RecipeCategory.COMBAT, plates)
                 .requires(BlueprintIngredient.of(blueprintItem))
-                .requires(PartMaterialIngredient.of(PartType.MAIN, armor.getGearType()), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), armor.getGearType()), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(plates).getPath()));
 
         shapelessGear(RecipeCategory.COMBAT, armor)
@@ -1467,7 +1470,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void curioRecipes(RecipeOutput consumer, String name, int mainCount, ItemLike curioItem, ItemLike curioMain, GearBlueprintItem blueprint) {
         shapelessPart(RecipeCategory.MISC, curioMain)
                 .requires(BlueprintIngredient.of(blueprint))
-                .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.CURIO, MaterialCategories.METAL), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + name + "_main_only"));
 
         shapelessGear(RecipeCategory.MISC, curioItem)
@@ -1483,23 +1486,23 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         shapelessGear(RecipeCategory.MISC, curioItem)
                 .requires(BlueprintIngredient.of(blueprint))
-                .requires(PartMaterialIngredient.of(PartType.MAIN, GearType.CURIO, MaterialCategories.METAL), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearType.CURIO, MaterialCategories.METAL), mainCount)
                 .requires(GearPartIngredient.of(PartType.ADORNMENT))
                 .save(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
 
-    private void toolBlueprint(RecipeOutput consumer, String group, ItemLike blueprint, ItemLike template, String... pattern) {
-        toolBlueprint(consumer, group, blueprint, template, Ingredient.EMPTY, pattern);
+    private void toolBlueprint(RecipeOutput consumer, String group, GearItemSet<?> itemSet, String... pattern) {
+        toolBlueprint(consumer, group, itemSet, Ingredient.EMPTY, pattern);
     }
 
-    private void toolBlueprint(RecipeOutput consumer, String group, ItemLike blueprint, ItemLike template, Ingredient extra, String... pattern) {
-        ShapedRecipeBuilder builderBlueprint = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, blueprint)
+    private void toolBlueprint(RecipeOutput consumer, String group, GearItemSet<?> itemSet, Ingredient extra, String... pattern) {
+        ShapedRecipeBuilder builderBlueprint = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, itemSet.blueprint())
                 .group("silentgear:blueprints/" + group)
                 .define('#', SgTags.Items.BLUEPRINT_PAPER)
                 .define('/', Tags.Items.RODS_WOODEN)
                 .unlockedBy("has_item", has(SgTags.Items.BLUEPRINT_PAPER));
 
-        ShapedRecipeBuilder builderTemplate = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, template)
+        ShapedRecipeBuilder builderTemplate = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, itemSet.template())
                 .group("silentgear:blueprints/" + group)
                 .define('#', SgTags.Items.TEMPLATE_BOARDS)
                 .define('/', Tags.Items.RODS_WOODEN)
@@ -1519,8 +1522,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
         builderTemplate.save(consumer);
     }
 
-    private void armorBlueprint(RecipeOutput consumer, String group, ItemLike blueprint, ItemLike template, String... pattern) {
-        ShapedRecipeBuilder builderBlueprint = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, blueprint)
+    private void armorBlueprint(RecipeOutput consumer, String group, GearItemSet<?> itemSet, String... pattern) {
+        ShapedRecipeBuilder builderBlueprint = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, itemSet.blueprint())
                 .group("silentgear:blueprints/" + group)
                 .define('#', SgTags.Items.BLUEPRINT_PAPER)
                 .unlockedBy("has_item", has(SgTags.Items.BLUEPRINT_PAPER));
@@ -1529,7 +1532,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
         builderBlueprint.save(consumer);
 
-        ShapedRecipeBuilder builderTemplate = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, template)
+        ShapedRecipeBuilder builderTemplate = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, itemSet.template())
                 .group("silentgear:blueprints/" + group)
                 .define('#', SgTags.Items.TEMPLATE_BOARDS)
                 .unlockedBy("has_item", has(SgTags.Items.TEMPLATE_BOARDS));
@@ -1539,11 +1542,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
         builderTemplate.save(consumer);
     }
 
-    private ShapelessConversionBuilder shapelessConversion(RecipeCategory category, ICoreItem result, List<LazyPartData> parts) {
+    private ShapelessConversionBuilder shapelessConversion(RecipeCategory category, ICoreItem result, List<PartInstance> parts) {
         return new ShapelessConversionBuilder(category, result, parts);
     }
 
-    private static final Map<Tier, DataResource<IMaterial>> TOOL_MATERIALS = ImmutableMap.<Tier, DataResource<IMaterial>>builder()
+    private static final Map<Tier, DataResource<Material>> TOOL_MATERIALS = ImmutableMap.<Tier, DataResource<Material>>builder()
             .put(Tiers.NETHERITE, Const.Materials.DIAMOND) // Yes, diamond is correct, this is for the main part
             .put(Tiers.DIAMOND, Const.Materials.DIAMOND)
             .put(Tiers.GOLD, Const.Materials.GOLD)
@@ -1551,7 +1554,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
             .put(Tiers.STONE, Const.Materials.STONE)
             .put(Tiers.WOOD, Const.Materials.WOOD)
             .build();
-    private static final Map<ArmorMaterial, DataResource<IMaterial>> ARMOR_MATERIALS = ImmutableMap.<ArmorMaterial, DataResource<IMaterial>>builder()
+    private static final Map<Holder<ArmorMaterial>, DataResource<Material>> ARMOR_MATERIALS = ImmutableMap.<Holder<ArmorMaterial>, DataResource<Material>>builder()
             .put(ArmorMaterials.NETHERITE, Const.Materials.DIAMOND) // Again, this is correct (see TOOL_MATERIALS)
             .put(ArmorMaterials.DIAMOND, Const.Materials.DIAMOND)
             .put(ArmorMaterials.GOLD, Const.Materials.GOLD)
@@ -1559,11 +1562,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
             .put(ArmorMaterials.LEATHER, Const.Materials.LEATHER)
             .build();
 
-    private void toolConversion(RecipeOutput consumer, DeferredItem<? extends ICoreItem> result, DataResource<IGearPart> mainPart, int mainCount, Item... toolItems) {
+    private void toolConversion(RecipeOutput consumer, DeferredItem<? extends ICoreItem> result, DataResource<GearPart> mainPart, int mainCount, Item... toolItems) {
         for (Item input : toolItems) {
             assert input instanceof TieredItem;
             Tier tier = ((TieredItem) input).getTier();
-            DataResource<IMaterial> coating = tier == Tiers.NETHERITE ? Const.Materials.NETHERITE : null;
+            DataResource<Material> coating = tier == Tiers.NETHERITE ? Const.Materials.NETHERITE : null;
             shapelessConversion(RecipeCategory.MISC, result.get(),
                     buildConversionParts(
                             result.get().getGearType(),
@@ -1578,11 +1581,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
     }
 
-    private void armorConversion(RecipeOutput consumer, DeferredItem<? extends ICoreItem> result, DataResource<IGearPart> mainPart, int mainCount, Item... armorItems) {
+    private void armorConversion(RecipeOutput consumer, DeferredItem<? extends ICoreItem> result, DataResource<GearPart> mainPart, int mainCount, Item... armorItems) {
         for (Item input : armorItems) {
             assert input instanceof ArmorItem;
-            ArmorMaterial armorMaterial = ((ArmorItem) input).getMaterial();
-            DataResource<IMaterial> coating = armorMaterial == ArmorMaterials.NETHERITE ? Const.Materials.NETHERITE : null;
+            var armorMaterial = ((ArmorItem) input).getMaterial();
+            DataResource<Material> coating = armorMaterial == ArmorMaterials.NETHERITE ? Const.Materials.NETHERITE : null;
             shapelessConversion(RecipeCategory.MISC, result.get(),
                     buildConversionParts(
                             result.get().getGearType(),
@@ -1618,26 +1621,26 @@ public class ModRecipesProvider extends LibRecipeProvider {
         builder.save(consumer, SilentGear.getId("salvaging/" + inputId.getPath()));
     }
 
-    private static List<LazyPartData> buildConversionParts(
+    private static List<PartInstance> buildConversionParts(
             GearType gearType,
-            DataResource<IGearPart> mainPart, DataResource<IMaterial> main, int mainCount,
-            @Nullable DataResource<IMaterial> rod,
-            @Nullable DataResource<IMaterial> coating
+            DataResource<GearPart> mainPart, DataResource<Material> main, int mainCount,
+            @Nullable DataResource<Material> rod,
+            @Nullable DataResource<Material> coating
     ) {
-        List<LazyPartData> ret = new ArrayList<>();
-        List<LazyMaterialInstance> mainMaterials = new ArrayList<>();
+        List<PartInstance> ret = new ArrayList<>();
+        List<MaterialInstance> mainMaterials = new ArrayList<>();
         for (int i = 0; i < mainCount; ++i) {
-            mainMaterials.add(LazyMaterialInstance.of(main));
+            mainMaterials.add(MaterialInstance.of(main));
         }
 
-        ret.add(LazyPartData.of(
+        ret.add(PartInstance.create(
                 mainPart,
-                PartType.MAIN.getCompoundPartItem(gearType).orElseThrow(),
+                PartTypes.MAIN.get().getCompoundPartItem(gearType).orElseThrow(),
                 mainMaterials
         ));
 
         if (rod != null) {
-            ret.add(LazyPartData.of(
+            ret.add(PartInstance.create(
                     Const.Parts.ROD,
                     SgItems.ROD.get(),
                     rod
@@ -1645,7 +1648,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
 
         if (coating != null) {
-            ret.add(LazyPartData.of(
+            ret.add(PartInstance.create(
                     Const.Parts.COATING,
                     SgItems.COATING.get(),
                     coating

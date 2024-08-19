@@ -32,27 +32,19 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearShearsItem extends ShearsItem implements ICoreTool {
-    public static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            ItemStats.DURABILITY,
-            ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.ENCHANTMENT_VALUE,
-            ItemStats.HARVEST_SPEED
-    );
+    private final Supplier<GearType> gearType;
 
-    public GearShearsItem() {
+    public GearShearsItem(Supplier<GearType> gearType) {
         super(GearHelper.getBaseItemProperties().durability(100));
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.SHEARS;
-    }
-
-    @Override
-    public Set<ItemStat> getRelevantStats(ItemStack stack) {
-        return RELEVANT_STATS;
+        return this.gearType.get();
     }
 
     @Override

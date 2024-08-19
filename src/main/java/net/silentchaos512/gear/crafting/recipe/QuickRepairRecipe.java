@@ -1,21 +1,3 @@
-/*
- * Silent Gear -- QuickRepairRecipe
- * Copyright (C) 2018 SilentChaos512
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 3
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.core.HolderLookup;
@@ -70,7 +52,7 @@ public class QuickRepairRecipe extends CustomRecipe {
                     }
                     foundKit = true;
                     repairKitEfficiency = getKitEfficiency(stack);
-                } else if (MaterialManager.from(stack) != null) {
+                } else if (MaterialManager.fromItem(stack) != null) {
                     materials.add(stack);
                 } else {
                     return false;
@@ -107,11 +89,10 @@ public class QuickRepairRecipe extends CustomRecipe {
         repairWithLooseMaterials(gear, repairKit, mats);
 
         // Then use repair kit, if necessary
-        if (gear.getDamageValue() > 0 && repairKit.getItem() instanceof RepairKitItem) {
-            RepairKitItem item = (RepairKitItem) repairKit.getItem();
+        if (gear.getDamageValue() > 0 && repairKit.getItem() instanceof RepairKitItem item) {
             int value = item.getDamageToRepair(gear, repairKit, RepairContext.Type.QUICK);
             if (value > 0) {
-                gear.setDamageValue(gear.getDamageValue() - Math.round(value));
+                gear.setDamageValue(gear.getDamageValue() - value);
             }
         }
 
@@ -156,9 +137,8 @@ public class QuickRepairRecipe extends CustomRecipe {
         for (int i = 0; i < list.size(); ++i) {
             ItemStack stack = inv.getItem(i);
 
-            if (stack.getItem() instanceof RepairKitItem) {
+            if (stack.getItem() instanceof RepairKitItem item) {
                 repairWithLooseMaterials(gear, repairKit, stackList.allMatches(mat -> SgRecipes.isRepairMaterial(gear, mat)));
-                RepairKitItem item = (RepairKitItem) stack.getItem();
                 ItemStack copy = stack.copy();
                 item.removeRepairMaterials(copy, item.getRepairMaterials(gear, copy, RepairContext.Type.QUICK));
                 list.set(i, copy);

@@ -1,23 +1,26 @@
 package net.silentchaos512.gear.data.loot;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.WritableRegistry;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.packs.VanillaLootTableProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootDataId;
-import net.minecraft.world.level.storage.loot.LootDataType;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class ModLootTables extends LootTableProvider {
-    public ModLootTables(DataGenerator dataGeneratorIn) {
-        super(dataGeneratorIn.getPackOutput(), Collections.emptySet(), VanillaLootTableProvider.create(dataGeneratorIn.getPackOutput()).getTables());
+    public ModLootTables(GatherDataEvent event) {
+        super(
+                event.getGenerator().getPackOutput(),
+                Collections.emptySet(),
+                VanillaLootTableProvider.create(event.getGenerator().getPackOutput(), event.getLookupProvider()).getTables(),
+                event.getLookupProvider()
+        );
     }
 
     @Override
@@ -31,9 +34,6 @@ public class ModLootTables extends LootTableProvider {
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationContext) {
-        map.forEach((name, loo) -> {
-            loo.validate(validationContext.setParams(loo.getParamSet()).enterElement("{" + name + "}", new LootDataId<>(LootDataType.TABLE, name)));
-        });
+    protected void validate(WritableRegistry<LootTable> writableregistry, ValidationContext validationcontext, ProblemReporter.Collector problemreporter$collector) {
     }
 }

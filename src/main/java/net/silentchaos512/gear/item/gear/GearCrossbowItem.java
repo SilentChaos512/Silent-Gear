@@ -3,12 +3,9 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -38,7 +35,6 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.client.util.ModelPropertiesHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import org.joml.Quaternionf;
@@ -47,6 +43,7 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon {
     private static final int MIN_CHARGE_TIME = 5;
@@ -55,13 +52,16 @@ public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon 
     private boolean startSoundPlayed = false;
     private boolean midLoadSoundPlayed = false;
 
-    public GearCrossbowItem() {
-        super(GearHelper.getBaseItemProperties().defaultDurability(100));
+    private final Supplier<GearType> gearType;
+
+    public GearCrossbowItem(Supplier<GearType> gearType) {
+        super(GearHelper.getBaseItemProperties());
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.CROSSBOW;
+        return this.gearType.get();
     }
 
     //region Crossbow stuff
@@ -437,37 +437,6 @@ public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
-    }
-
-    @Override
-    public int getAnimationFrames() {
-        return 4;
-    }
-
-    @Override
-    public int getAnimationFrame(ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
-        ItemPropertyFunction chargedProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("charged"));
-        if (chargedProperty != null && chargedProperty.call(stack, world, entity, 0) > 0) {
-            return 3;
-        }
-
-        ItemPropertyFunction pullingProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pulling"));
-        if (pullingProperty != null) {
-            float pulling = pullingProperty.call(stack, world, entity, 0);
-            if (pulling > 0) {
-                ItemPropertyFunction pullProperty = ModelPropertiesHelper.get(stack, new ResourceLocation("pull"));
-                if (pullProperty != null) {
-                    float pull = pullProperty.call(stack, world, entity, 0);
-
-                    if (pull > 1.0f)
-                        return 3;
-                    if (pull > 0.58f)
-                        return 2;
-                    return 1;
-                }
-            }
-        }
-        return 0;
     }
 
     @Override

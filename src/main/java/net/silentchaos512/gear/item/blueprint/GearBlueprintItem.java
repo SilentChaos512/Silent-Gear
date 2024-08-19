@@ -9,37 +9,37 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.TextListBuilder;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.MathUtils;
+import net.silentchaos512.lib.util.NameUtils;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final GearType gearType;
     private TagKey<Item> itemTag;
 
-    public GearBlueprintItem(GearType gearType, boolean singleUse, Properties properties) {
-        super(properties, singleUse);
+    public GearBlueprintItem(GearType gearType, BlueprintType type, Properties properties) {
+        super(properties, type);
         this.gearType = gearType;
     }
 
     @Override
     public PartType getPartType(ItemStack stack) {
-        return PartType.MAIN;
+        return PartTypes.MAIN.get();
     }
 
     public GearType getGearType() {
@@ -55,7 +55,8 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     public TagKey<Item> getItemTag() {
         if (itemTag == null) {
             ResourceLocation id = NameUtils.fromItem(this);
-            itemTag = ItemTags.create(new ResourceLocation(id.getNamespace(), "blueprints/" + gearType.getName()));
+            String itemClass = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(this.gearType)).getPath();
+            itemTag = ItemTags.create(new ResourceLocation(id.getNamespace(), "blueprints/" + itemClass));
         }
         return itemTag;
     }
@@ -63,12 +64,13 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     @Override
     protected Component getCraftedName(ItemStack stack) {
         ResourceLocation id = NameUtils.fromItem(this);
-        return Component.translatable(Util.makeDescriptionId("item", new ResourceLocation(id.getNamespace(), this.gearType.getName())));
+        String itemClass = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(this.gearType)).getPath();
+        return Component.translatable(Util.makeDescriptionId("item", new ResourceLocation(id.getNamespace(), itemClass)));
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flags) {
-        String itemClass = this.gearType.getName();
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flags) {
+        String itemClass = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(this.gearType)).getPath();
 
         // Flavor text
         if (!gearType.isArmor()) {
@@ -77,17 +79,17 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         }
 
         // Armor durability text
-        if (!MathUtils.floatsEqual(gearType.getArmorDurabilityMultiplier(), 1f)) {
-            tooltip.add(TextUtil.translate("item", "blueprint.armorDurability", gearType.getArmorDurabilityMultiplier())
+        if (!MathUtils.floatsEqual(gearType.armorDurabilityMultiplier(), 1f)) {
+            tooltip.add(TextUtil.translate("item", "blueprint.armorDurability", gearType.armorDurabilityMultiplier())
                     .withStyle(ChatFormatting.ITALIC));
         }
 
-        super.appendHoverText(stack, level, tooltip, flags);
+        super.appendHoverText(stack, tooltipContext, tooltip, flags);
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
             tooltip.add(Component.translatable("item.silentgear.blueprint.disabled").withStyle(ChatFormatting.DARK_RED));
-        } else if (this.singleUse) {
+        } else if (this.isSingleUse()) {
             tooltip.add(Component.translatable("item.silentgear.blueprint.singleUse").withStyle(ChatFormatting.RED));
         } else {
             tooltip.add(Component.translatable("item.silentgear.blueprint.multiUse").withStyle(ChatFormatting.GREEN));
@@ -105,12 +107,12 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
                 ICoreItem item = itemOptional.get();
                 ItemStack gear = new ItemStack(item);
 
-                for (PartType type : PartType.getValues()) {
-                    if (type != PartType.MAIN) {
-                        List<IGearPart> partsOfType = PartManager.getPartsOfType(type);
+                for (PartType type : SgRegistries.PART_TYPE) {
+                    if (type != PartTypes.MAIN.get()) {
+                        List<GearPart> partsOfType = SgRegistries.PART.getPartsOfType(type);
 
-                        if (!partsOfType.isEmpty() && item.supportsPart(gear, PartData.of(partsOfType.get(0)))) {
-                            builder.add(type.getDisplayName(0));
+                        if (!partsOfType.isEmpty() && item.supportsPart(gear, PartInstance.of(partsOfType.getFirst()))) {
+                            builder.add(type.getDisplayName());
                         }
                     }
                 }

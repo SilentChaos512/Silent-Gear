@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.crafting.recipe;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -10,15 +10,15 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.MaterialList;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     private final CompoundPartItem item;
@@ -45,7 +45,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     public boolean matches(CraftingContainer inv, Level worldIn) {
         if (!super.matches(inv, worldIn)) return false;
 
-        IMaterial first = null;
+        Material first = null;
 
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
@@ -59,7 +59,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
                 // If classic mixing is disabled, all materials must be the same
                 if (first == null) {
                     first = mat.get();
-                } else if (!Config.Common.allowLegacyMaterialMixing.get() && first != mat.get()) {
+                } else if (first != mat.get()) {
                     return false;
                 }
             }
@@ -69,13 +69,12 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
-        int craftedCount = super.getResultItem(registryAccess).getCount();
-        return item.create(getMaterials(inv), craftedCount);
+    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
+        return item.create(getMaterials(inv));
     }
 
-    private static MaterialList getMaterials(Container inv) {
-        MaterialList ret = MaterialList.empty();
+    private static List<MaterialInstance> getMaterials(Container inv) {
+        var ret = new ArrayList<MaterialInstance>();
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack stack = inv.getItem(i);
@@ -91,10 +90,10 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider registryAccess) {
         // Create an example item, so we're not just showing a broken item
         int craftedCount = super.getResultItem(registryAccess).getCount();
-        return item.create(MaterialList.of(LazyMaterialInstance.of(Const.Materials.EXAMPLE)), craftedCount);
+        return item.create(MaterialInstance.of(Const.Materials.EXAMPLE), craftedCount);
     }
 
     @Override

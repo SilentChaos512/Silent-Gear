@@ -2,6 +2,7 @@ package net.silentchaos512.gear.block.grader;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -20,12 +21,11 @@ import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.material.MaterialModifiers;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.lib.util.EnumUtils;
@@ -95,7 +95,7 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
         if (catalystTier < 1) return;
 
         MaterialInstance material = MaterialInstance.from(input);
-        if (material != null && material.getGrade() != MaterialGrade.getMax()) {
+        if (material != null && canGrade(input)) {
             if (blockEntity.progress < BASE_ANALYZE_TIME) {
                 ++blockEntity.progress;
             }
@@ -110,11 +110,12 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
         }
     }
 
-    private void tryGradeItem(ItemStack input, int catalystTier, IMaterialInstance material) {
+    private void tryGradeItem(ItemStack input, int catalystTier, MaterialInstance material) {
         MaterialGrade targetGrade = MaterialGrade.selectWithCatalyst(SilentGear.RANDOM, catalystTier);
         this.lastGradeAttempt = targetGrade;
+        var currentGradeMod = material.getModifier(MaterialModifiers.GRADE);
 
-        if (targetGrade.ordinal() > material.getGrade().ordinal()) {
+        if (currentGradeMod == null || targetGrade.ordinal() > currentGradeMod.grade().ordinal()) {
             // Assign grade, move to output slot
             ItemStack stack = input.split(1);
             targetGrade.setGradeOnStack(stack);
@@ -151,7 +152,7 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
     @Override
     public void setItem(int pSlot, ItemStack pStack) {
         ItemStack itemstack = this.items.get(pSlot);
-        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameTags(itemstack, pStack);
+        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, pStack);
         this.items.set(pSlot, pStack);
         if (pStack.getCount() > this.getMaxStackSize()) {
             pStack.setCount(this.getMaxStackSize());
@@ -168,13 +169,18 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
         return Container.stillValidBlockEntity(this, pPlayer);
     }
 
+    public static boolean canGrade(ItemStack stack) {
+        var material = MaterialInstance.from(stack);
+        if (material == null) return false;
+
+        var gradeMod = material.getModifier(MaterialModifiers.GRADE);
+        return gradeMod == null || gradeMod.grade() != MaterialGrade.MAX;
+    }
+
     private ItemStack getInputStack() {
         ItemStack stack = getItem(INPUT_SLOT);
-        if (!stack.isEmpty()) {
-            MaterialInstance material = MaterialInstance.from(stack);
-            if (material != null && material.getGrade() != MaterialGrade.getMax()) {
-                return stack;
-            }
+        if (!stack.isEmpty() && canGrade(stack)) {
+            return stack;
         }
         return ItemStack.EMPTY;
     }
@@ -192,11 +198,6 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
         return -1;
     }
 
-    static boolean canAcceptInput(ItemStack stack) {
-        MaterialInstance material = MaterialInstance.from(stack);
-        return material != null && material.getGrade() != MaterialGrade.getMax();
-    }
-
     public static int getCatalystTier(ItemStack stack) {
         if (!stack.isEmpty()) {
             for (int i = SgTags.Items.GRADER_CATALYSTS_TIERS.size() - 1; i >= 0; --i) {
@@ -209,64 +210,53 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
     }
 
     @Override
-    public void load(CompoundTag tags) {
-        super.load(tags);
+    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tags, this.items);
-        this.progress = tags.getInt("Progress");
+        ContainerHelper.loadAllItems(pTag, this.items, pRegistries);
+        this.progress = pTag.getInt("Progress");
     }
 
     @Override
-    public void saveAdditional(CompoundTag tags) {
-        super.saveAdditional(tags);
-        tags.putInt("Progress", this.progress);
-        ContainerHelper.saveAllItems(tags, this.items);
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.saveAdditional(pTag, pRegistries);
+        pTag.putInt("Progress", this.progress);
+        ContainerHelper.saveAllItems(pTag, this.items, pRegistries);
     }
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this, this::getTagsForUpdatePacket);
-    }
-
-    private CompoundTag getTagsForUpdatePacket(BlockEntity be) {
-        CompoundTag tags = getUpdateTag();
-
-        ItemStack input = getInputStack();
-        if (!input.isEmpty()) {
-            CompoundTag itemTags = input.serializeAttachments();
-            tags.put("input_item", itemTags);
-        }
-
-        return tags;
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag tags = super.getUpdateTag();
+    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries) {
+        CompoundTag tags = super.getUpdateTag(pRegistries);
         tags.putInt("Progress", this.progress);
 
         ListTag tagList = new ListTag();
         ItemStack input = getInputStack();
         if (!input.isEmpty()) {
-            CompoundTag itemTags = input.save(new CompoundTag());
-            itemTags.putByte("Slot", (byte) INPUT_SLOT);
-            tagList.add(itemTags);
+            CompoundTag itemTag = new CompoundTag();
+            itemTag.putByte("Slot", (byte) 0);
+            tagList.add(input.save(pRegistries, itemTag));
         }
         tags.put("Items", tagList);
         return tags;
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
-        super.onDataPacket(net, packet);
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
+        super.onDataPacket(net, pkt, lookupProvider);
 
-        CompoundTag tags = packet.getTag();
+        CompoundTag tags = pkt.getTag();
         if (tags == null) return;
 
         this.progress = tags.getInt("Progress");
 
         if (tags.contains("input_item")) {
-            setItem(INPUT_SLOT, ItemStack.of(tags.getCompound("input_item")));
+            var inputItem = ItemStack.parse(lookupProvider, tags.getCompound("input_item")).orElse(ItemStack.EMPTY);
+            setItem(INPUT_SLOT, inputItem);
         } else {
             setItem(INPUT_SLOT, ItemStack.EMPTY);
         }
@@ -289,12 +279,12 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
         }
 
         ItemStack stackInSlot = getItem(index);
-        if (stack.isEmpty() || (!stackInSlot.isEmpty() && !stackInSlot.areAttachmentsCompatible(stack))) {
+        if (stack.isEmpty() || (!stackInSlot.isEmpty() && !ItemStack.isSameItemSameComponents(stackInSlot, stack))) {
             return false;
         }
 
         if (index == INPUT_SLOT) {
-            return canAcceptInput(stack);
+            return canGrade(stack);
         } else {
             return getCatalystTier(stack) > 0;
         }
@@ -313,6 +303,16 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
     @Override
     protected Component getDefaultName() {
         return Component.translatable("container.silentgear.material_grader");
+    }
+
+    @Override
+    protected NonNullList<ItemStack> getItems() {
+        return items;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> pItems) {
+        this.items = pItems;
     }
 
     @Override

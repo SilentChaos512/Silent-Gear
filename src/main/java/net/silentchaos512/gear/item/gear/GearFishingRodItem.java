@@ -46,67 +46,30 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
-    private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            ItemStats.DURABILITY,
-            ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.ENCHANTMENT_VALUE
-    );
-
     private static final Collection<PartType> REQUIRED_PARTS = ImmutableSet.of(
             PartType.MAIN,
             PartType.ROD,
             PartType.CORD
     );
 
-    private static final ImmutableList<PartType> RENDER_PARTS = ImmutableList.of(
-            PartType.ROD,
-            PartType.CORD,
-            PartType.MAIN
-    );
+    private final Supplier<GearType> gearType;
 
-    private static final Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
-            ItemStats.ARMOR_DURABILITY,
-            ItemStats.REPAIR_VALUE,
-            ItemStats.HARVEST_SPEED,
-            ItemStats.RANGED_DAMAGE,
-            ItemStats.RANGED_SPEED,
-            ItemStats.PROJECTILE_ACCURACY,
-            ItemStats.PROJECTILE_SPEED,
-            ItemStats.ARMOR,
-            ItemStats.ARMOR_TOUGHNESS,
-            ItemStats.MAGIC_ARMOR,
-            ItemStats.KNOCKBACK_RESISTANCE
-    );
-
-    public GearFishingRodItem() {
-        super(GearHelper.getBaseItemProperties().durability(100));
+    public GearFishingRodItem(Supplier<GearType> gearType) {
+        super(GearHelper.getBaseItemProperties());
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.FISHING_ROD;
-    }
-
-    @Override
-    public Set<ItemStat> getRelevantStats(ItemStack stack) {
-        return RELEVANT_STATS;
-    }
-
-    @Override
-    public Set<ItemStat> getExcludedStats(ItemStack stack) {
-        return EXCLUDED_STATS;
+        return this.gearType.get();
     }
 
     @Override
     public Collection<PartType> getRequiredParts() {
         return REQUIRED_PARTS;
-    }
-
-    @Override
-    public Collection<PartType> getRenderParts() {
-        return RENDER_PARTS;
     }
 
     @Override

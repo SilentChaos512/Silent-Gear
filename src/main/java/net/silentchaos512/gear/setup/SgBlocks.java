@@ -22,7 +22,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.charger.StarlightChargerBlock;
-import net.silentchaos512.gear.block.compounder.CompoundMakerBlock;
+import net.silentchaos512.gear.block.compounder.AlloyMakerBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
@@ -101,20 +101,20 @@ public final class SgBlocks {
                     BlockBehaviour.Properties.of()
                             .strength(5, 30)));
 
-    public static final DeferredBlock<CompoundMakerBlock<MetalAlloyRecipe>> ALLOY_FORGE = register("alloy_forge", () ->
-            new CompoundMakerBlock<>(Const.METAL_COMPOUNDER_INFO,
+    public static final DeferredBlock<AlloyMakerBlock<MetalAlloyRecipe>> ALLOY_FORGE = register("alloy_forge", () ->
+            new AlloyMakerBlock<>(Const.METAL_COMPOUNDER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
-    public static final DeferredBlock<CompoundMakerBlock<GemAlloyRecipe>> RECRYSTALLIZER = register("recrystallizer", () ->
-            new CompoundMakerBlock<>(Const.GEM_COMPOUNDER_INFO,
+    public static final DeferredBlock<AlloyMakerBlock<GemAlloyRecipe>> RECRYSTALLIZER = register("recrystallizer", () ->
+            new AlloyMakerBlock<>(Const.GEM_COMPOUNDER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
-    public static final DeferredBlock<CompoundMakerBlock<FabricAlloyRecipe>> REFABRICATOR = register("refabricator", () ->
-            new CompoundMakerBlock<>(Const.FABRIC_COMPOUNDER_INFO,
+    public static final DeferredBlock<AlloyMakerBlock<FabricAlloyRecipe>> REFABRICATOR = register("refabricator", () ->
+            new AlloyMakerBlock<>(Const.FABRIC_COMPOUNDER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));

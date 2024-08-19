@@ -26,22 +26,26 @@ import net.silentchaos512.gear.util.GearHelper;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearTridentItem extends TridentItem implements ICoreWeapon {
-    public GearTridentItem() {
+    private final Supplier<GearType> gearType;
+
+    public GearTridentItem(Supplier<GearType> gearType) {
         super(GearHelper.getBaseItemProperties());
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.TRIDENT;
+        return this.gearType.get();
     }
 
     //region Standard tool overrides
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
+        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
     }
 
     @Override

@@ -26,6 +26,7 @@ import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -37,23 +38,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearCurioItem extends Item implements ICoreItem {
     private static final Collection<PartType> REQUIRED_PARTS = ImmutableList.of(
-            PartType.MAIN,
-            PartType.ADORNMENT
-    );
-    private static final ImmutableSet<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            ItemStats.DURABILITY
-    );
-    private static final ImmutableSet<ItemStat> EXCLUDED_STATS = ImmutableSet.copyOf(
-            ItemStats.allStatsOrderedExcluding(RELEVANT_STATS) // FYI, this should NOT be done in most cases
+            PartTypes.MAIN.get(),
+            PartTypes.SETTING.get()
     );
 
-    private final GearType gearType;
+    private final Supplier<GearType> gearType;
     private final String slot;
 
-    public GearCurioItem(GearType gearType, String slot, Properties properties) {
+    public GearCurioItem(Supplier<GearType> gearType, String slot, Properties properties) {
         super(properties);
         this.gearType = gearType;
         this.slot = slot;
@@ -65,7 +61,7 @@ public class GearCurioItem extends Item implements ICoreItem {
 
     @Override
     public GearType getGearType() {
-        return gearType;
+        return this.gearType.get();
     }
 
     @Override
@@ -74,31 +70,16 @@ public class GearCurioItem extends Item implements ICoreItem {
     }
 
     @Override
-    public Set<ItemStat> getRelevantStats(ItemStack stack) {
-        return RELEVANT_STATS;
-    }
-
-    @Override
-    public Set<ItemStat> getExcludedStats(ItemStack stack) {
-        return EXCLUDED_STATS;
-    }
-
-    @Override
     public Collection<PartType> getRequiredParts() {
         return REQUIRED_PARTS;
     }
 
     @Override
-    public boolean hasTexturesFor(PartType partType) {
-        return REQUIRED_PARTS.contains(partType);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
         if (!ModList.get().isLoaded(Const.CURIOS)) {
             tooltip.add(TextUtil.misc("curiosNotInstalled").withStyle(ChatFormatting.RED));
         }
-        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
+        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
     }
 
     @Override
@@ -173,8 +154,8 @@ public class GearCurioItem extends Item implements ICoreItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColor(stack, PartType.MAIN);
-                case 2 -> ColorUtils.getBlendedColor(stack, PartType.ADORNMENT);
+                case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
+                case 2 -> ColorUtils.getBlendedColor(stack, PartTypes.SETTING.get());
                 default -> Color.VALUE_WHITE;
             };
         };

@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.block.stoneanvil;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -40,7 +41,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     }
 
     public Optional<RecipeHolder<ToolActionRecipe>> getRecipe(ItemStack tool, ItemStack item) {
-        if (item.isEmpty()) return Optional.empty();
+        if (item.isEmpty() || this.level == null) return Optional.empty();
 
         return quickCheck.getRecipeFor(new SimpleContainer(tool, item), this.level);
     }
@@ -58,7 +59,9 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
 
     public void placeItem(@Nullable Entity entity, ItemStack stack) {
         this.item = stack.split(stack.getCount());
-        this.level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
+        if (this.level != null) {
+            this.level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
+        }
         this.markUpdated();
     }
 
@@ -66,7 +69,9 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
         if (!this.item.isEmpty()) {
             dropItem(this.item);
             this.clearContent();
-            level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
+            if (this.level != null) {
+                level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
+            }
             this.markUpdated();
             return true;
         }
@@ -75,16 +80,16 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
 
     public boolean workOnItem(@Nullable Entity entity, ItemStack tool) {
         var optionalHolder = getRecipe(tool, this.item);
-        if (optionalHolder.isPresent()) {
+        if (optionalHolder.isPresent() && this.level != null) {
             var recipe = optionalHolder.get().value();
-            ItemStack result = recipe.getResultItem(level.registryAccess());
+            ItemStack result = recipe.getResultItem(this.level.registryAccess());
             int damage = recipe.getDamageToTool();
 
             this.dropItem(result.copy());
             this.item.shrink(1);
             var serverPlayer = entity instanceof ServerPlayer ? (ServerPlayer) entity : null;
             if (serverPlayer == null || !serverPlayer.getAbilities().instabuild) {
-                tool.hurt(damage, SilentGear.RANDOM_SOURCE, serverPlayer);
+                tool.hurtAndBreak(damage, SilentGear.RANDOM_SOURCE, serverPlayer, () -> {});
             }
             level.playSound(null, getBlockPos(), SoundEvents.STONE_HIT, SoundSource.PLAYERS, 1f, 1f);
             level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
@@ -97,12 +102,16 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     }
 
     public void dropItem(ItemStack stack) {
-        Containers.dropItemStack(level, getBlockPos().getX(), getBlockPos().getY() + 1.0, getBlockPos().getZ(), stack);
+        if (this.level != null) {
+            Containers.dropItemStack(this.level, getBlockPos().getX(), getBlockPos().getY() + 1.0, getBlockPos().getZ(), stack);
+        }
     }
 
     private void markUpdated() {
         this.setChanged();
-        this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+        if (this.level != null) {
+            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+        }
     }
 
     @Override
@@ -111,18 +120,18 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     }
 
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
         this.item = ItemStack.EMPTY;
-        if (pTag.contains("Item")) {
-            this.item = ItemStack.of(pTag.getCompound("Item"));
+        if (tag.contains("Item")) {
+            this.item = ItemStack.parse(provider, tag.getCompound("Item")).orElse(null);
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        pTag.put("Item", this.item.save(new CompoundTag()));
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        tag.put("Item", this.item.save(provider));
     }
 
     @Nullable
@@ -132,9 +141,9 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
-        tag.put("Item", this.item.save(new CompoundTag()));
+        tag.put("Item", this.item.save(provider));
         return tag;
     }
 }

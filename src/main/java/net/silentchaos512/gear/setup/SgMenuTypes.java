@@ -17,7 +17,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.charger.ChargerContainerMenu;
 import net.silentchaos512.gear.block.charger.ChargerContainerScreen;
 import net.silentchaos512.gear.block.compounder.AlloyForgeScreen;
-import net.silentchaos512.gear.block.compounder.CompoundMakerContainer;
+import net.silentchaos512.gear.block.compounder.AlloyMakerContainer;
 import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
 import net.silentchaos512.gear.block.compounder.RefabricatorScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
@@ -38,22 +38,22 @@ public final class SgMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<MetalPressContainer>> METAL_PRESS = register("metal_press",
             MetalPressContainer::new);
 
-    public static final DeferredHolder<MenuType<?>, MenuType<CompoundMakerContainer>> METAL_ALLOYER = register("metal_alloyer",
-            (id, playerInventory, buffer) -> new CompoundMakerContainer(getMetalAlloyer(),
+    public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> METAL_ALLOYER = register("metal_alloyer",
+            (id, playerInventory, buffer) -> new AlloyMakerContainer(getMetalAlloyer(),
                     id,
                     playerInventory,
                     buffer,
                     SgBlocks.ALLOY_FORGE.get().getCategories()));
 
-    public static final DeferredHolder<MenuType<?>, MenuType<CompoundMakerContainer>> RECRYSTALLIZER = register("recrystallizer",
-            (id, playerInventory, buffer) -> new CompoundMakerContainer(getRecrystallizer(),
+    public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> RECRYSTALLIZER = register("recrystallizer",
+            (id, playerInventory, buffer) -> new AlloyMakerContainer(getRecrystallizer(),
                     id,
                     playerInventory,
                     buffer,
                     SgBlocks.RECRYSTALLIZER.get().getCategories()));
 
-    public static final DeferredHolder<MenuType<?>, MenuType<CompoundMakerContainer>> REFABRICATOR = register("refabricator",
-            (id, playerInventory, buffer) -> new CompoundMakerContainer(getRefabricator(),
+    public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> REFABRICATOR = register("refabricator",
+            (id, playerInventory, buffer) -> new AlloyMakerContainer(getRefabricator(),
                     id,
                     playerInventory,
                     buffer,

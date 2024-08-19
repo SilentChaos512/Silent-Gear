@@ -1,10 +1,6 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,23 +11,26 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.part.PartDataList;
-import net.silentchaos512.gear.api.traits.ITrait;
+import net.silentchaos512.gear.api.part.PartList;
+import net.silentchaos512.gear.api.property.TraitListPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitFunction;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.trait.TraitManager;
+import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.gear.trait.Trait;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public final class TraitHelper {
-    private TraitHelper() {throw new IllegalAccessError("Utility class");}
+    private TraitHelper() {
+        throw new IllegalAccessError("Utility class");
+    }
 
     /**
      * An easy way to activate an item's traits from anywhere. <strong>Use with care!</strong>
@@ -54,20 +53,14 @@ public final class TraitHelper {
             return inputValue;
         }
 
-        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
+        var traitListProperty = GearData.getProperties(gear).get(GearProperties.TRAITS.get());
+        if (traitListProperty == null) return inputValue;
+
+        var traits = traitListProperty.value();
         float value = inputValue;
 
-        for (Tag nbt : tagList) {
-            if (nbt instanceof CompoundTag) {
-                CompoundTag tagCompound = (CompoundTag) nbt;
-                String regName = tagCompound.getString("Name");
-                ITrait trait = TraitManager.get(regName);
-
-                if (trait != null) {
-                    int level = tagCompound.getByte("Level");
-                    value = action.apply(trait, level, value);
-                }
-            }
+        for (TraitInstance trait : traits) {
+            value = action.apply(trait, value);
         }
 
         return value;
@@ -82,42 +75,12 @@ public final class TraitHelper {
      * @param trait The trait to look for
      * @return The level of the trait on the gear, or zero if it does not have the trait
      */
-    public static int getTraitLevel(ItemStack gear, DataResource<ITrait> trait) {
-        return getTraitLevel(gear, trait.getId());
-    }
-
-    /**
-     * Gets the level of the trait on the gear, or zero if it does not have the trait. Similar to
-     * {@link #activateTraits(ItemStack, float, TraitFunction)}, this pulls the traits straight from
-     * NBT to minimize object creation.
-     *
-     * @param gear  The {@link net.silentchaos512.gear.api.item.ICoreItem}
-     * @param trait The trait to look for
-     * @return The level of the trait on the gear, or zero if it does not have the trait
-     */
-    public static int getTraitLevel(ItemStack gear, ITrait trait) {
-        return getTraitLevel(gear, trait.getId());
-    }
-
-    /**
-     * Gets the level of the trait on the gear using the trait ID.
-     *
-     * @param gear    The gear item
-     * @param traitId The trait's ID
-     * @return The level of the trait on the gear, or zero if the item does not have the trait or
-     * the trait does not exist.
-     */
-    public static int getTraitLevel(ItemStack gear, ResourceLocation traitId) {
+    public static int getTraitLevel(ItemStack gear, DataResource<Trait> trait) {
         if (GearHelper.isGear(gear)) {
-            ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
-
-            for (Tag nbt : tagList) {
-                if (nbt instanceof CompoundTag) {
-                    CompoundTag tagCompound = (CompoundTag) nbt;
-                    String regName = tagCompound.getString("Name");
-                    if (regName.equals(traitId.toString())) {
-                        return tagCompound.getByte("Level");
-                    }
+            var list = GearData.getProperties(gear).getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
+            for (var traitInstance : list.value()) {
+                if (traitInstance.getTrait() == trait.get()) {
+                    return traitInstance.getLevel();
                 }
             }
         }
@@ -125,62 +88,53 @@ public final class TraitHelper {
         return 0;
     }
 
-    public static boolean hasTrait(ItemStack gear, DataResource<ITrait> trait) {
-        return hasTrait(gear, trait.getId());
-    }
-
     /**
-     * Check if the gear item has the given trait at any level. Use {@link #getTraitLevel(ItemStack,
-     * ITrait)} to check the actual level.
+     * Check if the gear item has the given trait at any level.
      *
      * @param gear  The gear item
      * @param trait The trait
      * @return True if and only if the gear item has the trait
      */
-    public static boolean hasTrait(ItemStack gear, ITrait trait) {
-        return hasTrait(gear, trait.getId());
-    }
-
-    /**
-     * Check if the gear item has the given trait at any level. Use {@link #getTraitLevel(ItemStack,
-     * ResourceLocation)} to check the actual level.
-     *
-     * @param gear    The gear item
-     * @param traitId The trait ID
-     * @return True if and only if the gear item has the trait
-     */
-    public static boolean hasTrait(ItemStack gear, ResourceLocation traitId) {
+    public static boolean hasTrait(ItemStack gear, DataResource<Trait> trait) {
         if (GearHelper.isGear(gear)) {
-            ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
-
-            for (Tag nbt : tagList) {
-                if (nbt instanceof CompoundTag) {
-                    CompoundTag tagCompound = (CompoundTag) nbt;
-                    String regName = tagCompound.getString("Name");
-                    if (regName.equals(traitId.toString())) {
-                        return true;
-                    }
+            var list = GearData.getProperties(gear).getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
+            for (var traitInstance : list.value()) {
+                if (traitInstance.getTrait() == trait.get()) {
+                    return true;
                 }
             }
-
-            return false;
         }
 
         return false;
     }
 
-    public static int getHighestLevelEitherHand(Player player, DataResource<ITrait> trait) {
-        return getHighestLevelEitherHand(player, trait.getId());
+    /**
+     * Check if the gear item has the given trait at any level.
+     *
+     * @param gear  The gear item
+     * @param trait The trait
+     * @return True if and only if the gear item has the trait
+     */
+    public static boolean hasTrait(ItemStack gear, Trait trait) {
+        if (GearHelper.isGear(gear)) {
+            var list = GearData.getProperties(gear).getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
+            for (var traitInstance : list.value()) {
+                if (traitInstance.getTrait() == trait) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
-    @Deprecated
-    public static int getHighestLevelEitherHand(Player player, ResourceLocation traitId) {
+    public static int getHighestLevelEitherHand(Player player, DataResource<Trait> trait) {
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
-        return Math.max(getTraitLevel(main, traitId), getTraitLevel(off, traitId));
+        return Math.max(getTraitLevel(main, trait), getTraitLevel(off, trait));
     }
 
-    public static int getHighestLevelArmor(Player player, DataResource<ITrait> trait) {
+    public static int getHighestLevelArmor(Player player, DataResource<Trait> trait) {
         int max = 0;
         for (ItemStack stack : player.getInventory().armor) {
             max = Math.max(max, getTraitLevel(stack, trait));
@@ -188,29 +142,24 @@ public final class TraitHelper {
         return max;
     }
 
-    public static int getHighestLevelCurio(LivingEntity entity, DataResource<ITrait> trait) {
+    public static int getHighestLevelCurio(LivingEntity entity, DataResource<Trait> trait) {
         if (ModList.get().isLoaded(Const.CURIOS)) {
             return CuriosCompat.getHighestTraitLevel(entity, trait);
         }
         return 0;
     }
 
-    public static int getHighestLevelArmorOrCurio(Player player, DataResource<ITrait> trait) {
+    public static int getHighestLevelArmorOrCurio(Player player, DataResource<Trait> trait) {
         return Math.max(getHighestLevelArmor(player, trait), getHighestLevelCurio(player, trait));
     }
 
-    public static boolean hasTraitEitherHand(Player player, DataResource<ITrait> trait) {
-        return hasTraitEitherHand(player, trait.getId());
-    }
-
-    @Deprecated
-    public static boolean hasTraitEitherHand(Player player, ResourceLocation traitId) {
+    public static boolean hasTraitEitherHand(Player player, DataResource<Trait> trait) {
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
-        return hasTrait(main, traitId) || hasTrait(off, traitId);
+        return hasTrait(main, trait) || hasTrait(off, trait);
     }
 
-    public static boolean hasTraitArmor(Player player, DataResource<ITrait> trait) {
+    public static boolean hasTraitArmor(Player player, DataResource<Trait> trait) {
         for (ItemStack stack : player.getInventory().armor) {
             if (hasTrait(stack, trait)) {
                 return true;
@@ -219,76 +168,61 @@ public final class TraitHelper {
         return false;
     }
 
-    public static Map<ITrait, Integer> getCachedTraits(ItemStack gear) {
-        if (!GearHelper.isGear(gear)) return ImmutableMap.of();
+    public static List<TraitInstance> getTraits(ItemStack gear) {
+        if (!GearHelper.isGear(gear)) return Collections.emptyList();
 
-        Map<ITrait, Integer> result = new LinkedHashMap<>();
-        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
-
-        for (Tag nbt : tagList) {
-            if (nbt instanceof CompoundTag) {
-                CompoundTag tagCompound = (CompoundTag) nbt;
-                String name = tagCompound.getString("Name");
-                ITrait trait = TraitManager.get(name);
-                int level = tagCompound.getByte("Level");
-                if (trait != null && level > 0) {
-                    result.put(trait, level);
-                }
-            }
+        var properties = GearData.getProperties(gear);
+        var traitList = properties.get(GearProperties.TRAITS);
+        if (traitList != null) {
+            return traitList.value();
         }
-
-        return result;
-    }
-
-    @Deprecated
-    public static Map<ITrait, Integer> getTraits(ItemStack gear, PartDataList parts) {
-        return getTraits(gear, GearHelper.getType(gear), parts);
+        return Collections.emptyList();
     }
 
     /**
      * Gets a Map of Traits and levels from the parts, used to calculate trait levels and should not
-     * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, ResourceLocation)} or
-     * {@link #hasTrait(ItemStack, ResourceLocation)} when appropriate.
+     * be used in most cases. Consider using {@link #getTraitLevel(ItemStack, DataResource)} when
+     * appropriate.
      *
      * @param gear     The item
      * @param gearType The gear type
      * @param parts    The list of all parts used in constructing the gear.
      * @return A Map of Traits to their levels
      */
-    public static Map<ITrait, Integer> getTraits(ItemStack gear, GearType gearType, PartDataList parts) {
+    public static Map<Trait, Integer> getTraitsFromParts(ItemStack gear, GearType gearType, PartList parts) {
         if (parts.isEmpty() || (!gear.isEmpty() && GearHelper.isBroken(gear)))
             return ImmutableMap.of();
 
-        Map<ITrait, Integer> result = new LinkedHashMap<>();
+        Map<Trait, Integer> result = new LinkedHashMap<>();
 
-        for (PartData part : parts) {
+        for (PartInstance part : parts) {
             PartGearKey key = PartGearKey.of(gearType, part);
-            for (TraitInstance inst : part.getTraits(key, gear)) {
+            for (TraitInstance inst : part.getTraits(key)) {
                 if (inst.conditionsMatch(key, gear, parts)) {
-                    ITrait trait = inst.getTrait();
+                    Trait trait = inst.getTrait();
                     // Get the highest value in any part
                     result.merge(trait, inst.getLevel(), Integer::max);
                 }
             }
         }
 
-        ITrait[] keys = result.keySet().toArray(new ITrait[0]);
+        Trait[] keys = result.keySet().toArray(new Trait[0]);
 
         cancelTraits(result, keys);
         NeoForge.EVENT_BUS.post(new GetTraitsEvent(gear, parts, result));
         return result;
     }
 
-    public static List<TraitInstance> getTraits(List<? extends IGearComponentInstance<?>> components, PartGearKey partKey, ItemStack gear) {
+    public static List<TraitInstance> getTraitsFromComponents(List<? extends GearComponentInstance<?>> components, PartGearKey partKey, ItemStack gear) {
         if (components.isEmpty()) {
             return Collections.emptyList();
         }
 
-        Map<ITrait, Integer> map = new LinkedHashMap<>();
-        Map<ITrait, Integer> countMatsWithTrait = new HashMap<>();
+        Map<Trait, Integer> map = new LinkedHashMap<>();
+        Map<Trait, Integer> countMatsWithTrait = new HashMap<>();
 
-        for (IGearComponentInstance<?> comp : components) {
-            for (TraitInstance inst : comp.getTraits(partKey, gear)) {
+        for (GearComponentInstance<?> comp : components) {
+            for (TraitInstance inst : comp.getTraits(partKey)) {
                 if (inst.conditionsMatch(partKey, gear, components)) {
                     map.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
                     countMatsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
@@ -296,9 +230,9 @@ public final class TraitHelper {
             }
         }
 
-        ITrait[] keys = map.keySet().toArray(new ITrait[0]);
+        Trait[] keys = map.keySet().toArray(new Trait[0]);
 
-        for (ITrait trait : keys) {
+        for (Trait trait : keys) {
             final int matsWithTrait = countMatsWithTrait.get(trait);
             final float divisor = Math.max(components.size() / 2f, matsWithTrait);
             final int value = Math.round(map.get(trait) / divisor);
@@ -314,13 +248,13 @@ public final class TraitHelper {
         return ret;
     }
 
-    private static void cancelTraits(Map<ITrait, Integer> mapToModify, ITrait[] keys) {
-        for (int i = 0; i < keys.length; ++i) {
-            ITrait t1 = keys[i];
+    private static void cancelTraits(Map<Trait, Integer> mapToModify, Trait[] keys) {
+        /*for (int i = 0; i < keys.length; ++i) {
+            Trait t1 = keys[i];
 
             if (mapToModify.containsKey(t1)) {
                 for (int j = i + 1; j < keys.length; ++j) {
-                    ITrait t2 = keys[j];
+                    Trait t2 = keys[j];
 
                     if (mapToModify.containsKey(t2) && t1.willCancelWith(t2)) {
                         final int level = mapToModify.get(t1);
@@ -342,22 +276,15 @@ public final class TraitHelper {
                     }
                 }
             }
-        }
+        }*/
     }
 
     static void tickTraits(Level world, @Nullable Player player, ItemStack gear, boolean isEquipped) {
-        ListTag tagList = GearData.getPropertiesData(gear).getList("Traits", Tag.TAG_COMPOUND);
+        var traits = GearData.getProperties(gear).get(GearProperties.TRAITS);
+        if (traits == null) return;
 
-        for (int i = 0; i < tagList.size(); ++i) {
-            CompoundTag tagCompound = tagList.getCompound(i);
-            String regName = tagCompound.getString("Name");
-            ITrait trait = TraitManager.get(regName);
-
-            if (trait != null) {
-                int level = tagCompound.getByte("Level");
-                TraitActionContext context = new TraitActionContext(player, level, gear);
-                trait.onUpdate(context, isEquipped);
-            }
+        for (var trait : traits.value()) {
+            trait.getTrait().onUpdate(new TraitActionContext(player, trait, gear), isEquipped);
         }
     }
 }

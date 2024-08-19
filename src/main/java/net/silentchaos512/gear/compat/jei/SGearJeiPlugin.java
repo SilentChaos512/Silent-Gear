@@ -19,8 +19,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.block.compounder.AlloyForgeScreen;
 import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
 import net.silentchaos512.gear.block.compounder.RefabricatorScreen;
@@ -33,13 +31,14 @@ import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomMaterialItem;
-import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRecipes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -94,22 +93,9 @@ public class SGearJeiPlugin implements IModPlugin {
                             new ItemStack(item),
                             NonNullList.of(Ingredient.EMPTY,
                                     Ingredient.of(item),
-                                    PartMaterialIngredient.of(PartType.MAIN),
-                                    PartMaterialIngredient.of(PartType.MAIN),
-                                    PartMaterialIngredient.of(PartType.MAIN)
-                            )
-                    )
-            )));
-            reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new RecipeHolder<>(
-                    SilentGear.getId(itemName + "_fragments"),
-                    new ShapelessRecipe("",
-                            CraftingBookCategory.MISC,
-                            new ItemStack(item),
-                            NonNullList.of(Ingredient.EMPTY,
-                                    Ingredient.of(item),
-                                    Ingredient.of(SgItems.FRAGMENT),
-                                    Ingredient.of(SgItems.FRAGMENT),
-                                    Ingredient.of(SgItems.FRAGMENT)
+                                    new Ingredient(PartMaterialIngredient.of(PartTypes.MAIN.get())),
+                                    new Ingredient(PartMaterialIngredient.of(PartTypes.MAIN.get())),
+                                    new Ingredient(PartMaterialIngredient.of(PartTypes.MAIN.get()))
                             )
                     )
             )));
@@ -191,13 +177,8 @@ public class SGearJeiPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration reg) {
-        reg.registerSubtypeInterpreter(SgItems.FRAGMENT.get(), (stack, context) -> {
-            IMaterialInstance material = FragmentItem.getMaterial(stack);
-            return material != null ? material.getId().toString() : "";
-        });
-
         IIngredientSubtypeInterpreter<ItemStack> customMaterials = (stack, context) -> {
-            IMaterialInstance material = CustomMaterialItem.getMaterial(stack);
+            MaterialInstance material = CustomMaterialItem.getMaterial(stack);
             return material != null ? material.getId().toString() : "";
         };
         reg.registerSubtypeInterpreter(SgItems.CUSTOM_GEM.get(), customMaterials);

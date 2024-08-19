@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.color.item.ItemColor;
@@ -26,7 +26,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.stats.ItemStat;
 import net.silentchaos512.gear.api.stats.ItemStats;
@@ -34,6 +33,9 @@ import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
+import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
@@ -42,94 +44,52 @@ import net.silentchaos512.lib.util.Color;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearArrowItem extends ArrowItem implements ICoreItem {
-    private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            ItemStats.DURABILITY,
-            ItemStats.REPAIR_EFFICIENCY,
-            ItemStats.RANGED_DAMAGE,
-            ItemStats.PROJECTILE_SPEED,
-            ItemStats.PROJECTILE_ACCURACY
-    );
+    private static final Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
+            PartTypes.MAIN.get(),
+            PartTypes.ROD.get(),
+            PartTypes.FLETCHING.get()
+    ));
 
-    private static final Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
-            ItemStats.ARMOR_DURABILITY,
-            ItemStats.REPAIR_VALUE,
-            ItemStats.MELEE_DAMAGE,
-            ItemStats.ATTACK_SPEED,
-            ItemStats.ATTACK_REACH,
-            ItemStats.RANGED_SPEED,
-            ItemStats.ARMOR,
-            ItemStats.ARMOR_TOUGHNESS,
-            ItemStats.MAGIC_ARMOR,
-            ItemStats.KNOCKBACK_RESISTANCE
-    );
+    private final Supplier<GearType> gearType;
 
-    private static final Collection<PartType> REQUIRED_PARTS = ImmutableList.of(
-            PartType.MAIN,
-            PartType.ROD,
-            PartType.FLETCHING
-    );
-
-    public GearArrowItem(Properties builder) {
-        super(builder);
+    public GearArrowItem(Supplier<GearType> gearType) {
+        super(new Properties().stacksTo(64));
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.ARROW;
+        return this.gearType.get();
     }
 
     @Override
     public float getRepairModifier(ItemStack stack) {
-        int durability = GearData.getStatInt(stack, getDurabilityStat());
+        int durability = (int) GearData.getProperties(stack).getNumber(getDurabilityStat());
         if (durability == 0) return 1f;
         return (float) getMaxDamage(stack) / durability;
     }
 
     @Override
-    public Set<ItemStat> getRelevantStats(ItemStack stack) {
-        return RELEVANT_STATS;
-    }
-
-    @Override
-    public Set<ItemStat> getExcludedStats(ItemStack stack) {
-        return EXCLUDED_STATS;
-    }
-
-    @Override
     public Collection<PartType> getRequiredParts() {
-        return REQUIRED_PARTS;
+        return REQUIRED_PARTS.get();
     }
 
     @Override
-    public Collection<PartType> getRenderParts() {
-        return ImmutableList.of(
-                PartType.ROD,
-                PartType.FLETCHING,
-                PartType.MAIN
-        );
-    }
-
-    @Override
-    public ItemStack construct(Collection<? extends IPartData> parts) {
+    public ItemStack construct(Collection<PartInstance> parts) {
         ItemStack result = ICoreItem.super.construct(parts);
         result.setDamageValue(result.getMaxDamage() - 64);
         return result;
     }
 
     @Override
-    public boolean hasTexturesFor(PartType partType) {
-        return REQUIRED_PARTS.contains(partType) || partType.isUpgrade();
-    }
-
-    @Override
     public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        GearArrowEntity arrow = new GearArrowEntity(worldIn, shooter, stack);
+        GearArrowEntity arrow = new GearArrowEntity(worldIn, shooter, stack.copyWithCount(1));
         arrow.setArrowStack(stack);
-        arrow.setBaseDamage(GearData.getStat(stack, ItemStats.RANGED_DAMAGE));
+        arrow.setBaseDamage(GearData.getProperties(stack).getNumber(GearProperties.RANGED_DAMAGE));
 
         if (shooter instanceof Player && !((Player) shooter).getAbilities().instabuild) {
             // Consume an arrow
@@ -137,11 +97,6 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
         }
 
         return arrow;
-    }
-
-    @Override
-    public boolean isInfinite(ItemStack stack, ItemStack bow, Player player) {
-        return !GearHelper.isBroken(stack);
     }
 
     @Override
@@ -178,7 +133,7 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
         if (!KeyTracker.isDisplayStatsDown() && !KeyTracker.isDisplayTraitsDown() && !KeyTracker.isDisplayConstructionDown()) {
             tooltip.add(Component.literal("Do not use with vanilla crossbows, see issue #270")
                     .withStyle(ChatFormatting.RED));
@@ -186,7 +141,7 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
 
         tooltip.add(TextUtil.misc("ammo", stack.getMaxDamage() - stack.getDamageValue()));
 
-        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
+        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
     }
 
     @Override

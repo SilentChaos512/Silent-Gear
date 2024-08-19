@@ -17,13 +17,12 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.block.compounder.CompoundMakerBlockEntity;
-import net.silentchaos512.gear.block.compounder.CompoundMakerInfo;
+import net.silentchaos512.gear.block.compounder.AlloyMakerBlockEntity;
+import net.silentchaos512.gear.block.compounder.AlloyMakerInfo;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -35,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 
-public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
+public class AlloyRecipe implements Recipe<AlloyMakerBlockEntity<?>> {
     final List<Ingredient> ingredients = new ArrayList<>();
     final Result result;
 
@@ -44,7 +43,7 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
         this.ingredients.addAll(ingredients);
     }
 
-    public static <R extends AlloyRecipe> R makeExample(CompoundMakerInfo<?> info, int count, BiFunction<Result, List<Ingredient>, R> recipeFactory) {
+    public static <R extends AlloyRecipe> R makeExample(AlloyMakerInfo<?> info, int count, BiFunction<Result, List<Ingredient>, R> recipeFactory) {
         IMaterialCategory[] cats = info.getCategories().toArray(new IMaterialCategory[0]);
         List<Ingredient> list = new ArrayList<>();
         for (int i = 0; i < count; ++i) {
@@ -55,7 +54,7 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
     }
 
     @Override
-    public boolean matches(CompoundMakerBlockEntity<?> inv, Level worldIn) {
+    public boolean matches(AlloyMakerBlockEntity<?> inv, Level worldIn) {
         Set<Integer> matches = new HashSet<>();
         int inputs = 0;
 
@@ -87,7 +86,7 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
     }
 
     @Override
-    public ItemStack assemble(CompoundMakerBlockEntity<?> inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(AlloyMakerBlockEntity<?> inv, HolderLookup.Provider registryAccess) {
         return this.result.getResult();
     }
 
@@ -126,7 +125,7 @@ public class AlloyRecipe implements Recipe<CompoundMakerBlockEntity<?>> {
     public record Result(
             Item item,
             int count,
-            @Nullable DataResource<IMaterial> material
+            @Nullable DataResource<Material> material
     ) {
         public static final Codec<Result> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(

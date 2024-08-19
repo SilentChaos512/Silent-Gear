@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
@@ -73,12 +73,12 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
     private final MaterialGrade minGrade;
     private final MaterialGrade maxGrade;
     @Nullable
-    private final DataResource<IMaterial> material;
+    private final DataResource<Material> material;
     private final Set<IMaterialCategory> categories = new LinkedHashSet<>();
 
     public PartMaterialIngredient(PartType partType, GearType gearType,
                                   MaterialGrade minGrade, MaterialGrade maxGrade,
-                                  @Nullable DataResource<IMaterial> material,
+                                  @Nullable DataResource<Material> material,
                                   Collection<IMaterialCategory> categories
     ) {
         this.partType = partType;
@@ -144,7 +144,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
             );
             text = TextUtil.withColor(cats, Color.INDIANRED);
         } else {
-            MutableComponent any = TextUtil.translate("material.category", "any");
+            MutableComponent any = TextUtil.translate("material.group", "any");
             text = TextUtil.withColor(any, Color.LIGHTGREEN);
         }
 
@@ -177,7 +177,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
 
     @Override
     public Stream<ItemStack> getItems() {
-        Collection<IMaterial> materials = MaterialManager.getValues();
+        Collection<Material> materials = MaterialManager.getValues();
         if (!materials.isEmpty()) {
             return materials.stream()
                     .map(MaterialInstance::of)
@@ -201,7 +201,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
         private final GearType gearType;
         private MaterialGrade minGrade = MaterialGrade.NONE;
         private MaterialGrade maxGrade = MaterialGrade.NONE;
-        private DataResource<IMaterial> material;
+        private DataResource<Material> material;
         private final Set<IMaterialCategory> categories = new LinkedHashSet<>();
 
         public Builder(PartType partType, GearType gearType) {
@@ -224,7 +224,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
             return this;
         }
 
-        public Builder withMaterial(DataResource<IMaterial> material) {
+        public Builder withMaterial(DataResource<Material> material) {
             this.material = material;
             return this;
         }

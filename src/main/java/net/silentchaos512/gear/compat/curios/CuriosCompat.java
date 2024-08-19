@@ -4,8 +4,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.util.DataResource;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.util.TraitHelper;
 import top.theillusivec4.curios.api.CuriosApi;
 
@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class CuriosCompat {
     private CuriosCompat() {}
 
-    public static int getHighestTraitLevel(LivingEntity entity, DataResource<ITrait> trait) {
+    public static int getHighestTraitLevel(LivingEntity entity, DataResource<Trait> trait) {
         AtomicInteger max = new AtomicInteger();
         CuriosApi.getCuriosInventory(entity).ifPresent(inventory -> {
             inventory.getCurios().forEach((identifier, slotInventory) -> {

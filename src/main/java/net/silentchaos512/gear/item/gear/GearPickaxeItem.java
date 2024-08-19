@@ -10,7 +10,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,20 +32,16 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
     public static final Set<ToolAction> ACTIONS_WITH_SPOON = GearHelper.makeToolActionSet(ToolActions.PICKAXE_DIG, ToolActions.SHOVEL_DIG);
 
-    private final GearType gearType;
+    private final Supplier<GearType> gearType;
 
-    public GearPickaxeItem(GearType gearType) {
+    public GearPickaxeItem(Supplier<GearType> gearType) {
         super(GearHelper.DEFAULT_DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
-    }
-
-    @Override
-    public Tier getTier() {
-        return Config.Common.isLoaded() ? Config.Common.dummyToolTier.get() : GearHelper.DEFAULT_DUMMY_TIER;
     }
 
     @Override
@@ -64,7 +62,7 @@ public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
 
     @Override
     public GearType getGearType() {
-        return gearType;
+        return gearType.get();
     }
 
     @Override
@@ -106,6 +104,11 @@ public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
     @Override
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return GearHelper.getIsRepairable(toRepair, repair);
+    }
+
+    @Override
+    public ItemAttributeModifiers getAttributeModifiers(ItemStack stack) {
+        return super.getAttributeModifiers(stack);
     }
 
     @Override

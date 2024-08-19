@@ -7,7 +7,7 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.part.IGearPart;
+import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -27,14 +27,14 @@ public class HasPartTrigger extends SimpleCriterionTrigger<HasPartTrigger.Instan
 
     public record Instance(
             Optional<ContextAwarePredicate> player,
-            Optional<DataResource<IGearPart>> part,
+            Optional<DataResource<GearPart>> part,
             Optional<PartType> partType
     ) implements SimpleInstance {
         public static final Codec<Instance> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                         EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
                         DataResource.PART_CODEC.optionalFieldOf("part").forGetter(Instance::part),
-                        SgRegistries.PART_TYPES.byNameCodec().optionalFieldOf("part_type").forGetter(Instance::partType)
+                        SgRegistries.PART_TYPE.byNameCodec().optionalFieldOf("part_type").forGetter(Instance::partType)
                 ).apply(instance, Instance::new)
         );
 

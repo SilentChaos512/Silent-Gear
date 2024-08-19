@@ -39,7 +39,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
         icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(SgBlocks.SALVAGER));
         arrow = guiHelper.drawableBuilder(SalvagerScreen.TEXTURE, 176, 14, 24, 17)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
-        localizedName = TextUtil.translate("jei", "category.salvaging");
+        localizedName = TextUtil.translate("jei", "group.salvaging");
     }
 
     @Override

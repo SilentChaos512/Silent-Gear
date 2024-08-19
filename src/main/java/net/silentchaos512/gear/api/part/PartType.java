@@ -12,12 +12,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
-import net.silentchaos512.gear.gear.material.LazyMaterialInstance;
-import net.silentchaos512.gear.gear.part.LazyPartData;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -35,8 +34,8 @@ public record PartType(
         int maxPerItem,
         @Nullable Function<GearType, Optional<CompoundPartItem>> compoundParts
 ) {
-    public static Codec<PartType> CODEC = CodecUtils.byModNameCodec(SgRegistries.PART_TYPES);
-    public static StreamCodec<RegistryFriendlyByteBuf, PartType> STREAM_CODEC = ByteBufCodecs.registry(SgRegistries.PART_TYPES_KEY);
+    public static Codec<PartType> CODEC = CodecUtils.byModNameCodec(SgRegistries.PART_TYPE);
+    public static StreamCodec<RegistryFriendlyByteBuf, PartType> STREAM_CODEC = ByteBufCodecs.registry(SgRegistries.PART_TYPE_KEY);
 
     private static final Map<PartGearKey, Optional<CompoundPartItem>> ITEM_CACHE = new HashMap<>();
 
@@ -49,8 +48,8 @@ public record PartType(
         );
     }
 
-    public MutableComponent getDisplayName(int tier) {
-        var name = SgRegistries.PART_TYPES.getKey(this);
+    public MutableComponent getDisplayName() {
+        var name = SgRegistries.PART_TYPE.getKey(this);
         if (name == null) {
             return Component.literal("Unknown Part Type");
         }
@@ -72,23 +71,25 @@ public record PartType(
         return ITEM_CACHE.computeIfAbsent(key, gt -> compoundParts.apply(gearType));
     }
 
-    public Optional<? extends IPartData> makeCompoundPart(GearType gearType, DataResource<IMaterial> material) {
-        return makeCompoundPart(gearType, Collections.singletonList(LazyMaterialInstance.of(material)));
+    public Optional<? extends PartInstance> makeCompoundPart(GearType gearType, DataResource<Material> material) {
+        return makeCompoundPart(gearType, MaterialInstance.of(material));
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public Optional<? extends IPartData> makeCompoundPart(GearType gearType, List<IMaterialInstance> materials) {
+    public Optional<? extends PartInstance> makeCompoundPart(GearType gearType, MaterialInstance materials) {
         return getCompoundPartItem(gearType)
                 .map(item -> {
                     ItemStack stack = item.create(materials);
-                    return LazyPartData.of(this.getCompoundPartId(gearType), stack);
+                    return PartInstance.of(DataResource.part(this.getCompoundPartId(gearType)), stack);
                 });
     }
 
     public static Optional<CompoundPartItem> getToolHeadItem(GearType gearType) {
         for (Item item : BuiltInRegistries.ITEM.stream().toList()) {
-            if (item instanceof MainPartItem && gearType == ((MainPartItem) item).getGearType()) {
-                return Optional.of((CompoundPartItem) item);
+            if (item instanceof MainPartItem) {
+                var itemGearType = ((MainPartItem) item).getGearType();
+                if (itemGearType.matches(gearType)) {
+                    return Optional.of((CompoundPartItem) item);
+                }
             }
         }
 

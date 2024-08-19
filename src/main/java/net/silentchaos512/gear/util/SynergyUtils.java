@@ -1,19 +1,16 @@
 package net.silentchaos512.gear.util;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.gear.trait.SynergyTrait;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class SynergyUtils {
@@ -24,54 +21,78 @@ public final class SynergyUtils {
     private static final double SYNERGY_MULTI = 1.1;
     private static final double MIN_VALUE = 0.1;
     public static final double MAX_VALUE = 2.0;
+    public static final double RARITY_WEIGHT = 0.001; // was 0.005 in pre-1.21
+    public static final double NO_SHARED_CATEGORY_PENALTY = 0.2;
+    public static final double SHARED_CATEGORY_BONUS = 0.015;
 
     private SynergyUtils() {}
 
-    public static float getSynergy(PartType partType, List<? extends IMaterialInstance> materials, Collection<TraitInstance> traits) {
-        // TODO: Factor material categories into calculation, decrease weight of rarity and maybe tier
-        //  https://github.com/SilentChaos512/Silent-Gear/issues/267
-
-        if (materials.isEmpty()) {
+    public static float getSynergy(PartType partType, List<MaterialInstance> materials, Collection<TraitInstance> traits) {
+        if (materials.size() < 2) {
             return 1;
         }
 
         // First, we add a bonus for the number of unique materials
         double synergy = getBaseSynergy(materials);
 
-        // Second, reduce synergy for differences in certain properties
-        IMaterialInstance primary = materials.get(0);
-        final double primaryRarity = primary.getStat(partType, ItemStats.RARITY);
+        Map<IMaterialCategory, Integer> categoryCounts = getCategoryCounts(materials);
+
+        // Reduce synergy if all materials do not share at least one category
+        if (!hasSharedCategoryOnAllMaterials(categoryCounts, materials.size())) {
+            synergy -= NO_SHARED_CATEGORY_PENALTY;
+        }
+
+        // Bonus synergy for shared categories
+        for (int k : categoryCounts.values()) {
+            if (k > 1) {
+                synergy += SHARED_CATEGORY_BONUS * k;
+            }
+        }
+
+        // Reduce synergy for differences in certain properties
+        MaterialInstance primary = materials.getFirst();
+        final double primaryRarity = primary.getProperty(partType, GearProperties.RARITY.get());
         final double maxRarity = materials.stream()
-                .mapToDouble(m -> m.getStat(partType, ItemStats.RARITY))
-                .max().orElse(0);
-        final int maxTier = materials.stream()
-                .mapToInt(m -> m.getTier(partType))
+                .mapToDouble(m -> m.getProperty(partType, GearProperties.RARITY.get()))
                 .max().orElse(0);
 
-        for (IMaterialInstance material : getUniques(materials)) {
+        for (MaterialInstance material : getUniques(materials)) {
             if (maxRarity > 0) {
-                float rarity = material.getStat(partType, ItemStats.RARITY);
-                synergy -= 0.005 * Math.abs(primaryRarity - rarity);
-            }
-            if (maxTier > 0) {
-                int tier = material.getTier(partType);
-                synergy -= 0.08 * Math.abs(maxTier - tier);
+                float rarity = material.getProperty(partType, GearProperties.RARITY.get());
+                synergy -= RARITY_WEIGHT * Math.abs(primaryRarity - rarity);
             }
         }
 
         // Synergy traits
         for (TraitInstance trait : traits) {
-            if (trait.getTrait() instanceof SynergyTrait) {
-                synergy = ((SynergyTrait) trait.getTrait()).apply(synergy, trait.getLevel());
-            }
+            synergy = trait.getTrait().onCalculateSynergy(synergy, trait.getLevel());
         }
 
         return (float) Mth.clamp(synergy, MIN_VALUE, MAX_VALUE);
     }
 
-    public static Collection<IMaterialInstance> getUniques(Collection<? extends IMaterialInstance> materials) {
-        Map<ResourceLocation, IMaterialInstance> ret = new LinkedHashMap<>();
-        for (IMaterialInstance material : materials) {
+    private static Map<IMaterialCategory, Integer> getCategoryCounts(List<MaterialInstance> materials) {
+        Map<IMaterialCategory, Integer> ret = new HashMap<>();
+        for (var mat : materials) {
+            for (IMaterialCategory cat : mat.getCategories()) {
+                ret.merge(cat, 1, Integer::sum);
+            }
+        }
+        return ret;
+    }
+
+    private static boolean hasSharedCategoryOnAllMaterials(Map<IMaterialCategory, Integer> categoryCounts, int materialCount) {
+        for (int k : categoryCounts.values()) {
+            if (k == materialCount) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Collection<MaterialInstance> getUniques(Collection<? extends MaterialInstance> materials) {
+        Map<ResourceLocation, MaterialInstance> ret = new LinkedHashMap<>();
+        for (MaterialInstance material : materials) {
             ret.put(material.getId(), material);
         }
         return ret.values();
@@ -83,15 +104,15 @@ public final class SynergyUtils {
         return TextUtil.translate("misc", "synergy", value);
     }
 
-    private static double getBaseSynergy(Collection<? extends IMaterialInstance> materials) {
+    private static double getBaseSynergy(Collection<? extends MaterialInstance> materials) {
         final int x = getUniqueCount(materials);
         final double a = SYNERGY_MULTI;
         return a * (x / (x + a)) + (1 / (1 + a));
     }
 
-    private static int getUniqueCount(Collection<? extends IMaterialInstance> materials) {
+    private static int getUniqueCount(Collection<? extends MaterialInstance> materials) {
         return materials.stream()
-                .map(IMaterialInstance::getId)
+                .map(MaterialInstance::getId)
                 .collect(Collectors.toSet())
                 .size();
     }

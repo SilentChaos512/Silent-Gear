@@ -10,28 +10,29 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
-import net.silentchaos512.gear.api.util.IGearComponentInstance;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public record GearTypeTraitCondition(GearType gearType) implements ITraitCondition {
     public static final MapCodec<GearTypeTraitCondition> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    SgRegistries.GEAR_TYPES.byNameCodec().fieldOf("gear_type").forGetter(c -> c.gearType)
+                    SgRegistries.GEAR_TYPE.byNameCodec().fieldOf("gear_type").forGetter(c -> c.gearType)
             ).apply(instance, GearTypeTraitCondition::new)
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, GearTypeTraitCondition> STREAM_CODEC = StreamCodec.of(
             (buf, con) -> {
-                ByteBufCodecs.registry(SgRegistries.GEAR_TYPES_KEY).encode(buf, con.gearType);
+                ByteBufCodecs.registry(SgRegistries.GEAR_TYPE_KEY).encode(buf, con.gearType);
             },
             buf -> {
-                var gearType = ByteBufCodecs.registry(SgRegistries.GEAR_TYPES_KEY).decode(buf);
+                var gearType = ByteBufCodecs.registry(SgRegistries.GEAR_TYPE_KEY).decode(buf);
                 return new GearTypeTraitCondition(gearType);
             }
     );
@@ -39,9 +40,8 @@ public record GearTypeTraitCondition(GearType gearType) implements ITraitConditi
 
     private static final ResourceLocation NAME = SilentGear.getId("gear_type");
 
-    @Override
-    public ResourceLocation getId() {
-        return NAME;
+    public GearTypeTraitCondition(Supplier<GearType> gearType) {
+        this(gearType.get());
     }
 
     @Override
@@ -50,7 +50,7 @@ public record GearTypeTraitCondition(GearType gearType) implements ITraitConditi
     }
 
     @Override
-    public boolean matches(ITrait trait, PartGearKey key, ItemStack gear, List<? extends IGearComponentInstance<?>> components) {
+    public boolean matches(Trait trait, PartGearKey key, ItemStack gear, List<? extends GearComponentInstance<?>> components) {
         return gear.isEmpty() || key.getGearType().matches(this.gearType);
     }
 

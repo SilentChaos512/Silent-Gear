@@ -1,63 +1,54 @@
 package net.silentchaos512.gear.api.data.trait;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.silentchaos512.gear.api.ApiConst;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.traits.ITrait;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
+import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.gear.trait.TraitSerializers;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.gear.trait.condition.GearTypeTraitCondition;
 import net.silentchaos512.gear.gear.trait.condition.OrTraitCondition;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Consumer;
+import java.util.*;
+import java.util.function.Supplier;
 
 public class TraitBuilder {
-    private final ResourceLocation traitId;
+    private final DataResource<Trait> trait;
     protected final int maxLevel;
-    protected final ResourceLocation type;
-
     private Component name;
     private Component description;
+    private final List<TraitEffect> effects = new ArrayList<>();
+    private final List<ITraitCondition> conditions = new ArrayList<>();
+    private final List<ResourceLocation> cancelsList = new ArrayList<>();
+    private final List<ResourceLocation> overridesList = new ArrayList<>();
+    private final List<Component> extraWikiLines = new ArrayList<>();
 
-    private final Collection<ITraitCondition> conditions = new ArrayList<>();
-    private final Collection<ResourceLocation> cancelsList = new ArrayList<>();
-    private final Collection<ResourceLocation> overridesList = new ArrayList<>();
-    private final Collection<Component> extraWikiLines = new ArrayList<>();
-
-    private Consumer<JsonObject> extraData = json -> {};
-
-    public TraitBuilder(DataResource<ITrait> trait, int maxLevel, ResourceLocation serializerId) {
-        this(trait.getId(), maxLevel, serializerId);
-    }
-
-    public TraitBuilder(ResourceLocation traitId, int maxLevel, ResourceLocation serializerId) {
-        this.traitId = traitId;
-        this.type = serializerId;
+    public TraitBuilder(DataResource<Trait> trait, int maxLevel) {
+        this.trait = trait;
         this.maxLevel = maxLevel;
 
-        this.name = Component.translatable(Util.makeDescriptionId("trait", traitId));
-        this.description = Component.translatable(Util.makeDescriptionId("trait", traitId) + ".desc");
+        this.name = Component.translatable(Util.makeDescriptionId("trait", this.trait.getId()));
+        this.description = Component.translatable(Util.makeDescriptionId("trait", this.trait.getId()) + ".desc");
     }
 
-    public static TraitBuilder simple(DataResource<ITrait> trait, int maxLevel) {
-        return simple(trait.getId(), maxLevel);
+    public static TraitBuilder of(DataResource<Trait> trait, int maxLevel) {
+        return new TraitBuilder(trait, maxLevel);
     }
 
-    public static TraitBuilder simple(ResourceLocation traitId, int maxLevel) {
-        return new TraitBuilder(traitId, maxLevel, ApiConst.SIMPLE_TRAIT_ID);
+    public DataResource<Trait> getTrait() {
+        return trait;
     }
 
-    public ResourceLocation getTraitId() {
-        return traitId;
+    public TraitBuilder effects(TraitEffect first, TraitEffect... rest) {
+        this.effects.add(first);
+        if (rest.length > 0) {
+            this.effects.addAll(Arrays.stream(rest).toList());
+        }
+        return this;
     }
 
     public TraitBuilder setName(Component text) {
@@ -75,11 +66,12 @@ public class TraitBuilder {
         return this;
     }
 
-    public TraitBuilder withGearTypeCondition(GearType first, GearType... rest) {
+    @SafeVarargs
+    public final TraitBuilder withGearTypeCondition(Supplier<GearType> first, Supplier<GearType>... rest) {
         if (rest.length > 0) {
             Collection<GearType> types = new ArrayList<>(rest.length + 1);
-            types.add(first);
-            Collections.addAll(types, rest);
+            types.add(first.get());
+            Arrays.stream(rest).map(Supplier::get).forEach(types::add);
 
             GearTypeTraitCondition[] values = types.stream()
                     .map(GearTypeTraitCondition::new)
@@ -87,10 +79,10 @@ public class TraitBuilder {
 
             return withConditions(new OrTraitCondition(values));
         }
-        return withConditions(new GearTypeTraitCondition(first));
+        return withConditions(new GearTypeTraitCondition(first.get()));
     }
 
-    public TraitBuilder cancelsWith(DataResource<ITrait> trait) {
+    public TraitBuilder cancelsWith(DataResource<Trait> trait) {
         return cancelsWith(trait.getId());
     }
 
@@ -99,7 +91,7 @@ public class TraitBuilder {
         return this;
     }
 
-    public TraitBuilder overridesTrait(DataResource<ITrait> trait) {
+    public TraitBuilder overridesTrait(DataResource<Trait> trait) {
         return overridesTrait(trait.getId());
     }
 
@@ -120,53 +112,17 @@ public class TraitBuilder {
         return this;
     }
 
-    /**
-     * The "I don't feel like extending the class for this basic trait" method. Use it to append
-     * small amounts of extra properties to JSON.
-     *
-     * @param consumer The consumer
-     * @return The trait builder
-     */
-    public TraitBuilder extraData(Consumer<JsonObject> consumer) {
-        this.extraData = consumer;
-        return this;
-    }
-
     public JsonObject serialize() {
-        JsonObject json = new JsonObject();
+        var traitObj = new Trait(
+                this.maxLevel,
+                this.name,
+                this.description,
+                this.effects,
+                this.conditions,
+                this.extraWikiLines
+        );
 
-        json.addProperty("type", this.type.toString());
-        json.addProperty("max_level", this.maxLevel);
-
-        if (!this.conditions.isEmpty()) {
-            JsonArray array = new JsonArray();
-            this.conditions.forEach(c -> array.add(TraitSerializers.serializeCondition(c)));
-            json.add("conditions", array);
-        }
-
-        json.add("name", Component.Serializer.toJsonTree(this.name));
-        json.add("description", Component.Serializer.toJsonTree(this.description));
-
-        if (!this.cancelsList.isEmpty()) {
-            JsonArray cancelsArray = new JsonArray();
-            this.cancelsList.forEach(id -> cancelsArray.add(id.toString()));
-            json.add("cancels_with", cancelsArray);
-        }
-
-        if (!this.overridesList.isEmpty()) {
-            JsonArray overridesArray = new JsonArray();
-            this.overridesList.forEach(id -> overridesArray.add(id.toString()));
-            json.add("overrides", overridesArray);
-        }
-
-        if (!this.extraWikiLines.isEmpty()) {
-            JsonArray array = new JsonArray();
-            this.extraWikiLines.forEach(t -> array.add(Component.Serializer.toJsonTree(t)));
-            json.add("extra_wiki_lines", array);
-        }
-
-        this.extraData.accept(json);
-
-        return json;
+        var json = Trait.CODEC.encodeStart(JsonOps.INSTANCE, traitObj).getOrThrow();
+        return json.getAsJsonObject();
     }
 }

@@ -1,23 +1,25 @@
 package net.silentchaos512.gear.gear.material.modifier;
 
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
-import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ChargedProperties;
-import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.util.ChargedProperties;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 
-import javax.annotation.Nullable;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class ChargedMaterialModifier implements IMaterialModifier {
     protected final int level;
@@ -26,27 +28,34 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
         this.level = level;
     }
 
-    public ChargedProperties getChargedProperties(IMaterialInstance material) {
-        return new ChargedProperties(level, material.getStat(PartType.MAIN, ItemStats.CHARGING_VALUE));
+    public ChargedProperties getChargedProperties(MaterialInstance material) {
+        var chargingValue = material.getProperty(PartTypes.MAIN.get(), GearProperties.CHARGING_VALUE.get());
+        return new ChargedProperties(level, chargingValue);
     }
 
     public static class Type<T extends ChargedMaterialModifier> implements IMaterialModifierType<T> {
         private final Function<Integer, T> factory;
-        private final String nbtTagName;
-        private final Codec<T> codec;
+        private final Supplier<DataComponentType<Integer>> dataComponentType;
+        private final MapCodec<T> codec;
+        private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec;
 
-        public Type(Function<Integer, T> factory, String nbtTagName) {
+        public Type(Function<Integer, T> factory, Supplier<DataComponentType<Integer>> dataComponentType) {
             this.factory = factory;
-            this.nbtTagName = nbtTagName;
-            this.codec = RecordCodecBuilder.create(
+            this.dataComponentType = dataComponentType;
+            this.codec = RecordCodecBuilder.mapCodec(
                     instance -> instance.group(
                             Codec.INT.fieldOf("level").forGetter(m -> m.level)
                     ).apply(instance, factory)
             );
+            this.streamCodec = StreamCodec.composite(
+                    ByteBufCodecs.VAR_INT, m -> m.level,
+                    this.factory
+            );
         }
 
         public int checkLevel(ItemStack stack) {
-            return stack.getOrCreateTag().getShort(nbtTagName);
+            var i = stack.get(this.dataComponentType.get());
+            return i != null ? i : 0;
         }
 
         public T create(int level) {
@@ -59,10 +68,20 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
         }
 
         @Override
+        public void addModifier(T mod, ItemStack stack) {
+            stack.set(this.dataComponentType.get(), mod.level);
+            if (this.causesFoilEffect()) {
+                stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
+            }
+        }
+
+        @Override
         public void removeModifier(ItemStack stack) {
             if (!stack.isEmpty()) {
-                stack.getOrCreateTag().remove(nbtTagName);
-                stack.getOrCreateTag().remove(Const.NBT_IS_FOIL);
+                stack.remove(this.dataComponentType.get());
+                if (this.causesFoilEffect()) {
+                    stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
+                }
             }
         }
 
@@ -70,53 +89,14 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
             return true;
         }
 
-        @Nullable
         @Override
-        public T read(CompoundTag tag) {
-            int level = tag.getShort(nbtTagName);
-
-            if (level == 0) {
-                return null;
-            }
-
-            return factory.apply(level);
+        public MapCodec<T> codec() {
+            return this.codec;
         }
 
         @Override
-        public void write(T modifier, CompoundTag tag) {
-            tag.putShort(nbtTagName, (short) modifier.level);
-            if (causesFoilEffect()) {
-                tag.putBoolean(Const.NBT_IS_FOIL, true);
-            }
-        }
-
-        @Override
-        public T readFromNetwork(FriendlyByteBuf buf) {
-            int level = buf.readByte();
-            return create(level);
-        }
-
-        @Override
-        public void writeToNetwork(T modifier, FriendlyByteBuf buf) {
-            buf.writeByte(modifier.level);
-        }
-
-        @Override
-        public T deserialize(JsonObject json) {
-            int level = GsonHelper.getAsInt(json, "level", 0);
-            return create(level);
-        }
-
-        @Override
-        public JsonObject serialize(T modifier) {
-            JsonObject json = new JsonObject();
-            json.addProperty("level", modifier.level);
-            return json;
-        }
-
-        @Override
-        public Codec<T> codec() {
-            return codec;
+        public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
+            return this.streamCodec;
         }
     }
 }

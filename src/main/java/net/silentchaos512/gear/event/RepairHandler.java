@@ -1,28 +1,22 @@
 package net.silentchaos512.gear.event;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.gear.part.RepairContext;
-import net.silentchaos512.gear.gear.part.UpgradePart;
+import net.silentchaos512.gear.gear.part.UpgradeGearPart;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
+@EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class RepairHandler {
     private RepairHandler() {}
 
@@ -30,17 +24,17 @@ public final class RepairHandler {
     public static void onAnvilUpdate(AnvilUpdateEvent event) {
         if (event.getLeft().getItem() instanceof ICoreItem) {
             MaterialInstance material = MaterialInstance.from(event.getRight());
-            PartData part = PartData.from(event.getRight());
+            PartInstance part = PartInstance.from(event.getRight());
 
             if (material != null) {
                 handleGearRepair(event, material);
-            } else if (part != null && part.get() instanceof UpgradePart) {
+            } else if (part != null && part.get() instanceof UpgradeGearPart) {
                 handleUpgradeApplication(event, part);
             }
         }
     }
 
-    private static void handleUpgradeApplication(AnvilUpdateEvent event, PartData part) {
+    private static void handleUpgradeApplication(AnvilUpdateEvent event, PartInstance part) {
         ItemStack result = event.getLeft().copy();
         applyName(event, result);
 
@@ -57,7 +51,7 @@ public final class RepairHandler {
         applyName(event, result);
 
         float repairValue = material.getRepairValue(result, RepairContext.Type.ANVIL);
-        float gearRepairEfficiency = GearData.getStat(result, ItemStats.REPAIR_EFFICIENCY);
+        float gearRepairEfficiency = GearData.getProperties(result).getNumber(GearProperties.REPAIR_EFFICIENCY);
         float anvilEfficiency = Config.Common.repairFactorAnvil.get().floatValue();
         float amount = repairValue * gearRepairEfficiency * anvilEfficiency;
 
@@ -70,7 +64,8 @@ public final class RepairHandler {
         }
 
         if (amount > 0) {
-            result.hurt(-Math.round(amount * materialCount), SilentGear.RANDOM_SOURCE, null);
+            var repairAmount = Math.round(amount * materialCount);
+            result.setDamageValue(result.getDamageValue() - repairAmount);
             GearData.recalculateStats(result, null);
             event.setOutput(result);
             event.setCost(materialCount);
@@ -79,79 +74,8 @@ public final class RepairHandler {
     }
 
     private static void applyName(AnvilUpdateEvent event, ItemStack stack) {
-        if (!event.getName().isEmpty()) {
-            stack.setHoverName(Component.literal(event.getName()));
+        if (event.getName() != null && !event.getName().isEmpty()) {
+            stack.set(DataComponents.CUSTOM_NAME, Component.literal(event.getName()));
         }
-    }
-
-    /*
-    TODO: Uncomment when https://github.com/MinecraftForge/MinecraftForge/pull/5831 is merged
-    @SubscribeEvent
-    public static void onGrindstoneUpdate(GrindstoneUpdateEvent event) {
-        ItemStack first = event.getFirst();
-        ItemStack second = event.getSecond();
-        if (!canRepairTogether(first, second)) {
-            event.setCanceled(true);
-            return;
-        }
-
-        int durability1 = first.getMaxDamage() - first.getDamage();
-        int durability2 = second.getMaxDamage() - second.getDamage();
-        int newDurability = durability1 + durability2 + first.getMaxDamage() * 5 / 100;
-        int newDamage = Math.max(first.getMaxDamage() - newDurability, 0);
-        ItemStack result = copyCurses(first, second);
-        event.setOutput(createGrindstoneResult(result, newDamage));
-    }
-    */
-
-    private static boolean canRepairTogether(ItemStack first, ItemStack second) {
-        return first.getItem() == second.getItem()
-                && first.getItem() instanceof ICoreItem
-                && GearData.getTier(first) <= GearData.getTier(second);
-    }
-
-    private static ItemStack copyCurses(ItemStack first, ItemStack second) {
-        // Copy of GrindstoneContainer#mergeEnchants
-        ItemStack itemstack = first.copy();
-        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(second);
-
-        for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
-            Enchantment enchantment = entry.getKey();
-            if (!enchantment.isCurse() || itemstack.getEnchantmentLevel(enchantment) == 0) {
-                itemstack.enchant(enchantment, entry.getValue());
-            }
-        }
-
-        return itemstack;
-    }
-
-    private static ItemStack createGrindstoneResult(ItemStack stack, int newDamage) {
-        // Copy of GrindstoneContainer#removeNonCurses
-        ItemStack itemstack = stack.copy();
-        itemstack.removeTagKey("Enchantments");
-        itemstack.removeTagKey("StoredEnchantments");
-        if (newDamage > 0) {
-            itemstack.setDamageValue(newDamage);
-        } else {
-            itemstack.removeTagKey("Damage");
-        }
-
-        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack).entrySet().stream()
-                .filter((p_217012_0_) -> p_217012_0_.getKey().isCurse())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        EnchantmentHelper.setEnchantments(map, itemstack);
-        itemstack.setRepairCost(0);
-        if (itemstack.getItem() == Items.ENCHANTED_BOOK && map.isEmpty()) {
-            itemstack = new ItemStack(Items.BOOK);
-            if (stack.hasCustomHoverName()) {
-                itemstack.setHoverName(stack.getHoverName());
-            }
-        }
-
-        for (int i = 0; i < map.size(); ++i) {
-            itemstack.setRepairCost(AnvilMenu.calculateIncreasedRepairCost(itemstack.getBaseRepairCost()));
-        }
-
-        return itemstack;
     }
 }

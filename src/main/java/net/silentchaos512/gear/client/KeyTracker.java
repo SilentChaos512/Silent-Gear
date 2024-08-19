@@ -9,7 +9,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
@@ -20,7 +20,7 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
 
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
 public class KeyTracker {
     public static final KeyMapping DISPLAY_STATS = createKeyBinding("displayStats", GLFW.GLFW_KEY_LEFT_CONTROL);
     public static final KeyMapping DISPLAY_TRAITS = createKeyBinding("displayTraits", GLFW.GLFW_KEY_LEFT_SHIFT);
@@ -67,7 +67,7 @@ public class KeyTracker {
             }
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
-                PacketDistributor.SERVER.noArg().send(new KeyPressOnItemPayload(KeyPressOnItemPayload.Type.CYCLE_NEXT, getHoveredSlot()));
+                PacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.CYCLE_NEXT, getHoveredSlot()));
             }
         }
         if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == CYCLE_BACK.getKey().getValue()) {
@@ -76,21 +76,20 @@ public class KeyTracker {
             }
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
-                PacketDistributor.SERVER.noArg().send(new KeyPressOnItemPayload(KeyPressOnItemPayload.Type.CYCLE_BACK, getHoveredSlot()));
+                PacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.CYCLE_BACK, getHoveredSlot()));
             }
         }
         if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == OPEN_ITEM.getKey().getValue()) {
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
-                PacketDistributor.SERVER.noArg().send(new KeyPressOnItemPayload(KeyPressOnItemPayload.Type.OPEN_ITEM, getHoveredSlot()));
+                PacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.OPEN_ITEM, getHoveredSlot()));
             }
         }
     }
 
     private static ItemStack getHoveredItem() {
         Screen currentScreen = Minecraft.getInstance().screen;
-        if (currentScreen instanceof AbstractContainerScreen<?>) {
-            AbstractContainerScreen<?> containerScreen = (AbstractContainerScreen<?>) currentScreen;
+        if (currentScreen instanceof AbstractContainerScreen<?> containerScreen) {
             Slot slot = containerScreen.getSlotUnderMouse();
             if (slot != null) {
                 return slot.getItem();
@@ -101,8 +100,7 @@ public class KeyTracker {
 
     private static int getHoveredSlot() {
         Screen currentScreen = Minecraft.getInstance().screen;
-        if (currentScreen instanceof AbstractContainerScreen<?>) {
-            AbstractContainerScreen<?> containerScreen = (AbstractContainerScreen<?>) currentScreen;
+        if (currentScreen instanceof AbstractContainerScreen<?> containerScreen) {
             Slot slot = containerScreen.getSlotUnderMouse();
             if (slot != null) {
                 return slot.index;

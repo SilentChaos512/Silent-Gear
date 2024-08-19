@@ -24,23 +24,19 @@ import net.silentchaos512.gear.util.GearHelper;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearSwordItem extends SwordItem implements ICoreWeapon {
-    private final GearType gearType;
+    private final Supplier<GearType> gearType;
 
-    public GearSwordItem(GearType gearType) {
+    public GearSwordItem(Supplier<GearType> gearType) {
         super(GearHelper.DEFAULT_DUMMY_TIER, 0, 0, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
     }
 
     @Override
-    public Tier getTier() {
-        return Config.Common.isLoaded() ? Config.Common.dummyToolTier.get() : GearHelper.DEFAULT_DUMMY_TIER;
-    }
-
-    @Override
     public GearType getGearType() {
-        return this.gearType;
+        return this.gearType.get();
     }
 
     //region Standard tool overrides

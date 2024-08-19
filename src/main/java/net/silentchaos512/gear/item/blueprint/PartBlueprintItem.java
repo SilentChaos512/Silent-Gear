@@ -40,6 +40,6 @@ public class PartBlueprintItem extends AbstractBlueprintItem {
 
     @Override
     protected Component getCraftedName(ItemStack stack) {
-        return this.partType.getDisplayName(0);
+        return this.partType.getDisplayName();
     }
 }

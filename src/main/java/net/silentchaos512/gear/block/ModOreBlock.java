@@ -3,15 +3,14 @@ package net.silentchaos512.gear.block;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.util.TextUtil;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ModOreBlock extends DropExperienceBlock {
@@ -20,7 +19,7 @@ public class ModOreBlock extends DropExperienceBlock {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
         // Harvest level tips
         int harvestLevel = guessHarvestLevel(defaultBlockState());
         Component harvestLevelName = TextUtil.misc("harvestLevel." + harvestLevel);

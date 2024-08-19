@@ -24,6 +24,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
 import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.MathUtils;
@@ -32,14 +33,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearBowItem extends BowItem implements ICoreRangedWeapon {
     private static final int MIN_DRAW_DELAY = 10;
     private static final int MAX_DRAW_DELAY = 100;
 
-    public GearBowItem() {
-        // Max damage doesn't matter, just needs to be greater than zero
-        super(GearHelper.getBaseItemProperties().defaultDurability(100));
+    private final Supplier<GearType> gearType;
+
+    public GearBowItem(Supplier<GearType> gearType) {
+        super(GearHelper.getBaseItemProperties());
 /*        this.addPropertyOverride(new ResourceLocation("pull"), (stack, world, entity) -> {
             if (entity == null) {
                 return 0.0F;
@@ -47,11 +50,12 @@ public class GearBowItem extends BowItem implements ICoreRangedWeapon {
                 return !(entity.getActiveItemStack().getItem() instanceof CoreBow) ? 0.0F : (float)(stack.getUseDuration() - entity.getItemInUseCount()) / getDrawDelay(stack);
             }
         });*/
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.BOW;
+        return this.gearType.get();
     }
 
     //region Bow stuff
@@ -68,7 +72,7 @@ public class GearBowItem extends BowItem implements ICoreRangedWeapon {
     }
 
     public float getArrowDamage(ItemStack stack) {
-        return GearData.getStat(stack, ItemStats.RANGED_DAMAGE);
+        return GearData.getProperties(stack).getNumber(GearProperties.RANGED_DAMAGE);
     }
 
     @Nonnull

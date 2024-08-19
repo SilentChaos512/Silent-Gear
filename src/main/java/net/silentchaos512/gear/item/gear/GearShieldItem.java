@@ -33,48 +33,25 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GearShieldItem extends ShieldItem implements ICoreItem {
-    private static final Set<ItemStat> RELEVANT_STATS = ImmutableSet.of(
-            ItemStats.DURABILITY,
-            ItemStats.ENCHANTMENT_VALUE
-    );
+    private final Supplier<GearType> gearType;
 
-    private static final Set<ItemStat> EXCLUDED_STATS = ImmutableSet.of(
-            ItemStats.HARVEST_SPEED,
-            ItemStats.REACH_DISTANCE,
-            ItemStats.MELEE_DAMAGE,
-            ItemStats.MAGIC_DAMAGE,
-            ItemStats.ATTACK_SPEED,
-            ItemStats.ATTACK_REACH,
-            ItemStats.RANGED_DAMAGE,
-            ItemStats.RANGED_SPEED
-    );
-
-    public GearShieldItem() {
-        super(GearHelper.getBaseItemProperties().durability(100));
+    public GearShieldItem(Supplier<GearType> gearType) {
+        super(GearHelper.getBaseItemProperties());
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearType.SHIELD;
+        return this.gearType.get();
     }
 
     @Override
     public boolean isValidSlot(String slot) {
         return EquipmentSlot.MAINHAND.getName().equalsIgnoreCase(slot)
                 || EquipmentSlot.OFFHAND.getName().equalsIgnoreCase(slot);
-    }
-
-    @Override
-    public Set<ItemStat> getRelevantStats(ItemStack stack) {
-        return RELEVANT_STATS;
-    }
-
-
-    @Override
-    public Set<ItemStat> getExcludedStats(ItemStack stack) {
-        return EXCLUDED_STATS;
     }
 
     @Override

@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -66,23 +66,21 @@ public class StoneAnvilBlock extends BaseEntityBlock implements SimpleWaterlogge
         return new StoneAnvilBlockEntity(pPos, pState);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+    protected ItemInteractionResult useItemOn(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHitResult) {
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
         if (blockEntity instanceof StoneAnvilBlockEntity stoneAnvil) {
             ItemStack stack = pPlayer.getItemInHand(pHand);
             if (!pLevel.isClientSide && stoneAnvil.interact(pPlayer, pPlayer.getAbilities().instabuild ? stack.copy() : stack)) {
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
 
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         }
 
-        return InteractionResult.PASS;
+        return super.useItemOn(pStack, pState, pLevel, pPos, pPlayer, pHand, pHitResult);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
         if (!pState.is(pNewState.getBlock())) {
@@ -105,7 +103,6 @@ public class StoneAnvilBlock extends BaseEntityBlock implements SimpleWaterlogge
                 .setValue(FACING, pContext.getHorizontalDirection());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return SHAPE;
@@ -117,13 +114,11 @@ public class StoneAnvilBlock extends BaseEntityBlock implements SimpleWaterlogge
         return RenderShape.MODEL;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public FluidState getFluidState(BlockState pState) {
         return pState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(pState);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pPos, BlockPos pNeighborPos) {
         if (pState.getValue(WATERLOGGED)) {

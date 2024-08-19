@@ -6,11 +6,9 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.item.FragmentItem;
+import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -73,25 +71,18 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
                 .setGearType(item.getGearType())
                 .setPartType(item.getPartType());
 
-        if (item.getGearType().isArmor() && item.getGearType() != GearType.ELYTRA) {
+        if (item.getGearType().isArmor() && item.getGearType() != GearTypes.ELYTRA.get()) {
             builder.setTexturePath("part/armor");
-            if (item.getGearType().matches(GearType.HELMET))
+            if (item.getGearType().matches(GearTypes.HELMET.get()))
                 builder.addExtraLayer(SilentGear.getId("blueprint_helmet"));
-            if (item.getGearType().matches(GearType.CHESTPLATE))
+            if (item.getGearType().matches(GearTypes.CHESTPLATE.get()))
                 builder.addExtraLayer(SilentGear.getId("blueprint_chestplate"));
-            if (item.getGearType().matches(GearType.LEGGINGS))
+            if (item.getGearType().matches(GearTypes.LEGGINGS.get()))
                 builder.addExtraLayer(SilentGear.getId("blueprint_leggings"));
-            if (item.getGearType().matches(GearType.BOOTS))
+            if (item.getGearType().matches(GearTypes.BOOTS.get()))
                 builder.addExtraLayer(SilentGear.getId("blueprint_boots"));
         }
 
         return builder;
-    }
-
-    private CompoundModelBuilder fragmentBuilder(FragmentItem item) {
-        return ((CompoundModelBuilder) getBuilder(NameUtils.fromItem(item).getPath()))
-                .setLoader(Const.FRAGMENT_MODEL_LOADER)
-                .setGearType(GearType.FRAGMENT)
-                .setPartType(PartType.MAIN);
     }
 }

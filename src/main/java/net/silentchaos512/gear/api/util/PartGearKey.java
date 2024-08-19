@@ -6,15 +6,16 @@ import com.mojang.serialization.DataResult;
 import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
-import net.silentchaos512.gear.setup.SgRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 public record PartGearKey (
         GearType gearType,
@@ -26,7 +27,9 @@ public record PartGearKey (
             .comapFlatMap(PartGearKey::tryParseKey, PartGearKey::key)
             .stable();
 
-    public static PartGearKey of(GearType gearType, IPartData part) {
+    public static final PartGearKey ALL_MAIN = of(GearTypes.ALL.get(), PartTypes.MAIN.get());
+
+    public static PartGearKey of(GearType gearType, PartInstance part) {
         return of(gearType, part.getType());
     }
 
@@ -35,8 +38,24 @@ public record PartGearKey (
                 new PartGearKey(pair.getFirst(), pair.getSecond()));
     }
 
+    public static PartGearKey of(Supplier<GearType> gearType, Supplier<PartType> partType) {
+        return of(gearType.get(), partType.get());
+    }
+
+    public static PartGearKey ofAll(Supplier<PartType> partType) {
+        return ofAll(partType.get());
+    }
+
     public static PartGearKey ofAll(PartType partType) {
         return of(GearTypes.ALL.get(), partType);
+    }
+
+    public static PartGearKey ofMain(Supplier<GearType> gearType) {
+        return ofMain(gearType.get());
+    }
+
+    public static PartGearKey ofMain(GearType gearType) {
+        return of(gearType, PartTypes.MAIN.get());
     }
 
     @Nullable
@@ -57,7 +76,7 @@ public record PartGearKey (
     }
 
     public Component getDisplayName() {
-        return partType.getDisplayName(0).append(" / ").append(gearType.getDisplayName());
+        return partType.getDisplayName().append(" / ").append(gearType.getDisplayName());
     }
 
     private static DataResult<PartGearKey> tryParseKey(String str) {
@@ -67,11 +86,11 @@ public record PartGearKey (
         }
         var partTypeId = SilentGear.getIdWithDefaultNamespace(split[0]);
         var gearTypeId = SilentGear.getIdWithDefaultNamespace(split[1]);
-        var gearType = SgRegistries.GEAR_TYPES.get(partTypeId);
+        var gearType = SgRegistries.GEAR_TYPE.get(gearTypeId);
         if (gearType == null || gearType == GearTypes.NONE.get()) {
             return DataResult.error(() -> "Unknown gear type: " + gearTypeId);
         }
-        var partType = SgRegistries.PART_TYPES.get(partTypeId);
+        var partType = SgRegistries.PART_TYPE.get(partTypeId);
         if (partType == null || partType == PartTypes.NONE.get()) {
             return DataResult.error(() -> "Unknown part type: " + partTypeId);
         }
@@ -79,8 +98,8 @@ public record PartGearKey (
     }
 
     private String key() {
-        var partTypeShortStr = SilentGear.shortenId(SgRegistries.PART_TYPES.getKey(partType()));
-        var gearTypeShortStr = SilentGear.shortenId(SgRegistries.GEAR_TYPES.getKey(gearType()));
+        var partTypeShortStr = SilentGear.shortenId(SgRegistries.PART_TYPE.getKey(partType()));
+        var gearTypeShortStr = SilentGear.shortenId(SgRegistries.GEAR_TYPE.getKey(gearType()));
         return partTypeShortStr + "/" + gearTypeShortStr;
     }
 }

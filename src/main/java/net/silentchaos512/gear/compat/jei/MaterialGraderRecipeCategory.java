@@ -11,7 +11,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.material.IMaterial;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.setup.SgBlocks;
@@ -36,7 +36,7 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     public MaterialGraderRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(GraderScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
         icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(SgBlocks.MATERIAL_GRADER));
-        localizedName = TextUtil.translate("jei", "category.grading");
+        localizedName = TextUtil.translate("jei", "group.grading");
     }
 
     @Override
@@ -70,7 +70,7 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     @Nonnull
     public static List<ItemStack> getMaterials() {
         return MaterialManager.getValues().stream()
-                .map(IMaterial::getIngredient)
+                .map(Material::getIngredient)
                 .flatMap(ing -> Arrays.stream(ing.getItems()))
                 .collect(Collectors.toList());
     }

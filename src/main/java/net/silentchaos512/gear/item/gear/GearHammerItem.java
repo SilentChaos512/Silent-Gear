@@ -11,9 +11,10 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.util.IAoeTool;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class GearHammerItem extends GearPickaxeItem implements IAoeTool {
-    public GearHammerItem(GearType gearType) {
+    public GearHammerItem(Supplier<GearType> gearType) {
         super(gearType);
     }
 

@@ -5,21 +5,21 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.part.IGearPart;
-import net.silentchaos512.gear.api.traits.ITrait;
-import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.gear.part.PartManager;
-import net.silentchaos512.gear.gear.trait.TraitManager;
+import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.part.GearPart;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.trait.Trait;
+import net.silentchaos512.gear.setup.SgRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class DataResource<T> {
+public class DataResource<T> implements Supplier<T> {
     private final ResourceLocation objectId;
     private final Function<ResourceLocation, T> getter;
 
@@ -28,35 +28,48 @@ public class DataResource<T> {
         this.getter = getter;
     }
 
-    public static DataResource<IMaterial> material(String modPath) {
+    public static <T> DataResource<T> empty() {
+        return new DataResource<>(SilentGear.getId("empty"), id -> null);
+    }
+
+    public static DataResource<Material> material(String modPath) {
         return material(SilentGear.getId(modPath));
     }
 
-    public static DataResource<IMaterial> material(ResourceLocation id) {
-        return new DataResource<>(id, MaterialManager::get);
+    public static DataResource<Material> material(ResourceLocation id) {
+        return new DataResource<>(id, SgRegistries.MATERIAL::get);
     }
 
-    public static DataResource<IGearPart> part(String modPath) {
+    public static DataResource<Material> material(Material material) {
+        return material(SgRegistries.MATERIAL.getKey(material));
+    }
+
+    public static DataResource<Material> material(MaterialInstance materialInstance) {
+        return material(materialInstance.get());
+    }
+
+    public static DataResource<GearPart> part(String modPath) {
         return part(SilentGear.getId(modPath));
     }
 
-    public static DataResource<IGearPart> part(ResourceLocation id) {
-        return new DataResource<>(id, PartManager::get);
+    public static DataResource<GearPart> part(ResourceLocation id) {
+        return new DataResource<>(id, SgRegistries.PART::get);
     }
 
-    public static DataResource<ITrait> trait(String modPath) {
+    public static DataResource<Trait> trait(String modPath) {
         return trait(SilentGear.getId(modPath));
     }
 
-    public static DataResource<ITrait> trait(ResourceLocation id) {
-        return new DataResource<>(id, TraitManager::get);
+    public static DataResource<Trait> trait(ResourceLocation id) {
+        return new DataResource<>(id, SgRegistries.TRAIT::get);
     }
 
     @Nullable
-    private T getNullable() {
+    public T getNullable() {
         return this.getter.apply(this.objectId);
     }
 
+    @Override
     public T get() {
         T ret = getNullable();
         Objects.requireNonNull(ret, () -> "Data resource not present: " + this.objectId);
@@ -87,28 +100,28 @@ public class DataResource<T> {
         return obj != null ? Optional.ofNullable(mapper.apply(obj)) : Optional.empty();
     }
 
-    public static final Codec<DataResource<IMaterial>> MATERIAL_CODEC = ResourceLocation.CODEC.xmap(
+    public static final Codec<DataResource<Material>> MATERIAL_CODEC = ResourceLocation.CODEC.xmap(
             DataResource::material,
             DataResource::getId
     );
-    public static final Codec<DataResource<IGearPart>> PART_CODEC = ResourceLocation.CODEC.xmap(
+    public static final Codec<DataResource<GearPart>> PART_CODEC = ResourceLocation.CODEC.xmap(
             DataResource::part,
             DataResource::getId
     );
-    public static final Codec<DataResource<ITrait>> TRAIT_CODEC = ResourceLocation.CODEC.xmap(
+    public static final Codec<DataResource<Trait>> TRAIT_CODEC = ResourceLocation.CODEC.xmap(
             DataResource::trait,
             DataResource::getId
     );
 
-    public static final StreamCodec<FriendlyByteBuf, DataResource<IMaterial>> MATERIAL_STREAM_CODEC = StreamCodec.of(
+    public static final StreamCodec<FriendlyByteBuf, DataResource<Material>> MATERIAL_STREAM_CODEC = StreamCodec.of(
             (buf, d) -> buf.writeResourceLocation(d.getId()),
             buf -> DataResource.material(buf.readResourceLocation())
     );
-    public static final StreamCodec<FriendlyByteBuf, DataResource<IGearPart>> PART_STREAM_CODEC = StreamCodec.of(
+    public static final StreamCodec<FriendlyByteBuf, DataResource<GearPart>> PART_STREAM_CODEC = StreamCodec.of(
             (buf, d) -> buf.writeResourceLocation(d.getId()),
             buf -> DataResource.part(buf.readResourceLocation())
     );
-    public static final StreamCodec<FriendlyByteBuf, DataResource<ITrait>> TRAIT_STREAM_CODEC = StreamCodec.of(
+    public static final StreamCodec<FriendlyByteBuf, DataResource<Trait>> TRAIT_STREAM_CODEC = StreamCodec.of(
             (buf, d) -> buf.writeResourceLocation(d.getId()),
             buf -> DataResource.trait(buf.readResourceLocation())
     );

@@ -1,38 +1,20 @@
-/*
- * Silent Gear -- QuickRepairRecipe
- * Copyright (C) 2018 SilentChaos512
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 3
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.item.FragmentItem;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.setup.SgRecipes;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.collection.StackList;
 
 public class FillRepairKitRecipe extends CustomRecipe {
@@ -66,7 +48,7 @@ public class FillRepairKitRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
         StackList list = StackList.from(inv);
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class).copy();
         repairKit.setCount(1);
@@ -83,20 +65,15 @@ public class FillRepairKitRecipe extends CustomRecipe {
     }
 
     private static boolean isRepairMaterial(ItemStack stack) {
-        if (stack.getItem() instanceof FragmentItem) {
-            IMaterialInstance material = FragmentItem.getMaterial(stack);
-            return material != null && isRepairMaterial(material);
-        }
-
         MaterialInstance material = MaterialInstance.from(stack);
         return material != null && isRepairMaterial(material);
     }
 
-    private static boolean isRepairMaterial(IMaterialInstance material) {
-        float durability = material.getStat(PartType.MAIN, ItemStats.DURABILITY);
-        float armorDurability = material.getStat(PartType.MAIN, ItemStats.ARMOR_DURABILITY);
-        IMaterial mat = material.get();
-        return mat != null && mat.allowedInPart(material, PartType.MAIN)
+    private static boolean isRepairMaterial(MaterialInstance material) {
+        float durability = material.getProperty(PartTypes.MAIN, PropertyKey.of(GearProperties.DURABILITY, GearTypes.ALL));
+        float armorDurability = material.getProperty(PartTypes.MAIN, PropertyKey.of(GearProperties.ARMOR_DURABILITY, GearTypes.ALL));
+        Material mat = material.get();
+        return mat != null && mat.isAllowedInPart(material, PartTypes.MAIN.get())
                 && (durability > 0 || armorDurability > 0);
     }
 

@@ -5,7 +5,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
-public interface ITraitSerializer<T extends ITrait> {
+@Deprecated(forRemoval = true)
+public interface ITraitSerializer<T> {
     Codec<T> codec();
 
     StreamCodec<FriendlyByteBuf, T> streamCodec();

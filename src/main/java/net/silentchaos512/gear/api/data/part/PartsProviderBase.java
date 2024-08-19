@@ -5,7 +5,6 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.silentchaos512.gear.data.DataGenerators;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -41,7 +40,7 @@ public abstract class PartsProviderBase implements DataProvider {
                 throw new IllegalStateException("Duplicate part: " + builder.getId());
             }
             Path path = outputFolder.resolve(String.format("data/%s/silentgear_parts/%s.json", builder.getId().getNamespace(), builder.getId().getPath()));
-            list.add(DataGenerators.saveStable(cache, builder.serialize(), path));
+            list.add(DataProvider.saveStable(cache, builder.serialize(), path));
         });
 
         return CompletableFuture.allOf(list.toArray(new CompletableFuture[0]));

@@ -15,7 +15,7 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
@@ -33,7 +33,7 @@ public class GearHudOverlay {
     }
 
     @SubscribeEvent
-    public void renderOverlay(RenderGuiOverlayEvent.Post event) {
+    public void renderOverlay(RenderGuiLayerEvent event) {
         this.scaledWidth = this.mc.getWindow().getGuiScaledWidth();
         this.scaledHeight = this.mc.getWindow().getGuiScaledHeight();
 

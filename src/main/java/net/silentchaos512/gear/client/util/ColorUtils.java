@@ -3,17 +3,15 @@ package net.silentchaos512.gear.client.util;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.material.IMaterialDisplay;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
-import net.silentchaos512.gear.api.material.MaterialLayer;
-import net.silentchaos512.gear.api.part.IPartData;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.item.CompoundMaterialItem;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
@@ -23,17 +21,17 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public final class ColorUtils {
-    private ColorUtils() {}
+    private ColorUtils() {
+    }
 
-    public static int getBlendedColor(ICoreItem item, IPartData part, Collection<? extends IMaterialInstance> materials, int layer) {
+    public static int getBlendedColor(ICoreItem item, PartInstance part, Collection<? extends MaterialInstance> materials) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;
         int colorCount = 0;
 
         int i = 0;
-        for (IMaterialInstance mat : materials) {
-            IMaterialDisplay model = mat.getDisplayProperties();
-            int color = model.getLayerColor(item.getGearType(), part, mat, layer);
+        for (MaterialInstance mat : materials) {
+            int color = mat.getColor(item.getGearType(), part.getType());
             int r = (color >> 16) & 0xFF;
             int g = (color >> 8) & 0xFF;
             int b = color & 0xFF;
@@ -51,59 +49,47 @@ public final class ColorUtils {
         return blendColors(componentSums, maxColorSum, colorCount);
     }
 
-    public static int getBlendedColor(CompoundPartItem item, Collection<? extends IMaterialInstance> materials, int layer) {
+    @Deprecated(forRemoval = true)
+    public static int getBlendedColor(CompoundPartItem item, Collection<? extends MaterialInstance> materials) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;
         int colorCount = 0;
 
         int i = 0;
-        for (IMaterialInstance mat : materials) {
-            IMaterialDisplay model = mat.getDisplayProperties();
-            List<MaterialLayer> layers = model.getLayerList(item.getGearType(), item.getPartType(), mat).getLayers();
-            if (layers.size() > layer) {
-                int color = model.getLayerColor(item.getGearType(), item.getPartType(), mat, layer);
-                int r = (color >> 16) & 0xFF;
-                int g = (color >> 8) & 0xFF;
-                int b = color & 0xFF;
-                int colorWeight = item.getColorWeight(i, materials.size());
-                for (int j = 0; j < colorWeight; ++j) {
-                    maxColorSum += Math.max(r, Math.max(g, b));
-                    componentSums[0] += r;
-                    componentSums[1] += g;
-                    componentSums[2] += b;
-                    ++colorCount;
-                }
-                ++i;
+        for (MaterialInstance mat : materials) {
+            int color = mat.getColor(item.getGearType(), item.getPartType());
+            int r = (color >> 16) & 0xFF;
+            int g = (color >> 8) & 0xFF;
+            int b = color & 0xFF;
+            int colorWeight = item.getColorWeight(i, materials.size());
+            for (int j = 0; j < colorWeight; ++j) {
+                maxColorSum += Math.max(r, Math.max(g, b));
+                componentSums[0] += r;
+                componentSums[1] += g;
+                componentSums[2] += b;
+                ++colorCount;
             }
+            ++i;
         }
 
         return blendColors(componentSums, maxColorSum, colorCount);
     }
 
-    public static int getBlendedColor(CompoundMaterialItem item, Collection<? extends IMaterialInstance> materials, int layer) {
+    public static int getBlendedColorForCompoundMaterial(Collection<? extends MaterialInstance> materials) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;
         int colorCount = 0;
 
-        int i = 0;
-        for (IMaterialInstance mat : materials) {
-            IMaterialDisplay model = mat.getDisplayProperties();
-            List<MaterialLayer> layers = model.getLayerList(GearType.ALL, PartType.MAIN, mat).getLayers();
-            if (layers.size() > layer) {
-                int color = layers.get(layer).getColor();
-                int r = (color >> 16) & 0xFF;
-                int g = (color >> 8) & 0xFF;
-                int b = color & 0xFF;
-                int colorWeight = item.getColorWeight(i, materials.size());
-                for (int j = 0; j < colorWeight; ++j) {
-                    maxColorSum += Math.max(r, Math.max(g, b));
-                    componentSums[0] += r;
-                    componentSums[1] += g;
-                    componentSums[2] += b;
-                    ++colorCount;
-                }
-                ++i;
-            }
+        for (MaterialInstance mat : materials) {
+            int color = mat.getColor(GearTypes.ALL.get(), PartTypes.MAIN.get());
+            int r = (color >> 16) & 0xFF;
+            int g = (color >> 8) & 0xFF;
+            int b = color & 0xFF;
+            maxColorSum += Math.max(r, Math.max(g, b));
+            componentSums[0] += r;
+            componentSums[1] += g;
+            componentSums[2] += b;
+            ++colorCount;
         }
 
         return blendColors(componentSums, maxColorSum, colorCount);
@@ -133,7 +119,7 @@ public final class ColorUtils {
         }
 
         // Calculate and cache the layer color
-        List<PartData> list = GearData.getConstructionParts(stack).getPartsOfType(partType);
+        var list = GearData.getConstruction(stack).parts().getPartsOfType(partType);
         if (!list.isEmpty()) {
             int color = getBlendedColor(stack, list) & 0xFFFFFF;
             setCachedColor(stack, partType, 0, color);
@@ -142,15 +128,15 @@ public final class ColorUtils {
         return Color.VALUE_WHITE;
     }
 
-    private static int getBlendedColor(ItemStack gear, List<PartData> parts) {
+    private static int getBlendedColor(ItemStack gear, List<PartInstance> parts) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;
         int colorCount = 0;
 
         int partCount = parts.size();
         for (int i = 0; i < partCount; ++i) {
-            PartData part = parts.get(i);
-            int color = part.get().getColor(part, gear, 0, 0);
+            PartInstance part = parts.get(i);
+            int color = part.get().getColor(part, GearHelper.getType(gear), 0, 0);
             int r = (color >> 16) & 0xFF;
             int g = (color >> 8) & 0xFF;
             int b = color & 0xFF;

@@ -41,7 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
-import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.lib.util.MathUtils;
@@ -183,7 +183,7 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
         for (ItemStack part : recipe.getPossibleResults(this)) {
             ItemStack copy = part.copy();
             int count = copy.getCount();
-            PartData partData = PartData.from(part);
+            PartInstance partData = PartInstance.from(part);
             double partLossRate = partData != null
                     ? partData.get().getSalvageLossRate(partData, stack, lossRate)
                     : lossRate;

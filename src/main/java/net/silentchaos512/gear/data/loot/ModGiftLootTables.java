@@ -1,34 +1,19 @@
 package net.silentchaos512.gear.data.loot;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.packs.VanillaGiftLoot;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.SetLoreFunction;
-import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.neoforged.fml.util.ObfuscationReflectionHelper;
-import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.loot.function.SelectGearTierLootFunction;
 import net.silentchaos512.gear.setup.SgItems;
-import net.silentchaos512.lib.util.NameUtils;
 
-import javax.annotation.Nonnull;
-import java.lang.reflect.Constructor;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class ModGiftLootTables extends VanillaGiftLoot {
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> p_accept_1_) {
-        p_accept_1_.accept(SgItems.BLUEPRINT_PACKAGE.get().getDefaultLootTable(), LootTable.lootTable()
+    public void generate(HolderLookup.Provider p_331027_, BiConsumer<ResourceKey<LootTable>, LootTable.Builder> p_250831_) {
+        p_250831_.accept(SgItems.BLUEPRINT_PACKAGE.get().getDefaultLootTable(), LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(SgItems.ROD_BLUEPRINT)))
                 .withPool(LootPool.lootPool()
@@ -51,7 +36,7 @@ public class ModGiftLootTables extends VanillaGiftLoot {
                 .withPool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(SgItems.SHIELD_BLUEPRINT))));
 
-        for (Item item : SgItems.getItems(item -> item instanceof ICoreItem)) {
+        /*for (Item item : SgItems.getItems(item -> item instanceof ICoreItem)) {
             p_accept_1_.accept(SilentGear.getId("random_gear/" + NameUtils.fromItem(item).getPath()), LootTable.lootTable()
                     .withPool(LootPool.lootPool()
                             .add(LootItem.lootTableItem(item)
@@ -63,7 +48,7 @@ public class ModGiftLootTables extends VanillaGiftLoot {
                             .add(LootItem.lootTableItem(item)
                                     .setWeight(2)
                                     .apply(SelectGearTierLootFunction.builder(3)))));
-        }
+        }*/
 
         // FIXME
 /*        p_accept_1_.accept(SilentGear.getId("test/ldf_mallet"), LootTable.lootTable()
@@ -79,21 +64,5 @@ public class ModGiftLootTables extends VanillaGiftLoot {
                                 .apply(() -> setLore(ImmutableList.of(
                                         Component.literal("Standard Issue"),
                                         Component.literal("Protectors of Free Speech")))))));*/
-    }
-
-    @Nonnull
-    private static SetNameFunction setName(Component text) {
-        Constructor<SetNameFunction> constructor = ObfuscationReflectionHelper.findConstructor(SetNameFunction.class, LootItemCondition[].class, Component.class, LootContext.EntityTarget.class);
-        constructor.setAccessible(true);
-        try {
-            return constructor.newInstance(new LootItemCondition[0], text, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
-        }
-    }
-
-    private static SetLoreFunction setLore(List<Component> lore) {
-        return new SetLoreFunction(Collections.emptyList(), false, lore, Optional.empty());
     }
 }

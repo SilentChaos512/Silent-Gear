@@ -9,20 +9,20 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.part.IGearPart;
-import net.silentchaos512.gear.api.part.PartDataList;
+import net.silentchaos512.gear.api.part.GearPart;
+import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
-import net.silentchaos512.gear.api.stats.StatModifierMap;
-import net.silentchaos512.gear.api.util.StatGearKey;
-import net.silentchaos512.gear.gear.part.PartData;
-import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.api.property.GearProperty;
+import net.silentchaos512.gear.api.property.GearPropertyMap;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.util.PropertyKey;
+import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.GearData;
 
 import java.io.*;
@@ -33,11 +33,13 @@ import java.util.stream.Collectors;
 
 public final class PartsCommand {
     private static final SuggestionProvider<CommandSourceStack> partIdSuggestions = (ctx, builder) ->
-            SharedSuggestionProvider.suggestResource(PartManager.getValues().stream().map(IGearPart::getId), builder);
+            SharedSuggestionProvider.suggestResource(SgRegistries.PART.keySet(), builder);
     private static final SuggestionProvider<CommandSourceStack> partInGearSuggestions = (ctx, builder) -> {
-        PartDataList parts = GearData.getConstructionParts(getGear(ctx));
-        return SharedSuggestionProvider.suggestResource(parts.getUniqueParts(false).stream().map(part ->
-                part.get().getId()), builder);
+        PartList parts = GearData.getConstruction(getGear(ctx)).parts();
+        return SharedSuggestionProvider.suggestResource(
+                parts.stream().map(PartInstance::getId),
+                builder
+        );
     };
     private static final Pattern FORMAT_CODES = Pattern.compile("\u00a7[0-9a-z]");
 
@@ -64,14 +66,14 @@ public final class PartsCommand {
     }
 
     private static int runList(CommandContext<CommandSourceStack> context) {
-        String listStr = PartManager.getValues().stream()
-                .map(part -> part.getId().toString())
+        String listStr = SgRegistries.PART.keySet().stream()
+                .map(ResourceLocation::toString)
                 .collect(Collectors.joining(", "));
         context.getSource().sendSuccess(() -> Component.literal(listStr), true);
 
-        for (PartType type : PartType.getValues()) {
-            int count = PartManager.getPartsOfType(type).size();
-            String str = String.format("%s: %d", type.getName(), count);
+        for (PartType type : SgRegistries.PART_TYPE) {
+            int count = SgRegistries.PART.getPartsOfType(type).size();
+            String str = String.format("%s: %d", SgRegistries.PART_TYPE.getKey(type), count);
             context.getSource().sendSuccess(() -> Component.literal(str), true);
         }
 
@@ -89,12 +91,11 @@ public final class PartsCommand {
         }
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
-            StringBuilder builder = new StringBuilder("Name\tID\tType\tTier\t");
-            ItemStats.allStatsOrdered().forEach(s -> builder.append(s.getDisplayName().getString()).append("\t"));
-            builder.append("Traits");
+            StringBuilder builder = new StringBuilder("Name\tID\tType\t");
+            SgRegistries.GEAR_PROPERTY.forEach(prop -> builder.append(prop.getDisplayName().getString()).append("\t"));
             writer.write(builder.toString());
 
-            for (IGearPart part : PartManager.getValues()) {
+            for (GearPart part : SgRegistries.PART) {
                 writer.write(partToTsvLine(part) + "\n");
             }
         } catch (IOException e) {
@@ -106,24 +107,20 @@ public final class PartsCommand {
         return 1;
     }
 
-    private static String partToTsvLine(IGearPart part) {
+    private static String partToTsvLine(GearPart part) {
         StringBuilder builder = new StringBuilder();
-        PartData partData = PartData.of(part);
-        appendTsv(builder, part.getDisplayName(partData, ItemStack.EMPTY).getString());
-        appendTsv(builder, part.getId().toString());
-        appendTsv(builder, part.getType().getName());
-        appendTsv(builder, partData.getTier());
+        PartInstance partData = PartInstance.of(part);
+        appendTsv(builder, part.getDisplayName(partData, part.getType()).getString());
+        appendTsv(builder, SgRegistries.PART.getKey(part).toString());
+        appendTsv(builder, SgRegistries.PART_TYPE.getKey(part.getType()));
 
-        // Stats
-        for (ItemStat stat : ItemStats.allStatsOrdered()) {
-            Collection<StatInstance> statModifiers = partData.getStatModifiers(StatGearKey.of(stat, GearType.ALL), ItemStack.EMPTY);
-            appendTsv(builder, FORMAT_CODES.matcher(StatModifierMap.formatText(statModifiers, stat, 5).getString()).replaceAll(""));
+        // Properties
+        for (var property : SgRegistries.GEAR_PROPERTY) {
+            var mods = part.getPropertyModifiers(PartInstance.of(part), part.getType(), PropertyKey.of(property, GearTypes.ALL.get()));
+            //noinspection unchecked
+            var formattedText = GearPropertyMap.formatText((Collection<GearPropertyValue<?>>) mods, (GearProperty<?, GearPropertyValue<?>>) property, 5);
+            appendTsv(builder, FORMAT_CODES.matcher(formattedText.getString()).replaceAll(""));
         }
-
-        // Traits
-        appendTsv(builder, partData.getTraits().stream()
-                .map(t -> t.getTrait().getDisplayName(t.getLevel()).getString())
-                .collect(Collectors.joining(", ")));
 
         return builder.toString();
     }

@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -31,7 +30,6 @@ public abstract class ModContainerBlock<T extends BlockEntity> extends BaseEntit
         return tileFactory.create(pos, state);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
@@ -44,9 +42,8 @@ public abstract class ModContainerBlock<T extends BlockEntity> extends BaseEntit
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
         if (!worldIn.isClientSide) {
             BlockEntity tile = worldIn.getBlockEntity(pos);
             if (tile instanceof INamedContainerExtraData te && player instanceof ServerPlayer) {
@@ -56,6 +53,7 @@ public abstract class ModContainerBlock<T extends BlockEntity> extends BaseEntit
         return InteractionResult.SUCCESS;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;

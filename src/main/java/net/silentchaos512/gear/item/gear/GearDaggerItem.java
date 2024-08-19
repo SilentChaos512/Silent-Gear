@@ -4,8 +4,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 
+import java.util.function.Supplier;
+
 public class GearDaggerItem extends GearSwordItem {
-    public GearDaggerItem(GearType gearType) {
+    public GearDaggerItem(Supplier<GearType> gearType) {
         super(gearType);
     }
 

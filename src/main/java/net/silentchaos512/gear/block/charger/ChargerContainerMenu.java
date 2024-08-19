@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.GearApi;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgMenuTypes;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
@@ -32,7 +32,7 @@ public class ChargerContainerMenu extends AbstractContainerMenu {
         addSlot(new Slot(inventory, 0, 56, 23) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return GearApi.isMaterial(stack);
+                return MaterialInstance.from(stack) != null;
             }
         });
         addSlot(new Slot(inventory, 1, 56, 46) {

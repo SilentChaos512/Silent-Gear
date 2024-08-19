@@ -4,22 +4,21 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.material.IMaterial;
-import net.silentchaos512.gear.api.material.IMaterialInstance;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.part.PartData;
+import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import java.util.*;
 
 interface IGearRecipe {
     ICoreItem getOutputItem();
 
-    default Collection<PartData> getParts(Container inv) {
+    default Collection<PartInstance> getParts(Container inv) {
         List<MaterialInstance> materials = new ArrayList<>();
-        IMaterial first = null;
-        List<PartData> parts = new ArrayList<>();
+        Material first = null;
+        List<PartInstance> parts = new ArrayList<>();
 
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
@@ -31,13 +30,13 @@ interface IGearRecipe {
                     // If classic mixing is disabled, all materials must be the same
                     if (first == null) {
                         first = mat.get();
-                    } else if (!Config.Common.allowLegacyMaterialMixing.get() && first != mat.get()) {
+                    } else if (first != mat.get()) {
                         return Collections.emptyList();
                     }
 
                     materials.add(mat);
                 } else {
-                    PartData part = PartData.from(stack);
+                    PartInstance part = PartInstance.from(stack);
                     if (part != null) {
                         parts.add(part);
                     }
@@ -54,14 +53,14 @@ interface IGearRecipe {
         return parts;
     }
 
-    static Optional<PartData> createToolHead(GearType gearType, List<? extends IMaterialInstance> materials) {
-        return createCompoundPart(gearType, PartType.MAIN, materials);
+    static Optional<PartInstance> createToolHead(GearType gearType, List<MaterialInstance> materials) {
+        return createCompoundPart(gearType, PartTypes.MAIN.get(), materials);
     }
 
-    static Optional<PartData> createCompoundPart(GearType gearType, PartType partType, List<? extends IMaterialInstance> materials) {
+    static Optional<PartInstance> createCompoundPart(GearType gearType, PartType partType, List<MaterialInstance> materials) {
         return partType.getCompoundPartItem(gearType).map(item -> {
             ItemStack stack = item.create(materials);
-            return PartData.from(stack);
+            return PartInstance.from(stack);
         });
     }
 }
