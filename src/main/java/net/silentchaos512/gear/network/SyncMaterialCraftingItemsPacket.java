@@ -43,7 +43,7 @@ public class SyncMaterialCraftingItemsPacket {
     }
 
     public Map<PartType, Ingredient> getPartSubstitutes(ResourceLocation materialId) {
-        return partSubs.getOrDefault(materialId, Collections.emptyMap());
+        return partSubs.getOrDefault(materialId, Map.of());
     }
 
     public static SyncMaterialCraftingItemsPacket decode(FriendlyByteBuf buffer) {
