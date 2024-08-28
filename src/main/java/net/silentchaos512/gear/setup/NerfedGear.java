@@ -6,18 +6,19 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.lib.util.NameUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID)
+@EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class NerfedGear {
+    // FIXME: Maybe use ModifyDefaultComponentsEvent for this? Cannot use tags for that, probably...
     public static final List<String> DEFAULT_ITEMS = ImmutableList.of(
             "diamond_axe", "iron_axe", "golden_axe", "stone_axe", "wooden_axe",
             "diamond_hoe", "iron_hoe", "golden_hoe", "stone_hoe", "wooden_hoe",
@@ -54,7 +55,7 @@ public final class NerfedGear {
     }
 
     private static boolean isNerfedItem(Item item) {
-        return item.canBeDepleted() && Config.Common.isNerfedItem(item);
+        return Config.Common.isNerfedItem(item);
     }
 
     @SubscribeEvent

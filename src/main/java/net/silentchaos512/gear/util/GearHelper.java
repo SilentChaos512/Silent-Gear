@@ -3,6 +3,7 @@ package net.silentchaos512.gear.util;
 import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -30,9 +32,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.TierSortingRegistry;
-import net.neoforged.neoforge.common.ToolAction;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
 import net.silentchaos512.gear.api.item.GearType;
@@ -42,10 +43,9 @@ import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
@@ -61,10 +61,7 @@ import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -79,7 +76,7 @@ public final class GearHelper {
     public static Tiers DEFAULT_DUMMY_TIER = Tiers.WOOD;
     public static Holder<ArmorMaterial> DEFAULT_DUMMY_ARMOR_MATERIAL = ArmorMaterials.LEATHER;
 
-    private static final UUID REACH_MODIFIER_UUID = UUID.fromString("5e889b20-a8bd-43df-9ece-88a9f9be7530");
+    private static final ResourceLocation REACH_MODIFIER_ID = SilentGear.getId("reach_modifier");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
     private static final float BROKEN_DESTROY_SPEED = 0.25f;
 
@@ -161,8 +158,7 @@ public final class GearHelper {
                     .add(
                             Attributes.ATTACK_DAMAGE,
                             new AttributeModifier(
-                                    Item.BASE_ATTACK_DAMAGE_UUID,
-                                    "Tool modifier",
+                                    Item.BASE_ATTACK_DAMAGE_ID,
                                     getAttackDamageModifier(stack),
                                     AttributeModifier.Operation.ADD_VALUE
                             ),
@@ -171,8 +167,7 @@ public final class GearHelper {
                     .add(
                             Attributes.ATTACK_SPEED,
                             new AttributeModifier(
-                                    Item.BASE_ATTACK_SPEED_UUID,
-                                    "Tool modifier",
+                                    Item.BASE_ATTACK_SPEED_ID,
                                     getAttackSpeedModifier(stack),
                                     AttributeModifier.Operation.ADD_VALUE
                             ),
@@ -181,8 +176,7 @@ public final class GearHelper {
                     .add(
                             Attributes.BLOCK_INTERACTION_RANGE,
                             new AttributeModifier(
-                                    REACH_MODIFIER_UUID,
-                                    "Tool modifier",
+                                    REACH_MODIFIER_ID,
                                     GearData.getProperties(stack).getNumber(GearProperties.BLOCK_REACH),
                                     AttributeModifier.Operation.ADD_VALUE
                             ),
@@ -239,20 +233,21 @@ public final class GearHelper {
 
         ServerPlayer player = entity instanceof ServerPlayer ? (ServerPlayer) entity : null;
         final int preTraitAmount = amount;
-        amount = (int) TraitHelper.activateTraits(stack, preTraitAmount, (trait, val) ->
-                trait.getTrait().onDurabilityDamage(new TraitActionContext(player, trait, stack), (int) val));
+        amount = TraitHelper.activateTraits(stack, preTraitAmount, (trait, val) ->
+                (int) trait.getTrait().onDurabilityDamage(new TraitActionContext(player, trait, stack), val));
 
         final int maxDamage = stack.getMaxDamage();
         final int preDamageFactor = getDamageFactor(stack, maxDamage);
         if (!canBreakPermanently(stack))
             amount = Math.min(maxDamage - stack.getDamageValue(), amount);
-        stack.hurtAndBreak(amount, SilentGear.RANDOM_SOURCE, player, () -> {});
+        stack.hurtAndBreak(amount, player, slot);
 
         // Recalculate stats occasionally
         if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
-            GearData.recalculateStats(stack, player);
-            if (player != null)
+            GearData.recalculateGearData(stack, player);
+            if (player != null) {
                 onDamageFactorChange(player, preDamageFactor, getDamageFactor(stack, maxDamage));
+            }
         }
 
         handleBrokenItem(stack, player, slot);
@@ -265,7 +260,7 @@ public final class GearHelper {
         } else if (canBreakPermanently(stack) && stack.getDamageValue() > stack.getMaxDamage()) {
             // Item is gone forever, rest in pieces
             if (player != null) {
-                player.broadcastBreakEvent(slot); // entity.renderBrokenItemStack(stack);
+                player.onEquippedItemBroken(stack.getItem(), slot);
             }
             stack.shrink(1);
         }
@@ -281,9 +276,9 @@ public final class GearHelper {
      */
     public static void onBroken(ItemStack stack, @Nullable Player player, EquipmentSlot slot) {
         GearData.incrementBrokenCount(stack);
-        GearData.recalculateStats(stack, player);
+        GearData.recalculateGearData(stack, player);
         if (player != null) {
-            player.broadcastBreakEvent(slot);
+            player.onEquippedItemBroken(stack.getItem(), slot);
             notifyPlayerOfBrokenGear(stack, player);
         }
     }
@@ -354,25 +349,25 @@ public final class GearHelper {
         }
         superFunction.accept(stack, newDamage);
         if (!alreadyBroken && GearHelper.isBroken(stack)) {
-            GearData.recalculateStats(stack, null);
+            GearData.recalculateGearData(stack, null);
         }
     }
 
-    public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Runnable onBroken) {
+    public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
         final int preTraitValue;
         if (GearHelper.isUnbreakable(stack)) {
             preTraitValue = 0;
         } else if (!(Config.Common.isLoaded() && Config.Common.gearBreaksPermanently.get())) {
             preTraitValue = Mth.clamp(amount, 0, stack.getMaxDamage() - stack.getDamageValue() - 1);
             if (!isBroken(stack) && stack.getDamageValue() + preTraitValue >= stack.getMaxDamage() - 1) {
-                onBroken.run();
+                onBroken.accept(stack.getItem());
             }
         } else {
             preTraitValue = amount;
         }
 
-        final int value = (int) TraitHelper.activateTraits(stack, preTraitValue, (trait, val) ->
-                trait.getTrait().onDurabilityDamage(new TraitActionContext(null, trait, stack), (int) val));
+        final int value = TraitHelper.activateTraits(stack, preTraitValue, (trait, val) ->
+                (int) trait.getTrait().onDurabilityDamage(new TraitActionContext(null, trait, stack), val));
         GearHelper.damageParts(stack, value);
         return value;
     }
@@ -424,13 +419,10 @@ public final class GearHelper {
     }
 
     public static boolean isCorrectToolForDrops(ItemStack stack, BlockState state, @Nullable TagKey<Block> blocksForTool) {
-        Tier tier = GearData.getHarvestTier(stack);
-        if (tier != null) {
-            boolean isInToolTag = blocksForTool != null && state.is(blocksForTool);
-            return isInToolTag && TierSortingRegistry.isCorrectTierForDrops(tier, state);
-        }
-        // Tool is likely broken
-        return false;
+        if (GearHelper.isBroken(stack)) return false;
+
+        Tool tool = stack.get(DataComponents.TOOL);
+        return tool != null && tool.isCorrectForDrops(state);
     }
 
     public static float getDestroySpeed(ItemStack stack, BlockState state) {
@@ -672,7 +664,7 @@ public final class GearHelper {
     }
 
     private static ItemStack createSampleItem(ICoreItem item, int tier) {
-        ItemStack result = GearGenerator.create(item, tier);
+        ItemStack result = GearGenerator.create(item);
         if (result.isEmpty()) {
             Collection<PartInstance> parts = new ArrayList<>();
             for (PartType partType : item.getRequiredParts()) {
@@ -693,7 +685,7 @@ public final class GearHelper {
         }
         ItemStack result = new ItemStack(item);
         GearData.writeConstructionParts(result, parts);
-        GearData.recalculateStats(result, null);
+        GearData.recalculateGearData(result, null);
         return result;
     }
 
@@ -782,7 +774,7 @@ public final class GearHelper {
         return map.values();
     }
 
-    public static Set<ToolAction> makeToolActionSet(ToolAction... actions) {
+    public static Set<ItemAbility> makeItemAbilitySet(ItemAbility... actions) {
         return Stream.of(actions).collect(Collectors.toCollection(Sets::newIdentityHashSet));
     }
 

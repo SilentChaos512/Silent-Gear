@@ -9,6 +9,8 @@ import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 
+import javax.annotation.Nullable;
+
 public class GearArrowEntity extends Arrow {
     private ItemStack arrowStack = ItemStack.EMPTY;
 
@@ -16,12 +18,12 @@ public class GearArrowEntity extends Arrow {
         super(type, worldIn);
     }
 
-    public GearArrowEntity(Level worldIn, double x, double y, double z, ItemStack pickupItemStack) {
-        super(worldIn, x, y, z, pickupItemStack);
+    public GearArrowEntity(Level worldIn, double x, double y, double z, ItemStack pickupItemStack, @Nullable ItemStack firedWeapon) {
+        super(worldIn, x, y, z, pickupItemStack, firedWeapon);
     }
 
-    public GearArrowEntity(Level worldIn, LivingEntity shooter, ItemStack pickupItemStack) {
-        super(worldIn, shooter, pickupItemStack);
+    public GearArrowEntity(Level worldIn, LivingEntity shooter, ItemStack pickupItemStack, @Nullable ItemStack firedWeapon) {
+        super(worldIn, shooter, pickupItemStack, firedWeapon);
     }
 
     public void setArrowStack(ItemStack stack) {

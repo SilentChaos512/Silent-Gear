@@ -11,6 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -26,6 +27,7 @@ import net.silentchaos512.gear.api.traits.TraitEffectType;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.*;
@@ -72,13 +74,11 @@ public class AttributeTraitEffect extends TraitEffect {
 
             if (gearMatchesKey(context.gear(), key)) {
                 for (ModifierData mod : mods) {
-                    String modName = "Silent Gear trait modifier";
                     float modValue = mod.values.get(Mth.clamp(traitLevel - 1, 0, mod.values.size() - 1));
                     builder.add(
                             mod.attribute,
                             new AttributeModifier(
-                                    mod.getUuid(key, context),
-                                    modName,
+                                    mod.getModId(key, context),
                                     modValue,
                                     mod.operation
                             ),
@@ -124,7 +124,6 @@ public class AttributeTraitEffect extends TraitEffect {
         private final Holder<Attribute> attribute;
         private final List<Float> values;
         private final AttributeModifier.Operation operation;
-        private final Map<Key, UUID> uuidMap = new HashMap<>();
 
         public ModifierData(Holder<Attribute> attribute, List<Float> values, AttributeModifier.Operation operation) {
             this.attribute = attribute;
@@ -137,12 +136,16 @@ public class AttributeTraitEffect extends TraitEffect {
             return new ModifierData(attribute, Arrays.stream(values).toList(), operation);
         }
 
-        public UUID getUuid(Key key, TraitActionContext context) {
-            return uuidMap.computeIfAbsent(key, k -> {
-                var name = Objects.requireNonNull(BuiltInRegistries.ATTRIBUTE.getKey(this.attribute.value()));
-                var traitId = SgRegistries.TRAIT.getKey(context.trait());
-                return new UUID(((long) traitId.hashCode() << 32L) | name.hashCode(), k.hashCode());
-            });
+        public ResourceLocation getModId(Key key, TraitActionContext context) {
+            var itemId = BuiltInRegistries.ITEM.getKey(context.gear().getItem());
+            var primaryPart = GearData.getConstruction(context.gear()).getPrimaryPart();
+            var primaryMaterial = primaryPart != null ? primaryPart.getPrimaryMaterial() : null;
+            return ResourceLocation.fromNamespaceAndPath(
+                    itemId.getNamespace(),
+                    itemId.getPath()
+                            + "/" + key.group.getSerializedName()
+                            + (primaryMaterial != null ? "/" + primaryMaterial.getId() : "")
+            );
         }
 
         private String getWikiLine() {

@@ -29,12 +29,12 @@ public abstract class MaterialsProviderBase implements DataProvider {
     protected abstract Collection<MaterialBuilder<?>> getMaterials();
 
     protected DataResource<Material> modId(String path) {
-        return DataResource.material(new ResourceLocation(this.modId, path));
+        return DataResource.material(ResourceLocation.fromNamespaceAndPath(this.modId, path));
     }
 
     @SuppressWarnings("WeakerAccess")
     protected static ResourceLocation commonId(String path) {
-        return new ResourceLocation("c", path);
+        return ResourceLocation.fromNamespaceAndPath("c", path);
     }
 
     @Override

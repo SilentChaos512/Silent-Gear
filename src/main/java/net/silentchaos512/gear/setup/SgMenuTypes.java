@@ -1,13 +1,12 @@
 package net.silentchaos512.gear.setup;
 
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.network.IContainerFactory;
@@ -26,7 +25,7 @@ import net.silentchaos512.gear.block.press.MetalPressContainer;
 import net.silentchaos512.gear.block.press.MetalPressScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerContainer;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
-import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainer;
+import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainerMenu;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainerScreen;
 
 public final class SgMenuTypes {
@@ -65,8 +64,8 @@ public final class SgMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<ChargerContainerMenu>> STARLIGHT_CHARGER = register("starlight_charger",
             ChargerContainerMenu::createStarlightCharger);
 
-    public static final DeferredHolder<MenuType<?>, MenuType<BlueprintBookContainer>> BLUEPRINT_BOOK = register("blueprint_book",
-            BlueprintBookContainer::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<BlueprintBookContainerMenu>> BLUEPRINT_BOOK = register("blueprint_book",
+            BlueprintBookContainerMenu::new);
 
     private SgMenuTypes() {
     }
@@ -88,7 +87,7 @@ public final class SgMenuTypes {
     }
 
     @OnlyIn(Dist.CLIENT)
-    @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientEvents {
         @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {
@@ -100,7 +99,7 @@ public final class SgMenuTypes {
             event.register(SALVAGER.get(), SalvagerScreen::new);
             event.register(STARLIGHT_CHARGER.get(), ChargerContainerScreen::new);
 
-            MenuScreens.register(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
+            event.register(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
         }
     }
 }

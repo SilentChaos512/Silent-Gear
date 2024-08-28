@@ -1,18 +1,18 @@
 package net.silentchaos512.gear.gear.material;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
@@ -26,6 +26,7 @@ import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -39,13 +40,15 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public static final Codec<MaterialInstance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     DataResource.MATERIAL_CODEC.fieldOf("material").forGetter(m -> m.material),
-                    ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(m -> m.item)
+                    ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(m -> m.item),
+                    Codec.list(MaterialModifiers.CODEC).optionalFieldOf("modifiers", List.of()).forGetter(m -> m.modifiers)
             ).apply(instance, MaterialInstance::new)
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MaterialInstance> STREAM_CODEC = StreamCodec.composite(
             DataResource.MATERIAL_STREAM_CODEC, m -> m.material,
             ItemStack.STREAM_CODEC, m -> m.item,
+            MaterialModifiers.STREAM_CODEC.apply(ByteBufCodecs.list()), m -> m.modifiers,
             MaterialInstance::new
     );
 
@@ -53,18 +56,22 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
 
     private final DataResource<Material> material;
     private final ItemStack item;
-    private ImmutableList<IMaterialModifier> modifiers = ImmutableList.of(); // Start empty, build when needed
+    private final List<IMaterialModifier> modifiers;
 
     private MaterialInstance(DataResource<Material> material) {
         this(material, material.isPresent() ? material.get().getDisplayItem(PartTypes.MAIN.get(), 0) : ItemStack.EMPTY);
     }
 
     private MaterialInstance(DataResource<Material> material, ItemStack craftingItem) {
+        this(material, craftingItem, List.of());
+    }
+    private MaterialInstance(DataResource<Material> material, ItemStack craftingItem, List<IMaterialModifier> modifiers) {
         this.material = material;
         this.item = craftingItem.copy();
         if (!this.item.isEmpty()) {
             this.item.setCount(1);
         }
+        this.modifiers = modifiers;
     }
 
     public static MaterialInstance of(DataResource<Material> material) {
@@ -107,10 +114,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     }
 
     public Collection<IMaterialModifier> getModifiers() {
-        if (modifiers.isEmpty()) {
-            modifiers = ImmutableList.copyOf(MaterialModifiers.readFromMaterial(this));
-        }
-        return modifiers;
+        return this.modifiers;
     }
 
     @Nullable
@@ -289,5 +293,9 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public MaterialInstance onSalvage() {
         Material material = getNullable();
         return material != null ? material.onSalvage(this) : this;
+    }
+
+    public boolean is(DataResource<Material> material) {
+        return this.material == material;
     }
 }

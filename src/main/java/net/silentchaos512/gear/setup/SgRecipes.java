@@ -40,8 +40,6 @@ public final class SgRecipes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<ToolActionRecipe>> TOOL_ACTION_TYPE = registerType(Const.TOOL_ACTION);
 
     // Serializers
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CombineFragmentsRecipe>> COMBINE_FRAGMENTS = register(Const.COMBINE_FRAGMENTS, () ->
-            new SimpleCraftingRecipeSerializer<>(CombineFragmentsRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessCompoundPartRecipe>> COMPOUND_PART = register(Const.COMPOUND_PART, () ->
             new ExtendedShapelessRecipe.BasicSerializer<>(ShapelessCompoundPartRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AlloyRecipe>> COMPOUNDING = register(Const.COMPOUNDING, () ->

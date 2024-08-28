@@ -14,41 +14,37 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.BreakEventHandler;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public class GearSawItem extends GearAxeItem {
+public class GearSawItem extends GearAxeItem implements BreakEventHandler {
     public GearSawItem(Supplier<GearType> gearType) {
         super(gearType);
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        Level world = player.level();
-        if (!world.isClientSide) {
-            BlockState state = world.getBlockState(pos);
-
-            if (isLog(state) && detectTree(world, pos.getX(), pos.getY(), pos.getZ(), state.getBlock())) {
+    public void onBlockBreakEvent(ItemStack stack, Player player, Level level, BlockPos pos, BlockState state) {
+        if (!level.isClientSide) {
+            if (isLog(state) && detectTree(level, pos.getX(), pos.getY(), pos.getZ(), state.getBlock())) {
                 // Don't allow in creative mode.
                 if (player.getAbilities().instabuild) {
-                    return false;
+                    return;
                 }
 
                 TreeBreakResult result = new TreeBreakResult(stack, player);
-                breakTree(result, world, pos, pos, 0);
+                breakTree(result, level, pos, pos, 0);
                 SilentGear.LOGGER.debug("{} chopped down a tree with {} blocks using {}. Max recursion depth: {}",
                         player.getScoreboardName(),
                         result.blocksBroken,
                         stack.getHoverName().getString(),
-                        result.maxDepth);
-                return true;
+                        result.maxDepth
+                );
             }
         }
-
-        return false;
     }
 
     private static boolean detectTree(BlockGetter world, int x, int y, int z, Block wood) {
@@ -100,6 +96,7 @@ public class GearSawItem extends GearAxeItem {
         if (result != null && result.firstLog != null) {
             return state.getBlock() == result.firstLog;
         }
+        // TODO: Add a tag to allow more things to be recognized as trees, like crimson/warped fungus
         return state.is(BlockTags.LOGS);
     }
 
@@ -108,6 +105,7 @@ public class GearSawItem extends GearAxeItem {
     }
 
     private static boolean isFoliage(BlockState state, @Nullable TreeBreakResult result) {
+        // TODO: Add a tag to allow more things to be recognized as foliage?
         if (state.getBlock() == Blocks.SHROOMLIGHT) {
             return true;
         }

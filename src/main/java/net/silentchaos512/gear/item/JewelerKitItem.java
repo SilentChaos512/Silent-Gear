@@ -3,11 +3,14 @@ package net.silentchaos512.gear.item;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 
+import java.util.function.Supplier;
+
 public class JewelerKitItem extends PartBlueprintItem {
-    public JewelerKitItem(PartType partType, boolean singleUse, Properties properties) {
-        super(partType, singleUse, properties);
+    public JewelerKitItem(Supplier<PartType> partType, BlueprintType blueprintType, Properties properties) {
+        super(partType, blueprintType, properties);
     }
 
     @Override

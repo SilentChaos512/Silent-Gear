@@ -12,8 +12,8 @@ import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.setup.SgIngredientTypes;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
@@ -71,7 +71,7 @@ public final class GearPartIngredient implements ICustomIngredient, IGearIngredi
     public Stream<ItemStack> getItems() {
         // Although gear parts are not available when the ingredient is constructed,
         // they are available later on
-        Collection<GearPart> parts = PartManager.getPartsOfType(this.type);
+        Collection<GearPart> parts = SgRegistries.PART.getPartsOfType(this.type);
         if (!parts.isEmpty()) {
             return parts.stream()
                     .flatMap(part -> Stream.of(part.getIngredient().getItems()))

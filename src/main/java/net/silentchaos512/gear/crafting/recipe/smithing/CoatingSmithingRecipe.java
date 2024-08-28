@@ -38,7 +38,7 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
                 });
 
                 result.setDamageValue(0);
-                GearData.recalculateStats(result, CommonHooks.getCraftingPlayer()); // Crafting player is always null?
+                GearData.recalculateGearData(result, CommonHooks.getCraftingPlayer()); // Crafting player is always null?
                 return result;
             }
         }

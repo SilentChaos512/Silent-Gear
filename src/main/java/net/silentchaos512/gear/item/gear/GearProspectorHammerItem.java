@@ -9,9 +9,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
@@ -27,14 +27,13 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-        // TODO: Add a prospecting action?
-        return getGearType().canPerformAction(toolAction);
+    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+        return getGearType().canPerformAction(itemAbility);
     }
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        int range = Config.Common.prospectorHammerRange.get();
+        int range = getProspectingRange(context.getItemInHand());
         Player player = context.getPlayer();
         Direction face = context.getClickedFace();
         if (range <= 0 || player == null || face.getAxis() == Direction.Axis.Y) {
@@ -54,6 +53,10 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
         player.getCooldowns().addCooldown(this, 20);
 
         return InteractionResult.SUCCESS;
+    }
+
+    public Integer getProspectingRange(ItemStack stack) {
+        return Config.Common.prospectorHammerRange.get();
     }
 
     private static Component listFoundBlocks(Collection<BlockState> blocksFound) {

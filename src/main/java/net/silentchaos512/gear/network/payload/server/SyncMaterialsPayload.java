@@ -7,6 +7,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.material.MaterialSerializer;
+import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.setup.SgRegistries;
 
 import java.util.HashMap;
@@ -18,7 +20,7 @@ public record SyncMaterialsPayload(Map<ResourceLocation, Material> materials) im
     private static final StreamCodec<RegistryFriendlyByteBuf, HashMap<ResourceLocation, Material>> MAP_STREAM_CODEC = ByteBufCodecs.map(
             HashMap::new,
             ResourceLocation.STREAM_CODEC,
-            Material.STREAM_CODEC
+            MaterialSerializers.DISPATCH_STREAM_CODEC
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncMaterialsPayload> STREAM_CODEC = StreamCodec.of(

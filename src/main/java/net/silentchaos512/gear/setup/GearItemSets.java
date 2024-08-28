@@ -69,12 +69,15 @@ public class GearItemSets {
     static void registerGearItems() {
         LIST.forEach(set -> set.registerGearItem(SgItems.ITEMS));
     }
+
     static void registerMainPartItems() {
         LIST.forEach(set -> set.registerMainPartItem(SgItems.ITEMS));
     }
+
     static void registerBlueprintItems() {
         LIST.forEach(set -> set.registerBlueprintItem(SgItems.ITEMS));
     }
+
     static void registerTemplateItems() {
         LIST.forEach(set -> set.registerTemplateItem(SgItems.ITEMS));
     }

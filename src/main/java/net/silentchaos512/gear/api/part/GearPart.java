@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.api.part;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
@@ -77,7 +77,7 @@ public interface GearPart extends GearComponent<PartInstance> {
     }
 
     @Override
-    default boolean isCraftingAllowed(PartInstance part, PartType partType, GearType gearType, @Nullable Container inventory) {
+    default boolean isCraftingAllowed(PartInstance part, PartType partType, GearType gearType, @Nullable CraftingInput craftingInput) {
 /*        if (!GameStagesCompatProxy.canCraft(gearType, inventory) || !GameStagesCompatProxy.canCraft(this, inventory)) {
             return false;
         }*/

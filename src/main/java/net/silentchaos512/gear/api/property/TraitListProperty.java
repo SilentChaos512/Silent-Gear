@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.api.property;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -11,9 +12,16 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.client.util.GearTooltipFlag;
+import net.silentchaos512.gear.client.util.TextListBuilder;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.util.CodecUtils;
+import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.gear.util.TraitHelper;
+import net.silentchaos512.lib.event.ClientTicks;
+import net.silentchaos512.lib.util.Color;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -92,12 +100,63 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
     }
 
     @Override
-    public MutableComponent getFormattedText(TraitListPropertyValue value, int decimalPlaces, boolean addColor) {
+    public boolean isZero(List<TraitInstance> value) {
+        return value.isEmpty();
+    }
+
+    @Override
+    public MutableComponent formatValueWithColor(TraitListPropertyValue value, boolean addColor) {
+        return formatValue(value).plainCopy();
+    }
+
+    @Override
+    public Component formatValue(TraitListPropertyValue value) {
         return Component.literal(
                 value.value.stream()
                         .map(TraitInstance::getDisplayName)
                         .map(Component::getString)
                         .collect(Collectors.joining(", "))
         );
+    }
+
+    @Override
+    public List<Component> getTooltipLines(TraitListPropertyValue value, GearTooltipFlag flag) {
+        List<Component> result = new ArrayList<>();
+        var traits = value.value;
+        var displayIndex = getTraitDisplayIndex(traits.size(), flag);
+
+        MutableComponent textTraits = TextUtil.withColor(TextUtil.misc("tooltip.traits"), Color.GOLD);
+        if (displayIndex < 0) {
+            if (!Config.Client.vanillaStyleTooltips.get()) {
+                result.add(textTraits);
+            }
+        }
+
+        int i = 0;
+        for (var trait : traits) {
+            if (displayIndex < 0 || displayIndex == i) {
+                final int level = trait.getLevel();
+                trait.getTrait().addInformation(level, result, flag, text -> {
+                    if(Config.Client.vanillaStyleTooltips.get()) {
+                        var bullet = Component.literal(TextListBuilder.VANILLA_BULLET + " ");
+                        return TextUtil.withColor(bullet, Color.GRAY).append(text);
+                    }
+                    if (displayIndex >= 0) {
+                        var colon = Component.literal(": ");
+                        return textTraits.append(TextUtil.withColor(colon, ChatFormatting.GRAY).append(text));
+                    }
+                    return Component.literal(TextListBuilder.BULLETS[0] + " ").append(text);
+                });
+            }
+            ++i;
+        }
+
+        return result;
+    }
+
+    private static int getTraitDisplayIndex(int numTraits, GearTooltipFlag flag) {
+        if (Config.Client.vanillaStyleTooltips.get() || KeyTracker.isDisplayTraitsDown() || numTraits == 0)
+            return -1;
+        return ClientTicks.ticksInGame() / 20 % numTraits;
     }
 }

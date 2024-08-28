@@ -9,7 +9,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.AbstractMaterial;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;

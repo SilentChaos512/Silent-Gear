@@ -1,9 +1,6 @@
 package net.silentchaos512.gear.block.press;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -17,6 +14,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,7 +31,7 @@ import javax.annotation.Nullable;
 public class MetalPressBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, StackedContentsCompatible {
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
-    private final RecipeManager.CachedCheck<Container, PressingRecipe> quickCheck;
+    private final RecipeManager.CachedCheck<SingleRecipeInput, PressingRecipe> quickCheck;
 
     private NonNullList<ItemStack> items = NonNullList.withSize(2, ItemStack.EMPTY);
     private int progress = 0;
@@ -74,7 +72,7 @@ public class MetalPressBlockEntity extends BaseContainerBlockEntity implements W
         if (level == null || getItem(0).isEmpty()) {
             return null;
         }
-        var holder = quickCheck.getRecipeFor(this, level).orElse(null);
+        var holder = quickCheck.getRecipeFor(new SingleRecipeInput(this.items.getFirst()), level).orElse(null);
         if (holder != null) {
             return holder.value();
         }
@@ -83,7 +81,7 @@ public class MetalPressBlockEntity extends BaseContainerBlockEntity implements W
 
     private ItemStack getWorkOutput(@Nullable PressingRecipe recipe, RegistryAccess registryAccess) {
         if (recipe != null) {
-            return recipe.assemble(this, registryAccess);
+            return recipe.assemble(new SingleRecipeInput(this.items.getFirst()), registryAccess);
         }
         return ItemStack.EMPTY;
     }
@@ -171,6 +169,16 @@ public class MetalPressBlockEntity extends BaseContainerBlockEntity implements W
     }
 
     @Override
+    protected NonNullList<ItemStack> getItems() {
+        return this.items;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> pItems) {
+        this.items = pItems;
+    }
+
+    @Override
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new MetalPressContainer(id, player, this, this.fields);
     }
@@ -208,7 +216,7 @@ public class MetalPressBlockEntity extends BaseContainerBlockEntity implements W
     @Override
     public void setItem(int pSlot, ItemStack pStack) {
         ItemStack itemstack = this.items.get(pSlot);
-        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameTags(itemstack, pStack);
+        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, pStack);
         this.items.set(pSlot, pStack);
         if (pStack.getCount() > this.getMaxStackSize()) {
             pStack.setCount(this.getMaxStackSize());
@@ -238,15 +246,15 @@ public class MetalPressBlockEntity extends BaseContainerBlockEntity implements W
     }
 
     @Override
-    public void load(CompoundTag tags) {
-        super.load(tags);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tags, this.items);
+        ContainerHelper.loadAllItems(tag, this.items, provider);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        ContainerHelper.saveAllItems(pTag, this.items);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        ContainerHelper.saveAllItems(tag, this.items, provider);
     }
 }

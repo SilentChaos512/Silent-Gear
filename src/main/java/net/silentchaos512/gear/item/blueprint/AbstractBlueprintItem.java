@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.fml.ModList;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.List;

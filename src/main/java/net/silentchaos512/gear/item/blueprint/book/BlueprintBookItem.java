@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.item.blueprint.book;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -20,16 +21,17 @@ import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.item.ICycleItem;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlueprintBookItem extends Item implements IBlueprint, IContainerItem, ICycleItem {
-    private static final String NBT_SELECTED = "Selected";
     public static final int INVENTORY_SIZE = 6 * 9;
 
     public BlueprintBookItem(Properties properties) {
@@ -41,11 +43,11 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     public static int getSelectedSlot(ItemStack book) {
-        return clampSelectedSlot(book.getOrCreateTag().getInt(NBT_SELECTED));
+        return clampSelectedSlot(book.getOrDefault(SgDataComponents.SELECTED_SLOT, 0));
     }
 
     public static void setSelectedSlot(ItemStack book, int slot) {
-        book.getOrCreateTag().putInt(NBT_SELECTED, clampSelectedSlot(slot));
+        book.set(SgDataComponents.SELECTED_SLOT, clampSelectedSlot(slot));
     }
 
     private ItemStack getSelectedItem(ItemStack book) {
@@ -58,7 +60,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         if (!selected.isEmpty() && canStore(selected)) {
             return ((AbstractBlueprintItem) selected.getItem()).getPartType(selected);
         }
-        return PartType.MISC_UPGRADE;
+        return PartTypes.MISC_UPGRADE.get();
     }
 
     @Override
@@ -67,7 +69,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         if (!selected.isEmpty() && canStore(selected)) {
             return ((AbstractBlueprintItem) selected.getItem()).getGearType(selected);
         }
-        return GearType.NONE;
+        return GearTypes.NONE.get();
     }
 
     @Override
@@ -84,10 +86,10 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     public static void openContainer(ServerPlayer playerIn, ItemStack stack) {
         playerIn.openMenu(
                 new SimpleMenuProvider(
-                        (id, inv, z) -> new BlueprintBookContainer(id, inv, stack),
+                        (id, inv, z) -> new BlueprintBookContainerMenu(id, inv, stack),
                         Component.translatable("container.silentgear.blueprint_book")
                 ),
-                buf -> buf.writeItem(stack)
+                buf -> ItemStack.STREAM_CODEC.encode(buf, stack)
         );
     }
 
@@ -129,13 +131,12 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         for (int i = 0; i < blueprints.size() && i < getInventorySize(filled); i++) {
             inventory.insertItem(i, new ItemStack(blueprints.get(i)), false);
         }
-        this.saveInventory(filled, inventory);
-        filled.setHoverName(TextUtil.translate("item", "blueprint_book.fully_loaded"));
+        filled.set(DataComponents.CUSTOM_NAME, TextUtil.translate("item", "blueprint_book.fully_loaded"));
         return filled;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack,TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
         ItemStack selected = getSelectedItem(stack);
         if (!selected.isEmpty()) {
             tooltip.add(TextUtil.withColor(TextUtil.translate("item", "blueprint_book.selected"), Color.SKYBLUE)

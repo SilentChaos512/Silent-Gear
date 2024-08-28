@@ -1,14 +1,13 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.DoorBlock;
@@ -16,35 +15,26 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.util.NameUtils;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
-    private static final float[] DEFAULT_SAPLING_DROP_RATES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
-    private static final LootItemCondition.Builder SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
-    private static final LootItemCondition.Builder SHEARS = MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.SHEARS));
-    private static final LootItemCondition.Builder SILK_TOUCH_OR_SHEARS = SHEARS.or(SILK_TOUCH);
-    private static final LootItemCondition.Builder NOT_SILK_TOUCH_OR_SHEARS = SILK_TOUCH_OR_SHEARS.invert();
-
-    protected ModBlockLootTables() {
-        super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags());
+    protected ModBlockLootTables(HolderLookup.Provider provider) {
+        super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags(), provider);
     }
 
     @Override
@@ -72,7 +62,9 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         dropSelf(SgBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
         dropSelf(SgBlocks.NETHERWOOD_FENCE.get());
         dropSelf(SgBlocks.NETHERWOOD_FENCE_GATE.get());
-        add(SgBlocks.NETHERWOOD_LEAVES.get(), netherwoodLeaves(SgBlocks.NETHERWOOD_SAPLING, CraftingItems.NETHERWOOD_STICK, DEFAULT_SAPLING_DROP_RATES));
+        add(SgBlocks.NETHERWOOD_LEAVES.get(), block ->
+                createNetherwoodLeaves(block, SgBlocks.NETHERWOOD_SAPLING.get(), 0.05F, 0.0625F, 0.083333336F, 0.1F)
+        );
         dropSelf(SgBlocks.NETHERWOOD_LOG.get());
         dropSelf(SgBlocks.STRIPPED_NETHERWOOD_LOG.get());
         dropSelf(SgBlocks.NETHERWOOD_WOOD.get());
@@ -126,50 +118,73 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         dropOther(SgBlocks.WILD_FLUFFY_PLANT.get(), SgItems.FLUFFY_SEEDS);
     }
 
-    @Nonnull
-    private Function<Block, LootTable.Builder> netherwoodLeaves(ItemLike sapling, ItemLike stick, float... chances) {
-        return (block) -> createSelfDropDispatchTable(block, SILK_TOUCH_OR_SHEARS, applyExplosionCondition(block, LootItem.lootTableItem(sapling))
-                .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, chances)))
-                .withPool(LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1))
-                        .when(NOT_SILK_TOUCH_OR_SHEARS)
-                        .add(applyExplosionDecay(block, LootItem.lootTableItem(stick)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
-                                .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F))))
-                .withPool(LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1))
-                        .when(NOT_SILK_TOUCH_OR_SHEARS)
-                        .add(applyExplosionCondition(block, LootItem.lootTableItem(SgItems.NETHER_BANANA))
-                                .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
+    private LootTable.Builder createNetherwoodLeaves(Block leavesBlock, Block saplingBlock, float... chances) {
+        HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        return this.createSilkTouchOrShearsDispatchTable(
+                        leavesBlock,
+                        ((LootPoolSingletonContainer.Builder<?>) this.applyExplosionCondition(leavesBlock, LootItem.lootTableItem(saplingBlock)))
+                                .when(BonusLevelTableCondition.bonusLevelFlatChance(registrylookup.getOrThrow(Enchantments.FORTUNE), chances))
+                )
+                .withPool(
+                        LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .when(this.doesNotHaveShearsOrSilkTouch())
+                                .add(
+                                        ((LootPoolSingletonContainer.Builder<?>) this.applyExplosionDecay(
+                                                leavesBlock, LootItem.lootTableItem(CraftingItems.NETHERWOOD_STICK)
+                                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
+                                        ))
+                                                .when(BonusLevelTableCondition.bonusLevelFlatChance(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F))
+                                )
+                )
+                .withPool(
+                        LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .when(this.doesNotHaveShearsOrSilkTouch())
+                                .add(
+                                        ((LootPoolSingletonContainer.Builder<?>) this.applyExplosionCondition(leavesBlock, LootItem.lootTableItem(SgItems.NETHER_BANANA)))
+                                                .when(
+                                                        BonusLevelTableCondition.bonusLevelFlatChance(
+                                                                registrylookup.getOrThrow(Enchantments.FORTUNE), 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F
+                                                        )
+                                                )
+                                )
+                );
     }
 
     private LootTable.Builder flaxPlant(LootItemCondition.Builder builder) {
+        var registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        var fortune = registrylookup.getOrThrow(Enchantments.FORTUNE);
+
         return applyExplosionDecay(SgBlocks.FLAX_PLANT, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .when(builder)
                         .add(LootItem.lootTableItem(CraftingItems.FLAX_FIBER)
-                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(fortune, 0.5714286F, 3))))
                 .withPool(LootPool.lootPool()
                         .when(builder)
                         .add(LootItem.lootTableItem(SgItems.FLAX_SEEDS)
-                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(fortune, 0.5714286F, 3))))
                 .withPool(LootPool.lootPool()
                         .when(builder)
                         .add(LootItem.lootTableItem(CraftingItems.FLAX_FLOWERS)
-                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5f, 1))))
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(fortune, 0.5f, 1))))
         );
     }
 
     private LootTable.Builder fluffyPlant(LootItemCondition.Builder builder) {
+        var registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        var fortune = registrylookup.getOrThrow(Enchantments.FORTUNE);
+
         return applyExplosionDecay(SgBlocks.FLUFFY_PLANT, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .when(builder)
                         .add(LootItem.lootTableItem(CraftingItems.FLUFFY_PUFF)
-                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(fortune, 0.5714286F, 3))))
                 .withPool(LootPool.lootPool()
                         .when(builder)
                         .add(LootItem.lootTableItem(SgItems.FLUFFY_SEEDS)
-                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))))
+                                .apply(ApplyBonusCount.addBonusBinomialDistributionCount(fortune, 0.5714286F, 3))))
         );
     }
 
@@ -178,5 +193,13 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         return BuiltInRegistries.BLOCK.stream()
                 .filter(block -> SilentGear.MOD_ID.equals(NameUtils.fromBlock(block).getNamespace()))
                 .collect(Collectors.toSet());
+    }
+
+    private LootItemCondition.Builder hasShearsOrSilkTouch() {
+        return HAS_SHEARS.or(this.hasSilkTouch());
+    }
+
+    private LootItemCondition.Builder doesNotHaveShearsOrSilkTouch() {
+        return this.hasShearsOrSilkTouch().invert();
     }
 }

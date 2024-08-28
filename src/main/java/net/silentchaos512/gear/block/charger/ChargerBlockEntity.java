@@ -25,9 +25,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.block.INamedContainerExtraData;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialModifiers;
+import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.gear.gear.material.modifier.ChargedMaterialModifier;
 import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifier;
 import net.silentchaos512.gear.setup.SgBlockEntities;
@@ -98,7 +98,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
     }
 
     public static ChargerBlockEntity<StarchargedMaterialModifier> createStarlightCharger(BlockPos pos, BlockState state) {
-        return new ChargerBlockEntity<>(SgBlockEntities.STARLIGHT_CHARGER.get(), MaterialModifiers.STARCHARGED, pos, state);
+        return new ChargerBlockEntity<>(SgBlockEntities.STARLIGHT_CHARGER.get(), MaterialModifiers.STARCHARGED.get(), pos, state);
     }
 
     protected int getMaxCharge() {

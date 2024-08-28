@@ -16,9 +16,7 @@ import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
-import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -27,7 +25,6 @@ import net.silentchaos512.gear.util.GearData;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -117,8 +114,7 @@ public final class PartsCommand {
         // Properties
         for (var property : SgRegistries.GEAR_PROPERTY) {
             var mods = part.getPropertyModifiers(PartInstance.of(part), part.getType(), PropertyKey.of(property, GearTypes.ALL.get()));
-            //noinspection unchecked
-            var formattedText = GearPropertyMap.formatText((Collection<GearPropertyValue<?>>) mods, (GearProperty<?, GearPropertyValue<?>>) property, 5);
+            var formattedText = GearPropertyMap.formatTextUnchecked(mods, property, false);
             appendTsv(builder, FORMAT_CODES.matcher(formattedText.getString()).replaceAll(""));
         }
 

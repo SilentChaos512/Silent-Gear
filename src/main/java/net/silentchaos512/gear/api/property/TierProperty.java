@@ -86,8 +86,19 @@ public class TierProperty extends GearProperty<Tier, TierPropertyValue> {
     }
 
     @Override
-    public MutableComponent getFormattedText(TierPropertyValue value, int decimalPlaces, boolean addColor) {
+    public boolean isZero(Tier value) {
+        return value == getZeroValue();
+    }
+
+    @Override
+    public MutableComponent formatValueWithColor(TierPropertyValue value, boolean addColor) {
         return Component.literal(value.value.toString());
+    }
+
+    @Override
+    public Component formatValue(TierPropertyValue value) {
+        var id = Hack.TEMP_TOOL_TIERS_REVERSE.get(value.value);
+        return Component.literal(id.toString());
     }
 
     // region Temporary tier sorting hack
@@ -95,21 +106,21 @@ public class TierProperty extends GearProperty<Tier, TierPropertyValue> {
     // FIXME: Delete all of this whenever NeoForge replaces TierSortingRegistry
     public static class Hack {
         private static final Map<ResourceLocation, Tier> TEMP_TOOL_TIERS = ImmutableMap.<ResourceLocation, Tier>builder()
-                .put(new ResourceLocation("wood"), Tiers.WOOD)
-                .put(new ResourceLocation("stone"), Tiers.STONE)
-                .put(new ResourceLocation("iron"), Tiers.IRON)
-                .put(new ResourceLocation("diamond"), Tiers.DIAMOND)
-                .put(new ResourceLocation("gold"), Tiers.GOLD)
-                .put(new ResourceLocation("netherite"), Tiers.NETHERITE)
+                .put(ResourceLocation.withDefaultNamespace("wood"), Tiers.WOOD)
+                .put(ResourceLocation.withDefaultNamespace("stone"), Tiers.STONE)
+                .put(ResourceLocation.withDefaultNamespace("iron"), Tiers.IRON)
+                .put(ResourceLocation.withDefaultNamespace("diamond"), Tiers.DIAMOND)
+                .put(ResourceLocation.withDefaultNamespace("gold"), Tiers.GOLD)
+                .put(ResourceLocation.withDefaultNamespace("netherite"), Tiers.NETHERITE)
                 .build();
 
         private static final Map<Tier, ResourceLocation> TEMP_TOOL_TIERS_REVERSE = ImmutableMap.<Tier, ResourceLocation>builder()
-                .put(Tiers.WOOD, new ResourceLocation("wood"))
-                .put(Tiers.STONE, new ResourceLocation("stone"))
-                .put(Tiers.IRON, new ResourceLocation("iron"))
-                .put(Tiers.DIAMOND, new ResourceLocation("diamond"))
-                .put(Tiers.GOLD, new ResourceLocation("gold"))
-                .put(Tiers.NETHERITE, new ResourceLocation("netherite"))
+                .put(Tiers.WOOD, ResourceLocation.withDefaultNamespace("wood"))
+                .put(Tiers.STONE, ResourceLocation.withDefaultNamespace("stone"))
+                .put(Tiers.IRON, ResourceLocation.withDefaultNamespace("iron"))
+                .put(Tiers.DIAMOND, ResourceLocation.withDefaultNamespace("diamond"))
+                .put(Tiers.GOLD, ResourceLocation.withDefaultNamespace("gold"))
+                .put(Tiers.NETHERITE, ResourceLocation.withDefaultNamespace("netherite"))
                 .build();
 
         private static final Tier[] TEMP_TOOL_TIER_SORT = {

@@ -29,6 +29,7 @@ import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.block.IDroppableInventory;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipeInput;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -46,7 +47,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends BaseContainerB
 
     private final AlloyMakerInfo<R> info;
     private final int[] allSlots;
-    private final RecipeManager.CachedCheck<AlloyMakerBlockEntity<?>, R> quickCheck;
+    private final RecipeManager.CachedCheck<AlloyRecipeInput, R> quickCheck;
 
     private NonNullList<ItemStack> items;
     private ItemStack outputItemHint = ItemStack.EMPTY;
@@ -99,7 +100,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends BaseContainerB
 
     protected ItemStack getWorkOutput(@Nullable R recipe, RegistryAccess registryAccess, List<MaterialInstance> materials) {
         if (recipe != null) {
-            return recipe.assemble(this, registryAccess);
+            return recipe.assemble(AlloyRecipeInput.of(this), registryAccess);
         }
         return getOutputItem(materials).create(materials);
     }
@@ -141,7 +142,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends BaseContainerB
             return;
         }
 
-        var recipe = blockEntity.quickCheck.getRecipeFor(blockEntity, level).orElse(null);
+        var recipe = blockEntity.quickCheck.getRecipeFor(AlloyRecipeInput.of(blockEntity), level).orElse(null);
         if (recipe != null) {
             // Inputs match a custom recipe
             blockEntity.doWork(recipe.value(), level.registryAccess(), Collections.emptyList());

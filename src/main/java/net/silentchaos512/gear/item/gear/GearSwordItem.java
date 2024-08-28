@@ -1,27 +1,25 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreWeapon;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -30,7 +28,7 @@ public class GearSwordItem extends SwordItem implements ICoreWeapon {
     private final Supplier<GearType> gearType;
 
     public GearSwordItem(Supplier<GearType> gearType) {
-        super(GearHelper.DEFAULT_DUMMY_TIER, 0, 0, GearHelper.getBaseItemProperties());
+        super(GearHelper.DEFAULT_DUMMY_TIER, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
     }
 
@@ -42,13 +40,15 @@ public class GearSwordItem extends SwordItem implements ICoreWeapon {
     //region Standard tool overrides
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
+        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        return GearHelper.getAttributeModifiers(slot, stack);
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+        var builder = ItemAttributeModifiers.builder();
+        GearHelper.addAttributeModifiers(stack, builder);
+        return builder.build();
     }
 
     @Override
@@ -73,12 +73,7 @@ public class GearSwordItem extends SwordItem implements ICoreWeapon {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, ItemStats.DURABILITY);
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return GearHelper.getRarity(stack);
+        return GearData.getProperties(stack).getNumberInt(getDurabilityStat());
     }
 
     @Override
@@ -112,7 +107,7 @@ public class GearSwordItem extends SwordItem implements ICoreWeapon {
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 

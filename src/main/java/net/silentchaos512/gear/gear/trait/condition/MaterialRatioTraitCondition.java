@@ -7,9 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -33,13 +31,6 @@ public record MaterialRatioTraitCondition(float requiredRatio) implements ITrait
     );
     public static final TraitConditionSerializer<MaterialRatioTraitCondition> SERIALIZER = new TraitConditionSerializer<>(CODEC, STREAM_CODEC);
 
-    private static final ResourceLocation NAME = SilentGear.getId("material_ratio");
-
-    @Override
-    public ResourceLocation getId() {
-        return NAME;
-    }
-
     @Override
     public TraitConditionSerializer<?> serializer() {
         return SERIALIZER;
@@ -49,7 +40,7 @@ public record MaterialRatioTraitCondition(float requiredRatio) implements ITrait
     public boolean matches(Trait trait, PartGearKey key, ItemStack gear, List<? extends GearComponentInstance<?>> components) {
         int count = 0;
         for (GearComponentInstance<?> comp : components) {
-            Collection<TraitInstance> traits = comp.getTraits(key, gear);
+            Collection<TraitInstance> traits = comp.getTraits(key);
             for (TraitInstance inst : traits) {
                 if (inst.getTrait() == trait) {
                     ++count;

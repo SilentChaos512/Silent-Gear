@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.setup.gear;
 
-import net.neoforged.neoforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
@@ -85,107 +85,107 @@ public class GearTypes {
     // Standard harvest tools
     public static final DeferredHolder<GearType, GearType> PICKAXE = REGISTRAR.register("pickaxe",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ToolActions.DEFAULT_PICKAXE_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_PICKAXE_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> SHOVEL = REGISTRAR.register("shovel",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ToolActions.DEFAULT_SHOVEL_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_SHOVEL_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> AXE = REGISTRAR.register("axe",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ToolActions.DEFAULT_AXE_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_AXE_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> HOE = REGISTRAR.register("hoe",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ToolActions.DEFAULT_HOE_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_HOE_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> SHEARS = REGISTRAR.register("shears",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ToolActions.DEFAULT_SHEARS_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_SHEARS_ACTIONS)
                     .build()
     );
     // Big harvest tool
     public static final DeferredHolder<GearType, GearType> HAMMER = REGISTRAR.register("hammer",
             () -> GearType.Builder.of(PICKAXE)
-                    .toolActions(ToolActions.PICKAXE_DIG)
+                    .toolActions(ItemAbilities.PICKAXE_DIG)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> EXCAVATOR = REGISTRAR.register("excavator",
             () -> GearType.Builder.of(SHOVEL)
-                    .toolActions(ToolActions.SHOVEL_DIG)
+                    .toolActions(ItemAbilities.SHOVEL_DIG)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> SAW = REGISTRAR.register("saw",
             () -> GearType.Builder.of(AXE)
-                    .toolActions(ToolActions.AXE_DIG)
+                    .toolActions(ItemAbilities.AXE_DIG)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> SICKLE = REGISTRAR.register("sickle",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ToolActions.HOE_DIG)
+                    .toolActions(ItemAbilities.HOE_DIG)
                     .build()
     );
     // Specialty harvest tools
     public static final DeferredHolder<GearType, GearType> MATTOCK = REGISTRAR.register("mattock",
             () -> GearType.Builder.of(HARVEST_TOOL)
                     .toolActions(
-                            ToolActions.SHOVEL_DIG,
-                            ToolActions.AXE_DIG,
-                            ToolActions.HOE_DIG,
-                            ToolActions.HOE_TILL
+                            ItemAbilities.SHOVEL_DIG,
+                            ItemAbilities.AXE_DIG,
+                            ItemAbilities.HOE_DIG,
+                            ItemAbilities.HOE_TILL
                     )
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> PAXEL = REGISTRAR.register("paxel",
             () -> GearType.Builder.of(HARVEST_TOOL)
                     .toolActions(
-                            ToolActions.AXE_DIG,
-                            ToolActions.AXE_SCRAPE,
-                            ToolActions.AXE_STRIP,
-                            ToolActions.AXE_WAX_OFF,
-                            ToolActions.PICKAXE_DIG,
-                            ToolActions.SHOVEL_DIG
+                            ItemAbilities.AXE_DIG,
+                            ItemAbilities.AXE_SCRAPE,
+                            ItemAbilities.AXE_STRIP,
+                            ItemAbilities.AXE_WAX_OFF,
+                            ItemAbilities.PICKAXE_DIG,
+                            ItemAbilities.SHOVEL_DIG
                     )
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> PROSPECTOR_HAMMER = REGISTRAR.register("prospector_hammer",
             () -> GearType.Builder.of(PICKAXE)
-                    .toolActions(ToolActions.DEFAULT_PICKAXE_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_PICKAXE_ACTIONS)
                     .build()
     );
 
     // Melee weapons
     public static final DeferredHolder<GearType, GearType> SWORD = REGISTRAR.register("sword",
             () -> GearType.Builder.of(MELEE_WEAPON)
-                    .toolActions(ToolActions.DEFAULT_SWORD_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_SWORD_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> KATANA = REGISTRAR.register("katana",
             () -> GearType.Builder.of(MELEE_WEAPON)
-                    .toolActions(ToolActions.DEFAULT_SWORD_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_SWORD_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> MACHETE = REGISTRAR.register("machete",
             () -> GearType.Builder.of(MELEE_WEAPON)
                     .toolActions(
-                            ToolActions.SWORD_DIG,
-                            ToolActions.SWORD_SWEEP,
-                            ToolActions.AXE_DIG
+                            ItemAbilities.SWORD_DIG,
+                            ItemAbilities.SWORD_SWEEP,
+                            ItemAbilities.AXE_DIG
                     )
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> SPEAR = REGISTRAR.register("spear",
             () -> GearType.Builder.of(MELEE_WEAPON)
-                    .toolActions(ToolActions.SWORD_DIG)
+                    .toolActions(ItemAbilities.SWORD_DIG)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> TRIDENT = REGISTRAR.register("trident",
             () -> GearType.Builder.of(MELEE_WEAPON)
-                    .toolActions(ToolActions.DEFAULT_TRIDENT_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_TRIDENT_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> MACE = REGISTRAR.register("mace",
@@ -194,12 +194,12 @@ public class GearTypes {
     );
     public static final DeferredHolder<GearType, GearType> DAGGER = REGISTRAR.register("dagger",
             () -> GearType.Builder.of(MELEE_WEAPON)
-                    .toolActions(ToolActions.SWORD_DIG)
+                    .toolActions(ItemAbilities.SWORD_DIG)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> KNIFE = REGISTRAR.register("knife",
             () -> GearType.Builder.of(MELEE_WEAPON)
-                    .toolActions(ToolActions.SWORD_DIG)
+                    .toolActions(ItemAbilities.SWORD_DIG)
                     .build()
     );
 
@@ -220,7 +220,7 @@ public class GearTypes {
     // Other tools
     public static final DeferredHolder<GearType, GearType> FISHING_ROD = REGISTRAR.register("fishing_rod",
             () -> GearType.Builder.of(TOOL)
-                    .toolActions(ToolActions.DEFAULT_FISHING_ROD_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_FISHING_ROD_ACTIONS)
                     .relevantPropertyGroups(
                             GearPropertyGroups.TRAITS,
                             GearPropertyGroups.GENERAL
@@ -229,7 +229,7 @@ public class GearTypes {
     );
     public static final DeferredHolder<GearType, GearType> SHIELD = REGISTRAR.register("shield",
             () -> GearType.Builder.of(TOOL)
-                    .toolActions(ToolActions.DEFAULT_SHIELD_ACTIONS)
+                    .toolActions(ItemAbilities.DEFAULT_SHIELD_ACTIONS)
                     .relevantPropertyGroups(
                             GearPropertyGroups.TRAITS,
                             GearPropertyGroups.GENERAL

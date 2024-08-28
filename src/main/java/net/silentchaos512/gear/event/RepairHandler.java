@@ -8,7 +8,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.gear.part.RepairContext;
@@ -39,7 +39,7 @@ public final class RepairHandler {
         applyName(event, result);
 
         GearData.addUpgradePart(result, part);
-        GearData.recalculateStats(result, null);
+        GearData.recalculateGearData(result, null);
 
         event.setOutput(result);
         // TODO: Upgrade cost?
@@ -51,7 +51,7 @@ public final class RepairHandler {
         applyName(event, result);
 
         float repairValue = material.getRepairValue(result, RepairContext.Type.ANVIL);
-        float gearRepairEfficiency = GearData.getProperties(result).getNumber(GearProperties.REPAIR_EFFICIENCY);
+        float gearRepairEfficiency = GearData.getProperties(result, event.getPlayer()).getNumber(GearProperties.REPAIR_EFFICIENCY);
         float anvilEfficiency = Config.Common.repairFactorAnvil.get().floatValue();
         float amount = repairValue * gearRepairEfficiency * anvilEfficiency;
 
@@ -66,7 +66,7 @@ public final class RepairHandler {
         if (amount > 0) {
             var repairAmount = Math.round(amount * materialCount);
             result.setDamageValue(result.getDamageValue() - repairAmount);
-            GearData.recalculateStats(result, null);
+            GearData.recalculateGearData(result, null);
             event.setOutput(result);
             event.setCost(materialCount);
             event.setMaterialCost(materialCount);

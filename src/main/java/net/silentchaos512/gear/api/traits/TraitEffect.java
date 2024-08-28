@@ -5,6 +5,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
@@ -13,7 +14,9 @@ import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.setup.SgRegistries;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 public abstract class TraitEffect {
@@ -61,8 +64,14 @@ public abstract class TraitEffect {
         // Nothing
     }
 
-    public <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> V onGetProperty(TraitActionContext context, P property, V value, float damageRatio) {
-        return value;
+    public Collection<GearPropertyValue<?>> getBonusProperties(
+            int traitLevel,
+            @Nullable Player player,
+            GearProperty<?, ?> property,
+            GearPropertyValue<?> baseValue,
+            float damageRatio
+    ) {
+        return Collections.emptyList();
     }
 
     public void onGetAttributeModifiers(TraitActionContext context, ItemAttributeModifiers.Builder builder) {

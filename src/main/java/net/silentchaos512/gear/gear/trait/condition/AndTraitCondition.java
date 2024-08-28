@@ -7,9 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
@@ -33,8 +31,6 @@ public record AndTraitCondition(List<ITraitCondition> children) implements ITrai
     );
     public static final TraitConditionSerializer<AndTraitCondition> SERIALIZER = new TraitConditionSerializer<>(CODEC, STREAM_CODEC);
 
-    private static final ResourceLocation NAME = SilentGear.getId("and");
-
     public AndTraitCondition(ITraitCondition... values) {
         this(Arrays.asList(values));
     }
@@ -51,11 +47,6 @@ public record AndTraitCondition(List<ITraitCondition> children) implements ITrai
                 throw new IllegalArgumentException("Value must not be null");
             }
         }
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return NAME;
     }
 
     @Override

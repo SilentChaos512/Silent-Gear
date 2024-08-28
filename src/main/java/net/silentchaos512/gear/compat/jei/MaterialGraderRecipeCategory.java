@@ -13,8 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.block.grader.GraderScreen;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -69,7 +69,7 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
 
     @Nonnull
     public static List<ItemStack> getMaterials() {
-        return MaterialManager.getValues().stream()
+        return SgRegistries.MATERIAL.getValues(true).stream()
                 .map(Material::getIngredient)
                 .flatMap(ing -> Arrays.stream(ing.getItems()))
                 .collect(Collectors.toList());

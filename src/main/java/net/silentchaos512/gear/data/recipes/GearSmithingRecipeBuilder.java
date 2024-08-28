@@ -22,6 +22,7 @@ import net.silentchaos512.gear.crafting.recipe.smithing.CoatingSmithingRecipe;
 import net.silentchaos512.gear.crafting.recipe.smithing.GearSmithingRecipe;
 import net.silentchaos512.gear.crafting.recipe.smithing.UpgradeSmithingRecipe;
 import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
@@ -43,20 +44,22 @@ public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements 
         this.addition = addition;
     }
 
-    public static GearSmithingRecipeBuilder coating(ItemLike gearItem) {
-        return new GearSmithingRecipeBuilder(CoatingSmithingRecipe::new,
+    public static GearSmithingRecipeBuilder<CoatingSmithingRecipe> coating(ItemLike gearItem) {
+        return new GearSmithingRecipeBuilder<>(CoatingSmithingRecipe::new,
                 "coating",
                 gearItem.asItem(),
                 Ingredient.of(SgItems.COATING_SMITHING_TEMPLATE),
-                PartMaterialIngredient.of(PartType.COATING));
+                new Ingredient(PartMaterialIngredient.of(PartTypes.COATING.get()))
+        );
     }
 
-    public static GearSmithingRecipeBuilder upgrade(ItemLike gearItem, PartType partType) {
-        return new GearSmithingRecipeBuilder(UpgradeSmithingRecipe::new,
+    public static GearSmithingRecipeBuilder<UpgradeSmithingRecipe> upgrade(ItemLike gearItem, PartType partType) {
+        return new GearSmithingRecipeBuilder<>(UpgradeSmithingRecipe::new,
                 "upgrade",
                 gearItem.asItem(),
                 Ingredient.of(Items.STICK),
-                GearPartIngredient.of(partType));
+                new Ingredient(GearPartIngredient.of(partType))
+        );
     }
 
     @Override

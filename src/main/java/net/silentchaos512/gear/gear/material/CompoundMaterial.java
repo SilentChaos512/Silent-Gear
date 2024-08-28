@@ -5,8 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.api.event.GetMaterialPropertiesEvent;
@@ -172,7 +172,7 @@ public class CompoundMaterial extends AbstractMaterial {
     }
 
     @Override
-    public boolean isCraftingAllowed(MaterialInstance material, PartType partType, GearType gearType, @Nullable Container inventory) {
+    public boolean isCraftingAllowed(MaterialInstance material, PartType partType, GearType gearType, @Nullable CraftingInput craftingInput) {
         if (!isAllowedInPart(material, partType)) {
             return false;
         }

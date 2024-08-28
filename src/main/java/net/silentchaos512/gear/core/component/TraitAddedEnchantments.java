@@ -1,24 +1,14 @@
 package net.silentchaos512.gear.core.component;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public record TraitAddedEnchantments(
         List<Holder<Enchantment>> enchantments // FIXME: map of trait data resource to enchantments?
 ) {
-    public static final Codec<TraitAddedEnchantments> CODEC = RecordCodecBuilder.create(
+    /*public static final Codec<TraitAddedEnchantments> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     Codec.list(BuiltInRegistries.ENCHANTMENT.holderByNameCodec()).fieldOf("enchantments").forGetter(d -> d.enchantments)
             ).apply(instance, TraitAddedEnchantments::new)
@@ -46,5 +36,5 @@ public record TraitAddedEnchantments(
         public TraitAddedEnchantments toImmutable() {
             return new TraitAddedEnchantments(this.list);
         }
-    }
+    }*/
 }

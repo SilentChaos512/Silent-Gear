@@ -2,9 +2,9 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -12,7 +12,7 @@ import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.setup.SgRecipes;
@@ -27,7 +27,7 @@ public class GearPartSwapRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInput inv, Level worldIn) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         if (gear.isEmpty()) return false;
@@ -53,7 +53,7 @@ public class GearPartSwapRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         if (gear.isEmpty()) return ItemStack.EMPTY;
@@ -70,12 +70,12 @@ public class GearPartSwapRecipe extends CustomRecipe {
             if (part == null) return ItemStack.EMPTY;
 
             PartType type = part.getType();
-            List<PartData> partsOfType = new ArrayList<>(parts.getPartsOfType(type));
+            List<PartInstance> partsOfType = new ArrayList<>(parts.getPartsOfType(type));
             int maxPerItem = type.maxPerItem();
 
             // Remove old part of type (if over limit), then add replacement
             if (partsOfType.size() >= maxPerItem) {
-                PartData oldPart = partsOfType.getFirst();
+                PartInstance oldPart = partsOfType.getFirst();
                 partsOfType.remove(oldPart);
                 parts.remove(oldPart);
                 oldPart.onRemoveFromGear(result);
@@ -86,15 +86,15 @@ public class GearPartSwapRecipe extends CustomRecipe {
         }
 
         GearData.writeConstructionParts(result, parts);
-        GearData.recalculateStats(result, CommonHooks.getCraftingPlayer());
+        GearData.recalculateGearData(result, CommonHooks.getCraftingPlayer());
         newParts.forEach(p -> p.onAddToGear(result));
 
         return result;
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
-        NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
         ItemStack gear = StackList.from(inv).uniqueMatch(s -> s.getItem() instanceof ICoreItem);
         PartList oldParts = GearData.getConstruction(gear).parts();
         Map<PartType, Integer> removedCount = new HashMap<>();
@@ -108,13 +108,13 @@ public class GearPartSwapRecipe extends CustomRecipe {
                 PartInstance newPart = PartInstance.from(stack);
                 if (newPart != null && !Config.Common.destroySwappedParts.get()) {
                     PartType type = newPart.getType();
-                    List<PartData> partsOfType = oldParts.getPartsOfType(type);
+                    List<PartInstance> partsOfType = oldParts.getPartsOfType(type);
 
                     if (partsOfType.size() >= type.maxPerItem()) {
                         int index = removedCount.getOrDefault(type, 0);
                         if (index < partsOfType.size()) {
                             // Return old part
-                            PartData oldPart = partsOfType.get(index);
+                            PartInstance oldPart = partsOfType.get(index);
                             oldPart.onRemoveFromGear(gear);
                             ItemStack oldPartItem = oldPart.getItem();
                             // Store gear damage on main part item

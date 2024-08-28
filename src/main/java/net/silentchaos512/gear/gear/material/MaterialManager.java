@@ -4,9 +4,11 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
@@ -59,13 +61,14 @@ public class MaterialManager extends DataResourceManager<Material> {
 
         for (String key : this.ingredientChecks.keySet()) {
             if (this.ingredientChecks.get(key).size() > 1) {
-                String collect = this.ingredientChecks.get(key).stream().map(mat -> mat.getId().toString()).collect(Collectors.joining(" and "));
+                String collect = this.ingredientChecks.get(key).stream().map(mat -> getKey(mat).toString()).collect(Collectors.joining(" and "));
                 INGREDIENT_CONFLICT_LIST.add("Conflicting crafting items for: " + collect);
             }
         }
     }
 
     public List<Material> getValues(boolean includeChildren) {
+        // TODO: Add a cache?
         synchronized (this) {
             List<Material> list = new ArrayList<>();
             for (Material m : this) {
@@ -86,6 +89,16 @@ public class MaterialManager extends DataResourceManager<Material> {
                 }
             }
             return list;
+        }
+    }
+
+    public Optional<Material> getRandomObtainable(RandomSource randomSource) {
+        synchronized (this) {
+            var list = this.stream()
+                    .filter(material -> !material.getIngredient().isEmpty())
+                    .filter(material -> !material.isInCategory(MaterialCategories.INTANGIBLE))
+                    .toList();
+            return Util.getRandomSafe(list, randomSource);
         }
     }
 

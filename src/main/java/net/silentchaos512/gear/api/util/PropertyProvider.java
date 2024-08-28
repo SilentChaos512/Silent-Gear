@@ -9,8 +9,9 @@ import java.util.function.Supplier;
 /**
  * Something that can provide property modifiers, such as parts and materials
  *
- * @param <D> An object containing more data about this object, such as {@link
- *            PartData} or {@link net.silentchaos512.gear.api.material.IMaterialInstance}
+ * @param <D> An object containing more data about this object, such as
+ * {@link net.silentchaos512.gear.gear.part.PartInstance} or
+ * {@link net.silentchaos512.gear.gear.material.MaterialInstance}
  */
 public interface PropertyProvider<D> {
     <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(D instance, PartType partType, PropertyKey<T, V> key);

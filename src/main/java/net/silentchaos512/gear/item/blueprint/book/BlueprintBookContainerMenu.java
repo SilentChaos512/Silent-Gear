@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.item.blueprint.book;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -14,16 +14,16 @@ import net.silentchaos512.gear.setup.SgMenuTypes;
 
 import javax.annotation.Nonnull;
 
-public class BlueprintBookContainer extends AbstractContainerMenu {
+public class BlueprintBookContainerMenu extends AbstractContainerMenu {
     final ItemStack item;
     private final IItemHandler itemHandler;
     int bookSlot = -1;
 
-    public BlueprintBookContainer(int id, Inventory playerInventory, FriendlyByteBuf data) {
-        this(id, playerInventory, data.readItem());
+    public BlueprintBookContainerMenu(int id, Inventory playerInventory, RegistryFriendlyByteBuf data) {
+        this(id, playerInventory, ItemStack.STREAM_CODEC.decode(data));
     }
 
-    BlueprintBookContainer(int id, Inventory playerInventory, ItemStack stack) {
+    BlueprintBookContainerMenu(int id, Inventory playerInventory, ItemStack stack) {
         super(SgMenuTypes.BLUEPRINT_BOOK.get(), id);
         this.item = stack;
         IContainerItem containerItem = (IContainerItem) this.item.getItem();
@@ -114,12 +114,6 @@ public class BlueprintBookContainer extends AbstractContainerMenu {
         }
 
         super.clicked(slotId, dragType, clickTypeIn, player);
-    }
-
-    @Override
-    public void removed(Player playerIn) {
-        super.removed(playerIn);
-        ((IContainerItem) item.getItem()).saveInventory(item, itemHandler);
     }
 
     public boolean canTake(int slotId, Slot slot, int button, Player player, ClickType clickType) {

@@ -2,10 +2,9 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.Container;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -42,12 +41,12 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInput inv, Level worldIn) {
         if (!super.matches(inv, worldIn)) return false;
 
         Material first = null;
 
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+        for (int i = 0; i < inv.size(); ++i) {
             ItemStack stack = inv.getItem(i);
             MaterialInstance mat = MaterialInstance.from(stack);
 
@@ -69,14 +68,14 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         return item.create(getMaterials(inv));
     }
 
-    private static List<MaterialInstance> getMaterials(Container inv) {
+    private static List<MaterialInstance> getMaterials(CraftingInput inv) {
         var ret = new ArrayList<MaterialInstance>();
 
-        for (int i = 0; i < inv.getContainerSize(); i++) {
+        for (int i = 0; i < inv.size(); i++) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 MaterialInstance material = MaterialInstance.from(stack.copy().split(1));

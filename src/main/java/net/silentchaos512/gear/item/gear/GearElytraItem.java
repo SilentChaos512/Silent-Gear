@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ElytraItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -20,11 +22,9 @@ import net.neoforged.fml.ModList;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.compat.caelus.CaelusCompat;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -41,8 +41,8 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
     private static final UUID ARMOR_UUID = UUID.fromString("f099f401-82f6-4565-a0b5-fd464f2dc72c");
 
     private static final List<PartType> REQUIRED_PARTS = ImmutableList.of(
-            PartType.MAIN,
-            PartType.BINDING
+            PartTypes.MAIN.get(),
+            PartTypes.BINDING.get()
     );
 
     private final Supplier<GearType> gearType;
@@ -90,7 +90,8 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return (int) getGearType().armorDurabilityMultiplier() * getStatInt(stack, getDurabilityStat());
+        var durability = GearData.getProperties(stack).getNumber(getDurabilityStat());
+        return (int) (getGearType().armorDurabilityMultiplier() * durability);
     }
 
     @Override
@@ -103,10 +104,10 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        return GearHelper.damageItem(stack, amount, entity, t -> {
-            GearHelper.onBroken(stack, t instanceof Player ? (Player) t : null, this.getEquipmentSlot(stack));
-            onBroken.accept(t);
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, item -> {
+            GearHelper.onBroken(stack, entity instanceof Player ? (Player) entity : null, this.getEquipmentSlot(stack));
+            onBroken.accept(item);
         });
     }
 
@@ -126,7 +127,7 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
     }
 
     @Override
-    public ItemAttributeModifiers getAttributeModifiers(ItemStack stack) {
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         var builder = ItemAttributeModifiers.builder();
         addAttributes(stack, builder, true);
         return builder.build();
@@ -139,7 +140,8 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
 
         float armor = GearData.getProperties(stack).getNumber(GearProperties.ARMOR);
         if (armor > 0 && includeArmor) {
-            builder.add(Attributes.ARMOR, new AttributeModifier(ARMOR_UUID, "Elytra armor modifier", armor, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.BODY);
+            var id = ResourceLocation.withDefaultNamespace("armor.body");
+            builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.BODY);
         }
         GearHelper.addAttributeModifiers(stack, builder, false);
         CaelusCompat.tryAddFlightAttribute(builder);

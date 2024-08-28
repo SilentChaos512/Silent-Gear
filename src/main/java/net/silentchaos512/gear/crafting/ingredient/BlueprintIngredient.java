@@ -14,6 +14,7 @@ import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.item.GearItemSet;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
 import net.silentchaos512.gear.setup.SgIngredientTypes;
 import net.silentchaos512.gear.util.TextUtil;
@@ -51,6 +52,10 @@ public final class BlueprintIngredient implements ICustomIngredient, IGearIngred
     public static <T extends Item & IBlueprint> BlueprintIngredient of(T item) {
         ItemStack stack = new ItemStack(item);
         return new BlueprintIngredient(item.getPartType(stack), item.getGearType(stack));
+    }
+
+    public static BlueprintIngredient of(GearItemSet<?> gearItemSet) {
+        return of(gearItemSet.blueprint());
     }
 
     @Override

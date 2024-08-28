@@ -2,9 +2,9 @@ package net.silentchaos512.gear.gear.part;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.api.event.GetPropertyModifiersEvent;
@@ -56,14 +56,14 @@ public abstract class AbstractGearPart implements GearPart {
     }
 
     @Override
-    public boolean isCraftingAllowed(PartInstance part, PartType partType, GearType gearType, @Nullable Container inventory) {
+    public boolean isCraftingAllowed(PartInstance part, PartType partType, GearType gearType, @Nullable CraftingInput craftingInput) {
         if (!gearType.matches(GearTypes.ALL.get())) return true;
         for (GearType blacklistedGearType : crafting.gearTypeBlacklist()) {
             if (gearType.matches(blacklistedGearType)) {
                 return false;
             }
         }
-        return GearPart.super.isCraftingAllowed(part, partType, gearType, inventory);
+        return GearPart.super.isCraftingAllowed(part, partType, gearType, craftingInput);
     }
 
     @Override
@@ -96,7 +96,7 @@ public abstract class AbstractGearPart implements GearPart {
 
     /**
      * List of blacklisted {@link GearType}s, mostly used for part tooltips. To know whether of not
-     * a part may be used in crafting, use {@link #isCraftingAllowed(PartInstance, PartType, GearType, Container)} instead.
+     * a part may be used in crafting, use {@link net.silentchaos512.gear.api.util.GearComponent#isCraftingAllowed(Object, PartType, GearType, CraftingInput)} instead.
      *
      * @return The List of GearTypes the part may not be used to craft (could be empty)
      */

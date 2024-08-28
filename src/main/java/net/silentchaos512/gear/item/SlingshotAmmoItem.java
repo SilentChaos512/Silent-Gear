@@ -10,8 +10,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.ISlingshotAmmo;
 import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
-import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.util.TextUtil;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -21,8 +21,8 @@ public class SlingshotAmmoItem extends ArrowItem implements ISlingshotAmmo {
     }
 
     @Override
-    public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        return new SlingshotProjectile(SgEntities.SLINGSHOT_PROJECTILE.get(), shooter, worldIn, stack);
+    public AbstractArrow createArrow(Level level, ItemStack ammo, LivingEntity shooter, @Nullable ItemStack weapon) {
+        return new SlingshotProjectile(shooter, level, ammo, weapon);
     }
 
     @Override

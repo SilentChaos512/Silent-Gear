@@ -4,10 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -76,13 +76,8 @@ public class FluffyBlock extends Block {
             ItemStack mainHand = event.getEntity().getItemInHand(InteractionHand.MAIN_HAND);
 
             if (!mainHand.isEmpty() && mainHand.getItem() instanceof ShearsItem) {
-                int efficiency = EnchantmentHelper.getBlockEfficiency(event.getEntity());
-
-                float speed = event.getNewSpeed() * 4;
-                if (efficiency > 0) {
-                    speed += (efficiency * efficiency + 1);
-                }
-
+                float efficiency = (float) event.getEntity().getAttributeValue(Attributes.MINING_EFFICIENCY);
+                float speed = event.getNewSpeed() * 4 + efficiency;
                 event.setNewSpeed(speed);
             }
         }

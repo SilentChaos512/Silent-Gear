@@ -81,8 +81,7 @@ public class SgServerPayloadHandler {
                 ItemStack stack = player.getInventory().getItem(data.slot());
 
                 if (GearHelper.isGear(stack)) {
-                    GearData.recalculateStats(stack, player);
-                    GearData.putStatInNbtIfMissing(stack, data.triggerStat());
+                    GearData.recalculateGearData(stack, player);
                 }
             }
         });

@@ -6,9 +6,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
@@ -37,8 +35,6 @@ public record GearTypeTraitCondition(GearType gearType) implements ITraitConditi
             }
     );
     public static final TraitConditionSerializer<GearTypeTraitCondition> SERIALIZER = new TraitConditionSerializer<>(CODEC, STREAM_CODEC);
-
-    private static final ResourceLocation NAME = SilentGear.getId("gear_type");
 
     public GearTypeTraitCondition(Supplier<GearType> gearType) {
         this(gearType.get());

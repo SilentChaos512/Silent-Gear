@@ -6,16 +6,12 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.setup.SgRecipes;
 
-public class ToolActionRecipe implements Recipe<Container> {
+public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
     private final Ingredient tool;
     private final Ingredient ingredient;
     private final int damageToTool;
@@ -45,15 +41,12 @@ public class ToolActionRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(Container pContainer, Level pLevel) {
-        if (pContainer.getContainerSize() < 2) return false;
-
-        return tool.test(pContainer.getItem(0))
-                && ingredient.test(pContainer.getItem(1));
+    public boolean matches(ToolActionRecipe.Input input, Level pLevel) {
+        return this.tool.test(input.tool()) && this.ingredient.test(input.ingredient());
     }
 
     @Override
-    public ItemStack assemble(Container pContainer, HolderLookup.Provider pRegistryAccess) {
+    public ItemStack assemble(ToolActionRecipe.Input pContainer, HolderLookup.Provider pRegistryAccess) {
         return result.copy();
     }
 
@@ -114,6 +107,22 @@ public class ToolActionRecipe implements Recipe<Container> {
             Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.ingredient);
             buf.writeVarInt(recipe.damageToTool);
             ItemStack.STREAM_CODEC.encode(buf, recipe.result);
+        }
+    }
+
+    public record Input(ItemStack tool, ItemStack ingredient) implements RecipeInput {
+        @Override
+        public ItemStack getItem(int pIndex) {
+            return switch (pIndex) {
+                case 0 -> tool;
+                case 1 -> ingredient;
+                default -> throw new IllegalArgumentException("Index out of bounds: " + pIndex);
+            };
+        }
+
+        @Override
+        public int size() {
+            return 2;
         }
     }
 }

@@ -16,14 +16,14 @@ import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.network.payload.client.SelectBlueprintInBookPayload;
 import net.silentchaos512.lib.util.Color;
 
-public class BlueprintBookContainerScreen extends AbstractContainerScreen<BlueprintBookContainer> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
+public class BlueprintBookContainerScreen extends AbstractContainerScreen<BlueprintBookContainerMenu> {
+    private static final ResourceLocation TEXTURE = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
 
     private final Inventory playerInventory;
     private final int inventoryRows;
     private int selected;
 
-    public BlueprintBookContainerScreen(BlueprintBookContainer container, Inventory playerInventory, Component title) {
+    public BlueprintBookContainerScreen(BlueprintBookContainerMenu container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
         this.playerInventory = playerInventory;
         ItemStack stack = container.item;
@@ -39,7 +39,7 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
             Slot slot = getSlotUnderMouse();
             if (slot != null && !slot.getItem().isEmpty()) {
                 this.selected = slot.index;
-                PacketDistributor.SERVER.noArg().send(new SelectBlueprintInBookPayload(this.menu.bookSlot, this.selected));
+                PacketDistributor.sendToServer(new SelectBlueprintInBookPayload(this.menu.bookSlot, this.selected));
 
                 if (this.minecraft != null) {
                     this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
@@ -54,7 +54,6 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics, mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
     }

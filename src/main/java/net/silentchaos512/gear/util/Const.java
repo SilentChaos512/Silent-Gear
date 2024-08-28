@@ -1,7 +1,10 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.GearPart;
@@ -22,7 +25,7 @@ public final class Const {
 
     // Model properties
     public static final ResourceLocation BROKEN_PROPERTY = modId("broken");
-    public static final ModResourceLocation MODEL = SilentGear.getId("model");
+    public static final ResourceLocation MODEL = SilentGear.getId("model");
 
     // Recipe types and categories
     public static final ResourceLocation COMBINE_FRAGMENTS = modId("combine_fragments");
@@ -55,11 +58,11 @@ public final class Const {
     public static final String CURIOS = "curios";
 
     // Random
-    public static final ResourceLocation NULL_ID = new ResourceLocation("null");
+    public static final ResourceLocation NULL_ID = ResourceLocation.withDefaultNamespace("null");
 
     // Material Modifiers
-    public static final ModResourceLocation GRADE = SilentGear.getId("grade");
-    public static final ModResourceLocation STARCHARGED = SilentGear.getId("starcharged");
+    public static final ResourceLocation GRADE = SilentGear.getId("grade");
+    public static final ResourceLocation STARCHARGED = SilentGear.getId("starcharged");
     public static final String NBT_IS_FOIL = "SG_IsFoil";
 
     // Compound-crafting block info
@@ -110,6 +113,14 @@ public final class Const {
             FabricAlloyRecipe.class);
 
     private Const() {}
+
+    public static final class LootTables {
+        public static final ResourceKey<LootTable> DROPS_SINEW = create("drops_sinew");
+
+        private static ResourceKey<LootTable> create(String path) {
+            return ResourceKey.create(Registries.LOOT_TABLE, SilentGear.getId(path));
+        }
+    }
 
     public static final class Materials {
         public static final DataResource<Material> AZURE_ELECTRUM = DataResource.material("azure_electrum");
@@ -243,6 +254,6 @@ public final class Const {
     }
 
     private static ResourceLocation modId(String path) {
-        return new ResourceLocation(SilentGear.MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, path);
     }
 }

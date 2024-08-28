@@ -84,8 +84,8 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
         for (int i = 0; i < ingredients.size(); i++) {
             Ingredient ingredient = ingredients.get(i);
-            if (ingredient instanceof IGearIngredient) {
-                Component text = ((IGearIngredient) ingredient).getJeiHint().orElse(null);
+            if (ingredient.getCustomIngredient() instanceof IGearIngredient gearIngredient) {
+                Component text = gearIngredient.getJeiHint().orElse(null);
                 if (text != null) {
                     String prefix = (i + 1) + ": ";
                     lines.add(Component.literal(prefix).append(text));

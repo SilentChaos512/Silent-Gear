@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.crafting.recipe.press;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.ProcessedMaterialItem;
 import net.silentchaos512.gear.setup.SgRecipes;
@@ -18,8 +18,8 @@ public class MaterialPressingRecipe extends PressingRecipe {
     }
 
     @Override
-    public ItemStack assemble(Container inv, HolderLookup.Provider registryAccess) {
-        IMaterialInstance material = MaterialInstance.from(inv.getItem(0));
+    public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registryAccess) {
+        var material = MaterialInstance.from(input.getItem(0));
 
         if (material != null) {
             ProcessedMaterialItem item = (ProcessedMaterialItem) this.result.getItem();

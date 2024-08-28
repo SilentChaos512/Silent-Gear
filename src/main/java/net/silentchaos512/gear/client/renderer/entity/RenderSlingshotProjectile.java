@@ -29,9 +29,6 @@ public class RenderSlingshotProjectile extends EntityRenderer<SlingshotProjectil
 
     @Override
     public void render(SlingshotProjectile entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-//        ItemStack stack = entityIn.getItem();
-//        if (stack.isEmpty()) return;
-
         matrixStackIn.pushPose();
         float scale = 0.5f;
         matrixStackIn.scale(scale, scale, scale);
@@ -51,12 +48,11 @@ public class RenderSlingshotProjectile extends EntityRenderer<SlingshotProjectil
     }
 
     private static void vertex(VertexConsumer pConsumer, PoseStack.Pose pPose, int pPackedLight, float pX, int pY, int pU, int pV) {
-        pConsumer.vertex(pPose, pX - 0.5F, (float)pY - 0.25F, 0.0F)
-                .color(255, 255, 255, 255)
-                .uv((float)pU, (float)pV)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(pPackedLight)
-                .normal(pPose, 0.0F, 1.0F, 0.0F)
-                .endVertex();
+        pConsumer.addVertex(pPose, pX - 0.5F, (float)pY - 0.25F, 0.0F)
+                .setColor(-1)
+                .setUv((float)pU, (float)pV)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(pPackedLight)
+                .setNormal(pPose, 0.0F, 1.0F, 0.0F);
     }
 }

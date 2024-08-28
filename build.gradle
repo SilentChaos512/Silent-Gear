@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.142'
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -109,8 +109,17 @@ repositories {
         url = "https://modmaven.dev"
     }
     maven {
-        // Curios
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
+        // Caelus
         url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        // Curios
+        name = "OctoStudios"
+        url = uri("https://maven.octo-studios.com/releases")
     }
 }
 
@@ -118,9 +127,6 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     implementation("net.silentchaos512:silent-lib-${minecraft_version}-neoforge:${project.silentlib_version}")
-
-    // Silent Gear
-//    compileOnly("net.silentchaos512:silent-gear:${project.silentgear_version}")
 
     // JEI
     if (project.hasProperty("jei_version")) {
@@ -131,16 +137,22 @@ dependencies {
         runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
     }
 
+    // EMI
+    if (project.hasProperty("emi_version")) {
+        compileOnly("dev.emi:emi-neoforge:${emi_version}:api")
+//        runtimeOnly("dev.emi:emi-neoforge:${emi_version}")
+    }
+
     // Curios
     dependencies {
-        runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
-        compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}:api"
+        implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
     }
 
     // Caelus
     dependencies {
-        runtimeOnly "top.theillusivec4.caelus:caelus-neoforge:${caelus_version}+${minecraft_version}"
-        compileOnly "top.theillusivec4.caelus:caelus-neoforge:${caelus_version}+${minecraft_version}:api"
+        // FIXME: MC version
+//        runtimeOnly "top.theillusivec4.caelus:caelus-neoforge:${caelus_version}+1.20.6"
+        compileOnly "top.theillusivec4.caelus:caelus-neoforge:${caelus_version}+1.20.6:api"
     }
 }
 

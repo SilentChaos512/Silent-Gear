@@ -2,17 +2,16 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.setup.SgRecipes;
@@ -30,14 +29,14 @@ public class QuickRepairRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInput inv, Level worldIn) {
         // Need 1 gear, 1 repair kit, and optional materials
         ItemStack gear = ItemStack.EMPTY;
         boolean foundKit = false;
         float repairKitEfficiency = Config.Common.missingRepairKitEfficiency.get().floatValue();
         List<ItemStack> materials = new ArrayList<>();
 
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+        for (int i = 0; i < inv.size(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 //noinspection ChainOfInstanceofChecks
@@ -52,7 +51,7 @@ public class QuickRepairRecipe extends CustomRecipe {
                     }
                     foundKit = true;
                     repairKitEfficiency = getKitEfficiency(stack);
-                } else if (MaterialManager.fromItem(stack) != null) {
+                } else if (MaterialInstance.from(stack) != null) {
                     materials.add(stack);
                 } else {
                     return false;
@@ -79,7 +78,7 @@ public class QuickRepairRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
@@ -97,7 +96,7 @@ public class QuickRepairRecipe extends CustomRecipe {
         }
 
         GearData.incrementRepairedCount(gear, 1);
-        GearData.recalculateStats(gear, CommonHooks.getCraftingPlayer());
+        GearData.recalculateGearData(gear, CommonHooks.getCraftingPlayer());
         return gear;
     }
 
@@ -128,8 +127,8 @@ public class QuickRepairRecipe extends CustomRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
-        NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
         StackList stackList = StackList.from(inv);
         ItemStack gear = stackList.uniqueMatch(s -> s.getItem() instanceof ICoreItem);
         ItemStack repairKit = stackList.uniqueMatch(s -> s.getItem() instanceof RepairKitItem);

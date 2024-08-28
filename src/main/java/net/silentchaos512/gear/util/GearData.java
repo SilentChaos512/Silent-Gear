@@ -3,9 +3,7 @@ package net.silentchaos512.gear.util;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -13,6 +11,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -20,18 +19,21 @@ import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
-import net.silentchaos512.gear.api.stats.*;
-import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.property.TraitListPropertyValue;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
+import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.SgDataComponents;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
@@ -51,14 +53,16 @@ public final class GearData {
     }
 
     public static GearPropertiesData getProperties(ItemStack gear) {
+        return getProperties(gear, null);
+    }
+
+    public static GearPropertiesData getProperties(ItemStack gear, @Nullable Player player) {
         var data = gear.get(SgDataComponents.GEAR_PROPERTIES);
         if (data != null) {
             return data;
         }
-        // FIXME
-        GearPropertiesData newData = recalculateStats(gear, null);
-        gear.set(SgDataComponents.GEAR_PROPERTIES, newData);
-        return newData;
+        recalculateGearData(gear, null);
+        return gear.get(SgDataComponents.GEAR_PROPERTIES);
     }
 
     /**
@@ -77,142 +81,174 @@ public final class GearData {
     }
 
     /**
-     * Recalculate gear stats and setup NBT. This should be called ANY TIME an item is modified!
+     * Recalculate gear properties and set up the properties data component. This should be
+     * called ANY TIME an item is modified!
      *
      * @param gear   The gear item
      * @param player The player who has the item. Can be null if no player can be obtained. You can
      *               use {@link net.neoforged.neoforge.common.CommonHooks#getCraftingPlayer} the get the
      *               player during crafting.
      */
-    public static void recalculateStats(ItemStack gear, @Nullable Player player) {
+    public static void recalculateGearData(ItemStack gear, @Nullable Player player) {
+        var gearConstructionData = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
         try {
-            tryRecalculateStats(gear, player);
+            var gearType = GearHelper.getType(gear);
+            tryRecalculateGearData(gear, player, gearType, gearConstructionData);
         } catch (Throwable ex) {
-            CrashReport report = CrashReport.forThrowable(ex, "Failed to recalculate gear properties");
+            CrashReport report = CrashReport.forThrowable(ex, "Failed to recalculate gear item properties");
 
             CrashReportCategory itemCategory = report.addCategory("Gear Item");
             itemCategory.setDetail("Name", gear.getHoverName().getString() + " (" + NameUtils.fromItem(gear) + ")");
-            var construction = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
-            itemCategory.setDetail("Data", construction != null ? construction : "null");
+            itemCategory.setDetail("Data", gearConstructionData != null ? gearConstructionData : "null");
 
             throw new ReportedException(report);
         }
     }
 
-    @SuppressWarnings({"OverlyLongMethod", "OverlyComplexMethod"})
-    private static void tryRecalculateStats(ItemStack gear, @Nullable Player player) {
-        if (checkNonGearItem(gear, "recalculateStats")) return;
-
-        // TODO: What's the point of this? Traits not calculated yet, right?
-        TraitHelper.activateTraits(gear, 0f, (trait, value) -> {
-            trait.getTrait().onRecalculatePre(new TraitActionContext(player, trait, gear));
-            return 0f;
-        });
-
-        final String playerName = player != null ? player.getScoreboardName() : "somebody";
-        final String playersItemText = String.format("%s's %s", playerName, gear.getHoverName().getString());
-
-        GearConstructionData gearConstructionData = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
+    private static void tryRecalculateGearData(ItemStack gear, @Nullable Player player, GearType gearType, GearConstructionData gearConstructionData) {
         if (gearConstructionData == null) {
-            SilentGear.LOGGER.error("{}: gear item has no gearConstructionData data?", playersItemText);
+            SilentGear.LOGGER.error("{}: gear item has no GearConstructionData?", getPlayersItemNameText(gear, player));
             return;
         }
 
         final PartList parts = gearConstructionData.parts();
-        final ICoreItem item = (ICoreItem) gear.getItem();
-        final boolean partsListValid = !parts.isEmpty() && !parts.getMains().isEmpty();
-
-        if (partsListValid) {
-            // We should recalculate the item's stats!
-            SilentGear.LOGGER.debug("Recalculating for {}", playersItemText);
-
-            Map<Trait, Integer> traits = TraitHelper.getTraitsFromParts(gear, item.getGearType(), parts);
-
-            // Get all stat modifiers from all parts and item class modifiers
-            GearPropertyMap stats = getStatModifiers(gear, item, parts);
-
-            // For debugging
-            GearPropertiesData oldGearProperties = getProperties(gear);
-
-            // Cache traits in properties compound as well
-            ListTag traitList = new ListTag();
-            traits.forEach((trait, level) -> traitList.add(trait.write(level)));
-            propertiesCompound.put("Traits", traitList);
-
-            propertiesCompound.remove(NBT_SYNERGY);
-
-            // Calculate and write stats
-            int maxDamage = gear.getMaxDamage() > 0 ? gear.getMaxDamage() : 1;
-            final float damageRatio = Mth.clamp((float) gear.getDamageValue() / maxDamage, 0f, 1f);
-            CompoundTag statsCompound = new CompoundTag();
-            for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(gear))) {
-                StatGearKey key = StatGearKey.of(stat, item.getGearType());
-                Collection<StatInstance> modifiers = stats.get(key);
-                GearType statGearType = stats.getMostSpecificKey(key).getGearType();
-
-                final float initialValue = stat.compute(stat.getBaseValue(), true, item.getGearType(), statGearType, modifiers);
-                // Allow traits to modify stat
-                final float withTraits = TraitHelper.activateTraits(gear, initialValue, (trait, val) -> {
-                    TraitActionContext context = new TraitActionContext(player, trait, gear);
-                    return trait.getTrait().onGetProperty(context, stat, val, damageRatio);
-                });
-                final float value = Config.Common.getStatWithMultiplier(stat, withTraits);
-                if (!Mth.equal(value, 0f) || stats.containsKey(key)) {
-                    ResourceLocation statId = Objects.requireNonNull(stat.getStatId());
-                    propertiesCompound.remove(statId.getPath()); // Remove old keys
-                    statsCompound.putFloat(statId.toString(), stat.clampValue(value));
-                }
-            }
-            // Put missing relevant stats in the map to avoid recalculate stats packet spam
-            for (ItemStat stat : item.getRelevantStats(gear)) {
-                String statKey = stat.getStatId().toString();
-                if (!statsCompound.contains(statKey)) {
-                    statsCompound.putFloat(statKey, stat.getDefaultValue());
-                }
-            }
-            propertiesCompound.put(NBT_STATS, statsCompound);
-
-            if (player != null) {
-                printStatsForDebugging(gear, stats, oldStatValues);
-            }
-
-            // Remove enchantments if mod is configured to. Must be done before traits add enchantments!
-            if (gear.getOrCreateTag().contains("Enchantments") && Config.Common.forceRemoveEnchantments.get()) {
-                SilentGear.LOGGER.debug("Forcibly removing all enchantments from {} as per config settings", playersItemText);
-                gear.removeTagKey("Enchantments");
-            }
-
-            // Remove trait-added enchantments then let traits re-add them
-            EnchantmentTrait.removeTraitEnchantments(gear);
-            TraitHelper.activateTraits(gear, 0f, (trait, value) -> {
-                trait.getTrait().onRecalculatePost(new TraitActionContext(player, trait, gear));
-                return 0f;
-            });
-        } else {
-            SilentGear.LOGGER.debug("Not recalculating stats for {}", playersItemText);
+        if (parts.isEmpty() || parts.getMains().isEmpty()) {
+            SilentGear.LOGGER.debug("Not recalculating stats for {}", getPlayersItemNameText(gear, player));
         }
 
-        // Update rendering info even if we didn't update stats
-        updateRenderingInfo(gear, parts);
+        onRecalculatePre(gear, player);
+
+        @Nullable var oldProperties = gear.get(SgDataComponents.GEAR_PROPERTIES);
+
+        // Calculate base values, then bonuses from traits and such, then the final values!
+        // All of these are stored for tooltip purposes
+        var baseProperties = calculateBaseProperties(gear, player, gearType, gearConstructionData);
+        gear.set(SgDataComponents.GEAR_BASE_PROPERTIES, baseProperties);
+        var bonusValues = calculateBonusProperties(gear, player, gearType);
+        gear.set(SgDataComponents.GEAR_BONUS_PROPERTIES, bonusValues);
+        var finalProperties = calculateFinalProperties(gear, player, gearType);
+        gear.set(SgDataComponents.GEAR_PROPERTIES, finalProperties);
+
+        printStatsForDebugging(gear, oldProperties, baseProperties, bonusValues, finalProperties);
+
+        onRecalculatePost(gear, player);
     }
 
-    private static void printStatsForDebugging(ItemStack stack, GearPropertyMap stats, @Nullable Map<ItemStat, Float> oldStats) {
-        // Prints stats that have changed for debugging purposes
-        if (oldStats != null && SilentGear.LOGGER.isDebugEnabled()) {
-            GearType gearType = GearHelper.getType(stack);
-            Map<ItemStat, Float> newStats = getCurrentStatsForDebugging(stack);
-            assert newStats != null;
+    private static void onRecalculatePre(ItemStack gear, @Nullable Player player) {
+        // TODO: Remove trait-added enchantments
+    }
 
-            for (ItemStat stat : stats.getPropertyTypes()) {
-                float oldValue = oldStats.get(stat);
-                float newValue = newStats.get(stat);
-                float change = newValue - oldValue;
-                SilentGear.LOGGER.debug(" - {}: {} -> {} ({}) - mods: [{}]",
-                        stat.getDisplayName().getString(),
+    private static void onRecalculatePost(ItemStack gear, @Nullable Player player) {
+        // TODO: Add trait-added enchantments
+
+        var modelIndex = calculateModelIndex(gear);
+        gear.set(SgDataComponents.GEAR_MODEL_INDEX, modelIndex);
+    }
+
+    private static GearPropertiesData calculateBaseProperties(ItemStack gear, @Nullable Player player, GearType gearType, GearConstructionData gearConstructionData) {
+        // Get all property modifiers from all parts and item class modifiers
+        final PartList parts = gearConstructionData.parts();
+        final GearPropertyMap propertyMods = parts.getPropertyModifiersFromParts(gearType);
+
+        final Map<GearProperty<?, ?>, GearPropertyValue<?>> finalBaseValues = new LinkedHashMap<>();
+
+        for (var property : SgRegistries.GEAR_PROPERTY) {
+            var key = PropertyKey.of(property, gearType);
+            Collection<GearPropertyValue<?>> modifiers = propertyMods.get(key);
+            GearType statGearType = propertyMods.getMostSpecificKey(key).gearType();
+
+            final GearPropertyValue<?> value = property.computeUnchecked(true, gearType, statGearType, modifiers);
+            finalBaseValues.put(property, value);
+        }
+
+        return new GearPropertiesData(finalBaseValues);
+    }
+
+    private static GearPropertyMap calculateBonusProperties(ItemStack gear, @Nullable Player player, GearType gearType) {
+        var baseProperties = gear.getOrDefault(SgDataComponents.GEAR_BASE_PROPERTIES, GearPropertiesData.EMPTY);
+        var bonusProperties = new GearPropertyMap();
+
+        List<TraitInstance> traits = baseProperties.getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty()).value();
+
+        final int maxDamage = gear.getMaxDamage() > 0 ? gear.getMaxDamage() : 1;
+        final float damageRatio = Mth.clamp((float) gear.getDamageValue() / maxDamage, 0f, 1f);
+
+        for (var property : SgRegistries.GEAR_PROPERTY) {
+            if (property != GearProperties.TRAITS && baseProperties.contains(property)) {
+                var key = PropertyKey.of(property, gearType);
+
+                // Trait configBonus modifiers
+                for (TraitInstance trait : traits) {
+                    GearPropertyValue<?> baseValue = baseProperties.get(property);
+                    assert baseValue != null;
+                    bonusProperties.putAll(key, trait.getTrait().getBonusProperties(trait.getLevel(), player, property, baseValue, damageRatio));
+                }
+
+                // Config global property modifiers
+                var configBonus = Config.Common.getPropertyBonusMultiplier(property);
+                if (configBonus != null) {
+                    bonusProperties.put(key, configBonus);
+                }
+            }
+        }
+
+        return bonusProperties;
+    }
+
+    private static GearPropertiesData calculateFinalProperties(ItemStack gear, @Nullable Player player, GearType gearType) {
+        var baseProperties = gear.getOrDefault(SgDataComponents.GEAR_BASE_PROPERTIES, GearPropertiesData.EMPTY);
+        var bonusProperties = gear.getOrDefault(SgDataComponents.GEAR_BONUS_PROPERTIES, GearPropertyMap.EMPTY);
+
+        GearPropertyMap combinedMods = new GearPropertyMap();
+        Map<GearProperty<?, ?>, GearPropertyValue<?>> finalValues = new LinkedHashMap<>();
+
+        for (var property : SgRegistries.GEAR_PROPERTY) {
+            var key = PropertyKey.of(property, gearType);
+            combinedMods.put(key, baseProperties.get(property));
+            combinedMods.putAll(key, bonusProperties.get(key));
+            finalValues.put(property, property.computeUnchecked(true, gearType, gearType, combinedMods.get(key)));
+        }
+
+        return new GearPropertiesData(finalValues);
+    }
+
+    private static void modifyEnchantmentData(ItemStack gear, @Nullable Player player) {
+        final var playersItemText = getPlayersItemNameText(gear, player);
+
+        if (gear.isEnchanted() && Config.Common.forceRemoveEnchantments.get()) {
+            SilentGear.LOGGER.debug("Forcibly removing all enchantments from {} as per config settings", playersItemText);
+            gear.set(DataComponents.ENCHANTMENTS, null);
+        }
+
+        // TODO: Remove enchantments added by enchantment traits, and let the traits re-add them later
+        //EnchantmentTrait.removeTraitEnchantments(gear);
+    }
+
+    private static String getPlayersItemNameText(ItemStack gear, @org.jetbrains.annotations.Nullable Player player) {
+        final String playerName = player != null ? player.getScoreboardName() : "somebody";
+        return String.format("%s's %s", playerName, gear.getHoverName().getString());
+    }
+
+    private static void printStatsForDebugging(
+            ItemStack stack,
+            @Nullable GearPropertiesData oldProperties,
+            GearPropertiesData baseProperties,
+            GearPropertyMap bonusValues,
+            GearPropertiesData newProperties
+    ) {
+        // Prints stats that have changed for debugging purposes
+        if (oldProperties != null && SilentGear.LOGGER.isDebugEnabled()) {
+            GearType gearType = GearHelper.getType(stack);
+
+            for (var property : SgRegistries.GEAR_PROPERTY) {
+                var oldValue = oldProperties.get(property);
+                var newValue = newProperties.get(property);
+                SilentGear.LOGGER.debug(" - {}: {} -> {} -- base: {}, bonuses: [{}]",
+                        property.getDisplayName().getString(),
                         oldValue,
                         newValue,
-                        change < 0 ? change : "+" + change,
-                        GearPropertyMap.formatText(stats.getValues(stat, gearType), stat, 5).getString()
+                        baseProperties.get(property),
+                        bonusValues.get(PropertyKey.of(property, gearType))
                 );
             }
         }
@@ -235,13 +271,18 @@ public final class GearData {
     }
 
     private static int calculateModelIndex(ItemStack gear) {
+        if (GearHelper.isBroken(gear)) {
+            // Special broken gear model
+            return 0;
+        }
+
         var data = getConstruction(gear);
         var coatingOrMainPart = data.getCoatingOrMainPart();
-        if (coatingOrMainPart == null || coatingOrMainPart.getMaterial().isEmpty()) {
+        if (coatingOrMainPart == null || coatingOrMainPart.getPrimaryMaterial() == null) {
             // Data packs may not be fully loaded yet, or something else has gone wrong
             return -1;
         }
-        MaterialInstance mainMaterial = coatingOrMainPart.getMaterial().get();
+        MaterialInstance mainMaterial = coatingOrMainPart.getPrimaryMaterial();
         boolean highContrast = mainMaterial.getMainTextureType() == TextureType.HIGH_CONTRAST;
 
         int ret = highContrast ? 3 : 2;
@@ -256,22 +297,8 @@ public final class GearData {
         return ret;
     }
 
-    public static GearPropertyMap getStatModifiers(ItemStack stack, ICoreItem item, PartList parts) {
-        GearType gearType = item.getGearType();
-        GearPropertyMap stats = new GearPropertyMap();
-
-        for (ItemStat stat : ItemStats.allStatsOrderedExcluding(item.getExcludedStats(stack))) {
-            StatGearKey itemKey = StatGearKey.of(stat, gearType);
-
-            for (PartData part : parts) {
-                for (StatInstance mod : part.getStatModifiers(itemKey, stack)) {
-                    StatInstance modCopy = StatInstance.of(mod.getValue(), mod.getOp(), itemKey);
-                    stats.put(modCopy.getKey(), modCopy);
-                }
-            }
-        }
-
-        return stats;
+    public static int getModelIndex(ItemStack stack) {
+        return stack.getOrDefault(SgDataComponents.GEAR_MODEL_INDEX, 0);
     }
 
     //region Part getters and checks
@@ -371,8 +398,13 @@ public final class GearData {
     public static boolean hasPart(ItemStack gear, GearPart part) {
         if (checkNonGearItem(gear, "hasPart")) return false;
 
-        String partId = part.getId().toString();
-        return hasPart(gear, partId);
+        for (var partInstance : getConstruction(gear).parts()) {
+            if (partInstance.get() == part) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -494,9 +526,14 @@ public final class GearData {
         return true;
     }
 
+    public static void setExampleTag(ItemStack result, boolean value) {
+        result.set(SgDataComponents.GEAR_IS_EXAMPLE, value);
+    }
+
     @EventBusSubscriber(modid = SilentGear.MOD_ID)
     public static final class EventHandler {
-        private EventHandler() { }
+        private EventHandler() {
+        }
 
         @SubscribeEvent
         public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -504,10 +541,10 @@ public final class GearData {
             StackList.from(player.getInventory())
                     .stream()
                     .filter(s -> s.getItem() instanceof ICoreItem)
-                    .forEach(s -> recalculateStats(s, player));
+                    .forEach(s -> recalculateGearData(s, player));
 
             if (ModList.get().isLoaded(Const.CURIOS)) {
-                CuriosCompat.getEquippedCurios(player).forEach(s -> recalculateStats(s, player));
+                CuriosCompat.getEquippedCurios(player).forEach(s -> recalculateGearData(s, player));
             }
         }
     }

@@ -1,32 +1,26 @@
-package net.silentchaos512.gear.config;
+package net.silentchaos512.gear;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
-import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.config.ModConfig;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.silentchaos512.gear.api.part.MaterialGrade;
-import net.silentchaos512.gear.api.stats.ItemStat;
+import net.silentchaos512.gear.api.property.GearProperty;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.setup.NerfedGear;
-import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.IAoeTool;
 import net.silentchaos512.lib.util.NameUtils;
 
-import java.util.HashMap;
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
+@EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class Config {
     public static final class Common {
-        static final ModConfigSpec spec;
+        static final ModConfigSpec SPEC;
         // Blueprints
         public static final ModConfigSpec.EnumValue<BlueprintType.ConfigOption> blueprintTypes;
         public static final ModConfigSpec.BooleanValue spawnWithStarterBlueprints;
@@ -35,10 +29,6 @@ public final class Config {
         public static final ModConfigSpec.DoubleValue nerfedItemDurabilityMulti;
         public static final ModConfigSpec.DoubleValue nerfedItemHarvestSpeedMulti;
         static final ModConfigSpec.ConfigValue<List<? extends String>> nerfedItems;
-        // Sinew
-        public static final ModConfigSpec.DoubleValue sinewDropRate;
-        @Deprecated(forRemoval = true) // FIXME: use a tag, you fool...
-        static final ModConfigSpec.ConfigValue<List<? extends String>> sinewAnimals;
         // Gear
         public static final ModConfigSpec.BooleanValue allowConversionRecipes;
         public static final ModConfigSpec.BooleanValue allowEnchanting;
@@ -67,7 +57,6 @@ public final class Config {
         public static final ModConfigSpec.IntValue sawRecursionDepth;
         public static final ModConfigSpec.BooleanValue upgradesInAnvilOnly;
         public static final ModConfigSpec.BooleanValue destroySwappedParts;
-        private static final Map<ItemStat, ModConfigSpec.DoubleValue> statMultipliers = new HashMap<>();
         // Other items
         public static final ModConfigSpec.IntValue netherwoodCharcoalBurnTime;
         // Salvager
@@ -160,24 +149,6 @@ public final class Config {
                 nerfedItems = builder
                         .comment("These items will have reduced durability")
                         .defineList("items", NerfedGear.DEFAULT_ITEMS, Config::isResourceLocation);
-                builder.pop();
-            }
-            {
-                builder.comment("Settings for sinew drops");
-                builder.push("sinew");
-
-                sinewDropRate = builder
-                        .comment("Drop rate of sinew (chance out of 1)")
-                        .defineInRange("dropRate", 0.2, 0, 1);
-                sinewAnimals = builder
-                        .comment("These entities can drop sinew when killed.")
-                        .defineList("dropsFrom",
-                                ImmutableList.of(
-                                        "minecraft:cow",
-                                        "minecraft:pig",
-                                        "minecraft:sheep"
-                                ),
-                                Config::isResourceLocation);
                 builder.pop();
             }
             {
@@ -352,28 +323,24 @@ public final class Config {
                     .comment("Set to false to remove the text from tooltips")
                     .define("other.showWipText", true);
 
-            spec = builder.build();
+            SPEC = builder.build();
         }
 
         private Common() {}
 
         public static boolean isLoaded() {
-            return spec.isLoaded();
+            return SPEC.isLoaded();
         }
 
-        public static float getStatWithMultiplier(ItemStat stat, float value) {
-            if (statMultipliers.containsKey(stat))
-                return statMultipliers.get(stat).get().floatValue() * value;
-            return value;
+        @Nullable
+        public static GearPropertyValue<?> getPropertyBonusMultiplier(GearProperty<?, ?> property) {
+            // TODO: Make a special "_global_properties.json" file for materials to handle stat multipliers
+            return null;
         }
 
         @SuppressWarnings("TypeMayBeWeakened")
         public static boolean isNerfedItem(Item item) {
             return nerfedItemsEnabled.get() && isThingInList(NameUtils.fromItem(item), nerfedItems);
-        }
-
-        public static boolean isSinewAnimal(LivingEntity entity) {
-            return isThingInList(NameUtils.fromEntity(entity), sinewAnimals);
         }
 
         private static boolean isThingInList(ResourceLocation name, ModConfigSpec.ConfigValue<List<? extends String>> list) {
@@ -392,7 +359,7 @@ public final class Config {
     }
 
     public static final class Client {
-        static final ModConfigSpec spec;
+        static final ModConfigSpec SPEC;
 
         public static final ModConfigSpec.BooleanValue allowEnchantedEffect;
         public static final ModConfigSpec.BooleanValue playKachinkSound;
@@ -436,7 +403,7 @@ public final class Config {
                             "or encouraging the player to install JEI (Just Enough Items) if the mod is missing.")
                     .define("tooltip.jeiHints", true);
 
-            spec = builder.build();
+            SPEC = builder.build();
         }
 
         private Client() {}
@@ -444,8 +411,7 @@ public final class Config {
 
     private Config() {}
 
-    public static void init() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Common.spec);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Client.spec);
+    @SubscribeEvent
+    public static void onLoad(final ModConfigEvent event) {
     }
 }

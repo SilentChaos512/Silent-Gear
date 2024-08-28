@@ -71,7 +71,8 @@ public class StoneAnvilBlock extends BaseEntityBlock implements SimpleWaterlogge
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
         if (blockEntity instanceof StoneAnvilBlockEntity stoneAnvil) {
             ItemStack stack = pPlayer.getItemInHand(pHand);
-            if (!pLevel.isClientSide && stoneAnvil.interact(pPlayer, pPlayer.getAbilities().instabuild ? stack.copy() : stack)) {
+            var stackToConsume = pPlayer.getAbilities().instabuild ? stack.copy() : stack;
+            if (!pLevel.isClientSide && stoneAnvil.interact(pPlayer, stackToConsume, pHand)) {
                 return ItemInteractionResult.SUCCESS;
             }
 

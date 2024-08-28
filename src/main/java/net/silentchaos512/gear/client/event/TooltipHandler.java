@@ -12,11 +12,9 @@ import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearProperty;
-import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.property.GearPropertyGroups;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
@@ -24,7 +22,7 @@ import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.TextListBuilder;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -308,24 +306,18 @@ public final class TooltipHandler {
         GearType gearType = getPartGearType(part);
         TextListBuilder builder = new TextListBuilder();
 
-        List<ItemStat> relevantStats = new ArrayList<>(part.getGearType().getRelevantStats());
-        if (part.getGearType().isArmor() && relevantStats.contains(ItemStats.DURABILITY)) {
-            int index = relevantStats.indexOf(ItemStats.DURABILITY);
-            relevantStats.remove(ItemStats.DURABILITY);
-            relevantStats.add(index, ItemStats.ARMOR_DURABILITY);
-        }
-
-        for (ItemStat stat : relevantStats) {
-            Collection<StatInstance> modifiers = new ArrayList<>();
-            for (StatInstance mod : part.getStatModifiers(StatGearKey.of(stat, gearType), ItemStack.EMPTY)) {
-                if (mod.getOp() == StatInstance.Operation.AVG) {
-                    float computed = stat.compute(Collections.singleton(mod));
-                    modifiers.add(StatInstance.of(computed, StatInstance.Operation.AVG, mod.getKey()));
-                } else {
-                    modifiers.add(mod);
-                }
+        var sortedRelevantProperties = GearPropertyGroups.getSortedRelevantProperties(part.getGearType().relevantPropertyGroups());
+        for (GearProperty<?, ?> property : sortedRelevantProperties) {
+            Collection<GearPropertyValue<?>> modifiers = new ArrayList<>();
+            for (GearPropertyValue<?> mod : part.getPropertyModifiers(part.getType(), PropertyKey.of(property, gearType))) {
+//                if (mod.getOp() == StatInstance.Operation.AVG) {
+//                    float computed = stat.compute(Collections.singleton(mod));
+//                    modifiers.add(StatInstance.of(computed, StatInstance.Operation.AVG, mod.getKey()));
+//                } else {
+                modifiers.add(mod);
+//                }
             }
-            getStatTooltipLine(event, part.getType(), stat, modifiers).ifPresent(builder::add);
+            getStatTooltipLine(event, part.getType(), property, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
     }
@@ -351,53 +343,70 @@ public final class TooltipHandler {
         event.getToolTip().addAll(builder.build());
     }
 
-    private static void getMaterialStatModLines(ItemTooltipEvent event, PartType partType, MaterialInstance material, TextListBuilder builder, GearProperty<?, ?> stat) {
+    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> void getMaterialStatModLines(
+            ItemTooltipEvent event,
+            PartType partType,
+            MaterialInstance material,
+            TextListBuilder builder,
+            P property
+    ) {
+        Collection<V> modsAll = material.getPropertyModifiers(partType, PropertyKey.of(property, GearTypes.ALL.get()));
         //noinspection unchecked
-        Collection<GearPropertyValue<?>> modsAll = (Collection<GearPropertyValue<?>>) material.getPropertyModifiers(partType, PropertyKey.of(stat, GearTypes.ALL.get()));
-        Optional<MutableComponent> head = getStatTooltipLine(event, partType, stat, modsAll);
-        builder.add(head.orElseGet(() -> TextUtil.withColor(stat.getDisplayName(), stat.getNameColor())));
+        Optional<MutableComponent> head = getStatTooltipLine(event, partType, property, (Collection<GearPropertyValue<?>>) modsAll);
+        builder.add(head.orElseGet(() -> TextUtil.withColor(property.getDisplayName(), property.getGroup().getColor())));
 
         builder.indent();
 
         int subCount = 0;
-        List<StatGearKey> keysForStat = material.get().getPropertyKeys(material, partType).stream()
-                .filter(key -> key.getStat().equals(stat))
-                .collect(Collectors.toList());
+        List<PropertyKey<?, ?>> keysForStat = material.get().getPropertyKeys(material, partType).stream()
+                .filter(key -> key.property().equals(property))
+                .toList();
 
-        for (StatGearKey key : keysForStat) {
-            if (key.getGearType() != GearType.ALL) {
-                ItemStat stat1 = ItemStats.get(key.getStat());
+        for (var key : keysForStat) {
+            if (key.gearType() != GearTypes.ALL.get()) {
+                //noinspection unchecked
+                var castedKey = (PropertyKey<T, V>) key;
+                Collection<V> mods = material.getPropertyModifiers(partType, castedKey);
+                Optional<MutableComponent> line = getSubStatTooltipLine(event, partType, castedKey.property(), key.gearType(), mods);
 
-                if (stat1 != null) {
-                    Collection<StatInstance> mods = material.getPropertyModifiers(partType, key);
-                    Optional<MutableComponent> line = getSubStatTooltipLine(event, partType, stat1, key.getGearType(), mods);
-
-                    if (line.isPresent()) {
-                        builder.add(line.get());
-                        ++subCount;
-                    }
+                if (line.isPresent()) {
+                    builder.add(line.get());
+                    ++subCount;
                 }
             }
         }
 
-        if (subCount == 0 && !head.isPresent()) {
+        if (subCount == 0 && head.isEmpty()) {
             builder.removeLast();
         }
 
         builder.unindent();
     }
 
-    private static Optional<MutableComponent> getStatTooltipLine(ItemTooltipEvent event, PartType partType, GearProperty<?, ?> stat, Collection<GearPropertyValue<?>> modifiers) {
-        if (!modifiers.isEmpty()) {
-            GearPropertyValue<?> inst = stat.compute(stat.getZeroValue(), modifiers);
-            if (inst.shouldList(partType, stat, event.getFlags().isAdvanced())) {
-                boolean isZero = inst.getValue() == 0;
-                Color nameColor = isZero ? MC_DARK_GRAY : stat.getNameColor();
+    @SuppressWarnings("unchecked")
+    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> getStatTooltipLine(
+            ItemTooltipEvent event,
+            PartType partType,
+            GearProperty<?, ?> propertyIn,
+            Collection<GearPropertyValue<?>> modifiersIn
+    ) {
+        if (!modifiersIn.isEmpty()) {
+            // Cast to true types
+            var property = (P) propertyIn;
+            var modifiers = (Collection<V>) modifiersIn;
+            T value = property.compute(property.getZeroValue(), modifiers);
+            boolean isZero = property.isZero(value);
+            if (event.getFlags().isAdvanced() || !isZero) {
+                Color nameColor = isZero ? MC_DARK_GRAY : property.getGroup().getColor();
                 Color statColor = isZero ? MC_DARK_GRAY : Color.WHITE;
 
-                MutableComponent nameStr = TextUtil.withColor(stat.getDisplayName(), nameColor);
-                int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
-                MutableComponent statListText = TextUtil.withColor(GearPropertyMap.formatText(modifiers, stat, decimalPlaces), statColor);
+                MutableComponent nameStr = TextUtil.withColor(property.getDisplayName(), nameColor);
+                var uncoloredFormattedText = GearPropertyMap.formatText(
+                        modifiers,
+                        property,
+                        property.getPreferredDecimalPlaces(property.valueOf(value))
+                );
+                MutableComponent statListText = TextUtil.withColor(uncoloredFormattedText, statColor);
 
                 return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, statListText));
             }
@@ -406,16 +415,26 @@ public final class TooltipHandler {
         return Optional.empty();
     }
 
-    private static Optional<MutableComponent> getSubStatTooltipLine(ItemTooltipEvent event, PartType partType, ItemStat stat, GearType gearType, Collection<StatInstance> modifiers) {
+    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> getSubStatTooltipLine(
+            ItemTooltipEvent event,
+            PartType partType,
+            P property,
+            GearType gearType,
+            Collection<V> modifiers
+    ) {
         if (!modifiers.isEmpty()) {
-            StatInstance inst = stat.computeForDisplay(0, gearType, modifiers);
-            if (inst.shouldList(partType, stat, event.getFlags().isAdvanced())) {
-                boolean isZero = inst.getValue() == 0;
+            T value = property.compute(property.getZeroValue(), modifiers);
+            boolean isZero = property.isZero(value);
+            if (event.getFlags().isAdvanced() || !isZero) {
                 Color color = isZero ? MC_DARK_GRAY : Color.WHITE;
 
                 MutableComponent nameStr = TextUtil.withColor(gearType.getDisplayName().copy(), color);
-                int decimalPlaces = stat.isDisplayAsInt() && inst.getOp() != StatInstance.Operation.MUL1 && inst.getOp() != StatInstance.Operation.MUL2 ? 0 : 2;
-                MutableComponent statListText = TextUtil.withColor(GearPropertyMap.formatText(modifiers, stat, decimalPlaces), color);
+                var uncoloredFormattedText = GearPropertyMap.formatText(
+                        modifiers,
+                        property,
+                        property.getPreferredDecimalPlaces(property.valueOf(value))
+                );
+                MutableComponent statListText = TextUtil.withColor(uncoloredFormattedText, color);
 
                 return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, statListText));
             }

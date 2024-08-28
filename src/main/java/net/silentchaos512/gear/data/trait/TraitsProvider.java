@@ -12,7 +12,7 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.data.trait.*;
-import net.silentchaos512.gear.api.stats.ItemStats;
+import net.silentchaos512.gear.core.SoundPlayback;
 import net.silentchaos512.gear.gear.trait.effect.*;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgTags;
@@ -22,6 +22,7 @@ import net.silentchaos512.gear.util.Const;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public class TraitsProvider extends TraitsProviderBase {
@@ -46,6 +47,9 @@ public class TraitsProvider extends TraitsProviderBase {
         ret.add(TraitBuilder.of(Const.Traits.CONFETTI, 5)
                 .withGearTypeCondition(GearTypes.WEAPON));
         ret.add(TraitBuilder.of(Const.Traits.FIREPROOF, 1)
+                .effects(
+                        new FireproofTraitEffect()
+                )
                 .extraWikiLines("  - The item cannot be destroyed by fire or lava")
         );
         ret.add(TraitBuilder.of(Const.Traits.FLAMMABLE, 1));
@@ -241,18 +245,21 @@ public class TraitsProvider extends TraitsProviderBase {
                 .effects(
                         WielderEffectTraitEffect.builder()
                                 .add(GearTypes.ARMOR, WielderEffectTraitEffect.LevelType.PIECE_COUNT, MobEffects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
-                                .build()
+                                .build(),
+                        ExtraDamageTraitEffect.affectingHighHealth(2.0f)
                 )
         );
         ret.add(TraitBuilder.of(Const.Traits.AQUATIC, 5)
                 .effects(
                         WielderEffectTraitEffect.builder()
                                 .add(GearTypes.ARMOR, WielderEffectTraitEffect.LevelType.FULL_SET_ONLY, MobEffects.WATER_BREATHING, 1)
-                                .build()
+                                .build(),
+                        ExtraDamageTraitEffect.affectingAquatic(2.0f)
                 )
         );
         ret.add(TraitBuilder.of(Const.Traits.FLAME_WARD, 1)
                 .effects(
+                        new FireproofTraitEffect(),
                         WielderEffectTraitEffect.builder()
                                 .add(GearTypes.ARMOR, WielderEffectTraitEffect.LevelType.FULL_SET_ONLY, MobEffects.FIRE_RESISTANCE, 1)
                                 .build()
@@ -403,42 +410,137 @@ public class TraitsProvider extends TraitsProviderBase {
         );
 
         // Block placers
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.CRACKLER, 1, Blocks.BASALT, 3)
-                .withGearTypeCondition(GearTypes.TOOL));
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.FLOATSTONER, 1, Blocks.END_STONE, 3)
-                .withGearTypeCondition(GearTypes.TOOL));
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.IGNITE, 1, Blocks.FIRE, 1)
-                .sound(SoundEvents.FLINTANDSTEEL_USE, 1f, 1f)
+        ret.add(new TraitBuilder(Const.Traits.CRACKLER, 1)
                 .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        new BlockPlacerTraitEffect(
+                                Blocks.BASALT.defaultBlockState(),
+                                3,
+                                0,
+                                new SoundPlayback(SoundEvents.BASALT_PLACE, 1f, 1f, 0.2f)
+                        )
+                )
         );
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.RACKER, 1, Blocks.NETHERRACK, 3)
-                .withGearTypeCondition(GearTypes.TOOL));
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.REFRACTIVE, 1, SgBlocks.PHANTOM_LIGHT.get(), 5)
-                .sound(SoundEvents.AMETHYST_BLOCK_STEP, 0.75f, 0.5f)
+        ret.add(new TraitBuilder(Const.Traits.FLOATSTONER, 1)
                 .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        new BlockPlacerTraitEffect(
+                                Blocks.END_STONE.defaultBlockState(),
+                                3,
+                                0,
+                                new SoundPlayback(SoundEvents.STONE_PLACE, 1f, 1f, 0.2f)
+                        )
+                )
         );
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.TERMINUS, 1, Blocks.STONE, 3)
-                .withGearTypeCondition(GearTypes.TOOL));
-        ret.add(new BlockPlacerTraitBuilder(Const.Traits.VULCAN, 1, Blocks.OBSIDIAN, 20)
-                .cooldown(100)
+        ret.add(new TraitBuilder(Const.Traits.IGNITE, 1)
                 .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        new BlockPlacerTraitEffect(
+                                Blocks.FIRE.defaultBlockState(),
+                                1,
+                                0,
+                                new SoundPlayback(SoundEvents.FLINTANDSTEEL_USE, 1f, 1f, 0.2f)
+                        )
+                )
+        );
+        ret.add(new TraitBuilder(Const.Traits.RACKER, 1)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        new BlockPlacerTraitEffect(
+                                Blocks.NETHERRACK.defaultBlockState(),
+                                3,
+                                0,
+                                new SoundPlayback(SoundEvents.NETHERRACK_PLACE, 1f, 1f, 0.2f)
+                        )
+                )
+        );
+        ret.add(new TraitBuilder(Const.Traits.REFRACTIVE, 1)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        new BlockPlacerTraitEffect(
+                                SgBlocks.PHANTOM_LIGHT.get().defaultBlockState(),
+                                5,
+                                0,
+                                new SoundPlayback(SoundEvents.AMETHYST_BLOCK_STEP, 0.75f, 0.5f, 0.1f)
+                        )
+                )
+        );
+        ret.add(new TraitBuilder(Const.Traits.TERMINUS, 1)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        new BlockPlacerTraitEffect(
+                                Blocks.STONE.defaultBlockState(),
+                                3,
+                                0,
+                                new SoundPlayback(SoundEvents.STONE_PLACE, 1f, 1f, 0.2f)
+                        )
+                )
+        );
+        ret.add(new TraitBuilder(Const.Traits.VULCAN, 1)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        new BlockPlacerTraitEffect(
+                                Blocks.OBSIDIAN.defaultBlockState(),
+                                20,
+                                100,
+                                new SoundPlayback(SoundEvents.STONE_PLACE, 1f, 1f, 0.2f)
+                        )
+                )
         );
 
         // Block fillers
-        ret.add(new BlockFillerTraitBuilder(Const.Traits.ROAD_MAKER, 1, Blocks.DIRT_PATH, 0.5f)
-                .target(Blocks.GRASS_BLOCK)
-                .fillRange(1, 0, 1, false)
+        ret.add(new TraitBuilder(Const.Traits.CRACKLER, 1)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        new BlockFillerTraitEffect(
+                                new BlockFillerTraitEffect.TargetBlock(Blocks.GRASS_BLOCK, null),
+                                new BlockFillerTraitEffect.FillProperties(
+                                        Blocks.DIRT_PATH.defaultBlockState(),
+                                        false,
+                                        1, 0, 1,
+                                        false
+                                ),
+                                new BlockFillerTraitEffect.UseProperties(BlockFillerTraitEffect.SneakMode.PASS, 0.5f, 0),
+                                new SoundPlayback(SoundEvents.GRASS_BREAK, 1f, 1f, 0.1f)
+                        )
+                )
         );
 
         // Misfits
 
-        ret.add(bonusDropsTraits(Const.Traits.GOLD_DIGGER, 5, 0.15f, 0.5f, Ingredient.of(SgTags.Items.GOLD_DIGGER_DROPS))
-                .withGearTypeCondition(GearTypes.HARVEST_TOOL));
-        ret.add(bonusDropsTraits(Const.Traits.IMPERIAL, 5, 0.08f, 1f, Ingredient.of(SgTags.Items.IMPERIAL_DROPS))
-                .withGearTypeCondition(GearTypes.HARVEST_TOOL));
+        ret.add(new TraitBuilder(Const.Traits.GOLD_DIGGER, 5)
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL)
+                .effects(
+                        new BonusDropsTraitEffect(
+                                0.15f,
+                                0.5f,
+                                Ingredient.of(SgTags.Items.GOLD_DIGGER_DROPS),
+                                "nuggets"
+                        )
+                )
+        );
+        ret.add(new TraitBuilder(Const.Traits.IMPERIAL, 5)
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL)
+                .effects(
+                        new BonusDropsTraitEffect(
+                                0.15f,
+                                0.5f,
+                                Ingredient.of(SgTags.Items.IMPERIAL_DROPS),
+                                "gems"
+                        )
+                )
+        );
 
-        ret.add(cancelEffectsTrait(Const.Traits.CURE_POISON, MobEffects.POISON));
-        ret.add(cancelEffectsTrait(Const.Traits.CURE_WITHER, MobEffects.WITHER));
+        ret.add(new TraitBuilder(Const.Traits.CURE_POISON, 1)
+                .effects(
+                        new CancelEffectsTraitEffect(List.of(MobEffects.POISON))
+                )
+        );
+        ret.add(new TraitBuilder(Const.Traits.CURE_WITHER, 1)
+                .effects(
+                        new CancelEffectsTraitEffect(List.of(MobEffects.WITHER))
+                )
+        );
 
 
         ret.add(TraitBuilder.of(Const.Traits.CHILLED, 5)

@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialModifiers;
+import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.lib.util.EnumUtils;
@@ -113,7 +113,7 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
     private void tryGradeItem(ItemStack input, int catalystTier, MaterialInstance material) {
         MaterialGrade targetGrade = MaterialGrade.selectWithCatalyst(SilentGear.RANDOM, catalystTier);
         this.lastGradeAttempt = targetGrade;
-        var currentGradeMod = material.getModifier(MaterialModifiers.GRADE);
+        var currentGradeMod = material.getModifier(MaterialModifiers.GRADE.get());
 
         if (currentGradeMod == null || targetGrade.ordinal() > currentGradeMod.grade().ordinal()) {
             // Assign grade, move to output slot
@@ -173,7 +173,7 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
         var material = MaterialInstance.from(stack);
         if (material == null) return false;
 
-        var gradeMod = material.getModifier(MaterialModifiers.GRADE);
+        var gradeMod = material.getModifier(MaterialModifiers.GRADE.get());
         return gradeMod == null || gradeMod.grade() != MaterialGrade.MAX;
     }
 

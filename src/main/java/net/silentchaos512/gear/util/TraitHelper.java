@@ -13,9 +13,7 @@ import net.silentchaos512.gear.api.event.GetTraitsEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.property.TraitListPropertyValue;
-import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.api.traits.TraitFunction;
-import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.api.traits.*;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
@@ -46,7 +44,7 @@ public final class TraitHelper {
      *                   result.
      * @return The {@code inputValue} modified by traits.
      */
-    public static float activateTraits(ItemStack gear, final float inputValue, TraitFunction action) {
+    public static <T> T activateTraits(ItemStack gear, final T inputValue, TraitFunction<T> action) {
         if (!GearHelper.isGear(gear)) {
             SilentGear.LOGGER.error("Called activateTraits on non-gear item, {}", gear);
             SilentGear.LOGGER.catching(new IllegalArgumentException());
@@ -57,7 +55,7 @@ public final class TraitHelper {
         if (traitListProperty == null) return inputValue;
 
         var traits = traitListProperty.value();
-        float value = inputValue;
+        T value = inputValue;
 
         for (TraitInstance trait : traits) {
             value = action.apply(trait, value);
@@ -120,6 +118,23 @@ public final class TraitHelper {
             var list = GearData.getProperties(gear).getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
             for (var traitInstance : list.value()) {
                 if (traitInstance.getTrait() == trait) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean hasTraitEffect(ItemStack gear, TraitEffectType<?> traitEffectType) {
+        if (!GearHelper.isGear(gear)) return false;
+
+        var traitList = GearData.getProperties(gear)
+                .getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty())
+                .value();
+        for (TraitInstance traitInstance : traitList) {
+            for (TraitEffect effect : traitInstance.getTrait().getEffects()) {
+                if (effect.type() == traitEffectType) {
                     return true;
                 }
             }
@@ -280,7 +295,7 @@ public final class TraitHelper {
     }
 
     static void tickTraits(Level world, @Nullable Player player, ItemStack gear, boolean isEquipped) {
-        var traits = GearData.getProperties(gear).get(GearProperties.TRAITS);
+        var traits = GearData.getProperties(gear, player).get(GearProperties.TRAITS);
         if (traits == null) return;
 
         for (var trait : traits.value()) {

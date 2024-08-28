@@ -11,11 +11,10 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.Container;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -48,7 +47,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         ItemStack result = item.construct(getParts());
         ItemStack original = findOriginalItem(inv);
         if (!original.isEmpty()) {
@@ -62,8 +61,8 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         return result;
     }
 
-    private static ItemStack findOriginalItem(Container inv) {
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+    private static ItemStack findOriginalItem(CraftingInput inv) {
+        for (int i = 0; i < inv.size(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty() && stack.isDamageableItem()) {
                 return stack;

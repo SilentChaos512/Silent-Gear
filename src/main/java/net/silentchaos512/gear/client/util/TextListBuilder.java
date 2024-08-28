@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextListBuilder {
-    static final String[] BULLETS = {"\u2022", "\u25e6", "\u25aa"}; // •◦▪
-    static final String VANILLA_BULLET = "\u2666";
+    public static final String[] BULLETS = {"\u2022", "\u25e6", "\u25aa"}; // •◦▪
+    public static final String VANILLA_BULLET = "\u2666";
 
     private final List<Component> list = new ArrayList<>();
     private int indent = 0;

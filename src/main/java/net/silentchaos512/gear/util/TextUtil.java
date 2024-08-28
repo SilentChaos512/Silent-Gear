@@ -4,7 +4,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;

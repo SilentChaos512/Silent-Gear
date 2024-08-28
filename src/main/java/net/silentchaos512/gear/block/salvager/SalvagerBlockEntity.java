@@ -1,26 +1,9 @@
-/*
- * Silent Gear -- SalvagerTileEntity
- * Copyright (C) 2018 SilentChaos512
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 3
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.silentchaos512.gear.block.salvager;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -35,11 +18,12 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgBlockEntities;
@@ -59,7 +43,7 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
     private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, 18).toArray();
     public static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
 
-    private final RecipeManager.CachedCheck<Container, SalvagingRecipe> quickCheck;
+    private final RecipeManager.CachedCheck<SingleRecipeInput, SalvagingRecipe> quickCheck;
 
     private NonNullList<ItemStack> items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     int progress = 0;
@@ -89,7 +73,7 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
     @Nullable
     private SalvagingRecipe getRecipe(ItemStack input) {
         if (level == null || input.isEmpty()) return null;
-        var holder = quickCheck.getRecipeFor(this, level).orElse(null);
+        var holder = quickCheck.getRecipeFor(new SingleRecipeInput(getInputItem()), level).orElse(null);
         if (holder != null) {
             return holder.value();
         }
@@ -111,6 +95,10 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
         return true;
     }
 
+    public ItemStack getInputItem() {
+        return this.items.get(INPUT_SLOT);
+    }
+
     @Override
     public ItemStack getItem(int pSlot) {
         return this.items.get(pSlot);
@@ -129,7 +117,7 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
     @Override
     public void setItem(int pSlot, ItemStack pStack) {
         ItemStack itemstack = this.items.get(pSlot);
-        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameTags(itemstack, pStack);
+        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, pStack);
         this.items.set(pSlot, pStack);
         if (pStack.getCount() > this.getMaxStackSize()) {
             pStack.setCount(this.getMaxStackSize());
@@ -230,8 +218,8 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag tags = super.getUpdateTag();
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag tags = super.getUpdateTag(provider);
         tags.putInt("Progress", this.progress);
         return tags;
     }
@@ -248,12 +236,14 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        if (stack.isEmpty() || isOutputSlot(index))
+        if (stack.isEmpty() || isOutputSlot(index)) {
             return false;
+        }
 
         ItemStack current = getItem(index);
-        if (!current.isEmpty() && !current.areAttachmentsCompatible(stack))
+        if (!current.isEmpty() && !ItemStack.isSameItemSameComponents(stack, current)) {
             return false;
+        }
 
         return isInputSlot(index) || super.canPlaceItem(index, stack);
     }
@@ -292,6 +282,16 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
     }
 
     @Override
+    protected NonNullList<ItemStack> getItems() {
+        return this.items;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> pItems) {
+        this.items = pItems;
+    }
+
+    @Override
     protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
         return new SalvagerContainer(id, playerInventory, this, fields);
     }
@@ -309,15 +309,15 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
     }
 
     @Override
-    public void load(CompoundTag tags) {
-        super.load(tags);
+    public void loadAdditional(CompoundTag tags, HolderLookup.Provider provider) {
+        super.loadAdditional(tags, provider);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tags, this.items);
+        ContainerHelper.loadAllItems(tags, this.items, provider);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        ContainerHelper.saveAllItems(pTag, this.items);
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider provider) {
+        super.saveAdditional(pTag, provider);
+        ContainerHelper.saveAllItems(pTag, this.items, provider);
     }
 }

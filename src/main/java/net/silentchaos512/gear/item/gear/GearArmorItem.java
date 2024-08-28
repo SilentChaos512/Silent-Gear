@@ -20,7 +20,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
@@ -30,16 +30,11 @@ import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GearArmorItem extends ArmorItem implements ICoreArmor {
-    // Just copied from ArmorItem, access transformers are too flaky
-    private static final UUID[] ARMOR_MODIFIERS = {UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
-    // sum = 1, starts with boots
-    private static final float[] ABSORPTION_RATIO_BY_SLOT = {3f / 20f, 6f / 20f, 8f / 20f, 3f / 20f};
-
     // Caches armor colors by model key to speed up armor rendering
     private static final Cache<String, Integer> ARMOR_COLORS = CacheBuilder.newBuilder()
             .maximumSize(1000)
@@ -103,17 +98,17 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
     }
 
     @Override
-    public ItemAttributeModifiers getAttributeModifiers(ItemStack stack) {
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         var builder = ItemAttributeModifiers.builder();
-        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
+        EquipmentSlot slot = this.getEquipmentSlot();
         if (slot == this.getType().getSlot()) {
-            UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
             var equipmentSlotGroup = EquipmentSlotGroup.bySlot(slot);
-            builder.add(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", getArmorProtection(stack), AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
-            builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", getArmorToughness(stack), AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+            var resourcelocation = ResourceLocation.withDefaultNamespace("armor." + this.getType().getName());
+            builder.add(Attributes.ARMOR, new AttributeModifier(resourcelocation, getArmorProtection(stack), AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+            builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(resourcelocation, getArmorToughness(stack), AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
             float knockbackResistance = GearData.getProperties(stack).getNumber(GearProperties.KNOCKBACK_RESISTANCE) / 10f;
             if (knockbackResistance > 0) {
-                builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", knockbackResistance, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+                builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(resourcelocation, knockbackResistance, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
             }
             GearHelper.addAttributeModifiers(stack, builder);
         }
@@ -140,10 +135,10 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Runnable onBroken) {
-        return GearHelper.damageItem(stack, amount, entity, () -> {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+        return GearHelper.damageItem(stack, amount, entity, item -> {
             GearHelper.onBroken(stack, entity instanceof Player ? (Player) entity : null, this.getType().getSlot());
-            onBroken.run();
+            onBroken.accept(item);
         });
     }
 
@@ -181,7 +176,7 @@ public class GearArmorItem extends ArmorItem implements ICoreArmor {
 
         var primaryPart = GearData.getConstruction(stack).getCoatingOrMainPart();
         if (primaryPart != null) {
-            var primaryMaterial = primaryPart.getMaterialNullable();
+            var primaryMaterial = primaryPart.getPrimaryMaterial();
             if (primaryMaterial != null) {
                 var mainTextureType = primaryMaterial.getMainTextureType();
                 return mainTextureType.getArmorTexture(innerModel);

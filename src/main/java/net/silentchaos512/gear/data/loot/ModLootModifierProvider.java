@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.modifier.BonusDropsTraitLootModifier;
@@ -10,8 +10,8 @@ import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
 import net.silentchaos512.gear.util.Const;
 
 public class ModLootModifierProvider extends GlobalLootModifierProvider {
-    public ModLootModifierProvider(DataGenerator gen) {
-        super(gen.getPackOutput(), SilentGear.MOD_ID);
+    public ModLootModifierProvider(GatherDataEvent event) {
+        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), SilentGear.MOD_ID);
     }
 
     @Override

@@ -10,7 +10,7 @@ import net.silentchaos512.gear.api.property.NumberPropertyValue;
 import net.silentchaos512.gear.api.util.ChargedProperties;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialModifiers;
+import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
@@ -26,7 +26,7 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
 
     @Override
     public IMaterialModifierType<?> getType() {
-        return MaterialModifiers.STARCHARGED;
+        return MaterialModifiers.STARCHARGED.get();
     }
 
     @Override

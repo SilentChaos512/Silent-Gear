@@ -27,7 +27,7 @@ public class UpgradeSmithingRecipe extends GearSmithingRecipe {
             if (gearType.isGear() && part.get().canAddToGear(gear, part) && !GearData.hasPart(gear, part.get())) {
                 ItemStack result = gear.copy();
                 GearData.addPart(result, part);
-                GearData.recalculateStats(result, CommonHooks.getCraftingPlayer());
+                GearData.recalculateGearData(result, CommonHooks.getCraftingPlayer());
                 return result;
             }
         }

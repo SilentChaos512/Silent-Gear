@@ -10,7 +10,4 @@ public abstract class GearPropertyValue<T> {
     public T value() {
         return this.value;
     }
-
-    @Deprecated // Probably useless?
-    public abstract GearPropertyType<?> type();
 }

@@ -19,9 +19,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
-import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.network.payload.server.CommandOutputPayload;
@@ -31,7 +29,6 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -136,8 +133,7 @@ public final class MaterialsCommand {
         // Properties
         for (var property : SgRegistries.GEAR_PROPERTY) {
             var mods = material.getPropertyModifiers(partType, PropertyKey.of(property, GearTypes.ALL.get()));
-            //noinspection unchecked
-            var formattedText = GearPropertyMap.formatText((Collection<GearPropertyValue<?>>) mods, (GearProperty<?, GearPropertyValue<?>>) property, 5);
+            var formattedText = GearPropertyMap.formatTextUnchecked(mods, property, false);
             appendTsv(builder, FORMAT_CODES.matcher(formattedText.getString()).replaceAll(""));
         }
 

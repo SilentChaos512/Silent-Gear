@@ -6,7 +6,6 @@ import net.silentchaos512.gear.gear.trait.Trait;
 
 import javax.annotation.Nullable;
 
-@Deprecated
 public record TraitActionContext(
         @Nullable Player player,
         Trait trait,

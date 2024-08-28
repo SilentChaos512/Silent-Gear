@@ -70,6 +70,8 @@ public interface Material extends GearComponent<MaterialInstance> {
      */
     Collection<IMaterialCategory> getCategories(MaterialInstance material);
 
+    boolean isInCategory(IMaterialCategory category);
+
     Optional<Ingredient> getPartSubstitute(PartType partType);
 
     boolean hasPartSubstitutes();

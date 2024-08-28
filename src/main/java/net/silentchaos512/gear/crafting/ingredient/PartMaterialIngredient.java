@@ -12,16 +12,16 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.setup.SgIngredientTypes;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.TextUtil;
@@ -177,7 +177,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
 
     @Override
     public Stream<ItemStack> getItems() {
-        Collection<Material> materials = MaterialManager.getValues();
+        Collection<Material> materials = SgRegistries.MATERIAL.getValues(true);
         if (!materials.isEmpty()) {
             return materials.stream()
                     .map(MaterialInstance::of)

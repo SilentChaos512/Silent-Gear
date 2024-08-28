@@ -50,7 +50,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
                     PartInstance.create(Const.Parts.BINDING, SgItems.BINDING.get(), Const.Materials.STRING)
             ));
             AdvancementHolder root = Advancement.Builder.advancement()
-                    .display(rootIcon, title("root"), description("root"), new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/adventure.png"), AdvancementType.TASK, false, false, false)
+                    .display(rootIcon, title("root"), description("root"), ResourceLocation.withDefaultNamespace("textures/gui/advancements/backgrounds/adventure.png"), AdvancementType.TASK, false, false, false)
                     .addCriterion("get_item", getItem(Items.CRAFTING_TABLE))
                     .save(saver, id("root"));
 

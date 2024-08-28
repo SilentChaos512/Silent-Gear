@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -27,7 +27,7 @@ import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlock;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
@@ -42,7 +42,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class SgBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(SilentGear.MOD_ID);
 
@@ -206,7 +206,7 @@ public final class SgBlocks {
     public static final DeferredBlock<SlabBlock> NETHERWOOD_SLAB = register("netherwood_slab", () ->
             new SlabBlock(netherWoodProps(2f, 3f)));
     public static final DeferredBlock<StairBlock> NETHERWOOD_STAIRS = register("netherwood_stairs", () ->
-            new StairBlock(() -> NETHERWOOD_PLANKS.get().defaultBlockState(), netherWoodProps(2f, 3f)));
+            new StairBlock(NETHERWOOD_PLANKS.get().defaultBlockState(), netherWoodProps(2f, 3f)));
     public static final DeferredBlock<FenceBlock> NETHERWOOD_FENCE = register("netherwood_fence", () ->
             new FenceBlock(netherWoodProps(2f, 3f)));
     public static final DeferredBlock<FenceGateBlock> NETHERWOOD_FENCE_GATE = register("netherwood_fence_gate", () ->

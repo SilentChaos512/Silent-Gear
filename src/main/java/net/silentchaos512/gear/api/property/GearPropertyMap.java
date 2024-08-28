@@ -12,6 +12,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.CodecUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,26 +45,58 @@ public class GearPropertyMap implements Multimap<PropertyKey<?, ?>, GearProperty
 
     private final Multimap<PropertyKey<?, ?>, GearPropertyValue<?>> map = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
-    public static MutableComponent formatText(Collection<GearPropertyValue<?>> mods, GearProperty<?, GearPropertyValue<?>> stat, int maxDecimalPlaces) {
-        return formatText(mods, stat, maxDecimalPlaces, false);
+    public GearPropertyMap() {
     }
 
-    public static MutableComponent formatText(Collection<GearPropertyValue<?>> mods, GearProperty<?, GearPropertyValue<?>> propertyType, int maxDecimalPlaces, boolean addModColors) {
+    public GearPropertyMap(GearPropertyMap values) {
+        this.map.putAll(values);
+    }
+
+    public GearPropertyMap.Immutable toImmutable() {
+        return new Immutable(this);
+    }
+
+    public GearPropertyMap toMutable() {
+        return this;
+    }
+
+    public static Component formatTextUnchecked(
+            Collection<? extends GearPropertyValue<?>> mods,
+            GearProperty<?, ?> property,
+            boolean addModColors
+    ) {
+        return property.formatModifiersUnchecked(mods, addModColors);
+    }
+
+    public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> MutableComponent formatText(
+            Collection<V> mods,
+            P property,
+            int maxDecimalPlaces
+    ) {
+        return formatText(mods, property, maxDecimalPlaces, false);
+    }
+
+    public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> MutableComponent formatText(
+            Collection<V> mods,
+            P property,
+            int maxDecimalPlaces,
+            boolean addModColors
+    ) {
         if (mods.size() == 1) {
-            GearPropertyValue<?> inst = mods.iterator().next();
-            int decimalPlaces = propertyType.getPreferredDecimalPlaces(inst);
-            return propertyType.getFormattedText(inst, decimalPlaces, addModColors);
+            V inst = mods.iterator().next();
+            int decimalPlaces = property.getPreferredDecimalPlaces(inst);
+            return property.formatValueWithColor(inst, addModColors);
         }
 
         // Sort modifiers by operation
         MutableComponent result = Component.literal("");
-        List<GearPropertyValue<?>> toSort = propertyType.sortForDisplay(mods);
+        List<V> toSort = property.sortForDisplay(mods);
 
-        for (GearPropertyValue<?> inst : toSort) {
+        for (V inst : toSort) {
             if (!result.getSiblings().isEmpty()) {
                 result.append(", ");
             }
-            result.append(propertyType.getFormattedText(inst, propertyType.getPreferredDecimalPlaces(inst), addModColors));
+            result.append(property.formatValueWithColor(inst, addModColors));
         }
 
         return result;
@@ -90,7 +123,7 @@ public class GearPropertyMap implements Multimap<PropertyKey<?, ?>, GearProperty
                 ret.put(key, value);
             }
         }
-        return ret;
+        return ret.toImmutable();
     }
 
     public Set<GearProperty<?, ?>> getPropertyTypes() {
@@ -231,5 +264,62 @@ public class GearPropertyMap implements Multimap<PropertyKey<?, ?>, GearProperty
     @Override
     public Map<PropertyKey<?, ?>, Collection<GearPropertyValue<?>>> asMap() {
         return this.map.asMap();
+    }
+
+    public static final class Immutable extends GearPropertyMap {
+        public static final Codec<Immutable> CODEC = GearPropertyMap.CODEC
+                .xmap(
+                        GearPropertyMap::toImmutable,
+                        Immutable::toMutable
+                );
+
+        public Immutable(GearPropertyMap values) {
+            super(values);
+        }
+
+        @Override
+        public GearPropertyMap toMutable() {
+            return new GearPropertyMap(this);
+        }
+
+        @Override
+        public <V, I extends GearPropertyValue<V>> boolean put(GearProperty<V, I> stat, GearType gearType, I value) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean put(@Nullable PropertyKey<?, ?> key, @Nullable GearPropertyValue<?> value) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean remove(@Nullable Object key, @Nullable Object value) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean putAll(@Nullable PropertyKey<?, ?> key, @NotNull Iterable<? extends GearPropertyValue<?>> values) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean putAll(@NotNull Multimap<? extends PropertyKey<?, ?>, ? extends GearPropertyValue<?>> multimap) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Collection<GearPropertyValue<?>> replaceValues(@Nullable PropertyKey<?, ?> key, @NotNull Iterable<? extends GearPropertyValue<?>> values) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Collection<GearPropertyValue<?>> removeAll(@Nullable Object key) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
     }
 }

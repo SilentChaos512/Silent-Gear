@@ -1,36 +1,30 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -53,7 +47,7 @@ public class GearShearsItem extends ShearsItem implements ICoreTool {
             return 0f;
         }
 
-        float speed = getStat(stack, ItemStats.HARVEST_SPEED);
+        float speed = GearData.getProperties(stack).getNumber(GearProperties.HARVEST_SPEED);
 
         if (!state.is(Blocks.COBWEB) && !state.is(BlockTags.LEAVES)) {
             return state.is(BlockTags.WOOL) ? speed - 1 : 1;
@@ -79,13 +73,15 @@ public class GearShearsItem extends ShearsItem implements ICoreTool {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
+        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        return GearHelper.getAttributeModifiers(slot, stack);
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+        var builder = ItemAttributeModifiers.builder();
+        GearHelper.addAttributeModifiers(stack, builder);
+        return builder.build();
     }
 
     @Override
@@ -112,23 +108,18 @@ public class GearShearsItem extends ShearsItem implements ICoreTool {
     public void setDamage(ItemStack stack, int damage) {
         super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
         if (GearHelper.isBroken(stack)) {
-            GearData.recalculateStats(stack, null);
+            GearData.recalculateGearData(stack, null);
         }
     }
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, ItemStats.DURABILITY);
+        return GearData.getProperties(stack).getNumberInt(getDurabilityStat());
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, onBroken);
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return GearHelper.getRarity(stack);
     }
 
     @Override

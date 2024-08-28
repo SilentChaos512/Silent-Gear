@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.trait.Trait;
-import net.silentchaos512.gear.setup.gear.GearPropertyTypes;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,11 +12,6 @@ import java.util.List;
 public class TraitListPropertyValue extends GearPropertyValue<List<TraitInstance>> {
     public TraitListPropertyValue(List<TraitInstance> value) {
         super(ImmutableList.copyOf(value));
-    }
-
-    @Override
-    public GearPropertyType<?> type() {
-        return GearPropertyTypes.TRAIT_LIST.get();
     }
 
     public static TraitListPropertyValue empty() {

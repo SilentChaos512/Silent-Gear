@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.material.Material;
@@ -15,12 +15,12 @@ import java.util.*;
 interface IGearRecipe {
     ICoreItem getOutputItem();
 
-    default Collection<PartInstance> getParts(Container inv) {
+    default Collection<PartInstance> getParts(CraftingInput inv) {
         List<MaterialInstance> materials = new ArrayList<>();
         Material first = null;
         List<PartInstance> parts = new ArrayList<>();
 
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+        for (int i = 0; i < inv.size(); ++i) {
             ItemStack stack = inv.getItem(i);
 
             if (!stack.isEmpty()) {
@@ -46,8 +46,7 @@ interface IGearRecipe {
 
         if (!materials.isEmpty()) {
             // Construct a tool head
-            createToolHead(this.getOutputItem().getGearType(), materials).ifPresent(part ->
-                    parts.add(0, part));
+            createToolHead(this.getOutputItem().getGearType(), materials).ifPresent(parts::addFirst);
         }
 
         return parts;

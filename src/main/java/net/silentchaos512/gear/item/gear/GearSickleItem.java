@@ -12,16 +12,13 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.common.IPlantable;
+import net.silentchaos512.gear.api.item.BreakEventHandler;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -29,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class GearSickleItem extends GearDiggerItem {
+public class GearSickleItem extends GearDiggerItem implements BreakEventHandler {
     private static final int DURABILITY_USAGE = 3;
     private static final int BREAK_RANGE = 4;
     private static final int HARVEST_RANGE = 2;
@@ -58,10 +55,10 @@ public class GearSickleItem extends GearDiggerItem {
 
     private static boolean canRightClickHarvestBlock(BlockState state) {
         Block block = state.getBlock();
-        return block instanceof IPlantable && block instanceof BonemealableBlock;
+        return block instanceof BonemealableBlock;
     }
 
-    private static boolean tryHarvest(ServerLevel world, BlockPos pos, BlockState state, Player player, ItemStack sickle, int fortune) {
+    private static boolean tryHarvest(ServerLevel world, BlockPos pos, BlockState state, Player player, ItemStack sickle) {
         Block block = state.getBlock();
         BonemealableBlock growable = (BonemealableBlock) block;
 
@@ -69,7 +66,6 @@ public class GearSickleItem extends GearDiggerItem {
             // Fully grown crop
             NonNullList<ItemStack> drops = NonNullList.create();
             drops.addAll(Block.getDrops(state, world, pos, null, player, sickle));
-            //ForgeEventFactory.fireBlockHarvesting(drops, world, pos, state, fortune, 1, false, player);
 
             // Spawn drops in world, remove first seed
             boolean foundSeed = false;
@@ -94,34 +90,34 @@ public class GearSickleItem extends GearDiggerItem {
     public InteractionResult useOn(UseOnContext context) {
         // Sickles can right-click to harvest an area of plants
         ItemStack sickle = context.getItemInHand();
-        if (GearHelper.isBroken(sickle) || !(context.getLevel() instanceof ServerLevel))
+        if (GearHelper.isBroken(sickle) || !(context.getLevel() instanceof ServerLevel serverLevel)) {
             return InteractionResult.PASS;
+        }
 
-        ServerLevel world = (ServerLevel) context.getLevel();
         BlockPos pos = context.getClickedPos();
-        BlockState state = world.getBlockState(pos);
+        BlockState state = serverLevel.getBlockState(pos);
         if (!canRightClickHarvestBlock(state)) return InteractionResult.PASS;
 
         Player player = context.getPlayer();
         if (player == null) return InteractionResult.PASS;
 
-        int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, sickle);
         int harvestCount = 0;
         final int radius = HARVEST_RANGE;
 
         for (int z = pos.getZ() - radius; z <= pos.getZ() + radius; ++z) {
             for (int x = pos.getX() - radius; x <= pos.getX() + radius; ++x) {
                 BlockPos target = new BlockPos(x, pos.getY(), z);
-                state = world.getBlockState(target);
+                state = serverLevel.getBlockState(target);
 
-                if (canRightClickHarvestBlock(state) && tryHarvest(world, target, state, player, sickle, fortune)) {
+                if (canRightClickHarvestBlock(state) && tryHarvest(serverLevel, target, state, player, sickle)) {
                     ++harvestCount;
                 }
             }
         }
 
         if (harvestCount > 0) {
-            GearHelper.attemptDamage(sickle, DURABILITY_USAGE, player, context.getHand());
+            var damageToTool = Math.min(DURABILITY_USAGE, harvestCount);
+            GearHelper.attemptDamage(sickle, damageToTool, player, context.getHand());
             player.causeFoodExhaustion(0.02f);
             return InteractionResult.SUCCESS;
         }
@@ -130,18 +126,18 @@ public class GearSickleItem extends GearDiggerItem {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack sickle, BlockPos pos, Player player) {
-        return onSickleStartBreak(sickle, pos, player, BREAK_RANGE);
+    public void onBlockBreakEvent(ItemStack stack, Player player, Level level, BlockPos pos, BlockState state) {
+        breakPlantsInRange(stack, pos, player, BREAK_RANGE);
     }
 
-    boolean onSickleStartBreak(ItemStack sickle, BlockPos pos, Player player, final int range) {
-        if (GearHelper.isBroken(sickle)) return false;
+    void breakPlantsInRange(ItemStack sickle, BlockPos pos, Player player, final int range) {
+        if (GearHelper.isBroken(sickle)) return;
 
         Level world = player.level();
         BlockState state = world.getBlockState(pos);
 
         // FIXME: Maybe add a new tag for sickle mineable blocks?
-        if (!state.is(BlockTags.MINEABLE_WITH_HOE)) return false;
+        if (!state.is(BlockTags.MINEABLE_WITH_HOE)) return;
 
         int blocksBroken = 1;
 
@@ -157,49 +153,43 @@ public class GearSickleItem extends GearDiggerItem {
                 }
             }
         }
-
-        return super.onBlockStartBreak(sickle, pos, player);
     }
 
-    private static boolean breakExtraBlock(ItemStack sickle, Level world, BlockPos pos, Player player) {
-        if (world.isEmptyBlock(pos) || !(player instanceof ServerPlayer)) return false;
+    private static boolean breakExtraBlock(ItemStack sickle, Level level, BlockPos pos, Player player) {
+        if (level.isEmptyBlock(pos) || !(player instanceof ServerPlayer serverPlayer)) return false;
 
-        ServerPlayer playerMP = (ServerPlayer) player;
-        BlockState state = player.level().getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
 
-        int xpDropped = CommonHooks.onBlockBreakEvent(world, playerMP.gameMode.getGameModeForPlayer(), playerMP, pos);
-        boolean canceled = xpDropped == -1;
-        if (canceled) return false;
-
-        if (playerMP.getAbilities().instabuild) {
-            block.playerWillDestroy(world, pos, state, player);
-            if (block.onDestroyedByPlayer(state, world, pos, playerMP, false, state.getFluidState())) {
-                block.destroy(world, pos, state);
+        if (serverPlayer.getAbilities().instabuild) {
+            block.playerWillDestroy(level, pos, state, player);
+            if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, false, state.getFluidState())) {
+                block.destroy(level, pos, state);
             }
-            if (!world.isClientSide) {
-                playerMP.connection.send(new ClientboundBlockUpdatePacket(world, pos));
+            if (!level.isClientSide) {
+                serverPlayer.connection.send(new ClientboundBlockUpdatePacket(level, pos));
             }
             return true;
         }
 
-        if (!world.isClientSide && world instanceof ServerLevel) {
-            block.playerWillDestroy(world, pos, state, playerMP);
+        if (!level.isClientSide && level instanceof ServerLevel) {
+            block.playerWillDestroy(level, pos, state, serverPlayer);
 
-            if (block.onDestroyedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
-                block.destroy(world, pos, state);
-                block.playerDestroy(world, player, pos, state, null, sickle);
-                block.popExperience((ServerLevel) world, pos, xpDropped);
+            if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, true, state.getFluidState())) {
+                block.destroy(level, pos, state);
+                var blockEntity = level.getBlockEntity(pos);
+                block.playerDestroy(level, player, pos, state, blockEntity, sickle);
+                block.popExperience((ServerLevel) level, pos, state.getExpDrop(level, pos, blockEntity, player, sickle));
             }
 
-            playerMP.connection.send(new ClientboundBlockUpdatePacket(world, pos));
+            serverPlayer.connection.send(new ClientboundBlockUpdatePacket(level, pos));
         } else {
-            world.levelEvent(2001, pos, Block.getId(state));
-            if (block.onDestroyedByPlayer(state, world, pos, playerMP, true, state.getFluidState())) {
-                block.destroy(world, pos, state);
+            level.levelEvent(2001, pos, Block.getId(state));
+            if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, true, state.getFluidState())) {
+                block.destroy(level, pos, state);
             }
 
-            sickle.mineBlock(world, state, pos, playerMP);
+            sickle.mineBlock(level, state, pos, serverPlayer);
         }
 
         return true;

@@ -150,9 +150,9 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.MACHETE.gearItem(),
                 GearItemSets.MATTOCK.gearItem(),
                 GearItemSets.PAXEL.gearItem());
-        builder(Tags.Items.TOOLS_BOWS,
+        builder(Tags.Items.TOOLS_BOW,
                 GearItemSets.BOW.gearItem());
-        builder(Tags.Items.TOOLS_CROSSBOWS,
+        builder(Tags.Items.TOOLS_CROSSBOW,
                 GearItemSets.CROSSBOW.gearItem());
         builder(SgTags.Items.HAMMERS,
                 GearItemSets.HAMMER.gearItem(),
@@ -169,9 +169,9 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.PICKAXE.gearItem());
         builder(SgTags.Items.TOOLS_SAWS,
                 GearItemSets.SAW.gearItem());
-        builder(Tags.Items.TOOLS_SHEARS,
+        builder(Tags.Items.TOOLS_SHEAR,
                 GearItemSets.SHEARS.gearItem());
-        builder(Tags.Items.TOOLS_SHIELDS,
+        builder(Tags.Items.TOOLS_SHIELD,
                 GearItemSets.SHIELD.gearItem());
         builder(ItemTags.SHOVELS,
                 GearItemSets.EXCAVATOR.gearItem(),
@@ -274,7 +274,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     }
 
     private TagKey<Item> makeWrapper(String namespace, String path) {
-        return ItemTags.create(new ResourceLocation(namespace, path));
+        return ItemTags.create(ResourceLocation.fromNamespaceAndPath(namespace, path));
     }
 
     private void builder(TagKey<Item> tag, ItemLike... items) {

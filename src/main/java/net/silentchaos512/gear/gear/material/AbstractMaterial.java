@@ -3,16 +3,16 @@ package net.silentchaos512.gear.gear.material;
 import com.google.common.collect.Sets;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
@@ -65,6 +65,11 @@ public abstract class AbstractMaterial implements Material {
     }
 
     @Override
+    public boolean isInCategory(IMaterialCategory category) {
+        return this.crafting.categories().contains(category);
+    }
+
+    @Override
     public Ingredient getIngredient() {
         return crafting.craftingItem();
     }
@@ -91,7 +96,7 @@ public abstract class AbstractMaterial implements Material {
 
     public static MaterialInstance removeEnhancements(MaterialInstance material) {
         ItemStack stack = material.getItem().copy();
-        for (IMaterialModifierType<?> modifierType : MaterialModifiers.getTypes()) {
+        for (IMaterialModifierType<?> modifierType : SgRegistries.MATERIAL_MODIFIER_TYPE) {
             modifierType.removeModifier(stack);
         }
         stack.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
@@ -144,12 +149,12 @@ public abstract class AbstractMaterial implements Material {
     }
 
     @Override
-    public boolean isCraftingAllowed(MaterialInstance material, PartType partType, GearType gearType, @Nullable Container inventory) {
+    public boolean isCraftingAllowed(MaterialInstance material, PartType partType, GearType gearType, @Nullable CraftingInput craftingInput) {
         if (isGearTypeBlacklisted(gearType) || !isAllowedInPart(material, partType)) {
             return false;
         }
 
-        if (properties.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType, inventory))) {
+        if (properties.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType, craftingInput))) {
             if (partType == PartTypes.MAIN.get()) {
                 var durabilityProperty = gearType.durabilityStat().get();
                 var durabilityKey = PropertyKey.of(durabilityProperty, gearType);

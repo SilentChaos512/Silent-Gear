@@ -1,7 +1,9 @@
 package net.silentchaos512.gear.compat.curios;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -10,9 +12,10 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -22,7 +25,6 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CurioGearItemCapability {
@@ -30,13 +32,15 @@ public class CurioGearItemCapability {
         event.registerItem(
                 CuriosCapability.ITEM,
                 (stack, context) -> new GearCurio(stack, multimap -> {}),
-                SgItems.BRACELET.get(), SgItems.RING.get()
+                GearItemSets.BRACELET.gearItem(),
+                GearItemSets.RING.gearItem(),
+                GearItemSets.NECKLACE.gearItem()
         );
         event.registerItem(
                 CuriosCapability.ITEM,
-                (stack, context) -> new GearCurio(stack, multimap -> {
+                (stack, context) -> new GearCurio(stack, builder -> {
                     // Add armor, flight, and trait-related attributes
-                    SgItems.ELYTRA.get().addAttributes("back", stack, multimap, false);
+                    GearItemSets.ELYTRA.gearItem().addAttributes(stack, builder, false);
                 }) {
                     @Override
                     public void curioTick(SlotContext context) {
@@ -46,23 +50,23 @@ public class CurioGearItemCapability {
                         int ticksFlying = context.entity().getFallFlyingTicks();
 
                         if ((ticksFlying + 1) % 20 == 0) {
-                            stack.hurtAndBreak(1, context.entity(), entity -> entity.broadcastBreakEvent(EquipmentSlot.CHEST));
+                            stack.hurtAndBreak(1, context.entity(), EquipmentSlot.BODY);
                         }
                     }
                 },
-                SgItems.ELYTRA.get()
+                GearItemSets.ELYTRA.gearItem()
         );
     }
 
     public static class GearCurio implements ICurio {
         private final ItemStack stack;
-        private final Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes;
+        private final Consumer<ItemAttributeModifiers.Builder> extraAttributes;
 
         private GearCurio() {
             this(ItemStack.EMPTY, multimap -> {});
         }
 
-        private GearCurio(ItemStack stack, Consumer<Multimap<Attribute, AttributeModifier>> extraAttributes) {
+        private GearCurio(ItemStack stack, Consumer<ItemAttributeModifiers.Builder> extraAttributes) {
             this.stack = stack;
             this.extraAttributes = extraAttributes;
         }
@@ -78,10 +82,14 @@ public class CurioGearItemCapability {
         }
 
         @Override
-        public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid) {
-            Multimap<Attribute, AttributeModifier> multimap = GearHelper.getAttributeModifiers(slotContext.identifier(), stack, HashMultimap.create(), false);
-            extraAttributes.accept(multimap);
-            return multimap;
+        public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id) {
+            var builder = ItemAttributeModifiers.builder();
+            GearHelper.addAttributeModifiers(stack, builder);
+            ItemAttributeModifiers itemAttributeModifiers = builder.build();
+
+            Multimap<Holder<Attribute>, AttributeModifier> result = ArrayListMultimap.create();
+            itemAttributeModifiers.modifiers().forEach(entry -> result.put(entry.attribute(), entry.modifier()));
+            return result;
         }
 
         @Override
@@ -115,7 +123,7 @@ public class CurioGearItemCapability {
         @Nonnull
         @Override
         public SoundInfo getEquipSound(SlotContext slotContext) {
-            return new SoundInfo(SoundEvents.ARMOR_EQUIP_GOLD, 1.0f, 1.0f);
+            return new SoundInfo(SoundEvents.ARMOR_EQUIP_GOLD.value(), 1.0f, 1.0f);
         }
     }
 }

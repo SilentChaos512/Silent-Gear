@@ -5,68 +5,47 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.gear.part.PartManager;
+import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public final class GearGenerator {
     private GearGenerator() {
         throw new IllegalAccessError("Utility class");
     }
 
-    public static Optional<PartInstance> getRandomPart(GearType gearType, PartType type) {
-        return getRandomPart(gearType, type, -1);
+    public static Optional<PartInstance> getRandomPart(GearType gearType, PartType partType) {
+        return partType.getCompoundPartItem(gearType)
+                .map(GearGenerator::createRandom);
     }
 
-    public static Optional<PartInstance> getRandomPart(GearType gearType, PartType partType, final int partTier) {
-        Optional<PartInstance> optional = partType.getCompoundPartItem(gearType)
-                .map(item -> PartManager.fromItem(new ItemStack(item)))
-                .map(part -> part.randomizeData(gearType, partTier));
-
-        if (!optional.isPresent()) {
-            // No compound part available? Try to find a simple part.
-            List<GearPart> partsOfTier = PartManager.getValues().stream()
-                    .filter(part -> partTier == -1 || partTier == part.getTier())
-                    .collect(Collectors.toList());
-
-            if (!partsOfTier.isEmpty()) {
-                GearPart random = partsOfTier.get(SilentGear.RANDOM.nextInt(partsOfTier.size()));
-                return Optional.of(random.randomizeData(gearType, partTier));
-            } else if (partTier != -1) {
-                return getRandomPart(gearType, partType, -1);
-            }
-            return Optional.empty();
-        }
-
-        return optional;
+    private static PartInstance createRandom(CompoundPartItem item) {
+        var material = SgRegistries.MATERIAL.getRandomObtainable(SilentGear.RANDOM_SOURCE)
+                        .orElse(SgRegistries.MATERIAL.get(Const.Materials.EXAMPLE.getId()));
+        var stack = item.create(MaterialInstance.of(Objects.requireNonNull(material)));
+        return PartInstance.from(stack);
     }
 
-    public static ItemStack create(ICoreItem item, int minTier, int maxTier) {
-        if (minTier >= maxTier)
-            return create(item, maxTier);
-        return create(item, minTier + SilentGear.RANDOM.nextInt(maxTier - minTier));
+    public static ItemStack create(ICoreItem item) {
+        return randomizeParts(new ItemStack(item));
     }
 
-    public static ItemStack create(ICoreItem item, int tier) {
-        return randomizeParts(new ItemStack(item), tier);
-    }
-
-    public static ItemStack randomizeParts(ItemStack stack, int tier) {
-        if (!(stack.getItem() instanceof ICoreItem)) {
+    public static ItemStack randomizeParts(ItemStack stack) {
+        if (!(stack.getItem() instanceof ICoreItem item)) {
             throw new RuntimeException("Called GearGenerator.randomizeParts on non-gear");
         }
-        ICoreItem item = (ICoreItem) stack.getItem();
         GearType gearType = item.getGearType();
         PartList parts = PartList.of();
 
         for (PartType partType : item.getRequiredParts()) {
-            getRandomPart(gearType, partType, tier).ifPresent(parts::add);
+            getRandomPart(gearType, partType).ifPresent(parts::add);
         }
 
         if (parts.isEmpty()) {
@@ -77,12 +56,12 @@ public final class GearGenerator {
         GearData.writeConstructionParts(result, parts);
 
         // Apply some random upgrades?
-        if (item instanceof ICoreTool && tier > 1 && SilentGear.RANDOM.nextFloat() < 0.2f * tier + 0.1f) {
-            getRandomPart(gearType, PartType.TIP, tier).ifPresent(part ->
+        if (item instanceof ICoreTool && SilentGear.RANDOM.nextFloat() < 0.3f) {
+            getRandomPart(gearType, PartTypes.TIP.get()).ifPresent(part ->
                     GearData.addUpgradePart(result, part));
         }
 
-        GearData.recalculateStats(result, null);
+        GearData.recalculateGearData(result, null);
         parts.forEach(p -> p.onAddToGear(result));
 
         return result;

@@ -1,14 +1,11 @@
 package net.silentchaos512.gear.util;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -17,12 +14,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
-import net.silentchaos512.gear.config.Config;
-import org.joml.Matrix4f;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.silentchaos512.gear.Config;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -54,20 +50,20 @@ public interface IAoeTool {
 
         if (isEffectiveOnBlock(stack, state, player)) {
             Direction dir1, dir2;
-            switch (rt.getDirection().getAxis()) {
-                case Y:
+            dir2 = switch (rt.getDirection().getAxis()) {
+                case Y -> {
                     dir1 = Direction.SOUTH;
-                    dir2 = Direction.EAST;
-                    break;
-                case X:
+                    yield Direction.EAST;
+                }
+                case X -> {
                     dir1 = Direction.UP;
-                    dir2 = Direction.SOUTH;
-                    break;
-                default: // Z
+                    yield Direction.SOUTH;
+                }
+                default -> {
                     dir1 = Direction.UP;
-                    dir2 = Direction.EAST;
-                    break;
-            }
+                    yield Direction.EAST; // Z
+                }
+            };
 
             int r = getAoeRadius(stack);
             for (int i = -r; i <= r; ++i) {
@@ -83,7 +79,7 @@ public interface IAoeTool {
     }
 
     default boolean isEffectiveOnBlock(ItemStack stack, BlockState state, Player player) {
-        boolean isCorrectTool = stack.getItem().isCorrectToolForDrops(stack, state) || CommonHooks.isCorrectToolForDrops(state, player);
+        boolean isCorrectTool = stack.getItem().isCorrectToolForDrops(stack, state);
         return isCorrectTool && stack.getDestroySpeed(state) > 1f;
     }
 
@@ -104,54 +100,57 @@ public interface IAoeTool {
     }
 
     /**
-     * Handles actual AOE block breaking. Call {@link #onBlockStartBreak(ItemStack, BlockPos,
-     * Player)} inside the {@code onBlockStartBreak} method of the tool's item.
+     * Handles actual AOE block breaking.
      */
+    @EventBusSubscriber
     final class BreakHandler {
         private BreakHandler() {}
 
-        public static boolean onBlockStartBreak(ItemStack tool, BlockPos pos, Player player) {
-            Level world = player.getCommandSenderWorld();
-            if (world.isClientSide || !(world instanceof ServerLevel) || !(player instanceof ServerPlayer) || !(tool.getItem() instanceof IAoeTool))
-                return false;
+        @SubscribeEvent
+        public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
+            var player = event.getPlayer();
+            if (!(player instanceof ServerPlayer)) return;
 
-            IAoeTool item = (IAoeTool) tool.getItem();
-            HitResult rt = item.rayTraceBlocks(world, player);
-            BlockState stateOriginal = world.getBlockState(pos);
+            var tool = player.getMainHandItem();
+            if (!(tool.getItem() instanceof IAoeTool aoeToolItem)) return;
 
-            if (rt != null && rt.getType() == HitResult.Type.BLOCK && item.isEffectiveOnBlock(tool, stateOriginal, player)) {
-                BlockHitResult brt = (BlockHitResult) rt;
+            var level = player.getCommandSenderWorld();
+            if (level.isClientSide || !(level instanceof ServerLevel)) return;
+
+            var pos = event.getPos();
+
+            HitResult hitResult = aoeToolItem.rayTraceBlocks(level, player);
+            BlockState stateOriginal = level.getBlockState(pos);
+
+            if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK && aoeToolItem.isEffectiveOnBlock(tool, stateOriginal, player)) {
+                BlockHitResult brt = (BlockHitResult) hitResult;
                 Direction side = brt.getDirection();
-                List<BlockPos> extraBlocks = item.getExtraBlocks(world, brt, player, tool);
+                List<BlockPos> extraBlocks = aoeToolItem.getExtraBlocks(level, brt, player, tool);
 
-                for (BlockPos pos2 : extraBlocks) {
-                    BlockState state = world.getBlockState(pos2);
-                    if (!world.hasChunkAt(pos2) || !player.mayUseItemAt(pos2, side, tool) || !(state.canHarvestBlock(world, pos2, player)))
+                for (BlockPos extraPos : extraBlocks) {
+                    BlockState extraState = level.getBlockState(extraPos);
+                    if (!level.hasChunkAt(extraPos) || !player.mayUseItemAt(extraPos, side, tool) || !(extraState.canHarvestBlock(level, extraPos, player)))
                         continue;
 
+                    var extraBlock = extraState.getBlock();
                     if (player.getAbilities().instabuild) {
-                        if (state.onDestroyedByPlayer(world, pos2, player, true, state.getFluidState()))
-                            state.getBlock().destroy(world, pos2, state);
+                        if (extraState.onDestroyedByPlayer(level, extraPos, player, true, extraState.getFluidState()))
+                            extraBlock.destroy(level, extraPos, extraState);
                     } else {
-                        int xp = CommonHooks.onBlockBreakEvent(world, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos2);
-                        if (xp == -1) continue;
-                        tool.getItem().mineBlock(tool, world, state, pos2, player);
-                        BlockEntity tileEntity = world.getBlockEntity(pos2);
+                        BlockEntity blockEntity = level.getBlockEntity(extraPos);
+                        int xp = extraState.getExpDrop(level, extraPos, blockEntity, player, tool);
+                        tool.getItem().mineBlock(tool, level, extraState, extraPos, player);
 
-                        if (state.onDestroyedByPlayer(world, pos2, player, true, state.getFluidState())) {
-                            state.getBlock().destroy(world, pos2, state);
-                            state.getBlock().playerDestroy(world, player, pos2, state, tileEntity, tool);
-                            state.getBlock().popExperience((ServerLevel) world, pos2, xp);
+                        if (extraState.onDestroyedByPlayer(level, extraPos, player, true, extraState.getFluidState())) {
+                            extraBlock.destroy(level, extraPos, extraState);
+                            extraBlock.playerDestroy(level, player, extraPos, extraState, blockEntity, tool);
+                            extraBlock.popExperience((ServerLevel) level, extraPos, xp);
                         }
                     }
 
-                    // TODO: Maybe add a config? Unfortunately, this code is called only on the server...
-                    //world.playEvent(2001, pos, Block.getStateId(state)); // Playing for each block gets very loud
-
-                    ((ServerPlayer) player).connection.send(new ClientboundBlockUpdatePacket(world, pos));
+                    ((ServerPlayer) player).connection.send(new ClientboundBlockUpdatePacket(level, pos));
                 }
             }
-            return false;
         }
 
         /**
@@ -185,6 +184,7 @@ public interface IAoeTool {
         }
 
         private static boolean isOre(BlockState state) {
+            // TODO: Add a tag specifically for hammers to filter blocks they consider "ores"?
             return state.is(Tags.Blocks.ORES);
         }
 
@@ -194,54 +194,6 @@ public interface IAoeTool {
             if (state.is(BlockTags.NEEDS_IRON_TOOL)) return 2;
             if (state.is(BlockTags.NEEDS_STONE_TOOL)) return 1;
             return 0;
-        }
-    }
-
-    //@Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
-    final class HighlightHandler {
-        private HighlightHandler() {}
-
-        /*@SubscribeEvent
-        public static void onDrawBlockHighlight(DrawHighlightEvent event) {
-            Camera info = event.getInfo();
-            Entity entity = info.getEntity();
-            if (!(entity instanceof Player)) return;
-
-            Player player = (Player) entity;
-
-            HitResult rt = event.getTarget();
-
-            if (rt.getType() == HitResult.Type.BLOCK) {
-                ItemStack stack = player.getMainHandItem();
-
-                if (stack.getItem() instanceof IAoeTool) {
-                    Level world = player.getCommandSenderWorld();
-                    IAoeTool item = (IAoeTool) stack.getItem();
-
-                    for (BlockPos pos : item.getExtraBlocks(world, (BlockHitResult) rt, player, stack)) {
-                        VertexConsumer vertexBuilder = event.getBuffers().getBuffer(RenderType.lines());
-                        Vec3 vec = event.getInfo().getPosition();
-                        BlockState blockState = world.getBlockState(pos);
-                        drawSelectionBox(event.getMatrix(), world, vertexBuilder, event.getInfo().getEntity(), vec.x, vec.y, vec.z, pos, blockState);
-                    }
-                }
-            }
-        }*/
-
-        // Copied from WorldRenderer
-        @SuppressWarnings("MethodWithTooManyParameters")
-        private static void drawSelectionBox(PoseStack matrixStackIn, Level world, VertexConsumer bufferIn, Entity entityIn, double xIn, double yIn, double zIn, BlockPos blockPosIn, BlockState blockStateIn) {
-            drawShape(matrixStackIn, bufferIn, blockStateIn.getShape(world, blockPosIn, CollisionContext.of(entityIn)), (double) blockPosIn.getX() - xIn, (double) blockPosIn.getY() - yIn, (double) blockPosIn.getZ() - zIn, 0.0F, 0.0F, 0.0F, 0.4F);
-        }
-
-        // Copied from WorldRenderer
-        @SuppressWarnings("MethodWithTooManyParameters")
-        private static void drawShape(PoseStack matrixStackIn, VertexConsumer bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
-            Matrix4f matrix4f = matrixStackIn.last().pose();
-            shapeIn.forAllEdges((p_230013_12_, p_230013_14_, p_230013_16_, p_230013_18_, p_230013_20_, p_230013_22_) -> {
-                bufferIn.vertex(matrix4f, (float) (p_230013_12_ + xIn), (float) (p_230013_14_ + yIn), (float) (p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();
-                bufferIn.vertex(matrix4f, (float) (p_230013_18_ + xIn), (float) (p_230013_20_ + yIn), (float) (p_230013_22_ + zIn)).color(red, green, blue, alpha).endVertex();
-            });
         }
     }
 }

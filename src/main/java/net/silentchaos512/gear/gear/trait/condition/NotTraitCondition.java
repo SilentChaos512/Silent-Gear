@@ -5,9 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
@@ -28,13 +26,6 @@ public record NotTraitCondition(ITraitCondition child) implements ITraitConditio
             buf -> new NotTraitCondition(ITraitCondition.STREAM_CODEC.decode(buf))
     );
     public static final TraitConditionSerializer<NotTraitCondition> SERIALIZER = new TraitConditionSerializer<>(CODEC, STREAM_CODEC);
-
-    private static final ResourceLocation NAME = SilentGear.getId("not");
-
-    @Override
-    public ResourceLocation getId() {
-        return NAME;
-    }
 
     @Override
     public TraitConditionSerializer<?> serializer() {

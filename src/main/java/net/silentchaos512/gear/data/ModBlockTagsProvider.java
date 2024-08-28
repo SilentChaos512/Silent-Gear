@@ -77,7 +77,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(SgBlocks.NETHERWOOD_WOOD.get())
                 .add(SgBlocks.STRIPPED_NETHERWOOD_WOOD.get());
         tag(SgTags.Blocks.NETHERWOOD_SOIL)
-                .addTag(Tags.Blocks.NETHERRACK)
+                .addTag(Tags.Blocks.NETHERRACKS)
                 .addTag(BlockTags.DIRT)
                 .add(Blocks.FARMLAND);
         tag(SgTags.Blocks.PROSPECTOR_HAMMER_TARGETS)

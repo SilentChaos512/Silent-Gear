@@ -9,10 +9,10 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.MaterialSerializer;
+import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartSerializer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearProperty;
-import net.silentchaos512.gear.api.property.GearPropertyType;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitEffectType;
@@ -26,10 +26,10 @@ public class SgRegistries {
     public static final ResourceKey<Registry<GearType>> GEAR_TYPE_KEY = createRegistryKey("gear_type");
     public static final ResourceKey<Registry<PartType>> PART_TYPE_KEY = createRegistryKey("part_type");
     public static final ResourceKey<Registry<GearProperty<?, ? extends GearPropertyValue<?>>>> GEAR_PROPERTY_KEY = createRegistryKey("property");
-    public static final ResourceKey<Registry<GearPropertyType<?>>> GEAR_PROPERTY_TYPE_KEY = createRegistryKey("property_type");
     public static final ResourceKey<Registry<TraitConditionSerializer<?>>> TRAIT_CONDITION_KEY = createRegistryKey("trait_condition");
     public static final ResourceKey<Registry<TraitEffectType<?>>> TRAIT_EFFECT_TYPE_KEY = createRegistryKey("trait_effect_type");
     public static final ResourceKey<Registry<MaterialSerializer<?>>> MATERIAL_SERIALIZER_KEY = createRegistryKey("material_serializer");
+    public static final ResourceKey<Registry<IMaterialModifierType<?>>> MATERIAL_MODIFIER_TYPE_KEY = createRegistryKey("material_modifier_type");
     public static final ResourceKey<Registry<PartSerializer<?>>> PART_SERIALIZER_KEY = createRegistryKey("part_serializer");
 
     public static final Registry<GearType> GEAR_TYPE = new RegistryBuilder<>(GEAR_TYPE_KEY)
@@ -43,9 +43,6 @@ public class SgRegistries {
     public static final Registry<GearProperty<?, ? extends GearPropertyValue<?>>> GEAR_PROPERTY = new RegistryBuilder<>(GEAR_PROPERTY_KEY)
             .sync(true)
             .create();
-    public static final Registry<GearPropertyType<?>> GEAR_PROPERTY_TYPE = new RegistryBuilder<>(GEAR_PROPERTY_TYPE_KEY)
-            .sync(true)
-            .create();
     public static final Registry<TraitConditionSerializer<?>> TRAIT_CONDITION = new RegistryBuilder<>(TRAIT_CONDITION_KEY)
             .sync(true)
             .create();
@@ -53,6 +50,9 @@ public class SgRegistries {
             .sync(true)
             .create();
     public static final Registry<MaterialSerializer<?>> MATERIAL_SERIALIZER = new RegistryBuilder<>(MATERIAL_SERIALIZER_KEY)
+            .sync(true)
+            .create();
+    public static final Registry<IMaterialModifierType<?>> MATERIAL_MODIFIER_TYPE = new RegistryBuilder<>(MATERIAL_MODIFIER_TYPE_KEY)
             .sync(true)
             .create();
     public static final Registry<PartSerializer<?>> PART_SERIALIZER = new RegistryBuilder<>(PART_SERIALIZER_KEY)
@@ -75,6 +75,7 @@ public class SgRegistries {
         event.register(TRAIT_CONDITION);
         event.register(TRAIT_EFFECT_TYPE);
         event.register(MATERIAL_SERIALIZER);
+        event.register(MATERIAL_MODIFIER_TYPE);
         event.register(PART_SERIALIZER);
     }
 }

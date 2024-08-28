@@ -33,6 +33,8 @@ public class TraitEffectTypes {
             EnchantmentTrait.CODEC, EnchantmentTrait.STREAM_CODEC);*/
     public static final Supplier<TraitEffectType<ExtraDamageTraitEffect>> EXTRA_DAMAGE = register("extra_damage",
         ExtraDamageTraitEffect.CODEC, ExtraDamageTraitEffect.STREAM_CODEC);
+    public static final Supplier<TraitEffectType<FireproofTraitEffect>> FIREPROOF = register("fireproof",
+            FireproofTraitEffect.CODEC, FireproofTraitEffect.STREAM_CODEC);
     public static final Supplier<TraitEffectType<ItemMagnetTraitEffect>> ITEM_MAGNET = register("item_magnet",
             ItemMagnetTraitEffect.CODEC, ItemMagnetTraitEffect.STREAM_CODEC);
     public static final Supplier<TraitEffectType<NumberPropertyModifierTraitEffect>> NUMBER_PROPERTY_MODIFIER = register("number_property_modifier",

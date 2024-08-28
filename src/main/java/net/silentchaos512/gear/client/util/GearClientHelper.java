@@ -5,29 +5,33 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.stats.ItemStat;
-import net.silentchaos512.gear.api.stats.ItemStats;
-import net.silentchaos512.gear.api.stats.StatInstance;
+import net.silentchaos512.gear.api.property.GearProperty;
+import net.silentchaos512.gear.api.property.GearPropertyGroups;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.client.KeyTracker;
-import net.silentchaos512.gear.client.event.TooltipHandler;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.util.*;
-import net.silentchaos512.lib.event.ClientTicks;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public final class GearClientHelper {
@@ -61,13 +65,10 @@ public final class GearClientHelper {
             tooltip.add(Math.min(2, tooltip.size()), TextUtil.withColor(misc("exampleOutput2"), Color.YELLOW));
         }
 
-        PartList constructionParts = GearData.getConstructionParts(stack);
+        PartList constructionParts = GearData.getConstruction(stack).parts();
 
         if (constructionParts.getMains().isEmpty()) {
             tooltip.add(TextUtil.withColor(misc("invalidParts"), Color.FIREBRICK));
-            tooltip.add(TextUtil.withColor(misc("lockedStats"), Color.FIREBRICK));
-        } else if (GearData.hasLockedStats(stack)) {
-            tooltip.add(TextUtil.withColor(misc("lockedStats"), Color.YELLOW));
         }
 
         if (!Config.Client.vanillaStyleTooltips.get()) {
@@ -77,9 +78,6 @@ public final class GearClientHelper {
                 data.get().addInformation(data, stack, tooltip, flag);
             }
         }
-
-        // Traits
-        addTraitsInfo(stack, tooltip, flag);
 
         if (!Config.Client.vanillaStyleTooltips.get()) {
             // Stats
@@ -102,40 +100,28 @@ public final class GearClientHelper {
         if (KeyTracker.isDisplayStatsDown() && flag.showStats) {
             tooltip.add(TextUtil.withColor(misc("tooltip.stats"), Color.GOLD));
 
-            tooltip.add(TextUtil.withColor(misc("tier", GearData.getTier(stack)), Color.DEEPSKYBLUE));
-
-            Tier harvestTier = GearData.getHarvestTier(stack);
-            MutableComponent harvestTierNameWithColor = TierHelper.getTranslatedNameWithColor(harvestTier);
-            tooltip.add(TextUtil.withColor(misc("harvestTier", harvestTierNameWithColor), Color.SEAGREEN));
-
-            // Display only stats relevant to the item class
-            Collection<ItemStat> relevantStats = item.getRelevantStats(stack);
-            Collection<ItemStat> displayStats = flag.isAdvanced() && SilentGear.isDevBuild() ? ItemStats.allStatsOrdered() : relevantStats;
-
             TextListBuilder builder = new TextListBuilder();
+            var gearProperties = GearData.getProperties(stack);
 
-            for (ItemStat stat : displayStats) {
-                if (stat == ItemStats.ENCHANTMENT_VALUE && !Config.Common.allowEnchanting.get()) {
+            for (GearProperty<?, ?> property : getDisplayProperties(stack, flag)) {
+                if (property == GearProperties.ENCHANTMENT_VALUE && !Config.Common.allowEnchanting.get()) {
                     // Enchanting not allowed, so hide the stat
                     continue;
                 }
 
-                float statValue = GearData.getStat(stack, stat);
+                GearPropertyValue<?> value = gearProperties.get(property);
+                if (value == null) continue;
 
-                StatInstance inst = StatInstance.of(statValue, StatInstance.Operation.AVG, StatInstance.DEFAULT_KEY);
-                Color nameColor = relevantStats.contains(stat) ? stat.getNameColor() : TooltipHandler.MC_DARK_GRAY;
-                Component textName = TextUtil.withColor(stat.getDisplayName(), nameColor);
-                MutableComponent textStat = inst.getFormattedText(stat, stat.isDisplayAsInt() ? 0 : 2, false);
-
-                // Some stat-specific formatting...
-                // TODO: The stats should probably handle this instead
-                if (stat == ItemStats.DURABILITY) {
+                if (property == GearProperties.DURABILITY) {
+                    // Durability-specific formatting
                     int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
                     int durabilityMax = stack.getMaxDamage();
-                    textStat = statText("durabilityFormat", durabilityLeft, durabilityMax);
+                    var text = statText("durabilityFormat", durabilityLeft, durabilityMax);
+                    builder.add(property.formatText(text));
+                } else {
+                    // All other properties
+                    property.getTooltipLinesUnchecked(value, flag).forEach(builder::add);
                 }
-
-                builder.add(statText("displayFormat", textName, textStat));
             }
 
             tooltip.addAll(builder.build());
@@ -146,47 +132,11 @@ public final class GearClientHelper {
         }
     }
 
-    private static void addTraitsInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag) {
-        Map<ITrait, Integer> traits = TraitHelper.getTraits(stack);
-        List<ITrait> visibleTraits = new ArrayList<>();
-        for (ITrait t : traits.keySet()) {
-            if (t != null && t.showInTooltip(flag)) {
-                visibleTraits.add(t);
-            }
+    private static Iterable<GearProperty<?, ?>> getDisplayProperties(ItemStack stack, GearTooltipFlag flag) {
+        if (flag.isAdvanced() && SilentGear.isDevBuild()) {
+            return SgRegistries.GEAR_PROPERTY;
         }
-
-        int traitIndex = getTraitDisplayIndex(visibleTraits.size(), flag);
-        MutableComponent textTraits = TextUtil.withColor(misc("tooltip.traits"), Color.GOLD);
-        if (traitIndex < 0) {
-            if (!Config.Client.vanillaStyleTooltips.get()) {
-                tooltip.add(textTraits);
-            }
-        }
-
-        int i = 0;
-        for (ITrait trait : visibleTraits) {
-            if (traitIndex < 0 || traitIndex == i) {
-                final int level = traits.get(trait);
-                trait.addInformation(level, tooltip, flag, text -> {
-                    if(Config.Client.vanillaStyleTooltips.get()) {
-                        return TextUtil.withColor(Component.literal(TextListBuilder.VANILLA_BULLET + " "), Color.GRAY).append(text);
-                    }
-                    if (traitIndex >= 0) {
-                        return textTraits
-                                .append(TextUtil.withColor(Component.literal(": "), ChatFormatting.GRAY)
-                                        .append(text));
-                    }
-                    return Component.literal(TextListBuilder.BULLETS[0] + " ").append(text);
-                });
-            }
-            ++i;
-        }
-    }
-
-    private static int getTraitDisplayIndex(int numTraits, GearTooltipFlag flag) {
-        if (Config.Client.vanillaStyleTooltips.get() || KeyTracker.isDisplayTraitsDown() || numTraits == 0)
-            return -1;
-        return ClientTicks.ticksInGame() / 20 % numTraits;
+        return GearPropertyGroups.getSortedRelevantProperties(GearHelper.getType(stack).relevantPropertyGroups());
     }
 
     private static MutableComponent misc(String key, Object... formatArgs) {
@@ -203,16 +153,16 @@ public final class GearClientHelper {
         for (PartInstance part : parts) {
             if (part.get().isVisible()) {
                 int partNameColor = Color.blend(part.getColor(gear), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
-                MutableComponent partNameText = TextUtil.withColor(part.getDisplayName(gear).copy(), partNameColor);
+                MutableComponent partNameText = TextUtil.withColor(part.getDisplayName().copy(), partNameColor);
                 builder.add(flag.isAdvanced()
-                        ? partNameText.append(TextUtil.misc("spaceBrackets", part.getType().getName()).withStyle(ChatFormatting.DARK_GRAY))
+                        ? partNameText.append(TextUtil.misc("spaceBrackets", part.getType().getDisplayName()).withStyle(ChatFormatting.DARK_GRAY))
                         : partNameText);
 
                 // List materials for compound parts
                 if (part.get() instanceof CoreGearPart) {
                     builder.indent();
-                    for (IMaterialInstance material : CompoundPartItem.getMaterials(part.getItem())) {
-                        int nameColor = material.getNameColor(part.getType(), GearType.ALL);
+                    for (MaterialInstance material : CompoundPartItem.getMaterials(part.getItem())) {
+                        int nameColor = material.getNameColor(part.getType(), GearTypes.ALL.get());
                         builder.add(TextUtil.withColor(material.getDisplayNameWithModifiers(part.getType(), ItemStack.EMPTY), nameColor));
                     }
                     builder.unindent();

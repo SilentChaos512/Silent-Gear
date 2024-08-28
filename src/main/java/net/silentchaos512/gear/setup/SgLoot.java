@@ -78,6 +78,9 @@ public final class SgLoot {
 
             // Entities
             public static final ResourceLocation CAVE_SPIDER = inject(EntityType.CAVE_SPIDER.getDefaultLootTable());
+            public static final ResourceLocation COW = inject(EntityType.COW.getDefaultLootTable());
+            public static final ResourceLocation PIG = inject(EntityType.PIG.getDefaultLootTable());
+            public static final ResourceLocation SHEEP = inject(EntityType.SHEEP.getDefaultLootTable());
             public static final ResourceLocation SPIDER = inject(EntityType.SPIDER.getDefaultLootTable());
             public static final ResourceLocation ZOMBIE_VILLAGER = inject(EntityType.ZOMBIE_VILLAGER.getDefaultLootTable());
 

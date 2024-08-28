@@ -29,7 +29,7 @@ public interface ICoreItem extends ItemLike {
     default ItemStack construct(Collection<PartInstance> parts) {
         ItemStack result = new ItemStack(this);
         GearData.writeConstructionParts(result, parts);
-        GearData.recalculateStats(result, null);
+        GearData.recalculateGearData(result, null);
         parts.forEach(p -> p.onAddToGear(result));
         // Allow traits to make any needed changes (must be done after a recalculate)
         TraitHelper.activateTraits(result, 0, (trait, value) -> {

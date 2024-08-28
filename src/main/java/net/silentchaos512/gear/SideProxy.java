@@ -3,8 +3,6 @@ package net.silentchaos512.gear;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.Level;
@@ -21,15 +19,14 @@ import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
-import net.silentchaos512.gear.config.Config;
-import net.silentchaos512.gear.gear.material.MaterialManager;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
-import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.part.PartSerializers;
-import net.silentchaos512.gear.gear.trait.TraitManager;
 import net.silentchaos512.gear.setup.*;
-import net.silentchaos512.gear.setup.gear.*;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
 import net.silentchaos512.gear.world.SgWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
@@ -45,7 +42,6 @@ class SideProxy implements IProxy {
 
     SideProxy(IEventBus modEventBus) {
         GearProperties.REGISTRAR.register(modEventBus);
-        GearPropertyTypes.REGISTRAR.register(modEventBus);
         GearTypes.REGISTRAR.register(modEventBus);
         PartTypes.REGISTRAR.register(modEventBus);
         TraitEffectTypes.REGISTRAR.register(modEventBus);
@@ -57,7 +53,6 @@ class SideProxy implements IProxy {
         SgCreativeTabs.CREATIVE_TABS.register(modEventBus);
         SgCriteriaTriggers.TRIGGER_TYPES.register(modEventBus);
         SgDataComponents.REGISTRAR.register(modEventBus);
-        SgEnchantments.ENCHANTMENTS.register(modEventBus);
         SgEntities.ENTITIES.register(modEventBus);
         SgIngredientTypes.REGISTRAR.register(modEventBus);
         SgItems.ITEMS.register(modEventBus);
@@ -69,10 +64,6 @@ class SideProxy implements IProxy {
         SgVillages.PROFESSIONS.register(modEventBus);
         SgRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         SgRecipes.RECIPE_TYPES.register(modEventBus);
-
-        if (checkClientInstance()) {
-            Config.init();
-        }
 
         modEventBus.addListener(SgWorldFeatures::registerFeatures);
         modEventBus.addListener(SideProxy::commonSetup);
@@ -120,15 +111,15 @@ class SideProxy implements IProxy {
 
     private static void serverStarted(ServerStartedEvent event) {
         server = event.getServer();
-        SilentGear.LOGGER.info(TraitManager.MARKER, "Traits loaded: {}", TraitManager.getValues().size());
-        SilentGear.LOGGER.info(PartManager.MARKER, "Parts loaded: {}", PartManager.getValues().size());
-        SilentGear.LOGGER.info(PartManager.MARKER, "- Compound: {}", PartManager.getValues().stream()
+        SilentGear.LOGGER.info( "Traits loaded: {}", SgRegistries.TRAIT.stream().count());
+        SilentGear.LOGGER.info("Parts loaded: {}", SgRegistries.PART.stream().count());
+        SilentGear.LOGGER.info("- Compound: {}", SgRegistries.PART.stream()
                 .filter(part -> part instanceof CoreGearPart).count());
-        SilentGear.LOGGER.info(PartManager.MARKER, "- Simple: {}", PartManager.getValues().stream()
+        SilentGear.LOGGER.info("- Simple: {}", SgRegistries.PART.stream()
                 .filter(part -> !(part instanceof CoreGearPart)).count());
-        SilentGear.LOGGER.info(MaterialManager.MARKER, "Materials loaded: {}", MaterialManager.getValues().size());
-        SilentGear.LOGGER.info(MaterialManager.MARKER, "- Standard: {}", MaterialManager.getValues().stream()
-                .filter(mat -> mat.getSerializer() == MaterialSerializers.STANDARD).count());
+        SilentGear.LOGGER.info("Materials loaded: {}", SgRegistries.MATERIAL.stream().count());
+        SilentGear.LOGGER.info("- Standard: {}", SgRegistries.MATERIAL.stream()
+                .filter(mat -> mat.getSerializer() == MaterialSerializers.SIMPLE.get()).count());
     }
 
     private static void serverStopping(ServerStoppingEvent event) {
@@ -179,16 +170,6 @@ class SideProxy implements IProxy {
             if (SilentGear.isDevBuild()) {
                 //NeoForge.EVENT_BUS.register(new DebugOverlay());
             }
-
-            //noinspection ConstantConditions
-            if (Minecraft.getInstance() != null) {
-                ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-                if (resourceManager instanceof ReloadableResourceManager) {
-                    ((ReloadableResourceManager) resourceManager).registerReloadListener(GearDisplayManager.INSTANCE);
-                }
-            } else {
-                SilentGear.LOGGER.warn("MC instance is null? Must be running data generators! Not registering model loaders...");
-            }
         }
 
         private static void clientSetup(FMLClientSetupEvent event) {
@@ -202,19 +183,6 @@ class SideProxy implements IProxy {
         }
 
         private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-            /*
-            if (Loader.isModLoaded("jei")) {
-                if (SGearJeiPlugin.hasInitFailed()) {
-                    String msg = "The JEI plugin seems to have failed. Some recipes may not be visible. Please report with a copy of your log file.";
-                    SilentGear.log.error(msg);
-                    event.player.sendMessage(new TextComponentString(TextFormatting.RED + "[Silent Gear] " + msg));
-                } else {
-                    SilentGear.log.info("JEI plugin seems to have loaded correctly.");
-                }
-            } else {
-                SilentGear.log.info("JEI is not installed?");
-            }
-            */
         }
 
         @Nullable

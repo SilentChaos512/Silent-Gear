@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.setup;
 
+import net.minecraft.client.renderer.entity.FishingHookRenderer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -7,13 +8,12 @@ import net.minecraft.world.entity.MobCategory;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.renderer.entity.GearArrowRenderer;
-import net.silentchaos512.gear.client.renderer.entity.GearFishingHookRenderer;
 import net.silentchaos512.gear.client.renderer.entity.RenderSlingshotProjectile;
 import net.silentchaos512.gear.entity.GearFishingHook;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
@@ -44,13 +44,13 @@ public final class SgEntities {
                 .build(SilentGear.getId(name).toString()));
     }
 
-    @Mod.EventBusSubscriber(modid = SilentGear.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
     public static class Events {
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerEntityRenderer(ARROW.get(), GearArrowRenderer::new); // TODO: custom renderer
-            event.registerEntityRenderer(FISHING_HOOK.get(), GearFishingHookRenderer::new);
+            event.registerEntityRenderer(ARROW.get(), GearArrowRenderer::new);
+            event.registerEntityRenderer(FISHING_HOOK.get(), FishingHookRenderer::new);
             event.registerEntityRenderer(SLINGSHOT_PROJECTILE.get(), RenderSlingshotProjectile::new);
         }
     }

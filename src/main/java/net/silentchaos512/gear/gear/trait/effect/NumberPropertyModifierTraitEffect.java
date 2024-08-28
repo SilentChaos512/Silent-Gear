@@ -8,15 +8,16 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.player.Player;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.property.NumberPropertyValue;
-import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.api.traits.TraitEffectType;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -71,17 +72,22 @@ public final class NumberPropertyModifierTraitEffect extends TraitEffect {
     }
 
     @Override
-    public <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> V onGetProperty(TraitActionContext context, P property, V value, float damageRatio) {
-        if (property instanceof NumberProperty) {
+    public Collection<GearPropertyValue<?>> getBonusProperties(
+            int traitLevel,
+            @Nullable Player player,
+            GearProperty<?, ?> property,
+            GearPropertyValue<?> baseValue,
+            float damageRatio
+    ) {
+        if (property instanceof NumberProperty numberProperty) {
             var propertyMod = this.mods.get(property);
             if (propertyMod != null) {
-                var numberPropertyValue = (NumberPropertyValue) value;
-                var newValue = propertyMod.apply(context.traitLevel(), numberPropertyValue.value(), damageRatio);
-                //noinspection unchecked
-                return (V) new NumberPropertyValue(newValue, numberPropertyValue.operation());
+                var numberPropertyValue = (NumberPropertyValue) baseValue;
+                var bonusValue = propertyMod.getAddedValue(traitLevel, numberPropertyValue.value(), damageRatio);
+                return List.of(new NumberPropertyValue(bonusValue, NumberProperty.Operation.ADD));
             }
         }
-        return super.onGetProperty(context, property, value, damageRatio);
+        return super.getBonusProperties(traitLevel, player, property, baseValue, damageRatio);
     }
 
     @Override
@@ -96,7 +102,7 @@ public final class NumberPropertyModifierTraitEffect extends TraitEffect {
         return ret;
     }
 
-    public static record StatMod(
+    public record StatMod(
             float multiplier,
             boolean multiplyDamageRatio,
             boolean multiplyOriginalValue
@@ -116,7 +122,7 @@ public final class NumberPropertyModifierTraitEffect extends TraitEffect {
                 StatMod::new
         );
 
-        private float apply(int traitLevel, float originalValue, float damageRatio) {
+        private float getAddedValue(int traitLevel, float originalValue, float damageRatio) {
             float addedValue = this.multiplier * traitLevel;
 
             if (multiplyDamageRatio)
@@ -124,7 +130,7 @@ public final class NumberPropertyModifierTraitEffect extends TraitEffect {
             if (multiplyOriginalValue)
                 addedValue *= originalValue;
 
-            return originalValue + addedValue;
+            return addedValue;
         }
     }
 

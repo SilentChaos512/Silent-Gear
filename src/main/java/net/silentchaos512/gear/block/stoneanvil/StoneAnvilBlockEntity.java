@@ -10,17 +10,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Clearable;
-import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.recipe.ToolActionRecipe;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgRecipes;
@@ -30,7 +28,8 @@ import java.util.Optional;
 
 public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     private ItemStack item = ItemStack.EMPTY;
-    private final RecipeManager.CachedCheck<Container, ToolActionRecipe> quickCheck = RecipeManager.createCheck(SgRecipes.TOOL_ACTION_TYPE.get());
+    private final RecipeManager.CachedCheck<ToolActionRecipe.Input, ToolActionRecipe> quickCheck =
+            RecipeManager.createCheck(SgRecipes.TOOL_ACTION_TYPE.get());
 
     public StoneAnvilBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(SgBlockEntities.STONE_ANVIL.get(), pPos, pBlockState);
@@ -43,21 +42,21 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     public Optional<RecipeHolder<ToolActionRecipe>> getRecipe(ItemStack tool, ItemStack item) {
         if (item.isEmpty() || this.level == null) return Optional.empty();
 
-        return quickCheck.getRecipeFor(new SimpleContainer(tool, item), this.level);
+        return quickCheck.getRecipeFor(new ToolActionRecipe.Input(tool, item), this.level);
     }
 
-    public boolean interact(@Nullable Entity entity, ItemStack stack) {
+    public boolean interact(LivingEntity entity, ItemStack stack, InteractionHand hand) {
         if (this.item.isEmpty()) {
             placeItem(entity, stack);
             return true;
         }
-        if (workOnItem(entity, stack)) {
+        if (workOnItem(entity, stack, hand)) {
             return true;
         }
         return takeItem(entity);
     }
 
-    public void placeItem(@Nullable Entity entity, ItemStack stack) {
+    public void placeItem(LivingEntity entity, ItemStack stack) {
         this.item = stack.split(stack.getCount());
         if (this.level != null) {
             this.level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
@@ -65,7 +64,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
         this.markUpdated();
     }
 
-    public boolean takeItem(@Nullable Entity entity) {
+    public boolean takeItem(LivingEntity entity) {
         if (!this.item.isEmpty()) {
             dropItem(this.item);
             this.clearContent();
@@ -78,7 +77,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
         return false;
     }
 
-    public boolean workOnItem(@Nullable Entity entity, ItemStack tool) {
+    public boolean workOnItem(LivingEntity entity, ItemStack tool, InteractionHand hand) {
         var optionalHolder = getRecipe(tool, this.item);
         if (optionalHolder.isPresent() && this.level != null) {
             var recipe = optionalHolder.get().value();
@@ -89,7 +88,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
             this.item.shrink(1);
             var serverPlayer = entity instanceof ServerPlayer ? (ServerPlayer) entity : null;
             if (serverPlayer == null || !serverPlayer.getAbilities().instabuild) {
-                tool.hurtAndBreak(damage, SilentGear.RANDOM_SOURCE, serverPlayer, () -> {});
+                tool.hurtAndBreak(damage, entity, LivingEntity.getSlotForHand(hand));
             }
             level.playSound(null, getBlockPos(), SoundEvents.STONE_HIT, SoundSource.PLAYERS, 1f, 1f);
             level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));

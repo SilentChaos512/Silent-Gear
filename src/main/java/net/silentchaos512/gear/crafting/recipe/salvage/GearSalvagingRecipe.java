@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.silentchaos512.gear.api.part.PartList;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 
@@ -27,7 +28,7 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
         List<ItemStack> ret = new ArrayList<>();
 
         PartList parts = GearData.getConstruction(input).parts();
-        for (PartData part : parts) {
+        for (PartInstance part : parts) {
             ret.add(part.getItem());
             //ret.addAll(salvage(part));
         }

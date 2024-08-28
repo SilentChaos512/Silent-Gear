@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RepairItemRecipe;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.ICoreItem;
@@ -21,7 +21,7 @@ public class RepairItemRecipeFix extends RepairItemRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInput inv, Level worldIn) {
         ItemStack gearStack = StackList.from(inv).firstMatch(s -> s.getItem() instanceof ICoreItem);
         return gearStack.isEmpty() && super.matches(inv, worldIn);
     }

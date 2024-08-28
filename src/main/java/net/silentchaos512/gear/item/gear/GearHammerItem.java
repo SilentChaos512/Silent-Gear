@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.util.IAoeTool;
 
@@ -19,18 +19,13 @@ public class GearHammerItem extends GearPickaxeItem implements IAoeTool {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-        return getGearType().canPerformAction(toolAction);
+    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+        return getGearType().canPerformAction(itemAbility);
     }
 
     @Nullable
     @Override
     public HitResult rayTraceBlocks(Level world, Player player) {
         return getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
-    }
-
-    @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
-        return IAoeTool.BreakHandler.onBlockStartBreak(itemstack, pos, player);
     }
 }

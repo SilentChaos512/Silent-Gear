@@ -3,9 +3,9 @@ package net.silentchaos512.gear.crafting.recipe;
 import com.google.gson.JsonParseException;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -46,7 +46,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInput inv, Level worldIn) {
         if (!super.matches(inv, worldIn)) return false;
 
         GearType gearType = item.getGearType();
@@ -64,7 +64,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         return item.construct(getParts(inv));
     }
 

@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.GearPart;
+import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.setup.SgRegistries;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public record SyncPartsPayload(Map<ResourceLocation, GearPart> parts) implements
     private static final StreamCodec<RegistryFriendlyByteBuf, HashMap<ResourceLocation, GearPart>> MAP_STREAM_CODEC = ByteBufCodecs.map(
             HashMap::new,
             ResourceLocation.STREAM_CODEC,
-            GearPart.STREAM_CODEC
+            PartSerializers.DISPATCH_STREAM_CODEC
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncPartsPayload> STREAM_CODEC = StreamCodec.of(

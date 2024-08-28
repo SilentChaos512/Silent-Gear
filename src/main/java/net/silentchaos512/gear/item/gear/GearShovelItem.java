@@ -1,24 +1,20 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ICoreTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.config.Config;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -31,7 +27,7 @@ public class GearShovelItem extends ShovelItem implements ICoreTool {
     private final Supplier<GearType> gearType;
 
     public GearShovelItem(Supplier<GearType> gearType) {
-        super(GearHelper.DEFAULT_DUMMY_TIER, 0, 0f, GearHelper.getBaseItemProperties());
+        super(GearHelper.DEFAULT_DUMMY_TIER, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
     }
 
@@ -55,7 +51,7 @@ public class GearShovelItem extends ShovelItem implements ICoreTool {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return canPerformAction(stack, ToolActions.SHOVEL_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_SHOVEL);
+        return canPerformAction(stack, ItemAbilities.SHOVEL_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_SHOVEL);
     }
 
     @Override
@@ -79,8 +75,10 @@ public class GearShovelItem extends ShovelItem implements ICoreTool {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        return GearHelper.getAttributeModifiers(slot, stack);
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+        var builder = ItemAttributeModifiers.builder();
+        GearHelper.addAttributeModifiers(stack, builder);
+        return builder.build();
     }
 
     @Override
@@ -95,22 +93,17 @@ public class GearShovelItem extends ShovelItem implements ICoreTool {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return GearData.getStatInt(stack, getGearType().getDurabilityStat());
+        return GearData.getProperties(stack).getNumberInt(getDurabilityStat());
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return GearHelper.getRarity(stack);
     }
 
     @Override
@@ -129,8 +122,8 @@ public class GearShovelItem extends ShovelItem implements ICoreTool {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
+        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
     }
 
     @Override

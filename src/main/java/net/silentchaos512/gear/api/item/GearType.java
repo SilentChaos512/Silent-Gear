@@ -2,13 +2,14 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.neoforge.common.ToolAction;
-import net.silentchaos512.gear.api.property.GearPropertyGroup;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.property.GearProperty;
+import net.silentchaos512.gear.api.property.GearPropertyGroup;
 import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
@@ -23,7 +24,7 @@ import java.util.function.Supplier;
 public record GearType(
         Supplier<GearType> parent,
         int animationFrames,
-        Set<ToolAction> toolActions,
+        Set<ItemAbility> itemAbilities,
         float armorDurabilityMultiplier,
         Supplier<NumberProperty> durabilityStat,
         Set<GearPropertyGroup> relevantPropertyGroups
@@ -36,21 +37,33 @@ public record GearType(
     public GearType(
             @Nullable Supplier<GearType> parent,
             int animationFrames,
-            Set<ToolAction> toolActions,
+            Set<ItemAbility> itemAbilities,
             float armorDurabilityMultiplier,
             Supplier<NumberProperty> durabilityStat,
             Set<GearPropertyGroup> relevantPropertyGroups
     ) {
         this.parent = parent;
         this.animationFrames = animationFrames;
-        this.toolActions = toolActions;
+        this.itemAbilities = itemAbilities;
         this.armorDurabilityMultiplier = armorDurabilityMultiplier;
         this.durabilityStat = durabilityStat;
         this.relevantPropertyGroups = ImmutableSet.copyOf(relevantPropertyGroups);
     }
 
-    public boolean canPerformAction(ToolAction action) {
-        return toolActions.contains(action);
+    @Nullable
+    public static ICoreItem getItem(GearType type) {
+        return ITEMS.computeIfAbsent(type, gt -> {
+            for (var item : BuiltInRegistries.ITEM) {
+                if (item instanceof ICoreItem gearItem && gearItem.getGearType() == type) {
+                    return gearItem;
+                }
+            }
+            return null;
+        });
+    }
+
+    public boolean canPerformAction(ItemAbility action) {
+        return itemAbilities.contains(action);
     }
 
     public boolean matches(GearType type) {
@@ -119,7 +132,7 @@ public record GearType(
         private int animationFrames = 1;
         private Supplier<NumberProperty> durabilityStat = GearProperties.DURABILITY;
         private float armorDurabilityMultiplier = 1f;
-        private Set<ToolAction> toolActions = Collections.emptySet();
+        private Set<ItemAbility> toolActions = Collections.emptySet();
         private final Set<GearPropertyGroup> relevantPropertyGroups = new LinkedHashSet<>();
 
         private Builder(@Nullable Supplier<GearType> parent) {
@@ -159,12 +172,12 @@ public record GearType(
             return this;
         }
 
-        public Builder toolActions(ToolAction... actions) {
-            this.toolActions = GearHelper.makeToolActionSet(actions);
+        public Builder toolActions(ItemAbility... actions) {
+            this.toolActions = GearHelper.makeItemAbilitySet(actions);
             return this;
         }
 
-        public Builder toolActions(Set<ToolAction> actions) {
+        public Builder toolActions(Set<ItemAbility> actions) {
             this.toolActions = Collections.unmodifiableSet(actions);
             return this;
         }

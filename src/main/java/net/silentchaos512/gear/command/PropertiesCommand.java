@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartList;
-import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
@@ -61,7 +60,7 @@ public final class PropertiesCommand {
 
         ICoreItem item = (ICoreItem) stack.getItem();
         PartList parts = GearData.getConstruction(stack).parts();
-        GearPropertyMap properties = GearData.getStatModifiers(stack, item, parts);
+        GearPropertyMap properties = parts.getPropertyModifiersFromParts(item.getGearType());
 
         for (var property : SgRegistries.GEAR_PROPERTY) {
             var key = PropertyKey.of(property, item.getGearType());
@@ -69,10 +68,9 @@ public final class PropertiesCommand {
 
             if (!mods.isEmpty()) {
                 Component name = TextUtil.withColor(property.getDisplayName(), property.getGroup().getColor());
-                //noinspection unchecked
-                Component modsText = GearPropertyMap.formatText(mods, (GearProperty<?, GearPropertyValue<?>>) property, 5, true);
+                Component modsText = GearPropertyMap.formatTextUnchecked(mods, property, true);
                 Component valueText = TextUtil.withColor(
-                        property.getFormattedText(mods, 5, true),
+                        property.formatModifiersWithColorUnchecked(mods, true),
                         ChatFormatting.YELLOW
                 );
 
@@ -86,7 +84,7 @@ public final class PropertiesCommand {
                     if (!partMods.isEmpty()) {
                         Component partName = part.getDisplayName(part.getType());
                         //noinspection unchecked
-                        Component partModsText = GearPropertyMap.formatText((Collection<GearPropertyValue<?>>) partMods, (GearProperty<?, GearPropertyValue<?>>) property, 5, true);
+                        Component partModsText = GearPropertyMap.formatTextUnchecked(partMods, property, true);
 
                         context.getSource().sendSuccess(
                                 () -> TextUtil.translate("command", "stats.info.formatPart", partName, partModsText),
@@ -104,7 +102,7 @@ public final class PropertiesCommand {
         for (ServerPlayer player : players) {
             for (ItemStack stack : PlayerUtils.getNonEmptyStacks(player)) {
                 if (GearHelper.isGear(stack)) {
-                    GearData.recalculateStats(stack, player);
+                    GearData.recalculateGearData(stack, player);
                 }
             }
             context.getSource().sendSuccess(() -> Component.translatable("command.silentgear.recalculate", player.getScoreboardName()), true);

@@ -3,15 +3,19 @@ package net.silentchaos512.gear.setup;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.item.*;
+import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -66,27 +70,30 @@ public final class SgItems {
             new BlueprintBookItem(unstackableProps().rarity(Rarity.UNCOMMON)));
     // Blueprints
     public static final DeferredItem<PartBlueprintItem> JEWELER_TOOLS = register("jeweler_tools", () ->
-            new JewelerKitItem(PartTypes.SETTING.get(), false, unstackableProps()));
-    public static final DeferredItem<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartTypes.ROD.get(), false);
-    public static final DeferredItem<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartTypes.TIP.get(), false);
-    public static final DeferredItem<PartBlueprintItem> COATING_BLUEPRINT = registerPartBlueprint(PartTypes.COATING.get(), false);
-    public static final DeferredItem<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartTypes.GRIP.get(), false);
-    public static final DeferredItem<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartTypes.BINDING.get(), false);
-    public static final DeferredItem<PartBlueprintItem> LINING_BLUEPRINT = registerPartBlueprint(PartTypes.LINING.get(), false);
-    public static final DeferredItem<PartBlueprintItem> CORD_BLUEPRINT = registerPartBlueprint(PartTypes.CORD.get(), false);
-    public static final DeferredItem<PartBlueprintItem> FLETCHING_BLUEPRINT = registerPartBlueprint(PartTypes.FLETCHING.get(), false);
+            new JewelerKitItem(PartTypes.SETTING, BlueprintType.BLUEPRINT, unstackableProps()));
+    public static final DeferredItem<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartTypes.ROD, false);
+    public static final DeferredItem<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartTypes.TIP, false);
+    public static final DeferredItem<PartBlueprintItem> COATING_BLUEPRINT = registerPartBlueprint(PartTypes.COATING, false);
+    public static final DeferredItem<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartTypes.GRIP, false);
+    public static final DeferredItem<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartTypes.BINDING, false);
+    public static final DeferredItem<PartBlueprintItem> LINING_BLUEPRINT = registerPartBlueprint(PartTypes.LINING, false);
+    public static final DeferredItem<PartBlueprintItem> CORD_BLUEPRINT = registerPartBlueprint(PartTypes.CORD, false);
+    public static final DeferredItem<PartBlueprintItem> FLETCHING_BLUEPRINT = registerPartBlueprint(PartTypes.FLETCHING, false);
+
     static {
         GearItemSets.registerBlueprintItems();
     }
+
     // Templates
-    public static final DeferredItem<PartBlueprintItem> ROD_TEMPLATE = registerPartBlueprint(PartTypes.ROD.get(), true);
-    public static final DeferredItem<PartBlueprintItem> TIP_TEMPLATE = registerPartBlueprint(PartTypes.TIP.get(), true);
-    public static final DeferredItem<PartBlueprintItem> COATING_TEMPLATE = registerPartBlueprint(PartTypes.COATING.get(), true);
-    public static final DeferredItem<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartTypes.GRIP.get(), true);
-    public static final DeferredItem<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartTypes.BINDING.get(), true);
-    public static final DeferredItem<PartBlueprintItem> LINING_TEMPLATE = registerPartBlueprint(PartTypes.LINING.get(), true);
-    public static final DeferredItem<PartBlueprintItem> CORD_TEMPLATE = registerPartBlueprint(PartTypes.CORD.get(), true);
-    public static final DeferredItem<PartBlueprintItem> FLETCHING_TEMPLATE = registerPartBlueprint(PartTypes.FLETCHING.get(), true);
+    public static final DeferredItem<PartBlueprintItem> ROD_TEMPLATE = registerPartBlueprint(PartTypes.ROD, true);
+    public static final DeferredItem<PartBlueprintItem> TIP_TEMPLATE = registerPartBlueprint(PartTypes.TIP, true);
+    public static final DeferredItem<PartBlueprintItem> COATING_TEMPLATE = registerPartBlueprint(PartTypes.COATING, true);
+    public static final DeferredItem<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartTypes.GRIP, true);
+    public static final DeferredItem<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartTypes.BINDING, true);
+    public static final DeferredItem<PartBlueprintItem> LINING_TEMPLATE = registerPartBlueprint(PartTypes.LINING, true);
+    public static final DeferredItem<PartBlueprintItem> CORD_TEMPLATE = registerPartBlueprint(PartTypes.CORD, true);
+    public static final DeferredItem<PartBlueprintItem> FLETCHING_TEMPLATE = registerPartBlueprint(PartTypes.FLETCHING, true);
+
     static {
         GearItemSets.registerTemplateItems();
     }
@@ -97,6 +104,7 @@ public final class SgItems {
     static {
         GearItemSets.registerMainPartItems();
     }
+
     // Compound Parts
     public static final DeferredItem<CompoundPartItem> ROD = registerCompoundPart("rod", () ->
             new CompoundPartItem(PartTypes.ROD.get(), baseProps()));
@@ -139,7 +147,7 @@ public final class SgItems {
         CraftingItems.register(ITEMS);
     }
 
-    public static final DeferredItem<Item> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
+    public static final DeferredItem<SlingshotAmmoItem> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
     public static final DeferredItem<ItemNameBlockItem> FLAX_SEEDS = register("flax_seeds", () ->
             new SeedItem(SgBlocks.FLAX_PLANT.get(), baseProps()));
@@ -189,9 +197,9 @@ public final class SgItems {
     }
 
     @Deprecated // Make a part item set like gear items have?
-    private static DeferredItem<PartBlueprintItem> registerPartBlueprint(PartType partType, boolean singleUse) {
-        String name = SgRegistries.PART_TYPE.getKey(partType).getPath() + "_" + (singleUse ? "template" : "blueprint");
-        return register(name, () -> new PartBlueprintItem(partType, singleUse, baseProps()));
+    private static DeferredItem<PartBlueprintItem> registerPartBlueprint(DeferredHolder<PartType, PartType> partType, boolean singleUse) {
+        String name = partType.getId().getPath() + "_" + (singleUse ? "template" : "blueprint");
+        return register(name, () -> new PartBlueprintItem(partType, singleUse ? BlueprintType.TEMPLATE : BlueprintType.BLUEPRINT, baseProps()));
     }
 
     @SuppressWarnings("unchecked")

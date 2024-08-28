@@ -1,14 +1,15 @@
 package net.silentchaos512.gear.mixin;
 
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.damagesource.DamageSource;
-import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -22,8 +23,9 @@ public class MixinItemEntity {
         }
     }
 
+    @Unique
     private static boolean isFireproof(ItemStack stack) {
-        return GearHelper.isGear(stack) && (TraitHelper.hasTrait(stack, Const.Traits.FIREPROOF) || TraitHelper.hasTrait(stack, Const.Traits.FLAME_WARD));
+        return GearHelper.isGear(stack) && TraitHelper.hasTraitEffect(stack, TraitEffectTypes.FIREPROOF.get());
     }
 
     @Shadow

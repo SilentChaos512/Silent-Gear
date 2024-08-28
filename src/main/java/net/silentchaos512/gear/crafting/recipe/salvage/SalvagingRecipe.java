@@ -8,10 +8,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -23,7 +20,7 @@ import net.silentchaos512.gear.setup.SgRecipes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalvagingRecipe implements Recipe<Container> {
+public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
     protected final Ingredient ingredient;
     private final List<ItemStack> results = new ArrayList<>();
 
@@ -41,13 +38,13 @@ public class SalvagingRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(Container inv, Level worldIn) {
-        return ingredient.test(inv.getItem(0));
+    public boolean matches(SingleRecipeInput input, Level worldIn) {
+        return ingredient.test(input.getItem(0));
     }
 
     @Deprecated
     @Override
-    public ItemStack assemble(Container inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registryAccess) {
         // DO NOT USE
         return getResultItem(registryAccess);
     }

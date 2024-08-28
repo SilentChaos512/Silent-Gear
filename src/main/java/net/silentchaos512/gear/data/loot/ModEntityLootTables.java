@@ -1,6 +1,9 @@
 package net.silentchaos512.gear.data.loot;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.EntityLootSubProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.ItemLike;
@@ -9,7 +12,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -18,18 +21,34 @@ import net.silentchaos512.gear.setup.SgLoot;
 import java.util.function.BiConsumer;
 
 public class ModEntityLootTables extends EntityLootSubProvider {
-    protected ModEntityLootTables() {
-        super(FeatureFlags.REGISTRY.allFlags());
+    protected ModEntityLootTables(HolderLookup.Provider registries) {
+        super(FeatureFlags.REGISTRY.allFlags(), registries);
     }
 
     @Override
-    public void generate() {}
+    public void generate() {
+    }
 
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
-        consumer.accept(SgLoot.Injector.Tables.CAVE_SPIDER, addFineSilk(0.04f, 0.01f));
-        consumer.accept(SgLoot.Injector.Tables.SPIDER, addFineSilk(0.02f, 0.005f));
-        consumer.accept(SgLoot.Injector.Tables.ZOMBIE_VILLAGER, addLeatherScraps());
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.COW),
+                addSinew(0.2f, 0.2f)
+        );
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.PIG),
+                addSinew(0.2f, 0.2f)
+        );
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.SHEEP),
+                addSinew(0.2f, 0.2f)
+        );
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.CAVE_SPIDER),
+                addFineSilk(0.04f, 0.01f)
+        );
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.SPIDER),
+                addFineSilk(0.02f, 0.005f)
+        );
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.ZOMBIE_VILLAGER),
+                addLeatherScraps()
+        );
 
         /*heroOfTheVillage(consumer,
                 GearVillages.HOTV_GEAR_SMITH,
@@ -45,13 +64,24 @@ public class ModEntityLootTables extends EntityLootSubProvider {
         );*/
     }
 
-    private static LootTable.Builder addFineSilk(float baseChance, float lootingBonus) {
+    private LootTable.Builder addSinew(float baseChance, float lootingBonus) {
+        return LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(CraftingItems.SINEW)
+                                .when(LootItemKilledByPlayerCondition.killedByPlayer())
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, baseChance, lootingBonus))
+                        )
+                );
+    }
+
+    private LootTable.Builder addFineSilk(float baseChance, float lootingBonus) {
         return LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(CraftingItems.FINE_SILK)
                                 .when(LootItemKilledByPlayerCondition.killedByPlayer())
-                                .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(baseChance, lootingBonus))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, baseChance, lootingBonus))
                         )
                 );
     }

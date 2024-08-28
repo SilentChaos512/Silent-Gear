@@ -18,25 +18,25 @@ public final class SgTags {
         public static final TagKey<Block> NETHERWOOD_SOIL = mod("netherwood_soil");
         public static final TagKey<Block> PROSPECTOR_HAMMER_TARGETS = mod("prospector_hammer_targets");
 
-        public static final TagKey<Block> ORES_BORT = forge("ores/bort");
-        public static final TagKey<Block> ORES_CRIMSON_IRON = forge("ores/crimson_iron");
-        public static final TagKey<Block> ORES_AZURE_SILVER = forge("ores/azure_silver");
+        public static final TagKey<Block> ORES_BORT = common("ores/bort");
+        public static final TagKey<Block> ORES_CRIMSON_IRON = common("ores/crimson_iron");
+        public static final TagKey<Block> ORES_AZURE_SILVER = common("ores/azure_silver");
 
-        public static final TagKey<Block> STORAGE_BLOCKS_RAW_CRIMSON_IRON = forge("storage_blocks/raw_crimson_iron");
-        public static final TagKey<Block> STORAGE_BLOCKS_RAW_AZURE_SILVER = forge("storage_blocks/raw_azure_silver");
+        public static final TagKey<Block> STORAGE_BLOCKS_RAW_CRIMSON_IRON = common("storage_blocks/raw_crimson_iron");
+        public static final TagKey<Block> STORAGE_BLOCKS_RAW_AZURE_SILVER = common("storage_blocks/raw_azure_silver");
 
-        public static final TagKey<Block> STORAGE_BLOCKS_BORT = forge("storage_blocks/bort");
-        public static final TagKey<Block> STORAGE_BLOCKS_BLAZE_GOLD = forge("storage_blocks/blaze_gold");
-        public static final TagKey<Block> STORAGE_BLOCKS_CRIMSON_IRON = forge("storage_blocks/crimson_iron");
-        public static final TagKey<Block> STORAGE_BLOCKS_CRIMSON_STEEL = forge("storage_blocks/crimson_steel");
-        public static final TagKey<Block> STORAGE_BLOCKS_AZURE_SILVER = forge("storage_blocks/azure_silver");
-        public static final TagKey<Block> STORAGE_BLOCKS_AZURE_ELECTRUM = forge("storage_blocks/azure_electrum");
-        public static final TagKey<Block> STORAGE_BLOCKS_TYRIAN_STEEL = forge("storage_blocks/tyrian_steel");
+        public static final TagKey<Block> STORAGE_BLOCKS_BORT = common("storage_blocks/bort");
+        public static final TagKey<Block> STORAGE_BLOCKS_BLAZE_GOLD = common("storage_blocks/blaze_gold");
+        public static final TagKey<Block> STORAGE_BLOCKS_CRIMSON_IRON = common("storage_blocks/crimson_iron");
+        public static final TagKey<Block> STORAGE_BLOCKS_CRIMSON_STEEL = common("storage_blocks/crimson_steel");
+        public static final TagKey<Block> STORAGE_BLOCKS_AZURE_SILVER = common("storage_blocks/azure_silver");
+        public static final TagKey<Block> STORAGE_BLOCKS_AZURE_ELECTRUM = common("storage_blocks/azure_electrum");
+        public static final TagKey<Block> STORAGE_BLOCKS_TYRIAN_STEEL = common("storage_blocks/tyrian_steel");
 
         private Blocks() {}
 
-        private static TagKey<Block> forge(String path) {
-            return BlockTags.create(new ResourceLocation("forge", path));
+        private static TagKey<Block> common(String path) {
+            return BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", path));
         }
 
         private static TagKey<Block> mod(String path) {
@@ -135,7 +135,7 @@ public final class SgTags {
         private Items() {}
 
         private static TagKey<Item> common(String path) {
-            return ItemTags.create(new ResourceLocation("common", path));
+            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", path));
         }
 
         private static TagKey<Item> mod(String path) {
@@ -143,7 +143,7 @@ public final class SgTags {
         }
 
         private static TagKey<Item> silentsMechanisms(String path) {
-            return ItemTags.create(new ResourceLocation("silents_mechanisms", path));
+            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("silents_mechanisms", path));
         }
     }
 

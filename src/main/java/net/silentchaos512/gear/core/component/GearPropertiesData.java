@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.core.component;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.property.GearProperty;
@@ -8,6 +9,7 @@ import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.setup.SgRegistries;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -15,10 +17,16 @@ import java.util.function.Supplier;
 public record GearPropertiesData(
         Map<GearProperty<?, ?>, GearPropertyValue<?>> properties
 ) {
+    public static final GearPropertiesData EMPTY = new GearPropertiesData(Collections.emptyMap());
+
     public static final StreamCodec<RegistryFriendlyByteBuf, GearPropertiesData> STREAM_CODEC = StreamCodec.of(
             GearPropertiesData::encode,
             GearPropertiesData::decode
     );
+
+    public GearPropertiesData(Map<GearProperty<?, ?>, GearPropertyValue<?>> properties) {
+        this.properties = ImmutableMap.copyOf(properties);
+    }
 
     @Nullable
     public <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> V get(Supplier<P> propertyType) {
@@ -56,6 +64,14 @@ public record GearPropertiesData(
     public float getNumber(NumberProperty propertyType, float defaultValue) {
         var property = get(propertyType);
         return property != null ? property.value() : defaultValue;
+    }
+
+    public int getNumberInt(Supplier<NumberProperty> propertyType) {
+        return Math.round(getNumber(propertyType, propertyType.get().getDefaultValue()));
+    }
+
+    public boolean contains(GearProperty<?, ?> property) {
+        return this.properties.containsKey(property);
     }
 
     private static void encode(RegistryFriendlyByteBuf buf, GearPropertiesData data) {

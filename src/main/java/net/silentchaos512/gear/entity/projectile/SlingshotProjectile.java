@@ -5,32 +5,27 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.SgEntities;
+
+import javax.annotation.Nullable;
 
 public class SlingshotProjectile extends AbstractArrow {
-    public SlingshotProjectile(EntityType<? extends AbstractArrow> pEntityType, Level pLevel, ItemStack pPickupItemStack) {
-        super(pEntityType, pLevel, pPickupItemStack);
+    public SlingshotProjectile(LivingEntity pOwner, Level pLevel, ItemStack pPickupItemStack, @Nullable ItemStack firedWeapon) {
+        super(SgEntities.SLINGSHOT_PROJECTILE.get(), pOwner, pLevel, pPickupItemStack, firedWeapon);
     }
 
-    public SlingshotProjectile(EntityType<? extends AbstractArrow> pEntityType, double pX, double pY, double pZ, Level pLevel, ItemStack pPickupItemStack) {
-        super(pEntityType, pX, pY, pZ, pLevel, pPickupItemStack);
-    }
-
-    public SlingshotProjectile(EntityType<? extends AbstractArrow> pEntityType, LivingEntity pOwner, Level pLevel, ItemStack pPickupItemStack) {
-        super(pEntityType, pOwner, pLevel, pPickupItemStack);
-    }
-
-    public SlingshotProjectile(EntityType<SlingshotProjectile> type, Level level) {
-        super(type, level, SgItems.PEBBLE.toStack());
+    public SlingshotProjectile(EntityType<SlingshotProjectile> slingshotProjectileEntityType, Level level) {
+        super(slingshotProjectileEntityType, level);
     }
 
     @Override
     protected ItemStack getPickupItem() {
-        return SgItems.PEBBLE.toStack();
+        return ItemStack.EMPTY;
     }
 
-    public ItemStack getItem() {
-        return getPickupItem();
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return ItemStack.EMPTY;
     }
 
     @Override

@@ -158,7 +158,7 @@ public class WielderEffectTraitEffect extends TraitEffect {
 
         private static float getDefaultDuration(Holder<MobEffect> effect) {
             // Duration in seconds. The .9 should prevent flickering.
-            var nightVision = new ResourceLocation("night_vision");
+            var nightVision = ResourceLocation.withDefaultNamespace("night_vision");
             return effect.is(nightVision) ? 15.9f : 1.9f;
         }
 

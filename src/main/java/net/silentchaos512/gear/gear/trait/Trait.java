@@ -13,6 +13,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -24,10 +25,11 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.client.KeyTracker;
-import net.silentchaos512.gear.config.Config;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.TextUtil;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -147,12 +149,18 @@ public final class Trait {
         }
     }
 
-    public <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> V onGetProperty(TraitActionContext context, P property, V value, float damageRatio) {
-        V newValue = value;
+    public Collection<GearPropertyValue<?>> getBonusProperties(
+            int traitLevel,
+            @Nullable Player player,
+            GearProperty<?, ?> property,
+            GearPropertyValue<?> baseValue,
+            float damageRatio
+    ) {
+        Collection<GearPropertyValue<?>> result = new ArrayList<>();
         for (TraitEffect effect : this.effects) {
-            newValue = effect.onGetProperty(context, property, newValue, damageRatio);
+            result.addAll(effect.getBonusProperties(traitLevel, player, property, baseValue, damageRatio));
         }
-        return newValue;
+        return result;
     }
 
     public void onGetAttributeModifiers(TraitActionContext context, ItemAttributeModifiers.Builder builder) {

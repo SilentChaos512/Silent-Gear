@@ -6,8 +6,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.Material;
@@ -180,13 +180,17 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
         return part != null ? part.getPropertyModifiers(this, partType, key) : Collections.emptyList();
     }
 
+    public <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(PropertyKey<T, V> key) {
+        return this.getPropertyModifiers(this.getType(), key);
+    }
+
     @Override
     public Collection<TraitInstance> getTraits(PartGearKey key) {
         var part = getNullable();
         return part != null ? part.getTraits(this, key) : Collections.emptyList();
     }
 
-    public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingContainer inventory) {
+    public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingInput inventory) {
         var part = getNullable();
         return part != null && part.isCraftingAllowed(this, this.getType(), gearType, inventory);
     }
@@ -199,6 +203,10 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
     @Override
     public int getNameColor(PartType partType, GearType gearType) {
         return Color.VALUE_WHITE;
+    }
+
+    public Component getDisplayName() {
+        return getDisplayName(this.getType());
     }
 
     @Override

@@ -13,10 +13,11 @@ import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.property.NumberPropertyValue;
 import net.silentchaos512.gear.api.property.NumberProperty;
+import net.silentchaos512.gear.api.property.NumberPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
-import net.silentchaos512.gear.gear.material.MaterialModifiers;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
@@ -38,11 +39,11 @@ public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialMod
 
     @Override
     public IMaterialModifierType<?> getType() {
-        return MaterialModifiers.GRADE;
+        return MaterialModifiers.GRADE.get();
     }
 
     @Override
-    public List<GearPropertyValue<?>> modifyStats(IMaterialInstance material, PartType partType, PropertyKey key, List<GearPropertyValue<?>> statMods) {
+    public List<GearPropertyValue<?>> modifyStats(MaterialInstance material, PartType partType, PropertyKey<?, ?> key, List<GearPropertyValue<?>> statMods) {
         if (key.property().isAffectedByGrades() && grade != null && key.property() instanceof NumberProperty) {
             float bonus = grade.bonusPercent / 100f;
             List<GearPropertyValue<?>> ret = new ArrayList<>();

@@ -17,12 +17,12 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.block.compounder.AlloyMakerBlockEntity;
 import net.silentchaos512.gear.block.compounder.AlloyMakerInfo;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 
-public class AlloyRecipe implements Recipe<AlloyMakerBlockEntity<?>> {
+public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
     final List<Ingredient> ingredients = new ArrayList<>();
     final Result result;
 
@@ -54,11 +54,11 @@ public class AlloyRecipe implements Recipe<AlloyMakerBlockEntity<?>> {
     }
 
     @Override
-    public boolean matches(AlloyMakerBlockEntity<?> inv, Level worldIn) {
+    public boolean matches(AlloyRecipeInput inv, Level worldIn) {
         Set<Integer> matches = new HashSet<>();
         int inputs = 0;
 
-        for (int i = 0; i < inv.getInputSlotCount(); ++i) {
+        for (int i = 0; i < inv.size(); ++i) {
             if (!inv.getItem(i).isEmpty()) {
                 ++inputs;
             }
@@ -67,7 +67,7 @@ public class AlloyRecipe implements Recipe<AlloyMakerBlockEntity<?>> {
         for (Ingredient ingredient : this.ingredients) {
             boolean found = false;
 
-            for (int i = 0; i < inv.getInputSlotCount(); ++i) {
+            for (int i = 0; i < inv.size(); ++i) {
                 ItemStack stack = inv.getItem(i);
 
                 if (!stack.isEmpty() && ingredient.test(stack)) {
@@ -86,7 +86,7 @@ public class AlloyRecipe implements Recipe<AlloyMakerBlockEntity<?>> {
     }
 
     @Override
-    public ItemStack assemble(AlloyMakerBlockEntity<?> inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(AlloyRecipeInput inv, HolderLookup.Provider registryAccess) {
         return this.result.getResult();
     }
 
@@ -143,7 +143,7 @@ public class AlloyRecipe implements Recipe<AlloyMakerBlockEntity<?>> {
 
         public ItemStack getResult() {
             if (item instanceof CustomMaterialItem customMaterialItem && material != null) {
-                return customMaterialItem.create(LazyMaterialInstance.of(material), count);
+                return customMaterialItem.create(MaterialInstance.of(material), count);
             }
             return new ItemStack(item);
         }

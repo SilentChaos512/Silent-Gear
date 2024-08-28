@@ -1864,7 +1864,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
     }
 
     private static MaterialBuilder<SimpleMaterial> terracotta(DataResource<Material> parent, String suffix, ItemLike item, int color) {
-        var id = new ResourceLocation(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
+        var id = ResourceLocation.fromNamespaceAndPath(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
         return MaterialBuilder.simple(DataResource.material(id))
                 .parent(parent)
                 .crafting(item)
@@ -1873,7 +1873,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private static MaterialBuilder<SimpleMaterial> wood(String suffix, ItemLike item, int color) {
         var parent = Const.Materials.WOOD;
-        var id = new ResourceLocation(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
+        var id = ResourceLocation.fromNamespaceAndPath(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
         return MaterialBuilder.simple(DataResource.material(id))
                 .parent(parent)
                 .crafting(item)
@@ -1882,7 +1882,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private static MaterialBuilder<SimpleMaterial> wool(String suffix, ItemLike item, int color) {
         var parent = Const.Materials.WOOL;
-        var id = new ResourceLocation(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
+        var id = ResourceLocation.fromNamespaceAndPath(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
         return MaterialBuilder.simple(DataResource.material(id))
                 .parent(parent)
                 .crafting(item)

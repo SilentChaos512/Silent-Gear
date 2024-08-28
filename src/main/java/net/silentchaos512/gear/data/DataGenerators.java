@@ -44,8 +44,8 @@ public final class DataGenerators {
         gen.addProvider(event.includeServer(), new MaterialsProvider(gen, SilentGear.MOD_ID));
         gen.addProvider(event.includeServer(), new PartsProvider(gen));
 
-        gen.addProvider(event.includeServer(), new ModLootTables(gen));
-        gen.addProvider(event.includeServer(), new ModRecipesProvider(gen));
+        gen.addProvider(event.includeServer(), new ModLootTables(event));
+        gen.addProvider(event.includeServer(), new ModRecipesProvider(event));
         gen.addProvider(event.includeServer(), new ModAdvancementProvider(event));
 //        ModWorldGen.init(gen, existingFileHelper); //FIXME
 

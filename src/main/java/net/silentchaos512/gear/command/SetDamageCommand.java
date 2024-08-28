@@ -48,7 +48,7 @@ public final class SetDamageCommand {
             stack.setDamageValue(clamped);
 
             if (stack.getItem() instanceof ICoreItem) {
-                GearData.recalculateStats(stack, playerMP);
+                GearData.recalculateGearData(stack, playerMP);
             }
 
             return 1;

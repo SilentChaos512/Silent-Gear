@@ -61,7 +61,6 @@ public class PhantomLight extends Block implements SimpleWaterloggedBlock {
         return true;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.INVISIBLE;

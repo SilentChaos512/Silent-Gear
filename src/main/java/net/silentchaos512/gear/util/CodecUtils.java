@@ -13,9 +13,11 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.silentchaos512.gear.SilentGear;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,12 +77,12 @@ public class CodecUtils {
     }
 
     private static <T> Codec<Holder.Reference<T>> referenceHolderWithLifecycle(Registry<T> registry) {
-        Codec<Holder.Reference<T>> codec = ModResourceLocation.CODEC
+        Codec<Holder.Reference<T>> codec = ResourceLocation.CODEC
                 .comapFlatMap(
                         p_315852_ -> registry.getHolder(p_315852_)
                                 .map(DataResult::success)
                                 .orElseGet(() -> DataResult.error(() -> "Unknown registry key in " + registry.key() + ": " + p_315852_)),
-                        p_325513_ -> new ModResourceLocation(p_325513_.key().location())
+                        p_325513_ -> SilentGear.getId(p_325513_.key().location().toString())
                 );
         return ExtraCodecs.overrideLifecycle(
                 codec, p_325514_ -> registry.registrationInfo(p_325514_.key()).map(RegistrationInfo::lifecycle).orElse(Lifecycle.experimental())

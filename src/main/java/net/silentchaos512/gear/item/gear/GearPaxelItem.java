@@ -5,9 +5,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.function.Supplier;
@@ -18,15 +18,15 @@ public class GearPaxelItem extends GearPickaxeItem {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-        return getGearType().canPerformAction(toolAction);
+    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+        return getGearType().canPerformAction(itemAbility);
     }
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
         return super.isCorrectToolForDrops(stack, state)
-                || SgItems.SHOVEL.get().isCorrectToolForDrops(stack, state)
-                || SgItems.AXE.get().isCorrectToolForDrops(stack, state);
+                || GearItemSets.SHOVEL.gearItem().isCorrectToolForDrops(stack, state)
+                || GearItemSets.AXE.gearItem().isCorrectToolForDrops(stack, state);
     }
 
     @Override

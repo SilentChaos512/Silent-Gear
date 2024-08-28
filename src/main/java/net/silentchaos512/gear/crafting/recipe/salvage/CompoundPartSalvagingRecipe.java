@@ -10,6 +10,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
@@ -39,11 +40,11 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public boolean matches(Container inv, Level worldIn) {
-        if (!(inv.getItem(0).getItem() instanceof CompoundPartItem))
+    public boolean matches(SingleRecipeInput input, Level worldIn) {
+        if (!(input.getItem(0).getItem() instanceof CompoundPartItem))
             return false;
 
-        return PartInstance.from(inv.getItem(0)) != null;
+        return PartInstance.from(input.getItem(0)) != null;
     }
 
     @Override

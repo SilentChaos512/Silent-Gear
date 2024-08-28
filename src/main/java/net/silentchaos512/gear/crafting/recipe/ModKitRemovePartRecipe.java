@@ -2,15 +2,16 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.ModKitItem;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -23,12 +24,12 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInput inv, Level worldIn) {
         ItemStack gear = ItemStack.EMPTY;
         boolean foundModKit = false;
         PartType type = PartTypes.NONE.get();
 
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+        for (int i = 0; i < inv.size(); ++i) {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 //noinspection ChainOfInstanceofChecks
@@ -50,7 +51,7 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(ICoreItem.class);
         ItemStack modKit = list.uniqueOfType(ModKitItem.class);
@@ -60,7 +61,7 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
         PartType type = ModKitItem.getSelectedType(modKit);
 
         if (GearData.removeFirstPartOfType(result, type)) {
-            GearData.recalculateStats(result, CommonHooks.getCraftingPlayer());
+            GearData.recalculateGearData(result, CommonHooks.getCraftingPlayer());
         }
         return result;
     }
@@ -71,12 +72,12 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
-        NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
         ItemStack gear = StackList.from(inv).uniqueOfType(ICoreItem.class);
         ItemStack modKit = StackList.from(inv).uniqueOfType(ModKitItem.class);
         PartType type = ModKitItem.getSelectedType(modKit);
-        PartData part = GearData.getConstruction(gear).getPartOfType(type);
+        PartInstance part = GearData.getConstruction(gear).getPartOfType(type);
 
         for (int i = 0; i < list.size(); ++i) {
             ItemStack stack = inv.getItem(i);

@@ -4,14 +4,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.silentchaos512.gear.api.item.BreakEventHandler;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.function.Supplier;
 
-public class GearMacheteItem extends GearSwordItem {
+public class GearMacheteItem extends GearSwordItem implements BreakEventHandler {
     private static final int BREAK_RANGE = 2;
 
     public GearMacheteItem(Supplier<GearType> gearType) {
@@ -19,11 +21,11 @@ public class GearMacheteItem extends GearSwordItem {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
+    public void onBlockBreakEvent(ItemStack stack, Player player, Level level, BlockPos pos, BlockState state) {
         // Allow clearing vegetation, just like sickles but with a smaller range
-        if (!player.isCrouching())
-            return SgItems.SICKLE.get().onSickleStartBreak(itemstack, pos, player, BREAK_RANGE);
-        return super.onBlockStartBreak(itemstack, pos, player);
+        if (!player.isCrouching()) {
+            GearItemSets.SICKLE.gearItem().breakPlantsInRange(stack, pos, player, BREAK_RANGE);
+        }
     }
 
     @Override

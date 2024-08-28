@@ -10,11 +10,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
-import javax.annotation.Nonnegative;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -68,6 +69,11 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
 
     public abstract T compute(T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers);
 
+    @SuppressWarnings("unchecked")
+    public V computeUnchecked(boolean clampResult, GearType itemType, GearType statType, Collection<GearPropertyValue<?>> modifiers) {
+        return valueOf(compute(getBaseValue(), clampResult, itemType, statType, (Collection<V>) modifiers));
+    }
+
     public T getDefaultValue() {
         return defaultValue;
     }
@@ -85,6 +91,8 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     }
 
     public abstract T getZeroValue();
+
+    public abstract boolean isZero(T value);
 
     public boolean isAffectedByGrades() {
         return affectedByGrades;
@@ -104,16 +112,66 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return value;
     }
 
-    public abstract MutableComponent getFormattedText(V value, @Nonnegative int decimalPlaces, boolean addColor);
-
-    public MutableComponent getFormattedText(V value) {
-        return getFormattedText(value, 2, false);
+    public List<Component> getTooltipLines(V value, GearTooltipFlag flag) {
+        return List.of(formatText(value, flag));
     }
 
-    public MutableComponent getFormattedText(Collection<GearPropertyValue<?>> mods, @Nonnegative int decimalPlaces, boolean addColor) {
+    public final List<Component> getTooltipLinesUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag) {
+        return List.of(formatTextUnchecked(value, flag));
+    }
+
+    @SuppressWarnings("unchecked")
+    public final Component formatTextUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag) {
+        return formatText((V) value, flag);
+    }
+
+    public Component formatText(V value, GearTooltipFlag flag) {
+        var valueText = formatValue(value);
+        return formatText(valueText);
+    }
+
+    public Component formatText(Component valueText) {
+        var propertyName = TextUtil.withColor(getDisplayName(), this.nameColor);
+        return Component.translatable("stat.silentgear.displayFormat", propertyName, valueText);
+    }
+
+    public abstract Component formatValue(V value);
+
+    public abstract MutableComponent formatValueWithColor(V value, boolean addColor);
+
+    @SuppressWarnings("unchecked")
+    public Component formatModifiersUnchecked(Collection<? extends GearPropertyValue<?>> mods, boolean addModColors) {
+        return formatModifiers((Collection<V>) mods, addModColors);
+    }
+
+    public Component formatModifiers(Collection<V> mods, boolean addModColors) {
+        if (mods.size() == 1) {
+            V inst = mods.iterator().next();
+            int decimalPlaces = getPreferredDecimalPlaces(inst);
+            return formatValueWithColor(inst, addModColors);
+        }
+
+        // Sort modifiers by operation
+        MutableComponent result = Component.literal("");
+        List<V> toSort = sortForDisplay(mods);
+
+        for (V value : toSort) {
+            if (!result.getSiblings().isEmpty()) {
+                result.append(", ");
+            }
+            result.append(formatValueWithColor(value, addModColors));
+        }
+
+        return result;
+    }
+
+    public MutableComponent formatModifiersWithColorUnchecked(
+            Collection<GearPropertyValue<?>> mods,
+            boolean addColor
+    ) {
         //noinspection unchecked
         V value = valueOf(compute((Collection<V>) mods));
-        return getFormattedText(value, decimalPlaces, addColor);
+        return formatValueWithColor(value, addColor);
     }
 
     public int getPreferredDecimalPlaces(V value) {

@@ -26,7 +26,6 @@ import net.silentchaos512.lib.util.NameUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final GearType gearType;
@@ -56,7 +55,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
         if (itemTag == null) {
             ResourceLocation id = NameUtils.fromItem(this);
             String itemClass = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(this.gearType)).getPath();
-            itemTag = ItemTags.create(new ResourceLocation(id.getNamespace(), "blueprints/" + itemClass));
+            itemTag = ItemTags.create(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "blueprints/" + itemClass));
         }
         return itemTag;
     }
@@ -65,7 +64,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     protected Component getCraftedName(ItemStack stack) {
         ResourceLocation id = NameUtils.fromItem(this);
         String itemClass = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(this.gearType)).getPath();
-        return Component.translatable(Util.makeDescriptionId("item", new ResourceLocation(id.getNamespace(), itemClass)));
+        return Component.translatable(Util.makeDescriptionId("item", ResourceLocation.fromNamespaceAndPath(id.getNamespace(), itemClass)));
     }
 
     @Override
@@ -100,11 +99,10 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
 
     private void appendSupportedTypesText(Collection<Component> list) {
         if (KeyTracker.isDisplayStatsDown()) {
-            Optional<ICoreItem> itemOptional = this.gearType.getItem();
+            ICoreItem item = GearType.getItem(this.gearType);
 
-            if (itemOptional.isPresent()) {
+            if (item != null) {
                 TextListBuilder builder = new TextListBuilder();
-                ICoreItem item = itemOptional.get();
                 ItemStack gear = new ItemStack(item);
 
                 for (PartType type : SgRegistries.PART_TYPE) {

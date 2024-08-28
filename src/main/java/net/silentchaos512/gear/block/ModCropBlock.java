@@ -1,11 +1,8 @@
 package net.silentchaos512.gear.block;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.CropBlock;
-import net.neoforged.neoforge.common.PlantType;
 
 import java.util.function.Supplier;
 
@@ -20,10 +17,5 @@ public class ModCropBlock extends CropBlock {
     @Override
     protected ItemLike getBaseSeedId() {
         return seedItem.get();
-    }
-
-    @Override
-    public PlantType getPlantType(BlockGetter world, BlockPos pos) {
-        return PlantType.CROP;
     }
 }

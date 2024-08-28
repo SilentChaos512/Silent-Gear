@@ -88,6 +88,11 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
     }
 
     @Override
+    public boolean isZero(Float value) {
+        return MathUtils.floatsEqual(value, 0f);
+    }
+
+    @Override
     public NumberPropertyValue valueOf(Float value) {
         return new NumberPropertyValue(value, Operation.AVERAGE);
     }
@@ -213,8 +218,8 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
     }
 
     @Override
-    public MutableComponent getFormattedText(NumberPropertyValue value, int decimalPlaces, boolean addColor) {
-        return value.operation().formatNumberValue(this, value.value, decimalPlaces, addColor);
+    public MutableComponent formatValueWithColor(NumberPropertyValue value, boolean addColor) {
+        return value.operation().formatNumberValue(this, value.value, getPreferredDecimalPlaces(value), addColor);
     }
 
     @Override
@@ -228,6 +233,11 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
         var list = new ArrayList<>(mods);
         list.sort(Comparator.comparing(mod -> mod.operation().ordinal()));
         return list;
+    }
+
+    @Override
+    public Component formatValue(NumberPropertyValue value) {
+        return value.operation().formatNumberValue(this, value.value, getPreferredDecimalPlaces(value), false);
     }
 
     public enum Operation {

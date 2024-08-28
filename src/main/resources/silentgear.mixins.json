@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_16",
   "refmap": "silentgear.refmap.json",
   "mixins": [
-    "MixinItem",
     "MixinItemEntity",
     "MixinPowderSnowBlock"
   ]

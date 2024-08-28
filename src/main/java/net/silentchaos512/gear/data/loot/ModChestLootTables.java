@@ -1,7 +1,9 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.data.loot.packs.VanillaChestLoot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.loot.LootTableSubProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
@@ -16,14 +18,27 @@ import net.silentchaos512.gear.setup.SgLoot;
 
 import java.util.function.BiConsumer;
 
-public class ModChestLootTables extends VanillaChestLoot {
+public class ModChestLootTables implements LootTableSubProvider {
+    public ModChestLootTables(HolderLookup.Provider provider) {
+    }
+
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
-        consumer.accept(SgLoot.Injector.Tables.NETHER_BRIDGE, addNetherMetalsAndFlora());
-        consumer.accept(SgLoot.Injector.Tables.BASTION_TREASURE, addNetherMetalsWithExtra());
-        consumer.accept(SgLoot.Injector.Tables.BASTION_OTHER, addNetherFlora(LootTable.lootTable()));
-        consumer.accept(SgLoot.Injector.Tables.BASTION_BRIDGE, addNetherMetalsAndFlora());
-        consumer.accept(SgLoot.Injector.Tables.RUINED_PORTAL, addNetherMetalsAndFlora());
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.NETHER_BRIDGE),
+                addNetherMetalsAndFlora()
+        );
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.BASTION_TREASURE),
+                addNetherMetalsWithExtra()
+        );
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.BASTION_OTHER),
+                addNetherFlora(LootTable.lootTable())
+        );
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.BASTION_BRIDGE),
+                addNetherMetalsAndFlora()
+        );
+        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.RUINED_PORTAL),
+                addNetherMetalsAndFlora()
+        );
     }
 
     public static LootTable.Builder addNetherMetalsAndFlora() {

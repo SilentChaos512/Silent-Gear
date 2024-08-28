@@ -4,7 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.property.GearProperty;
+import net.silentchaos512.gear.api.property.GearPropertyMap;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.CodecUtils;
 
@@ -53,6 +59,22 @@ public class PartList implements List<PartInstance> {
         PartList.Immutable ret = new Immutable();
         Collections.addAll(ret.list, parts);
         return ret;
+    }
+
+    public GearPropertyMap getPropertyModifiersFromParts(GearType gearType) {
+        GearPropertyMap stats = new GearPropertyMap();
+
+        for (GearProperty<?, ? extends GearPropertyValue<?>> property : SgRegistries.GEAR_PROPERTY) {
+            PropertyKey<?, ?> key = PropertyKey.of(property, gearType);
+
+            for (PartInstance part : this) {
+                for (GearPropertyValue<?> mod : part.getPropertyModifiers(key)) {
+                    stats.put(key, mod);
+                }
+            }
+        }
+
+        return stats;
     }
 
     public List<PartInstance> getMains() {

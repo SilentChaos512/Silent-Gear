@@ -3,7 +3,9 @@ package net.silentchaos512.gear.event;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -19,7 +21,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.*;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.DyeColor;
@@ -27,28 +28,30 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.Fireworks;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.BreakEventHandler;
 import net.silentchaos512.gear.api.item.ICoreItem;
 import net.silentchaos512.gear.api.item.ICoreTool;
-import net.silentchaos512.gear.api.material.MaterialList;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.NumberPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -58,10 +61,11 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.*;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public final class GearEvents {
     public static final ResourceLocation APPLY_TIP_UPGRADE = SilentGear.getId("apply_tip_upgrade");
     public static final ResourceLocation CRAFTED_WITH_ROUGH_ROD = SilentGear.getId("crafted_with_rough_rod");
@@ -73,7 +77,7 @@ public final class GearEvents {
     private GearEvents() {}
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent events) {
+    public static void onServerTick(ServerTickEvent events) {
         entityAttackedThisTick.clear();
     }
 
@@ -82,7 +86,7 @@ public final class GearEvents {
     private static final Set<UUID> entityAttackedThisTick = new HashSet<>();
 
     @SubscribeEvent
-    public static void onAttackEntity(LivingAttackEvent event) {
+    public static void onAttackEntity(LivingIncomingDamageEvent event) {
         // Check if already handled
         LivingEntity attacked = event.getEntity();
         if (attacked == null || attacked.level().isClientSide || entityAttackedThisTick.contains(attacked.getUUID()))
@@ -110,57 +114,25 @@ public final class GearEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event) {
-        LivingEntity attacked = event.getEntity();
-
-        DamageSource source = event.getSource();
-        if (source == null || !"player".equals(source.getMsgId())) return;
-
-        Entity attacker = source.getEntity();
-        if (!(attacker instanceof Player player)) return;
-
-        ItemStack weapon = player.getMainHandItem();
-        if (!(weapon.getItem() instanceof ICoreTool)) return;
-
-        // Traits that increase damage to specific mob types.
-        // TODO: Maybe add a new trait type/effect to give pack makers control?
-
-        int adamant = TraitHelper.getTraitLevel(weapon, Const.Traits.ADAMANT);
-        if (adamant > 0 && attacked.getMaxHealth() > 21f) {
-            event.setAmount(event.getAmount() + 2 * adamant);
-        }
-
-        int aquatic = TraitHelper.getTraitLevel(weapon, Const.Traits.AQUATIC);
-        if (aquatic > 0 && !attacked.canDrownInFluidType(NeoForgeMod.WATER_TYPE.value())) {
-            event.setAmount(event.getAmount() + 2 * aquatic);
-        }
-
-        int chilled = TraitHelper.getTraitLevel(weapon, Const.Traits.CHILLED);
-        if (chilled > 0 && attacked.fireImmune()) {
-            event.setAmount(event.getAmount() + 2 * chilled);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onLivingDamage(LivingDamageEvent event) {
+    public static void onLivingDamage(LivingDamageEvent.Post event) {
         if (event.getEntity() instanceof Player)
             if (isFireDamage(event.getSource())) {
                 damageFlammableItems(event);
             }
     }
 
-    private static boolean isFireDamage(DamageSource source) {
-        return source.is(DamageTypeTags.IS_FIRE);
+    private static boolean isFireDamage(@Nullable DamageSource source) {
+        return source != null && source.is(DamageTypeTags.IS_FIRE);
     }
 
-    private static void damageFlammableItems(LivingDamageEvent event) {
+    private static void damageFlammableItems(LivingDamageEvent.Post event) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack stack = event.getEntity().getItemBySlot(slot);
             if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
                 GearHelper.attemptDamage(stack, 2, event.getEntity(), slot);
                 if (GearHelper.isBroken(stack)) {
                     event.getEntity().sendSystemMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getHoverName()));
-                    event.getEntity().broadcastBreakEvent(slot);
+                    event.getEntity().onEquippedItemBroken(stack.getItem(), slot);
                     stack.shrink(1);
                 }
             }
@@ -183,11 +155,11 @@ public final class GearEvents {
     //region Magic armor
 
     @SubscribeEvent
-    public static void onLivingHurtMagicArmor(LivingHurtEvent event) {
+    public static void onLivingHurtMagicArmor(LivingDamageEvent.Pre event) {
         if (event.getSource().is(DamageTypes.MAGIC)) {
             float magicArmor = getTotalMagicArmor(event.getEntity());
             float scale = 1f - getReducedMagicDamageScale(magicArmor);
-            event.setAmount(event.getAmount() * scale);
+            event.setNewDamage(event.getNewDamage() * scale);
         }
     }
 
@@ -195,7 +167,7 @@ public final class GearEvents {
         float total = 0f;
         for (ItemStack stack : entity.getArmorSlots()) {
             if (stack.getItem() instanceof GearArmorItem) {
-                total += (float) ((GearArmorItem) stack.getItem()).getArmorMagicProtection(stack);
+                total += ((GearArmorItem) stack.getItem()).getArmorMagicProtection(stack);
             }
         }
         return total;
@@ -267,7 +239,7 @@ public final class GearEvents {
     );
 
     @SubscribeEvent
-    public static void onBlockBreak(BlockDropsEvent event) {
+    public static void onBlockDrops(BlockDropsEvent event) {
         if (event.getBreaker() == null) return;
 
         ItemStack tool = event.getTool();
@@ -279,11 +251,18 @@ public final class GearEvents {
             event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
         }
 
-        if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().is(Tags.Blocks.ORES_DIAMOND) && tool.getEnchantmentLevel(Enchantments.SILK_TOUCH) == 0) {
+        if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().is(Tags.Blocks.ORES_DIAMOND) && !hasSilkTouch(event.getLevel(), tool)) {
             Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getBreaker().getCommandSenderWorld());
             entity.teleportTo(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);
             event.getLevel().addFreshEntity(entity);
         }
+    }
+
+    private static boolean hasSilkTouch(Level level, ItemStack tool) {
+        Holder.Reference<Enchantment> silkTouch = level.registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT)
+                .getHolderOrThrow(Enchantments.SILK_TOUCH);
+        return EnchantmentHelper.getTagEnchantmentLevel(silkTouch, tool) > 0;
     }
 
     @SubscribeEvent
@@ -294,7 +273,10 @@ public final class GearEvents {
             // Try to trigger some advancements
 
             // Crude tool
-            if (GearData.hasPart(result, PartTypes.ROD.get(), p -> p.containsMaterial(Const.Materials.WOOD_ROUGH))) {
+            if (GearData.hasPart(result, PartTypes.ROD.get(), p -> {
+                var primaryMaterial = p.getPrimaryMaterial();
+                return primaryMaterial != null && primaryMaterial.is(Const.Materials.WOOD_ROUGH);
+            })) {
                 SgCriteriaTriggers.CRAFTED_WITH_ROUGH_ROD.get().trigger(player);
             }
 
@@ -305,7 +287,7 @@ public final class GearEvents {
 
             // Number properties
             for (var propertyType : SgRegistries.GEAR_PROPERTY) {
-                GearPropertyValue<?> property = GearData.getProperties(result).get(propertyType);
+                GearPropertyValue<?> property = GearData.getProperties(result, player).get(propertyType);
                 if (property instanceof NumberPropertyValue numberProperty) {
                     SgCriteriaTriggers.GEAR_PROPERTY.get().trigger(player, propertyType, numberProperty.value());
                 }
@@ -349,13 +331,6 @@ public final class GearEvents {
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
         var player = event.getEntity();
         if (!player.level().isClientSide) {
-            int magnetic = Math.max(TraitHelper.getHighestLevelEitherHand(player, Const.Traits.MAGNETIC),
-                    TraitHelper.getHighestLevelCurio(player, Const.Traits.MAGNETIC));
-
-            if (magnetic > 0) {
-                tickMagnetic(player, magnetic);
-            }
-
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
             if (!player.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
@@ -372,31 +347,6 @@ public final class GearEvents {
                 player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 9, true, false));
             }
         }
-    }
-
-    private static void tickMagnetic(Player player, int magneticLevel) {
-        if (player.isCrouching()) return;
-
-        final int range = magneticLevel * 3 + 1;
-        Vec3 target = new Vec3(player.getX(), player.getY(0.5), player.getZ());
-
-        AABB aabb = new AABB(player.getX() - range, player.getY() - range, player.getZ() - range, player.getX() + range + 1, player.getY() + range + 1, player.getZ() + range + 1);
-        for (ItemEntity entity : player.level().getEntitiesOfClass(ItemEntity.class, aabb, e -> e.distanceToSqr(player) < range * range)) {
-            if (canMagneticPullItem(entity)) {
-                // Accelerate to target point
-                Vec3 vec = entity.getDismountLocationForPassenger(player).vectorTo(target);
-                vec = vec.normalize().scale(0.06);
-                if (entity.getY() < target.y) {
-                    double xzDistanceSq = (entity.getX() - target.x) * (entity.getX() - target.x) + (entity.getZ() - target.z) * (entity.getZ() - target.z);
-                    vec = vec.add(0, 0.005 + xzDistanceSq / 1000, 0);
-                }
-                entity.push(vec.x, vec.y, vec.z);
-            }
-        }
-    }
-
-    private static boolean canMagneticPullItem(ItemEntity entity) {
-        return !entity.hasPickUpDelay() && !entity.getPersistentData().getBoolean("PreventRemoteMovement");
     }
 
     @SubscribeEvent
@@ -465,7 +415,7 @@ public final class GearEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerHurt(LivingHurtEvent event) {
+    public static void onPlayerHurt(LivingDamageEvent.Post event) {
         if (event.getEntity() instanceof Player) {
             Entity source = event.getSource().getDirectEntity();
             if (source instanceof LivingEntity) {
@@ -478,6 +428,15 @@ public final class GearEvents {
                             Mth.cos(source.getYRot() * ((float)Math.PI / 180F)));
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        var player = event.getPlayer();
+        ItemStack tool = player.getMainHandItem();
+        if (tool.getItem() instanceof BreakEventHandler breakEventHandler) {
+            breakEventHandler.onBlockBreakEvent(tool, player, player.level(), event.getPos(), event.getState());
         }
     }
 }

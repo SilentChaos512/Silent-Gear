@@ -149,7 +149,7 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
             String packName;
             for (ResourceLocation id : resources.keySet()) {
                 String path = id.getPath().substring(this.dataPath.length() + 1, id.getPath().length() - ".json".length());
-                ResourceLocation name = new ResourceLocation(id.getNamespace(), path);
+                ResourceLocation name = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), path);
 
                 Optional<Resource> resourceOptional = resourceManager.getResource(id);
                 if (resourceOptional.isPresent()) {
