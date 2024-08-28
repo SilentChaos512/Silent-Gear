@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.item;
 
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.api.item.GearType;
@@ -9,12 +10,11 @@ import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.setup.SgRegistries;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class GearItemSet<I extends Item> {
-    private final Supplier<GearType> type;
+    private final DeferredHolder<GearType, GearType> type;
     private final String partName;
 
     private DeferredItem<I> gearItem;
@@ -27,23 +27,23 @@ public final class GearItemSet<I extends Item> {
     private Supplier<GearBlueprintItem> blueprintSupplier;
     private Supplier<GearBlueprintItem> templateSupplier;
 
-    public GearItemSet(Supplier<GearType> type, String partName, Function<Supplier<GearType>, I> gearItem) {
-        this(type, partName, () -> gearItem.apply(type));
+    public GearItemSet(DeferredHolder<GearType, GearType> type, String partName, Function<Supplier<GearType>, I> gearItem) {
+        this(type, partName, () -> gearItem.apply(type::value));
     }
 
-    public GearItemSet(Supplier<GearType> type, String partName, Supplier<I> gearItem) {
+    public GearItemSet(DeferredHolder<GearType, GearType> type, String partName, Supplier<I> gearItem) {
         this(
                 type,
                 partName,
                 gearItem,
-                () -> new MainPartItem(type.get(), new Item.Properties().stacksTo(1)),
-                () -> new GearBlueprintItem(type.get(), BlueprintType.BLUEPRINT, new Item.Properties()),
-                () -> new GearBlueprintItem(type.get(), BlueprintType.TEMPLATE, new Item.Properties())
+                () -> new MainPartItem(type::value, new Item.Properties().stacksTo(1)),
+                () -> new GearBlueprintItem(type::value, BlueprintType.BLUEPRINT, new Item.Properties()),
+                () -> new GearBlueprintItem(type::value, BlueprintType.TEMPLATE, new Item.Properties())
         );
     }
 
     public GearItemSet(
-            Supplier<GearType> type,
+            DeferredHolder<GearType, GearType> type,
             String partName,
             Supplier<I> gearItem,
             Supplier<MainPartItem> mainPart,
@@ -59,11 +59,11 @@ public final class GearItemSet<I extends Item> {
     }
 
     public GearType type() {
-        return this.type.get();
+        return this.type.value();
     }
 
     public String name() {
-        return Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(this.type.get())).getPath();
+        return this.type.getId().getPath();
     }
 
     public I gearItem() {

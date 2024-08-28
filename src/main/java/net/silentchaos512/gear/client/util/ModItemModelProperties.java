@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Items;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.Const;
@@ -63,7 +63,7 @@ public final class ModItemModelProperties {
             return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
         });
 
-        SgItems.getItems(ICoreItem.class).forEach(item -> {
+        SgItems.getItems(GearItem.class).forEach(item -> {
             ItemProperties.register(item.asItem(), Const.MODEL, (stack, level, entity, par4) -> {
                 return GearData.getModelIndex(stack);
             });

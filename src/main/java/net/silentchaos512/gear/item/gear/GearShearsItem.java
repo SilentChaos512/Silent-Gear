@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearShearsItem extends ShearsItem implements ICoreTool {
+public class GearShearsItem extends ShearsItem implements GearTool {
     private final Supplier<GearType> gearType;
 
     public GearShearsItem(Supplier<GearType> gearType) {
@@ -69,7 +69,7 @@ public class GearShearsItem extends ShearsItem implements ICoreTool {
         if (!state.is(BlockTags.FIRE)) {
             return 1;
         }
-        return ICoreTool.super.getDamageOnBlockBreak(gear, world, state, pos);
+        return GearTool.super.getDamageOnBlockBreak(gear, world, state, pos);
     }
 
     @Override

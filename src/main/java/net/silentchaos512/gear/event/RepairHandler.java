@@ -7,7 +7,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -22,7 +22,7 @@ public final class RepairHandler {
 
     @SubscribeEvent
     public static void onAnvilUpdate(AnvilUpdateEvent event) {
-        if (event.getLeft().getItem() instanceof ICoreItem) {
+        if (event.getLeft().getItem() instanceof GearItem) {
             MaterialInstance material = MaterialInstance.from(event.getRight());
             PartInstance part = PartInstance.from(event.getRight());
 

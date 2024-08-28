@@ -15,7 +15,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
+import net.silentchaos512.gear.api.item.GearRangedWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearCrossbowItem extends CrossbowItem implements ICoreRangedWeapon {
+public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
     private static final int MIN_CHARGE_TIME = 5;
     private static final int MAX_CHARGE_TIME = 50;
 

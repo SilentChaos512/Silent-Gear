@@ -5,9 +5,11 @@ import net.minecraft.world.item.Tiers;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.property.*;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class GearProperties {
@@ -16,7 +18,8 @@ public class GearProperties {
     public static final Supplier<TraitListProperty> TRAITS = REGISTRAR.register(
             "traits",
             () -> new TraitListProperty(
-                    new GearProperty.Builder<>(Collections.emptyList())
+                    new GearProperty.Builder<List<TraitInstance>>(Collections.emptyList())
+                            .group(GearPropertyGroups.TRAITS)
             )
     );
     public static final Supplier<NumberProperty> DURABILITY = REGISTRAR.register(

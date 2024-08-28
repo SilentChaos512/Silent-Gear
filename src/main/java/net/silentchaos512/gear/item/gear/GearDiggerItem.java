@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearDiggerItem extends DiggerItem implements ICoreTool {
+public class GearDiggerItem extends DiggerItem implements GearTool {
     private static final Map<ItemAbility, TagKey<Block>> TOOL_TYPES = ImmutableMap.<ItemAbility, TagKey<Block>>builder()
             .put(ItemAbilities.AXE_DIG, BlockTags.MINEABLE_WITH_AXE)
             .put(ItemAbilities.HOE_DIG, BlockTags.MINEABLE_WITH_HOE)

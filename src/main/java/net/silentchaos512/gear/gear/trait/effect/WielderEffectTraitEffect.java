@@ -20,8 +20,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreArmor;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearArmor;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.api.traits.TraitEffectType;
@@ -70,7 +70,7 @@ public class WielderEffectTraitEffect extends TraitEffect {
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
         if (!isEquipped || context.player() == null || context.player().tickCount % 10 != 0) return;
 
-        GearType gearType = ((ICoreItem) context.gear().getItem()).getGearType();
+        GearType gearType = ((GearItem) context.gear().getItem()).getGearType();
         potions.forEach((type, list) -> {
             applyEffects(context, gearType, type, list);
         });
@@ -98,7 +98,7 @@ public class WielderEffectTraitEffect extends TraitEffect {
 
         int count = 0;
         for (ItemStack stack : player.getArmorSlots()) {
-            if (stack.getItem() instanceof ICoreArmor && TraitHelper.hasTrait(stack, context.trait())) {
+            if (stack.getItem() instanceof GearArmor && TraitHelper.hasTrait(stack, context.trait())) {
                 ++count;
             }
         }

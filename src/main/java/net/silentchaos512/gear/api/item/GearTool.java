@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -12,8 +13,15 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
-public interface ICoreTool extends ICoreItem {
+public interface GearTool extends GearItem {
+    Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
+            PartTypes.MAIN.get(),
+            PartTypes.ROD.get(),
+            PartTypes.CORD.get()
+    ));
+
     @Override
     default boolean isValidSlot(String slot) {
         return EquipmentSlot.MAINHAND.getName().equalsIgnoreCase(slot)
@@ -22,7 +30,7 @@ public interface ICoreTool extends ICoreItem {
 
     @Override
     default Collection<PartType> getRequiredParts() {
-        return ImmutableList.of(PartTypes.MAIN.get(), PartTypes.ROD.get());
+        return REQUIRED_PARTS.get();
     }
 
     /**

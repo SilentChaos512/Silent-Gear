@@ -9,7 +9,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearProperty;
@@ -54,7 +54,7 @@ public final class GearClientHelper {
     }
 
     public static void addInformation(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, GearTooltipFlag flag) {
-        if (!(stack.getItem() instanceof ICoreItem item)) return;
+        if (!(stack.getItem() instanceof GearItem item)) return;
 
         if (GearHelper.isBroken(stack)) {
             tooltip.add(Math.min(1, tooltip.size()), TextUtil.withColor(misc("broken"), Color.FIREBRICK));
@@ -96,7 +96,7 @@ public final class GearClientHelper {
         }
     }
 
-    public static void addStatsInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag, ICoreItem item) {
+    public static void addStatsInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag, GearItem item) {
         if (KeyTracker.isDisplayStatsDown() && flag.showStats) {
             tooltip.add(TextUtil.withColor(misc("tooltip.stats"), Color.GOLD));
 

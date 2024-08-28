@@ -99,31 +99,31 @@ public final class SgItems {
     }
     //endregion
 
-    //region Compound Parts and Tool Heads
-    // Tool Heads
+    //region Parts
+    // Mains (tool heads, etc.)
     static {
         GearItemSets.registerMainPartItems();
     }
 
     // Compound Parts
     public static final DeferredItem<CompoundPartItem> ROD = registerCompoundPart("rod", () ->
-            new CompoundPartItem(PartTypes.ROD.get(), baseProps()));
+            new CompoundPartItem(PartTypes.ROD, baseProps()));
     public static final DeferredItem<CompoundPartItem> TIP = registerCompoundPart("tip", () ->
-            new CompoundPartItem(PartTypes.TIP.get(), baseProps()));
+            new CompoundPartItem(PartTypes.TIP, baseProps()));
     public static final DeferredItem<CompoundPartItem> COATING = registerCompoundPart("coating", () ->
-            new CompoundPartItem(PartTypes.COATING.get(), baseProps()));
+            new CompoundPartItem(PartTypes.COATING, baseProps()));
     public static final DeferredItem<CompoundPartItem> GRIP = registerCompoundPart("grip", () ->
-            new CompoundPartItem(PartTypes.GRIP.get(), baseProps()));
+            new CompoundPartItem(PartTypes.GRIP, baseProps()));
     public static final DeferredItem<CompoundPartItem> BINDING = registerCompoundPart("binding", () ->
-            new CompoundPartItem(PartTypes.BINDING.get(), baseProps()));
+            new CompoundPartItem(PartTypes.BINDING, baseProps()));
     public static final DeferredItem<CompoundPartItem> LINING = registerCompoundPart("lining", () ->
-            new CompoundPartItem(PartTypes.LINING.get(), baseProps()));
+            new CompoundPartItem(PartTypes.LINING, baseProps()));
     public static final DeferredItem<CompoundPartItem> CORD = registerCompoundPart("cord", () ->
-            new CompoundPartItem(PartTypes.CORD.get(), baseProps()));
+            new CompoundPartItem(PartTypes.CORD, baseProps()));
     public static final DeferredItem<CompoundPartItem> FLETCHING = registerCompoundPart("fletching", () ->
-            new CompoundPartItem(PartTypes.FLETCHING.get(), baseProps()));
+            new CompoundPartItem(PartTypes.FLETCHING, baseProps()));
     public static final DeferredItem<CompoundPartItem> SETTING = registerCompoundPart("setting", () ->
-            new CompoundPartItem(PartTypes.SETTING.get(), baseProps()));
+            new CompoundPartItem(PartTypes.SETTING, baseProps()));
     //endregion
 
     // Compound materials

@@ -3,7 +3,7 @@ package net.silentchaos512.gear.client.util;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -24,7 +24,7 @@ public final class ColorUtils {
     private ColorUtils() {
     }
 
-    public static int getBlendedColor(ICoreItem item, PartInstance part, Collection<? extends MaterialInstance> materials) {
+    public static int getBlendedColor(GearItem item, PartInstance part, Collection<? extends MaterialInstance> materials) {
         int[] componentSums = new int[3];
         int maxColorSum = 0;
         int colorCount = 0;

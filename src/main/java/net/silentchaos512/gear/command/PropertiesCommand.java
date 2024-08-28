@@ -9,7 +9,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
@@ -58,7 +58,7 @@ public final class PropertiesCommand {
                 true
         );
 
-        ICoreItem item = (ICoreItem) stack.getItem();
+        GearItem item = (GearItem) stack.getItem();
         PartList parts = GearData.getConstruction(stack).parts();
         GearPropertyMap properties = parts.getPropertyModifiersFromParts(item.getGearType());
 

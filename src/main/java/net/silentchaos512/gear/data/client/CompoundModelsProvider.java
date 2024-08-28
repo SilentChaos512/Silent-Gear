@@ -6,7 +6,7 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.Const;
@@ -59,7 +59,7 @@ public class CompoundModelsProvider extends ModelProvider<ItemModelBuilder> {
 //        gearBuilder(ModItems.BOOTS.get()).parent(itemHandheld);
     }
 
-    protected CompoundModelBuilder gearBuilder(ICoreItem item) {
+    protected CompoundModelBuilder gearBuilder(GearItem item) {
         return ((CompoundModelBuilder) getBuilder(NameUtils.fromItem(item).getPath()))
                 .setLoader(Const.GEAR_MODEL_LOADER)
                 .setGearType(item.getGearType());

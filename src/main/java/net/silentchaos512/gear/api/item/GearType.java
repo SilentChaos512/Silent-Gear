@@ -32,7 +32,7 @@ public record GearType(
     public static final Codec<GearType> CODEC = CodecUtils.byModNameCodec(SgRegistries.GEAR_TYPE);
     public static final StreamCodec<RegistryFriendlyByteBuf, GearType> STREAM_CODEC = ByteBufCodecs.registry(SgRegistries.GEAR_TYPE_KEY);
 
-    private static final Map<GearType, ICoreItem> ITEMS = new HashMap<>();
+    private static final Map<GearType, GearItem> ITEMS = new HashMap<>();
 
     public GearType(
             @Nullable Supplier<GearType> parent,
@@ -51,10 +51,10 @@ public record GearType(
     }
 
     @Nullable
-    public static ICoreItem getItem(GearType type) {
+    public static GearItem getItem(GearType type) {
         return ITEMS.computeIfAbsent(type, gt -> {
             for (var item : BuiltInRegistries.ITEM) {
-                if (item instanceof ICoreItem gearItem && gearItem.getGearType() == type) {
+                if (item instanceof GearItem gearItem && gearItem.getGearType() == type) {
                     return gearItem;
                 }
             }

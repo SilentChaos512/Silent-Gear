@@ -17,7 +17,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRecipes;
@@ -29,16 +29,16 @@ import java.util.List;
 
 public final class ConversionRecipe extends ExtendedShapelessRecipe {
     private final Result result;
-    private final ICoreItem item;
+    private final GearItem item;
 
     public ConversionRecipe(String pGroup, CraftingBookCategory pCategory, Result pResult, NonNullList<Ingredient> pIngredients) {
         super(pGroup, pCategory, pResult.item.getDefaultInstance(), pIngredients);
         this.result = pResult;
 
-        if (!(this.result.item instanceof ICoreItem)) {
+        if (!(this.result.item instanceof GearItem)) {
             throw new JsonParseException("result is not a gear item: " + BuiltInRegistries.ITEM.getKey(this.result.item));
         }
-        this.item = (ICoreItem) this.result.item;
+        this.item = (GearItem) this.result.item;
     }
 
     @Override

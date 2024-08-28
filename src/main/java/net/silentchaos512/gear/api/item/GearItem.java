@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.item.Item;
@@ -23,7 +24,11 @@ import java.util.function.Supplier;
 /**
  * Interface for all equipment items, including tools and armor.
  */
-public interface ICoreItem extends ItemLike {
+public interface GearItem extends ItemLike {
+    Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
+            PartTypes.MAIN.get()
+    ));
+
     //region Item properties and construction
 
     default ItemStack construct(Collection<PartInstance> parts) {
@@ -60,7 +65,7 @@ public interface ICoreItem extends ItemLike {
     }
 
     default Collection<PartType> getRequiredParts() {
-        return ImmutableList.of(PartTypes.MAIN.get());
+        return REQUIRED_PARTS.get();
     }
 
     //endregion

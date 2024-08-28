@@ -17,7 +17,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreArmor;
+import net.silentchaos512.gear.api.item.GearArmor;
 import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.Config;
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearArmorItem extends ArmorItem implements ICoreArmor {
+public class GearArmorItem extends ArmorItem implements GearArmor {
     // Caches armor colors by model key to speed up armor rendering
     private static final Cache<String, Integer> ARMOR_COLORS = CacheBuilder.newBuilder()
             .maximumSize(1000)

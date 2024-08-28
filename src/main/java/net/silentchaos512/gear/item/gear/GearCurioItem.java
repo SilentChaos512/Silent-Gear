@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.item.gear;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.color.item.ItemColor;
@@ -15,7 +16,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.ModList;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -31,11 +32,11 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearCurioItem extends Item implements ICoreItem {
-    private static final Collection<PartType> REQUIRED_PARTS = ImmutableList.of(
+public class GearCurioItem extends Item implements GearItem {
+    private static final Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
             PartTypes.MAIN.get(),
             PartTypes.SETTING.get()
-    );
+    ));
 
     private final Supplier<GearType> gearType;
     private final String slot;
@@ -62,7 +63,7 @@ public class GearCurioItem extends Item implements ICoreItem {
 
     @Override
     public Collection<PartType> getRequiredParts() {
-        return REQUIRED_PARTS;
+        return REQUIRED_PARTS.get();
     }
 
     @Override

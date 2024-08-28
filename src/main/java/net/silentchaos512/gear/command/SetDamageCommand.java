@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Mth;
 import net.minecraft.network.chat.Component;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
@@ -47,7 +47,7 @@ public final class SetDamageCommand {
 
             stack.setDamageValue(clamped);
 
-            if (stack.getItem() instanceof ICoreItem) {
+            if (stack.getItem() instanceof GearItem) {
                 GearData.recalculateGearData(stack, playerMP);
             }
 

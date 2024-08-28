@@ -37,8 +37,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearItem;
+import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -82,9 +82,9 @@ public final class GearHelper {
 
     private GearHelper() {}
 
-    public static Optional<ICoreItem> getItem(ItemStack gear) {
-        if (gear.getItem() instanceof ICoreItem) {
-            return Optional.of((ICoreItem) gear.getItem());
+    public static Optional<GearItem> getItem(ItemStack gear) {
+        if (gear.getItem() instanceof GearItem) {
+            return Optional.of((GearItem) gear.getItem());
         }
         return Optional.empty();
     }
@@ -96,7 +96,7 @@ public final class GearHelper {
      * @return True if {@code stack} is a gear item
      */
     public static boolean isGear(ItemStack stack) {
-        return stack.getItem() instanceof ICoreItem;
+        return stack.getItem() instanceof GearItem;
     }
 
     /**
@@ -110,7 +110,7 @@ public final class GearHelper {
             return false;
         }
 
-        ICoreItem item = (ICoreItem) stack.getItem();
+        GearItem item = (GearItem) stack.getItem();
         for (PartType type : item.getRequiredParts()) {
             if (!GearData.hasPartOfType(stack, type)) {
                 return false;
@@ -139,7 +139,7 @@ public final class GearHelper {
     }
 
     public static float getAttackSpeedModifier(ItemStack stack) {
-        if (!(stack.getItem() instanceof ICoreTool))
+        if (!(stack.getItem() instanceof GearTool))
             return 0.0f;
 
         float speed = GearData.getProperties(stack).getNumber(GearProperties.ATTACK_SPEED);
@@ -192,8 +192,8 @@ public final class GearHelper {
 
     @Deprecated
     public static boolean isValidSlot(ItemStack gear, String slot) {
-        if (gear.getItem() instanceof ICoreItem) {
-            return ((ICoreItem) gear.getItem()).isValidSlot(slot);
+        if (gear.getItem() instanceof GearItem) {
+            return ((GearItem) gear.getItem()).isValidSlot(slot);
         }
         return false;
     }
@@ -216,7 +216,7 @@ public final class GearHelper {
     }
 
     public static NumberProperty getDurabilityProperty(ItemStack gear) {
-        return getItem(gear).map(ICoreItem::getDurabilityStat).map(Supplier::get).orElse(GearProperties.DURABILITY.get());
+        return getItem(gear).map(GearItem::getDurabilityStat).map(Supplier::get).orElse(GearProperties.DURABILITY.get());
     }
 
     public static float getRepairModifier(ItemStack gear) {
@@ -392,10 +392,10 @@ public final class GearHelper {
     }
 
     public static GearType getType(ItemStack gear, GearType defaultType) {
-        if (gear.isEmpty() || !(gear.getItem() instanceof ICoreItem)) {
+        if (gear.isEmpty() || !(gear.getItem() instanceof GearItem)) {
             return defaultType;
         }
-        return ((ICoreItem) gear.getItem()).getGearType();
+        return ((GearItem) gear.getItem()).getGearType();
     }
 
     /**
@@ -449,8 +449,8 @@ public final class GearHelper {
     }
 
     public static boolean onBlockDestroyed(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!isBroken(stack) && stack.getItem() instanceof ICoreTool) {
-            int damage = ((ICoreTool) stack.getItem()).getDamageOnBlockBreak(stack, world, state, pos);
+        if (!isBroken(stack) && stack.getItem() instanceof GearTool) {
+            int damage = ((GearTool) stack.getItem()).getDamageOnBlockBreak(stack, world, state, pos);
             attemptDamage(stack, damage, entityLiving, EquipmentSlot.MAINHAND);
         }
 //        GearStatistics.incrementStat(stack, GearStatistics.BLOCKS_MINED);
@@ -462,8 +462,8 @@ public final class GearHelper {
 
     public static boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         boolean isBroken = isBroken(stack);
-        if (!isBroken && stack.getItem() instanceof ICoreTool) {
-            int damage = ((ICoreTool) stack.getItem()).getDamageOnHitEntity(stack, target, attacker);
+        if (!isBroken && stack.getItem() instanceof GearTool) {
+            int damage = ((GearTool) stack.getItem()).getDamageOnHitEntity(stack, target, attacker);
             attemptDamage(stack, damage, attacker, EquipmentSlot.MAINHAND);
         }
 
@@ -634,7 +634,7 @@ public final class GearHelper {
         return Rarity.EPIC;
     }
 
-    public static void fillItemGroup(ICoreItem item, CreativeModeTab group, Collection<ItemStack> items) {
+    public static void fillItemGroup(GearItem item, CreativeModeTab group, Collection<ItemStack> items) {
         boolean inTab = false;
         // FIXME?
         /*for (CreativeModeTab tabInList : item.asItem().getCreativeTabs()) {
@@ -663,7 +663,7 @@ public final class GearHelper {
         items.add(createSampleItem(item, Const.Materials.TYRIAN_STEEL));
     }
 
-    private static ItemStack createSampleItem(ICoreItem item, int tier) {
+    private static ItemStack createSampleItem(GearItem item, int tier) {
         ItemStack result = GearGenerator.create(item);
         if (result.isEmpty()) {
             Collection<PartInstance> parts = new ArrayList<>();
@@ -676,7 +676,7 @@ public final class GearHelper {
         return result;
     }
 
-    private static ItemStack createSampleItem(ICoreItem item, DataResource<Material> mainMaterial) {
+    private static ItemStack createSampleItem(GearItem item, DataResource<Material> mainMaterial) {
         Collection<PartInstance> parts = Lists.newArrayList();
         for (PartType partType : item.getRequiredParts()) {
             // FIXME: Cords are missing from bows and fishing rods
@@ -735,8 +735,8 @@ public final class GearHelper {
         Component gearName = Component.translatable(gear.getDescriptionId() + ".nameProper", partName);
         Component result = gearName;
 
-        if (gear.getItem() instanceof ICoreTool) {
-            ICoreItem item = (ICoreItem) gear.getItem();
+        if (gear.getItem() instanceof GearTool) {
+            GearItem item = (GearItem) gear.getItem();
             if (item.requiresPartOfType(PartTypes.ROD.get()) && GearData.getPartOfType(gear, PartTypes.ROD.get()) == null) {
                 result = Component.translatable(gear.getDescriptionId() + ".noRod", gearName);
             } else if (item.requiresPartOfType(PartTypes.CORD.get()) && GearData.getPartOfType(gear, PartTypes.CORD.get()) == null) {

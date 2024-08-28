@@ -3,8 +3,8 @@ package net.silentchaos512.gear.util;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearItem;
+import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -33,12 +33,12 @@ public final class GearGenerator {
         return PartInstance.from(stack);
     }
 
-    public static ItemStack create(ICoreItem item) {
+    public static ItemStack create(GearItem item) {
         return randomizeParts(new ItemStack(item));
     }
 
     public static ItemStack randomizeParts(ItemStack stack) {
-        if (!(stack.getItem() instanceof ICoreItem item)) {
+        if (!(stack.getItem() instanceof GearItem item)) {
             throw new RuntimeException("Called GearGenerator.randomizeParts on non-gear");
         }
         GearType gearType = item.getGearType();
@@ -56,7 +56,7 @@ public final class GearGenerator {
         GearData.writeConstructionParts(result, parts);
 
         // Apply some random upgrades?
-        if (item instanceof ICoreTool && SilentGear.RANDOM.nextFloat() < 0.3f) {
+        if (item instanceof GearTool && SilentGear.RANDOM.nextFloat() < 0.3f) {
             getRandomPart(gearType, PartTypes.TIP.get()).ifPresent(part ->
                     GearData.addUpgradePart(result, part));
         }

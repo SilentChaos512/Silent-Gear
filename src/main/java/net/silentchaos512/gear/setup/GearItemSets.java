@@ -2,6 +2,7 @@ package net.silentchaos512.gear.setup;
 
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.item.GearItemSet;
 import net.silentchaos512.gear.item.gear.*;
@@ -57,7 +58,7 @@ public class GearItemSets {
     public static final GearItemSet<GearCurioItem> BRACELET = set(GearTypes.BRACELET, "bracelet_band", gt -> new GearCurioItem(gt, "bracelet", SgItems.unstackableProps()));
     public static final GearItemSet<GearCurioItem> NECKLACE = set(GearTypes.NECKLACE, "necklace_chain", gt -> new GearCurioItem(gt, "necklace", SgItems.unstackableProps()));
 
-    private static <I extends Item> GearItemSet<I> set(Supplier<GearType> type, String partName, Function<Supplier<GearType>, I> itemFactory) {
+    private static <I extends Item> GearItemSet<I> set(DeferredHolder<GearType, GearType> type, String partName, Function<Supplier<GearType>, I> itemFactory) {
         return set(new GearItemSet<>(type, partName, itemFactory));
     }
 

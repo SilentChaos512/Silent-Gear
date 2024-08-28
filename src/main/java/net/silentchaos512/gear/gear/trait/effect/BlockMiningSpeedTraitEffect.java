@@ -10,7 +10,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.api.traits.TraitEffectType;
 import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
@@ -19,7 +18,6 @@ import net.silentchaos512.gear.util.CodecUtils;
 import java.util.Collection;
 import java.util.List;
 
-@EventBusSubscriber
 public class BlockMiningSpeedTraitEffect extends TraitEffect {
     public static final MapCodec<BlockMiningSpeedTraitEffect> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(

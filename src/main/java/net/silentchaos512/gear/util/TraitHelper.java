@@ -10,6 +10,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetTraitsEvent;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.property.TraitListPropertyValue;
@@ -37,7 +38,7 @@ public final class TraitHelper {
      * This implementation pulls the item's traits straight from NBT to minimize object creation.
      * The {@link TraitFunction} is applied to every trait.
      *
-     * @param gear       The {@link net.silentchaos512.gear.api.item.ICoreItem} affected
+     * @param gear       The {@link GearItem} affected
      * @param inputValue The base value to have the traits act on.
      * @param action     The specific action to apply to each trait. This is {@code (trait, level,
      *                   value) -> modifiedInputValue}, where 'value' is the currently calculated
@@ -69,7 +70,7 @@ public final class TraitHelper {
      * {@link #activateTraits(ItemStack, float, TraitFunction)}, this pulls the traits straight from
      * NBT to minimize object creation.
      *
-     * @param gear  The {@link net.silentchaos512.gear.api.item.ICoreItem}
+     * @param gear  The {@link GearItem}
      * @param trait The trait to look for
      * @return The level of the trait on the gear, or zero if it does not have the trait
      */

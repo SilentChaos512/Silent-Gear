@@ -1,14 +1,13 @@
 package net.silentchaos512.gear.item;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -22,17 +21,18 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class CompoundPartItem extends Item {
-    private final PartType partType;
+    private final Supplier<PartType> partType;
 
-    public CompoundPartItem(PartType partType, Properties properties) {
+    public CompoundPartItem(Supplier<PartType> partType, Properties properties) {
         super(properties.component(SgDataComponents.MATERIAL_LIST, List.of(MaterialInstance.of(Const.Materials.EXAMPLE))));
         this.partType = partType;
     }
 
     public PartType getPartType() {
-        return partType;
+        return partType.get();
     }
 
     public GearType getGearType() {
@@ -95,7 +95,8 @@ public class CompoundPartItem extends Item {
         PartInstance part = PartInstance.from(stack);
         MaterialInstance material = getPrimaryMaterial(stack);
         if (part != null && material != null) {
-            MutableComponent nameText = Component.translatable(this.getDescriptionId() + ".nameProper", material.getDisplayName(partType, ItemStack.EMPTY));
+            var materialDisplayName = material.getDisplayName(partType.get(), ItemStack.EMPTY);
+            var nameText = Component.translatable(this.getDescriptionId() + ".nameProper", materialDisplayName);
             int nameColor = Color.blend(part.getColor(ItemStack.EMPTY), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
             return TextUtil.withColor(nameText, nameColor);
         }

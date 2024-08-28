@@ -6,17 +6,19 @@ import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
-public class MainPartItem extends CompoundPartItem {
-    private final GearType gearType;
+import java.util.function.Supplier;
 
-    public MainPartItem(GearType gearType, Properties properties) {
-        super(PartTypes.MAIN.get(), properties.durability(100));
+public class MainPartItem extends CompoundPartItem {
+    private final Supplier<GearType> gearType;
+
+    public MainPartItem(Supplier<GearType> gearType, Properties properties) {
+        super(PartTypes.MAIN, properties.durability(100));
         this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return gearType;
+        return gearType.get();
     }
 
     @Override
@@ -29,7 +31,8 @@ public class MainPartItem extends CompoundPartItem {
     public int getMaxDamage(ItemStack stack) {
         PartInstance part = PartInstance.from(stack);
         if (part != null) {
-            return Math.round(part.getProperty(PartTypes.MAIN, PropertyKey.of(gearType.durabilityStat().get(), gearType)));
+            var key = PropertyKey.of(getGearType().durabilityStat().get(), getGearType());
+            return Math.round(part.getProperty(PartTypes.MAIN, key));
         }
         return super.getMaxDamage(stack);
     }

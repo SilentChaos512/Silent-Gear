@@ -3,7 +3,7 @@ package net.silentchaos512.gear.crafting.recipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -13,7 +13,7 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import java.util.*;
 
 interface IGearRecipe {
-    ICoreItem getOutputItem();
+    GearItem getOutputItem();
 
     default Collection<PartInstance> getParts(CraftingInput inv) {
         List<MaterialInstance> materials = new ArrayList<>();

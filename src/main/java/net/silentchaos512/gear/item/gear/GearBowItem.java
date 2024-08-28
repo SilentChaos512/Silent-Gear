@@ -15,7 +15,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreRangedWeapon;
+import net.silentchaos512.gear.api.item.GearRangedWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearBowItem extends BowItem implements ICoreRangedWeapon {
+public class GearBowItem extends BowItem implements GearRangedWeapon {
     private static final int MIN_DRAW_DELAY = 10;
     private static final int MAX_DRAW_DELAY = 100;
 
@@ -47,7 +47,7 @@ public class GearBowItem extends BowItem implements ICoreRangedWeapon {
 
     @Override
     public float getDrawDelay(@Nonnull ItemStack stack) {
-        return Mth.clamp(ICoreRangedWeapon.super.getDrawDelay(stack), MIN_DRAW_DELAY, MAX_DRAW_DELAY);
+        return Mth.clamp(GearRangedWeapon.super.getDrawDelay(stack), MIN_DRAW_DELAY, MAX_DRAW_DELAY);
     }
 
     public float getArrowVelocity(ItemStack stack, int charge) {

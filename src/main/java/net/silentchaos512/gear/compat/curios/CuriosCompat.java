@@ -3,7 +3,7 @@ package net.silentchaos512.gear.compat.curios;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -23,7 +23,7 @@ public final class CuriosCompat {
                 var stacks = slotInventory.getStacks();
                 for (int i = 0; i < stacks.getSlots(); ++i) {
                     var stack = stacks.getStackInSlot(i);
-                    if (stack.getItem() instanceof ICoreItem) {
+                    if (stack.getItem() instanceof GearItem) {
                         max.set(Math.max(max.get(), TraitHelper.getTraitLevel(stack, trait)));
                     }
                 }
@@ -40,7 +40,7 @@ public final class CuriosCompat {
                 var stacks = slotInventory.getStacks();
                 for (int i = 0; i < stacks.getSlots(); ++i) {
                     var stack = stacks.getStackInSlot(i);
-                    if (stack.getItem() instanceof ICoreItem) {
+                    if (stack.getItem() instanceof GearItem) {
                         ret.add(stack);
                     }
                 }

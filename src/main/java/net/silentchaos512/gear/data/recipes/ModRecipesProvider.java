@@ -17,7 +17,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.MaterialGrade;
@@ -1252,8 +1252,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerSmithing(RecipeOutput consumer) {
-        SgItems.getItems(item -> item instanceof ICoreItem).forEach(item -> {
-            if (((ICoreItem) item).getGearType() != GearTypes.ELYTRA.get()) {
+        SgItems.getItems(item -> item instanceof GearItem).forEach(item -> {
+            if (((GearItem) item).getGearType() != GearTypes.ELYTRA.get()) {
                 GearSmithingRecipeBuilder.coating(item).save(consumer);
             }
             GearSmithingRecipeBuilder.upgrade(item, PartTypes.MISC_UPGRADE.get()).save(consumer);
@@ -1278,8 +1278,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void registerSalvaging(RecipeOutput consumer) {
-        SgItems.getItems(item -> item instanceof ICoreItem).forEach(item ->
-                gearSalvage(consumer, (ICoreItem) item));
+        SgItems.getItems(item -> item instanceof GearItem).forEach(item ->
+                gearSalvage(consumer, (GearItem) item));
 
         vanillaSalvage(consumer, Items.NETHERITE_SWORD, Items.DIAMOND, 2, 1, Items.NETHERITE_INGOT);
         vanillaSalvage(consumer, Items.NETHERITE_PICKAXE, Items.DIAMOND, 3, 2, Items.NETHERITE_INGOT);
@@ -1544,7 +1544,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         builderTemplate.save(consumer);
     }
 
-    private ShapelessConversionBuilder shapelessConversion(RecipeCategory category, ICoreItem result, List<PartInstance> parts) {
+    private ShapelessConversionBuilder shapelessConversion(RecipeCategory category, GearItem result, List<PartInstance> parts) {
         return new ShapelessConversionBuilder(category, result, parts);
     }
 
@@ -1564,7 +1564,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
             .put(ArmorMaterials.LEATHER, Const.Materials.LEATHER)
             .build();
 
-    private void toolConversion(RecipeOutput consumer, ICoreItem result, DataResource<GearPart> mainPart, int mainCount, Item... toolItems) {
+    private void toolConversion(RecipeOutput consumer, GearItem result, DataResource<GearPart> mainPart, int mainCount, Item... toolItems) {
         for (Item input : toolItems) {
             assert input instanceof TieredItem;
             Tier tier = ((TieredItem) input).getTier();
@@ -1583,7 +1583,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
     }
 
-    private void armorConversion(RecipeOutput consumer, ICoreItem result, DataResource<GearPart> mainPart, int mainCount, Item... armorItems) {
+    private void armorConversion(RecipeOutput consumer, GearItem result, DataResource<GearPart> mainPart, int mainCount, Item... armorItems) {
         for (Item input : armorItems) {
             assert input instanceof ArmorItem;
             var armorMaterial = ((ArmorItem) input).getMaterial();
@@ -1602,7 +1602,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
     }
 
-    private static void gearSalvage(RecipeOutput consumer, ICoreItem item) {
+    private static void gearSalvage(RecipeOutput consumer, GearItem item) {
         SalvagingRecipeBuilder.gearBuilder(item)
                 .save(consumer, SilentGear.getId("salvaging/gear/" + NameUtils.fromItem(item).getPath()));
     }

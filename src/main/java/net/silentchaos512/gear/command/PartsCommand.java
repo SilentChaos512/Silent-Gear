@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -128,7 +128,7 @@ public final class PartsCommand {
     private static ItemStack getGear(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         if (ctx.getSource().getEntity() instanceof ServerPlayer) {
             ItemStack gear = ctx.getSource().getPlayerOrException().getMainHandItem();
-            if (gear.getItem() instanceof ICoreItem) {
+            if (gear.getItem() instanceof GearItem) {
                 return gear;
             }
         } else {

@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -50,8 +49,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.BreakEventHandler;
-import net.silentchaos512.gear.api.item.ICoreItem;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearItem;
+import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.NumberPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -67,17 +66,10 @@ import java.util.function.Function;
 
 @EventBusSubscriber
 public final class GearEvents {
-    public static final ResourceLocation APPLY_TIP_UPGRADE = SilentGear.getId("apply_tip_upgrade");
-    public static final ResourceLocation CRAFTED_WITH_ROUGH_ROD = SilentGear.getId("crafted_with_rough_rod");
-    public static final ResourceLocation MAX_DURABILITY = SilentGear.getId("max_durability");
-    public static final ResourceLocation REPAIR_FROM_BROKEN = SilentGear.getId("repair_from_broken");
-    public static final ResourceLocation UNIQUE_MAIN_PARTS = SilentGear.getId("unique_main_parts");
-    public static final ResourceLocation FALL_WITH_MOONWALKER = SilentGear.getId("fall_with_moonwalker");
-
     private GearEvents() {}
 
     @SubscribeEvent
-    public static void onServerTick(ServerTickEvent events) {
+    public static void onServerTick(ServerTickEvent.Post events) {
         entityAttackedThisTick.clear();
     }
 
@@ -100,7 +92,7 @@ public final class GearEvents {
 
         Player player = (Player) attacker;
         ItemStack weapon = player.getMainHandItem();
-        if (!(weapon.getItem() instanceof ICoreTool)) return;
+        if (!(weapon.getItem() instanceof GearTool)) return;
 
         final float baseDamage = event.getAmount();
         final float newDamage = TraitHelper.activateTraits(weapon, baseDamage, (trait, value) ->
@@ -189,7 +181,7 @@ public final class GearEvents {
         final Player player = event.getEntity();
         ItemStack tool = player.getMainHandItem();
 
-        if (tool.getItem() instanceof ICoreItem) {
+        if (tool.getItem() instanceof GearItem) {
             final BlockState state = event.getState();
 
             if (tool.isCorrectToolForDrops(state)) {
@@ -219,7 +211,7 @@ public final class GearEvents {
         if (event.getAttackingPlayer() == null) return;
 
         ItemStack tool = event.getAttackingPlayer().getMainHandItem();
-        if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
+        if (tool.isEmpty() || !(tool.getItem() instanceof GearTool)) return;
 
         int ancientLevel = TraitHelper.getTraitLevel(tool, Const.Traits.ANCIENT);
         if (ancientLevel == 0) return;
@@ -243,7 +235,7 @@ public final class GearEvents {
         if (event.getBreaker() == null) return;
 
         ItemStack tool = event.getTool();
-        if (tool.isEmpty() || !(tool.getItem() instanceof ICoreTool)) return;
+        if (tool.isEmpty() || !(tool.getItem() instanceof GearTool)) return;
 
         int ancientLevel = TraitHelper.getTraitLevel(tool, Const.Traits.ANCIENT);
         if (ancientLevel > 0) {

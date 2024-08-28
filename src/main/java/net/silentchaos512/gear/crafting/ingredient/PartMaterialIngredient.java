@@ -36,13 +36,13 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
     public static final MapCodec<PartMaterialIngredient> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     PartType.CODEC.fieldOf("part_type").forGetter(PartMaterialIngredient::getPartType),
-                    GearType.CODEC.optionalFieldOf("gear_type", GearTypes.NONE.get()).forGetter(PartMaterialIngredient::getGearType),
+                    GearType.CODEC.optionalFieldOf("gear_type").forGetter(ing -> Optional.of(ing.gearType)),
                     MaterialGrade.CODEC.optionalFieldOf("min_grade", MaterialGrade.NONE).forGetter(ing -> ing.minGrade),
                     MaterialGrade.CODEC.optionalFieldOf("max_grade", MaterialGrade.NONE).forGetter(ing -> ing.maxGrade),
                     DataResource.MATERIAL_CODEC.optionalFieldOf("material").forGetter(ing -> Optional.ofNullable(ing.material)),
                     MaterialCategories.CODEC.listOf().optionalFieldOf("categories", Collections.emptyList()).forGetter(ing -> ImmutableList.copyOf(ing.categories))
             ).apply(instance, (pt, gt, minGrade, maxGrade, material, categories) -> {
-                return new PartMaterialIngredient(pt, gt, minGrade, maxGrade, material.orElse(null), categories);
+                return new PartMaterialIngredient(pt, gt.orElse(GearTypes.NONE.get()), minGrade, maxGrade, material.orElse(null), categories);
             })
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, PartMaterialIngredient> STREAM_CODEC = StreamCodec.of(

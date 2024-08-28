@@ -4,19 +4,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
-import net.silentchaos512.gear.network.SgNetwork;
-import net.silentchaos512.gear.setup.gear.GearTypes;
-import net.silentchaos512.gear.setup.gear.PartTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +19,6 @@ import java.util.Optional;
 import java.util.Random;
 
 @Mod(SilentGear.MOD_ID)
-@EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class SilentGear {
     public static final String MOD_ID = "silentgear";
     public static final String MOD_NAME = "Silent Gear";
@@ -48,17 +41,9 @@ public final class SilentGear {
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.Common.SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.Client.SPEC);
 
-        modEventBus.register(GearTypes.REGISTRAR);
-        modEventBus.register(PartTypes.REGISTRAR);
-
         if (ModList.get().isLoaded("curios")) {
             CuriosCompat.registerEventHandlers(modEventBus);
         }
-    }
-
-    @SubscribeEvent
-    public static void registerPayloadHandler(RegisterPayloadHandlersEvent event) {
-        SgNetwork.register(event);
     }
 
     public static String getVersion() {

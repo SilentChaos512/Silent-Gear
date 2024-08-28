@@ -10,11 +10,11 @@ import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.util.Color;
 
-public interface ICoreArmor extends ICoreItem {
+public interface GearArmor extends GearItem {
     @Override
     default boolean supportsPart(ItemStack gear, PartInstance part) {
         PartType type = part.getType();
-        boolean supported = ICoreItem.super.supportsPart(gear, part);
+        boolean supported = GearItem.super.supportsPart(gear, part);
         return (type == PartTypes.MAIN.get() && supported)
                 || type == PartTypes.TIP.get()
                 || type == PartTypes.LINING.get()

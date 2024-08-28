@@ -9,7 +9,7 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.CommonHooks;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.RepairContext;
@@ -40,7 +40,7 @@ public class QuickRepairRecipe extends CustomRecipe {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 //noinspection ChainOfInstanceofChecks
-                if (stack.getItem() instanceof ICoreItem) {
+                if (stack.getItem() instanceof GearItem) {
                     if (!gear.isEmpty()) {
                         return false;
                     }
@@ -80,7 +80,7 @@ public class QuickRepairRecipe extends CustomRecipe {
     @Override
     public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         StackList list = StackList.from(inv);
-        ItemStack gear = list.uniqueOfType(ICoreItem.class).copy();
+        ItemStack gear = list.uniqueOfType(GearItem.class).copy();
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
         Collection<ItemStack> mats = list.allMatches(mat -> SgRecipes.isRepairMaterial(gear, mat));
 
@@ -117,7 +117,7 @@ public class QuickRepairRecipe extends CustomRecipe {
         }
 
         // Repair efficiency instance tool class
-        if (gear.getItem() instanceof ICoreItem) {
+        if (gear.getItem() instanceof GearItem) {
             float repairEfficiency = GearData.getProperties(gear).getNumber(GearProperties.REPAIR_EFFICIENCY);
             if (repairEfficiency > 0) {
                 repairValue *= repairEfficiency;
@@ -130,7 +130,7 @@ public class QuickRepairRecipe extends CustomRecipe {
     public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
         StackList stackList = StackList.from(inv);
-        ItemStack gear = stackList.uniqueMatch(s -> s.getItem() instanceof ICoreItem);
+        ItemStack gear = stackList.uniqueMatch(s -> s.getItem() instanceof GearItem);
         ItemStack repairKit = stackList.uniqueMatch(s -> s.getItem() instanceof RepairKitItem);
 
         for (int i = 0; i < list.size(); ++i) {

@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 
@@ -52,7 +52,7 @@ public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements 
         return new SalvagingRecipeBuilder<>(SalvagingRecipe::new, "salvaging", ingredient, true);
     }
 
-    public static SalvagingRecipeBuilder<GearSalvagingRecipe> gearBuilder(ICoreItem item) {
+    public static SalvagingRecipeBuilder<GearSalvagingRecipe> gearBuilder(GearItem item) {
         return new SalvagingRecipeBuilder<>((ingredient, __) -> new GearSalvagingRecipe(ingredient), "salvaging/gear", Ingredient.of(item), false);
     }
 

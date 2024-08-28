@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.item.ItemStack;
@@ -13,11 +14,18 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
-public interface ICoreRangedWeapon extends ICoreTool {
+public interface GearRangedWeapon extends GearTool {
+    Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
+            PartTypes.MAIN.get(),
+            PartTypes.ROD.get(),
+            PartTypes.CORD.get()
+    ));
+
     @Override
     default Collection<PartType> getRequiredParts() {
-        return ImmutableList.of(PartTypes.MAIN.get(), PartTypes.ROD.get(), PartTypes.CORD.get());
+        return REQUIRED_PARTS.get();
     }
 
     default float getBaseDrawDelay(ItemStack stack) {

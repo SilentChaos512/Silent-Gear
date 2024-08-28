@@ -33,7 +33,7 @@ public class GearHudOverlay {
     }
 
     @SubscribeEvent
-    public void renderOverlay(RenderGuiLayerEvent event) {
+    public void renderOverlay(RenderGuiLayerEvent.Post event) {
         this.scaledWidth = this.mc.getWindow().getGuiScaledWidth();
         this.scaledHeight = this.mc.getWindow().getGuiScaledHeight();
 

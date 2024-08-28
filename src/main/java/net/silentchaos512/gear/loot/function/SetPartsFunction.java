@@ -8,7 +8,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgLoot;
 import net.silentchaos512.gear.util.GearData;
@@ -33,7 +33,7 @@ public final class SetPartsFunction extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext context) {
-        if (!(stack.getItem() instanceof ICoreItem)) return stack;
+        if (!(stack.getItem() instanceof GearItem)) return stack;
         ItemStack result = stack.copy();
         GearData.writeConstructionParts(result, this.parts);
         GearData.recalculateGearData(result, null);

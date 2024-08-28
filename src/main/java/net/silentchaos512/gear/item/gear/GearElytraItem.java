@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,12 +20,12 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.neoforged.fml.ModList;
+import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.api.item.GearArmor;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreArmor;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.compat.caelus.CaelusCompat;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -33,17 +34,14 @@ import net.silentchaos512.gear.util.*;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearElytraItem extends ElytraItem implements ICoreArmor {
-    private static final UUID ARMOR_UUID = UUID.fromString("f099f401-82f6-4565-a0b5-fd464f2dc72c");
-
-    private static final List<PartType> REQUIRED_PARTS = ImmutableList.of(
+public class GearElytraItem extends ElytraItem implements GearArmor {
+    private static final Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableSet.of(
             PartTypes.MAIN.get(),
             PartTypes.BINDING.get()
-    );
+    ));
 
     private final Supplier<GearType> gearType;
 
@@ -64,7 +62,7 @@ public class GearElytraItem extends ElytraItem implements ICoreArmor {
 
     @Override
     public Collection<PartType> getRequiredParts() {
-        return REQUIRED_PARTS;
+        return REQUIRED_PARTS.get();
     }
 
     @Override

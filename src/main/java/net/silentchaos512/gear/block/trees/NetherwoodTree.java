@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.block.trees;
 
 import net.minecraft.core.Holder;
-import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.grower.TreeGrower;
@@ -12,12 +12,13 @@ import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSi
 import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.ForkingTrunkPlacer;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.setup.SgBlocks;
 
 import java.util.Optional;
 
 public class NetherwoodTree {
-    public static final ResourceKey<ConfiguredFeature<?, ?>> KEY = FeatureUtils.createKey("silentgear:netherwood");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> KEY = ResourceKey.create(Registries.CONFIGURED_FEATURE, SilentGear.getId("netherwood"));
 
     public static final TreeConfiguration TREE_CONFIGURATION = new TreeConfiguration.TreeConfigurationBuilder(
             BlockStateProvider.simple(SgBlocks.NETHERWOOD_LOG.get()),

@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
@@ -21,16 +21,16 @@ import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 import java.util.Collection;
 
 public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implements IGearRecipe {
-    private final ICoreItem item;
+    private final GearItem item;
     private final Lazy<ItemStack> exampleOutput;
 
     public ShapelessGearRecipe(String pGroup, CraftingBookCategory pCategory, ItemStack pResult, NonNullList<Ingredient> pIngredients) {
         super(pGroup, pCategory, pResult, pIngredients);
 
-        if (!(pResult.getItem() instanceof ICoreItem)) {
+        if (!(pResult.getItem() instanceof GearItem)) {
             throw new JsonParseException("result is not a gear item: " + pResult);
         }
-        this.item = (ICoreItem) pResult.getItem();
+        this.item = (GearItem) pResult.getItem();
 
         this.exampleOutput = Lazy.of(() -> {
             // Create an example item, so we're not just showing a broken item
@@ -69,7 +69,7 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ICoreItem getOutputItem() {
+    public GearItem getOutputItem() {
         return item;
     }
 

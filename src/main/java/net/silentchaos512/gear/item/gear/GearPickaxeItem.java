@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.util.Const;
@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearPickaxeItem extends PickaxeItem implements ICoreTool {
+public class GearPickaxeItem extends PickaxeItem implements GearTool {
     public static final Set<ItemAbility> ACTIONS_WITH_SPOON = GearHelper.makeItemAbilitySet(
             ItemAbilities.PICKAXE_DIG,
             ItemAbilities.SHOVEL_DIG

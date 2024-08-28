@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.item.gear;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
@@ -28,7 +29,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -43,12 +44,12 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
-    private static final Collection<PartType> REQUIRED_PARTS = ImmutableSet.of(
+public class GearFishingRodItem extends FishingRodItem implements GearTool {
+    private static final Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableSet.of(
             PartTypes.MAIN.get(),
             PartTypes.ROD.get(),
             PartTypes.CORD.get()
-    );
+    ));
 
     private final Supplier<GearType> gearType;
 
@@ -64,7 +65,7 @@ public class GearFishingRodItem extends FishingRodItem implements ICoreTool {
 
     @Override
     public Collection<PartType> getRequiredParts() {
-        return REQUIRED_PARTS;
+        return REQUIRED_PARTS.get();
     }
 
     @Override

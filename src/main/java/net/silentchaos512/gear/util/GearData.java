@@ -14,7 +14,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
@@ -44,7 +44,7 @@ import java.util.function.Predicate;
 
 /**
  * Includes many methods for getting values from the NBT of gear items. Please make sure all
- * ItemStacks passed in are of {@link ICoreItem}s! Calling these methods with invalid items should
+ * ItemStacks passed in are of {@link GearItem}s! Calling these methods with invalid items should
  * not crash the game, but will spam the log with stack traces and will return invalid values.
  */
 public final class GearData {
@@ -540,7 +540,7 @@ public final class GearData {
             Player player = event.getEntity();
             StackList.from(player.getInventory())
                     .stream()
-                    .filter(s -> s.getItem() instanceof ICoreItem)
+                    .filter(s -> s.getItem() instanceof GearItem)
                     .forEach(s -> recalculateGearData(s, player));
 
             if (ModList.get().isLoaded(Const.CURIOS)) {

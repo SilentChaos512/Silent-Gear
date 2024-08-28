@@ -18,7 +18,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.ICoreTool;
+import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.block.compounder.AlloyForgeScreen;
 import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
 import net.silentchaos512.gear.block.compounder.RefabricatorScreen;
@@ -129,7 +129,7 @@ public class SGearJeiPlugin implements IModPlugin {
 
         addInfoPage(reg, CraftingItems.RED_CARD_UPGRADE);
         addInfoPage(reg, CraftingItems.SPOON_UPGRADE);
-        for (Item item : SgItems.getItems(item -> item instanceof ICoreTool)) {
+        for (Item item : SgItems.getItems(item -> item instanceof GearTool)) {
             addInfoPage(reg, item);
         }
     }

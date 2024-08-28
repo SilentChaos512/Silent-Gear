@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.ColorUtils;
@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearArrowItem extends ArrowItem implements ICoreItem {
+public class GearArrowItem extends ArrowItem implements GearItem {
     private static final Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
             PartTypes.MAIN.get(),
             PartTypes.ROD.get(),
@@ -72,7 +72,7 @@ public class GearArrowItem extends ArrowItem implements ICoreItem {
 
     @Override
     public ItemStack construct(Collection<PartInstance> parts) {
-        ItemStack result = ICoreItem.super.construct(parts);
+        ItemStack result = GearItem.super.construct(parts);
         result.setDamageValue(result.getMaxDamage() - 64);
         return result;
     }

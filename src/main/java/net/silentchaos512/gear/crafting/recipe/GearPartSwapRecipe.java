@@ -9,7 +9,7 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.CommonHooks;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.Config;
@@ -29,11 +29,11 @@ public class GearPartSwapRecipe extends CustomRecipe {
     @Override
     public boolean matches(CraftingInput inv, Level worldIn) {
         StackList list = StackList.from(inv);
-        ItemStack gear = list.uniqueOfType(ICoreItem.class);
+        ItemStack gear = list.uniqueOfType(GearItem.class);
         if (gear.isEmpty()) return false;
 
-        ICoreItem item = (ICoreItem) gear.getItem();
-        Collection<ItemStack> others = list.allMatches(stack -> !(stack.getItem() instanceof ICoreItem));
+        GearItem item = (GearItem) gear.getItem();
+        Collection<ItemStack> others = list.allMatches(stack -> !(stack.getItem() instanceof GearItem));
         if (others.isEmpty()) return false;
 
         Map<PartType, Integer> typeCounts = new HashMap<>();
@@ -55,10 +55,10 @@ public class GearPartSwapRecipe extends CustomRecipe {
     @Override
     public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         StackList list = StackList.from(inv);
-        ItemStack gear = list.uniqueOfType(ICoreItem.class);
+        ItemStack gear = list.uniqueOfType(GearItem.class);
         if (gear.isEmpty()) return ItemStack.EMPTY;
 
-        Collection<ItemStack> others = list.allMatches(stack -> !(stack.getItem() instanceof ICoreItem));
+        Collection<ItemStack> others = list.allMatches(stack -> !(stack.getItem() instanceof GearItem));
         if (others.isEmpty()) return ItemStack.EMPTY;
 
         ItemStack result = gear.copy();
@@ -95,14 +95,14 @@ public class GearPartSwapRecipe extends CustomRecipe {
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
-        ItemStack gear = StackList.from(inv).uniqueMatch(s -> s.getItem() instanceof ICoreItem);
+        ItemStack gear = StackList.from(inv).uniqueMatch(s -> s.getItem() instanceof GearItem);
         PartList oldParts = GearData.getConstruction(gear).parts();
         Map<PartType, Integer> removedCount = new HashMap<>();
 
         for (int i = 0; i < list.size(); ++i) {
             ItemStack stack = inv.getItem(i);
 
-            if (stack.getItem() instanceof ICoreItem) {
+            if (stack.getItem() instanceof GearItem) {
                 list.set(i, ItemStack.EMPTY);
             } else {
                 PartInstance newPart = PartInstance.from(stack);

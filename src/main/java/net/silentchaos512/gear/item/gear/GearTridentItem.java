@@ -14,7 +14,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreWeapon;
+import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearTridentItem extends TridentItem implements ICoreWeapon {
+public class GearTridentItem extends TridentItem implements GearWeapon {
     private final Supplier<GearType> gearType;
 
     public GearTridentItem(Supplier<GearType> gearType) {

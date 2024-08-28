@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.ICoreItem;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.setup.SgIngredientTypes;
 
 import javax.annotation.Nullable;
@@ -50,7 +50,7 @@ public final class GearTypeIngredient implements ICustomIngredient {
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
 
-        return stack.getItem() instanceof ICoreItem && ((ICoreItem) stack.getItem()).getGearType().matches(this.type);
+        return stack.getItem() instanceof GearItem && ((GearItem) stack.getItem()).getGearType().matches(this.type);
     }
 
     private void dissolve() {
