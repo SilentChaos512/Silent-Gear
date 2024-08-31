@@ -1,0 +1,33 @@
+{
+  "parent": "silentgear:blueprint_paper",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:bow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.bow.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:bow"
+    },
+    "title": {
+      "translate": "advancements.silentgear.bow.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

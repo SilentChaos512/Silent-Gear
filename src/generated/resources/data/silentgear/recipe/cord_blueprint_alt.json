@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "silentgear:blueprints/cord",
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "/": {
+      "tag": "c:strings"
+    }
+  },
+  "pattern": [
+    "#/",
+    "#/",
+    "#/"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:cord_blueprint"
+  }
+}

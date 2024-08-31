@@ -1,0 +1,33 @@
+{
+  "parent": "silentgear:crimson_repair_kit",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:azure_repair_kit"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.azure_repair_kit.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:azure_repair_kit"
+    },
+    "title": {
+      "translate": "advancements.silentgear.azure_repair_kit.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

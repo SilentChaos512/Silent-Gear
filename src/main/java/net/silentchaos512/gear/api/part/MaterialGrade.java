@@ -118,7 +118,7 @@ public enum MaterialGrade {
     }
 
     public MutableComponent getDisplayName() {
-        return Component.translatable("stat.silentgear.grade." + name());
+        return Component.translatable("grade.silentgear." + name());
     }
 
     public static class Range {

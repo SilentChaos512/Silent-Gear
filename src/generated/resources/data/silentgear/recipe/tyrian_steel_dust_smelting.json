@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.75,
+  "ingredient": {
+    "tag": "c:dusts/tyrian_steel"
+  },
+  "result": {
+    "count": 1,
+    "id": "silentgear:tyrian_steel_ingot"
+  }
+}

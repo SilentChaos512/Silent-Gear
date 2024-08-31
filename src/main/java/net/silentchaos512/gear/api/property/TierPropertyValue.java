@@ -7,4 +7,8 @@ public class TierPropertyValue extends GearPropertyValue<Tier> {
         super(value);
     }
 
+    @Override
+    public String toString() {
+        return this.value.toString();
+    }
 }

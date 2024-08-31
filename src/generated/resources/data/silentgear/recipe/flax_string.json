@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "silentgear:flax_fiber"
+    },
+    {
+      "item": "silentgear:flax_fiber"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:flax_string"
+  }
+}

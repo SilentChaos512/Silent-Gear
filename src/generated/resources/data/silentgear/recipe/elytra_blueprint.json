@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "/": {
+      "tag": "c:ingots/gold"
+    },
+    "e": {
+      "item": "minecraft:elytra"
+    },
+    "p": {
+      "item": "minecraft:phantom_membrane"
+    }
+  },
+  "pattern": [
+    "/e/",
+    "p#p",
+    "p p"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:elytra_blueprint"
+  }
+}

@@ -1,33 +1,35 @@
 {
-  "type": "silentgear:attribute",
-  "max_level": 7,
-  "name": {
-    "translate": "trait.silentgear.cursed"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.cursed.desc"
   },
-  "cancels_with": [
-    "silentgear:lucky"
+  "effects": [
+    {
+      "type": "silentgear:attribute",
+      "attribute_modifiers": {
+        "all/any": [
+          {
+            "attribute": "minecraft:generic.luck",
+            "operation": "add_value",
+            "values": [
+              -0.5,
+              -1.0,
+              -1.5,
+              -2.0,
+              -3.0,
+              -4.0,
+              -5.0
+            ]
+          }
+        ]
+      }
+    }
   ],
   "extra_wiki_lines": [
     "  - Please see the extra info on the Lucky trait and this wiki page: https://minecraft.gamepedia.com/Luck"
   ],
-  "attribute_modifiers": {
-    "all": [
-      {
-        "attribute": "minecraft:generic.luck",
-        "operation": 0,
-        "value": [
-          -0.5,
-          -1.0,
-          -1.5,
-          -2.0,
-          -3.0,
-          -4.0,
-          -5.0
-        ]
-      }
-    ]
+  "max_level": 7,
+  "name": {
+    "translate": "trait.silentgear.cursed"
   }
 }

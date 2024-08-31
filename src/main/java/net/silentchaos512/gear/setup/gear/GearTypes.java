@@ -206,14 +206,17 @@ public class GearTypes {
     // Ranged weapons
     public static final DeferredHolder<GearType, GearType> BOW = REGISTRAR.register("bow",
             () -> GearType.Builder.of(RANGED_WEAPON)
+                    .animationFrames(4)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> CROSSBOW = REGISTRAR.register("crossbow",
             () -> GearType.Builder.of(RANGED_WEAPON)
+                    .animationFrames(4)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> SLINGSHOT = REGISTRAR.register("slingshot",
             () -> GearType.Builder.of(RANGED_WEAPON)
+                    .animationFrames(4)
                     .build()
     );
 

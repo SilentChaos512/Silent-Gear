@@ -1,40 +1,44 @@
 {
-  "type": "silentgear:attribute",
-  "max_level": 5,
   "conditions": [
     {
       "type": "silentgear:or",
       "values": [
         {
           "type": "silentgear:gear_type",
-          "gear_type": "armor"
+          "gear_type": "silentgear:armor"
         },
         {
           "type": "silentgear:gear_type",
-          "gear_type": "curio"
+          "gear_type": "silentgear:curio"
         }
       ]
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.bastion"
-  },
   "description": {
     "translate": "trait.silentgear.bastion.desc"
   },
-  "attribute_modifiers": {
-    "all": [
-      {
-        "attribute": "minecraft:generic.armor",
-        "operation": 0,
-        "value": [
-          1.0,
-          2.0,
-          3.0,
-          4.0,
-          5.0
+  "effects": [
+    {
+      "type": "silentgear:attribute",
+      "attribute_modifiers": {
+        "all/any": [
+          {
+            "attribute": "minecraft:generic.armor",
+            "operation": "add_value",
+            "values": [
+              1.0,
+              2.0,
+              3.0,
+              4.0,
+              5.0
+            ]
+          }
         ]
       }
-    ]
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.bastion"
   }
 }

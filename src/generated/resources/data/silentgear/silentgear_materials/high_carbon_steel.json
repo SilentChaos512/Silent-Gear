@@ -1,72 +1,57 @@
 {
   "type": "silentgear:custom_compound",
-  "simple": false,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 2,
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "advanced"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "type": "silentgear:custom_compound",
       "item": "silentgear:custom_ingot",
-      "material": "silentgear:high_carbon_steel",
-      "type": "silentgear:custom_compound"
-    }
+      "material": "silentgear:high_carbon_steel"
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.high_carbon_steel"
+  "display": {
+    "color": "#FF848484",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.high_carbon_steel"
+    },
+    "name_prefix": ""
   },
-  "stats": {
-    "main": {
-      "durability": 420.0,
-      "armor_durability": 24.0,
-      "enchantment_value": 11.0,
-      "rarity": 40.0,
-      "charging_value": 0.8,
-      "repair_value": 0.05,
-      "harvest_speed": 6.0,
-      "melee_damage": 4.0,
-      "magic_damage": 1.0,
-      "attack_speed": -0.2,
+  "properties": {
+    "silentgear:main": {
       "armor": 20.0,
-      "armor/helmet": 3.0,
-      "armor/chestplate": 8.0,
-      "armor/leggings": 6.0,
       "armor/boots": 3.0,
+      "armor/chestplate": 8.0,
+      "armor/helmet": 3.0,
+      "armor/leggings": 6.0,
+      "armor_durability": 24.0,
       "armor_toughness": 2.0,
+      "attack_damage": 4.0,
+      "attack_speed": -0.2,
+      "charging_value": 0.8,
+      "draw_speed": -0.2,
+      "durability": 420.0,
+      "enchantment_value": 11.0,
+      "harvest_speed": 6.0,
+      "harvest_tier": "minecraft:iron",
       "magic_armor": 6.0,
+      "magic_damage": 1.0,
       "ranged_damage": 2.0,
-      "ranged_speed": -0.2
+      "rarity": 40.0,
+      "repair_value": 0.05,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#848484"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#848484"
-      }
-    ]
   }
 }

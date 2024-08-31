@@ -1,140 +1,98 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "gem"
+      "gem",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:gems/lapis"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.lapis_lazuli"
-  },
-  "stats": {
-    "main": {
-      "durability": 200.0,
-      "armor_durability": 13.0,
-      "enchantment_value": 17.0,
-      "rarity": 30.0,
-      "charging_value": 1.3,
-      "harvest_speed": 5.0,
-      "melee_damage": 2.0,
-      "magic_damage": 3.0,
-      "attack_speed": 0.0,
-      "ranged_damage": 0.0,
-      "ranged_speed": -0.1,
-      "projectile_speed": 1.0,
-      "projectile_accuracy": 0.8,
-      "armor": 15.0,
-      "armor/helmet": 2.0,
-      "armor/chestplate": 6.0,
-      "armor/leggings": 5.0,
-      "armor/boots": 2.0,
-      "magic_armor": 10.0
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:gems/lapis"
     },
-    "tip": {
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FF224BAF",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.lapis_lazuli"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor": 15.0,
+      "armor/boots": 2.0,
+      "armor/chestplate": 6.0,
+      "armor/helmet": 2.0,
+      "armor/leggings": 5.0,
+      "armor_durability": 13.0,
+      "attack_damage": 2.0,
+      "attack_speed": 0.0,
+      "charging_value": 1.3,
+      "draw_speed": -0.1,
+      "durability": 200.0,
+      "enchantment_value": 17.0,
+      "harvest_speed": 5.0,
+      "harvest_tier": "minecraft:iron",
+      "magic_armor": 10.0,
+      "magic_damage": 3.0,
+      "projectile_accuracy": 0.8,
+      "projectile_speed": 1.0,
+      "ranged_damage": 0.0,
+      "rarity": 30.0
+    },
+    "silentgear:setting": {
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.75
+            }
+          ],
+          "level": 3,
+          "trait": "silentgear:lucky"
+        }
+      ]
+    },
+    "silentgear:tip": {
+      "attack_speed": {
+        "operation": "ADD",
+        "value": 0.3
+      },
       "harvest_speed": {
-        "mul2": -0.1
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.1
       },
       "magic_damage": {
-        "add": 2.0
+        "operation": "ADD",
+        "value": 2.0
       },
-      "attack_speed": {
-        "add": 0.3
-      }
-    },
-    "adornment": {}
-  },
-  "traits": {
-    "tip": [
-      {
-        "name": "silentgear:holy",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.75
-          }
-        ]
-      },
-      {
-        "name": "silentgear:lucky",
-        "level": 4,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.75
-          }
-        ]
-      }
-    ],
-    "adornment": [
-      {
-        "name": "silentgear:lucky",
-        "level": 3,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.75
-          }
-        ]
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#224BAF"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#224BAF"
-      }
-    ],
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_smooth",
-        "color": "#224BAF"
-      }
-    ],
-    "tip/part": [
-      {
-        "texture": "silentgear:tip_base"
-      },
-      {
-        "texture": "silentgear:tip",
-        "color": "#224BAF"
-      },
-      {
-        "texture": "silentgear:tip_shine"
-      }
-    ],
-    "adornment/all": [
-      {
-        "texture": "silentgear:adornment_generic",
-        "color": "#224BAF"
-      }
-    ],
-    "adornment/part": [
-      {
-        "texture": "silentgear:adornment",
-        "color": "#224BAF"
-      },
-      {
-        "texture": "silentgear:adornment_highlight"
-      }
-    ]
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.75
+            }
+          ],
+          "level": 1,
+          "trait": "silentgear:holy"
+        },
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.75
+            }
+          ],
+          "level": 4,
+          "trait": "silentgear:lucky"
+        }
+      ]
+    }
   }
 }

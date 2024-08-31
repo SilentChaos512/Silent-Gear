@@ -1,74 +1,59 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 5,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": false,
     "categories": [
       "intangible"
     ],
-    "visible": false,
-    "gear_blacklist": [],
-    "can_salvage": false
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "minecraft:barrier"
-    }
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "block.minecraft.barrier"
+  "display": {
+    "color": "#FFFF0000",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "block.minecraft.barrier"
+    },
+    "name_prefix": ""
   },
-  "stats": {
-    "main": {
-      "durability": 1337.0,
-      "armor_durability": 84.0,
-      "enchantment_value": 5.0,
-      "rarity": 111.0,
-      "charging_value": 0.5,
-      "repair_value": -1.0,
-      "harvest_speed": 5.0,
-      "melee_damage": 1.0,
-      "magic_damage": 1.0,
-      "attack_speed": 0.0,
-      "ranged_damage": 1.0,
-      "ranged_speed": 0.0,
+  "properties": {
+    "silentgear:main": {
       "armor": 20.0,
-      "armor/helmet": 3.0,
-      "armor/chestplate": 8.0,
-      "armor/leggings": 6.0,
       "armor/boots": 3.0,
+      "armor/chestplate": 8.0,
+      "armor/helmet": 3.0,
+      "armor/leggings": 6.0,
+      "armor_durability": 84.0,
       "armor_toughness": 10.0,
-      "magic_armor": 10.0
+      "attack_damage": 1.0,
+      "attack_speed": 0.0,
+      "charging_value": 0.5,
+      "draw_speed": 0.0,
+      "durability": 1337.0,
+      "enchantment_value": 5.0,
+      "harvest_speed": 5.0,
+      "harvest_tier": "minecraft:wood",
+      "magic_armor": 10.0,
+      "magic_damage": 1.0,
+      "ranged_damage": 1.0,
+      "rarity": 111.0,
+      "repair_value": -1.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 5,
+          "trait": "silentgear:adamant"
+        },
+        {
+          "conditions": [],
+          "level": 5,
+          "trait": "silentgear:holy"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:adamant",
-        "level": 5
-      },
-      {
-        "name": "silentgear:holy",
-        "level": 5
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#FF0000"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#FF0000"
-      }
-    ]
   }
 }

@@ -1,30 +1,32 @@
 {
-  "type": "silentgear:stat_modifier",
-  "max_level": 5,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "tool"
+      "gear_type": "silentgear:tool"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.sharp"
-  },
   "description": {
     "translate": "trait.silentgear.sharp.desc"
   },
-  "stats": [
+  "effects": [
     {
-      "name": "silentgear:harvest_speed",
-      "value": 0.125,
-      "factor_damage": true,
-      "factor_value": true
-    },
-    {
-      "name": "silentgear:melee_damage",
-      "value": 0.125,
-      "factor_damage": true,
-      "factor_value": true
+      "type": "silentgear:number_property_modifier",
+      "property_modifiers": {
+        "silentgear:attack_damage": {
+          "base_multiplier": 0.125,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": true
+        },
+        "silentgear:harvest_speed": {
+          "base_multiplier": 0.125,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": true
+        }
+      }
     }
-  ]
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.sharp"
+  }
 }

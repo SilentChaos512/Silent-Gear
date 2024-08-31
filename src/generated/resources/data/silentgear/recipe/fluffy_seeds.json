@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "silentgear:fluffy_puff"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:fluffy_seeds"
+  }
+}

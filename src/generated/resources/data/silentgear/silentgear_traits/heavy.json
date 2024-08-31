@@ -1,73 +1,74 @@
 {
-  "type": "silentgear:attribute",
-  "max_level": 5,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "armor"
+      "gear_type": "silentgear:armor"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.heavy"
-  },
   "description": {
     "translate": "trait.silentgear.heavy.desc"
   },
-  "cancels_with": [
-    "silentgear:light"
+  "effects": [
+    {
+      "type": "silentgear:attribute",
+      "attribute_modifiers": {
+        "armor/chest": [
+          {
+            "attribute": "minecraft:generic.movement_speed",
+            "operation": "add_multiplied_base",
+            "values": [
+              -0.01,
+              -0.02,
+              -0.03,
+              -0.04,
+              -0.05
+            ]
+          }
+        ],
+        "armor/feet": [
+          {
+            "attribute": "minecraft:generic.movement_speed",
+            "operation": "add_multiplied_base",
+            "values": [
+              -0.01,
+              -0.02,
+              -0.03,
+              -0.04,
+              -0.05
+            ]
+          }
+        ],
+        "armor/head": [
+          {
+            "attribute": "minecraft:generic.movement_speed",
+            "operation": "add_multiplied_base",
+            "values": [
+              -0.01,
+              -0.02,
+              -0.03,
+              -0.04,
+              -0.05
+            ]
+          }
+        ],
+        "armor/legs": [
+          {
+            "attribute": "minecraft:generic.movement_speed",
+            "operation": "add_multiplied_base",
+            "values": [
+              -0.01,
+              -0.02,
+              -0.03,
+              -0.04,
+              -0.05
+            ]
+          }
+        ]
+      }
+    }
   ],
-  "attribute_modifiers": {
-    "armor/head": [
-      {
-        "attribute": "minecraft:generic.movement_speed",
-        "operation": 1,
-        "value": [
-          -0.01,
-          -0.02,
-          -0.03,
-          -0.04,
-          -0.05
-        ]
-      }
-    ],
-    "armor/chest": [
-      {
-        "attribute": "minecraft:generic.movement_speed",
-        "operation": 1,
-        "value": [
-          -0.01,
-          -0.02,
-          -0.03,
-          -0.04,
-          -0.05
-        ]
-      }
-    ],
-    "armor/legs": [
-      {
-        "attribute": "minecraft:generic.movement_speed",
-        "operation": 1,
-        "value": [
-          -0.01,
-          -0.02,
-          -0.03,
-          -0.04,
-          -0.05
-        ]
-      }
-    ],
-    "armor/feet": [
-      {
-        "attribute": "minecraft:generic.movement_speed",
-        "operation": 1,
-        "value": [
-          -0.01,
-          -0.02,
-          -0.03,
-          -0.04,
-          -0.05
-        ]
-      }
-    ]
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.heavy"
   }
 }

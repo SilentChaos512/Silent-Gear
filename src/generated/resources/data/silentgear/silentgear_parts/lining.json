@@ -1,11 +1,19 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "armor",
-  "part_type": "silentgear:lining",
-  "crafting_item": {
-    "item": "silentgear:lining"
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:lining"
+    }
   },
-  "name": {
-    "translate": "part.silentgear.lining"
-  }
+  "display": {
+    "name": {
+      "translate": "part.silentgear.lining"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:armor",
+  "part_type": "silentgear:lining",
+  "properties": {}
 }

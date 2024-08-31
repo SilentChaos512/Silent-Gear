@@ -1,19 +1,19 @@
 {
-  "type": "silentgear:simple_trait",
-  "max_level": 1,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "harvest_tool"
+      "gear_type": "silentgear:harvest_tool"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.magmatic"
-  },
   "description": {
     "translate": "trait.silentgear.magmatic.desc"
   },
+  "effects": [],
   "extra_wiki_lines": [
     "Smelted drops are not affected by fortune to prevent item duplication"
-  ]
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.magmatic"
+  }
 }

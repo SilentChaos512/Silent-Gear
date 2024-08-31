@@ -5,6 +5,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitEffect;
@@ -113,6 +114,7 @@ public class TraitBuilder {
     }
 
     public JsonObject serialize() {
+        SilentGear.LOGGER.info("Trying to serialize trait \"{}\"", this.trait.getId());
         var traitObj = new Trait(
                 this.maxLevel,
                 this.name,
@@ -122,7 +124,10 @@ public class TraitBuilder {
                 this.extraWikiLines
         );
 
-        var json = Trait.CODEC.encodeStart(JsonOps.INSTANCE, traitObj).getOrThrow();
-        return json.getAsJsonObject();
+        var jsonElementDataResult = Trait.CODEC.encodeStart(JsonOps.INSTANCE, traitObj);
+        if (jsonElementDataResult.isError()) {
+            SilentGear.LOGGER.error("Something went wrong when serializing trait \"{}\"", this.trait.getId());
+        }
+        return jsonElementDataResult.getOrThrow().getAsJsonObject();
     }
 }

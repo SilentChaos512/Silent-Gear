@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:stone_shovel"
+  },
+  "results": [
+    {
+      "count": 1,
+      "id": "minecraft:cobblestone"
+    },
+    {
+      "count": 2,
+      "id": "minecraft:stick"
+    }
+  ]
+}

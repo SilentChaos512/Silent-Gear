@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "type": "silentgear:material",
+      "gear_type": "silentgear:tool",
+      "material": "silentgear:copper",
+      "min_grade": "A",
+      "part_type": "silentgear:main"
+    }
+  },
+  "pattern": [
+    "# #",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:bucket"
+  }
+}

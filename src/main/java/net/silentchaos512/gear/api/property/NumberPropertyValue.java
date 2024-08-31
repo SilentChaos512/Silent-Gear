@@ -15,4 +15,9 @@ public final class NumberPropertyValue extends GearPropertyValue<Float> {
     public static NumberPropertyValue average(float value) {
         return new NumberPropertyValue(value, NumberProperty.Operation.AVERAGE);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %.1f", this.operation.name(), this.value);
+    }
 }

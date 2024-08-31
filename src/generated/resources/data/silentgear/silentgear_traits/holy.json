@@ -1,18 +1,23 @@
 {
-  "type": "silentgear:damage_type",
-  "max_level": 5,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "weapon"
+      "gear_type": "silentgear:weapon"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.holy"
-  },
   "description": {
     "translate": "trait.silentgear.holy.desc"
   },
-  "damage_type": "holy",
-  "damage_bonus": 2
+  "effects": [
+    {
+      "type": "silentgear:extra_damage",
+      "affected_entities_tag": "minecraft:undead",
+      "affected_type": "tagged",
+      "bonus_damage_per_level": 2.0
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.holy"
+  }
 }

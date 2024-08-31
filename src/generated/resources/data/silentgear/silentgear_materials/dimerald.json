@@ -1,201 +1,147 @@
 {
   "type": "silentgear:custom_compound",
-  "simple": false,
-  "harvest_tier": "minecraft:diamond",
-  "availability": {
-    "tier": 3,
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "gem"
+      "gem",
+      "advanced"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "type": "silentgear:custom_compound",
       "item": "silentgear:custom_gem",
-      "material": "silentgear:dimerald",
-      "type": "silentgear:custom_compound"
-    }
+      "material": "silentgear:dimerald"
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.dimerald"
+  "display": {
+    "color": "#FF1ACE82",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.dimerald"
+    },
+    "name_prefix": ""
   },
-  "stats": {
-    "main": {
-      "durability": 1776.0,
-      "armor_durability": 36.0,
-      "enchantment_value": 12.0,
-      "rarity": 80.0,
-      "charging_value": 0.7,
-      "harvest_speed": 9.0,
-      "melee_damage": 3.0,
-      "magic_damage": 3.0,
-      "attack_speed": 0.1,
-      "ranged_damage": 3.0,
-      "ranged_speed": 0.1,
-      "projectile_speed": 1.0,
-      "projectile_accuracy": 1.2,
+  "properties": {
+    "silentgear:main": {
       "armor": 22.0,
-      "armor/helmet": 4.0,
-      "armor/chestplate": 9.0,
-      "armor/leggings": 6.0,
       "armor/boots": 3.0,
+      "armor/chestplate": 9.0,
+      "armor/helmet": 4.0,
+      "armor/leggings": 6.0,
+      "armor_durability": 36.0,
       "armor_toughness": 10.0,
-      "magic_armor": 10.0
+      "attack_damage": 3.0,
+      "attack_speed": 0.1,
+      "charging_value": 0.7,
+      "draw_speed": 0.1,
+      "durability": 1776.0,
+      "enchantment_value": 12.0,
+      "harvest_speed": 9.0,
+      "harvest_tier": "minecraft:diamond",
+      "magic_armor": 10.0,
+      "magic_damage": 3.0,
+      "projectile_accuracy": 1.2,
+      "projectile_speed": 1.0,
+      "ranged_damage": 3.0,
+      "rarity": 80.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:brittle"
+        },
+        {
+          "conditions": [
+            {
+              "type": "silentgear:or",
+              "values": [
+                {
+                  "type": "silentgear:material_count",
+                  "count": 3
+                },
+                {
+                  "type": "silentgear:material_ratio",
+                  "ratio": 0.5
+                }
+              ]
+            }
+          ],
+          "level": 2,
+          "trait": "silentgear:gold_digger"
+        }
+      ]
     },
-    "rod": {
+    "silentgear:rod": {
       "harvest_speed": {
-        "mul2": 0.15
-      }
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.15
+      },
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.5
+            }
+          ],
+          "level": 1,
+          "trait": "silentgear:brittle"
+        },
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.5
+            }
+          ],
+          "level": 3,
+          "trait": "silentgear:ancient"
+        }
+      ]
     },
-    "tip": {
+    "silentgear:setting": {
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:kitty_vision"
+        }
+      ]
+    },
+    "silentgear:tip": {
+      "attack_damage": {
+        "operation": "ADD",
+        "value": 2.0
+      },
       "durability": {
-        "add": 360.0
+        "operation": "ADD",
+        "value": 360.0
       },
       "harvest_speed": {
-        "add": 2.0
-      },
-      "melee_damage": {
-        "add": 2.0
+        "operation": "ADD",
+        "value": 2.0
       },
       "magic_damage": {
-        "add": 1.0
+        "operation": "ADD",
+        "value": 1.0
       },
       "ranged_damage": {
-        "add": 0.5
+        "operation": "ADD",
+        "value": 0.5
       },
       "rarity": {
-        "add": 25.0
-      }
-    },
-    "adornment": {}
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:brittle",
-        "level": 1
+        "operation": "ADD",
+        "value": 25.0
       },
-      {
-        "name": "silentgear:gold_digger",
-        "level": 2,
-        "conditions": [
-          {
-            "type": "silentgear:or",
-            "values": [
-              {
-                "type": "silentgear:material_count",
-                "count": 3
-              },
-              {
-                "type": "silentgear:material_ratio",
-                "ratio": 0.5
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:brittle",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.5
-          }
-        ]
-      },
-      {
-        "name": "silentgear:ancient",
-        "level": 3,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.5
-          }
-        ]
-      }
-    ],
-    "tip": [
-      {
-        "name": "silentgear:imperial",
-        "level": 2
-      }
-    ],
-    "adornment": [
-      {
-        "name": "silentgear:kitty_vision",
-        "level": 1
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#1ACE82"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#1ACE82"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#1ACE82"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#1ACE82"
-      }
-    ],
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_sharp",
-        "color": "#1ACE82"
-      }
-    ],
-    "tip/part": [
-      {
-        "texture": "silentgear:tip_base"
-      },
-      {
-        "texture": "silentgear:tip",
-        "color": "#1ACE82"
-      },
-      {
-        "texture": "silentgear:tip_shine"
-      }
-    ],
-    "adornment/all": [
-      {
-        "texture": "silentgear:adornment_generic",
-        "color": "#1ACE82"
-      },
-      {
-        "texture": "silentgear:adornment_highlight",
-        "color": "#1ACE82"
-      }
-    ],
-    "adornment/part": [
-      {
-        "texture": "silentgear:adornment",
-        "color": "#1ACE82"
-      },
-      {
-        "texture": "silentgear:adornment_highlight"
-      }
-    ]
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:imperial"
+        }
+      ]
+    }
   }
 }

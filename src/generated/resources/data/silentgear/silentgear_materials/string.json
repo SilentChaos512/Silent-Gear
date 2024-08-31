@@ -1,73 +1,46 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "organic",
-      "fiber"
+      "fiber",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:string"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.string"
-  },
-  "stats": {
-    "binding": {
-      "repair_efficiency": {
-        "mul1": 0.05
-      }
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:strings"
     },
-    "cord": {
-      "ranged_speed": {
-        "mul1": 0.1
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFFFFFFF",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.string"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:binding": {
+      "repair_efficiency": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.05
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    },
+    "silentgear:cord": {
+      "draw_speed": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.1
       }
     }
-  },
-  "traits": {
-    "binding": [
-      {
-        "name": "silentgear:flexible",
-        "level": 1
-      }
-    ]
-  },
-  "model": {
-    "binding/all": [
-      {
-        "texture": "silentgear:binding_generic"
-      }
-    ],
-    "binding/part": [
-      {
-        "texture": "silentgear:binding"
-      }
-    ],
-    "cord/all": [
-      {
-        "texture": "silentgear:bowstring_string"
-      },
-      {
-        "texture": "silentgear:arrow"
-      }
-    ],
-    "cord/part": [
-      {
-        "texture": "silentgear:bowstring"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:cloth"
-      }
-    ]
   }
 }

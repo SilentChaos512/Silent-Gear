@@ -1,127 +1,86 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 3,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "gem",
-      "organic"
+      "organic",
+      "advanced"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:gems/prismarine"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:gems/prismarine"
+  "display": {
+    "color": "#FF91C5B7",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.prismarine"
+    },
+    "name_prefix": {
+      "translate": "material.silentgear.prismarine"
     }
   },
-  "name": {
-    "translate": "material.silentgear.prismarine"
-  },
-  "name_prefix": {
-    "translate": "material.silentgear.prismarine"
-  },
-  "stats": {
-    "coating": {
-      "durability": {
-        "mul2": 0.075
-      },
+  "properties": {
+    "silentgear:coating": {
       "armor_durability": {
-        "mul2": 0.125
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.125
       },
       "armor_toughness": {
-        "add": 1.0
+        "operation": "ADD",
+        "value": 1.0
+      },
+      "durability": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.075
       },
       "knockback_resistance": {
-        "add": 0.25
-      }
-    },
-    "adornment": {}
-  },
-  "traits": {
-    "coating": [
-      {
-        "name": "silentgear:aquatic",
-        "level": 5,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.67
-          }
-        ]
+        "operation": "ADD",
+        "value": 0.25
       },
-      {
-        "name": "silentgear:aquatic",
-        "level": 3,
-        "conditions": [
-          {
-            "type": "silentgear:not",
-            "value": {
+      "traits": [
+        {
+          "conditions": [
+            {
               "type": "silentgear:material_ratio",
               "ratio": 0.67
             }
-          }
-        ]
-      }
-    ],
-    "adornment": [
-      {
-        "name": "silentgear:swift_swim",
-        "level": 3,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.67
-          }
-        ]
-      }
-    ]
-  },
-  "model": {
-    "coating/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#91C5B7"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "coating/part": [
-      {
-        "texture": "silentgear:coating_material",
-        "color": "#91C5B7"
-      },
-      {
-        "texture": "silentgear:coating_jar"
-      }
-    ],
-    "adornment/all": [
-      {
-        "texture": "silentgear:adornment_generic",
-        "color": "#91C5B7"
-      },
-      {
-        "texture": "silentgear:adornment_highlight",
-        "color": "#91C5B7"
-      }
-    ],
-    "adornment/part": [
-      {
-        "texture": "silentgear:adornment",
-        "color": "#91C5B7"
-      },
-      {
-        "texture": "silentgear:adornment_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:dust",
-        "color": "#91C5B7"
-      }
-    ]
+          ],
+          "level": 5,
+          "trait": "silentgear:aquatic"
+        },
+        {
+          "conditions": [
+            {
+              "type": "silentgear:not",
+              "value": {
+                "type": "silentgear:material_ratio",
+                "ratio": 0.67
+              }
+            }
+          ],
+          "level": 3,
+          "trait": "silentgear:aquatic"
+        }
+      ]
+    },
+    "silentgear:setting": {
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.67
+            }
+          ],
+          "level": 3,
+          "trait": "silentgear:swift_swim"
+        }
+      ]
+    }
   }
 }

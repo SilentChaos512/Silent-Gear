@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "c:ingots/crimson_steel"
+    },
+    "/": {
+      "tag": "c:rods/blaze"
+    },
+    "o": {
+      "tag": "c:ingots/blaze_gold"
+    }
+  },
+  "pattern": [
+    " / ",
+    "#o#",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:crimson_repair_kit"
+  }
+}

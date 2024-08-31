@@ -1,67 +1,58 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:diamond",
-  "availability": {
-    "tier": 3,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "metal"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "subs": {
-      "rod": {
+    "gear_type_blacklist": [],
+    "ingredient": [],
+    "part_substitutes": {
+      "silentgear:rod": {
         "item": "minecraft:end_rod"
       }
     }
   },
-  "name": {
-    "translate": "material.silentgear.end_rod"
+  "display": {
+    "color": "#FFF6E2CD",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.end_rod"
+    },
+    "name_prefix": ""
   },
-  "stats": {
-    "rod": {
-      "harvest_speed": {
-        "mul2": 0.2
+  "properties": {
+    "silentgear:rod": {
+      "attack_damage": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.1
       },
-      "melee_damage": {
-        "mul2": 0.1
+      "harvest_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.2
       },
       "ranged_damage": {
-        "mul2": 0.1
-      }
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.1
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:flexible"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:sturdy"
+        },
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:refractive"
+        }
+      ]
     }
-  },
-  "traits": {
-    "rod": [
-      {
-        "name": "silentgear:flexible",
-        "level": 4
-      },
-      {
-        "name": "silentgear:sturdy",
-        "level": 2
-      },
-      {
-        "name": "silentgear:refractive",
-        "level": 1
-      }
-    ]
-  },
-  "model": {
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#F6E2CD"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#F6E2CD"
-      }
-    ]
   }
 }

@@ -19,8 +19,8 @@ public class GearItemSets {
     public static final GearItemSet<GearSwordItem> SWORD = set(GearTypes.SWORD, "sword_blade", GearSwordItem::new);
     public static final GearItemSet<GearSwordItem> KATANA = set(GearTypes.KATANA, "katana_blade", GearSwordItem::new);
     public static final GearItemSet<GearMacheteItem> MACHETE = set(GearTypes.MACHETE, "machete_blade", GearMacheteItem::new);
-    public static final GearItemSet<GearDaggerItem> KNIFE = set(GearTypes.KNIFE, "dagger_blade", GearDaggerItem::new);
-    public static final GearItemSet<GearDaggerItem> DAGGER = set(GearTypes.DAGGER, "knife_blade", GearDaggerItem::new);
+    public static final GearItemSet<GearDaggerItem> KNIFE = set(GearTypes.KNIFE, "knife_blade", GearDaggerItem::new);
+    public static final GearItemSet<GearDaggerItem> DAGGER = set(GearTypes.DAGGER, "dagger_blade", GearDaggerItem::new);
     public static final GearItemSet<GearSwordItem> SPEAR = set(GearTypes.SPEAR, "spear_tip", GearSwordItem::new);
     public static final GearItemSet<GearTridentItem> TRIDENT = set(GearTypes.TRIDENT, "trident_prongs", GearTridentItem::new);
     public static final GearItemSet<GearMaceItem> MACE = set(GearTypes.MACE, "mace_head", GearMaceItem::new);

@@ -1,29 +1,41 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "paxel",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:paxel_head"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.paxel_head"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:paxel",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:paxel_head"
-  },
-  "name": {
-    "translate": "part.silentgear.paxel_head"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 3.0
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 3.0
     },
     "attack_speed": {
-      "add": -3.0
+      "operation": "ADD",
+      "value": -3.0
     },
-    "repair_efficiency": 1.2,
     "durability": {
-      "mul1": 0.35
+      "operation": "MULTIPLY_BASE",
+      "value": 0.35
     },
     "enchantment_value": {
-      "mul1": -0.3
+      "operation": "MULTIPLY_BASE",
+      "value": -0.3
     },
     "harvest_speed": {
-      "mul1": -0.2
-    }
+      "operation": "MULTIPLY_BASE",
+      "value": -0.2
+    },
+    "repair_efficiency": 1.2
   }
 }

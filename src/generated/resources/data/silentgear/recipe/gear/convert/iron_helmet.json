@@ -1,0 +1,40 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_helmet"
+    }
+  ],
+  "result": {
+    "item": "silentgear:helmet",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:helmet_plates"
+        },
+        "part": "silentgear:helmet_plates"
+      }
+    ]
+  }
+}

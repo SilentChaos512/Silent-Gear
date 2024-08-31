@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:diamond_boots"
+  },
+  "results": [
+    {
+      "count": 4,
+      "id": "minecraft:diamond"
+    }
+  ]
+}

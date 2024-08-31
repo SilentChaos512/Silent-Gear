@@ -1,26 +1,37 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "spear",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:spear_tip"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.spear_tip"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:spear",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:spear_tip"
-  },
-  "name": {
-    "translate": "part.silentgear.spear_tip"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 3.0
-    },
-    "attack_speed": {
-      "add": -2.7
-    },
-    "repair_efficiency": 1.25,
-    "durability": {
-      "mul1": -0.2
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 3.0
     },
     "attack_reach": {
-      "add": 1.0
-    }
+      "operation": "ADD",
+      "value": 1.0
+    },
+    "attack_speed": {
+      "operation": "ADD",
+      "value": -2.7
+    },
+    "durability": {
+      "operation": "MULTIPLY_BASE",
+      "value": -0.2
+    },
+    "repair_efficiency": 1.25
   }
 }

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "silentgear:fluffy_feather"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:feather"
+  }
+}

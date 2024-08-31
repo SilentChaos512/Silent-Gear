@@ -1,40 +1,44 @@
 {
-  "type": "silentgear:attribute",
-  "max_level": 5,
   "conditions": [
     {
       "type": "silentgear:or",
       "values": [
         {
           "type": "silentgear:gear_type",
-          "gear_type": "boots"
+          "gear_type": "silentgear:boots"
         },
         {
           "type": "silentgear:gear_type",
-          "gear_type": "curio"
+          "gear_type": "silentgear:curio"
         }
       ]
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.moonwalker"
-  },
   "description": {
     "translate": "trait.silentgear.moonwalker.desc"
   },
-  "attribute_modifiers": {
-    "all": [
-      {
-        "attribute": "neoforge:entity_gravity",
-        "operation": 1,
-        "value": [
-          -0.15,
-          -0.3,
-          -0.45000002,
-          -0.6,
-          -0.75
+  "effects": [
+    {
+      "type": "silentgear:attribute",
+      "attribute_modifiers": {
+        "all/any": [
+          {
+            "attribute": "minecraft:generic.gravity",
+            "operation": "add_multiplied_base",
+            "values": [
+              -0.15,
+              -0.3,
+              -0.45000002,
+              -0.6,
+              -0.75
+            ]
+          }
         ]
       }
-    ]
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.moonwalker"
   }
 }

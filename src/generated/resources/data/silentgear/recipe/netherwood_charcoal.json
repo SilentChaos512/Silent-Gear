@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.15,
+  "ingredient": {
+    "tag": "silentgear:netherwood_logs"
+  },
+  "result": {
+    "count": 1,
+    "id": "silentgear:netherwood_charcoal"
+  }
+}

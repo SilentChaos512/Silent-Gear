@@ -1,19 +1,28 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "shovel",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:shovel_head"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.shovel_head"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:shovel",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:shovel_head"
-  },
-  "name": {
-    "translate": "part.silentgear.shovel_head"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 1.5
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 1.5
     },
     "attack_speed": {
-      "add": -3.0
+      "operation": "ADD",
+      "value": -3.0
     },
     "repair_efficiency": 2.0
   }

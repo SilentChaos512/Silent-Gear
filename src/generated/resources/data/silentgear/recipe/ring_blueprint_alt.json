@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "silentgear:blueprints/ring",
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "/": {
+      "tag": "c:ingots/gold"
+    }
+  },
+  "pattern": [
+    " #/",
+    "# #",
+    "/# "
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:ring_blueprint"
+  }
+}

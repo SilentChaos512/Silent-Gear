@@ -1,43 +1,32 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 0,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "organic"
+      "organic",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "minecraft:vine"
-    }
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.vine"
+  "display": {
+    "color": "#FF007F0E",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.vine"
+    },
+    "name_prefix": ""
   },
-  "stats": {
-    "binding": {
+  "properties": {
+    "silentgear:binding": {
       "repair_efficiency": {
-        "mul1": 0.03
+        "operation": "MULTIPLY_BASE",
+        "value": 0.03
       }
     }
-  },
-  "model": {
-    "binding/all": [
-      {
-        "texture": "silentgear:binding_generic",
-        "color": "#007F0E"
-      }
-    ],
-    "binding/part": [
-      {
-        "texture": "silentgear:binding",
-        "color": "#007F0E"
-      }
-    ]
   }
 }

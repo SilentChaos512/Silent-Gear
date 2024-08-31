@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.api.traits.TraitEffectType;
@@ -58,7 +57,6 @@ public class ItemMagnetTraitEffect extends TraitEffect {
         this.effectRange = effectRange;
         this.affectedItems = affectedItems;
         this.affectedItemsTextForWiki = affectedItemsTextForWiki;
-        NeoForge.EVENT_BUS.register(this);
     }
 
     @Override

@@ -112,6 +112,7 @@ public final class PartsProvider extends PartsProviderBase {
 
     private static UpgradePartBuilder upgradePart(String name, ItemLike item) {
         return (UpgradePartBuilder) new UpgradePartBuilder(SilentGear.getId(name), GearTypes.ALL, PartTypes.MISC_UPGRADE)
+                .crafting(item)
                 .display(Component.translatable("part.silentgear." + name.replace('/', '.')));
     }
 
@@ -197,6 +198,10 @@ public final class PartsProvider extends PartsProviderBase {
             )
             .put(GearTypes.LEGGINGS.get(), b -> b
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1)
+            )
+            .put(GearTypes.MACE.get(), b -> b
+                    // TODO: Need to determine mace properties
+                    .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .put(GearTypes.MACHETE.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 2, NumberProperty.Operation.ADD)

@@ -1,37 +1,46 @@
 {
-  "type": "silentgear:stellar",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.stellar"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.stellar.desc"
   },
-  "extra_wiki_lines": [
-    "  - Has a 2% chance per level to restore 1 durability each second"
-  ],
-  "potion_effects": {
-    "armor": [
-      {
-        "type": "piece_count",
-        "effect": "minecraft:speed",
-        "level": [
-          0,
-          1,
-          2,
-          3
-        ]
-      },
-      {
-        "type": "piece_count",
-        "effect": "minecraft:jump_boost",
-        "level": [
-          1,
-          2,
-          3,
-          4
+  "effects": [
+    {
+      "type": "silentgear:self_repair",
+      "activation_chance": 0.02,
+      "repair_amount": 1
+    },
+    {
+      "type": "silentgear:wielder_effect",
+      "potion_effects": {
+        "silentgear:armor": [
+          {
+            "type": "piece_count",
+            "duration": 38,
+            "effect": "minecraft:speed",
+            "levels": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "type": "piece_count",
+            "duration": 38,
+            "effect": "minecraft:jump_boost",
+            "levels": [
+              1,
+              2,
+              3,
+              4
+            ]
+          }
         ]
       }
-    ]
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.stellar"
   }
 }

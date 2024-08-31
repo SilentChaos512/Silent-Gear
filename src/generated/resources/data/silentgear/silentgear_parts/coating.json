@@ -1,16 +1,21 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "all",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [
+      "silentgear:elytra"
+    ],
+    "ingredient": {
+      "item": "silentgear:coating"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.coating"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:all",
   "part_type": "silentgear:coating",
-  "availability": {
-    "gear_blacklist": [
-      "elytra"
-    ]
-  },
-  "crafting_item": {
-    "item": "silentgear:coating"
-  },
-  "name": {
-    "translate": "part.silentgear.coating"
-  }
+  "properties": {}
 }

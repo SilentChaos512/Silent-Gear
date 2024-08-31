@@ -1,22 +1,13 @@
 package net.silentchaos512.gear.client.event;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.multiplayer.MultiPlayerGameMode;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
-import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 
@@ -44,7 +35,7 @@ public class GearHudOverlay {
 
     private void renderAttackIndicator(GuiGraphics graphics) {
         // Renders an attack indicator if an entity is within extra reach distance of a gear weapon
-        RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
+        /*RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
 
         Options options = this.mc.options;
         if (options.getCameraType().isFirstPerson()) {
@@ -73,7 +64,7 @@ public class GearHudOverlay {
                 }
 
             }
-        }
+        }*/
     }
 
     private static boolean isEntityTargeted(@Nullable HitResult rayTraceIn) {

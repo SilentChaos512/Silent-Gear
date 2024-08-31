@@ -1,131 +1,92 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:diamond",
-  "availability": {
-    "tier": 4,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "endgame"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/refined_obsidian"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:ingots/refined_obsidian"
-    }
+  "display": {
+    "color": "#FF665482",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.refined_obsidian"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.refined_obsidian"
-  },
-  "stats": {
-    "main": {
-      "durability": 2500.0,
+  "properties": {
+    "silentgear:main": {
+      "armor": 30.0,
+      "armor/boots": 5.0,
+      "armor/chestplate": 12.0,
+      "armor/helmet": 5.0,
+      "armor/leggings": 8.0,
       "armor_durability": 50.0,
-      "repair_value": -0.3,
+      "armor_toughness": 16.0,
+      "attack_damage": 10.0,
+      "attack_speed": 0.3,
+      "charging_value": 0.8,
+      "draw_speed": 0.2,
+      "durability": 2500.0,
       "enchantment_value": 40.0,
       "harvest_speed": 20.0,
-      "melee_damage": 10.0,
-      "magic_damage": 4.0,
-      "attack_speed": 0.3,
-      "armor": 30.0,
-      "armor/helmet": 5.0,
-      "armor/chestplate": 12.0,
-      "armor/leggings": 8.0,
-      "armor/boots": 5.0,
-      "armor_toughness": 16.0,
+      "harvest_tier": "minecraft:diamond",
       "magic_armor": 6.0,
+      "magic_damage": 4.0,
       "ranged_damage": 4.0,
-      "ranged_speed": 0.2,
       "rarity": 70.0,
-      "charging_value": 0.8
+      "repair_value": -0.3,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        },
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:hard"
+        }
+      ]
     },
-    "rod": {
+    "silentgear:rod": {
       "durability": {
-        "mul2": 0.25
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.25
       },
-      "rarity": 70.0
+      "rarity": 70.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:malleable"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:hard"
+        }
+      ]
     },
-    "tip": {
+    "silentgear:tip": {
       "durability": {
-        "add": 600.0
-      }
+        "operation": "ADD",
+        "value": 600.0
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:vulcan"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      },
-      {
-        "name": "silentgear:hard",
-        "level": 4
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:malleable",
-        "level": 4
-      },
-      {
-        "name": "silentgear:hard",
-        "level": 3
-      }
-    ],
-    "tip": [
-      {
-        "name": "silentgear:vulcan",
-        "level": 1
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#665482"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#665482"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#665482"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#665482"
-      }
-    ],
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_sharp",
-        "color": "#665482"
-      }
-    ],
-    "tip/part": [
-      {
-        "texture": "silentgear:tip_base"
-      },
-      {
-        "texture": "silentgear:tip",
-        "color": "#665482"
-      },
-      {
-        "texture": "silentgear:tip_shine"
-      }
-    ]
   }
 }

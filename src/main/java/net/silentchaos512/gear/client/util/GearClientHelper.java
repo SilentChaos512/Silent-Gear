@@ -98,7 +98,7 @@ public final class GearClientHelper {
 
     public static void addStatsInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag, GearItem item) {
         if (KeyTracker.isDisplayStatsDown() && flag.showStats) {
-            tooltip.add(TextUtil.withColor(misc("tooltip.stats"), Color.GOLD));
+            tooltip.add(TextUtil.withColor(misc("tooltip.properties"), Color.GOLD));
 
             TextListBuilder builder = new TextListBuilder();
             var gearProperties = GearData.getProperties(stack);

@@ -1,29 +1,41 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "excavator",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:excavator_head"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.excavator_head"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:excavator",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:excavator_head"
-  },
-  "name": {
-    "translate": "part.silentgear.excavator_head"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 2.0
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 2.0
     },
     "attack_speed": {
-      "add": -3.0
+      "operation": "ADD",
+      "value": -3.0
     },
-    "repair_efficiency": 2.0,
     "durability": {
-      "mul1": 1.0
+      "operation": "MULTIPLY_BASE",
+      "value": 1.0
     },
     "enchantment_value": {
-      "mul1": -0.5
+      "operation": "MULTIPLY_BASE",
+      "value": -0.5
     },
     "harvest_speed": {
-      "mul1": -0.5
-    }
+      "operation": "MULTIPLY_BASE",
+      "value": -0.5
+    },
+    "repair_efficiency": 2.0
   }
 }

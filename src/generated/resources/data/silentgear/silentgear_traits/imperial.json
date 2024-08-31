@@ -1,21 +1,26 @@
 {
-  "type": "silentgear:bonus_drops",
-  "max_level": 5,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "harvest_tool"
+      "gear_type": "silentgear:harvest_tool"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.imperial"
-  },
   "description": {
     "translate": "trait.silentgear.imperial.desc"
   },
-  "base_chance": 0.08,
-  "bonus_multiplier": 1.0,
-  "ingredient": {
-    "tag": "silentgear:imperial_drops"
+  "effects": [
+    {
+      "type": "silentgear:bonus_drops",
+      "base_chance": 0.15,
+      "bonus_multiplier": 0.5,
+      "ingredient": {
+        "tag": "silentgear:imperial_drops"
+      },
+      "matched_items_text_for_wiki": "gems"
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.imperial"
   }
 }

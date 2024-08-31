@@ -1,0 +1,14 @@
+{
+  "type": "silentgear:tool_action",
+  "damage_to_tool": 1,
+  "ingredient": {
+    "tag": "c:ingots/azure_electrum"
+  },
+  "result": {
+    "count": 1,
+    "id": "silentgear:azure_electrum_dust"
+  },
+  "tool": {
+    "tag": "c:tools/hammers"
+  }
+}

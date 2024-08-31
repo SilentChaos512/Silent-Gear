@@ -8,6 +8,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartCraftingData;
 import net.silentchaos512.gear.api.part.PartDisplayData;
@@ -106,6 +107,8 @@ public class PartBuilder {
     }
 
     public JsonElement serialize() {
+        SilentGear.LOGGER.info("Trying to serialize gear part \"{}\"", this.id);
+
         CoreGearPart part = new CoreGearPart(
                 this.gearType,
                 this.partType,
@@ -115,10 +118,14 @@ public class PartBuilder {
         );
 
         var serializer = PartSerializers.CORE.get();
-        var json = serializer.codec().codec().encodeStart(JsonOps.INSTANCE, part).getOrThrow();
-        var serializerId = Objects.requireNonNull(SgRegistries.PART_SERIALIZER.getKey(serializer));
-        json.getAsJsonObject().addProperty("type", serializerId.toString());
+        var jsonElementDataResult = serializer.codec().codec().encodeStart(JsonOps.INSTANCE, part);
+        if (jsonElementDataResult.isError()) {
+            SilentGear.LOGGER.error("Something went wrong when serializing gear part \"{}\"", this.id);
+        }
 
+        var json = jsonElementDataResult.getOrThrow().getAsJsonObject();
+        var serializerId = Objects.requireNonNull(SgRegistries.PART_SERIALIZER.getKey(serializer));
+        json.addProperty("type", serializerId.toString());
         return json;
     }
 }

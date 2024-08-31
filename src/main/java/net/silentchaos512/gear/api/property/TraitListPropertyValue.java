@@ -8,6 +8,7 @@ import net.silentchaos512.gear.gear.trait.Trait;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TraitListPropertyValue extends GearPropertyValue<List<TraitInstance>> {
     public TraitListPropertyValue(List<TraitInstance> value) {
@@ -24,5 +25,13 @@ public class TraitListPropertyValue extends GearPropertyValue<List<TraitInstance
 
     public static TraitListPropertyValue of(TraitInstance... traits) {
         return new TraitListPropertyValue(Arrays.stream(traits).toList());
+    }
+
+    @Override
+    public String toString() {
+        var listText = this.value.stream()
+                .map(trait -> trait.getDisplayName().toString())
+                .collect(Collectors.joining(", "));
+        return "[" + listText + "]";
     }
 }

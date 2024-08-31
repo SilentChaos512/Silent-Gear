@@ -22,8 +22,8 @@ public record SoundPlayback(
     public static final Codec<SoundPlayback> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     BuiltInRegistries.SOUND_EVENT.byNameCodec().fieldOf("sound").forGetter(s -> s.sound),
-                    Codec.FLOAT.optionalFieldOf("volume", 1f).forGetter(s -> s.volume),
-                    Codec.FLOAT.optionalFieldOf("pitch", 1f).forGetter(s -> s.pitch),
+                    Codec.FLOAT.fieldOf("volume").forGetter(s -> s.volume),
+                    Codec.FLOAT.fieldOf("pitch").forGetter(s -> s.pitch),
                     Codec.FLOAT.optionalFieldOf("pitch_deviation", 0f).forGetter(s -> s.pitchDeviation)
             ).apply(instance, SoundPlayback::new)
     );

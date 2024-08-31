@@ -1,0 +1,63 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_chestplate"
+    }
+  ],
+  "result": {
+    "item": "silentgear:chestplate",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:chestplate_plates"
+        },
+        "part": "silentgear:chestplate_plates"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:netherite"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:coating"
+        },
+        "part": "silentgear:coating"
+      }
+    ]
+  }
+}

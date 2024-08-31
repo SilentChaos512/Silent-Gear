@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "silentgear:blueprints/fishing_rod",
+  "key": {
+    "#": {
+      "tag": "silentgear:template_boards"
+    },
+    "/": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  /",
+    " /#",
+    "/ #"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:fishing_rod_template"
+  }
+}

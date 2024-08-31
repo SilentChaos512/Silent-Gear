@@ -24,22 +24,25 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 
 public class ExtraDamageTraitEffect extends TraitEffect {
     public static final MapCodec<ExtraDamageTraitEffect> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     Codec.FLOAT.fieldOf("bonus_damage_per_level").forGetter(e -> e.bonusDamagePerLevel),
-                    TagKey.codec(Registries.ENTITY_TYPE).optionalFieldOf("affected_entities_tag", null).forGetter(e -> e.affectedEntitiesTag),
+                    TagKey.codec(Registries.ENTITY_TYPE).optionalFieldOf("affected_entities_tag").forGetter(e -> Optional.ofNullable(e.affectedEntitiesTag)),
                     AffectedMobTypes.CODEC.fieldOf("affected_type").forGetter(e -> e.affectedMobTypes)
-            ).apply(instance, ExtraDamageTraitEffect::new)
+            ).apply(instance, (bonusDamagePerLevel1, affectedEntitiesTag1, affectedMobTypes1) ->
+                    new ExtraDamageTraitEffect(bonusDamagePerLevel1, affectedEntitiesTag1.orElse(null), affectedMobTypes1))
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ExtraDamageTraitEffect> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.FLOAT, e -> e.bonusDamagePerLevel,
-            CodecUtils.tagStreamCodec(Registries.ENTITY_TYPE), e -> e.affectedEntitiesTag,
+            CodecUtils.tagStreamCodec(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional), e -> Optional.ofNullable(e.affectedEntitiesTag),
             AffectedMobTypes.STREAM_CODEC, e -> e.affectedMobTypes,
-            ExtraDamageTraitEffect::new
+            (bonusDamagePerLevel1, affectedEntitiesTag1, affectedMobTypes1) ->
+                    new ExtraDamageTraitEffect(bonusDamagePerLevel1, affectedEntitiesTag1.orElse(null), affectedMobTypes1)
     );
 
     private final float bonusDamagePerLevel;

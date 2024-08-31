@@ -48,7 +48,7 @@ public class TraitsProvider extends TraitsProviderBase {
                 .withGearTypeCondition(GearTypes.WEAPON));
         ret.add(TraitBuilder.of(Const.Traits.FIREPROOF, 1)
                 .effects(
-                        new FireproofTraitEffect()
+                        FireproofTraitEffect.INSTANCE
                 )
                 .extraWikiLines("  - The item cannot be destroyed by fire or lava")
         );
@@ -259,7 +259,7 @@ public class TraitsProvider extends TraitsProviderBase {
         );
         ret.add(TraitBuilder.of(Const.Traits.FLAME_WARD, 1)
                 .effects(
-                        new FireproofTraitEffect(),
+                        FireproofTraitEffect.INSTANCE,
                         WielderEffectTraitEffect.builder()
                                 .add(GearTypes.ARMOR, WielderEffectTraitEffect.LevelType.FULL_SET_ONLY, MobEffects.FIRE_RESISTANCE, 1)
                                 .build()
@@ -489,13 +489,13 @@ public class TraitsProvider extends TraitsProviderBase {
         );
 
         // Block fillers
-        ret.add(new TraitBuilder(Const.Traits.CRACKLER, 1)
+        ret.add(new TraitBuilder(Const.Traits.ROAD_MAKER, 1)
                 .withGearTypeCondition(GearTypes.TOOL)
                 .effects(
                         new BlockFillerTraitEffect(
                                 new BlockFillerTraitEffect.TargetBlock(Blocks.GRASS_BLOCK, null),
                                 new BlockFillerTraitEffect.FillProperties(
-                                        Blocks.DIRT_PATH.defaultBlockState(),
+                                        Blocks.DIRT_PATH,
                                         false,
                                         1, 0, 1,
                                         false

@@ -1,45 +1,22 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
+  "type": "silentgear:simple",
   "parent": "silentgear:wool",
-  "crafting_items": {
-    "main": {
+  "crafting": {
+    "can_salvage": true,
+    "categories": [],
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "minecraft:black_wool"
-    }
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.wool.black"
+  "display": {
+    "color": "#FF141519",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.wool.black"
+    },
+    "name_prefix": ""
   },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#141519"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:cloth",
-        "color": "#141519"
-      }
-    ],
-    "grip/all": [
-      {
-        "texture": "silentgear:grip_wool",
-        "color": "#141519"
-      }
-    ],
-    "grip/part": [
-      {
-        "texture": "silentgear:grip",
-        "color": "#141519"
-      }
-    ],
-    "lining/part": [
-      {
-        "texture": "silentgear:lining_cloth",
-        "color": "#141519"
-      }
-    ]
-  }
+  "properties": {}
 }

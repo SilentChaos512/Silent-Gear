@@ -1,0 +1,46 @@
+{
+  "parent": "silentgear:the_end",
+  "criteria": {
+    "get_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:azure_silver_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "get_ore": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:raw_azure_silver"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.azure_silver.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:azure_silver_ingot"
+    },
+    "title": {
+      "translate": "advancements.silentgear.azure_silver.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_ore"
+    ],
+    [
+      "get_ingot"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

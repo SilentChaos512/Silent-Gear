@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "group": "silentgear:blueprints/lining",
+  "ingredients": [
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "silentgear:template_boards"
+    },
+    {
+      "tag": "minecraft:wool"
+    },
+    {
+      "tag": "minecraft:wool"
+    },
+    {
+      "tag": "c:strings"
+    },
+    {
+      "tag": "c:strings"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:lining_template"
+  }
+}

@@ -1,13 +1,18 @@
 {
-  "type": "silentgear:cancel_effects",
-  "max_level": 1,
-  "name": {
-    "translate": "trait.silentgear.cure_wither"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.cure_wither.desc"
   },
   "effects": [
-    "minecraft:wither"
-  ]
+    {
+      "type": "silentgear:cancel_effects",
+      "cleared_effects": [
+        "minecraft:wither"
+      ]
+    }
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.cure_wither"
+  }
 }

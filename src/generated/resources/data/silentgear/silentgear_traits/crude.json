@@ -1,15 +1,16 @@
 {
-  "type": "silentgear:synergy",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.crude"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.crude.desc"
   },
-  "cancels_with": [
-    "silentgear:rustic",
-    "silentgear:synergistic"
+  "effects": [
+    {
+      "type": "silentgear:synergy_multiplier",
+      "multiplier": -0.04
+    }
   ],
-  "synergy_multi": -0.04
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.crude"
+  }
 }

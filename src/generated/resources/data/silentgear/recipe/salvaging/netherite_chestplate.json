@@ -1,0 +1,16 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:netherite_chestplate"
+  },
+  "results": [
+    {
+      "count": 8,
+      "id": "minecraft:diamond"
+    },
+    {
+      "count": 1,
+      "id": "minecraft:netherite_ingot"
+    }
+  ]
+}

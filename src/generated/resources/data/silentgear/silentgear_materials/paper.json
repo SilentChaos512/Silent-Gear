@@ -1,40 +1,55 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 0,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "organic"
+      "organic",
+      "sheet",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:paper"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:paper"
+  "display": {
+    "color": "#FFFFFFFF",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.paper"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:fletching": {
+      "projectile_accuracy": 0.9,
+      "projectile_speed": 1.1
+    },
+    "silentgear:main": {
+      "armor": 4.0,
+      "armor/boots": 1.0,
+      "armor/chestplate": 1.0,
+      "armor/helmet": 1.0,
+      "armor/leggings": 1.0,
+      "armor_durability": 2.0,
+      "charging_value": 1.0,
+      "durability": 0.0,
+      "enchantment_value": 11.0,
+      "rarity": 3.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:flammable"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:rustic"
+        }
+      ]
     }
-  },
-  "name": {
-    "translate": "material.silentgear.paper"
-  },
-  "stats": {
-    "fletching": {
-      "projectile_speed": 1.1,
-      "projectile_accuracy": 0.9
-    }
-  },
-  "model": {
-    "fletching/all": [
-      {
-        "texture": "silentgear:fletching_generic"
-      }
-    ],
-    "fletching/part": [
-      {
-        "texture": "silentgear:fletching"
-      }
-    ]
   }
 }

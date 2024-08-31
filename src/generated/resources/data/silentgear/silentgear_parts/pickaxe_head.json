@@ -1,19 +1,28 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "pickaxe",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:pickaxe_head"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.pickaxe_head"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:pickaxe",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:pickaxe_head"
-  },
-  "name": {
-    "translate": "part.silentgear.pickaxe_head"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 1.0
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 1.0
     },
     "attack_speed": {
-      "add": -2.8
+      "operation": "ADD",
+      "value": -2.8
     },
     "repair_efficiency": 1.0
   }

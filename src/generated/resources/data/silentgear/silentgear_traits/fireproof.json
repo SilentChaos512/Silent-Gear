@@ -1,13 +1,18 @@
 {
-  "type": "silentgear:simple_trait",
-  "max_level": 1,
-  "name": {
-    "translate": "trait.silentgear.fireproof"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.fireproof.desc"
   },
+  "effects": [
+    {
+      "type": "silentgear:fireproof"
+    }
+  ],
   "extra_wiki_lines": [
     "  - The item cannot be destroyed by fire or lava"
-  ]
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.fireproof"
+  }
 }

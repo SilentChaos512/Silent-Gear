@@ -1,0 +1,23 @@
+{
+  "type": "silentgear:compound_part",
+  "category": "misc",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "silentgear:none",
+      "part_type": "silentgear:setting"
+    },
+    {
+      "item": "silentgear:bort"
+    },
+    {
+      "type": "silentgear:material",
+      "gear_type": "silentgear:tool",
+      "part_type": "silentgear:setting"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:setting"
+  }
+}

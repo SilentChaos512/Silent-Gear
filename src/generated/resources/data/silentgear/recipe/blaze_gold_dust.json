@@ -1,0 +1,14 @@
+{
+  "type": "silentgear:tool_action",
+  "damage_to_tool": 1,
+  "ingredient": {
+    "tag": "c:ingots/blaze_gold"
+  },
+  "result": {
+    "count": 1,
+    "id": "silentgear:blaze_gold_dust"
+  },
+  "tool": {
+    "tag": "c:tools/hammers"
+  }
+}

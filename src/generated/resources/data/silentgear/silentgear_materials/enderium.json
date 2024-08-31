@@ -1,97 +1,73 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:netherite",
-  "availability": {
-    "tier": 4,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "endgame"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/enderium"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:ingots/enderium"
-    }
+  "display": {
+    "color": "#FF468C75",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.enderium"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.enderium"
-  },
-  "stats": {
-    "main": {
-      "durability": 1200.0,
+  "properties": {
+    "silentgear:main": {
+      "armor": 22.0,
+      "armor/boots": 3.0,
+      "armor/chestplate": 9.0,
+      "armor/helmet": 3.0,
+      "armor/leggings": 7.0,
       "armor_durability": 34.0,
-      "repair_value": 0.15,
+      "armor_toughness": 8.0,
+      "attack_damage": 6.0,
+      "attack_speed": 0.0,
+      "charging_value": 1.2,
+      "draw_speed": 0.0,
+      "durability": 1200.0,
       "enchantment_value": 13.0,
       "harvest_speed": 18.0,
-      "melee_damage": 6.0,
-      "magic_damage": 4.0,
-      "attack_speed": 0.0,
-      "armor": 22.0,
-      "armor/helmet": 3.0,
-      "armor/chestplate": 9.0,
-      "armor/leggings": 7.0,
-      "armor/boots": 3.0,
-      "armor_toughness": 8.0,
+      "harvest_tier": "minecraft:netherite",
       "magic_armor": 10.0,
+      "magic_damage": 4.0,
       "ranged_damage": 3.0,
-      "ranged_speed": 0.0,
       "rarity": 80.0,
-      "charging_value": 1.2
+      "repair_value": 0.15,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        }
+      ]
     },
-    "rod": {
+    "silentgear:rod": {
       "durability": {
-        "mul2": 0.2
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.2
       },
       "harvest_speed": {
-        "mul2": 0.2
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.2
       },
-      "rarity": 60.0
+      "rarity": 60.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:malleable"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:malleable",
-        "level": 2
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#468C75"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#468C75"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#468C75"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#468C75"
-      }
-    ]
   }
 }

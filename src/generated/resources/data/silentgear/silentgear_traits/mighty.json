@@ -1,64 +1,71 @@
 {
-  "type": "silentgear:wielder_effect",
-  "max_level": 5,
   "conditions": [
     {
       "type": "silentgear:or",
       "values": [
         {
           "type": "silentgear:gear_type",
-          "gear_type": "tool"
+          "gear_type": "silentgear:tool"
         },
         {
           "type": "silentgear:gear_type",
-          "gear_type": "curio"
+          "gear_type": "silentgear:curio"
         }
       ]
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.mighty"
-  },
   "description": {
     "translate": "trait.silentgear.mighty.desc"
   },
-  "potion_effects": {
-    "tool": [
-      {
-        "type": "trait_level",
-        "effect": "minecraft:strength",
-        "level": [
-          0,
-          0,
-          1,
-          1,
-          2
-        ]
-      },
-      {
-        "type": "trait_level",
-        "effect": "minecraft:haste",
-        "level": [
-          1,
-          1,
-          1,
-          2,
-          3
+  "effects": [
+    {
+      "type": "silentgear:wielder_effect",
+      "potion_effects": {
+        "silentgear:curio": [
+          {
+            "type": "trait_level",
+            "duration": 38,
+            "effect": "minecraft:haste",
+            "levels": [
+              1,
+              1,
+              2,
+              2,
+              3
+            ]
+          }
+        ],
+        "silentgear:tool": [
+          {
+            "type": "trait_level",
+            "duration": 38,
+            "effect": "minecraft:strength",
+            "levels": [
+              0,
+              0,
+              1,
+              1,
+              2
+            ]
+          },
+          {
+            "type": "trait_level",
+            "duration": 38,
+            "effect": "minecraft:haste",
+            "levels": [
+              1,
+              1,
+              1,
+              2,
+              3
+            ]
+          }
         ]
       }
-    ],
-    "curio": [
-      {
-        "type": "trait_level",
-        "effect": "minecraft:haste",
-        "level": [
-          1,
-          1,
-          2,
-          2,
-          3
-        ]
-      }
-    ]
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.mighty"
   }
 }

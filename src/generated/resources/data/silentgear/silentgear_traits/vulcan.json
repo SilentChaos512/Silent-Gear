@@ -1,22 +1,31 @@
 {
-  "type": "silentgear:block_placer",
-  "max_level": 1,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "tool"
+      "gear_type": "silentgear:tool"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.vulcan"
-  },
   "description": {
     "translate": "trait.silentgear.vulcan.desc"
   },
-  "block": "minecraft:obsidian",
-  "damage_on_use": 20,
-  "cooldown": 100,
-  "sound": "minecraft:block.stone.place",
-  "sound_volume": 1.0,
-  "sound_pitch": 1.0
+  "effects": [
+    {
+      "type": "silentgear:block_placer",
+      "block": {
+        "Name": "minecraft:obsidian"
+      },
+      "cooldown": 100,
+      "damage_on_use": 20,
+      "sound": {
+        "pitch": 1.0,
+        "pitch_deviation": 0.2,
+        "sound": "minecraft:block.stone.place",
+        "volume": 1.0
+      }
+    }
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.vulcan"
+  }
 }

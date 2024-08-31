@@ -1,23 +1,33 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "crossbow",
-  "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:crossbow_limbs"
-  },
-  "name": {
-    "translate": "part.silentgear.crossbow_limbs"
-  },
-  "stats": {
-    "ranged_damage": {
-      "add": 2.0
-    },
-    "ranged_speed": {
-      "add": 1.0
-    },
-    "repair_efficiency": 1.0,
-    "enchantment_value": {
-      "mul1": -0.45
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:crossbow_limbs"
     }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.crossbow_limbs"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:crossbow",
+  "part_type": "silentgear:main",
+  "properties": {
+    "draw_speed": {
+      "operation": "ADD",
+      "value": 1.0
+    },
+    "enchantment_value": {
+      "operation": "MULTIPLY_BASE",
+      "value": -0.45
+    },
+    "ranged_damage": {
+      "operation": "ADD",
+      "value": 2.0
+    },
+    "repair_efficiency": 1.0
   }
 }

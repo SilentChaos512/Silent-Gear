@@ -1,0 +1,33 @@
+{
+  "parent": "silentgear:template_board",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:tip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.tip_upgrade.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:tip"
+    },
+    "title": {
+      "translate": "advancements.silentgear.tip_upgrade.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,108 +1,82 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 0,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "organic",
-      "cloth"
+      "cloth",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:leather"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.leather"
-  },
-  "stats": {
-    "main": {
-      "durability": 0.0,
-      "armor_durability": 5.0,
-      "enchantment_value": 15.0,
-      "rarity": 11.0,
-      "charging_value": 0.8,
-      "armor": 7.0,
-      "armor/helmet": 1.0,
-      "armor/chestplate": 3.0,
-      "armor/leggings": 2.0,
-      "armor/boots": 1.0,
-      "magic_armor": 8.0
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:leathers"
     },
-    "grip": {
-      "repair_efficiency": {
-        "mul1": 0.1
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FF805133",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.leather"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:grip": {
+      "attack_speed": {
+        "operation": "ADD",
+        "value": 0.15
       },
       "harvest_speed": {
-        "mul1": 0.15
+        "operation": "MULTIPLY_BASE",
+        "value": 0.15
       },
-      "attack_speed": {
-        "add": 0.15
-      }
+      "repair_efficiency": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.1
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:flexible"
+        }
+      ]
     },
-    "lining": {}
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:snow_walker",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "boots"
-          }
-        ]
-      }
-    ],
-    "grip": [
-      {
-        "name": "silentgear:flexible",
-        "level": 3
-      }
-    ],
-    "lining": [
-      {
-        "name": "silentgear:flexible",
-        "level": 4
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#805133"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:cloth",
-        "color": "#805133"
-      }
-    ],
-    "grip/all": [
-      {
-        "texture": "silentgear:grip_wool",
-        "color": "#805133"
-      }
-    ],
-    "grip/part": [
-      {
-        "texture": "silentgear:grip",
-        "color": "#805133"
-      }
-    ],
-    "lining/part": [
-      {
-        "texture": "silentgear:lining_cloth",
-        "color": "#805133"
-      }
-    ]
+    "silentgear:lining": {
+      "traits": [
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    },
+    "silentgear:main": {
+      "armor": 7.0,
+      "armor/boots": 1.0,
+      "armor/chestplate": 3.0,
+      "armor/helmet": 1.0,
+      "armor/leggings": 2.0,
+      "armor_durability": 5.0,
+      "charging_value": 0.8,
+      "durability": 0.0,
+      "enchantment_value": 15.0,
+      "magic_armor": 8.0,
+      "rarity": 11.0,
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:gear_type",
+              "gear_type": "silentgear:boots"
+            }
+          ],
+          "level": 1,
+          "trait": "silentgear:snow_walker"
+        }
+      ]
+    }
   }
 }

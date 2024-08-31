@@ -1,0 +1,59 @@
+{
+  "parent": "silentgear:blueprint_paper",
+  "criteria": {
+    "katana": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:katana"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "machete": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:machete"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "sword": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:sword"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.swords.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:sword"
+    },
+    "title": {
+      "translate": "advancements.silentgear.swords.title"
+    }
+  },
+  "requirements": [
+    [
+      "sword"
+    ],
+    [
+      "katana"
+    ],
+    [
+      "machete"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

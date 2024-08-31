@@ -1,107 +1,83 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/bismuth_brass"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:ingots/bismuth_brass"
-    }
+  "display": {
+    "color": "#FFE9C1B4",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.bismuth_brass"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.bismuth_brass"
-  },
-  "stats": {
-    "main": {
-      "durability": 580.0,
+  "properties": {
+    "silentgear:main": {
+      "armor": 18.0,
+      "armor/boots": 3.0,
+      "armor/chestplate": 7.0,
+      "armor/helmet": 3.0,
+      "armor/leggings": 5.0,
       "armor_durability": 15.0,
-      "repair_value": 0.15,
+      "armor_toughness": 2.0,
+      "attack_damage": 3.0,
+      "attack_speed": 0.1,
+      "charging_value": 1.1,
+      "draw_speed": 0.2,
+      "durability": 580.0,
       "enchantment_value": 14.0,
       "harvest_speed": 9.0,
-      "melee_damage": 3.0,
-      "magic_damage": 2.0,
-      "attack_speed": 0.1,
-      "armor": 18.0,
-      "armor/helmet": 3.0,
-      "armor/chestplate": 7.0,
-      "armor/leggings": 5.0,
-      "armor/boots": 3.0,
-      "armor_toughness": 2.0,
+      "harvest_tier": "minecraft:iron",
       "magic_armor": 8.0,
+      "magic_damage": 2.0,
       "ranged_damage": 2.0,
-      "ranged_speed": 0.2,
       "rarity": 50.0,
-      "charging_value": 1.1
+      "repair_value": 0.15,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:malleable"
+        },
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.5
+            }
+          ],
+          "level": 2,
+          "trait": "silentgear:lustrous"
+        }
+      ]
     },
-    "rod": {
+    "silentgear:rod": {
       "durability": {
-        "mul2": -0.1
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.1
       },
       "harvest_speed": {
-        "mul2": 0.2
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.2
       },
-      "rarity": 50.0
+      "rarity": 50.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:malleable"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:malleable",
-        "level": 2
-      },
-      {
-        "name": "silentgear:lustrous",
-        "level": 2,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.5
-          }
-        ]
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:malleable",
-        "level": 2
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#E9C1B4"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#E9C1B4"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#E9C1B4"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#E9C1B4"
-      }
-    ]
   }
 }

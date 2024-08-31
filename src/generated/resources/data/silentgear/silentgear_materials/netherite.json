@@ -1,100 +1,77 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:netherite",
-  "availability": {
-    "tier": 4,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "endgame"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/netherite"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "item": "minecraft:netherite_ingot"
-    }
+  "display": {
+    "color": "#FF867B86",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.netherite"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.netherite"
-  },
-  "name_prefix": {
-    "translate": "material.silentgear.netherite"
-  },
-  "stats": {
-    "coating": {
-      "durability": [
-        {
-          "mul2": 0.3
-        },
-        {
-          "add": 2.0
-        }
-      ],
+  "properties": {
+    "silentgear:coating": {
       "armor_durability": {
-        "mul2": 0.121212125
-      },
-      "harvest_speed": {
-        "mul2": 0.125
-      },
-      "melee_damage": {
-        "mul2": 0.33333334
-      },
-      "magic_damage": {
-        "mul2": 0.33333334
-      },
-      "ranged_damage": {
-        "mul2": 0.33333334
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.121212125
       },
       "armor_toughness": {
-        "add": 4.0
+        "operation": "ADD",
+        "value": 4.0
+      },
+      "attack_damage": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.33333334
+      },
+      "durability": [
+        {
+          "operation": "MULTIPLY_TOTAL",
+          "value": 0.3
+        },
+        {
+          "operation": "ADD",
+          "value": 2.0
+        }
+      ],
+      "enchantment_value": {
+        "operation": "ADD",
+        "value": 5.0
+      },
+      "harvest_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.125
       },
       "knockback_resistance": {
-        "add": 1.0
+        "operation": "ADD",
+        "value": 1.0
       },
-      "enchantment_value": {
-        "add": 5.0
-      }
+      "magic_damage": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.33333334
+      },
+      "ranged_damage": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.33333334
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:fireproof"
+        }
+      ]
     }
-  },
-  "traits": {
-    "coating": [
-      {
-        "name": "silentgear:fireproof",
-        "level": 1
-      }
-    ]
-  },
-  "model": {
-    "coating/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#867B86"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "coating/part": [
-      {
-        "texture": "silentgear:coating_material",
-        "color": "#867B86"
-      },
-      {
-        "texture": "silentgear:coating_jar"
-      }
-    ],
-    "coating/armor": [
-      {
-        "texture": "minecraft:netherite"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:dust",
-        "color": "#867B86"
-      }
-    ]
   }
 }

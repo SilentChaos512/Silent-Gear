@@ -1,19 +1,28 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "sword",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:sword_blade"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.sword_blade"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:sword",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:sword_blade"
-  },
-  "name": {
-    "translate": "part.silentgear.sword_blade"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 3.0
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 3.0
     },
     "attack_speed": {
-      "add": -2.4
+      "operation": "ADD",
+      "value": -2.4
     },
     "repair_efficiency": 1.0
   }

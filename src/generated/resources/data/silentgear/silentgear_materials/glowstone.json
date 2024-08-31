@@ -1,80 +1,61 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "gem",
-      "dust"
+      "dust",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:dusts/glowstone"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:dusts/glowstone"
-    }
+  "display": {
+    "color": "#FFD2D200",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.glowstone"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.glowstone"
-  },
-  "stats": {
-    "tip": {
-      "harvest_speed": {
-        "mul2": 0.4
+  "properties": {
+    "silentgear:tip": {
+      "attack_damage": {
+        "operation": "ADD",
+        "value": 2.0
       },
-      "melee_damage": {
-        "add": 2.0
+      "draw_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.3
+      },
+      "harvest_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.4
       },
       "magic_damage": {
-        "add": 2.0
-      },
-      "ranged_speed": {
-        "mul2": 0.3
+        "operation": "ADD",
+        "value": 2.0
       },
       "rarity": {
-        "add": 15.0
-      }
+        "operation": "ADD",
+        "value": 15.0
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:refractive"
+        },
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:lustrous"
+        }
+      ]
     }
-  },
-  "traits": {
-    "tip": [
-      {
-        "name": "silentgear:refractive",
-        "level": 1
-      },
-      {
-        "name": "silentgear:lustrous",
-        "level": 4
-      }
-    ]
-  },
-  "model": {
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_smooth",
-        "color": "#D2D200"
-      }
-    ],
-    "tip/part": [
-      {
-        "texture": "silentgear:tip_base"
-      },
-      {
-        "texture": "silentgear:tip",
-        "color": "#D2D200"
-      },
-      {
-        "texture": "silentgear:tip_shine"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:dust",
-        "color": "#D2D200"
-      }
-    ]
   }
 }

@@ -1,14 +1,21 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "leggings",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:legging_plates"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.legging_plates"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:leggings",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:legging_plates"
-  },
-  "name": {
-    "translate": "part.silentgear.legging_plates"
-  },
-  "stats": {
+  "properties": {
     "repair_efficiency": 1.0
   }
 }

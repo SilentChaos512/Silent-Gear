@@ -122,11 +122,13 @@ public class ProcessedMaterial extends AbstractMaterial {
     public static class Serializer extends MaterialSerializer<ProcessedMaterial> {
         public static final MapCodec<ProcessedMaterial> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
-                        DataResource.MATERIAL_CODEC.fieldOf("parent").forGetter(m -> m.parent),
+                        DataResource.MATERIAL_CODEC.optionalFieldOf("parent").forGetter(m -> m.parent.toOptional()),
                         MaterialCraftingData.CODEC.fieldOf("crafting").forGetter(m -> m.crafting),
                         MaterialDisplayData.CODEC.fieldOf("display").forGetter(m -> m.display),
                         Codec.unboundedMap(PartType.CODEC, GearPropertyMap.CODEC).fieldOf("properties").forGetter(m -> m.properties)
-                ).apply(instance, ProcessedMaterial::new)
+                ).apply(instance, (parent, crafting, display, properties) ->
+                        new ProcessedMaterial(parent.orElse(DataResource.empty()), crafting, display, properties)
+                )
         );
 
         public static final StreamCodec<RegistryFriendlyByteBuf, ProcessedMaterial> STREAM_CODEC = StreamCodec.composite(

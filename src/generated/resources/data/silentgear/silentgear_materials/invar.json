@@ -1,116 +1,92 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/invar"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:ingots/invar"
-    }
+  "display": {
+    "color": "#FFC2CBB8",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.invar"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.invar"
-  },
-  "stats": {
-    "main": {
-      "durability": 640.0,
+  "properties": {
+    "silentgear:main": {
+      "armor": 18.0,
+      "armor/boots": 2.0,
+      "armor/chestplate": 8.0,
+      "armor/helmet": 2.0,
+      "armor/leggings": 6.0,
       "armor_durability": 20.0,
-      "repair_value": 0.15,
+      "armor_toughness": 2.0,
+      "attack_damage": 3.5,
+      "attack_speed": 0.0,
+      "charging_value": 1.2,
+      "draw_speed": 0.0,
+      "durability": 640.0,
       "enchantment_value": 13.0,
       "harvest_speed": 7.0,
-      "melee_damage": 3.5,
-      "magic_damage": 3.0,
-      "attack_speed": 0.0,
-      "armor": 18.0,
-      "armor/helmet": 2.0,
-      "armor/chestplate": 8.0,
-      "armor/leggings": 6.0,
-      "armor/boots": 2.0,
-      "armor_toughness": 2.0,
+      "harvest_tier": "minecraft:iron",
       "magic_armor": 6.0,
+      "magic_damage": 3.0,
       "ranged_damage": 2.0,
-      "ranged_speed": 0.0,
       "rarity": 50.0,
-      "charging_value": 1.2
+      "repair_value": 0.15,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        },
+        {
+          "conditions": [
+            {
+              "type": "silentgear:or",
+              "values": [
+                {
+                  "type": "silentgear:material_count",
+                  "count": 3
+                },
+                {
+                  "type": "silentgear:material_ratio",
+                  "ratio": 0.35
+                }
+              ]
+            }
+          ],
+          "level": 2,
+          "trait": "silentgear:adamant"
+        }
+      ]
     },
-    "rod": {
+    "silentgear:rod": {
+      "attack_damage": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.1
+      },
       "durability": {
-        "mul2": 0.3
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.3
       },
-      "melee_damage": {
-        "mul2": 0.1
-      },
-      "rarity": 50.0
+      "rarity": 50.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      },
-      {
-        "name": "silentgear:adamant",
-        "level": 2,
-        "conditions": [
-          {
-            "type": "silentgear:or",
-            "values": [
-              {
-                "type": "silentgear:material_count",
-                "count": 3
-              },
-              {
-                "type": "silentgear:material_ratio",
-                "ratio": 0.35
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#C2CBB8"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#C2CBB8"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#C2CBB8"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#C2CBB8"
-      }
-    ]
   }
 }

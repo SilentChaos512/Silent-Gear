@@ -1,33 +1,38 @@
 {
-  "type": "silentgear:wielder_effect",
-  "max_level": 1,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "armor"
+      "gear_type": "silentgear:armor"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.flame_ward"
-  },
   "description": {
     "translate": "trait.silentgear.flame_ward.desc"
   },
-  "overrides": [
-    "silentgear:flammable"
+  "effects": [
+    {
+      "type": "silentgear:fireproof"
+    },
+    {
+      "type": "silentgear:wielder_effect",
+      "potion_effects": {
+        "silentgear:armor": [
+          {
+            "type": "full_set_only",
+            "duration": 38,
+            "effect": "minecraft:fire_resistance",
+            "levels": [
+              1
+            ]
+          }
+        ]
+      }
+    }
   ],
   "extra_wiki_lines": [
     "  - The item cannot be destroyed by fire or lava"
   ],
-  "potion_effects": {
-    "armor": [
-      {
-        "type": "full_set_only",
-        "effect": "minecraft:fire_resistance",
-        "level": [
-          1
-        ]
-      }
-    ]
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.flame_ward"
   }
 }

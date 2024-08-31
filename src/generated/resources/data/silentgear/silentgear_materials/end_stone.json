@@ -1,103 +1,80 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "rock"
+      "rock",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:end_stones"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.end_stone"
-  },
-  "stats": {
-    "main": {
-      "durability": 1164.0,
-      "armor_durability": 15.0,
-      "enchantment_value": 10.0,
-      "rarity": 32.0,
-      "charging_value": 0.9,
-      "repair_value": -0.2,
-      "harvest_speed": 7.0,
-      "melee_damage": 2.0,
-      "magic_damage": 3.0,
-      "attack_speed": 0.1,
-      "ranged_damage": 0.0,
-      "ranged_speed": 0.0,
-      "projectile_speed": 1.0,
-      "projectile_accuracy": 0.8,
-      "armor": 15.0,
-      "armor/helmet": 3.0,
-      "armor/chestplate": 5.0,
-      "armor/leggings": 4.0,
-      "armor/boots": 3.0,
-      "armor_toughness": 1.0,
-      "magic_armor": 6.0
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:end_stones"
     },
-    "rod": {
-      "melee_damage": {
-        "add": 1.0
-      }
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFFFFFCC",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.end_stone"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor": 15.0,
+      "armor/boots": 3.0,
+      "armor/chestplate": 5.0,
+      "armor/helmet": 3.0,
+      "armor/leggings": 4.0,
+      "armor_durability": 15.0,
+      "armor_toughness": 1.0,
+      "attack_damage": 2.0,
+      "attack_speed": 0.1,
+      "charging_value": 0.9,
+      "draw_speed": 0.0,
+      "durability": 1164.0,
+      "enchantment_value": 10.0,
+      "harvest_speed": 7.0,
+      "harvest_tier": "minecraft:iron",
+      "magic_armor": 6.0,
+      "magic_damage": 3.0,
+      "projectile_accuracy": 0.8,
+      "projectile_speed": 1.0,
+      "ranged_damage": 0.0,
+      "rarity": 32.0,
+      "repair_value": -0.2,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:jagged"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:ancient"
+        }
+      ]
+    },
+    "silentgear:rod": {
+      "attack_damage": {
+        "operation": "ADD",
+        "value": 1.0
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:malleable"
+        },
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:ancient"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:jagged",
-        "level": 3
-      },
-      {
-        "name": "silentgear:ancient",
-        "level": 2
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:malleable",
-        "level": 1
-      },
-      {
-        "name": "silentgear:ancient",
-        "level": 4
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#FFFFCC"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#FFFFCC"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#FFFFCC"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#FFFFCC"
-      }
-    ]
   }
 }

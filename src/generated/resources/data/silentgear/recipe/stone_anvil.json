@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "c:cobblestones"
+    },
+    "/": {
+      "tag": "minecraft:dirt"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#/#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:stone_anvil"
+  }
+}

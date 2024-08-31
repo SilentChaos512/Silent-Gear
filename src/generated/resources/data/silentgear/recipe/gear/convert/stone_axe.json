@@ -1,0 +1,48 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:stone_axe"
+    }
+  ],
+  "result": {
+    "item": "silentgear:axe",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:stone"
+              },
+              {
+                "material": "silentgear:stone"
+              },
+              {
+                "material": "silentgear:stone"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:axe_head"
+        },
+        "part": "silentgear:axe_head"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:wood"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:rod"
+        },
+        "part": "silentgear:rod"
+      }
+    ]
+  }
+}

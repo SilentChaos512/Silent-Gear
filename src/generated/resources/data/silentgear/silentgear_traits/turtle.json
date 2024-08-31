@@ -1,25 +1,25 @@
 {
-  "type": "silentgear:simple_trait",
-  "max_level": 1,
   "conditions": [
     {
       "type": "silentgear:or",
       "values": [
         {
           "type": "silentgear:gear_type",
-          "gear_type": "helmet"
+          "gear_type": "silentgear:helmet"
         },
         {
           "type": "silentgear:gear_type",
-          "gear_type": "curio"
+          "gear_type": "silentgear:curio"
         }
       ]
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.turtle"
-  },
   "description": {
     "translate": "trait.silentgear.turtle.desc"
+  },
+  "effects": [],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.turtle"
   }
 }

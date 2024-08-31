@@ -1,45 +1,51 @@
 {
-  "type": "silentgear:wielder_effect",
-  "max_level": 1,
   "conditions": [
     {
       "type": "silentgear:or",
       "values": [
         {
           "type": "silentgear:gear_type",
-          "gear_type": "helmet"
+          "gear_type": "silentgear:helmet"
         },
         {
           "type": "silentgear:gear_type",
-          "gear_type": "curio"
+          "gear_type": "silentgear:curio"
         }
       ]
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.kitty_vision"
-  },
   "description": {
     "translate": "trait.silentgear.kitty_vision.desc"
   },
-  "potion_effects": {
-    "helmet": [
-      {
-        "type": "trait_level",
-        "effect": "minecraft:night_vision",
-        "level": [
-          1
+  "effects": [
+    {
+      "type": "silentgear:wielder_effect",
+      "potion_effects": {
+        "silentgear:curio": [
+          {
+            "type": "trait_level",
+            "duration": 318,
+            "effect": "minecraft:night_vision",
+            "levels": [
+              1
+            ]
+          }
+        ],
+        "silentgear:helmet": [
+          {
+            "type": "trait_level",
+            "duration": 318,
+            "effect": "minecraft:night_vision",
+            "levels": [
+              1
+            ]
+          }
         ]
       }
-    ],
-    "curio": [
-      {
-        "type": "trait_level",
-        "effect": "minecraft:night_vision",
-        "level": [
-          1
-        ]
-      }
-    ]
+    }
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.kitty_vision"
   }
 }

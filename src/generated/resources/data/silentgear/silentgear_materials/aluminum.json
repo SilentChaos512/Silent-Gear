@@ -1,114 +1,92 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/aluminum"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:ingots/aluminum"
-    }
+  "display": {
+    "color": "#FFBFD4DE",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.aluminum"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.aluminum"
-  },
-  "stats": {
-    "main": {
-      "durability": 365.0,
+  "properties": {
+    "silentgear:main": {
+      "armor": 14.0,
+      "armor/boots": 2.0,
+      "armor/chestplate": 6.0,
+      "armor/helmet": 2.0,
+      "armor/leggings": 4.0,
       "armor_durability": 15.0,
+      "armor_toughness": 0.5,
+      "attack_damage": 2.0,
+      "attack_speed": 0.2,
+      "charging_value": 0.9,
+      "draw_speed": 0.2,
+      "durability": 365.0,
       "enchantment_value": 14.0,
       "harvest_speed": 8.0,
-      "melee_damage": 2.0,
-      "magic_damage": 2.0,
-      "attack_speed": 0.2,
-      "armor": 14.0,
-      "armor/helmet": 2.0,
-      "armor/chestplate": 6.0,
-      "armor/leggings": 4.0,
-      "armor/boots": 2.0,
-      "armor_toughness": 0.5,
+      "harvest_tier": "minecraft:iron",
       "magic_armor": 3.0,
+      "magic_damage": 2.0,
       "ranged_damage": 2.0,
-      "ranged_speed": 0.2,
       "rarity": 25.0,
-      "charging_value": 0.9
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        },
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.5
+            }
+          ],
+          "level": 2,
+          "trait": "silentgear:soft"
+        },
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:synergistic"
+        }
+      ]
     },
-    "rod": {
+    "silentgear:rod": {
       "durability": {
-        "mul2": 0.2
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.2
       },
       "ranged_damage": {
-        "mul2": 0.1
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.1
       },
-      "rarity": 30.0
+      "rarity": 30.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:synergistic"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      },
-      {
-        "name": "silentgear:soft",
-        "level": 2,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.5
-          }
-        ]
-      },
-      {
-        "name": "silentgear:synergistic",
-        "level": 1
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      },
-      {
-        "name": "silentgear:synergistic",
-        "level": 2
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#BFD4DE"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#BFD4DE"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#BFD4DE"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#BFD4DE"
-      }
-    ]
   }
 }

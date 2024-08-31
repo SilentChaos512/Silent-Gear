@@ -75,7 +75,7 @@ public class CustomAlloyIngredient implements ICustomIngredient {
 
     private void dissolve() {
         if (this.itemStacks == null) {
-            var itemValue = new Ingredient.ItemValue(item.create(MaterialInstance.of(this.material)));
+            var itemValue = new Ingredient.ItemValue(item.create(MaterialInstance.of(this.material, ItemStack.EMPTY)));
             this.itemStacks = itemValue.getItems().toArray(new ItemStack[0]);
         }
     }

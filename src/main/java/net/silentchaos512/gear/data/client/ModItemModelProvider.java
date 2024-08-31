@@ -210,7 +210,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private String gearTypeName(GearType gearType) {
-        return Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(gearType)).toString();
+        return Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(gearType)).getPath();
     }
 
     private String itemNamePath(GearItemSet<?> itemSet) {
@@ -357,7 +357,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder tempGearPart(DeferredItem<CompoundPartItem> item) {
-        String name = gearTypeName(item.get().getGearType());
+        String name = Objects.requireNonNull(SgRegistries.PART_TYPE.getKey(item.get().getPartType())).getPath();
         return tempGearPart(item, "item/part/" + name);
     }
 

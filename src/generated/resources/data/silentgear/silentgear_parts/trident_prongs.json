@@ -1,19 +1,28 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "trident",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:trident_prongs"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.trident_prongs"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:trident",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:trident_prongs"
-  },
-  "name": {
-    "translate": "part.silentgear.trident_prongs"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 4.0
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 4.0
     },
     "attack_speed": {
-      "add": -2.9
+      "operation": "ADD",
+      "value": -2.9
     },
     "repair_efficiency": 1.0
   }

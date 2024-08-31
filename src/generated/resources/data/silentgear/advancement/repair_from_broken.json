@@ -1,0 +1,34 @@
+{
+  "parent": "silentgear:repair_kit",
+  "criteria": {
+    "repair": {
+      "conditions": {
+        "broken_count": {
+          "min": 1
+        },
+        "repaired_count": {
+          "min": 1
+        }
+      },
+      "trigger": "silentgear:gear_repair"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.repair_from_broken.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:flint"
+    },
+    "title": {
+      "translate": "advancements.silentgear.repair_from_broken.title"
+    }
+  },
+  "requirements": [
+    [
+      "repair"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

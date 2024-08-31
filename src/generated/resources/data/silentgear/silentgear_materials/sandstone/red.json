@@ -1,50 +1,22 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
+  "type": "silentgear:simple",
   "parent": "silentgear:sandstone",
-  "crafting_items": {
-    "main": [
-      {
-        "item": "minecraft:red_sandstone"
-      },
-      {
-        "item": "minecraft:chiseled_red_sandstone"
-      },
-      {
-        "item": "minecraft:cut_red_sandstone"
-      },
-      {
-        "item": "minecraft:smooth_red_sandstone"
-      }
-    ]
+  "crafting": {
+    "can_salvage": true,
+    "categories": [],
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:sandstone/red_blocks"
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.sandstone.red"
+  "display": {
+    "color": "#FFD97B30",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.sandstone.red"
+    },
+    "name_prefix": ""
   },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#D97B30"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#D97B30"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#D97B30"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#D97B30"
-      }
-    ]
-  }
+  "properties": {}
 }

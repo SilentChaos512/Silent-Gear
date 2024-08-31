@@ -42,11 +42,6 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-/**
- * Includes many methods for getting values from the NBT of gear items. Please make sure all
- * ItemStacks passed in are of {@link GearItem}s! Calling these methods with invalid items should
- * not crash the game, but will spam the log with stack traces and will return invalid values.
- */
 public final class GearData {
     private GearData() {
         throw new IllegalAccessError("Utility class");
@@ -62,7 +57,7 @@ public final class GearData {
             return data;
         }
         recalculateGearData(gear, null);
-        return gear.get(SgDataComponents.GEAR_PROPERTIES);
+        return gear.getOrDefault(SgDataComponents.GEAR_PROPERTIES, GearPropertiesData.EMPTY);
     }
 
     /**
@@ -73,11 +68,10 @@ public final class GearData {
      * @return The gear construction data component, or a new, empty component
      */
     public static GearConstructionData getConstruction(ItemStack gear) {
-        var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
-        if (data == null) {
+        if (!(gear.getItem() instanceof GearItem)) {
             throw new IllegalArgumentException("Not a gear item: " + gear);
         }
-        return data;
+        return gear.getOrDefault(SgDataComponents.GEAR_CONSTRUCTION, GearConstructionData.EMPTY);
     }
 
     /**
@@ -483,6 +477,7 @@ public final class GearData {
                 data != null ? data.brokenCount() : 0,
                 data != null ? data.repairedCount() : 0
         );
+        gear.set(SgDataComponents.GEAR_CONSTRUCTION, newData);
     }
 
     //endregion

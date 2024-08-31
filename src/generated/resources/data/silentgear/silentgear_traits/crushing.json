@@ -1,24 +1,27 @@
 {
-  "type": "silentgear:stat_modifier",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.crushing"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.crushing.desc"
   },
-  "stats": [
+  "effects": [
     {
-      "name": "silentgear:armor",
-      "value": 0.05,
-      "factor_damage": true,
-      "factor_value": true
-    },
-    {
-      "name": "silentgear:melee_damage",
-      "value": -0.1667,
-      "factor_damage": true,
-      "factor_value": true
+      "type": "silentgear:number_property_modifier",
+      "property_modifiers": {
+        "silentgear:armor": {
+          "base_multiplier": 0.05,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": true
+        },
+        "silentgear:attack_damage": {
+          "base_multiplier": -0.1667,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": true
+        }
+      }
     }
-  ]
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.crushing"
+  }
 }

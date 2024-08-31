@@ -1,0 +1,26 @@
+{
+  "parent": "silentgear:azure_silver",
+  "criteria": {
+    "fall_with_moonwalker_boots": {
+      "trigger": "silentgear:fall_with_moonwalker"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.moonwalker.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:boots"
+    },
+    "title": {
+      "translate": "advancements.silentgear.moonwalker.title"
+    }
+  },
+  "requirements": [
+    [
+      "fall_with_moonwalker_boots"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

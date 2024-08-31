@@ -1,0 +1,23 @@
+{
+  "type": "silentgear:shaped_gear_crafting",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "type": "silentgear:material",
+      "gear_type": "silentgear:tool",
+      "part_type": "silentgear:main"
+    },
+    "/": {
+      "tag": "silentgear:rods/rough"
+    }
+  },
+  "pattern": [
+    "##",
+    "#/",
+    " /"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:axe"
+  }
+}

@@ -1,28 +1,39 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "slingshot",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:slingshot_limbs"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.slingshot_limbs"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:slingshot",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:slingshot_limbs"
-  },
-  "name": {
-    "translate": "part.silentgear.slingshot_limbs"
-  },
-  "stats": {
+  "properties": {
+    "draw_speed": {
+      "operation": "ADD",
+      "value": 1.5
+    },
+    "enchantment_value": {
+      "operation": "MULTIPLY_BASE",
+      "value": -0.65
+    },
     "ranged_damage": [
       {
-        "add": 0.0
+        "operation": "ADD",
+        "value": 0.0
       },
       {
-        "mul1": -0.75
+        "operation": "MULTIPLY_BASE",
+        "value": -0.75
       }
     ],
-    "ranged_speed": {
-      "add": 1.5
-    },
-    "repair_efficiency": 2.0,
-    "enchantment_value": {
-      "mul1": -0.65
-    }
+    "repair_efficiency": 2.0
   }
 }

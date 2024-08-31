@@ -1,35 +1,11 @@
 {
-  "type": "silentgear:enchantment",
-  "max_level": 2,
-  "conditions": [
-    {
-      "type": "silentgear:gear_type",
-      "gear_type": "weapon"
-    }
-  ],
-  "name": {
-    "translate": "trait.silentgear.fiery"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.fiery.desc"
   },
-  "enchantments": {
-    "melee_weapon": [
-      {
-        "enchantment": "minecraft:fire_aspect",
-        "level": [
-          1,
-          2
-        ]
-      }
-    ],
-    "ranged_weapon": [
-      {
-        "enchantment": "minecraft:flame",
-        "level": [
-          1
-        ]
-      }
-    ]
+  "effects": [],
+  "max_level": 2,
+  "name": {
+    "translate": "trait.silentgear.fiery"
   }
 }

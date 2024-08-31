@@ -1,0 +1,51 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_boots"
+    }
+  ],
+  "result": {
+    "item": "silentgear:boots",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:boot_plates"
+        },
+        "part": "silentgear:boots_plates"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:netherite"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:coating"
+        },
+        "part": "silentgear:coating"
+      }
+    ]
+  }
+}

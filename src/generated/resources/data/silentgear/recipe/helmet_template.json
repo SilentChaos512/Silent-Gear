@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "silentgear:blueprints/helmet",
+  "key": {
+    "#": {
+      "tag": "silentgear:template_boards"
+    }
+  },
+  "pattern": [
+    "###",
+    "# #"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:helmet_template"
+  }
+}

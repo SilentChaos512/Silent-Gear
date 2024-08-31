@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "silentgear:blueprints/prospector_hammer",
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "/": {
+      "tag": "c:rods/wooden"
+    },
+    "@": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "pattern": [
+    "##",
+    " /",
+    " @"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:prospector_hammer_blueprint"
+  }
+}

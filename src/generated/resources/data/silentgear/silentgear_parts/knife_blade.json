@@ -1,28 +1,39 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "knife",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:knife_blade"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.knife_blade"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:knife",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:knife_blade"
-  },
-  "name": {
-    "translate": "part.silentgear.knife_blade"
-  },
-  "stats": {
-    "melee_damage": [
+  "properties": {
+    "attack_damage": [
       {
-        "add": 1.0
+        "operation": "ADD",
+        "value": 1.0
       },
       {
-        "mul1": -0.5
+        "operation": "MULTIPLY_BASE",
+        "value": -0.5
       }
     ],
     "attack_speed": {
-      "add": -1.6
+      "operation": "ADD",
+      "value": -1.6
     },
-    "repair_efficiency": 2.0,
     "durability": {
-      "mul1": 0.25
-    }
+      "operation": "MULTIPLY_BASE",
+      "value": 0.25
+    },
+    "repair_efficiency": 2.0
   }
 }

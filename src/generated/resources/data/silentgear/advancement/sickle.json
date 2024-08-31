@@ -1,0 +1,33 @@
+{
+  "parent": "silentgear:mattock",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:sickle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.sickle.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:sickle"
+    },
+    "title": {
+      "translate": "advancements.silentgear.sickle.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,49 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_chestplate"
+    }
+  ],
+  "result": {
+    "item": "silentgear:chestplate",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              },
+              {
+                "material": "silentgear:iron"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:chestplate_plates"
+        },
+        "part": "silentgear:chestplate_plates"
+      }
+    ]
+  }
+}

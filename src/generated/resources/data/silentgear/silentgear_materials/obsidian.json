@@ -1,100 +1,80 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:diamond",
-  "availability": {
-    "tier": 3,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "rock"
+      "rock",
+      "advanced"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:obsidian"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.obsidian"
-  },
-  "stats": {
-    "main": {
-      "durability": 3072.0,
-      "armor_durability": 37.0,
-      "enchantment_value": 7.0,
-      "rarity": 10.0,
-      "charging_value": 0.6,
-      "repair_value": -0.5,
-      "harvest_speed": 6.0,
-      "melee_damage": 3.0,
-      "magic_damage": 2.0,
-      "attack_speed": -0.4,
-      "ranged_damage": 0.0,
-      "ranged_speed": -0.4,
-      "projectile_speed": 0.7,
-      "projectile_accuracy": 0.7,
-      "armor": 20.0,
-      "armor/helmet": 3.0,
-      "armor/chestplate": 8.0,
-      "armor/leggings": 6.0,
-      "armor/boots": 3.0,
-      "armor_toughness": 4.0,
-      "magic_armor": 8.0
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:obsidians"
     },
-    "rod": {
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FF443464",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.obsidian"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor": 20.0,
+      "armor/boots": 3.0,
+      "armor/chestplate": 8.0,
+      "armor/helmet": 3.0,
+      "armor/leggings": 6.0,
+      "armor_durability": 37.0,
+      "armor_toughness": 4.0,
+      "attack_damage": 3.0,
+      "attack_speed": -0.4,
+      "charging_value": 0.6,
+      "draw_speed": -0.4,
+      "durability": 3072.0,
+      "enchantment_value": 7.0,
+      "harvest_speed": 6.0,
+      "harvest_tier": "minecraft:diamond",
+      "magic_armor": 8.0,
+      "magic_damage": 2.0,
+      "projectile_accuracy": 0.7,
+      "projectile_speed": 0.7,
+      "ranged_damage": 0.0,
+      "rarity": 10.0,
+      "repair_value": -0.5,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:jagged"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:crushing"
+        }
+      ]
+    },
+    "silentgear:rod": {
       "harvest_speed": {
-        "mul2": -0.1
-      }
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.1
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:brittle"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:chipping"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:jagged",
-        "level": 3
-      },
-      {
-        "name": "silentgear:crushing",
-        "level": 2
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:brittle",
-        "level": 2
-      },
-      {
-        "name": "silentgear:chipping",
-        "level": 3
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#443464"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#443464"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#443464"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#443464"
-      }
-    ]
   }
 }

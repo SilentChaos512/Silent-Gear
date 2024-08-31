@@ -1,39 +1,25 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
+  "type": "silentgear:simple",
   "parent": "silentgear:stone",
-  "crafting_items": {
-    "main": {
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "rock",
+      "basic"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "minecraft:andesite"
-    }
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.stone.andesite"
+  "display": {
+    "color": "#FF8A8A8E",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.stone.andesite"
+    },
+    "name_prefix": ""
   },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#8A8A8E"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#8A8A8E"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#8A8A8E"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#8A8A8E"
-      }
-    ]
-  }
+  "properties": {}
 }

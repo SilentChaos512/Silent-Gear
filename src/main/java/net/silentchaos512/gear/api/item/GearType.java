@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public record GearType(
-        Supplier<GearType> parent,
+        @Nullable Supplier<GearType> parent,
         int animationFrames,
         Set<ItemAbility> itemAbilities,
         float armorDurabilityMultiplier,
@@ -111,7 +111,7 @@ public record GearType(
 
     @Override
     public Set<GearPropertyGroup> relevantPropertyGroups() {
-        if (relevantPropertyGroups.isEmpty()) {
+        if (relevantPropertyGroups.isEmpty() && this.parent != null) {
             return parent.get().relevantPropertyGroups();
         }
         return relevantPropertyGroups;
@@ -124,6 +124,26 @@ public record GearType(
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var thisKey = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(this));
+        var thatKey = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey((GearType) obj));
+        return thisKey.equals(thatKey);
+    }
+
+    @Override
+    public int hashCode() {
+        var key = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(this));
+        return key.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getDisplayName().getString();
     }
 
     public static class Builder {

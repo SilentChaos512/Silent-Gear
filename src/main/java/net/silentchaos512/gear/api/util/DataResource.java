@@ -69,6 +69,13 @@ public class DataResource<T> implements Supplier<T> {
         return this.getter.apply(this.objectId);
     }
 
+    public Optional<DataResource<T>> toOptional() {
+        if (!isPresent()) {
+            return Optional.empty();
+        }
+        return Optional.of(this);
+    }
+
     @Override
     public T get() {
         T ret = getNullable();
@@ -98,6 +105,11 @@ public class DataResource<T> implements Supplier<T> {
     public <U> Optional<U> map(Function<? super T, ? extends U> mapper) {
         T obj = getNullable();
         return obj != null ? Optional.ofNullable(mapper.apply(obj)) : Optional.empty();
+    }
+
+    @Override
+    public String toString() {
+        return "DataResource{" + this.objectId + "}";
     }
 
     public static final Codec<DataResource<Material>> MATERIAL_CODEC = ResourceLocation.CODEC.xmap(

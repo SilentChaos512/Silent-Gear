@@ -1,55 +1,40 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "slime",
-      "organic"
+      "organic",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "minecraft:slime_block"
-    }
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.slime"
+  "display": {
+    "color": "#FF8CD782",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.slime"
+    },
+    "name_prefix": ""
   },
-  "stats": {
-    "lining": {
+  "properties": {
+    "silentgear:lining": {
       "armor_toughness": {
-        "add": 0.5
-      }
-    }
-  },
-  "traits": {
-    "lining": [
-      {
-        "name": "silentgear:bounce",
-        "level": 1
-      }
-    ]
-  },
-  "model": {
-    "lining/part": [
-      {
-        "texture": "silentgear:lining_slime",
-        "color": "#8CD782"
+        "operation": "ADD",
+        "value": 0.5
       },
-      {
-        "texture": "silentgear:lining_slime_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:dust",
-        "color": "#8CD782"
-      }
-    ]
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:bounce"
+        }
+      ]
+    }
   }
 }

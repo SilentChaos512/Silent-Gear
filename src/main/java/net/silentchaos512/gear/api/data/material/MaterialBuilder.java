@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.*;
@@ -24,6 +25,7 @@ import net.silentchaos512.gear.gear.material.CustomCompoundMaterial;
 import net.silentchaos512.gear.gear.material.ProcessedMaterial;
 import net.silentchaos512.gear.gear.material.SimpleMaterial;
 import net.silentchaos512.gear.gear.trait.Trait;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -36,11 +38,11 @@ import java.util.function.Supplier;
 public class MaterialBuilder<M extends Material> {
     private final ResourceLocation id;
     private final MaterialFactory<M> factory;
-    private DataResource<Material> parent = null;
+    private DataResource<Material> parent = DataResource.empty();
     private MaterialCraftingData crafting = null;
     private MaterialDisplayData display;
     private final Map<PartType, GearPropertyMap> properties = new LinkedHashMap<>();
-    private Map<PartType, List<TraitInstance>> traits;
+    private final Map<PartType, List<TraitInstance>> traits = new LinkedHashMap<>();
 
     public MaterialBuilder(ResourceLocation id, MaterialFactory<M> factory) {
         this.id = id;
@@ -287,6 +289,7 @@ public class MaterialBuilder<M extends Material> {
 
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     public JsonObject serialize() {
+        SilentGear.LOGGER.info("Trying to serialize material \"{}\"", this.id);
         validate();
 
         this.traits.forEach(((partType, traitInstances) -> {
@@ -303,8 +306,15 @@ public class MaterialBuilder<M extends Material> {
 
         //noinspection unchecked
         var codec = (MapCodec<M>) material.getSerializer().codec();
-        var jsonElement = codec.codec().encodeStart(JsonOps.INSTANCE, material).getOrThrow();
-        return jsonElement.getAsJsonObject();
+        var jsonElementDataResult = codec.codec().encodeStart(JsonOps.INSTANCE, material);
+        if (jsonElementDataResult.isError()) {
+            SilentGear.LOGGER.error("Something went wrong when serializing material \"{}\"", this.id);
+        }
+
+        var json = jsonElementDataResult.getOrThrow().getAsJsonObject();
+        var serializerId = Objects.requireNonNull(SgRegistries.MATERIAL_SERIALIZER.getKey(material.getSerializer()));
+        json.addProperty("type", serializerId.toString());
+        return json;
     }
 
     public interface MaterialFactory<M extends Material> {

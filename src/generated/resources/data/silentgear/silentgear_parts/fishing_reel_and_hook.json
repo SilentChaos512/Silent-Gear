@@ -1,20 +1,29 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "fishing_rod",
-  "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:fishing_reel_and_hook"
-  },
-  "name": {
-    "translate": "part.silentgear.fishing_reel_and_hook"
-  },
-  "stats": {
-    "durability": {
-      "mul1": -0.5
-    },
-    "repair_efficiency": 1.25,
-    "enchantment_value": {
-      "mul1": -0.75
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:fishing_reel_and_hook"
     }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.fishing_reel_and_hook"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:fishing_rod",
+  "part_type": "silentgear:main",
+  "properties": {
+    "durability": {
+      "operation": "MULTIPLY_BASE",
+      "value": -0.5
+    },
+    "enchantment_value": {
+      "operation": "MULTIPLY_BASE",
+      "value": -0.75
+    },
+    "repair_efficiency": 1.25
   }
 }

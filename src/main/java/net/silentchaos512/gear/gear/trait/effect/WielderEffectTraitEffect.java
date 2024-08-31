@@ -123,7 +123,7 @@ public class WielderEffectTraitEffect extends TraitEffect {
                         LevelType.CODEC.fieldOf("type").forGetter(d -> d.type),
                         BuiltInRegistries.MOB_EFFECT.holderByNameCodec().fieldOf("effect").forGetter(d -> d.effect),
                         Codec.INT.fieldOf("duration").forGetter(d -> d.duration),
-                        Codec.list(ExtraCodecs.POSITIVE_INT).fieldOf("levels").forGetter(d -> d.levels)
+                        Codec.list(ExtraCodecs.NON_NEGATIVE_INT).fieldOf("levels").forGetter(d -> d.levels)
                 ).apply(instance, PotionData::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, PotionData> STREAM_CODEC = StreamCodec.composite(

@@ -1,0 +1,33 @@
+{
+  "parent": "silentgear:blueprint_paper",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:blueprint_book"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.blueprint_book.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:blueprint_book"
+    },
+    "title": {
+      "translate": "advancements.silentgear.blueprint_book.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

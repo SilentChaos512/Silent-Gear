@@ -22,6 +22,8 @@ public record GearConstructionData(
         int brokenCount,
         int repairedCount
 ) {
+    public static final GearConstructionData EMPTY = new GearConstructionData(PartList.empty(), true, 0, 0);
+
     public static final Codec<GearConstructionData> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     PartList.CODEC.fieldOf("parts").forGetter(d -> d.parts),

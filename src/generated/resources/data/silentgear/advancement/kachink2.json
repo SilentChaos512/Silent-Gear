@@ -1,0 +1,26 @@
+{
+  "parent": "silentgear:kachink1",
+  "criteria": {
+    "kachink": {
+      "trigger": "silentgear:brittle_proc"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.kachink2.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:diamond_shard"
+    },
+    "title": {
+      "translate": "advancements.silentgear.kachink2.title"
+    }
+  },
+  "requirements": [
+    [
+      "kachink"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

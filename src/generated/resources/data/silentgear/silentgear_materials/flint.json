@@ -1,104 +1,68 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:stone",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "rock"
+      "rock",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "minecraft:flint"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.flint"
-  },
-  "stats": {
-    "main": {
-      "durability": 124.0,
-      "armor_durability": 4.0,
-      "enchantment_value": 3.0,
-      "rarity": 6.0,
-      "charging_value": 0.8,
-      "harvest_speed": 5.0,
-      "melee_damage": 2.0,
-      "attack_speed": -0.1,
-      "ranged_damage": 1.0,
-      "ranged_speed": -0.3,
-      "projectile_speed": 1.0,
-      "projectile_accuracy": 1.0,
-      "armor": 4.0,
-      "armor/helmet": 0.5,
-      "armor/chestplate": 2.0,
-      "armor/leggings": 1.0,
-      "armor/boots": 0.5
     },
-    "rod": {},
-    "adornment": {}
+    "part_substitutes": {}
   },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:jagged",
-        "level": 3
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:brittle",
-        "level": 3
-      },
-      {
-        "name": "silentgear:jagged",
-        "level": 2
-      }
-    ]
+  "display": {
+    "color": "#FF969696",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.flint"
+    },
+    "name_prefix": ""
   },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#969696"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#969696"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#969696"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#969696"
-      }
-    ],
-    "adornment/all": [
-      {
-        "texture": "silentgear:adornment_generic",
-        "color": "#969696"
-      }
-    ],
-    "adornment/part": [
-      {
-        "texture": "silentgear:adornment",
-        "color": "#969696"
-      },
-      {
-        "texture": "silentgear:adornment_highlight"
-      }
-    ]
+  "properties": {
+    "silentgear:main": {
+      "armor": 4.0,
+      "armor/boots": 0.5,
+      "armor/chestplate": 2.0,
+      "armor/helmet": 0.5,
+      "armor/leggings": 1.0,
+      "armor_durability": 4.0,
+      "attack_damage": 2.0,
+      "attack_speed": -0.1,
+      "charging_value": 0.8,
+      "draw_speed": -0.3,
+      "durability": 124.0,
+      "enchantment_value": 3.0,
+      "harvest_speed": 5.0,
+      "harvest_tier": "minecraft:stone",
+      "projectile_accuracy": 1.0,
+      "projectile_speed": 1.0,
+      "ranged_damage": 1.0,
+      "rarity": 6.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:jagged"
+        }
+      ]
+    },
+    "silentgear:rod": {
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:brittle"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:jagged"
+        }
+      ]
+    },
+    "silentgear:setting": {}
   }
 }

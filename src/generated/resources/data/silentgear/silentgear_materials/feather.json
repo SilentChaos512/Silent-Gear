@@ -1,45 +1,30 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "organic"
+      "organic",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:feathers"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:feathers"
+  "display": {
+    "color": "#FFFFFFFF",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.feather"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:fletching": {
+      "projectile_accuracy": 1.1,
+      "projectile_speed": 0.9
     }
-  },
-  "name": {
-    "translate": "material.silentgear.feather"
-  },
-  "stats": {
-    "fletching": {
-      "projectile_speed": 0.9,
-      "projectile_accuracy": 1.1
-    }
-  },
-  "model": {
-    "fletching/all": [
-      {
-        "texture": "silentgear:fletching_generic"
-      }
-    ],
-    "fletching/part": [
-      {
-        "texture": "silentgear:fletching"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:cloth"
-      }
-    ]
   }
 }

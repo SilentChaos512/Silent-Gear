@@ -1,10 +1,11 @@
 {
-  "type": "silentgear:simple_trait",
+  "conditions": [],
+  "description": {
+    "translate": "trait.silentgear.red_card.desc"
+  },
+  "effects": [],
   "max_level": 1,
   "name": {
     "translate": "trait.silentgear.red_card"
-  },
-  "description": {
-    "translate": "trait.silentgear.red_card.desc"
   }
 }

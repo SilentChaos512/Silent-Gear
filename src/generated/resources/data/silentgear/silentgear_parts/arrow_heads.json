@@ -1,14 +1,19 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "arrow",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:arrow_heads"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.arrow_heads"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:arrow",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:arrow_heads"
-  },
-  "name": {
-    "translate": "part.silentgear.arrow_heads"
-  },
-  "stats": {
-    "repair_efficiency": 0.75
-  }
+  "properties": {}
 }

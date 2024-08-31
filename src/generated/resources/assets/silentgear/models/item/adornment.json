@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "silentgear:item/part/adornment",
-    "layer1": "silentgear:item/part_marker"
-  }
-}

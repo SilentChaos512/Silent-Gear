@@ -1,0 +1,14 @@
+{
+  "type": "silentgear:tool_action",
+  "damage_to_tool": 1,
+  "ingredient": {
+    "tag": "c:ingots/crimson_steel"
+  },
+  "result": {
+    "count": 1,
+    "id": "silentgear:crimson_steel_dust"
+  },
+  "tool": {
+    "tag": "c:tools/hammers"
+  }
+}

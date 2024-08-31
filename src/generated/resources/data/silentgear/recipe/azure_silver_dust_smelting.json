@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 1.5,
+  "ingredient": {
+    "tag": "c:dusts/azure_silver"
+  },
+  "result": {
+    "count": 1,
+    "id": "silentgear:azure_silver_ingot"
+  }
+}

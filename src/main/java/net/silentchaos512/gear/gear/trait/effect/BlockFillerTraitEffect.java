@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class BlockFillerTraitEffect extends TraitEffect {
@@ -133,7 +134,7 @@ public class BlockFillerTraitEffect extends TraitEffect {
 
                     if (targetBlock.test(state) && (fillProperties.replaceBlockEntities || world.getBlockEntity(pos) == null)) {
                         if (!simulate) {
-                            world.setBlock(pos, fillProperties.blockState, 11);
+                            world.setBlock(pos, fillProperties.block.defaultBlockState(), 11);
                         }
                         ++count;
                     }
@@ -154,7 +155,7 @@ public class BlockFillerTraitEffect extends TraitEffect {
     public Collection<String> getExtraWikiLines() {
         Collection<String> ret = new ArrayList<>();
 
-        ret.add("  - Fills with: " + NameUtils.fromBlock(fillProperties.blockState));
+        ret.add("  - Fills with: " + NameUtils.fromBlock(fillProperties.block));
         ret.add("  - Replaces");
         if (targetBlock.tag != null) {
             ret.add("    - Tag: " + targetBlock.tag.location());
@@ -188,15 +189,6 @@ public class BlockFillerTraitEffect extends TraitEffect {
     public enum SneakMode implements StringRepresentable {
         PASS, CONSTRAIN, IGNORE;
 
-        static SneakMode byName(String name) {
-            for (SneakMode value : values()) {
-                if (value.name().equalsIgnoreCase(name)) {
-                    return value;
-                }
-            }
-            return IGNORE;
-        }
-
         @Override
         public String getSerializedName() {
             return name().toLowerCase(Locale.ROOT);
@@ -212,9 +204,9 @@ public class BlockFillerTraitEffect extends TraitEffect {
     ) implements Predicate<BlockState> {
         public static final Codec<TargetBlock> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                        BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("block", null).forGetter(t -> t.block),
-                        TagKey.codec(Registries.BLOCK).optionalFieldOf("tag", null).forGetter(t -> t.tag)
-                ).apply(instance, TargetBlock::new)
+                        BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("block").forGetter(t -> Optional.ofNullable(t.block)),
+                        TagKey.codec(Registries.BLOCK).optionalFieldOf("tag").forGetter(t -> Optional.ofNullable(t.tag))
+                ).apply(instance, (block1, tag1) -> new TargetBlock(block1.orElse(null), tag1.orElse(null)))
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, TargetBlock> STREAM_CODEC = StreamCodec.of(
                 (buf, val) -> {
@@ -248,7 +240,7 @@ public class BlockFillerTraitEffect extends TraitEffect {
     }
 
     public record FillProperties(
-            BlockState blockState,
+            Block block,
             boolean replaceBlockEntities,
             int rangeX,
             int rangeY,
@@ -257,7 +249,7 @@ public class BlockFillerTraitEffect extends TraitEffect {
     ) {
         public static final Codec<FillProperties> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                        BlockState.CODEC.fieldOf("block").forGetter(p -> p.blockState),
+                        BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(p -> p.block),
                         Codec.BOOL.fieldOf("replace_block_entities").forGetter(p -> p.replaceBlockEntities),
                         Codec.INT.fieldOf("range_x").forGetter(p -> p.rangeX),
                         Codec.INT.fieldOf("range_y").forGetter(p -> p.rangeY),
@@ -266,14 +258,13 @@ public class BlockFillerTraitEffect extends TraitEffect {
                 ).apply(instance, FillProperties::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, FillProperties> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.registry(Registries.BLOCK), p -> p.blockState.getBlock(),
+                ByteBufCodecs.registry(Registries.BLOCK), p -> p.block,
                 ByteBufCodecs.BOOL, p -> p.replaceBlockEntities,
                 ByteBufCodecs.VAR_INT, p -> p.rangeX,
                 ByteBufCodecs.VAR_INT, p -> p.rangeY,
                 ByteBufCodecs.VAR_INT, p -> p.rangeZ,
                 ByteBufCodecs.BOOL, p -> p.facingPlaneOnly,
-                (block, replace, x, y, z, facingPlane) ->
-                        new FillProperties(block.defaultBlockState(), replace, x, y, z, facingPlane)
+                FillProperties::new
         );
     }
 

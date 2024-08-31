@@ -1,14 +1,26 @@
 {
-  "type": "silentgear:block_mining_speed",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.greedy"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.greedy.desc"
   },
-  "speed_multiplier": 0.2,
-  "blocks": [
-    "forge:ores"
-  ]
+  "effects": [
+    {
+      "type": "silentgear:block_mining_speed",
+      "block_tag": "c:ores",
+      "speed_modifier": 0.2
+    },
+    {
+      "type": "silentgear:item_magnet",
+      "affected_items": {
+        "tag": "silentgear:greedy_magnet_attracted"
+      },
+      "affected_items_text_for_wiki": "ores and gems",
+      "effect_range": 2.0,
+      "pull_strength": 0.06
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.greedy"
+  }
 }

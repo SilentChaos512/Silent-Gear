@@ -1,11 +1,19 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "tool",
-  "part_type": "silentgear:grip",
-  "crafting_item": {
-    "item": "silentgear:grip"
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:grip"
+    }
   },
-  "name": {
-    "translate": "part.silentgear.grip"
-  }
+  "display": {
+    "name": {
+      "translate": "part.silentgear.grip"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:tool",
+  "part_type": "silentgear:grip",
+  "properties": {}
 }

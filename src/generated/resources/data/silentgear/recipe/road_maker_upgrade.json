@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "silentgear:advanced_upgrade_base"
+    },
+    {
+      "item": "minecraft:iron_shovel"
+    },
+    {
+      "tag": "c:dyes/orange"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:road_maker_upgrade"
+  }
+}

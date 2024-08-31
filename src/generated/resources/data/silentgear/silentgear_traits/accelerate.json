@@ -1,36 +1,37 @@
 {
-  "type": "silentgear:stat_modifier",
-  "max_level": 5,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "tool"
+      "gear_type": "silentgear:tool"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.accelerate"
-  },
   "description": {
     "translate": "trait.silentgear.accelerate.desc"
   },
-  "stats": [
+  "effects": [
     {
-      "name": "silentgear:harvest_speed",
-      "value": 2.0,
-      "factor_damage": true,
-      "factor_value": false
-    },
-    {
-      "name": "silentgear:attack_speed",
-      "value": 0.01,
-      "factor_damage": true,
-      "factor_value": false
-    },
-    {
-      "name": "silentgear:ranged_speed",
-      "value": 0.01,
-      "factor_damage": true,
-      "factor_value": false
+      "type": "silentgear:number_property_modifier",
+      "property_modifiers": {
+        "silentgear:attack_speed": {
+          "base_multiplier": 0.01,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": false
+        },
+        "silentgear:draw_speed": {
+          "base_multiplier": 0.01,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": false
+        },
+        "silentgear:harvest_speed": {
+          "base_multiplier": 2.0,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": false
+        }
+      }
     }
-  ]
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.accelerate"
+  }
 }

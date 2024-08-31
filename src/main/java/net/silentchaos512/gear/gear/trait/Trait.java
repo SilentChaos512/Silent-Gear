@@ -19,13 +19,15 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
+import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.client.KeyTracker;
-import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -50,6 +52,10 @@ public final class Trait {
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, Trait> STREAM_CODEC = StreamCodec.of(
             (buf, t) -> {
+                var traitId = SgRegistries.TRAIT.getKey(t);
+                SilentGear.LOGGER.debug("trait encode {}", traitId);
+                buf.writeResourceLocation(traitId);
+
                 ByteBufCodecs.VAR_INT.encode(buf, t.maxLevel);
                 ComponentSerialization.STREAM_CODEC.encode(buf, t.displayName);
                 ComponentSerialization.STREAM_CODEC.encode(buf, t.description);
@@ -58,6 +64,9 @@ public final class Trait {
                 CodecUtils.encodeList(buf, t.wikiLines, ComponentSerialization.STREAM_CODEC);
             },
             buf -> {
+                var traitId = buf.readResourceLocation();
+                SilentGear.LOGGER.debug("trait decode {}", traitId);
+
                 var maxLevel = ByteBufCodecs.VAR_INT.decode(buf);
                 var displayName = ComponentSerialization.STREAM_CODEC.decode(buf);
                 var description = ComponentSerialization.STREAM_CODEC.decode(buf);

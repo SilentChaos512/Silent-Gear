@@ -266,6 +266,19 @@ public class GearPropertyMap implements Multimap<PropertyKey<?, ?>, GearProperty
         return this.map.asMap();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        GearPropertyMap that = (GearPropertyMap) obj;
+        return this.map.equals(that.map);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.map.hashCode();
+    }
+
     public static final class Immutable extends GearPropertyMap {
         public static final Codec<Immutable> CODEC = GearPropertyMap.CODEC
                 .xmap(

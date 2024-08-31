@@ -1,11 +1,19 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "tool",
-  "part_type": "silentgear:binding",
-  "crafting_item": {
-    "item": "silentgear:binding"
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:binding"
+    }
   },
-  "name": {
-    "translate": "part.silentgear.binding"
-  }
+  "display": {
+    "name": {
+      "translate": "part.silentgear.binding"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:tool",
+  "part_type": "silentgear:binding",
+  "properties": {}
 }

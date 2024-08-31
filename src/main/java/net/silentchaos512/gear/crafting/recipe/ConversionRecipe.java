@@ -117,7 +117,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         private static final MapCodec<ConversionRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
                                 Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group),
-                                CraftingBookCategory.CODEC.fieldOf("group").orElse(CraftingBookCategory.MISC).forGetter(recipe -> recipe.category),
+                                CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(recipe -> recipe.category),
                                 Result.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
                                 Ingredient.CODEC_NONEMPTY
                                         .listOf()

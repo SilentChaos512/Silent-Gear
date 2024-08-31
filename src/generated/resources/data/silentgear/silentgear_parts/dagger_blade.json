@@ -1,24 +1,34 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "dagger",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:dagger_blade"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.dagger_blade"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:dagger",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:dagger_blade"
-  },
-  "name": {
-    "translate": "part.silentgear.dagger_blade"
-  },
-  "stats": {
-    "melee_damage": [
+  "properties": {
+    "attack_damage": [
       {
-        "add": 2.0
+        "operation": "ADD",
+        "value": 2.0
       },
       {
-        "mul1": -0.5
+        "operation": "MULTIPLY_BASE",
+        "value": -0.5
       }
     ],
     "attack_speed": {
-      "add": -1.2
+      "operation": "ADD",
+      "value": -1.2
     },
     "repair_efficiency": 2.0
   }

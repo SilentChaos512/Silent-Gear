@@ -1,28 +1,37 @@
 {
-  "type": "silentgear:misc_upgrade",
-  "gear_type": "all",
+  "type": "silentgear:upgrade",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:red_card_upgrade"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.misc.red_card"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:all",
   "part_type": "silentgear:misc_upgrade",
-  "gear_types": {
-    "types": [
-      "all"
-    ],
-    "match_parents": true
-  },
-  "crafting_item": {
-    "item": "silentgear:red_card_upgrade"
-  },
-  "name": {
-    "translate": "part.silentgear.misc.red_card"
-  },
-  "stats": {
+  "properties": {
     "rarity": {
-      "add": -5.0
-    }
+      "operation": "ADD",
+      "value": -5.0
+    },
+    "traits": [
+      {
+        "conditions": [],
+        "level": 1,
+        "trait": "silentgear:red_card"
+      }
+    ]
   },
-  "traits": [
-    {
-      "name": "silentgear:red_card",
-      "level": 1
-    }
-  ]
+  "upgrade_gear_types": {
+    "match_parents": true,
+    "types": [
+      "silentgear:all"
+    ]
+  }
 }

@@ -1,195 +1,148 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 3,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "advanced"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:ingots/blaze_gold"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.blaze_gold"
-  },
-  "stats": {
-    "main": {
-      "durability": 69.0,
-      "armor_durability": 9.0,
-      "enchantment_value": 24.0,
-      "rarity": 45.0,
-      "charging_value": 1.2,
-      "harvest_speed": 15.0,
-      "melee_damage": 2.0,
-      "magic_damage": 5.0,
-      "attack_speed": 0.1,
-      "ranged_damage": 1.0,
-      "ranged_speed": 0.2,
-      "projectile_speed": 1.2,
-      "projectile_accuracy": 0.9,
-      "armor": 13.0,
-      "armor/helmet": 2.0,
-      "armor/chestplate": 5.0,
-      "armor/leggings": 4.0,
-      "armor/boots": 2.0,
-      "armor_toughness": 1.0,
-      "magic_armor": 10.0
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/blaze_gold"
     },
-    "rod": {
-      "harvest_speed": {
-        "mul2": 0.1
-      }
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFDD8500",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.blaze_gold"
     },
-    "tip": {
-      "durability": {
-        "add": 32.0
-      },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:coating": {
       "armor_durability": {
-        "add": 3.0
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.05
+      },
+      "durability": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.05
+      },
+      "rarity": {
+        "operation": "ADD",
+        "value": 20.0
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:brilliant"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:soft"
+        }
+      ]
+    },
+    "silentgear:main": {
+      "armor": 13.0,
+      "armor/boots": 2.0,
+      "armor/chestplate": 5.0,
+      "armor/helmet": 2.0,
+      "armor/leggings": 4.0,
+      "armor_durability": 9.0,
+      "armor_toughness": 1.0,
+      "attack_damage": 2.0,
+      "attack_speed": 0.1,
+      "charging_value": 1.2,
+      "draw_speed": 0.2,
+      "durability": 69.0,
+      "enchantment_value": 24.0,
+      "harvest_speed": 15.0,
+      "harvest_tier": "minecraft:iron",
+      "magic_armor": 10.0,
+      "magic_damage": 5.0,
+      "projectile_accuracy": 0.9,
+      "projectile_speed": 1.2,
+      "ranged_damage": 1.0,
+      "rarity": 45.0,
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.7
+            }
+          ],
+          "level": 1,
+          "trait": "silentgear:brilliant"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:greedy"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        }
+      ]
+    },
+    "silentgear:rod": {
+      "harvest_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.1
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    },
+    "silentgear:tip": {
+      "armor_durability": {
+        "operation": "ADD",
+        "value": 3.0
+      },
+      "attack_damage": {
+        "operation": "ADD",
+        "value": 1.0
+      },
+      "durability": {
+        "operation": "ADD",
+        "value": 32.0
       },
       "harvest_speed": {
-        "add": 4.0
-      },
-      "melee_damage": {
-        "add": 1.0
+        "operation": "ADD",
+        "value": 4.0
       },
       "magic_damage": {
-        "add": 1.0
+        "operation": "ADD",
+        "value": 1.0
       },
       "rarity": {
-        "add": 14.0
-      }
-    },
-    "coating": {
-      "durability": {
-        "mul2": -0.05
+        "operation": "ADD",
+        "value": 14.0
       },
-      "armor_durability": {
-        "mul2": -0.05
-      },
-      "rarity": {
-        "add": 20.0
-      }
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:soft"
+        },
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:fiery"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:brilliant",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.7
-          }
-        ]
-      },
-      {
-        "name": "silentgear:greedy",
-        "level": 3
-      },
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:flexible",
-        "level": 3
-      }
-    ],
-    "tip": [
-      {
-        "name": "silentgear:soft",
-        "level": 2
-      },
-      {
-        "name": "silentgear:fiery",
-        "level": 4
-      }
-    ],
-    "coating": [
-      {
-        "name": "silentgear:brilliant",
-        "level": 1
-      },
-      {
-        "name": "silentgear:soft",
-        "level": 2
-      }
-    ]
-  },
-  "model": {
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#DD8500"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#DD8500"
-      }
-    ],
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_smooth",
-        "color": "#DD8500"
-      }
-    ],
-    "tip/part": [
-      {
-        "texture": "silentgear:tip_base"
-      },
-      {
-        "texture": "silentgear:tip",
-        "color": "#DD8500"
-      },
-      {
-        "texture": "silentgear:tip_shine"
-      }
-    ],
-    "coating/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#DD8500"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "coating/part": [
-      {
-        "texture": "silentgear:coating_material",
-        "color": "#DD8500"
-      },
-      {
-        "texture": "silentgear:coating_jar"
-      }
-    ],
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#DD8500"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#DD8500"
-      }
-    ]
   }
 }

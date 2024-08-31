@@ -2,10 +2,8 @@ package net.silentchaos512.gear.core;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
@@ -197,8 +195,16 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     private T tryDecode(ResourceLocation name, String packName, JsonObject json) {
-        this.logger.info("Decoding {} \"{}\" in pack \"{}\"", this.typeName, name, packName);
-        var result = this.codec.decode(JsonOps.INSTANCE, json);
+        this.logger.info(this.logMarker, "Decoding {} \"{}\" in pack \"{}\"", this.typeName, name, packName);
+
+        DataResult<Pair<T, JsonElement>> result;
+        try {
+            result = this.codec.decode(JsonOps.INSTANCE, json);
+        } catch (Exception ex) {
+            this.logger.info(this.logMarker, "Error decoding {} \"{}\" in pack \"{}\"", this.typeName, name, packName);
+            throw this.exceptionFactory.create(name, packName, ex);
+        }
+
         if (result.isSuccess()) {
             return result.result().get().getFirst();
         } else {

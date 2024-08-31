@@ -1,68 +1,48 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "gem",
       "dust"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:dusts/redstone"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:dusts/redstone"
-    }
+  "display": {
+    "color": "#FFBB0000",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.redstone"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.redstone"
-  },
-  "stats": {
-    "tip": {
-      "harvest_speed": {
-        "mul2": 0.2
-      },
-      "melee_damage": {
-        "add": 2.0
+  "properties": {
+    "silentgear:tip": {
+      "attack_damage": {
+        "operation": "ADD",
+        "value": 2.0
       },
       "attack_speed": {
-        "add": 0.5
+        "operation": "ADD",
+        "value": 0.5
+      },
+      "harvest_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.2
       },
       "ranged_damage": {
-        "add": 2.0
+        "operation": "ADD",
+        "value": 2.0
       },
       "rarity": {
-        "add": 10.0
+        "operation": "ADD",
+        "value": 10.0
       }
     }
-  },
-  "model": {
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_smooth",
-        "color": "#BB0000"
-      }
-    ],
-    "tip/part": [
-      {
-        "texture": "silentgear:tip_base"
-      },
-      {
-        "texture": "silentgear:tip",
-        "color": "#BB0000"
-      },
-      {
-        "texture": "silentgear:tip_shine"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:dust",
-        "color": "#BB0000"
-      }
-    ]
   }
 }

@@ -1,11 +1,19 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "projectile",
-  "part_type": "silentgear:fletching",
-  "crafting_item": {
-    "item": "silentgear:fletching"
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:fletching"
+    }
   },
-  "name": {
-    "translate": "part.silentgear.fletching"
-  }
+  "display": {
+    "name": {
+      "translate": "part.silentgear.fletching"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:projectile",
+  "part_type": "silentgear:fletching",
+  "properties": {}
 }

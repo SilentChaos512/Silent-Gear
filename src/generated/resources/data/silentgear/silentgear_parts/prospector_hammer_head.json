@@ -1,29 +1,41 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "prospector_hammer",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:prospector_hammer_head"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.prospector_hammer_head"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:prospector_hammer",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:prospector_hammer_head"
-  },
-  "name": {
-    "translate": "part.silentgear.prospector_hammer_head"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 2.0
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 2.0
     },
     "attack_speed": {
-      "add": -2.6
+      "operation": "ADD",
+      "value": -2.6
     },
-    "repair_efficiency": 1.5,
     "durability": {
-      "mul1": -0.25
+      "operation": "MULTIPLY_BASE",
+      "value": -0.25
     },
     "enchantment_value": {
-      "mul1": -0.25
+      "operation": "MULTIPLY_BASE",
+      "value": -0.25
     },
     "harvest_speed": {
-      "mul1": -0.25
-    }
+      "operation": "MULTIPLY_BASE",
+      "value": -0.25
+    },
+    "repair_efficiency": 1.5
   }
 }

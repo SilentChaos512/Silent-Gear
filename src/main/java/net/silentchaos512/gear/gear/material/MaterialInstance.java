@@ -40,14 +40,14 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public static final Codec<MaterialInstance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     DataResource.MATERIAL_CODEC.fieldOf("material").forGetter(m -> m.material),
-                    ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(m -> m.item),
+                    ItemStack.OPTIONAL_CODEC.optionalFieldOf("item", ItemStack.EMPTY).forGetter(m -> m.item),
                     Codec.list(MaterialModifiers.CODEC).optionalFieldOf("modifiers", List.of()).forGetter(m -> m.modifiers)
             ).apply(instance, MaterialInstance::new)
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MaterialInstance> STREAM_CODEC = StreamCodec.composite(
             DataResource.MATERIAL_STREAM_CODEC, m -> m.material,
-            ItemStack.STREAM_CODEC, m -> m.item,
+            ItemStack.OPTIONAL_STREAM_CODEC, m -> m.item,
             MaterialModifiers.STREAM_CODEC.apply(ByteBufCodecs.list()), m -> m.modifiers,
             MaterialInstance::new
     );

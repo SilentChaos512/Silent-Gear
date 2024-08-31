@@ -1,113 +1,88 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "organic",
-      "cloth"
+      "cloth",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "minecraft:phantom_membrane"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.phantom_membrane"
-  },
-  "stats": {
-    "main": {
-      "durability": 0.0,
-      "armor_durability": 12.0,
-      "enchantment_value": 10.0,
-      "rarity": 35.0,
-      "charging_value": 0.7,
-      "armor_durability/elytra": 17.0,
-      "armor": 6.0,
-      "armor/helmet": 1.0,
-      "armor/chestplate": 2.0,
-      "armor/leggings": 2.0,
-      "armor/boots": 1.0,
-      "magic_armor": 8.0
     },
-    "grip": {
-      "repair_efficiency": {
-        "mul1": 0.15
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFC3B9A1",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.phantom_membrane"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:grip": {
+      "attack_speed": {
+        "operation": "ADD",
+        "value": 0.2
       },
       "harvest_speed": {
-        "mul1": 0.1
+        "operation": "MULTIPLY_BASE",
+        "value": 0.1
       },
-      "attack_speed": {
-        "add": 0.2
-      }
+      "repair_efficiency": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.15
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:ancient"
+        }
+      ]
     },
-    "lining": {}
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:renew",
-        "level": 2,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.5
-          }
-        ]
-      }
-    ],
-    "grip": [
-      {
-        "name": "silentgear:ancient",
-        "level": 2
-      }
-    ],
-    "lining": [
-      {
-        "name": "silentgear:light",
-        "level": 2
-      },
-      {
-        "name": "silentgear:flexible",
-        "level": 3
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#C3B9A1"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:cloth",
-        "color": "#C3B9A1"
-      }
-    ],
-    "grip/all": [
-      {
-        "texture": "silentgear:grip_wool",
-        "color": "#C3B9A1"
-      }
-    ],
-    "grip/part": [
-      {
-        "texture": "silentgear:grip",
-        "color": "#C3B9A1"
-      }
-    ],
-    "lining/part": [
-      {
-        "texture": "silentgear:lining_cloth",
-        "color": "#C3B9A1"
-      }
-    ]
+    "silentgear:lining": {
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:light"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    },
+    "silentgear:main": {
+      "armor": 6.0,
+      "armor/boots": 1.0,
+      "armor/chestplate": 2.0,
+      "armor/helmet": 1.0,
+      "armor/leggings": 2.0,
+      "armor_durability": 12.0,
+      "armor_durability/elytra": 17.0,
+      "charging_value": 0.7,
+      "durability": 0.0,
+      "enchantment_value": 10.0,
+      "magic_armor": 8.0,
+      "rarity": 35.0,
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.5
+            }
+          ],
+          "level": 2,
+          "trait": "silentgear:renew"
+        }
+      ]
+    }
   }
 }

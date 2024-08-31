@@ -1,0 +1,62 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_axe"
+    }
+  ],
+  "result": {
+    "item": "silentgear:axe",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:axe_head"
+        },
+        "part": "silentgear:axe_head"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:wood"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:rod"
+        },
+        "part": "silentgear:rod"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:netherite"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:coating"
+        },
+        "part": "silentgear:coating"
+      }
+    ]
+  }
+}

@@ -1,11 +1,19 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "ranged_weapon",
-  "part_type": "silentgear:cord",
-  "crafting_item": {
-    "item": "silentgear:cord"
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:cord"
+    }
   },
-  "name": {
-    "translate": "part.silentgear.bowstring"
-  }
+  "display": {
+    "name": {
+      "translate": "part.silentgear.bowstring"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:ranged_weapon",
+  "part_type": "silentgear:cord",
+  "properties": {}
 }

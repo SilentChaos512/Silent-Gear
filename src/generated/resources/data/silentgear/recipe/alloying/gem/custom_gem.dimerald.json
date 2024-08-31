@@ -1,0 +1,15 @@
+{
+  "type": "silentgear:compounding/gem",
+  "ingredients": [
+    {
+      "tag": "c:gems/diamond"
+    },
+    {
+      "tag": "c:gems/emerald"
+    }
+  ],
+  "result": {
+    "item": "silentgear:custom_gem",
+    "material": "silentgear:dimerald"
+  }
+}

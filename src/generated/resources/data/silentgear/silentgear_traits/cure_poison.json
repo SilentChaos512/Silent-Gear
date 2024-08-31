@@ -1,13 +1,18 @@
 {
-  "type": "silentgear:cancel_effects",
-  "max_level": 1,
-  "name": {
-    "translate": "trait.silentgear.cure_poison"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.cure_poison.desc"
   },
   "effects": [
-    "minecraft:poison"
-  ]
+    {
+      "type": "silentgear:cancel_effects",
+      "cleared_effects": [
+        "minecraft:poison"
+      ]
+    }
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.cure_poison"
+  }
 }

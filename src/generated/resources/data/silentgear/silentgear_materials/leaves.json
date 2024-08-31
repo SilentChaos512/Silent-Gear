@@ -1,48 +1,30 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "organic"
+      "organic",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "tag": "minecraft:leaves"
+    },
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FF4A8F28",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.leaves"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:fletching": {
+      "projectile_accuracy": 0.9,
+      "projectile_speed": 1.1
     }
-  },
-  "name": {
-    "translate": "material.silentgear.leaves"
-  },
-  "stats": {
-    "fletching": {
-      "projectile_speed": 1.1,
-      "projectile_accuracy": 0.9
-    }
-  },
-  "model": {
-    "fletching/all": [
-      {
-        "texture": "silentgear:fletching_generic",
-        "color": "#4A8F28"
-      }
-    ],
-    "fletching/part": [
-      {
-        "texture": "silentgear:fletching",
-        "color": "#4A8F28"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:cloth",
-        "color": "#4A8F28"
-      }
-    ]
   }
 }

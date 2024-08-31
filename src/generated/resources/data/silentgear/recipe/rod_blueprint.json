@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "silentgear:blueprints/rod",
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "/": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "#/",
+    "#/"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:rod_blueprint"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:mace_head"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.mace_head"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:mace",
+  "part_type": "silentgear:main",
+  "properties": {
+    "repair_efficiency": 1.0
+  }
+}

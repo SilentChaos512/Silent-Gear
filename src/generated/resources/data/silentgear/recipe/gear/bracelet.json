@@ -1,0 +1,18 @@
+{
+  "type": "silentgear:gear_crafting",
+  "category": "misc",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "silentgear:none",
+      "part_type": "silentgear:setting"
+    },
+    {
+      "item": "silentgear:bracelet_band"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:bracelet"
+  }
+}

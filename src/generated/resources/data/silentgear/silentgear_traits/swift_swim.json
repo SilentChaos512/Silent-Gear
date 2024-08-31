@@ -1,25 +1,30 @@
 {
-  "type": "silentgear:attribute",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.swift_swim"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.swift_swim.desc"
   },
-  "attribute_modifiers": {
-    "all": [
-      {
-        "attribute": "neoforge:swim_speed",
-        "operation": 0,
-        "value": [
-          0.2,
-          0.4,
-          0.6,
-          0.8,
-          1.0
+  "effects": [
+    {
+      "type": "silentgear:attribute",
+      "attribute_modifiers": {
+        "all/any": [
+          {
+            "attribute": "neoforge:swim_speed",
+            "operation": "add_value",
+            "values": [
+              0.2,
+              0.4,
+              0.6,
+              0.8,
+              1.0
+            ]
+          }
         ]
       }
-    ]
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.swift_swim"
   }
 }

@@ -1,84 +1,54 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "organic",
-      "fiber"
+      "fiber",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "silentgear:fluffy_string"
-    }
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.fluffy_string"
+  "display": {
+    "color": "#FFFFFAE5",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.fluffy_string"
+    },
+    "name_prefix": ""
   },
-  "stats": {
-    "binding": {
+  "properties": {
+    "silentgear:binding": {
       "armor_durability": {
-        "mul1": 0.05
+        "operation": "MULTIPLY_BASE",
+        "value": 0.05
       },
       "harvest_speed": {
-        "mul1": -0.05
-      }
-    },
-    "cord": {
-      "ranged_damage": {
-        "mul1": 0.05
+        "operation": "MULTIPLY_BASE",
+        "value": -0.05
       },
-      "ranged_speed": {
-        "mul1": -0.05
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    },
+    "silentgear:cord": {
+      "draw_speed": {
+        "operation": "MULTIPLY_BASE",
+        "value": -0.05
+      },
+      "ranged_damage": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.05
       }
     }
-  },
-  "traits": {
-    "binding": [
-      {
-        "name": "silentgear:flexible",
-        "level": 3
-      }
-    ]
-  },
-  "model": {
-    "binding/all": [
-      {
-        "texture": "silentgear:binding_generic",
-        "color": "#FFFAE5"
-      }
-    ],
-    "binding/part": [
-      {
-        "texture": "silentgear:binding",
-        "color": "#FFFAE5"
-      }
-    ],
-    "cord/all": [
-      {
-        "texture": "silentgear:bowstring_string",
-        "color": "#FFFAE5"
-      },
-      {
-        "texture": "silentgear:arrow"
-      }
-    ],
-    "cord/part": [
-      {
-        "texture": "silentgear:bowstring",
-        "color": "#FFFAE5"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:cloth",
-        "color": "#FFFAE5"
-      }
-    ]
   }
 }

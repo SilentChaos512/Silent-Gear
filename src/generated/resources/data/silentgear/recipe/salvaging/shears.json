@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:shears"
+  },
+  "results": [
+    {
+      "count": 2,
+      "id": "minecraft:iron_ingot"
+    }
+  ]
+}

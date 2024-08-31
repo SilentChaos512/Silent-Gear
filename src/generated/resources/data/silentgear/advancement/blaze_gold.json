@@ -1,0 +1,33 @@
+{
+  "parent": "silentgear:nether",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:blaze_gold_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.blaze_gold.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:blaze_gold_ingot"
+    },
+    "title": {
+      "translate": "advancements.silentgear.blaze_gold.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

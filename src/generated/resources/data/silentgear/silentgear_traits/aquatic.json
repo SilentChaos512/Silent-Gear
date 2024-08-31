@@ -1,21 +1,32 @@
 {
-  "type": "silentgear:wielder_effect",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.aquatic"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.aquatic.desc"
   },
-  "potion_effects": {
-    "armor": [
-      {
-        "type": "full_set_only",
-        "effect": "minecraft:water_breathing",
-        "level": [
-          1
+  "effects": [
+    {
+      "type": "silentgear:wielder_effect",
+      "potion_effects": {
+        "silentgear:armor": [
+          {
+            "type": "full_set_only",
+            "duration": 38,
+            "effect": "minecraft:water_breathing",
+            "levels": [
+              1
+            ]
+          }
         ]
       }
-    ]
+    },
+    {
+      "type": "silentgear:extra_damage",
+      "affected_type": "aquatic",
+      "bonus_damage_per_level": 2.0
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.aquatic"
   }
 }

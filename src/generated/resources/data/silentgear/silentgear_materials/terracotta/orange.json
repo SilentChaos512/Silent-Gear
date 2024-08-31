@@ -1,39 +1,22 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
+  "type": "silentgear:simple",
   "parent": "silentgear:terracotta",
-  "crafting_items": {
-    "main": {
+  "crafting": {
+    "can_salvage": true,
+    "categories": [],
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "minecraft:orange_terracotta"
-    }
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.terracotta.orange"
+  "display": {
+    "color": "#FFA05325",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.terracotta.orange"
+    },
+    "name_prefix": ""
   },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#A05325"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#A05325"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#A05325"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#A05325"
-      }
-    ]
-  }
+  "properties": {}
 }

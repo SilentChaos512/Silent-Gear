@@ -36,13 +36,13 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
     public static final Codec<PartInstance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     DataResource.PART_CODEC.fieldOf("part").forGetter(p -> p.part),
-                    ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(p -> p.craftingItem)
-            ).apply(instance, PartInstance::new)
+                    ItemStack.OPTIONAL_CODEC.optionalFieldOf("item", ItemStack.EMPTY).forGetter(p -> p.craftingItem)
+            ).apply(instance, PartInstance::of)
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, PartInstance> STREAM_CODEC = StreamCodec.composite(
             DataResource.PART_STREAM_CODEC, p -> p.part,
-            ItemStack.STREAM_CODEC, p -> p.craftingItem,
+            ItemStack.OPTIONAL_STREAM_CODEC, p -> p.craftingItem,
             PartInstance::new
     );
 
@@ -247,7 +247,7 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
 
     @Override
     public String toString() {
-        return "PartData{" +
+        return "PartInstance{" +
                 this.part +
                 "}";
     }

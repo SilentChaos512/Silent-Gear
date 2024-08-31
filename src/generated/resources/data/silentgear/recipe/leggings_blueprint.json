@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "silentgear:blueprints/leggings",
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    }
+  },
+  "pattern": [
+    "###",
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:leggings_blueprint"
+  }
+}

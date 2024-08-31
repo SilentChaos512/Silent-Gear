@@ -11,12 +11,14 @@ import java.util.Collection;
 import java.util.List;
 
 public class FireproofTraitEffect extends TraitEffect {
-    public static final MapCodec<FireproofTraitEffect> CODEC =
-            MapCodec.unit(new FireproofTraitEffect());
-    public static final StreamCodec<RegistryFriendlyByteBuf, FireproofTraitEffect> STREAM_CODEC =
-            StreamCodec.unit(new FireproofTraitEffect());
+    public static final FireproofTraitEffect INSTANCE = new FireproofTraitEffect();
 
-    public FireproofTraitEffect() {
+    public static final MapCodec<FireproofTraitEffect> CODEC =
+            MapCodec.unit(INSTANCE);
+    public static final StreamCodec<RegistryFriendlyByteBuf, FireproofTraitEffect> STREAM_CODEC =
+            StreamCodec.unit(INSTANCE);
+
+    private FireproofTraitEffect() {
     }
 
     @Override

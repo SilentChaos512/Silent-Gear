@@ -1,0 +1,23 @@
+{
+  "type": "silentgear:compound_part",
+  "category": "misc",
+  "ingredients": [
+    {
+      "type": "silentgear:blueprint",
+      "gear_type": "silentgear:none",
+      "part_type": "silentgear:coating"
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "type": "silentgear:material",
+      "gear_type": "silentgear:tool",
+      "part_type": "silentgear:coating"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:coating"
+  }
+}

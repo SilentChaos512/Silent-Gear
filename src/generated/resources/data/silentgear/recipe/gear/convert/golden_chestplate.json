@@ -1,0 +1,49 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:golden_chestplate"
+    }
+  ],
+  "result": {
+    "item": "silentgear:chestplate",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:gold"
+              },
+              {
+                "material": "silentgear:gold"
+              },
+              {
+                "material": "silentgear:gold"
+              },
+              {
+                "material": "silentgear:gold"
+              },
+              {
+                "material": "silentgear:gold"
+              },
+              {
+                "material": "silentgear:gold"
+              },
+              {
+                "material": "silentgear:gold"
+              },
+              {
+                "material": "silentgear:gold"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:chestplate_plates"
+        },
+        "part": "silentgear:chestplate_plates"
+      }
+    ]
+  }
+}

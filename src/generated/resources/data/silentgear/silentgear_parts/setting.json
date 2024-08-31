@@ -1,0 +1,19 @@
+{
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:setting"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.setting"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:curio",
+  "part_type": "silentgear:setting",
+  "properties": {}
+}

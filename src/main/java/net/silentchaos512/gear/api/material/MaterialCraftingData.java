@@ -23,7 +23,7 @@ public record MaterialCraftingData(
 ) {
     public static final Codec<MaterialCraftingData> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(d -> d.craftingItem),
+                    Ingredient.CODEC.fieldOf("ingredient").forGetter(d -> d.craftingItem),
                     Codec.list(MaterialCategories.CODEC).fieldOf("categories").forGetter(d -> d.categories),
                     Codec.list(GearType.CODEC).fieldOf("gear_type_blacklist").forGetter(d -> d.gearTypeBlacklist),
                     Codec.unboundedMap(PartType.CODEC, Ingredient.CODEC_NONEMPTY).fieldOf("part_substitutes").forGetter(d -> d.partSubstitutes),

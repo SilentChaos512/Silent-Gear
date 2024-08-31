@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "silentgear:blueprints/spear",
+  "key": {
+    "#": {
+      "tag": "silentgear:template_boards"
+    },
+    "/": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "#  ",
+    " / ",
+    "  /"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:spear_template"
+  }
+}

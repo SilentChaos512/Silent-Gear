@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:diamond_chestplate"
+  },
+  "results": [
+    {
+      "count": 8,
+      "id": "minecraft:diamond"
+    }
+  ]
+}

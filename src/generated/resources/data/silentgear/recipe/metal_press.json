@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "c:obsidians"
+    },
+    "/": {
+      "tag": "c:rods/iron"
+    },
+    "t": {
+      "tag": "c:ingots/tyrian_steel"
+    }
+  },
+  "pattern": [
+    "#t#",
+    "/ /",
+    "#t#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:metal_press"
+  }
+}

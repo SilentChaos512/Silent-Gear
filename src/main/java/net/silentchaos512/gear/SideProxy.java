@@ -23,10 +23,7 @@ import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.setup.*;
-import net.silentchaos512.gear.setup.gear.GearProperties;
-import net.silentchaos512.gear.setup.gear.GearTypes;
-import net.silentchaos512.gear.setup.gear.PartTypes;
-import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
+import net.silentchaos512.gear.setup.gear.*;
 import net.silentchaos512.gear.world.SgWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
@@ -47,6 +44,7 @@ class SideProxy implements IProxy {
         TraitEffectTypes.REGISTRAR.register(modEventBus);
         MaterialSerializers.REGISTRAR.register(modEventBus);
         PartSerializers.REGISTRAR.register(modEventBus);
+        TraitConditions.REGISTRAR.register(modEventBus);
 
         SgBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         SgBlocks.BLOCKS.register(modEventBus);

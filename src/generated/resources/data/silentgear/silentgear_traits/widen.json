@@ -1,20 +1,20 @@
 {
-  "type": "silentgear:simple_trait",
-  "max_level": 3,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "harvest_tool"
+      "gear_type": "silentgear:harvest_tool"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.widen"
-  },
   "description": {
     "translate": "trait.silentgear.widen.desc"
   },
+  "effects": [],
   "extra_wiki_lines": [
     "  - Adds the trait level to the effect radius",
     "  - Level 1 = 5x5, 2 = 7x7, 3 = 9x9"
-  ]
+  ],
+  "max_level": 3,
+  "name": {
+    "translate": "trait.silentgear.widen"
+  }
 }

@@ -1,24 +1,35 @@
 {
-  "type": "silentgear:wielder_effect",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.adamant"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.adamant.desc"
   },
-  "potion_effects": {
-    "armor": [
-      {
-        "type": "piece_count",
-        "effect": "minecraft:resistance",
-        "level": [
-          1,
-          1,
-          1,
-          2
+  "effects": [
+    {
+      "type": "silentgear:wielder_effect",
+      "potion_effects": {
+        "silentgear:armor": [
+          {
+            "type": "piece_count",
+            "duration": 38,
+            "effect": "minecraft:resistance",
+            "levels": [
+              1,
+              1,
+              1,
+              2
+            ]
+          }
         ]
       }
-    ]
+    },
+    {
+      "type": "silentgear:extra_damage",
+      "affected_type": "high_health",
+      "bonus_damage_per_level": 2.0
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.adamant"
   }
 }

@@ -48,7 +48,7 @@ public final class BonusDropsTraitEffect extends TraitEffect {
 
     @Override
     public TraitEffectType<?> type() {
-        return TraitEffectTypes.ITEM_MAGNET.get();
+        return TraitEffectTypes.BONUS_DROPS.get();
     }
 
     @Override

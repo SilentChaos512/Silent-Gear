@@ -96,6 +96,11 @@ public record PartType(
         return Optional.empty();
     }
 
+    @Override
+    public String toString() {
+        return getDisplayName().getString();
+    }
+
     @SuppressWarnings("WeakerAccess")
     public static final class Builder {
         private boolean isRemovable = false;

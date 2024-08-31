@@ -16,6 +16,7 @@ import net.silentchaos512.gear.util.CodecUtils;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class PartList implements List<PartInstance> {
     public static final Codec<PartList> CODEC = Codec.list(PartInstance.CODEC)
@@ -101,6 +102,14 @@ public class PartList implements List<PartInstance> {
             }
         }
         return builder.build();
+    }
+
+    @Override
+    public String toString() {
+        var listText = this.list.stream()
+                .map(part -> part.getDisplayName().toString())
+                .collect(Collectors.joining(", "));
+        return "PartList[" + listText + "]";
     }
 
     //region List overrides

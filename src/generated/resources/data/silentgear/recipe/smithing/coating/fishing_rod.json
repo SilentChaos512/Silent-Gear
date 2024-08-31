@@ -1,0 +1,14 @@
+{
+  "type": "silentgear:smithing/coating",
+  "addition": {
+    "type": "silentgear:material",
+    "gear_type": "silentgear:tool",
+    "part_type": "silentgear:coating"
+  },
+  "gear": {
+    "id": "silentgear:fishing_rod"
+  },
+  "template": {
+    "item": "silentgear:coating_smithing_template"
+  }
+}

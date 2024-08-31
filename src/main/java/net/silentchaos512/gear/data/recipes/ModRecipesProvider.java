@@ -113,6 +113,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                         .withMaterial(DataResource.material("copper"))
                         .withGrade(MaterialGrade.A, null).build()
                 ))
+                .unlockedBy("impossible", CriteriaTriggers.IMPOSSIBLE.createCriterion(new ImpossibleTrigger.TriggerInstance()))
                 .save(consumer, modId("graded_mat_test"));
     }
 

@@ -1,0 +1,14 @@
+{
+  "type": "silentgear:tool_action",
+  "damage_to_tool": 10,
+  "ingredient": {
+    "item": "minecraft:shulker_shell"
+  },
+  "result": {
+    "count": 1,
+    "id": "silentgear:crushed_shulker_shell"
+  },
+  "tool": {
+    "tag": "c:tools/hammers"
+  }
+}

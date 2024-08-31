@@ -1,0 +1,21 @@
+{
+  "type": "silentgear:compounding/metal",
+  "ingredients": [
+    {
+      "tag": "c:ingots/crimson_steel"
+    },
+    {
+      "tag": "c:ingots/azure_electrum"
+    },
+    {
+      "item": "silentgear:crushed_shulker_shell"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "silentgear:tyrian_steel_ingot"
+  }
+}

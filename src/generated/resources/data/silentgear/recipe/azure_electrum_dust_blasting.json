@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.5,
+  "ingredient": {
+    "tag": "c:dusts/azure_electrum"
+  },
+  "result": {
+    "count": 1,
+    "id": "silentgear:azure_electrum_ingot"
+  }
+}

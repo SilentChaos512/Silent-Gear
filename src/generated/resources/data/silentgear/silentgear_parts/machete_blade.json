@@ -1,19 +1,28 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "machete",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:machete_blade"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.machete_blade"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:machete",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:machete_blade"
-  },
-  "name": {
-    "translate": "part.silentgear.machete_blade"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 2.0
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 2.0
     },
     "attack_speed": {
-      "add": -2.2
+      "operation": "ADD",
+      "value": -2.2
     },
     "repair_efficiency": 1.0
   }

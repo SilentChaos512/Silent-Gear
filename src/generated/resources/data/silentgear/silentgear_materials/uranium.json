@@ -1,97 +1,73 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:diamond",
-  "availability": {
-    "tier": 3,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "advanced"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/uranium"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:ingots/uranium"
-    }
+  "display": {
+    "color": "#FF21FF0F",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.uranium"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.uranium"
-  },
-  "stats": {
-    "main": {
-      "durability": 800.0,
+  "properties": {
+    "silentgear:main": {
+      "armor": 13.0,
+      "armor/boots": 2.0,
+      "armor/chestplate": 5.0,
+      "armor/helmet": 2.0,
+      "armor/leggings": 4.0,
       "armor_durability": 20.0,
-      "repair_value": -0.15,
+      "armor_toughness": 1.0,
+      "attack_damage": 2.0,
+      "attack_speed": 0.1,
+      "charging_value": 1.5,
+      "draw_speed": 0.1,
+      "durability": 800.0,
       "enchantment_value": 17.0,
       "harvest_speed": 6.0,
-      "melee_damage": 2.0,
-      "magic_damage": 2.0,
-      "attack_speed": 0.1,
-      "armor": 13.0,
-      "armor/helmet": 2.0,
-      "armor/chestplate": 5.0,
-      "armor/leggings": 4.0,
-      "armor/boots": 2.0,
-      "armor_toughness": 1.0,
+      "harvest_tier": "minecraft:diamond",
       "magic_armor": 3.0,
+      "magic_damage": 2.0,
       "ranged_damage": 0.5,
-      "ranged_speed": 0.1,
       "rarity": 50.0,
-      "charging_value": 1.5
+      "repair_value": -0.15,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:malleable"
+        }
+      ]
     },
-    "rod": {
+    "silentgear:rod": {
+      "draw_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.1
+      },
       "harvest_speed": {
-        "mul2": 0.1
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.1
       },
-      "ranged_speed": {
-        "mul2": 0.1
-      },
-      "rarity": 40.0
+      "rarity": 40.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:malleable"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:malleable",
-        "level": 2
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:malleable",
-        "level": 2
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#21FF0F"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#21FF0F"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#21FF0F"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#21FF0F"
-      }
-    ]
   }
 }

@@ -1,0 +1,17 @@
+{
+  "type": "silentgear:gear_crafting",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "silentgear:paxel_head"
+    },
+    {
+      "type": "silentgear:part_type",
+      "part_type": "silentgear:rod"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:paxel"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:paper"
+    },
+    {
+      "tag": "c:paper"
+    },
+    {
+      "tag": "c:paper"
+    },
+    {
+      "tag": "c:paper"
+    },
+    {
+      "tag": "c:dyes/blue"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "silentgear:blueprint_paper"
+  }
+}

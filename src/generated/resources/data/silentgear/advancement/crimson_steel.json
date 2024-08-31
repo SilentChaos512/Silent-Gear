@@ -1,0 +1,33 @@
+{
+  "parent": "silentgear:crimson_iron",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:crimson_steel_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.crimson_steel.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:crimson_steel_ingot"
+    },
+    "title": {
+      "translate": "advancements.silentgear.crimson_steel.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

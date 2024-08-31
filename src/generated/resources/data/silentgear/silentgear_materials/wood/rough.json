@@ -1,63 +1,44 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 0,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": false,
     "categories": [
       "organic",
       "wood"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "subs": {
-      "rod": {
+    "gear_type_blacklist": [],
+    "ingredient": [],
+    "part_substitutes": {
+      "silentgear:rod": {
         "tag": "silentgear:rods/rough"
       }
     }
   },
-  "name": {
-    "translate": "material.silentgear.wood.rough"
+  "display": {
+    "color": "#FF6B4909",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.wood.rough"
+    },
+    "name_prefix": {
+      "translate": "misc.silentgear.crude"
+    }
   },
-  "name_prefix": {
-    "translate": "misc.silentgear.crude"
-  },
-  "stats": {
-    "rod": {}
-  },
-  "traits": {
-    "rod": [
-      {
-        "name": "silentgear:crude",
-        "level": 3
-      },
-      {
-        "name": "silentgear:bending",
-        "level": 5
-      }
-    ]
-  },
-  "model": {
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#6B4909"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#6B4909"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:wood",
-        "color": "#6B4909"
-      }
-    ]
+  "properties": {
+    "silentgear:rod": {
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:crude"
+        },
+        {
+          "conditions": [],
+          "level": 5,
+          "trait": "silentgear:bending"
+        }
+      ]
+    }
   }
 }

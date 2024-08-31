@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "silentgear:blueprints/bracelet",
+  "key": {
+    "#": {
+      "tag": "silentgear:blueprint_paper"
+    },
+    "/": {
+      "tag": "c:ingots/gold"
+    }
+  },
+  "pattern": [
+    "###",
+    "# #",
+    "/#/"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:bracelet_blueprint"
+  }
+}

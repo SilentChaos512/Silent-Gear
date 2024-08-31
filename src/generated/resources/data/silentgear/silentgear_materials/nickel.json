@@ -1,114 +1,90 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/nickel"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:ingots/nickel"
-    }
+  "display": {
+    "color": "#FFEFE87B",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.nickel"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.nickel"
-  },
-  "stats": {
-    "main": {
-      "durability": 380.0,
+  "properties": {
+    "silentgear:main": {
+      "armor": 13.0,
+      "armor/boots": 2.0,
+      "armor/chestplate": 5.0,
+      "armor/helmet": 2.0,
+      "armor/leggings": 4.0,
       "armor_durability": 17.0,
+      "attack_damage": 2.5,
+      "attack_speed": 0.1,
+      "charging_value": 1.0,
+      "draw_speed": 0.1,
+      "durability": 380.0,
       "enchantment_value": 12.0,
       "harvest_speed": 7.0,
-      "melee_damage": 2.5,
-      "magic_damage": 1.0,
-      "attack_speed": 0.1,
-      "armor": 13.0,
-      "armor/helmet": 2.0,
-      "armor/chestplate": 5.0,
-      "armor/leggings": 4.0,
-      "armor/boots": 2.0,
+      "harvest_tier": "minecraft:iron",
       "magic_armor": 6.0,
+      "magic_damage": 1.0,
       "ranged_damage": 0.5,
-      "ranged_speed": 0.1,
       "rarity": 40.0,
-      "charging_value": 1.0
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        },
+        {
+          "conditions": [
+            {
+              "type": "silentgear:or",
+              "values": [
+                {
+                  "type": "silentgear:material_count",
+                  "count": 3
+                },
+                {
+                  "type": "silentgear:material_ratio",
+                  "ratio": 0.35
+                }
+              ]
+            }
+          ],
+          "level": 1,
+          "trait": "silentgear:adamant"
+        }
+      ]
     },
-    "rod": {
+    "silentgear:rod": {
+      "attack_damage": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.1
+      },
       "durability": {
-        "mul2": 0.2
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.2
       },
-      "melee_damage": {
-        "mul2": 0.1
-      },
-      "rarity": 40.0
+      "rarity": 40.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:malleable"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      },
-      {
-        "name": "silentgear:adamant",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:or",
-            "values": [
-              {
-                "type": "silentgear:material_count",
-                "count": 3
-              },
-              {
-                "type": "silentgear:material_ratio",
-                "ratio": 0.35
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:malleable",
-        "level": 3
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#EFE87B"
-      },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#EFE87B"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#EFE87B"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#EFE87B"
-      }
-    ]
   }
 }

@@ -1,0 +1,24 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:crossbow"
+  },
+  "results": [
+    {
+      "count": 3,
+      "id": "minecraft:stick"
+    },
+    {
+      "count": 2,
+      "id": "minecraft:string"
+    },
+    {
+      "count": 1,
+      "id": "minecraft:iron_ingot"
+    },
+    {
+      "count": 1,
+      "id": "minecraft:tripwire_hook"
+    }
+  ]
+}

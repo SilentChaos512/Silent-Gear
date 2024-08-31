@@ -39,8 +39,7 @@ public final class PropertyKey<T, V extends GearPropertyValue<T>> {
         this.property = property;
         this.gearType = gearType;
         this.key = SilentGear.shortenId(SgRegistries.GEAR_PROPERTY.getKey(this.property))
-                + "/"
-                + SilentGear.shortenId(SgRegistries.GEAR_TYPE.getKey(this.gearType));
+                + makeKeySuffix();
     }
 
     public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> PropertyKey<T, V> of(Supplier<P> property, Supplier<GearType> gearType) {
@@ -128,5 +127,12 @@ public final class PropertyKey<T, V extends GearPropertyValue<T>> {
         var property = ByteBufCodecs.registry(SgRegistries.GEAR_PROPERTY_KEY).decode(buf);
         var gearType = ByteBufCodecs.registry(SgRegistries.GEAR_TYPE_KEY).decode(buf);
         return new PropertyKey<>(property, gearType);
+    }
+
+    private String makeKeySuffix() {
+        if (this.gearType != GearTypes.ALL.get()) {
+            return "/" + SilentGear.shortenId(SgRegistries.GEAR_TYPE.getKey(this.gearType));
+        }
+        return "";
     }
 }

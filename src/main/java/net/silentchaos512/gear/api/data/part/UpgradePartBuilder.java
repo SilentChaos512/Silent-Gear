@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.data.part;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.ResourceLocation;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
 import net.silentchaos512.gear.api.part.PartType;
@@ -27,6 +28,8 @@ public class UpgradePartBuilder extends PartBuilder {
 
     @Override
     public JsonElement serialize() {
+        SilentGear.LOGGER.info("Trying to serialize upgrade part \"{}\"", this.id);
+
         UpgradeGearPart part = new UpgradeGearPart(
                 this.gearType,
                 this.partType,
@@ -37,10 +40,14 @@ public class UpgradePartBuilder extends PartBuilder {
         );
 
         var serializer = PartSerializers.UPGRADE.get();
-        var json = serializer.codec().codec().encodeStart(JsonOps.INSTANCE, part).getOrThrow();
+        var jsonElementDataResult = serializer.codec().codec().encodeStart(JsonOps.INSTANCE, part);
+        if (jsonElementDataResult.isError()) {
+            SilentGear.LOGGER.error("Something went wrong when serializing upgrade part \"{}\"", this.id);
+        }
+
+        var json = jsonElementDataResult.getOrThrow();
         var serializerId = Objects.requireNonNull(SgRegistries.PART_SERIALIZER.getKey(serializer));
         json.getAsJsonObject().addProperty("type", serializerId.toString());
-
         return json;
     }
 }

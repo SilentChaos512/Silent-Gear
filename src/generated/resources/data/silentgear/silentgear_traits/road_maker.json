@@ -1,25 +1,41 @@
 {
-  "type": "silentgear:block_filler",
-  "max_level": 1,
-  "name": {
-    "translate": "trait.silentgear.road_maker"
-  },
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "silentgear:tool"
+    }
+  ],
   "description": {
     "translate": "trait.silentgear.road_maker.desc"
   },
-  "target": {
-    "block": "minecraft:grass_block"
-  },
-  "fill_block": "minecraft:dirt_path",
-  "replace_tile_entities": false,
-  "fill_spread_x": 1,
-  "fill_spread_y": 0,
-  "fill_spread_z": 1,
-  "fill_facing_plane_only": false,
-  "sneak_mode": "pass",
-  "damage_on_use": 0.5,
-  "cooldown": 0,
-  "sound": "minecraft:block.grass.break",
-  "sound_volume": 1.0,
-  "sound_pitch": 1.0
+  "effects": [
+    {
+      "type": "silentgear:block_filler",
+      "fill_properties": {
+        "block": "minecraft:dirt_path",
+        "facing_plane_only": false,
+        "range_x": 1,
+        "range_y": 0,
+        "range_z": 1,
+        "replace_block_entities": false
+      },
+      "sound": {
+        "pitch": 1.0,
+        "pitch_deviation": 0.1,
+        "sound": "minecraft:block.grass.break",
+        "volume": 1.0
+      },
+      "target": {
+        "block": "minecraft:grass_block"
+      },
+      "use_properties": {
+        "damage_per_block": 0.5,
+        "sneak_mode": "pass"
+      }
+    }
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.road_maker"
+  }
 }

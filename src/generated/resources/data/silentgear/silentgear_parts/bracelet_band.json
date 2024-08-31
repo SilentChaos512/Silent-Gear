@@ -1,11 +1,19 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "bracelet",
-  "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:bracelet_band"
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:bracelet_band"
+    }
   },
-  "name": {
-    "translate": "part.silentgear.bracelet_band"
-  }
+  "display": {
+    "name": {
+      "translate": "part.silentgear.bracelet_band"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:bracelet",
+  "part_type": "silentgear:main",
+  "properties": {}
 }

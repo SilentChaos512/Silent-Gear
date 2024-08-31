@@ -64,8 +64,12 @@ public final class SilentGear {
     }
 
     public static ResourceLocation getId(String path) {
-        if (path.contains(":") && !path.startsWith(SilentGear.MOD_ID)) {
-            throw new IllegalArgumentException("path contains namespace other than " + SilentGear.MOD_ID);
+        if (path.contains(":")) {
+            if (path.startsWith(SilentGear.MOD_ID)) {
+                return ResourceLocation.tryParse(path);
+            } else {
+                throw new IllegalArgumentException("path contains namespace other than " + SilentGear.MOD_ID);
+            }
         }
         return ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, path);
     }

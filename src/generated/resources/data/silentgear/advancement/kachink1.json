@@ -1,0 +1,26 @@
+{
+  "parent": "silentgear:root",
+  "criteria": {
+    "kachink": {
+      "trigger": "silentgear:damage_factor_change"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.kachink1.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:iron_nugget"
+    },
+    "title": {
+      "translate": "advancements.silentgear.kachink1.title"
+    }
+  },
+  "requirements": [
+    [
+      "kachink"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

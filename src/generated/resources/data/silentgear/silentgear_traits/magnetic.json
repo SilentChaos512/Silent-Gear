@@ -1,13 +1,14 @@
 {
-  "type": "silentgear:simple_trait",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.magnetic"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.magnetic.desc"
   },
+  "effects": [],
   "extra_wiki_lines": [
     "Higher levels increase range"
-  ]
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.magnetic"
+  }
 }

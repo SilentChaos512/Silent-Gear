@@ -1,0 +1,59 @@
+{
+  "parent": "silentgear:blueprint_paper",
+  "criteria": {
+    "axe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:axe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:pickaxe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "shovel": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:shovel"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.standard_tools.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:pickaxe"
+    },
+    "title": {
+      "translate": "advancements.silentgear.standard_tools.title"
+    }
+  },
+  "requirements": [
+    [
+      "pickaxe"
+    ],
+    [
+      "shovel"
+    ],
+    [
+      "axe"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -137,8 +137,8 @@ public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
         public static final StreamCodec<RegistryFriendlyByteBuf, Result> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.registry(Registries.ITEM), r -> r.item,
                 ByteBufCodecs.VAR_INT, r -> r.count,
-                DataResource.MATERIAL_STREAM_CODEC, r -> r.material,
-                Result::new
+                DataResource.MATERIAL_STREAM_CODEC.apply(ByteBufCodecs::optional), r -> Optional.ofNullable(r.material),
+                (item1, count1, material1) -> new Result(item1, count1, material1.orElse(null))
         );
 
         public ItemStack getResult() {

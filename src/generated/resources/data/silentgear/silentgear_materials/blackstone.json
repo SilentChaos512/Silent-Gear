@@ -1,116 +1,88 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:stone",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "rock"
+      "rock",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "minecraft:blackstone"
-    }
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.blackstone"
+  "display": {
+    "color": "#FF3C3947",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.blackstone"
+    },
+    "name_prefix": ""
   },
-  "stats": {
-    "main": {
-      "durability": 151.0,
+  "properties": {
+    "silentgear:main": {
+      "armor": 5.0,
+      "armor/boots": 1.0,
+      "armor/chestplate": 2.0,
+      "armor/helmet": 1.0,
+      "armor/leggings": 1.0,
       "armor_durability": 5.0,
-      "enchantment_value": 4.0,
-      "rarity": 9.0,
-      "charging_value": 0.6,
-      "harvest_speed": 4.0,
-      "melee_damage": 1.0,
+      "attack_damage": 1.0,
       "attack_speed": 0.0,
       "attack_speed/axe": -0.2,
       "attack_speed/hoe": -1.0,
-      "ranged_damage": 0.0,
-      "ranged_speed": -0.2,
-      "projectile_speed": 1.0,
+      "charging_value": 0.6,
+      "draw_speed": -0.2,
+      "durability": 151.0,
+      "enchantment_value": 4.0,
+      "harvest_speed": 4.0,
+      "harvest_tier": "minecraft:stone",
       "projectile_accuracy": 0.8,
-      "armor": 5.0,
-      "armor/helmet": 1.0,
-      "armor/chestplate": 2.0,
-      "armor/leggings": 1.0,
-      "armor/boots": 1.0
+      "projectile_speed": 1.0,
+      "ranged_damage": 0.0,
+      "rarity": 9.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:brittle"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:jagged"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:hard"
+        }
+      ]
     },
-    "rod": {
+    "silentgear:rod": {
       "harvest_speed": {
-        "mul2": -0.1
-      }
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.1
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:brittle"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:jagged"
+        },
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:hard"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:brittle",
-        "level": 1
-      },
-      {
-        "name": "silentgear:jagged",
-        "level": 2
-      },
-      {
-        "name": "silentgear:hard",
-        "level": 2
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:brittle",
-        "level": 1
-      },
-      {
-        "name": "silentgear:jagged",
-        "level": 2
-      },
-      {
-        "name": "silentgear:hard",
-        "level": 1
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#3C3947"
-      },
-      {
-        "texture": "silentgear:main_splotches",
-        "color": "#1F121B"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#3C3947"
-      }
-    ],
-    "main/armor": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#3C3947"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#3C3947"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#3C3947"
-      }
-    ]
   }
 }

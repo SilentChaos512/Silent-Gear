@@ -1,0 +1,13 @@
+{
+  "type": "silentgear:gear_crafting",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "silentgear:boot_plates"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:boots"
+  }
+}

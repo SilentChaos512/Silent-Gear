@@ -1,0 +1,46 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:diamond_leggings"
+    }
+  ],
+  "result": {
+    "item": "silentgear:leggings",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              },
+              {
+                "material": "silentgear:diamond"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:legging_plates"
+        },
+        "part": "silentgear:leggings_plates"
+      }
+    ]
+  }
+}

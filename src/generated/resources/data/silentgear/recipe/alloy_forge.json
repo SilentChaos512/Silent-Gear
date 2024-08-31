@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:blackstone"
+    },
+    "/": {
+      "tag": "c:ingots/crimson_steel"
+    },
+    "i": {
+      "tag": "c:storage_blocks/iron"
+    }
+  },
+  "pattern": [
+    "/#/",
+    "/ /",
+    "#i#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:alloy_forge"
+  }
+}

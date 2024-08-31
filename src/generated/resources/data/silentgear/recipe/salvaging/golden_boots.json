@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:golden_boots"
+  },
+  "results": [
+    {
+      "count": 4,
+      "id": "minecraft:gold_ingot"
+    }
+  ]
+}

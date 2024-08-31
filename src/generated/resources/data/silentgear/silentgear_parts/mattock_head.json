@@ -1,29 +1,41 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "mattock",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:mattock_head"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.mattock_head"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:mattock",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:mattock_head"
-  },
-  "name": {
-    "translate": "part.silentgear.mattock_head"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 1.0
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 1.0
     },
     "attack_speed": {
-      "add": -2.6
+      "operation": "ADD",
+      "value": -2.6
     },
-    "repair_efficiency": 1.25,
     "durability": {
-      "mul1": 0.25
+      "operation": "MULTIPLY_BASE",
+      "value": 0.25
     },
     "enchantment_value": {
-      "mul1": -0.25
+      "operation": "MULTIPLY_BASE",
+      "value": -0.25
     },
     "harvest_speed": {
-      "mul1": -0.25
-    }
+      "operation": "MULTIPLY_BASE",
+      "value": -0.25
+    },
+    "repair_efficiency": 1.25
   }
 }

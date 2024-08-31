@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "silentgear:advanced_upgrade_base"
+    },
+    "G": {
+      "tag": "c:ingots/blaze_gold"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "Q": {
+      "tag": "c:gems/quartz"
+    }
+  },
+  "pattern": [
+    "QIQ",
+    "I#I",
+    "GGG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:material_grader"
+  }
+}

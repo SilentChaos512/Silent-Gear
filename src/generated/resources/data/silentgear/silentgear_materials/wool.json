@@ -1,107 +1,86 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 0,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "organic",
-      "cloth"
+      "cloth",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "tag": "minecraft:wool"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.wool"
-  },
-  "stats": {
-    "main": {
-      "durability": 0.0,
-      "armor_durability": 4.0,
-      "enchantment_value": 7.0,
-      "rarity": 7.0,
-      "charging_value": 0.7,
-      "armor": 4.0,
-      "armor/helmet": 0.5,
-      "armor/chestplate": 2.0,
-      "armor/leggings": 1.0,
-      "armor/boots": 0.5,
-      "magic_armor": 4.0
     },
-    "grip": {
-      "repair_efficiency": {
-        "mul1": 0.2
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFFFFFFF",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.wool"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:grip": {
+      "attack_speed": {
+        "operation": "ADD",
+        "value": 0.2
       },
       "harvest_speed": {
-        "mul1": 0.1
+        "operation": "MULTIPLY_BASE",
+        "value": 0.1
       },
-      "attack_speed": {
-        "add": 0.2
-      }
+      "repair_efficiency": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.2
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:flexible"
+        }
+      ]
     },
-    "lining": {
+    "silentgear:lining": {
       "knockback_resistance": {
-        "add": 0.1
-      }
+        "operation": "ADD",
+        "value": 0.1
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    },
+    "silentgear:main": {
+      "armor": 4.0,
+      "armor/boots": 0.5,
+      "armor/chestplate": 2.0,
+      "armor/helmet": 0.5,
+      "armor/leggings": 1.0,
+      "armor_durability": 4.0,
+      "charging_value": 0.7,
+      "durability": 0.0,
+      "enchantment_value": 7.0,
+      "magic_armor": 4.0,
+      "rarity": 7.0,
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:gear_type",
+              "gear_type": "silentgear:boots"
+            }
+          ],
+          "level": 1,
+          "trait": "silentgear:snow_walker"
+        }
+      ]
     }
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:snow_walker",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:gear_type",
-            "gear_type": "boots"
-          }
-        ]
-      }
-    ],
-    "grip": [
-      {
-        "name": "silentgear:flexible",
-        "level": 2
-      }
-    ],
-    "lining": [
-      {
-        "name": "silentgear:flexible",
-        "level": 2
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:cloth"
-      }
-    ],
-    "grip/all": [
-      {
-        "texture": "silentgear:grip_wool"
-      }
-    ],
-    "grip/part": [
-      {
-        "texture": "silentgear:grip"
-      }
-    ],
-    "lining/part": [
-      {
-        "texture": "silentgear:lining_cloth"
-      }
-    ]
   }
 }

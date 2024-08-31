@@ -1,0 +1,33 @@
+{
+  "parent": "silentgear:bow",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "silentgear:crossbow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.crossbow.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "silentgear:crossbow"
+    },
+    "title": {
+      "translate": "advancements.silentgear.crossbow.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,27 +1,27 @@
 {
-  "type": "silentgear:stat_modifier",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.organic"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.organic.desc"
   },
-  "cancels_with": [
-    "silentgear:eroded"
-  ],
-  "stats": [
+  "effects": [
     {
-      "name": "silentgear:enchantment_value",
-      "value": 0.1,
-      "factor_damage": true,
-      "factor_value": true
-    },
-    {
-      "name": "silentgear:magic_damage",
-      "value": -0.15,
-      "factor_damage": true,
-      "factor_value": true
+      "type": "silentgear:number_property_modifier",
+      "property_modifiers": {
+        "silentgear:enchantment_value": {
+          "base_multiplier": 0.1,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": true
+        },
+        "silentgear:magic_damage": {
+          "base_multiplier": -0.15,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": true
+        }
+      }
     }
-  ]
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.organic"
+  }
 }

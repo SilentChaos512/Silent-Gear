@@ -1,0 +1,39 @@
+{
+  "parent": "silentgear:material_grader",
+  "criteria": {
+    "durability": {
+      "conditions": {
+        "stat": "silentgear:durability",
+        "value": {
+          "min": 16000.0
+        }
+      },
+      "trigger": "silentgear:property_value"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.silentgear.high_durability.description"
+    },
+    "icon": {
+      "components": {
+        "silentgear:material_list": [
+          {
+            "material": "silentgear:emerald"
+          }
+        ]
+      },
+      "count": 1,
+      "id": "silentgear:tip"
+    },
+    "title": {
+      "translate": "advancements.silentgear.high_durability.title"
+    }
+  },
+  "requirements": [
+    [
+      "durability"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,81 +1,58 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:stone",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "rock"
+      "rock",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:sandstone/uncolored_blocks"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:sandstone"
-    }
+  "display": {
+    "color": "#FFE3DBB0",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.sandstone"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.sandstone"
-  },
-  "stats": {
-    "main": {
-      "durability": 117.0,
+  "properties": {
+    "silentgear:main": {
+      "armor": 5.0,
+      "armor/boots": 1.0,
+      "armor/chestplate": 2.0,
+      "armor/helmet": 1.0,
+      "armor/leggings": 1.0,
       "armor_durability": 6.0,
-      "enchantment_value": 7.0,
-      "rarity": 7.0,
-      "charging_value": 0.7,
-      "repair_value": -0.1,
-      "harvest_speed": 4.0,
-      "melee_damage": 1.0,
+      "attack_damage": 1.0,
       "attack_speed": 0.1,
       "attack_speed/axe": -0.1,
       "attack_speed/hoe": -1.0,
-      "ranged_damage": 0.0,
-      "ranged_speed": -0.1,
-      "projectile_speed": 1.0,
+      "charging_value": 0.7,
+      "draw_speed": -0.1,
+      "durability": 117.0,
+      "enchantment_value": 7.0,
+      "harvest_speed": 4.0,
+      "harvest_tier": "minecraft:stone",
       "projectile_accuracy": 0.8,
-      "armor": 5.0,
-      "armor/helmet": 1.0,
-      "armor/chestplate": 2.0,
-      "armor/leggings": 1.0,
-      "armor/boots": 1.0
+      "projectile_speed": 1.0,
+      "ranged_damage": 0.0,
+      "rarity": 7.0,
+      "repair_value": -0.1
     },
-    "rod": {}
-  },
-  "traits": {
-    "rod": [
-      {
-        "name": "silentgear:brittle",
-        "level": 1
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_lc",
-        "color": "#E3DBB0"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#E3DBB0"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_lc",
-        "color": "#E3DBB0"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#E3DBB0"
-      }
-    ]
+    "silentgear:rod": {
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:brittle"
+        }
+      ]
+    }
   }
 }

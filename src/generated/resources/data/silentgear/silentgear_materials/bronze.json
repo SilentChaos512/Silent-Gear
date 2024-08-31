@@ -1,93 +1,68 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "metal"
+      "metal",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
-      "tag": "forge:ingots/bronze"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.bronze"
-  },
-  "stats": {
-    "main": {
-      "durability": 300.0,
-      "armor_durability": 13.0,
-      "enchantment_value": 12.0,
-      "rarity": 15.0,
-      "charging_value": 1.1,
-      "repair_value": 0.15,
-      "harvest_speed": 6.0,
-      "melee_damage": 2.5,
-      "magic_damage": 1.0,
-      "attack_speed": 0.2,
-      "ranged_damage": 2.0,
-      "ranged_speed": -0.2,
-      "armor": 15.0,
-      "armor/helmet": 3.0,
-      "armor/chestplate": 6.0,
-      "armor/leggings": 4.0,
-      "armor/boots": 2.0,
-      "armor_toughness": 1.0,
-      "magic_armor": 6.0
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/bronze"
     },
-    "rod": {
-      "melee_damage": {
-        "mul2": 0.05
-      }
-    }
+    "part_substitutes": {}
   },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:sharp",
-        "level": 1
-      }
-    ],
-    "rod": [
-      {
-        "name": "silentgear:flexible",
-        "level": 1
-      }
-    ]
+  "display": {
+    "color": "#FFD6903B",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.bronze"
+    },
+    "name_prefix": ""
   },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#D6903B"
+  "properties": {
+    "silentgear:main": {
+      "armor": 15.0,
+      "armor/boots": 2.0,
+      "armor/chestplate": 6.0,
+      "armor/helmet": 3.0,
+      "armor/leggings": 4.0,
+      "armor_durability": 13.0,
+      "armor_toughness": 1.0,
+      "attack_damage": 2.5,
+      "attack_speed": 0.2,
+      "charging_value": 1.1,
+      "draw_speed": -0.2,
+      "durability": 300.0,
+      "enchantment_value": 12.0,
+      "harvest_speed": 6.0,
+      "harvest_tier": "minecraft:iron",
+      "magic_armor": 6.0,
+      "magic_damage": 1.0,
+      "ranged_damage": 2.0,
+      "rarity": 15.0,
+      "repair_value": 0.15,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:sharp"
+        }
+      ]
+    },
+    "silentgear:rod": {
+      "attack_damage": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.05
       },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#D6903B"
-      }
-    ],
-    "rod/all": [
-      {
-        "texture": "silentgear:rod_generic_hc",
-        "color": "#D6903B"
-      }
-    ],
-    "rod/part": [
-      {
-        "texture": "silentgear:rod",
-        "color": "#D6903B"
-      }
-    ]
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    }
   }
 }

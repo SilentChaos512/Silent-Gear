@@ -1,84 +1,53 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 1,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "organic",
-      "fiber"
+      "fiber",
+      "basic"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "silentgear:sinew_fiber"
-    }
-  },
-  "name": {
-    "translate": "material.silentgear.sinew"
-  },
-  "stats": {
-    "binding": {
-      "repair_efficiency": {
-        "mul1": -0.05
-      }
     },
-    "cord": {
-      "ranged_damage": {
-        "mul1": 0.2
-      }
-    }
+    "part_substitutes": {}
   },
-  "traits": {
-    "binding": [
-      {
-        "name": "silentgear:flexible",
-        "level": 4
-      }
-    ],
-    "cord": [
-      {
-        "name": "silentgear:flexible",
-        "level": 2
-      }
-    ]
+  "display": {
+    "color": "#FFD8995B",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.sinew"
+    },
+    "name_prefix": ""
   },
-  "model": {
-    "binding/all": [
-      {
-        "texture": "silentgear:binding_generic",
-        "color": "#D8995B"
-      }
-    ],
-    "binding/part": [
-      {
-        "texture": "silentgear:binding",
-        "color": "#D8995B"
-      }
-    ],
-    "cord/all": [
-      {
-        "texture": "silentgear:bowstring_string",
-        "color": "#7E6962"
+  "properties": {
+    "silentgear:binding": {
+      "repair_efficiency": {
+        "operation": "MULTIPLY_BASE",
+        "value": -0.05
       },
-      {
-        "texture": "silentgear:arrow"
-      }
-    ],
-    "cord/part": [
-      {
-        "texture": "silentgear:bowstring",
-        "color": "#7E6962"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:cloth",
-        "color": "#7E6962"
-      }
-    ]
+      "traits": [
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    },
+    "silentgear:cord": {
+      "ranged_damage": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.2
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    }
   }
 }

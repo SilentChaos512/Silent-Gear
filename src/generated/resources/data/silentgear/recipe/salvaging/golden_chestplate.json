@@ -1,0 +1,12 @@
+{
+  "type": "silentgear:salvaging",
+  "ingredient": {
+    "item": "minecraft:golden_chestplate"
+  },
+  "results": [
+    {
+      "count": 8,
+      "id": "minecraft:gold_ingot"
+    }
+  ]
+}

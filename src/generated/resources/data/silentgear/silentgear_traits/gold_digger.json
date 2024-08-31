@@ -1,21 +1,26 @@
 {
-  "type": "silentgear:bonus_drops",
-  "max_level": 5,
   "conditions": [
     {
       "type": "silentgear:gear_type",
-      "gear_type": "harvest_tool"
+      "gear_type": "silentgear:harvest_tool"
     }
   ],
-  "name": {
-    "translate": "trait.silentgear.gold_digger"
-  },
   "description": {
     "translate": "trait.silentgear.gold_digger.desc"
   },
-  "base_chance": 0.15,
-  "bonus_multiplier": 0.5,
-  "ingredient": {
-    "tag": "silentgear:gold_digger"
+  "effects": [
+    {
+      "type": "silentgear:bonus_drops",
+      "base_chance": 0.15,
+      "bonus_multiplier": 0.5,
+      "ingredient": {
+        "tag": "silentgear:gold_digger_drops"
+      },
+      "matched_items_text_for_wiki": "nuggets"
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.gold_digger"
   }
 }

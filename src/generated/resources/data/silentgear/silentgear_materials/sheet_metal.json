@@ -1,39 +1,42 @@
 {
-  "type": "silentgear:crafted",
-  "simple": false,
-  "harvest_tier": "minecraft:wood",
-  "availability": {
-    "tier": 0,
+  "type": "silentgear:processed",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
       "sheet"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
-  },
-  "crafting_items": {
-    "main": {
+    "gear_type_blacklist": [],
+    "ingredient": {
       "item": "silentgear:sheet_metal"
-    }
+    },
+    "part_substitutes": {}
   },
-  "name": {
-    "translate": "material.silentgear.sheet_metal"
+  "display": {
+    "color": "#FFFFFFFF",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.sheet_metal"
+    },
+    "name_prefix": ""
   },
-  "stats": {
-    "main": {
-      "durability": {
-        "mul2": -1.0
+  "properties": {
+    "silentgear:main": {
+      "armor": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.5
       },
       "armor_durability": {
-        "mul2": -0.4
-      },
-      "armor": {
-        "mul2": -0.5
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.4
       },
       "armor_toughness": {
-        "mul2": -0.5
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.5
+      },
+      "durability": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": -1.0
       }
     }
-  },
-  "model": {}
+  }
 }

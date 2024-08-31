@@ -1,19 +1,28 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "axe",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:axe_head"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.axe_head"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:axe",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:axe_head"
-  },
-  "name": {
-    "translate": "part.silentgear.axe_head"
-  },
-  "stats": {
-    "melee_damage": {
-      "add": 5.0
+  "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 5.0
     },
     "attack_speed": {
-      "add": -3.0
+      "operation": "ADD",
+      "value": -3.0
     },
     "repair_efficiency": 1.0
   }

@@ -1,0 +1,45 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:golden_hoe"
+    }
+  ],
+  "result": {
+    "item": "silentgear:hoe",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:gold"
+              },
+              {
+                "material": "silentgear:gold"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:hoe_head"
+        },
+        "part": "silentgear:hoe_head"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:wood"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:rod"
+        },
+        "part": "silentgear:rod"
+      }
+    ]
+  }
+}

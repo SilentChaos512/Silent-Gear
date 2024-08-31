@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "silentgear:advanced_upgrade_base"
+    },
+    {
+      "tag": "c:storage_blocks/crimson_iron"
+    },
+    {
+      "tag": "c:ingots/crimson_steel"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:wide_plate_upgrade"
+  }
+}

@@ -1,133 +1,87 @@
 {
-  "type": "silentgear:standard",
-  "simple": true,
-  "harvest_tier": "minecraft:iron",
-  "availability": {
-    "tier": 2,
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
     "categories": [
-      "gem"
+      "gem",
+      "intermediate"
     ],
-    "visible": true,
-    "gear_blacklist": [],
-    "can_salvage": true
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:gems/amethyst"
+    },
+    "part_substitutes": {}
   },
-  "crafting_items": {
-    "main": {
-      "item": "minecraft:amethyst_shard"
-    }
+  "display": {
+    "color": "#FFA31DE6",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.amethyst"
+    },
+    "name_prefix": ""
   },
-  "name": {
-    "translate": "material.silentgear.amethyst"
-  },
-  "stats": {
-    "main": {
-      "durability": 210.0,
-      "armor_durability": 10.0,
-      "enchantment_value": 16.0,
-      "rarity": 35.0,
-      "charging_value": 1.3,
-      "harvest_speed": 6.0,
-      "melee_damage": 1.0,
-      "magic_damage": 3.0,
-      "attack_speed": 0.0,
-      "ranged_damage": 1.0,
-      "ranged_speed": 0.0,
-      "projectile_speed": 1.0,
-      "projectile_accuracy": 1.0,
+  "properties": {
+    "silentgear:main": {
       "armor": 15.0,
-      "armor/helmet": 3.0,
-      "armor/chestplate": 5.0,
-      "armor/leggings": 4.0,
       "armor/boots": 3.0,
-      "magic_armor": 10.0
+      "armor/chestplate": 5.0,
+      "armor/helmet": 3.0,
+      "armor/leggings": 4.0,
+      "armor_durability": 10.0,
+      "attack_damage": 1.0,
+      "attack_speed": 0.0,
+      "charging_value": 1.3,
+      "draw_speed": 0.0,
+      "durability": 210.0,
+      "enchantment_value": 16.0,
+      "harvest_speed": 6.0,
+      "harvest_tier": "minecraft:iron",
+      "magic_armor": 10.0,
+      "magic_damage": 3.0,
+      "projectile_accuracy": 1.0,
+      "projectile_speed": 1.0,
+      "ranged_damage": 1.0,
+      "rarity": 35.0,
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.7
+            }
+          ],
+          "level": 1,
+          "trait": "silentgear:renew"
+        }
+      ]
     },
-    "tip": {
+    "silentgear:setting": {
+      "traits": [
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:cursed"
+        }
+      ]
+    },
+    "silentgear:tip": {
       "durability": {
-        "mul2": -0.25
-      }
-    },
-    "adornment": {}
-  },
-  "traits": {
-    "main": [
-      {
-        "name": "silentgear:renew",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.7
-          }
-        ]
-      }
-    ],
-    "tip": [
-      {
-        "name": "silentgear:silky",
-        "level": 1,
-        "conditions": [
-          {
-            "type": "silentgear:material_ratio",
-            "ratio": 0.66
-          }
-        ]
-      }
-    ],
-    "adornment": [
-      {
-        "name": "silentgear:cursed",
-        "level": 4
-      }
-    ]
-  },
-  "model": {
-    "main/all": [
-      {
-        "texture": "silentgear:main_generic_hc",
-        "color": "#A31DE6"
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.25
       },
-      {
-        "texture": "silentgear:_highlight"
-      }
-    ],
-    "main/fragment": [
-      {
-        "texture": "silentgear:metal",
-        "color": "#A31DE6"
-      }
-    ],
-    "tip/all": [
-      {
-        "texture": "silentgear:tip_sharp",
-        "color": "#A31DE6"
-      }
-    ],
-    "tip/part": [
-      {
-        "texture": "silentgear:tip_base"
-      },
-      {
-        "texture": "silentgear:tip",
-        "color": "#A31DE6"
-      },
-      {
-        "texture": "silentgear:tip_shine"
-      }
-    ],
-    "adornment/all": [
-      {
-        "texture": "silentgear:adornment_generic",
-        "color": "#A31DE6"
-      }
-    ],
-    "adornment/part": [
-      {
-        "texture": "silentgear:adornment",
-        "color": "#A31DE6"
-      },
-      {
-        "texture": "silentgear:adornment_highlight"
-      }
-    ]
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_ratio",
+              "ratio": 0.66
+            }
+          ],
+          "level": 1,
+          "trait": "silentgear:silky"
+        }
+      ]
+    }
   }
 }

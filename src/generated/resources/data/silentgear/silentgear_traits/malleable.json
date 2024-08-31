@@ -1,15 +1,17 @@
 {
-  "type": "silentgear:durability",
-  "max_level": 5,
-  "name": {
-    "translate": "trait.silentgear.malleable"
-  },
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.malleable.desc"
   },
-  "cancels_with": [
-    "silentgear:brittle"
+  "effects": [
+    {
+      "type": "silentgear:durability",
+      "activation_chance": 0.1,
+      "effect_scale": -1
+    }
   ],
-  "effect_scale": -1,
-  "activation_chance": 0.1
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.malleable"
+  }
 }

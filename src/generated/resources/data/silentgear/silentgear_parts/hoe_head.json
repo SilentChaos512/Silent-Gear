@@ -1,19 +1,28 @@
 {
-  "type": "silentgear:compound_part",
-  "gear_type": "hoe",
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:hoe_head"
+    }
+  },
+  "display": {
+    "name": {
+      "translate": "part.silentgear.hoe_head"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:hoe",
   "part_type": "silentgear:main",
-  "crafting_item": {
-    "item": "silentgear:hoe_head"
-  },
-  "name": {
-    "translate": "part.silentgear.hoe_head"
-  },
-  "stats": {
-    "melee_damage": {
-      "mul1": -1.0
+  "properties": {
+    "attack_damage": {
+      "operation": "MULTIPLY_BASE",
+      "value": -1.0
     },
     "attack_speed": {
-      "add": -1.0
+      "operation": "ADD",
+      "value": -1.0
     },
     "repair_efficiency": 1.0
   }
