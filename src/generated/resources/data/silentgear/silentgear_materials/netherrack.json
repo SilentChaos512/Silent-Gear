@@ -37,7 +37,10 @@
       "durability": 142.0,
       "enchantment_value": 8.0,
       "harvest_speed": 5.0,
-      "harvest_tier": "minecraft:stone",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_netherrack_tools",
+        "name": "netherrack"
+      },
       "magic_armor": 4.0,
       "magic_damage": 0.5,
       "projectile_accuracy": 1.0,

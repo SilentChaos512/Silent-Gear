@@ -39,7 +39,10 @@
       "durability": 420.0,
       "enchantment_value": 11.0,
       "harvest_speed": 6.0,
-      "harvest_tier": "minecraft:iron",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_high_carbon_steel_tools",
+        "name": "high_carbon_steel"
+      },
       "magic_armor": 6.0,
       "magic_damage": 1.0,
       "ranged_damage": 2.0,

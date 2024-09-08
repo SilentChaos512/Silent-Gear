@@ -40,7 +40,10 @@
       "durability": 108.0,
       "enchantment_value": 5.0,
       "harvest_speed": 4.0,
-      "harvest_tier": "minecraft:stone",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_bone_tools",
+        "name": "bone"
+      },
       "magic_armor": 1.0,
       "magic_damage": 1.0,
       "projectile_accuracy": 1.0,

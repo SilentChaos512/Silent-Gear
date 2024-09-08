@@ -36,7 +36,10 @@
       "durability": 197.0,
       "enchantment_value": 29.0,
       "harvest_speed": 19.0,
-      "harvest_tier": "minecraft:diamond",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_azure_silver_tools",
+        "name": "azure_silver"
+      },
       "magic_armor": 13.0,
       "magic_damage": 7.0,
       "projectile_accuracy": 1.1,

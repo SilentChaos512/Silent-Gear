@@ -39,7 +39,10 @@
       "durability": 1776.0,
       "enchantment_value": 12.0,
       "harvest_speed": 9.0,
-      "harvest_tier": "minecraft:diamond",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_dimerald_tools",
+        "name": "dimerald"
+      },
       "magic_armor": 10.0,
       "magic_damage": 3.0,
       "projectile_accuracy": 1.2,

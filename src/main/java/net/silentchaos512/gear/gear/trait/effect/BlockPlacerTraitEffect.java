@@ -80,7 +80,7 @@ public class BlockPlacerTraitEffect extends TraitEffect {
             ItemStack fakeBlockStack = new ItemStack(blockState.getBlock());
             InteractionResult result = fakeBlockStack.useOn(new FakeItemUseContext(context, fakeBlockStack));
             if (result.consumesAction()) {
-                if (damageOnUse > 0) {
+                if (damageOnUse > 0 && context.getPlayer() != null) {
                     GearHelper.attemptDamage(stack, damageOnUse, context.getPlayer(), context.getHand());
                 }
                 if (sound != null) {

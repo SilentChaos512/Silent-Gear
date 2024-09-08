@@ -29,7 +29,7 @@ public class CodecUtils {
         throw new IllegalAccessError("Utility class");
     }
 
-    public static <T> StreamCodec<RegistryFriendlyByteBuf, TagKey<T>> tagStreamCodec(ResourceKey<? extends Registry<T>> registryKey) {
+    public static <T> StreamCodec<FriendlyByteBuf, TagKey<T>> tagStreamCodec(ResourceKey<? extends Registry<T>> registryKey) {
         return StreamCodec.of(
                 (buf, val) -> buf.writeResourceLocation(val.location()),
                 buf -> TagKey.create(registryKey, buf.readResourceLocation())

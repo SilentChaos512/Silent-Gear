@@ -12,6 +12,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FluffyBlock;
+import net.silentchaos512.gear.core.BuiltinMaterials;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgTags;
 
@@ -25,11 +26,35 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         // Harvesting
+        tag(SgTags.Blocks.MINEABLE_WITH_MACHETE)
+                .addTag(BlockTags.MINEABLE_WITH_AXE);
+        tag(SgTags.Blocks.MINEABLE_WITH_MATTOCK)
+                .addTag(BlockTags.MINEABLE_WITH_AXE)
+                .addTag(BlockTags.MINEABLE_WITH_HOE)
+                .addTag(BlockTags.MINEABLE_WITH_SHOVEL);
+        tag(SgTags.Blocks.MINEABLE_WITH_PAXEL)
+                .addTag(BlockTags.MINEABLE_WITH_AXE)
+                .addTag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .addTag(BlockTags.MINEABLE_WITH_SHOVEL);
+        tag(SgTags.Blocks.MINEABLE_WITH_SICKLE)
+                .addTag(BlockTags.CROPS)
+                .addTag(BlockTags.FLOWERS)
+                .addTag(BlockTags.LEAVES);
+
         tag(Tags.Blocks.NEEDS_NETHERITE_TOOL)
                 .addTag(SgTags.Blocks.ORES_AZURE_SILVER);
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .addTag(SgTags.Blocks.ORES_BORT)
                 .addTag(SgTags.Blocks.ORES_CRIMSON_IRON);
+        tag(SgTags.Blocks.NEEDS_COPPER_TOOL)
+                .add(
+                        Blocks.GOLD_BLOCK,
+                        Blocks.RAW_GOLD_BLOCK,
+                        Blocks.GOLD_ORE,
+                        Blocks.DEEPSLATE_GOLD_ORE,
+                        Blocks.REDSTONE_ORE,
+                        Blocks.DEEPSLATE_REDSTONE_ORE
+                );
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(SgBlocks.RAW_AZURE_SILVER_BLOCK.get())
                 .add(SgBlocks.RAW_CRIMSON_IRON_BLOCK.get());
@@ -67,6 +92,10 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(SgBlocks.REFABRICATOR.get())
                 .add(SgBlocks.METAL_PRESS.get())
                 .add(SgBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
+
+        for (BuiltinMaterials material : BuiltinMaterials.values()) {
+            material.generateTag(this::tag);
+        }
 
         // Silent Gear
         tag(SgTags.Blocks.FLUFFY_BLOCKS)

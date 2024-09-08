@@ -123,7 +123,12 @@ public class GearShieldItem extends ShieldItem implements GearItem {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hitEntity(stack, target, attacker);
+        return GearHelper.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        GearHelper.postHurtEnemy(stack, target, attacker);
     }
 
     @Override

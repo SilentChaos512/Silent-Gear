@@ -37,7 +37,10 @@
       "durability": 2400.0,
       "enchantment_value": 19.0,
       "harvest_speed": 15.0,
-      "harvest_tier": "minecraft:netherite",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_crimson_steel_tools",
+        "name": "crimson_steel"
+      },
       "magic_armor": 10.0,
       "magic_damage": 6.0,
       "projectile_accuracy": 1.3,

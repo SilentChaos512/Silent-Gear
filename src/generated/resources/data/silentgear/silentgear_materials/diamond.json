@@ -38,7 +38,10 @@
       "durability": 1561.0,
       "enchantment_value": 10.0,
       "harvest_speed": 8.0,
-      "harvest_tier": "minecraft:diamond",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_diamond_tools",
+        "name": "diamond"
+      },
       "magic_armor": 4.0,
       "magic_damage": 1.0,
       "projectile_accuracy": 1.1,

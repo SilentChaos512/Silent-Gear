@@ -36,7 +36,10 @@
       "durability": 330.0,
       "enchantment_value": 10.0,
       "harvest_speed": 7.0,
-      "harvest_tier": "minecraft:iron",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_quartz_tools",
+        "name": "quartz"
+      },
       "magic_armor": 4.0,
       "projectile_accuracy": 1.0,
       "projectile_speed": 1.0,

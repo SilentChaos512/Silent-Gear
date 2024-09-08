@@ -37,7 +37,10 @@
       "durability": 420.0,
       "enchantment_value": 14.0,
       "harvest_speed": 10.0,
-      "harvest_tier": "minecraft:diamond",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_crimson_iron_tools",
+        "name": "crimson_iron"
+      },
       "magic_armor": 6.0,
       "magic_damage": 3.0,
       "projectile_accuracy": 1.1,

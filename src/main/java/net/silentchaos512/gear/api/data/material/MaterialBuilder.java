@@ -9,7 +9,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.SilentGear;
@@ -21,6 +20,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
+import net.silentchaos512.gear.core.BuiltinMaterials;
 import net.silentchaos512.gear.gear.material.CustomCompoundMaterial;
 import net.silentchaos512.gear.gear.material.ProcessedMaterial;
 import net.silentchaos512.gear.gear.material.SimpleMaterial;
@@ -31,11 +31,13 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.util.Color;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
 @SuppressWarnings({"WeakerAccess", "OverlyComplexClass"})
 public class MaterialBuilder<M extends Material> {
+    @Nullable BuiltinMaterials builtinMaterial;
     private final ResourceLocation id;
     private final MaterialFactory<M> factory;
     private DataResource<Material> parent = DataResource.empty();
@@ -63,6 +65,12 @@ public class MaterialBuilder<M extends Material> {
 
     public static MaterialBuilder<SimpleMaterial> simple(DataResource<Material> material) {
         return new MaterialBuilder<>(material.getId(), SimpleMaterial::new);
+    }
+
+    public static MaterialBuilder<SimpleMaterial> builtin(BuiltinMaterials material) {
+        var result = simple(material.getMaterial());
+        result.builtinMaterial = material;
+        return result;
     }
 
     public static MaterialBuilder<CustomCompoundMaterial> customCompound(DataResource<Material> material) {
@@ -170,8 +178,12 @@ public class MaterialBuilder<M extends Material> {
         return this;
     }
 
+    public <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> MaterialBuilder<M> stat(Supplier<PartType> partType, Supplier<P> property, T value) {
+        return stat(partType, property, property.get().valueOf(value));
+    }
+
     public MaterialBuilder<M> stat(Supplier<PartType> partType, Supplier<NumberProperty> property, float value) {
-        return stat(partType, property, NumberPropertyValue.average(value));
+        return stat(partType, property, new NumberPropertyValue(value, NumberProperty.Operation.AVERAGE));
     }
 
     public MaterialBuilder<M> stat(Supplier<PartType> partType, Supplier<NumberProperty> property, float value, NumberProperty.Operation operation) {
@@ -204,8 +216,17 @@ public class MaterialBuilder<M extends Material> {
         return this;
     }
 
-    public MaterialBuilder<M> mainStatsHarvest(Tier harvestTier, float harvestSpeed) {
-        stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(harvestTier));
+    public MaterialBuilder<M> mainStatsHarvest(HarvestTier harvestTier, float harvestSpeed) {
+        stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new HarvestTierPropertyValue(harvestTier));
+        stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, NumberPropertyValue.average(harvestSpeed));
+        return this;
+    }
+
+    public MaterialBuilder<M> mainStatsHarvest(float harvestSpeed) {
+        if (this.builtinMaterial != null) {
+            var harvestTier = this.builtinMaterial.getHarvestTier();
+            stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new HarvestTierPropertyValue(harvestTier));
+        }
         stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, NumberPropertyValue.average(harvestSpeed));
         return this;
     }

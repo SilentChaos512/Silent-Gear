@@ -42,7 +42,10 @@
       "durability": 59.0,
       "enchantment_value": 15.0,
       "harvest_speed": 2.0,
-      "harvest_tier": "minecraft:wood",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_wood_tools",
+        "name": "wood"
+      },
       "magic_armor": 2.0,
       "projectile_accuracy": 0.9,
       "projectile_speed": 1.0,

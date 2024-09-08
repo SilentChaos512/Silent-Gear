@@ -37,7 +37,10 @@
       "durability": 3652.0,
       "enchantment_value": 16.0,
       "harvest_speed": 18.0,
-      "harvest_tier": "minecraft:netherite",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_tyrian_steel_tools",
+        "name": "tyrian_steel"
+      },
       "magic_armor": 12.0,
       "magic_damage": 6.0,
       "projectile_accuracy": 1.1,

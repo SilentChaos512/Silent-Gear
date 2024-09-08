@@ -107,7 +107,7 @@ public class BlockFillerTraitEffect extends TraitEffect {
 
         if (replaceCount > 0) {
             // Damage item, player effects
-            if (useProperties.damagePerBlock > 0) {
+            if (useProperties.damagePerBlock > 0 && player != null) {
                 GearHelper.attemptDamage(stack, durabilityCost, player, context.getHand());
             }
             if (sound != null) {

@@ -1,10 +1,9 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.setup.SgTags;
 
 import java.util.function.Supplier;
 
@@ -14,8 +13,7 @@ public class GearMattockItem extends GearHoeItem {
     }
 
     @Override
-    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_AXE)
-                || GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_SHOVEL);
+    public TagKey<Block> getToolBlockSet() {
+        return SgTags.Blocks.MINEABLE_WITH_MATTOCK;
     }
 }

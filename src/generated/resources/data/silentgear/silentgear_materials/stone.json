@@ -42,7 +42,10 @@
       "durability": 131.0,
       "enchantment_value": 5.0,
       "harvest_speed": 4.0,
-      "harvest_tier": "minecraft:stone",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_stone_tools",
+        "name": "stone"
+      },
       "projectile_accuracy": 0.8,
       "projectile_speed": 1.0,
       "ranged_damage": 0.0,

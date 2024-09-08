@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,10 +11,10 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.ItemAbilities;
+import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearShovelItem extends ShovelItem implements GearTool {
+public class GearShovelItem extends ShovelItem implements GearDiggerTool {
     private final Supplier<GearType> gearType;
 
     public GearShovelItem(Supplier<GearType> gearType) {
@@ -50,8 +51,8 @@ public class GearShovelItem extends ShovelItem implements GearTool {
     }
 
     @Override
-    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return canPerformAction(stack, ItemAbilities.SHOVEL_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_SHOVEL);
+    public TagKey<Block> getToolBlockSet() {
+        return BlockTags.MINEABLE_WITH_SHOVEL;
     }
 
     @Override
@@ -61,7 +62,12 @@ public class GearShovelItem extends ShovelItem implements GearTool {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hitEntity(stack, target, attacker);
+        return GearHelper.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        GearHelper.postHurtEnemy(stack, target, attacker);
     }
 
     @Override

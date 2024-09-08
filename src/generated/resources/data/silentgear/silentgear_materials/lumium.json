@@ -37,7 +37,10 @@
       "durability": 920.0,
       "enchantment_value": 14.0,
       "harvest_speed": 15.0,
-      "harvest_tier": "minecraft:diamond",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "minecraft:incorrect_for_diamond_tool",
+        "name": "diamond"
+      },
       "magic_armor": 10.0,
       "magic_damage": 3.0,
       "ranged_damage": 2.0,

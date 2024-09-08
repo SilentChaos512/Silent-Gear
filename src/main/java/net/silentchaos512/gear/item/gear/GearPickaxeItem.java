@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,11 +14,12 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
+import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.util.Const;
@@ -31,7 +33,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearPickaxeItem extends PickaxeItem implements GearTool {
+public class GearPickaxeItem extends PickaxeItem implements GearDiggerTool {
     public static final Set<ItemAbility> ACTIONS_WITH_SPOON = GearHelper.makeItemAbilitySet(
             ItemAbilities.PICKAXE_DIG,
             ItemAbilities.SHOVEL_DIG
@@ -50,7 +52,7 @@ public class GearPickaxeItem extends PickaxeItem implements GearTool {
             return false;
         }
 
-        // TODO: Make a ToolActionTrait type?
+        // TODO: Make a ItemAbilityTrait trait effect?
         if (TraitHelper.hasTrait(stack, Const.Traits.SPOON)) {
             // Pickaxe with spoon upgrade can dig dirt and stuff
             return ACTIONS_WITH_SPOON.contains(itemAbility);
@@ -63,6 +65,11 @@ public class GearPickaxeItem extends PickaxeItem implements GearTool {
     @Override
     public GearType getGearType() {
         return gearType.get();
+    }
+
+    @Override
+    public TagKey<Block> getToolBlockSet() {
+        return BlockTags.MINEABLE_WITH_PICKAXE;
     }
 
     @Override
@@ -83,7 +90,7 @@ public class GearPickaxeItem extends PickaxeItem implements GearTool {
         if (TraitHelper.hasTrait(stack, Const.Traits.SPOON) && GearItemSets.SHOVEL.gearItem().isCorrectToolForDrops(stack, state)) {
             return true;
         }
-        return canPerformAction(stack, ItemAbilities.PICKAXE_DIG) && GearHelper.isCorrectToolForDrops(stack, state, BlockTags.MINEABLE_WITH_PICKAXE);
+        return super.isCorrectToolForDrops(stack, state);
     }
 
     @Override
@@ -93,7 +100,12 @@ public class GearPickaxeItem extends PickaxeItem implements GearTool {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hitEntity(stack, target, attacker);
+        return GearHelper.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        GearHelper.postHurtEnemy(stack, target, attacker);
     }
 
     @Override

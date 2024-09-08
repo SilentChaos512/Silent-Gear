@@ -2,6 +2,7 @@ package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,12 +11,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
@@ -35,6 +39,18 @@ public class GearSwordItem extends SwordItem implements GearWeapon {
     @Override
     public GearType getGearType() {
         return this.gearType.get();
+    }
+
+    @Override
+    public Tool createToolProperties(GearPropertiesData properties) {
+        return new Tool(
+                List.of(
+                        Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 15.0F),
+                        Tool.Rule.overrideSpeed(BlockTags.SWORD_EFFICIENT, 1.5F)
+                ),
+                1.0F,
+                2
+        );
     }
 
     //region Standard tool overrides
@@ -83,7 +99,12 @@ public class GearSwordItem extends SwordItem implements GearWeapon {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hitEntity(stack, target, attacker);
+        return GearHelper.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        GearHelper.postHurtEnemy(stack, target, attacker);
     }
 
     @Override

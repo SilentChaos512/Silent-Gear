@@ -36,7 +36,10 @@
       "durability": 192.0,
       "enchantment_value": 12.0,
       "harvest_speed": 5.0,
-      "harvest_tier": "minecraft:stone",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "minecraft:incorrect_for_stone_tool",
+        "name": "stone"
+      },
       "magic_armor": 2.0,
       "magic_damage": 1.0,
       "ranged_damage": 0.5,

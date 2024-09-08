@@ -36,7 +36,10 @@
       "durability": 124.0,
       "enchantment_value": 3.0,
       "harvest_speed": 5.0,
-      "harvest_tier": "minecraft:stone",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_flint_tools",
+        "name": "flint"
+      },
       "projectile_accuracy": 1.0,
       "projectile_speed": 1.0,
       "ranged_damage": 1.0,

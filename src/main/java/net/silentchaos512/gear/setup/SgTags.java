@@ -13,6 +13,14 @@ import java.util.List;
 
 public final class SgTags {
     public static final class Blocks {
+        public static final TagKey<Block> MINEABLE_WITH_MACHETE = mod("mineable/machete");
+        public static final TagKey<Block> MINEABLE_WITH_MATTOCK = mod("mineable/mattock");
+        public static final TagKey<Block> MINEABLE_WITH_PAXEL = mod("mineable/paxel");
+        public static final TagKey<Block> MINEABLE_WITH_SICKLE = mod("mineable/sickle");
+
+        public static final TagKey<Block> NEEDS_COPPER_TOOL = mod("needs_copper_tool");
+        public static final TagKey<Block> INCORRECT_FOR_COPPER_TOOL = mod("incorrect_for_copper_tool");
+
         public static final TagKey<Block> FLUFFY_BLOCKS = mod("fluffy_blocks");
         public static final TagKey<Block> NETHERWOOD_LOGS = mod("netherwood_logs");
         public static final TagKey<Block> NETHERWOOD_SOIL = mod("netherwood_soil");

@@ -173,7 +173,7 @@ public class GearFishingRodItem extends FishingRodItem implements GearTool {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hitEntity(stack, target, attacker);
+        return GearHelper.hurtEnemy(stack, target, attacker);
     }
 
     @Override

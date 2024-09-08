@@ -24,6 +24,10 @@
       "operation": "ADD",
       "value": -2.2
     },
+    "harvest_speed": {
+      "operation": "MULTIPLY_BASE",
+      "value": 0.4
+    },
     "repair_efficiency": 1.0
   }
 }

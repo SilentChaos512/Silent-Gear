@@ -204,6 +204,7 @@ public final class PartsProvider extends PartsProviderBase {
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .put(GearTypes.MACHETE.get(), b -> b
+                    .numberProperty(GearProperties.HARVEST_SPEED, 0.4f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 2, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.ATTACK_SPEED, -2.2f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)

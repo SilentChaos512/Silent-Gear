@@ -13,12 +13,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -42,18 +44,19 @@ public class GearShearsItem extends ShearsItem implements GearTool {
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (GearHelper.isBroken(stack)) {
-            return 0f;
-        }
-
-        float speed = GearData.getProperties(stack).getNumber(GearProperties.HARVEST_SPEED);
-
-        if (!state.is(Blocks.COBWEB) && !state.is(BlockTags.LEAVES)) {
-            return state.is(BlockTags.WOOL) ? speed - 1 : 1;
-        } else {
-            return 2.5f * speed;
-        }
+    public Tool createToolProperties(GearPropertiesData properties) {
+        // Mimic ShearsItem. Adjust speed so that iron shears are identical to vanilla.
+        final float adjustedSpeed = properties.getNumber(GearProperties.HARVEST_SPEED) / 6f;
+        return new Tool(
+                List.of(
+                        Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 15f * adjustedSpeed),
+                        Tool.Rule.overrideSpeed(BlockTags.LEAVES, 15f * adjustedSpeed),
+                        Tool.Rule.overrideSpeed(BlockTags.WOOL, 5f * adjustedSpeed),
+                        Tool.Rule.overrideSpeed(List.of(Blocks.VINE, Blocks.GLOW_LICHEN), 2f * adjustedSpeed)
+                ),
+                1.0f,
+                1
+        );
     }
 
     @Override
@@ -129,7 +132,12 @@ public class GearShearsItem extends ShearsItem implements GearTool {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hitEntity(stack, target, attacker);
+        return GearHelper.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        GearHelper.postHurtEnemy(stack, target, attacker);
     }
 
     @Override

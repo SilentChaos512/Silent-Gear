@@ -223,11 +223,11 @@ public final class GearHelper {
         return getItem(gear).map(item -> item.getRepairModifier(gear)).orElse(1f);
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, InteractionHand hand) {
+    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entity, InteractionHand hand) {
         attemptDamage(stack, amount, entity, hand == InteractionHand.OFF_HAND ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
     }
 
-    public static void attemptDamage(ItemStack stack, int amount, @Nullable LivingEntity entity, EquipmentSlot slot) {
+    public static void attemptDamage(ItemStack stack, int amount, LivingEntity entity, EquipmentSlot slot) {
         if (isUnbreakable(stack) || (entity instanceof Player && ((Player) entity).getAbilities().instabuild))
             return;
 
@@ -237,16 +237,17 @@ public final class GearHelper {
                 (int) trait.getTrait().onDurabilityDamage(new TraitActionContext(player, trait, stack), val));
 
         final int maxDamage = stack.getMaxDamage();
-        final int preDamageFactor = getDamageFactor(stack, maxDamage);
+        final int previousDamageFactor = getDamageFactor(stack, maxDamage);
         if (!canBreakPermanently(stack))
             amount = Math.min(maxDamage - stack.getDamageValue(), amount);
-        stack.hurtAndBreak(amount, player, slot);
+        stack.hurtAndBreak(amount, entity, slot);
 
         // Recalculate stats occasionally
-        if (getDamageFactor(stack, maxDamage) != preDamageFactor) {
+        var currentDamageFactory = getDamageFactor(stack, maxDamage);
+        if (currentDamageFactory != previousDamageFactor) {
             GearData.recalculateGearData(stack, player);
             if (player != null) {
-                onDamageFactorChange(player, preDamageFactor, getDamageFactor(stack, maxDamage));
+                onDamageFactorChange(player, previousDamageFactor, currentDamageFactory);
             }
         }
 
@@ -460,14 +461,15 @@ public final class GearHelper {
         return true;
     }
 
-    public static boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        boolean isBroken = isBroken(stack);
-        if (!isBroken && stack.getItem() instanceof GearTool) {
-            int damage = ((GearTool) stack.getItem()).getDamageOnHitEntity(stack, target, attacker);
-            attemptDamage(stack, damage, attacker, EquipmentSlot.MAINHAND);
-        }
+    public static boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        return !isBroken(stack);
+    }
 
-        return !isBroken;
+    public static void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (!isBroken(stack) && stack.getItem() instanceof GearTool gearToolItem) {
+            var damageOnHitEntity = gearToolItem.getDamageOnHitEntity(stack, target, attacker);
+            attemptDamage(stack, damageOnHitEntity, attacker, EquipmentSlot.MAINHAND);
+        }
     }
 
     // Formerly onUpdate

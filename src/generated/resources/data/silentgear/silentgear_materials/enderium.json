@@ -37,7 +37,10 @@
       "durability": 1200.0,
       "enchantment_value": 13.0,
       "harvest_speed": 18.0,
-      "harvest_tier": "minecraft:netherite",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "minecraft:incorrect_for_netherite_tool",
+        "name": "netherite"
+      },
       "magic_armor": 10.0,
       "magic_damage": 4.0,
       "ranged_damage": 3.0,

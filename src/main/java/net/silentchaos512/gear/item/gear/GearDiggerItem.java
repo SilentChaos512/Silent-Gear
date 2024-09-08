@@ -1,9 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -17,10 +15,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
+import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
@@ -28,18 +25,10 @@ import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearDiggerItem extends DiggerItem implements GearTool {
-    private static final Map<ItemAbility, TagKey<Block>> TOOL_TYPES = ImmutableMap.<ItemAbility, TagKey<Block>>builder()
-            .put(ItemAbilities.AXE_DIG, BlockTags.MINEABLE_WITH_AXE)
-            .put(ItemAbilities.HOE_DIG, BlockTags.MINEABLE_WITH_HOE)
-            .put(ItemAbilities.PICKAXE_DIG, BlockTags.MINEABLE_WITH_PICKAXE)
-            .put(ItemAbilities.SHOVEL_DIG, BlockTags.MINEABLE_WITH_SHOVEL)
-            .build();
-
+public class GearDiggerItem extends DiggerItem implements GearDiggerTool {
     private final TagKey<Block> blocks;
     private final Supplier<GearType> gearType;
 
@@ -55,26 +44,17 @@ public class GearDiggerItem extends DiggerItem implements GearTool {
     }
 
     @Override
+    public TagKey<Block> getToolBlockSet() {
+        return this.blocks;
+    }
+
+    @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility toolAction) {
         if (GearHelper.isBroken(stack)) {
             return false;
         }
 
         return getGearType().canPerformAction(toolAction);
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        for (Map.Entry<ItemAbility, TagKey<Block>> entry : TOOL_TYPES.entrySet()) {
-            ItemAbility action = entry.getKey();
-            TagKey<Block> tag = entry.getValue();
-
-            if (canPerformAction(stack, action) && GearHelper.isCorrectToolForDrops(stack, state, tag)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override
@@ -89,7 +69,12 @@ public class GearDiggerItem extends DiggerItem implements GearTool {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hitEntity(stack, target, attacker);
+        return GearHelper.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        GearHelper.postHurtEnemy(stack, target, attacker);
     }
 
     @Override

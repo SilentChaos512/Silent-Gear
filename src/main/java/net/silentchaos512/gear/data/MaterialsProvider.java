@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
@@ -18,11 +17,12 @@ import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.material.MaterialCraftingData;
 import net.silentchaos512.gear.api.material.TextureType;
+import net.silentchaos512.gear.api.property.HarvestTier;
 import net.silentchaos512.gear.api.property.NumberProperty;
-import net.silentchaos512.gear.api.property.TierPropertyValue;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.core.BuiltinMaterials;
 import net.silentchaos512.gear.crafting.ingredient.CustomAlloyIngredient;
 import net.silentchaos512.gear.gear.material.CompoundMaterial;
 import net.silentchaos512.gear.gear.material.CustomCompoundMaterial;
@@ -104,7 +104,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .display(Component.translatable(Items.BARRIER.getDescriptionId()), 0xFF0000)
                 .mainStatsCommon(1337, 84, 5, 111, 0.5f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -1f)
-                .mainStatsHarvest(Tiers.WOOD, 5)
+                .mainStatsHarvest(HarvestTier.WOOD, 5)
                 .mainStatsMelee(1, 1, 0f)
                 .mainStatsRanged(1, 0f)
                 .mainStatsArmor(3, 8, 6, 3, 10, 10)
@@ -123,7 +123,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 )
                 .displayWithDefaultName(Color.VALUE_WHITE, TextureType.LOW_CONTRAST)
                 .mainStatsCommon(100, 6, 1, 0, 1f)
-                .mainStatsHarvest(Tiers.WOOD, 1)
+                .mainStatsHarvest(HarvestTier.WOOD, 1)
                 .mainStatsMelee(1, 1, 0f)
                 .mainStatsRanged(0, 0f)
                 .mainStatsArmor(1, 1, 1, 1, 1, 1)
@@ -141,13 +141,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private void addModMetals(Collection<MaterialBuilder<?>> ret) {
         // Azure Electrum
-        ret.add(MaterialBuilder.simple(modId("azure_electrum"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.AZURE_ELECTRUM)
                 .crafting(SgTags.Items.INGOTS_AZURE_ELECTRUM, MaterialCategories.METAL, MaterialCategories.ENDGAME)
                 .displayWithDefaultName(0x4575E3, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(1259, 61, 37, 109, 1.5f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.5f)
-                .mainStatsHarvest(Tiers.NETHERITE, 29)
+                .mainStatsHarvest(29)
                 .mainStatsMelee(7, 11, 0.0f)
                 .mainStatsRanged(3, 0.0f)
                 .mainStatsProjectile(2f, 1.5f)
@@ -167,13 +167,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.TIP, Const.Traits.MALLEABLE, 3)
         );
         // Azure Silver
-        ret.add(MaterialBuilder.simple(modId("azure_silver"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.AZURE_SILVER)
                 .crafting(SgTags.Items.INGOTS_AZURE_SILVER, MaterialCategories.METAL, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0xCBBAFF, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(197, 17, 29, 83, 1.4f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.5f)
-                .mainStatsHarvest(Tiers.DIAMOND, 19)
+                .mainStatsHarvest(19)
                 .mainStatsMelee(5, 7, 0.0f)
                 .mainStatsRanged(2, 0.0f)
                 .mainStatsProjectile(1.2f, 1.1f)
@@ -196,12 +196,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.TIP, Const.Traits.SOFT, 2)
         );
         // Blaze Gold
-        ret.add(MaterialBuilder.simple(modId("blaze_gold"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.BLAZE_GOLD)
                 .crafting(SgTags.Items.INGOTS_BLAZE_GOLD, MaterialCategories.METAL, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0xDD8500)
                 //main
                 .mainStatsCommon(69, 9, 24, 45, 1.2f)
-                .mainStatsHarvest(Tiers.IRON, 15)
+                .mainStatsHarvest(15)
                 .mainStatsMelee(2, 5, 0.1f)
                 .mainStatsRanged(1, 0.2f)
                 .mainStatsProjectile(1.2f, 0.9f)
@@ -229,12 +229,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.COATING, Const.Traits.SOFT, 2)
         );
         // Bronze
-        ret.add(MaterialBuilder.simple(modId("bronze"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.BRONZE)
                 .crafting(SgTags.Items.INGOTS_BRONZE, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xD6903B, TextureType.HIGH_CONTRAST)
                 .mainStatsCommon(300, 13, 12, 15, 1.1f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
-                .mainStatsHarvest(Tiers.IRON, 6)
+                .mainStatsHarvest(6)
                 .mainStatsMelee(2.5f, 1f, 0.2f)
                 .mainStatsRanged(2, -0.2f)
                 .mainStatsArmor(3, 6, 4, 2, 1, 6) //15
@@ -244,13 +244,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 1)
         );
         // Crimson Iron
-        ret.add(MaterialBuilder.simple(modId("crimson_iron"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.CRIMSON_IRON)
                 .crafting(SgTags.Items.INGOTS_CRIMSON_IRON, MaterialCategories.METAL, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0xFF6189, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(420, 27, 14, 31, 0.7f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.5f)
-                .mainStatsHarvest(Tiers.DIAMOND, 10)
+                .mainStatsHarvest(10)
                 .mainStatsMelee(3, 3, -0.1f)
                 .mainStatsRanged(2, -0.1f)
                 .mainStatsProjectile(1, 1.1f)
@@ -269,13 +269,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.TIP, Const.Traits.FIERY, 1)
         );
         // Crimson Steel
-        ret.add(MaterialBuilder.simple(modId("crimson_steel"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.CRIMSON_STEEL)
                 .crafting(SgTags.Items.INGOTS_CRIMSON_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
                 .displayWithDefaultName(0xDC143C, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(2400, 42, 19, 83, 0.9f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.5f)
-                .mainStatsHarvest(Tiers.NETHERITE, 15)
+                .mainStatsHarvest(15)
                 .mainStatsMelee(6, 6, -0.1f)
                 .mainStatsRanged(3, -0.1f)
                 .mainStatsProjectile(1f, 1.3f)
@@ -295,12 +295,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.TIP, Const.Traits.MAGMATIC, 1)
         );
         // Tyrian Steel
-        ret.add(MaterialBuilder.simple(modId("tyrian_steel"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.TYRIAN_STEEL)
                 .crafting(SgTags.Items.INGOTS_TYRIAN_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
                 .displayWithDefaultName(0xB01080, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(3652, 81, 16, 100, 1.1f)
-                .mainStatsHarvest(Tiers.NETHERITE, 18)
+                .mainStatsHarvest(18)
                 .mainStatsMelee(8, 6, 0.0f)
                 .mainStatsRanged(4, 0.0f)
                 .mainStatsProjectile(1.1f, 1.1f)
@@ -320,12 +320,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private void addVanillaMetals(Collection<MaterialBuilder<?>> ret) {
         // Copper
-        ret.add(MaterialBuilder.simple(modId("copper"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.COPPER)
                 .crafting(Tags.Items.INGOTS_COPPER, MaterialCategories.METAL, MaterialCategories.BASIC)
                 .displayWithDefaultName(0xFD804C, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(151, 12, 15, 12, 1.3f)
-                .mainStatsHarvest(Tiers.STONE, 5)
+                .mainStatsHarvest(5)
                 .mainStatsMelee(1.5f, 1.0f, 0.1f)
                 .stat(PartGearKey.ofMain(GearTypes.AXE), GearProperties.ATTACK_SPEED, -0.1f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, 0f)
@@ -338,12 +338,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.SOFT, 3)
         );
         // Gold
-        ret.add(MaterialBuilder.simple(modId("gold"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.GOLD)
                 .crafting(Tags.Items.INGOTS_GOLD, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xFDFF70, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(32, 7, 22, 50, 1.2f)
-                .mainStatsHarvest(Tiers.GOLD, 12)
+                .mainStatsHarvest(12)
                 .mainStatsMelee(0, 4, 0.0f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, -2f)
                 .mainStatsRanged(0, 0.3f)
@@ -372,7 +372,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.COATING, Const.Traits.SOFT, 3)
         );
         // Iron
-        ret.add(MaterialBuilder.simple(modId("iron"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.IRON)
                 .crafting(new MaterialCraftingData(
                         Ingredient.of(Tags.Items.INGOTS_IRON),
                         List.of(MaterialCategories.METAL, MaterialCategories.INTERMEDIATE),
@@ -383,7 +383,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .displayWithDefaultName(Color.VALUE_WHITE, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(250, 15, 14, 20, 0.7f)
-                .mainStatsHarvest(Tiers.IRON, 6)
+                .mainStatsHarvest(6)
                 .mainStatsMelee(2, 1, 0.0f)
                 .stat(PartGearKey.ofMain(GearTypes.AXE), GearProperties.ATTACK_SPEED, -0.1f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, 0f)
@@ -425,13 +425,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private void addGems(Collection<MaterialBuilder<?>> ret) {
         // Diamond
-        ret.add(MaterialBuilder.simple(modId("diamond"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.DIAMOND)
                 .crafting(Tags.Items.GEMS_DIAMOND, MaterialCategories.GEM, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0x33EBCB, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(1561, 33, 10, 70, 0.8f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, 1f)
-                .mainStatsHarvest(Tiers.DIAMOND, 8)
+                .mainStatsHarvest(8)
                 .mainStatsMelee(3, 1, 0.0f)
                 .mainStatsRanged(2, -0.2f)
                 .mainStatsProjectile(0.9f, 1.1f)
@@ -456,13 +456,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.SETTING, Const.Traits.BASTION, 1)
         );
         // Emerald
-        ret.add(MaterialBuilder.simple(modId("emerald"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.EMERALD)
                 .crafting(Tags.Items.GEMS_EMERALD, MaterialCategories.GEM, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0x00B038, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(1080, 24, 16, 40, 1.0f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.25f)
-                .mainStatsHarvest(Tiers.IRON, 10)
+                .mainStatsHarvest(10)
                 .mainStatsMelee(2, 2, 0.0f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, 1f)
                 .mainStatsRanged(1, -0.1f)
@@ -487,12 +487,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.SETTING, Const.Traits.REACH, 2)
         );
         // Lapis Lazuli
-        ret.add(MaterialBuilder.simple(modId("lapis_lazuli"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.LAPIS_LAZULI)
                 .crafting(Tags.Items.GEMS_LAPIS, MaterialCategories.GEM, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0x224BAF, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(200, 13, 17, 30, 1.3f)
-                .mainStatsHarvest(Tiers.IRON, 5)
+                .mainStatsHarvest(5)
                 .mainStatsMelee(2, 3, 0.0f)
                 .mainStatsRanged(0, -0.1f)
                 .mainStatsProjectile(1.0f, 0.8f)
@@ -521,12 +521,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.SETTING, Const.Traits.SWIFT_SWIM, 3, new MaterialRatioTraitCondition(0.67f))
         );
         // Quartz
-        ret.add(MaterialBuilder.simple(modId("quartz"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.QUARTZ)
                 .crafting(Tags.Items.GEMS_QUARTZ, MaterialCategories.GEM, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xD4CABA, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(330, 13, 10, 40, 1.2f)
-                .mainStatsHarvest(Tiers.IRON, 7)
+                .mainStatsHarvest(7)
                 .mainStatsMelee(2, 0, 0.1f)
                 .mainStatsRanged(0, 0.1f)
                 .mainStatsProjectile(1f, 1f)
@@ -550,12 +550,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.SETTING, Const.Traits.MIGHTY, 2, new MaterialRatioTraitCondition(0.5f))
         );
         // Amethyst
-        ret.add(MaterialBuilder.simple(modId("amethyst"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.AMETHYST)
                 .crafting(Tags.Items.GEMS_AMETHYST, MaterialCategories.GEM, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xA31DE6, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(210, 10, 16, 35, 1.3f)
-                .mainStatsHarvest(Tiers.IRON, 6)
+                .mainStatsHarvest(6)
                 .mainStatsMelee(1, 3, 0)
                 .mainStatsRanged(1, 0)
                 .mainStatsProjectile(1, 1)
@@ -599,12 +599,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
     @SuppressWarnings("OverlyLongMethod")
     private void addStones(Collection<MaterialBuilder<?>> ret) {
         // Basalt
-        ret.add(MaterialBuilder.simple(modId("basalt"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.BASALT)
                 .crafting(Items.BASALT, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x4F4B4F, TextureType.LOW_CONTRAST)
                 //main
                 .mainStatsCommon(137, 4, 6, 7, 0.7f)
-                .mainStatsHarvest(Tiers.STONE, 4)
+                .mainStatsHarvest(4)
                 .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartGearKey.ofMain(GearTypes.AXE), GearProperties.ATTACK_SPEED, -0.2f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, -1f)
@@ -619,12 +619,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.CHIPPING, 2)
         );
         // Blackstone
-        ret.add(MaterialBuilder.simple(modId("blackstone"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.BLACKSTONE)
                 .crafting(Items.BLACKSTONE, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x3C3947, TextureType.LOW_CONTRAST)
                 //main
                 .mainStatsCommon(151, 5, 4, 9, 0.6f)
-                .mainStatsHarvest(Tiers.STONE, 4)
+                .mainStatsHarvest(4)
                 .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartGearKey.ofMain(GearTypes.AXE), GearProperties.ATTACK_SPEED, -0.2f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, -1f)
@@ -640,13 +640,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.HARD, 1)
         );
         // End Stone
-        ret.add(MaterialBuilder.simple(modId("end_stone"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.END_STONE)
                 .crafting(Tags.Items.END_STONES, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0xFFFFCC)
                 //main
                 .mainStatsCommon(1164, 15, 10, 32, 0.9f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.2f)
-                .mainStatsHarvest(Tiers.IRON, 7)
+                .mainStatsHarvest(7)
                 .mainStatsMelee(2, 3, 0.1f)
                 .mainStatsRanged(0, 0f, 1f, 0.8f)
                 .mainStatsArmor(3, 5, 4, 3, 1, 6) //15
@@ -658,12 +658,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.ANCIENT, 4)
         );
         // Flint
-        ret.add(MaterialBuilder.simple(modId("flint"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.FLINT)
                 .crafting(Items.FLINT, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x969696, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(124, 4, 3, 6, 0.8f)
-                .mainStatsHarvest(Tiers.STONE, 5)
+                .mainStatsHarvest(5)
                 .mainStatsMelee(2, 0, -0.1f)
                 .mainStatsRanged(1, -0.3f, 1.0f, 1.0f)
                 .mainStatsArmor(0.5f, 2f, 1f, 0.5f, 0, 0) //4
@@ -675,13 +675,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .noProperties(PartTypes.SETTING)
         );
         // Netherrack
-        ret.add(MaterialBuilder.simple(modId("netherrack"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.NETHERRACK)
                 .crafting(Tags.Items.NETHERRACKS, MaterialCategories.ROCK, MaterialCategories.ORGANIC, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x854242, TextureType.LOW_CONTRAST)
                 //main
                 .mainStatsCommon(142, 5, 8, 11, 0.8f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.2f)
-                .mainStatsHarvest(Tiers.STONE, 5)
+                .mainStatsHarvest(5)
                 .mainStatsMelee(0.5f, 0.5f, 0.0f)
                 .mainStatsRanged(0.5f, 0.1f, 0.8f, 1.0f)
                 .mainStatsArmor(1, 4, 2, 1, 0, 4) //8
@@ -692,13 +692,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.BENDING, 2)
         );
         // Obsidian
-        ret.add(MaterialBuilder.simple(modId("obsidian"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.OBSIDIAN)
                 .crafting(Tags.Items.OBSIDIANS, MaterialCategories.ROCK, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0x443464, TextureType.LOW_CONTRAST)
                 //main
-                .mainStatsCommon(3072, 37, 7, 10, 0.6f)
-                .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.5f)
-                .mainStatsHarvest(Tiers.DIAMOND, 6)
+                .mainStatsCommon(1024, 13, 7, 10, 0.6f)
+                .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.25f)
+                .mainStatsHarvest(6)
                 .mainStatsMelee(3, 2, -0.4f)
                 .mainStatsRanged(0, -0.4f, 0.7f, 0.7f)
                 .mainStatsArmor(3, 8, 6, 3, 4, 8) //20
@@ -710,14 +710,13 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.CHIPPING, 3)
         );
         // Sandstone
-        var sgSandstone = modId("sandstone");
-        ret.add(MaterialBuilder.simple(sgSandstone)
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.SANDSTONE)
                 .crafting(Tags.Items.SANDSTONE_UNCOLORED_BLOCKS, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0xE3DBB0, TextureType.LOW_CONTRAST)
                 //main
                 .mainStatsCommon(117, 6, 7, 7, 0.7f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.1f)
-                .mainStatsHarvest(Tiers.STONE, 4)
+                .mainStatsHarvest(4)
                 .mainStatsMelee(1, 0, 0.1f)
                 .stat(PartGearKey.ofMain(GearTypes.AXE), GearProperties.ATTACK_SPEED, -0.1f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, -1f)
@@ -728,13 +727,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Red sandstone
         ret.add(MaterialBuilder.simple(modId("sandstone/red"))
-                .parent(sgSandstone)
+                .parent(BuiltinMaterials.SANDSTONE.getMaterial())
                 .crafting(Tags.Items.SANDSTONE_RED_BLOCKS)
                 .displayWithDefaultName(0xD97B30)
         );
         // Stone
-        var stone = modId("stone");
-        ret.add(MaterialBuilder.simple(stone)
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.STONE)
                 .crafting(new MaterialCraftingData(
                         Ingredient.of(Tags.Items.COBBLESTONES),
                         List.of(MaterialCategories.ROCK, MaterialCategories.BASIC),
@@ -745,7 +743,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .displayWithDefaultName(0x9A9A9A, TextureType.LOW_CONTRAST)
                 //main
                 .mainStatsCommon(131, 5, 5, 4, 0.5f)
-                .mainStatsHarvest(Tiers.STONE, 4)
+                .mainStatsHarvest(4)
                 .mainStatsMelee(1, 0, 0.0f)
                 .stat(PartGearKey.ofMain(GearTypes.AXE), GearProperties.ATTACK_SPEED, -0.2f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, -1f)
@@ -758,29 +756,29 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.CRUSHING, 2)
         );
         ret.add(MaterialBuilder.simple(modId("stone/andesite"))
-                .parent(stone)
+                .parent(BuiltinMaterials.STONE.getMaterial())
                 .crafting(Items.ANDESITE, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x8A8A8E, TextureType.LOW_CONTRAST)
         );
         ret.add(MaterialBuilder.simple(modId("stone/diorite"))
-                .parent(stone)
+                .parent(BuiltinMaterials.STONE.getMaterial())
                 .crafting(Items.DIORITE, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0xFFFFFF, TextureType.LOW_CONTRAST)
         );
         ret.add(MaterialBuilder.simple(modId("stone/granite"))
-                .parent(stone)
+                .parent(BuiltinMaterials.STONE.getMaterial())
                 .crafting(Items.GRANITE, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x9F6B58, TextureType.LOW_CONTRAST)
         );
         // Terracotta
-        var sgTerracotta = modId("terracotta");
-        ret.add(MaterialBuilder.simple(sgTerracotta)
+        var sgTerracotta = BuiltinMaterials.TERRACOTTA.getMaterial();
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.TERRACOTTA)
                 .crafting(Items.TERRACOTTA, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x985F45, TextureType.LOW_CONTRAST)
                 //main
                 .mainStatsCommon(165, 11, 9, 7, 0.8f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.1f)
-                .mainStatsHarvest(Tiers.STONE, 4)
+                .mainStatsHarvest(4)
                 .mainStatsMelee(1.5f, 0, 0.2f)
                 .mainStatsRanged(0, -0.2f, 1f, 0.9f)
                 .mainStatsArmor(2, 3, 3, 1, 0, 3) //9
@@ -812,7 +810,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private void addWoods(Collection<MaterialBuilder<?>> ret) {
         // Wood
-        ret.add(MaterialBuilder.simple(Const.Materials.WOOD)
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.WOOD)
                 .crafting(new MaterialCraftingData(
                         Ingredient.of(ItemTags.PLANKS),
                         List.of(MaterialCategories.ORGANIC, MaterialCategories.WOOD),
@@ -824,7 +822,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(59, 8, 15, 1, 0.6f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.25f)
-                .mainStatsHarvest(Tiers.WOOD, 2)
+                .mainStatsHarvest(2)
                 .mainStatsMelee(0, 0, 0.0f)
                 .stat(PartGearKey.ofMain(GearTypes.AXE), GearProperties.ATTACK_SPEED, -0.2f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, -2f)
@@ -865,7 +863,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
 
         // Netherwood
-        ret.add(MaterialBuilder.simple(modId("netherwood"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.NETHERWOOD)
                 .crafting(new MaterialCraftingData(
                         Ingredient.of(SgBlocks.NETHERWOOD_PLANKS),
                         List.of(MaterialCategories.ORGANIC, MaterialCategories.WOOD),
@@ -878,7 +876,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsCommon(72, 12, 13, 4, 0.7f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.1f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_EFFICIENCY, 0.5f)
-                .mainStatsHarvest(Tiers.WOOD, 2)
+                .mainStatsHarvest(2)
                 .mainStatsMelee(0, 0, 0.2f)
                 .mainStatsRanged(0, 0f, 1f, 0.8f)
                 .mainStatsArmor(1, 4, 2, 1, 0, 6) //8
@@ -890,7 +888,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 1)
         );
         // Bamboo
-        ret.add(MaterialBuilder.simple(modId("bamboo"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.BAMBOO)
                 .crafting(new MaterialCraftingData(
                         Ingredient.of(Items.BAMBOO_PLANKS),
                         List.of(MaterialCategories.ORGANIC, MaterialCategories.WOOD, MaterialCategories.BASIC),
@@ -902,7 +900,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //main
                 .mainStatsCommon(65, 9, 15, 4, 0.7f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.25f)
-                .mainStatsHarvest(Tiers.WOOD, 2)
+                .mainStatsHarvest(2)
                 .mainStatsMelee(0, 0, 0.0f)
                 .stat(PartGearKey.ofMain(GearTypes.AXE), GearProperties.ATTACK_SPEED, -0.2f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, -2f)
@@ -1124,7 +1122,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .displayWithDefaultName(0x1ACE82, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(1776, 36, 12, 80, 0.7f)
-                .mainStatsHarvest(Tiers.DIAMOND, 9)
+                .mainStatsHarvest(BuiltinMaterials.DIMERALD.getHarvestTier(), 9)
                 .mainStatsMelee(3, 3, 0.1f)
                 .mainStatsRanged(3, 0.1f, 1.0f, 1.2f)
                 .mainStatsArmor(4, 9, 6, 3, 10, 10) //22
@@ -1151,7 +1149,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .displayWithDefaultName(0x848484, TextureType.HIGH_CONTRAST)
                 .mainStatsCommon(420, 24, 11, 40, 0.8f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.05f)
-                .mainStatsHarvest(Tiers.IRON, 6)
+                .mainStatsHarvest(BuiltinMaterials.HIGH_CARBON_STEEL.getHarvestTier(), 6)
                 .mainStatsMelee(4, 1, -0.2f)
                 .mainStatsArmor(3, 8, 6, 3, 2, 6)
                 .mainStatsRanged(2, -0.2f)
@@ -1178,7 +1176,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.REACH, 1)
         );
         // Bone
-        ret.add(MaterialBuilder.simple(modId("bone"))
+        ret.add(MaterialBuilder.builtin(BuiltinMaterials.BONE)
                 .crafting(new MaterialCraftingData(
                         Ingredient.of(Items.BONE_BLOCK),
                         List.of(MaterialCategories.ORGANIC, MaterialCategories.BASIC),
@@ -1189,7 +1187,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .displayWithDefaultName(0xFCFBED, TextureType.LOW_CONTRAST)
                 //main
                 .mainStatsCommon(108, 4, 5, 8, 0.9f)
-                .mainStatsHarvest(Tiers.STONE, 4)
+                .mainStatsHarvest(4)
                 .mainStatsMelee(2, 1, 0.1f)
                 .mainStatsRanged(1f, 0f, 0.9f, 1f)
                 .mainStatsArmor(1, 2, 1, 1, 0, 1) //5
@@ -1224,7 +1222,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 365)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 15)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 14)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 8)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 2)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 2)
@@ -1250,7 +1248,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 18)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 11)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.DIAMOND))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.DIAMOND)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 8)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 4)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 1.5f)
@@ -1274,7 +1272,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 330)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 10)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 12)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 5)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 2.5f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 3.5f)
@@ -1298,7 +1296,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 15)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 14)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 9)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 3f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 2f)
@@ -1322,7 +1320,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 25)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 14)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.DIAMOND))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.DIAMOND)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 10)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 4f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 5f)
@@ -1346,7 +1344,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 8)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 13)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 7)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 1.5f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 1.5f)
@@ -1370,7 +1368,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 24)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 12)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.DIAMOND))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.DIAMOND)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 9)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 4f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 1f)
@@ -1393,7 +1391,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 96)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 10)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 25)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 14)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 2f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 5f)
@@ -1417,7 +1415,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 34)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 13)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.NETHERITE))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.NETHERITE)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 18)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 6f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 4f)
@@ -1440,7 +1438,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 13)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 7)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 3.5f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 3f)
@@ -1463,7 +1461,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 260)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 14)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 15)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 4)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 2f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 2f)
@@ -1487,7 +1485,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 14)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.DIAMOND))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.DIAMOND)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 15)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 4f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 3f)
@@ -1512,7 +1510,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 17)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 12)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 7)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 2.5f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 1f)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_SPEED, 0.1f)
@@ -1534,7 +1532,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 500)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 30)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 12)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 10)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 4f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 2f)
@@ -1556,7 +1554,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 900)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 21)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 14)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.DIAMOND))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.DIAMOND)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 12)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 4f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 4f)
@@ -1581,7 +1579,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 18)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 11)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 2f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 4f)
@@ -1604,7 +1602,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 18)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 18)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 14)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 5f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 3f)
@@ -1631,7 +1629,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 15)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 7)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 3f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 2f)
@@ -1656,7 +1654,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 50)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.3f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 40)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.DIAMOND))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.DIAMOND)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 20)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 10f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 4f)
@@ -1682,7 +1680,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 25)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 16)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.DIAMOND))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.DIAMOND)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 13)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 3f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 4f)
@@ -1706,7 +1704,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 64)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 9)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 20)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.GOLD))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.GOLD)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 11)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 0f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 4f)
@@ -1731,7 +1729,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 11)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.IRON))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.IRON)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 6)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 4f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 1f)
@@ -1752,7 +1750,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 192)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 13)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 12)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.STONE))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.STONE)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 5)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 1.5f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 1f)
@@ -1775,7 +1773,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 1600)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 37)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 12)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.NETHERITE))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.NETHERITE)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 8)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 6f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 1f)
@@ -1801,7 +1799,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, -0.15f)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 17)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.DIAMOND))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.DIAMOND)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 6)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 2f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 2f)
@@ -1823,7 +1821,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 192)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 10)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 15)
-                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, new TierPropertyValue(Tiers.STONE))
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_TIER, HarvestTier.STONE)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 3)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 1.5f)
                 .stat(PartTypes.MAIN, GearProperties.MAGIC_DAMAGE, 1f)

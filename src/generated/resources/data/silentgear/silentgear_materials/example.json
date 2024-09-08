@@ -42,7 +42,10 @@
       "durability": 100.0,
       "enchantment_value": 1.0,
       "harvest_speed": 1.0,
-      "harvest_tier": "minecraft:wood",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "minecraft:incorrect_for_wooden_tool",
+        "name": "wood"
+      },
       "magic_armor": 1.0,
       "magic_damage": 1.0,
       "ranged_damage": 0.0,

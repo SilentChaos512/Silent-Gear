@@ -63,7 +63,10 @@
       "durability": 32.0,
       "enchantment_value": 22.0,
       "harvest_speed": 12.0,
-      "harvest_tier": "minecraft:gold",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_gold_tools",
+        "name": "gold"
+      },
       "magic_armor": 8.0,
       "magic_damage": 4.0,
       "projectile_accuracy": 1.0,

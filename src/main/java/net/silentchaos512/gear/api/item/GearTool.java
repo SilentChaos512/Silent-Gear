@@ -7,12 +7,15 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 public interface GearTool extends GearItem {
@@ -21,6 +24,10 @@ public interface GearTool extends GearItem {
             PartTypes.ROD.get(),
             PartTypes.CORD.get()
     ));
+
+    default Tool createToolProperties(GearPropertiesData properties) {
+        return new Tool(List.of(), 1.0f, 2);
+    }
 
     @Override
     default boolean isValidSlot(String slot) {

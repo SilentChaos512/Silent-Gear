@@ -37,7 +37,10 @@
       "durability": 240.0,
       "enchantment_value": 13.0,
       "harvest_speed": 7.0,
-      "harvest_tier": "minecraft:iron",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "minecraft:incorrect_for_iron_tool",
+        "name": "iron"
+      },
       "magic_armor": 6.0,
       "magic_damage": 1.5,
       "ranged_damage": 2.0,

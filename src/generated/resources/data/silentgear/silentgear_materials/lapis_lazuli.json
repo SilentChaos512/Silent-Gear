@@ -36,7 +36,10 @@
       "durability": 200.0,
       "enchantment_value": 17.0,
       "harvest_speed": 5.0,
-      "harvest_tier": "minecraft:iron",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_lapis_lazuli_tools",
+        "name": "lapis_lazuli"
+      },
       "magic_armor": 10.0,
       "magic_damage": 3.0,
       "projectile_accuracy": 0.8,

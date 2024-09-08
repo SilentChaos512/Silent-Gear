@@ -36,7 +36,10 @@
       "durability": 165.0,
       "enchantment_value": 9.0,
       "harvest_speed": 4.0,
-      "harvest_tier": "minecraft:stone",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_terracotta_tools",
+        "name": "terracotta"
+      },
       "magic_armor": 3.0,
       "projectile_accuracy": 0.9,
       "projectile_speed": 1.0,

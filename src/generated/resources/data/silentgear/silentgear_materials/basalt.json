@@ -38,7 +38,10 @@
       "durability": 137.0,
       "enchantment_value": 6.0,
       "harvest_speed": 4.0,
-      "harvest_tier": "minecraft:stone",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_basalt_tools",
+        "name": "basalt"
+      },
       "projectile_accuracy": 0.8,
       "projectile_speed": 1.0,
       "ranged_damage": 0.0,

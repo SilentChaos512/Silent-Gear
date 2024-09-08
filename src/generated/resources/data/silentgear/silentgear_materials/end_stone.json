@@ -37,7 +37,10 @@
       "durability": 1164.0,
       "enchantment_value": 10.0,
       "harvest_speed": 7.0,
-      "harvest_tier": "minecraft:iron",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_end_stone_tools",
+        "name": "end_stone"
+      },
       "magic_armor": 6.0,
       "magic_damage": 3.0,
       "projectile_accuracy": 0.8,

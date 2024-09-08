@@ -1,7 +1,5 @@
 package net.silentchaos512.gear.setup.gear;
 
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.property.*;
@@ -106,10 +104,10 @@ public class GearProperties {
                             .affectedBySynergy(false)
             )
     );
-    public static final Supplier<TierProperty> HARVEST_TIER = REGISTRAR.register(
+    public static final Supplier<HarvestTierProperty> HARVEST_TIER = REGISTRAR.register(
             "harvest_tier",
-            () -> new TierProperty(
-                    new GearProperty.Builder<Tier>(Tiers.WOOD)
+            () -> new HarvestTierProperty(
+                    new GearProperty.Builder<>(HarvestTier.ZERO)
                             .group(GearPropertyGroups.HARVEST)
                             .affectedByGrades(false)
                             .affectedBySynergy(false)

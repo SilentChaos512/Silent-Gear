@@ -18,6 +18,85 @@
       "translate": "advancements.silentgear.root.description"
     },
     "icon": {
+      "components": {
+        "silentgear:construction": {
+          "broken_count": 0,
+          "example": false,
+          "parts": [
+            {
+              "item": {
+                "components": {
+                  "silentgear:material_list": [
+                    {
+                      "material": "silentgear:crimson_steel"
+                    }
+                  ]
+                },
+                "count": 1,
+                "id": "silentgear:pickaxe_head"
+              },
+              "part": "silentgear:pickaxe_head"
+            },
+            {
+              "item": {
+                "components": {
+                  "silentgear:material_list": [
+                    {
+                      "material": "silentgear:blaze_gold"
+                    }
+                  ]
+                },
+                "count": 1,
+                "id": "silentgear:rod"
+              },
+              "part": "silentgear:rod"
+            },
+            {
+              "item": {
+                "components": {
+                  "silentgear:material_list": [
+                    {
+                      "material": "silentgear:azure_electrum"
+                    }
+                  ]
+                },
+                "count": 1,
+                "id": "silentgear:tip"
+              },
+              "part": "silentgear:tip"
+            },
+            {
+              "item": {
+                "components": {
+                  "silentgear:material_list": [
+                    {
+                      "material": "silentgear:wool/black"
+                    }
+                  ]
+                },
+                "count": 1,
+                "id": "silentgear:grip"
+              },
+              "part": "silentgear:grip"
+            },
+            {
+              "item": {
+                "components": {
+                  "silentgear:material_list": [
+                    {
+                      "material": "silentgear:string"
+                    }
+                  ]
+                },
+                "count": 1,
+                "id": "silentgear:binding"
+              },
+              "part": "silentgear:binding"
+            }
+          ],
+          "repairedCount": 0
+        }
+      },
       "count": 1,
       "id": "silentgear:pickaxe"
     },

@@ -63,7 +63,10 @@
       "durability": 69.0,
       "enchantment_value": 24.0,
       "harvest_speed": 15.0,
-      "harvest_tier": "minecraft:iron",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_blaze_gold_tools",
+        "name": "blaze_gold"
+      },
       "magic_armor": 10.0,
       "magic_damage": 5.0,
       "projectile_accuracy": 0.9,

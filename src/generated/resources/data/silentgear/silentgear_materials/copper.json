@@ -38,7 +38,10 @@
       "durability": 151.0,
       "enchantment_value": 15.0,
       "harvest_speed": 5.0,
-      "harvest_tier": "minecraft:stone",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_copper_tools",
+        "name": "copper"
+      },
       "magic_armor": 8.0,
       "magic_damage": 1.0,
       "ranged_damage": 0.1,

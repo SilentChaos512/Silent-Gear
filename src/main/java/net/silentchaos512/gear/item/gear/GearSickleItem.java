@@ -5,7 +5,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.BreakEventHandler;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.HashMap;
@@ -48,7 +48,7 @@ public class GearSickleItem extends GearDiggerItem implements BreakEventHandler 
     }
 
     public GearSickleItem(Supplier<GearType> gearType) {
-        super(gearType, BlockTags.LEAVES, GearHelper.getBaseItemProperties());
+        super(gearType, SgTags.Blocks.MINEABLE_WITH_SICKLE, GearHelper.getBaseItemProperties());
     }
 
     //region Sickle harvesting
@@ -136,8 +136,7 @@ public class GearSickleItem extends GearDiggerItem implements BreakEventHandler 
         Level world = player.level();
         BlockState state = world.getBlockState(pos);
 
-        // FIXME: Maybe add a new tag for sickle mineable blocks?
-        if (!state.is(BlockTags.MINEABLE_WITH_HOE)) return;
+        if (!state.is(getToolBlockSet())) return;
 
         int blocksBroken = 1;
 

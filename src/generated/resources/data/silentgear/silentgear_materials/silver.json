@@ -36,7 +36,10 @@
       "durability": 64.0,
       "enchantment_value": 20.0,
       "harvest_speed": 11.0,
-      "harvest_tier": "minecraft:gold",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "minecraft:incorrect_for_gold_tool",
+        "name": "gold"
+      },
       "magic_armor": 10.0,
       "magic_damage": 4.0,
       "ranged_damage": 0.0,

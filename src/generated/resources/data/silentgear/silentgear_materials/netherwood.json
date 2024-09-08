@@ -40,7 +40,10 @@
       "durability": 72.0,
       "enchantment_value": 13.0,
       "harvest_speed": 2.0,
-      "harvest_tier": "minecraft:wood",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_netherwood_tools",
+        "name": "netherwood"
+      },
       "magic_armor": 6.0,
       "projectile_accuracy": 0.8,
       "projectile_speed": 1.0,

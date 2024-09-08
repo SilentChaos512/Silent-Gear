@@ -38,7 +38,10 @@
       "durability": 1080.0,
       "enchantment_value": 16.0,
       "harvest_speed": 10.0,
-      "harvest_tier": "minecraft:iron",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_emerald_tools",
+        "name": "emerald"
+      },
       "magic_armor": 6.0,
       "magic_damage": 2.0,
       "projectile_accuracy": 0.9,

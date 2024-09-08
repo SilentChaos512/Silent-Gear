@@ -37,7 +37,10 @@
       "durability": 1259.0,
       "enchantment_value": 37.0,
       "harvest_speed": 29.0,
-      "harvest_tier": "minecraft:netherite",
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_azure_electrum_tools",
+        "name": "azure_electrum"
+      },
       "magic_armor": 19.0,
       "magic_damage": 11.0,
       "projectile_accuracy": 1.5,
