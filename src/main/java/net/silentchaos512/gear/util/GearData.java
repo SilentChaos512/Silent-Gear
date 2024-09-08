@@ -116,10 +116,13 @@ public final class GearData {
 
         // Calculate base values, then bonuses from traits and such, then the final values!
         // All of these are stored for tooltip purposes
+        // First, calculate base properties (first pass, creates the traits list and everything)
         var baseProperties = calculateBaseProperties(gear, player, gearType, gearConstructionData);
         gear.set(SgDataComponents.GEAR_BASE_PROPERTIES, baseProperties);
+        // Second, calculate bonus modifiers provided by traits
         var bonusValues = calculateBonusProperties(gear, player, gearType);
         gear.set(SgDataComponents.GEAR_BONUS_PROPERTIES, bonusValues);
+        // Finally, combine the base and bonus modifiers into the final property values
         var finalProperties = calculateFinalProperties(gear, player, gearType);
         gear.set(SgDataComponents.GEAR_PROPERTIES, finalProperties);
 
@@ -164,8 +167,8 @@ public final class GearData {
 
         List<TraitInstance> traits = baseProperties.getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty()).value();
 
-        final int maxDamage = gear.getMaxDamage() > 0 ? gear.getMaxDamage() : 1;
-        final float damageRatio = Mth.clamp((float) gear.getDamageValue() / maxDamage, 0f, 1f);
+        var baseDurability = gearType.getBaseDurability(baseProperties); // Cannot use gear#getMaxDamage (infinite recursion)
+        final float damageRatio = Mth.clamp((float) gear.getDamageValue() / baseDurability, 0f, 1f);
 
         for (var property : SgRegistries.GEAR_PROPERTY) {
             if (property != GearProperties.TRAITS && baseProperties.contains(property)) {

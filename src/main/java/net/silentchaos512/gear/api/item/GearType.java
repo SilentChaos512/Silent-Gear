@@ -11,6 +11,7 @@ import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyGroup;
 import net.silentchaos512.gear.api.property.NumberProperty;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -107,6 +108,14 @@ public record GearType(
     @Nullable
     public Supplier<GearType> parent() {
         return parent;
+    }
+
+    public int getBaseDurability(GearPropertiesData baseProperties) {
+        float baseValue = baseProperties.getNumber(this.durabilityStat);
+        if (this.durabilityStat.get() == GearProperties.ARMOR_DURABILITY.get()) {
+            return Math.round(this.armorDurabilityMultiplier * baseValue);
+        }
+        return Math.round(baseValue);
     }
 
     @Override

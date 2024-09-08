@@ -52,6 +52,6 @@ public record GearTypeTraitCondition(GearType gearType) implements ITraitConditi
 
     @Override
     public MutableComponent getDisplayText() {
-        return TextUtil.translate("trait.condition", "gear_type", this.gearType);
+        return TextUtil.translate("trait.condition", "gear_type", this.gearType.getDisplayName());
     }
 }
