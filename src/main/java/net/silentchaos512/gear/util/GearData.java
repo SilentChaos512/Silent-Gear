@@ -167,8 +167,9 @@ public final class GearData {
 
         List<TraitInstance> traits = baseProperties.getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty()).value();
 
+        var damageValue = gear.getOrDefault(DataComponents.DAMAGE, 0); // Cannot use gear#getDamageValue (infinite recursion)
         var baseDurability = gearType.getBaseDurability(baseProperties); // Cannot use gear#getMaxDamage (infinite recursion)
-        final float damageRatio = Mth.clamp((float) gear.getDamageValue() / baseDurability, 0f, 1f);
+        final float damageRatio = Mth.clamp((float) damageValue / baseDurability, 0f, 1f);
 
         for (var property : SgRegistries.GEAR_PROPERTY) {
             if (property != GearProperties.TRAITS && baseProperties.contains(property)) {

@@ -14,7 +14,6 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 public final class ModItemModelProperties {
-
     private ModItemModelProperties() {}
 
     @SuppressWarnings("OverlyComplexMethod")

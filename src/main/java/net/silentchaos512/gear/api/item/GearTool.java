@@ -21,8 +21,7 @@ import java.util.function.Supplier;
 public interface GearTool extends GearItem {
     Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
             PartTypes.MAIN.get(),
-            PartTypes.ROD.get(),
-            PartTypes.CORD.get()
+            PartTypes.ROD.get()
     ));
 
     default Tool createToolProperties(GearPropertiesData properties) {
