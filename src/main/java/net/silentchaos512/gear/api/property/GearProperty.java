@@ -132,7 +132,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
 
     public Component formatText(Component valueText) {
         var propertyName = TextUtil.withColor(getDisplayName(), this.nameColor);
-        return Component.translatable("stat.silentgear.displayFormat", propertyName, valueText);
+        return Component.translatable("property.silentgear.displayFormat", propertyName, valueText);
     }
 
     public abstract Component formatValue(V value);

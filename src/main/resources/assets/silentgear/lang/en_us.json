@@ -816,7 +816,7 @@
   "property.silentgear.projectile_speed": "Projectile Speed",
   "property.silentgear.ranged_damage": "Ranged Damage",
   "property.silentgear.rarity": "Rarity",
-  "property.silentgear.reach_distance": "Reach Distance",
+  "property.silentgear.block_reach": "Block Reach",
   "property.silentgear.repair_efficiency": "Repair Efficiency",
   "property.silentgear.repair_value": "Repair Bonus",
   "property.silentgear.traits": "Traits",

@@ -216,7 +216,7 @@ public record GearType(
         }
 
         public Builder relevantPropertyGroups(Collection<GearPropertyGroup> propertyGroups) {
-            propertyGroups.addAll(Builder.this.relevantPropertyGroups);
+            this.relevantPropertyGroups.addAll(propertyGroups);
             return this;
         }
     }

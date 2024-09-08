@@ -142,7 +142,7 @@ public final class GearHelper {
         if (!(stack.getItem() instanceof GearTool))
             return 0.0f;
 
-        float speed = GearData.getProperties(stack).getNumber(GearProperties.ATTACK_SPEED);
+        float speed = GearData.getProperties(stack).getNumber(GearProperties.ATTACK_SPEED) - 4.0f;
         if (isBroken(stack))
             speed += BROKEN_ATTACK_SPEED_CHANGE;
         return speed;

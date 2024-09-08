@@ -80,7 +80,7 @@ public final class GearClientHelper {
         }
 
         if (!Config.Client.vanillaStyleTooltips.get()) {
-            // Stats
+            // Properties
             addStatsInfo(stack, tooltip, flag, item);
         }
 
@@ -126,7 +126,7 @@ public final class GearClientHelper {
 
             tooltip.addAll(builder.build());
         } else if (flag.showStats) {
-            tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.stats"), Color.GOLD)
+            tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.properties"), Color.GOLD)
                     .append(Component.literal(" ")
                             .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), ChatFormatting.GRAY))));
         }
@@ -144,7 +144,7 @@ public final class GearClientHelper {
     }
 
     private static MutableComponent statText(String key, Object... formatArgs) {
-        return Component.translatable("stat.silentgear." + key, formatArgs);
+        return Component.translatable("property.silentgear." + key, formatArgs);
     }
 
     public static void tooltipListParts(ItemStack gear, List<Component> tooltip, Collection<PartInstance> parts, GearTooltipFlag flag) {

@@ -403,7 +403,7 @@ public final class TooltipHandler {
                 );
                 MutableComponent statListText = TextUtil.withColor(uncoloredFormattedText, statColor);
 
-                return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, statListText));
+                return Optional.of(Component.translatable("property.silentgear.displayFormat", nameStr, statListText));
             }
         }
 
@@ -431,7 +431,7 @@ public final class TooltipHandler {
                 );
                 MutableComponent statListText = TextUtil.withColor(uncoloredFormattedText, color);
 
-                return Optional.of(Component.translatable("stat.silentgear.displayFormat", nameStr, statListText));
+                return Optional.of(Component.translatable("property.silentgear.displayFormat", nameStr, statListText));
             }
         }
 

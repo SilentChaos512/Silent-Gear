@@ -47,7 +47,7 @@ public record HarvestTier(
 
         var thisHolderSet = BuiltInRegistries.BLOCK.getOrCreateTag(this.incorrectForTool);
         var otherHolderSet = BuiltInRegistries.BLOCK.getOrCreateTag(other.incorrectForTool);
-        return thisHolderSet.size() > otherHolderSet.size();
+        return thisHolderSet.size() < otherHolderSet.size();
     }
 
     public static HarvestTier create(String name) {
