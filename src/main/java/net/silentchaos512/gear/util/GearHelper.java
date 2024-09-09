@@ -34,18 +34,18 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.NeoForge;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearTool;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
@@ -748,7 +748,7 @@ public final class GearHelper {
 
         // Prefixes
         for (Component t : getNamePrefixes(gear, data.parts())) {
-            result = t.copy().append(Component.literal(" ")).append(result);
+            result = t.copy().append(result);
         }
 
         return result;

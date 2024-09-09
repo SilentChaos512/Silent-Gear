@@ -19,10 +19,7 @@ import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nonnegative;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
@@ -33,8 +30,8 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
     private static final Codec<NumberPropertyValue> FULL_CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     Codec.FLOAT.fieldOf("value").forGetter(NumberPropertyValue::value),
-                    Operation.CODEC.optionalFieldOf("operation", Operation.AVERAGE).forGetter(NumberPropertyValue::operation)
-            ).apply(instance, NumberPropertyValue::new)
+                    Operation.CODEC.optionalFieldOf("operation").forGetter(v -> Optional.of(v.operation()))
+            ).apply(instance, (value, operation) -> new NumberPropertyValue(value, operation.orElse(Operation.AVERAGE)))
     );
     public static final Codec<NumberPropertyValue> CODEC = Codec.either(Codec.FLOAT, FULL_CODEC)
             .xmap(

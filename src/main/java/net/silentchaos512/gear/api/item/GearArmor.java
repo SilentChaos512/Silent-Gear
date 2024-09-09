@@ -8,7 +8,6 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.PartTypes;
-import net.silentchaos512.lib.util.Color;
 
 public interface GearArmor extends GearItem {
     @Override
@@ -29,7 +28,7 @@ public interface GearArmor extends GearItem {
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
                 case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
-                default -> Color.VALUE_WHITE;
+                default -> 0xFFFFFFFF;
             };
         };
     }

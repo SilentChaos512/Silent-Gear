@@ -16,7 +16,6 @@ import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TraitHelper;
-import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -100,7 +99,7 @@ public interface GearItem extends ItemLike {
                 // 2: highlight layer, no color needed
                 case 3 -> ColorUtils.getBlendedColor(stack, PartTypes.TIP.get());
                 case 4 -> ColorUtils.getBlendedColor(stack, PartTypes.GRIP.get());
-                default -> Color.VALUE_WHITE;
+                default -> 0xFFFFFFFF;
             };
         };
     }

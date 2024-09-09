@@ -44,11 +44,6 @@ import net.silentchaos512.lib.util.Color;
 import java.util.*;
 
 public class MaterialsProvider extends MaterialsProviderBase {
-    @Deprecated
-    public MaterialsProvider(DataGenerator generator) {
-        this(generator, SilentGear.MOD_ID);
-    }
-
     public MaterialsProvider(DataGenerator generator, String modId) {
         super(generator, modId);
     }
@@ -407,7 +402,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Netherite
         ret.add(MaterialBuilder.simple(modId("netherite"))
                 .crafting(Tags.Items.INGOTS_NETHERITE, MaterialCategories.METAL, MaterialCategories.ENDGAME)
-                .display(TextUtil.translate("material", "netherite"), 0x867B86)
+                .display(
+                        TextUtil.translate("material", "netherite"),
+                        TextUtil.translate("material", "netherite"),
+                        0x867B86
+                )
                 //coating
                 .stat(PartTypes.COATING, GearProperties.DURABILITY, 0.3f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .stat(PartTypes.COATING, GearProperties.DURABILITY, 2, NumberProperty.Operation.ADD)

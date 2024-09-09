@@ -28,15 +28,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTool;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.Color;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -221,7 +220,7 @@ public class GearFishingRodItem extends FishingRodItem implements GearTool {
                 case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.ROD.get());
                 case 1 -> ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
                 case 3 -> ColorUtils.getBlendedColor(stack, PartTypes.CORD.get());
-                default -> Color.VALUE_WHITE;
+                default -> 0xFFFFFFFF;
             };
         };
     }

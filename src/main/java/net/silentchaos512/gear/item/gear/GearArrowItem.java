@@ -18,8 +18,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearItem;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.ColorUtils;
@@ -31,7 +31,6 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.lib.util.Color;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -168,7 +167,7 @@ public class GearArrowItem extends ArrowItem implements GearItem {
                 case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.ROD.get());
                 case 1 -> ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
                 case 3 -> ColorUtils.getBlendedColor(stack, PartTypes.FLETCHING.get());
-                default -> Color.VALUE_WHITE;
+                default -> 0xFFFFFFFF;
             };
         };
     }

@@ -121,11 +121,11 @@ public final class ColorUtils {
         // Calculate and cache the layer color
         var list = GearData.getConstruction(stack).parts().getPartsOfType(partType);
         if (!list.isEmpty()) {
-            int color = getBlendedColor(stack, list) & 0xFFFFFF;
+            int color = getBlendedColor(stack, list);
             setCachedColor(stack, partType, 0, color);
             return color;
         }
-        return Color.VALUE_WHITE;
+        return 0xFFFFFFFF;
     }
 
     private static int getBlendedColor(ItemStack gear, List<PartInstance> parts) {
@@ -162,10 +162,10 @@ public final class ColorUtils {
             b = (int) ((float) b * maxAverage / max);
             int finalColor = (r << 8) + g;
             finalColor = (finalColor << 8) + b;
-            return finalColor;
+            return finalColor | 0xFF000000;
         }
 
-        return Color.VALUE_WHITE;
+        return Color.VALUE_WHITE | 0xFF000000;
     }
 
     public static final Cache<String, Map<PartType, Integer>> GEAR_COLOR_CACHE = CacheBuilder.newBuilder()
@@ -182,9 +182,9 @@ public final class ColorUtils {
     public static int getCachedColor(ItemStack stack, PartType partType, int animationFrame) {
         Map<PartType, Integer> partTypeMap = GEAR_COLOR_CACHE.getIfPresent(GearData.getModelKey(stack, animationFrame));
         if (partTypeMap != null) {
-            return partTypeMap.getOrDefault(partType, Color.VALUE_WHITE);
+            return partTypeMap.getOrDefault(partType, 0xFFFFFFFF);
         }
-        return Color.VALUE_WHITE;
+        return 0xFFFFFFFF;
     }
 
     public static void setCachedColor(ItemStack stack, PartType partType, int animationFrame, int color) {

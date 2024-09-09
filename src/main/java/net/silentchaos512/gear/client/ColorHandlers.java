@@ -11,7 +11,6 @@ import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.gear.PartTypes;
-import net.silentchaos512.lib.util.Color;
 
 public final class ColorHandlers {
     private ColorHandlers() {
@@ -57,7 +56,7 @@ public final class ColorHandlers {
             case 1:
                 return ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
             default:
-                return Color.VALUE_WHITE;
+                return 0xFFFFFFFF;
         }
     }
 }

@@ -19,7 +19,9 @@
     "name": {
       "translate": "material.silentgear.netherite"
     },
-    "name_prefix": ""
+    "name_prefix": {
+      "translate": "material.silentgear.netherite"
+    }
   },
   "properties": {
     "silentgear:coating": {

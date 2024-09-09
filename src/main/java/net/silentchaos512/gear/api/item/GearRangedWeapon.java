@@ -11,7 +11,6 @@ import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -46,7 +45,7 @@ public interface GearRangedWeapon extends GearTool {
                 case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.ROD.get());
                 case 1 -> ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
                 case 3 -> ColorUtils.getBlendedColor(stack, PartTypes.CORD.get());
-                default -> Color.VALUE_WHITE;
+                default -> 0xFFFFFFFF;
             };
         };
     }

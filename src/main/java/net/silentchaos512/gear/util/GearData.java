@@ -13,6 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.material.TextureType;
@@ -101,7 +102,7 @@ public final class GearData {
 
     private static void tryRecalculateGearData(ItemStack gear, @Nullable Player player, GearType gearType, GearConstructionData gearConstructionData) {
         if (gearConstructionData == null) {
-            SilentGear.LOGGER.error("{}: gear item has no GearConstructionData?", getPlayersItemNameText(gear, player));
+            //SilentGear.LOGGER.error("{}: gear item has no GearConstructionData?", getPlayersItemNameText(gear, player));
             return;
         }
 
@@ -138,8 +139,17 @@ public final class GearData {
     private static void onRecalculatePost(ItemStack gear, @Nullable Player player) {
         // TODO: Add trait-added enchantments
 
+        // Set other data components
+        if (gear.getItem() instanceof GearTool gearTool) {
+            GearPropertiesData properties = gear.getOrDefault(SgDataComponents.GEAR_PROPERTIES, GearPropertiesData.EMPTY);
+            gear.set(DataComponents.TOOL, gearTool.createToolProperties(properties));
+        }
+
         var modelIndex = calculateModelIndex(gear);
         gear.set(SgDataComponents.GEAR_MODEL_INDEX, modelIndex);
+
+        var modelKey = calculateModelKey(gear, getConstruction(gear).parts());
+        gear.set(SgDataComponents.GEAR_MODEL_KEY, modelKey);
     }
 
     private static GearPropertiesData calculateBaseProperties(ItemStack gear, @Nullable Player player, GearType gearType, GearConstructionData gearConstructionData) {
@@ -236,6 +246,8 @@ public final class GearData {
     ) {
         // Prints stats that have changed for debugging purposes
         if (oldProperties != null && SilentGear.LOGGER.isDebugEnabled()) {
+            SilentGear.LOGGER.debug("{}: properties updated", stack.getDisplayName().getString());
+
             GearType gearType = GearHelper.getType(stack);
 
             for (var property : SgRegistries.GEAR_PROPERTY) {
