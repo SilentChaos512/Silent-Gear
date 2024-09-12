@@ -27,7 +27,7 @@ public interface GearArmor extends GearItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
+                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
                 default -> 0xFFFFFFFF;
             };
         };

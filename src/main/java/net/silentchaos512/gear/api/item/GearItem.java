@@ -88,17 +88,17 @@ public interface GearItem extends ItemLike {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.ROD.get());
+                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
                 case 1 -> {
                     if (GearData.hasPartOfType(stack, PartTypes.COATING.get())) {
-                        yield ColorUtils.getBlendedColor(stack, PartTypes.COATING.get());
+                        yield ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get());
                     } else {
-                        yield ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
+                        yield ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
                     }
                 }
                 // 2: highlight layer, no color needed
-                case 3 -> ColorUtils.getBlendedColor(stack, PartTypes.TIP.get());
-                case 4 -> ColorUtils.getBlendedColor(stack, PartTypes.GRIP.get());
+                case 3 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.TIP.get());
+                case 4 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.GRIP.get());
                 default -> 0xFFFFFFFF;
             };
         };

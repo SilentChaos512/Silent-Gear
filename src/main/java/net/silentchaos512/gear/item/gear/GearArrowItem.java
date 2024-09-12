@@ -164,9 +164,9 @@ public class GearArrowItem extends ArrowItem implements GearItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.ROD.get());
-                case 1 -> ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
-                case 3 -> ColorUtils.getBlendedColor(stack, PartTypes.FLETCHING.get());
+                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+                case 1 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+                case 3 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.FLETCHING.get());
                 default -> 0xFFFFFFFF;
             };
         };

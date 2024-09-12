@@ -22,7 +22,7 @@
     },
     "attack_speed": {
       "operation": "ADD",
-      "value": -2.2
+      "value": 1.8
     },
     "harvest_speed": {
       "operation": "MULTIPLY_BASE",

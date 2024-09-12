@@ -22,7 +22,7 @@
     },
     "attack_speed": {
       "operation": "ADD",
-      "value": -3.2
+      "value": 0.8
     },
     "durability": {
       "operation": "MULTIPLY_BASE",

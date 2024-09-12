@@ -120,7 +120,7 @@ public final class PartsProvider extends PartsProviderBase {
             .put(GearTypes.ARROW.get(), b -> {})
             .put(GearTypes.AXE.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 5, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -3, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1)
             )
             .put(GearTypes.BOOTS.get(), b -> b
@@ -144,7 +144,7 @@ public final class PartsProvider extends PartsProviderBase {
             )
             .put(GearTypes.DAGGER.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 2, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -1.2f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 2.8f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 2.0f)
                     .numberProperty(GearProperties.ATTACK_DAMAGE, -0.5f, NumberProperty.Operation.MULTIPLY_BASE)
             )
@@ -155,7 +155,7 @@ public final class PartsProvider extends PartsProviderBase {
             )
             .put(GearTypes.EXCAVATOR.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 2, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -3f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 2.0f)
                     .numberProperty(GearProperties.DURABILITY, 1.0f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.5f, NumberProperty.Operation.MULTIPLY_BASE)
@@ -168,7 +168,7 @@ public final class PartsProvider extends PartsProviderBase {
             )
             .put(GearTypes.HAMMER.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 4, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -3.2f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 0.8f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1.5f)
                     .numberProperty(GearProperties.DURABILITY, 1.0f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.5f, NumberProperty.Operation.MULTIPLY_BASE)
@@ -179,19 +179,19 @@ public final class PartsProvider extends PartsProviderBase {
             )
             .put(GearTypes.HOE.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, -1f, NumberProperty.Operation.MULTIPLY_BASE)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -1f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 3f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1)
             )
             .put(GearTypes.KATANA.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 4, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -2.6f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.4f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
                     .numberProperty(GearProperties.DURABILITY, 0.125f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.1f, NumberProperty.Operation.MULTIPLY_BASE)
             )
             .put(GearTypes.KNIFE.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 1, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -1.6f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 2.4f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 2.0f)
                     .numberProperty(GearProperties.ATTACK_DAMAGE, -0.5f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.DURABILITY, 0.25f, NumberProperty.Operation.MULTIPLY_BASE)
@@ -206,12 +206,12 @@ public final class PartsProvider extends PartsProviderBase {
             .put(GearTypes.MACHETE.get(), b -> b
                     .numberProperty(GearProperties.HARVEST_SPEED, 0.4f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 2, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -2.2f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.8f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .put(GearTypes.MATTOCK.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 1, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -2.6f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.4f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1.25f)
                     .numberProperty(GearProperties.DURABILITY, 0.25f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.25f, NumberProperty.Operation.MULTIPLY_BASE)
@@ -220,7 +220,7 @@ public final class PartsProvider extends PartsProviderBase {
             .put(GearTypes.NECKLACE.get(), b -> {})
             .put(GearTypes.PAXEL.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 3, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -3.0f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.0f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1.2f)
                     .numberProperty(GearProperties.DURABILITY, 0.35f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.3f, NumberProperty.Operation.MULTIPLY_BASE)
@@ -228,12 +228,12 @@ public final class PartsProvider extends PartsProviderBase {
             )
             .put(GearTypes.PICKAXE.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 1, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -2.8f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.2f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .put(GearTypes.PROSPECTOR_HAMMER.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 2, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -2.6f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.4f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1.5f)
                     .numberProperty(GearProperties.DURABILITY, -0.25f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.25f, NumberProperty.Operation.MULTIPLY_BASE)
@@ -242,7 +242,7 @@ public final class PartsProvider extends PartsProviderBase {
             .put(GearTypes.RING.get(), b -> {})
             .put(GearTypes.SAW.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 2, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -2.4f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.6f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1.5f)
                     .numberProperty(GearProperties.DURABILITY, 1.0f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.5f, NumberProperty.Operation.MULTIPLY_BASE)
@@ -257,12 +257,12 @@ public final class PartsProvider extends PartsProviderBase {
             )
             .put(GearTypes.SHOVEL.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 1.5f, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -3.0f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.0f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 2f)
             )
             .put(GearTypes.SICKLE.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 1, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -1.8f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 2.2f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .put(GearTypes.SLINGSHOT.get(), b -> b
@@ -274,19 +274,19 @@ public final class PartsProvider extends PartsProviderBase {
             )
             .put(GearTypes.SPEAR.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 3, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -2.7f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.3f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1.25f)
                     .numberProperty(GearProperties.DURABILITY, -0.2f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ATTACK_REACH, 1, NumberProperty.Operation.ADD)
             )
             .put(GearTypes.SWORD.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 3, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -2.4f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.6f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .put(GearTypes.TRIDENT.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 4, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_SPEED, -2.9f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 1.1f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .build();

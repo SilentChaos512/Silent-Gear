@@ -5,7 +5,6 @@ import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
-import net.silentchaos512.lib.util.Color;
 import org.jetbrains.annotations.Nullable;
 
 public class ProcessedMaterialItem extends SingleMaterialItem implements IColoredMaterialItem {
@@ -22,7 +21,10 @@ public class ProcessedMaterialItem extends SingleMaterialItem implements IColore
     @Override
     public int getColor(ItemStack stack, int layer) {
         var baseMaterial = getMaterial(stack);
-        return baseMaterial != null ? baseMaterial.getColor(GearTypes.ALL.get(), PartTypes.MAIN.get()) : Color.VALUE_WHITE;
+        if (baseMaterial != null && layer == 0) {
+            return baseMaterial.getColor(GearTypes.ALL.get(), PartTypes.MAIN.get());
+        }
+        return 0xFFFFFFFF;
     }
 
     @Override

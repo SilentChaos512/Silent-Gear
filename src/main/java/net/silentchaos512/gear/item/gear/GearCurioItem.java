@@ -142,8 +142,8 @@ public class GearCurioItem extends Item implements GearItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
-                case 2 -> ColorUtils.getBlendedColor(stack, PartTypes.SETTING.get());
+                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+                case 2 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.SETTING.get());
                 default -> 0xFFFFFFFF;
             };
         };

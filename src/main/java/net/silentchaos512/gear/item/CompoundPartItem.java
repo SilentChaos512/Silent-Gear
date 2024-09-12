@@ -81,9 +81,11 @@ public class CompoundPartItem extends Item {
     public int getColor(ItemStack stack, int layer) {
         if (layer == 0) {
             var primaryMaterial = getPrimaryMaterial(stack);
-            return primaryMaterial != null ? primaryMaterial.getColor(getGearType(), getPartType()) : Color.VALUE_WHITE;
+            return primaryMaterial != null
+                    ? primaryMaterial.getColor(getGearType(), getPartType()) | 0xFF000000
+                    : 0xFFFFFFFF;
         }
-        return Color.VALUE_WHITE;
+        return 0xFFFFFFFF;
     }
 
     public int getColorWeight(int index, int totalCount) {
@@ -97,7 +99,7 @@ public class CompoundPartItem extends Item {
         if (part != null && material != null) {
             var materialDisplayName = material.getDisplayName(partType.get(), ItemStack.EMPTY);
             var nameText = Component.translatable(this.getDescriptionId() + ".nameProper", materialDisplayName);
-            int nameColor = Color.blend(part.getColor(ItemStack.EMPTY), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
+            int nameColor = Color.blend(part.getColor(ItemStack.EMPTY), 0xFFFFFFFF, 0.25f) & 0xFFFFFF;
             return TextUtil.withColor(nameText, nameColor);
         }
         return super.getName(stack);

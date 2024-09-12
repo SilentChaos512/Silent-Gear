@@ -69,7 +69,10 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
 
     @Override
     public int getColor(ItemStack stack, int layer) {
-        return ColorUtils.getBlendedColorForCompoundMaterial(getSubMaterials(stack));
+        if (layer == 0) {
+            return ColorUtils.getBlendedColorForCompoundMaterial(getSubMaterials(stack));
+        }
+        return 0xFFFFFFFF;
     }
 
     @Override

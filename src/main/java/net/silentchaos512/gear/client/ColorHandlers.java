@@ -25,7 +25,7 @@ public final class ColorHandlers {
 
         // Tools, armor, shields, etc.
         BuiltInRegistries.ITEM.stream()
-                .filter(item -> item instanceof GearItem /*item instanceof GearArmorItem || item instanceof GearShieldItem*/)
+                .filter(item -> item instanceof GearItem)
                 .map(item -> (GearItem) item)
                 .forEach(item -> event.register(item.getItemColors(), item));
 
@@ -50,13 +50,10 @@ public final class ColorHandlers {
      * @return The color of the layer
      */
     public static int getShieldColor(ItemStack stack, int tintIndex) {
-        switch (tintIndex) {
-            case 0:
-                return ColorUtils.getBlendedColor(stack, PartTypes.ROD.get());
-            case 1:
-                return ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
-            default:
-                return 0xFFFFFFFF;
-        }
+        return switch (tintIndex) {
+            case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+            case 1 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+            default -> 0xFFFFFFFF;
+        };
     }
 }

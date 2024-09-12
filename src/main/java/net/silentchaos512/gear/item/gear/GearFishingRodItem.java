@@ -217,9 +217,9 @@ public class GearFishingRodItem extends FishingRodItem implements GearTool {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColor(stack, PartTypes.ROD.get());
-                case 1 -> ColorUtils.getBlendedColor(stack, PartTypes.MAIN.get());
-                case 3 -> ColorUtils.getBlendedColor(stack, PartTypes.CORD.get());
+                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+                case 1 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+                case 3 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.CORD.get());
                 default -> 0xFFFFFFFF;
             };
         };

@@ -10,7 +10,6 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 
@@ -29,9 +28,9 @@ public class CustomMaterialItem extends SingleMaterialItem implements IColoredMa
     public int getColor(ItemStack stack, int layer) {
         var material = getMaterial(stack);
         if (layer == 0 && material != null) {
-            return material.getColor(GearTypes.ALL.get(), PartTypes.MAIN.get());
+            return material.getColor(GearTypes.ALL.get(), PartTypes.MAIN.get()) | 0xFF000000;
         }
-        return Color.VALUE_WHITE;
+        return 0xFFFFFFFF;
     }
 
     @Override

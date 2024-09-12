@@ -22,7 +22,7 @@
     },
     "attack_speed": {
       "operation": "ADD",
-      "value": -2.4
+      "value": 1.6
     },
     "repair_efficiency": 1.0
   }

@@ -12,11 +12,9 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -107,13 +105,13 @@ public final class ColorUtils {
             b = (int) ((float) b * maxAverage / max);
             int finalColor = (r << 8) + g;
             finalColor = (finalColor << 8) + b;
-            return finalColor;
+            return finalColor | 0xFF000000;
         }
 
-        return Color.VALUE_WHITE;
+        return 0xFFFFFFFF;
     }
 
-    public static int getBlendedColor(ItemStack stack, PartType partType) {
+    public static int getBlendedColorForPartInGear(ItemStack stack, PartType partType) {
         if (hasCachedColor(stack, partType, 0)) {
             return getCachedColor(stack, partType, 0);
         }
@@ -121,51 +119,12 @@ public final class ColorUtils {
         // Calculate and cache the layer color
         var list = GearData.getConstruction(stack).parts().getPartsOfType(partType);
         if (!list.isEmpty()) {
-            int color = getBlendedColor(stack, list);
+            var part = list.getFirst();
+            int color = part.get().getColor(part, GearHelper.getType(stack), 0, 0);
             setCachedColor(stack, partType, 0, color);
             return color;
         }
         return 0xFFFFFFFF;
-    }
-
-    private static int getBlendedColor(ItemStack gear, List<PartInstance> parts) {
-        int[] componentSums = new int[3];
-        int maxColorSum = 0;
-        int colorCount = 0;
-
-        int partCount = parts.size();
-        for (int i = 0; i < partCount; ++i) {
-            PartInstance part = parts.get(i);
-            int color = part.get().getColor(part, GearHelper.getType(gear), 0, 0);
-            int r = (color >> 16) & 0xFF;
-            int g = (color >> 8) & 0xFF;
-            int b = color & 0xFF;
-            // Add earlier colors multiple times, to give them greater weight
-            int colorWeight = (partCount - i) * (partCount - i);
-            for (int j = 0; j < colorWeight; ++j) {
-                maxColorSum += Math.max(r, Math.max(g, b));
-                componentSums[0] += r;
-                componentSums[1] += g;
-                componentSums[2] += b;
-                ++colorCount;
-            }
-        }
-
-        if (colorCount > 0) {
-            int r = componentSums[0] / colorCount;
-            int g = componentSums[1] / colorCount;
-            int b = componentSums[2] / colorCount;
-            float maxAverage = (float) maxColorSum / (float) colorCount;
-            float max = (float) Math.max(r, Math.max(g, b));
-            r = (int) ((float) r * maxAverage / max);
-            g = (int) ((float) g * maxAverage / max);
-            b = (int) ((float) b * maxAverage / max);
-            int finalColor = (r << 8) + g;
-            finalColor = (finalColor << 8) + b;
-            return finalColor | 0xFF000000;
-        }
-
-        return Color.VALUE_WHITE | 0xFF000000;
     }
 
     public static final Cache<String, Map<PartType, Integer>> GEAR_COLOR_CACHE = CacheBuilder.newBuilder()
