@@ -8,6 +8,9 @@
       "part_type": "silentgear:coating"
     },
     {
+      "item": "minecraft:glass_bottle"
+    },
+    {
       "type": "silentgear:material",
       "gear_type": "silentgear:tool",
       "part_type": "silentgear:coating"

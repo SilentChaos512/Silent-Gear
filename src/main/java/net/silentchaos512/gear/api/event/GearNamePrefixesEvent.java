@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.api.event;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.gear.part.PartInstance;
 
 import java.util.ArrayList;
@@ -12,7 +12,10 @@ public class GearNamePrefixesEvent extends GearItemEvent {
 
     public GearNamePrefixesEvent(ItemStack gear, Collection<PartInstance> parts) {
         super(gear, parts);
-        parts.forEach(p -> prefixes.add(p.get().getDisplayNamePrefix(p, gear)));
+        parts.forEach(p -> {
+            var gearPart = p.get();
+            prefixes.add(gearPart.getDisplayNamePrefix(p, gear));
+        });
     }
 
     public Collection<Component> getPrefixes() {

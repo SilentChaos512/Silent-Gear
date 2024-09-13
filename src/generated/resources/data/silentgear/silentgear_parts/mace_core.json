@@ -4,12 +4,12 @@
     "can_salvage": true,
     "gear_type_blacklist": [],
     "ingredient": {
-      "item": "silentgear:mace_head"
+      "item": "silentgear:mace_core"
     }
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.mace_head"
+      "translate": "part.silentgear.mace_core"
     },
     "name_prefix": ""
   },

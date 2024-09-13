@@ -139,6 +139,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearStandardTool(GearItemSets.MACHETE, itemHandheld);
         tempGearStandardTool(GearItemSets.SPEAR, itemHandheld);
         tempGearStandardTool(GearItemSets.TRIDENT, itemHandheld);
+        tempGearStandardTool(GearItemSets.MACE, itemHandheld);
         tempGearStandardTool(GearItemSets.KNIFE, itemHandheld);
         tempGearStandardTool(GearItemSets.DAGGER, itemHandheld);
         tempGearStandardTool(GearItemSets.PICKAXE, itemHandheld);
@@ -165,6 +166,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearElytra(GearItemSets.ELYTRA, itemGenerated);
         tempGearCurio(GearItemSets.RING, itemGenerated);
         tempGearCurio(GearItemSets.BRACELET, itemGenerated);
+        tempGearCurio(GearItemSets.NECKLACE, itemGenerated);
         // Parts
         tempMainPart(GearItemSets.SWORD);
         tempMainPart(GearItemSets.KATANA);

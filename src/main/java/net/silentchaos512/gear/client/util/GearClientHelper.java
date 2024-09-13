@@ -73,7 +73,7 @@ public final class GearClientHelper {
 
         if (!Config.Client.vanillaStyleTooltips.get()) {
             // Let parts add information if they need to
-            Collections.reverse(constructionParts);
+            //Collections.reverse(constructionParts);
             for (PartInstance data : constructionParts) {
                 data.get().addInformation(data, stack, tooltip, flag);
             }

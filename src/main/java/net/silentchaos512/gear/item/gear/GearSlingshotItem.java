@@ -29,11 +29,6 @@ public class GearSlingshotItem extends GearBowItem {
     }
 
     @Override
-    public float getArrowDamage(ItemStack stack) {
-        return super.getArrowDamage(stack);
-    }
-
-    @Override
     public Predicate<ItemStack> getAllSupportedProjectiles() {
         return stack -> stack.getItem() instanceof ISlingshotAmmo;
     }

@@ -364,7 +364,7 @@ public final class GearData {
     public static void addUpgradePart(ItemStack gear, PartInstance part) {
         if (!GearHelper.isGear(gear)) return;
 
-        PartList parts = getConstruction(gear).parts();
+        List<PartInstance> parts = new ArrayList<>(getConstruction(gear).parts());
 
         // Make sure the upgrade is valid for the gear type
         if (!part.get().canAddToGear(gear, part))

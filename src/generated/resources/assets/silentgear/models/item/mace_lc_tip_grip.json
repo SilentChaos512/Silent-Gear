@@ -1,0 +1,10 @@
+{
+  "parent": "silentgear:item/mace",
+  "textures": {
+    "layer0": "silentgear:item/mace/rod_generic_lc",
+    "layer1": "silentgear:item/mace/main_generic_lc",
+    "layer2": "silentgear:item/blank",
+    "layer3": "silentgear:item/mace/tip_sharp",
+    "layer4": "silentgear:item/mace/grip_wool"
+  }
+}

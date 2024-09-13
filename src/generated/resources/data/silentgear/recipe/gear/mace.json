@@ -3,7 +3,7 @@
   "category": "equipment",
   "ingredients": [
     {
-      "item": "silentgear:mace_head"
+      "item": "silentgear:mace_core"
     },
     {
       "type": "silentgear:part_type",

@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "silentgear:blueprints/bracelet",
+  "group": "silentgear:blueprints/necklace",
   "key": {
     "#": {
       "tag": "silentgear:blueprint_paper"
@@ -11,11 +11,12 @@
     }
   },
   "pattern": [
-    "###",
-    "/#/"
+    "/#/",
+    "# #",
+    "###"
   ],
   "result": {
     "count": 1,
-    "id": "silentgear:bracelet_blueprint"
+    "id": "silentgear:necklace_blueprint"
   }
 }

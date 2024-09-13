@@ -18,9 +18,9 @@
               "duration": 80,
               "id": "minecraft:poison",
               "neoforge:cures": [
-                "protected_by_totem",
+                "honey",
                 "milk",
-                "honey"
+                "protected_by_totem"
               ],
               "show_icon": true
             }
@@ -30,9 +30,9 @@
               "duration": 160,
               "id": "minecraft:poison",
               "neoforge:cures": [
-                "protected_by_totem",
+                "honey",
                 "milk",
-                "honey"
+                "protected_by_totem"
               ],
               "show_icon": true
             }
@@ -42,9 +42,9 @@
               "duration": 240,
               "id": "minecraft:poison",
               "neoforge:cures": [
-                "protected_by_totem",
+                "honey",
                 "milk",
-                "honey"
+                "protected_by_totem"
               ],
               "show_icon": true
             }
@@ -54,9 +54,9 @@
               "duration": 320,
               "id": "minecraft:poison",
               "neoforge:cures": [
-                "protected_by_totem",
+                "honey",
                 "milk",
-                "honey"
+                "protected_by_totem"
               ],
               "show_icon": true
             }
@@ -66,9 +66,9 @@
               "duration": 400,
               "id": "minecraft:poison",
               "neoforge:cures": [
-                "protected_by_totem",
+                "honey",
                 "milk",
-                "honey"
+                "protected_by_totem"
               ],
               "show_icon": true
             }

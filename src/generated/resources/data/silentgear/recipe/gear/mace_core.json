@@ -8,19 +8,7 @@
       "part_type": "silentgear:main"
     },
     {
-      "type": "silentgear:material",
-      "gear_type": "silentgear:tool",
-      "part_type": "silentgear:main"
-    },
-    {
-      "type": "silentgear:material",
-      "gear_type": "silentgear:tool",
-      "part_type": "silentgear:main"
-    },
-    {
-      "type": "silentgear:material",
-      "gear_type": "silentgear:tool",
-      "part_type": "silentgear:main"
+      "item": "minecraft:heavy_core"
     },
     {
       "type": "silentgear:material",
@@ -40,6 +28,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "silentgear:mace_head"
+    "id": "silentgear:mace_core"
   }
 }

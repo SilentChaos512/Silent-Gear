@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "silentgear:blueprints/bracelet",
   "key": {
     "#": {
-      "tag": "silentgear:blueprint_paper"
+      "tag": "silentgear:template_boards"
     },
     "/": {
-      "tag": "c:ingots/gold"
+      "tag": "c:rods/breeze"
     }
   },
   "pattern": [
+    " # ",
     "###",
-    "/#/"
+    " / "
   ],
   "result": {
     "count": 1,
-    "id": "silentgear:bracelet_blueprint"
+    "id": "silentgear:mace_template"
   }
 }

@@ -43,15 +43,15 @@ public final class PartsProvider extends PartsProviderBase {
         ret.add(part("binding", GearTypes.TOOL, PartTypes.BINDING)
                 .crafting(SgItems.BINDING)
         );
-        ret.add(part("bowstring", GearTypes.RANGED_WEAPON, PartTypes.CORD)
-                .crafting(SgItems.CORD)
-        );
         ret.add(part("coating", GearTypes.ALL, PartTypes.COATING)
                 .crafting(new PartCraftingData(
                         Ingredient.of(SgItems.COATING),
                         ImmutableList.of(GearTypes.ELYTRA.get()),
                         true
                 ))
+        );
+        ret.add(part("cord", GearTypes.RANGED_WEAPON, PartTypes.CORD)
+                .crafting(SgItems.CORD)
         );
         ret.add(part("fletching", GearTypes.PROJECTILE, PartTypes.FLETCHING)
                 .crafting(SgItems.FLETCHING)

@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "silentgear:item/necklace/main_generic_hc",
+    "layer1": "silentgear:item/necklace/_highlight",
+    "layer2": "silentgear:item/necklace/adornment_generic",
+    "layer3": "silentgear:item/necklace/adornment_highlight"
+  }
+}

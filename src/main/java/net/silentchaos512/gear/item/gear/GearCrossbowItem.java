@@ -79,7 +79,7 @@ public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
     @Override
     public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder);
+        GearHelper.addAttributeModifiers(stack, builder, false);
         return builder.build();
     }
 

@@ -23,7 +23,7 @@ public class GearItemSets {
     public static final GearItemSet<GearDaggerItem> DAGGER = set(GearTypes.DAGGER, "dagger_blade", GearDaggerItem::new);
     public static final GearItemSet<GearSwordItem> SPEAR = set(GearTypes.SPEAR, "spear_tip", GearSwordItem::new);
     public static final GearItemSet<GearTridentItem> TRIDENT = set(GearTypes.TRIDENT, "trident_prongs", GearTridentItem::new);
-    public static final GearItemSet<GearMaceItem> MACE = set(GearTypes.MACE, "mace_head", GearMaceItem::new);
+    public static final GearItemSet<GearMaceItem> MACE = set(GearTypes.MACE, "mace_core", GearMaceItem::new);
 
     public static final GearItemSet<GearShieldItem> SHIELD = set(GearTypes.SHIELD, "shield_plate", GearShieldItem::new);
 

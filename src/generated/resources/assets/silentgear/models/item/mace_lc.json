@@ -1,0 +1,7 @@
+{
+  "parent": "silentgear:item/mace",
+  "textures": {
+    "layer0": "silentgear:item/mace/rod_generic_lc",
+    "layer1": "silentgear:item/mace/main_generic_lc"
+  }
+}
