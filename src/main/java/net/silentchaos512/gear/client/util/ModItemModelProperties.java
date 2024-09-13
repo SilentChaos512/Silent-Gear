@@ -18,6 +18,7 @@ public final class ModItemModelProperties {
 
     @SuppressWarnings("OverlyComplexMethod")
     public static void register(FMLClientSetupEvent event) {
+        // FIXME: use event.enqueueWork()
         ItemProperties.register(GearItemSets.BOW.gearItem(), ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, par4) -> {
             if (entity == null) {
                 return 0.0F;

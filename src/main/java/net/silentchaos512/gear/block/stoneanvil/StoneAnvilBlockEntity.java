@@ -3,6 +3,7 @@ package net.silentchaos512.gear.block.stoneanvil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.silentchaos512.gear.crafting.recipe.ToolActionRecipe;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgRecipes;
+import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -78,6 +80,8 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     }
 
     public boolean workOnItem(LivingEntity entity, ItemStack tool, InteractionHand hand) {
+        if (GearHelper.isGear(tool) && GearHelper.isBroken(tool)) return false;
+
         var optionalHolder = getRecipe(tool, this.item);
         if (optionalHolder.isPresent() && this.level != null) {
             var recipe = optionalHolder.get().value();
@@ -124,13 +128,17 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
         this.item = ItemStack.EMPTY;
         if (tag.contains("Item")) {
             this.item = ItemStack.parse(provider, tag.getCompound("Item")).orElse(null);
+        } else {
+            this.item = ItemStack.EMPTY;
         }
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.saveAdditional(tag, provider);
-        tag.put("Item", this.item.save(provider));
+        if (!this.item.isEmpty()) {
+            tag.put("Item", this.item.save(provider));
+        }
     }
 
     @Nullable
@@ -142,7 +150,20 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
-        tag.put("Item", this.item.save(provider));
+        if (!this.item.isEmpty()) {
+            tag.put("Item", this.item.save(provider));
+        }
         return tag;
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
+        super.onDataPacket(net, pkt, lookupProvider);
+        var tag = pkt.getTag();
+        if (tag.contains("Item")) {
+            this.item = ItemStack.parse(lookupProvider, tag.getCompound("Item")).orElse(null);
+        } else {
+            this.item = ItemStack.EMPTY;
+        }
     }
 }
