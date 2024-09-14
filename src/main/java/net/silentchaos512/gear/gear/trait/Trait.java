@@ -136,8 +136,12 @@ public final class Trait {
         return ret;
     }
 
-    public float onDurabilityDamage(TraitActionContext context, int damageTaken) {
-        return damageTaken;
+    public int onDurabilityDamage(TraitActionContext context, int damageTaken) {
+        int ret = damageTaken;
+        for (TraitEffect effect : this.effects) {
+            ret = effect.onDurabilityDamage(context, ret);
+        }
+        return ret;
     }
 
     public void onGearCrafted(TraitActionContext context) {
@@ -211,7 +215,7 @@ public final class Trait {
     public ItemStack addLootDrops(TraitActionContext context, ItemStack stack) {
         ItemStack result = stack.copy();
         for (TraitEffect effect : this.effects) {
-            result = addLootDrops(context, result);
+            result = effect.addLootDrops(context, result);
         }
         return result;
     }

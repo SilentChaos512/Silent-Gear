@@ -62,7 +62,8 @@ public class GearPartSwapRecipe extends CustomRecipe {
         if (others.isEmpty()) return ItemStack.EMPTY;
 
         ItemStack result = gear.copy();
-        PartList parts = GearData.getConstruction(gear).parts();
+        PartList originalParts = GearData.getConstruction(gear).parts();
+        List<PartInstance> parts = new ArrayList<>(originalParts);
         PartList newParts = PartList.of();
 
         for (ItemStack stack : others) {
@@ -70,7 +71,7 @@ public class GearPartSwapRecipe extends CustomRecipe {
             if (part == null) return ItemStack.EMPTY;
 
             PartType type = part.getType();
-            List<PartInstance> partsOfType = new ArrayList<>(parts.getPartsOfType(type));
+            List<PartInstance> partsOfType = new ArrayList<>(originalParts.getPartsOfType(type));
             int maxPerItem = type.maxPerItem();
 
             // Remove old part of type (if over limit), then add replacement

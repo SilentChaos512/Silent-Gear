@@ -24,6 +24,7 @@ import net.silentchaos512.lib.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialModifier {
     public static final MapCodec<GradeMaterialModifier> CODEC = RecordCodecBuilder.mapCodec(
@@ -81,6 +82,15 @@ public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialMod
         @Override
         public ResourceLocation getId() {
             return Const.GRADE;
+        }
+
+        @Override
+        public Optional<GradeMaterialModifier> readModifier(ItemStack stack) {
+            var grade = MaterialGrade.fromStack(stack);
+            if (grade != MaterialGrade.NONE) {
+                return Optional.of(new GradeMaterialModifier(grade));
+            }
+            return Optional.empty();
         }
 
         @Override

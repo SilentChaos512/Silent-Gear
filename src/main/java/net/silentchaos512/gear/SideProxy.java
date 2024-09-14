@@ -42,6 +42,7 @@ class SideProxy implements IProxy {
         GearTypes.REGISTRAR.register(modEventBus);
         PartTypes.REGISTRAR.register(modEventBus);
         TraitEffectTypes.REGISTRAR.register(modEventBus);
+        MaterialModifiers.REGISTRAR.register(modEventBus);
         MaterialSerializers.REGISTRAR.register(modEventBus);
         PartSerializers.REGISTRAR.register(modEventBus);
         TraitConditions.REGISTRAR.register(modEventBus);

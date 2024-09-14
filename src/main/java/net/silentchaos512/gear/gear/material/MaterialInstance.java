@@ -63,7 +63,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     }
 
     private MaterialInstance(DataResource<Material> material, ItemStack craftingItem) {
-        this(material, craftingItem, List.of());
+        this(material, craftingItem, getMaterialModifiersFromItem(craftingItem));
     }
     private MaterialInstance(DataResource<Material> material, ItemStack craftingItem, List<IMaterialModifier> modifiers) {
         this.material = material;
@@ -97,6 +97,14 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
             return of(material, stack);
         }
         return null;
+    }
+
+    private static List<IMaterialModifier> getMaterialModifiersFromItem(ItemStack stack) {
+        var list = new ArrayList<IMaterialModifier>();
+        for (IMaterialModifierType<?> type : SgRegistries.MATERIAL_MODIFIER_TYPE) {
+            type.readModifier(stack).ifPresent(list::add);
+        }
+        return List.copyOf(list);
     }
 
     public ResourceLocation getId() {
@@ -214,6 +222,11 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     @Override
     public int hashCode() {
         return Objects.hash(material, item);
+    }
+
+    @Override
+    public String toString() {
+        return "MaterialInstance{" + this.material.getId() + "}";
     }
 
     public boolean hasAnyCategory(Collection<IMaterialCategory> others) {

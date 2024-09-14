@@ -18,6 +18,7 @@ import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -65,6 +66,15 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
         @Override
         public ResourceLocation getId() {
             return Const.STARCHARGED;
+        }
+
+        @Override
+        public Optional<T> readModifier(ItemStack stack) {
+            var modifierLevel = stack.getOrDefault(this.dataComponentType.get(), 0);
+            if (modifierLevel > 0) {
+                return Optional.of(factory.apply(modifierLevel));
+            }
+            return Optional.empty();
         }
 
         @Override

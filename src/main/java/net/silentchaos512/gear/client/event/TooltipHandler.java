@@ -124,12 +124,12 @@ public final class TooltipHandler {
                             .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_STATS), ChatFormatting.GRAY))));
         }
 
-        if (keyHeld) {
-            getMaterialModifierLines(event, material);
+        getMaterialModifierLines(event, material);
 
+        if (keyHeld) {
             getMaterialCategoriesLine(material).ifPresent(t -> event.getToolTip().add(t));
 
-            List<PartType> partTypes = new ArrayList<>(material.getPartTypes());
+            List<PartType> partTypes = getSortedPartTypes(material.getPartTypes());
             if (!partTypes.isEmpty()) {
                 int index = KeyTracker.getMaterialCycleIndex(partTypes.size());
                 PartType partType = partTypes.get(index);
@@ -140,13 +140,19 @@ public final class TooltipHandler {
                 event.getToolTip().add(Component.translatable("misc.silentgear.tooltip.properties").withStyle(ChatFormatting.GOLD));
                 getMaterialStatLines(event, partType, material);
             }
-        } else {
-            getMaterialModifierLines(event, material);
+        } else if (event.getFlags().isAdvanced()) {
+            addJeiSearchTerms(event, material);
+        }
+    }
 
-            if (event.getFlags().isAdvanced()) {
-                addJeiSearchTerms(event, material);
+    private static List<PartType> getSortedPartTypes(Set<PartType> set) {
+        var result = new ArrayList<PartType>();
+        for (var partType : SgRegistries.PART_TYPE) {
+            if (set.contains(partType)) {
+                result.add(partType);
             }
         }
+        return result;
     }
 
     private static void addJeiSearchTerms(ItemTooltipEvent event, MaterialInstance material) {

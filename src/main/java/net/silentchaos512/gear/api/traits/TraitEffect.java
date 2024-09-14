@@ -48,7 +48,7 @@ public abstract class TraitEffect {
         return baseValue;
     }
 
-    public float onDurabilityDamage(TraitActionContext context, int damageTaken) {
+    public int onDurabilityDamage(TraitActionContext context, int damageTaken) {
         return damageTaken;
     }
 

@@ -62,6 +62,21 @@ public class PartList implements List<PartInstance> {
         return ret;
     }
 
+    public List<PartInstance> toSortedList() {
+        var result = new ArrayList<PartInstance>();
+        for (PartType partType : SgRegistries.PART_TYPE) {
+            var subList = getPartsOfType(partType);
+            if (subList.size() > 1) {
+                var sortedList = new ArrayList<>(subList);
+                sortedList.sort(Comparator.comparing(PartInstance::getId));
+                result.addAll(sortedList);
+            } else if (subList.size() == 1) {
+                result.add(subList.getFirst());
+            }
+        }
+        return result;
+    }
+
     public GearPropertyMap getPropertyModifiersFromParts(GearType gearType) {
         GearPropertyMap stats = new GearPropertyMap();
 

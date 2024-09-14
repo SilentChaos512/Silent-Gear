@@ -233,6 +233,8 @@ public class GearTypes {
     public static final DeferredHolder<GearType, GearType> SHIELD = REGISTRAR.register("shield",
             () -> GearType.Builder.of(TOOL)
                     .toolActions(ItemAbilities.DEFAULT_SHIELD_ACTIONS)
+                    .durabilityStat(GearProperties.ARMOR_DURABILITY)
+                    .armorDurabilityMultiplier(337f / 15f)
                     .relevantPropertyGroups(
                             GearPropertyGroups.TRAITS,
                             GearPropertyGroups.GENERAL

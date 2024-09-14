@@ -72,7 +72,6 @@ import java.util.stream.Stream;
  * Also see {@link GearData}, which focuses on getting/updating item data and NBT.
  */
 public final class GearHelper {
-    public static final ResourceLocation DAMAGE_FACTOR_CHANGE = SilentGear.getId("damage_factor_change");
     public static Tiers DEFAULT_DUMMY_TIER = Tiers.WOOD;
     public static Holder<ArmorMaterial> DEFAULT_DUMMY_ARMOR_MATERIAL = ArmorMaterials.LEATHER;
 

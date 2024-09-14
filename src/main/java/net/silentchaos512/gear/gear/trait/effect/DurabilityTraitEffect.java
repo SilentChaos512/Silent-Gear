@@ -55,7 +55,7 @@ public final class DurabilityTraitEffect extends TraitEffect {
     }
 
     @Override
-    public float onDurabilityDamage(TraitActionContext context, int damageTaken) {
+    public int onDurabilityDamage(TraitActionContext context, int damageTaken) {
         Player player = context.player();
         if (damageTaken != 0 && shouldActivate(context.traitLevel())) {
             if (effectScale > 0 && player instanceof ServerPlayer) {

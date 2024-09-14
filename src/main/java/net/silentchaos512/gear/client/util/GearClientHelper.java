@@ -66,6 +66,7 @@ public final class GearClientHelper {
         }
 
         PartList constructionParts = GearData.getConstruction(stack).parts();
+        List<PartInstance> sortedConstructionParts = constructionParts.toSortedList();
 
         if (constructionParts.getMains().isEmpty()) {
             tooltip.add(TextUtil.withColor(misc("invalidParts"), Color.FIREBRICK));
@@ -74,7 +75,7 @@ public final class GearClientHelper {
         if (!Config.Client.vanillaStyleTooltips.get()) {
             // Let parts add information if they need to
             //Collections.reverse(constructionParts);
-            for (PartInstance data : constructionParts) {
+            for (PartInstance data : sortedConstructionParts) {
                 data.get().addInformation(data, stack, tooltip, flag);
             }
         }
@@ -87,8 +88,7 @@ public final class GearClientHelper {
         // Tool construction
         if (KeyTracker.isDisplayConstructionDown() && flag.showConstruction) {
             tooltip.add(TextUtil.withColor(misc("tooltip.construction"), Color.GOLD));
-            Collections.reverse(constructionParts);
-            tooltipListParts(stack, tooltip, constructionParts, flag);
+            tooltipListParts(stack, tooltip, sortedConstructionParts, flag);
         } else if (flag.showConstruction) {
             tooltip.add(TextUtil.withColor(TextUtil.misc("tooltip.construction"), Color.GOLD)
                     .append(Component.literal(" ")
@@ -112,7 +112,7 @@ public final class GearClientHelper {
                 GearPropertyValue<?> value = gearProperties.get(property);
                 if (value == null) continue;
 
-                if (property == GearProperties.DURABILITY) {
+                if (property == GearProperties.DURABILITY.get()) {
                     // Durability-specific formatting
                     int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
                     int durabilityMax = stack.getMaxDamage();
