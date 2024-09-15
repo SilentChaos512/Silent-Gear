@@ -6,7 +6,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.trait.Trait;
@@ -35,7 +34,7 @@ public interface ITraitCondition {
 
     TraitConditionSerializer<?> serializer();
 
-    boolean matches(Trait trait, PartGearKey key, ItemStack gear, List<? extends GearComponentInstance<?>> components);
+    boolean matches(Trait trait, PartGearKey key, List<? extends GearComponentInstance<?>> components);
 
     MutableComponent getDisplayText();
 }

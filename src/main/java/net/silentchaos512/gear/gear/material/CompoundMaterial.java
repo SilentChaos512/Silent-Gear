@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.NeoForge;
@@ -145,7 +144,7 @@ public class CompoundMaterial extends AbstractMaterial {
         // Synergy
         final var modifiersWithSynergy = new ArrayList<V>();
         if (key.property().isAffectedBySynergy()) {
-            final float synergy = SynergyUtils.getSynergy(partType, new ArrayList<>(subMaterials), getTraits(material, partGearKey));
+            final float synergy = SynergyUtils.getSynergy(partType, new ArrayList<>(subMaterials), material.getTraits(partGearKey));
             if (!MathUtils.floatsEqual(synergy, 1.0f)) {
                 for (var mod : compressedModifiers) {
                     modifiersWithSynergy.add(key.property().applySynergy(mod, synergy));
@@ -154,21 +153,6 @@ public class CompoundMaterial extends AbstractMaterial {
         }
 
         return modifiersWithSynergy;
-    }
-
-    @Override
-    public Collection<TraitInstance> getTraits(MaterialInstance material, PartGearKey partKey) {
-        List<MaterialInstance> materials = new ArrayList<>(getSubMaterials(material));
-        List<TraitInstance> traits = TraitHelper.getTraitsFromComponents(materials, partKey, ItemStack.EMPTY);
-        Collection<TraitInstance> ret = new ArrayList<>();
-
-        for (TraitInstance inst : traits) {
-            if (inst.conditionsMatch(partKey, ItemStack.EMPTY, materials)) {
-                ret.add(inst);
-            }
-        }
-
-        return ret;
     }
 
     @Override

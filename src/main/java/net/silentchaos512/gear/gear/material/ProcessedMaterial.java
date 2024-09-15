@@ -84,14 +84,6 @@ public class ProcessedMaterial extends AbstractMaterial {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(MaterialInstance material, PartGearKey partKey) {
-        Collection<TraitInstance> ret = super.getTraits(material, partKey);
-        MaterialInstance base = getBaseMaterial(material);
-        ret.addAll(base.getTraits(partKey));
-        return ret;
-    }
-
-    @Override
     public Component getBaseMaterialName(@Nullable MaterialInstance material, PartType partType) {
         if (material != null) {
             return getBaseMaterial(material).getDisplayName(partType).plainCopy();

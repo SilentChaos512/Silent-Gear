@@ -268,16 +268,11 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         if (material == null) {
             return Collections.emptyList();
         }
-        return material.getPropertyModifiers(this, partType, key);
-    }
-
-    @Override
-    public Collection<TraitInstance> getTraits(PartGearKey key) {
-        Material material = getNullable();
-        if (material == null) {
-            return Collections.emptyList();
+        Collection<V> propertyModifiers = material.getPropertyModifiers(this, partType, key);
+        for (var modifier : this.modifiers) {
+            propertyModifiers = modifier.modifyStats(this, partType, key, propertyModifiers);
         }
-        return material.getTraits(this, key);
+        return propertyModifiers;
     }
 
     public MutableComponent getDisplayNameWithModifiers(PartType partType, ItemStack gear) {

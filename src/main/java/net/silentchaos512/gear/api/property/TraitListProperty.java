@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
@@ -62,21 +61,35 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
             return baseValue;
         }
 
+        List<TraitInstance> list = new ArrayList<>();
+        for (var mod : modifiers) {
+            list.addAll(mod.value);
+        }
+        return computeTraits(baseValue, list);
+    }
+
+    public List<TraitInstance> computeTraits(Collection<TraitInstance> traits) {
+        return computeTraits(List.of(), traits);
+    }
+
+    public List<TraitInstance> computeTraits(List<TraitInstance> baseValue, Collection<TraitInstance> traits) {
+        if (traits.isEmpty()) {
+            return baseValue;
+        }
+
         Map<Trait, Integer> map = new LinkedHashMap<>();
         Map<Trait, Integer> count = new HashMap<>();
 
-        for (TraitListPropertyValue mod : modifiers) {
-            for (TraitInstance traitInstance : mod.value) {
-                map.merge(traitInstance.getTrait(), traitInstance.getLevel(), Integer::sum);
-                count.merge(traitInstance.getTrait(), 1, Integer::sum);
-            }
+        for (var traitInstance : traits) {
+            map.merge(traitInstance.getTrait(), traitInstance.getLevel(), Integer::sum);
+            count.merge(traitInstance.getTrait(), 1, Integer::sum);
         }
 
         Trait[] keys = map.keySet().toArray(new Trait[0]);
 
         for (Trait trait : keys) {
             final int matsWithTrait = count.get(trait);
-            final float divisor = Math.max(modifiers.size() / 2f, matsWithTrait);
+            final float divisor = Math.max(traits.size() / 2f, matsWithTrait);
             final int value = Math.round(map.get(trait) / divisor);
             map.put(trait, Mth.clamp(value, 1, trait.getMaxLevel()));
         }
@@ -90,8 +103,7 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
 
     @Override
     public List<TraitListPropertyValue> compressModifiers(Collection<TraitListPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
-        var value = TraitHelper.getTraitsFromComponents(components, key, ItemStack.EMPTY);
-        return Collections.singletonList(new TraitListPropertyValue(value));
+        return List.copyOf(modifiers);
     }
 
     @Override
@@ -137,7 +149,7 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
             if (displayIndex < 0 || displayIndex == i) {
                 final int level = trait.getLevel();
                 trait.getTrait().addInformation(level, result, flag, text -> {
-                    if(Config.Client.vanillaStyleTooltips.get()) {
+                    if (Config.Client.vanillaStyleTooltips.get()) {
                         var bullet = Component.literal(TextListBuilder.VANILLA_BULLET + " ");
                         return TextUtil.withColor(bullet, Color.GRAY).append(text);
                     }

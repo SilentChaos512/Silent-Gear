@@ -17,12 +17,14 @@ import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.property.NumberPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,17 +46,18 @@ public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialMod
     }
 
     @Override
-    public List<GearPropertyValue<?>> modifyStats(MaterialInstance material, PartType partType, PropertyKey<?, ?> key, List<GearPropertyValue<?>> statMods) {
+    public <T, V extends GearPropertyValue<T>> Collection<V> modifyStats(MaterialInstance material, PartType partType, PropertyKey<T, V> key, Collection<V> statMods) {
         if (key.property().isAffectedByGrades() && grade != null && key.property() instanceof NumberProperty) {
             float bonus = grade.bonusPercent / 100f;
-            List<GearPropertyValue<?>> ret = new ArrayList<>();
+            List<V> ret = new ArrayList<>();
 
             // Apply grade bonus to all modifiers. Makes it easier to see the effect on rods and such.
             for (var mod : statMods) {
                 var numberValue = (NumberPropertyValue) mod;
                 float value = numberValue.value();
                 // Taking the abs of value times bonus makes negative mods become less negative
-                ret.add(new NumberPropertyValue(value + Math.abs(value) * bonus, numberValue.operation()));
+                //noinspection unchecked
+                ret.add((V) new NumberPropertyValue(value + Math.abs(value) * bonus, numberValue.operation()));
             }
 
             return ret;
@@ -86,8 +89,8 @@ public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialMod
 
         @Override
         public Optional<GradeMaterialModifier> readModifier(ItemStack stack) {
-            var grade = MaterialGrade.fromStack(stack);
-            if (grade != MaterialGrade.NONE) {
+            var grade = stack.get(SgDataComponents.MATERIAL_GRADE);
+            if (grade != null) {
                 return Optional.of(new GradeMaterialModifier(grade));
             }
             return Optional.empty();
@@ -95,12 +98,12 @@ public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialMod
 
         @Override
         public void addModifier(GradeMaterialModifier mod, ItemStack stack) {
-            mod.grade.setGradeOnStack(stack);
+            stack.set(SgDataComponents.MATERIAL_GRADE, mod.grade);
         }
 
         @Override
         public void removeModifier(ItemStack stack) {
-            MaterialGrade.NONE.setGradeOnStack(stack);
+            stack.remove(SgDataComponents.MATERIAL_GRADE);
         }
 
         @Override

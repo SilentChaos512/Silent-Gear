@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.item;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -107,6 +109,10 @@ public class CompoundPartItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+        var basicItemName = Component.translatable(this.getDescriptionId());
+        var gearPartText = Component.translatable("item.silentgear.compound_part.part_name", basicItemName);
+        tooltip.add(gearPartText.withStyle(ChatFormatting.ITALIC));
+
         PartInstance part = PartInstance.from(stack);
         MaterialInstance material = getPrimaryMaterial(stack);
 

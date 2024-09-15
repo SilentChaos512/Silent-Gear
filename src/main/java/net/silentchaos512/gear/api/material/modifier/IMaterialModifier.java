@@ -7,12 +7,18 @@ import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface IMaterialModifier {
     IMaterialModifierType<?> getType();
 
-    List<GearPropertyValue<?>> modifyStats(MaterialInstance material, PartType partType, PropertyKey<?, ?> key, List<GearPropertyValue<?>> statMods);
+    <T, V extends GearPropertyValue<T>> Collection<V> modifyStats(
+            MaterialInstance material,
+            PartType partType,
+            PropertyKey<T, V> key,
+            Collection<V> statMods
+    );
 
     // TODO: modifyTraits method?
 

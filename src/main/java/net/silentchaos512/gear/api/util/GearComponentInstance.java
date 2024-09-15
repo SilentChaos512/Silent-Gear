@@ -7,11 +7,15 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.property.TraitListProperty;
+import net.silentchaos512.gear.api.property.TraitListPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.function.Supplier;
 
 public interface GearComponentInstance<A extends GearComponent<?>> {
@@ -38,7 +42,11 @@ public interface GearComponentInstance<A extends GearComponent<?>> {
         return getPropertyModifiers(partType.get(), key);
     }
 
-    Collection<TraitInstance> getTraits(PartGearKey key);
+    default Collection<TraitInstance> getTraits(PartGearKey key) {
+        var property = GearProperties.TRAITS.get();
+        var mods = getPropertyModifiers(key.partType(), PropertyKey.of(property, key.gearType()));
+        return property.compute(mods);
+    }
 
     default Component getDisplayName(PartType type) {
         return getDisplayName(type, ItemStack.EMPTY);

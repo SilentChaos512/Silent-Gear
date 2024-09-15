@@ -214,7 +214,7 @@ public final class TraitHelper {
         for (PartInstance part : parts) {
             PartGearKey key = PartGearKey.of(gearType, part);
             for (TraitInstance inst : part.getTraits(key)) {
-                if (inst.conditionsMatch(key, gear, parts)) {
+                if (inst.conditionsMatch(key, parts)) {
                     Trait trait = inst.getTrait();
                     // Get the highest value in any part
                     result.merge(trait, inst.getLevel(), Integer::max);
@@ -229,7 +229,8 @@ public final class TraitHelper {
         return result;
     }
 
-    public static List<TraitInstance> getTraitsFromComponents(List<? extends GearComponentInstance<?>> components, PartGearKey partKey, ItemStack gear) {
+    @Deprecated
+    public static List<TraitInstance> getTraitsFromComponents(List<? extends GearComponentInstance<?>> components, PartGearKey partKey) {
         if (components.isEmpty()) {
             return Collections.emptyList();
         }
@@ -239,7 +240,7 @@ public final class TraitHelper {
 
         for (GearComponentInstance<?> comp : components) {
             for (TraitInstance inst : comp.getTraits(partKey)) {
-                if (inst.conditionsMatch(partKey, gear, components)) {
+                if (inst.conditionsMatch(partKey, components)) {
                     map.merge(inst.getTrait(), inst.getLevel(), Integer::sum);
                     countMatsWithTrait.merge(inst.getTrait(), 1, Integer::sum);
                 }

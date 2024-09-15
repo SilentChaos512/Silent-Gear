@@ -17,6 +17,7 @@ import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class StarchargedMaterialModifier extends ChargedMaterialModifier {
@@ -30,16 +31,17 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
     }
 
     @Override
-    public List<GearPropertyValue<?>> modifyStats(MaterialInstance material, PartType partType, PropertyKey<?, ?> key, List<GearPropertyValue<?>> modifiers) {
-        List<GearPropertyValue<?>> ret = new ArrayList<>();
+    public <T, V extends GearPropertyValue<T>> Collection<V> modifyStats(MaterialInstance material, PartType partType, PropertyKey<T, V> key, Collection<V> modifiers) {
+        List<V> ret = new ArrayList<>();
 
         if (key.property() == GearProperties.CHARGING_VALUE.get()) {
             return ret;
         }
 
-        for (GearPropertyValue<?> mod : modifiers) {
+        for (V mod : modifiers) {
             GearPropertyValue<?> newMod = modifyStat(key, mod, getChargedProperties(material));
-            ret.add(newMod != null ? newMod : mod);
+            //noinspection unchecked
+            ret.add(newMod != null ? (V) newMod : mod);
         }
 
         return ret;

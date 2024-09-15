@@ -1,6 +1,6 @@
 {
   "type": "silentgear:simple",
-  "parent": "silentgear:empty",
+  "parent": "silentgear:wood",
   "crafting": {
     "can_salvage": true,
     "categories": [
@@ -18,7 +18,7 @@
     }
   },
   "display": {
-    "color": "#FFD83200",
+    "color": "#FF7D272D",
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.netherwood"

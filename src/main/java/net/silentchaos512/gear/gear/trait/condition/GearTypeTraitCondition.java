@@ -6,7 +6,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
@@ -46,8 +45,8 @@ public record GearTypeTraitCondition(GearType gearType) implements ITraitConditi
     }
 
     @Override
-    public boolean matches(Trait trait, PartGearKey key, ItemStack gear, List<? extends GearComponentInstance<?>> components) {
-        return gear.isEmpty() || key.getGearType().matches(this.gearType);
+    public boolean matches(Trait trait, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+        return key.getGearType().matches(this.gearType);
     }
 
     @Override

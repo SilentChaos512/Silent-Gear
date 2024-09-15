@@ -26,6 +26,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.Color;
@@ -137,53 +138,8 @@ public class CoreGearPart extends AbstractGearPart {
         GetPropertyModifiersEvent<T, V> event = new GetPropertyModifiersEvent<>(part, key, mods);
         NeoForge.EVENT_BUS.post(event);
 
-        List<V> ret = new ArrayList<>(event.getModifiers());
-
-        if (key.property() instanceof NumberProperty) {
-            // Average together all number property modifiers of the same op
-            for (NumberProperty.Operation op : NumberProperty.Operation.values()) {
-                Collection<NumberPropertyValue> modsForOp = ret.stream()
-                        .filter(val -> val instanceof NumberPropertyValue)
-                        .map(val -> (NumberPropertyValue) val)
-                        .filter(val -> val.operation() == op)
-                        .collect(Collectors.toList());
-                if (modsForOp.size() > 1) {
-                    NumberPropertyValue mod = compressModifiers(modsForOp, op);
-                    ret.removeIf(val -> ((NumberPropertyValue) val).operation() == op);
-                    //noinspection unchecked
-                    ret.add((V) mod);
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    private static NumberPropertyValue compressModifiers(Collection<NumberPropertyValue> mods, NumberProperty.Operation operation) {
-        // We do NOT want to average together max modifiers...
-        if (operation == NumberProperty.Operation.MAX) {
-            return mods.stream()
-                    .max((o1, o2) -> Float.compare(o1.value(), o2.value()))
-                    .orElse(new NumberPropertyValue(0, operation));
-        }
-
-        var weightedAverage = NumberProperty.getWeightedAverage(mods, operation);
-        return new NumberPropertyValue(weightedAverage, operation);
-    }
-
-    @Override
-    public Collection<TraitInstance> getTraits(PartInstance part, PartGearKey partKey) {
-        var list = new ArrayList<>(super.getTraits(part, partKey));
-        var materials = this.getMaterials(part);
-        for (MaterialInstance material : materials) {
-            list.addAll(
-                    material.getTraits(partKey)
-                            .stream()
-                            .filter(traitInstance -> traitInstance.conditionsMatch(partKey, ItemStack.EMPTY, List.of(part)))
-                            .toList()
-            );
-        }
-        return list;
+        var modifiers = event.getModifiers();
+        return key.property().compressModifiers(modifiers, part.getKey(), List.of(part));
     }
 
     @Override

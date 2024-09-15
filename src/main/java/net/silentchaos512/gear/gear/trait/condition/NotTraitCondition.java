@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
@@ -33,8 +32,8 @@ public record NotTraitCondition(ITraitCondition child) implements ITraitConditio
     }
 
     @Override
-    public boolean matches(Trait trait, PartGearKey key, ItemStack gear, List<? extends GearComponentInstance<?>> components) {
-        return !this.child.matches(trait, key, gear, components);
+    public boolean matches(Trait trait, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+        return !this.child.matches(trait, key, components);
     }
 
     @Override

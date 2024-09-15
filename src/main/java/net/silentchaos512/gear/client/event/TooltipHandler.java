@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.client.event;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
@@ -83,7 +82,7 @@ public final class TooltipHandler {
 
         PartInstance part = PartInstance.from(stack);
         if (part != null /*&& !part.isBlacklisted(stack)*/) {
-            onPartTooltip(event, stack, part);
+            onPartTooltip(event, part);
             return;
         }
 
@@ -205,7 +204,7 @@ public final class TooltipHandler {
         return ret.append(keyHint);
     }
 
-    private static void onPartTooltip(ItemTooltipEvent event, ItemStack stack, PartInstance part) {
+    private static void onPartTooltip(ItemTooltipEvent event, PartInstance part) {
 
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
             event.getToolTip().add(Component.literal("* Part ID: " + part.getId()).withStyle(ChatFormatting.DARK_GRAY));
@@ -221,7 +220,7 @@ public final class TooltipHandler {
 
         // Traits
         List<TraitInstance> traits = new ArrayList<>();
-        for (TraitInstance traitInstance : part.getTraits(PartGearKey.ofAll(part.getType()))) {
+        for (TraitInstance traitInstance : part.getTraits(PartGearKey.of(part.getGearType(), part.getType()))) {
             if (traitInstance.getTrait().showInTooltip(event.getFlags())) {
                 traits.add(traitInstance);
             }
@@ -237,14 +236,14 @@ public final class TooltipHandler {
             ++i;
         }
 
-        // Stats
+        // Properties
         if (KeyTracker.isControlDown()) {
             event.getToolTip().add(Component.translatable("misc.silentgear.tooltip.properties")
                     .withStyle(ChatFormatting.GOLD)
                     .append(Component.literal(" (Silent Gear)")
                             .withStyle(ChatFormatting.RESET)
                             .withStyle(ChatFormatting.ITALIC)));
-            getPartStatLines(event, stack, part);
+            getPartStatLines(event, part);
         } else {
             event.getToolTip().add(Component.translatable("misc.silentgear.tooltip.ctrlForProperties").withStyle(ChatFormatting.GOLD));
         }
@@ -303,22 +302,14 @@ public final class TooltipHandler {
         event.getToolTip().addAll(builder.build());
     }
 
-    private static void getPartStatLines(ItemTooltipEvent event, ItemStack stack, PartInstance part) {
+    private static void getPartStatLines(ItemTooltipEvent event, PartInstance part) {
         GearType gearType = getPartGearType(part);
         TextListBuilder builder = new TextListBuilder();
 
         var sortedRelevantProperties = GearPropertyGroups.getSortedRelevantProperties(part.getGearType().relevantPropertyGroups());
         for (GearProperty<?, ?> property : sortedRelevantProperties) {
-            Collection<GearPropertyValue<?>> modifiers = new ArrayList<>();
-            for (GearPropertyValue<?> mod : part.getPropertyModifiers(part.getType(), PropertyKey.of(property, gearType))) {
-//                if (mod.getOp() == StatInstance.Operation.AVG) {
-//                    float computed = stat.compute(Collections.singleton(mod));
-//                    modifiers.add(StatInstance.of(computed, StatInstance.Operation.AVG, mod.getKey()));
-//                } else {
-                modifiers.add(mod);
-//                }
-            }
-            getStatTooltipLine(event, part.getType(), property, modifiers).ifPresent(builder::add);
+            var modifiers = new ArrayList<GearPropertyValue<?>>(part.getPropertyModifiers(part.getType(), PropertyKey.of(property, gearType)));
+            getStatTooltipLine(event, part.getGearType(), property, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
     }
@@ -353,7 +344,7 @@ public final class TooltipHandler {
     ) {
         Collection<V> modsAll = material.getPropertyModifiers(partType, PropertyKey.of(property, GearTypes.ALL.get()));
         //noinspection unchecked
-        Optional<MutableComponent> head = getStatTooltipLine(event, partType, property, (Collection<GearPropertyValue<?>>) modsAll);
+        Optional<MutableComponent> head = getStatTooltipLine(event, GearTypes.ALL.get(), property, (Collection<GearPropertyValue<?>>) modsAll);
         builder.add(head.orElseGet(() -> TextUtil.withColor(property.getDisplayName(), property.getGroup().getColor())));
 
         builder.indent();
@@ -387,7 +378,7 @@ public final class TooltipHandler {
     @SuppressWarnings("unchecked")
     private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> getStatTooltipLine(
             ItemTooltipEvent event,
-            PartType partType,
+            GearType gearType,
             GearProperty<?, ?> propertyIn,
             Collection<GearPropertyValue<?>> modifiersIn
     ) {
@@ -395,7 +386,7 @@ public final class TooltipHandler {
             // Cast to true types
             var property = (P) propertyIn;
             var modifiers = (Collection<V>) modifiersIn;
-            T value = property.compute(property.getZeroValue(), modifiers);
+            T value = property.compute(property.getZeroValue(), true, gearType, modifiers);
             boolean isZero = property.isZero(value);
             if (event.getFlags().isAdvanced() || !isZero) {
                 Color nameColor = isZero ? MC_DARK_GRAY : property.getGroup().getColor();
@@ -442,13 +433,5 @@ public final class TooltipHandler {
         }
 
         return Optional.empty();
-    }
-
-    public static MutableComponent harvestLevelWithHint(MutableComponent statValueText, float statValue) {
-        String key = "misc.silentgear.harvestLevel." + Math.round(statValue);
-        if (I18n.exists(key)) {
-            return statValueText.append(TextUtil.misc("spaceBrackets", Component.translatable(key)));
-        }
-        return statValueText;
     }
 }

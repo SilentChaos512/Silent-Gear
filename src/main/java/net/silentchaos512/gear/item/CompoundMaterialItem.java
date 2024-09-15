@@ -86,7 +86,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
         if (Config.Client.showMaterialTooltips.get()) {
             List<MaterialInstance> materials = getSubMaterials(stack);
-            List<TraitInstance> traits = TraitHelper.getTraitsFromComponents(materials, PartGearKey.of(GearTypes.ALL, PartTypes.MAIN), ItemStack.EMPTY);
+            List<TraitInstance> traits = TraitHelper.getTraitsFromComponents(materials, PartGearKey.of(GearTypes.ALL, PartTypes.MAIN));
 
             float synergy = SynergyUtils.getSynergy(PartTypes.MAIN.get(), materials, traits);
             tooltip.add(SynergyUtils.getDisplayText(synergy));

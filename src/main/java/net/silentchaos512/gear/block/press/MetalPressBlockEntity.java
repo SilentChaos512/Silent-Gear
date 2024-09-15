@@ -104,7 +104,7 @@ public class MetalPressBlockEntity extends BaseContainerBlockEntity implements W
         if (!current.isEmpty()) {
             int newCount = current.getCount() + output.getCount();
 
-            if (!InventoryUtils.canItemsStack(current, output) || newCount > output.getMaxStackSize()) {
+            if (!ItemStack.isSameItemSameComponents(current, output) || newCount > output.getMaxStackSize()) {
                 // Output items do not match or not enough room
                 stopWork();
                 return;

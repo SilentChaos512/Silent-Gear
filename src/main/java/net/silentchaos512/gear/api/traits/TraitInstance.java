@@ -9,10 +9,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.TooltipFlag;
 import net.silentchaos512.gear.api.util.DataResource;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -21,7 +22,7 @@ import net.silentchaos512.gear.util.TextUtil;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public final class TraitInstance implements ITraitInstance {
+public final class TraitInstance {
     public static final Codec<TraitInstance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     DataResource.TRAIT_CODEC.fieldOf("trait").forGetter(t -> t.trait),
@@ -59,15 +60,6 @@ public final class TraitInstance implements ITraitInstance {
                 .build();
     }
 
-    /**
-     * Gets a trait instance. Will return a {@link TraitInstance} if the trait is loaded, or a
-     * {@link LazyTraitInstance} if not.
-     *
-     * @param trait      The trait
-     * @param level      The trait level
-     * @param conditions Optional trait conditions
-     * @return Trait instance
-     */
     public static TraitInstance of(DataResource<Trait> trait, int level, ITraitCondition... conditions) {
         return new TraitInstance(trait, level, conditions);
     }
@@ -76,23 +68,16 @@ public final class TraitInstance implements ITraitInstance {
         return new TraitInstance(trait, level, conditions);
     }
 
-    @Override
-    public ResourceLocation getTraitId() {
-        return trait.getId();
-    }
-
+    @javax.annotation.Nullable
     @Nonnull
-    @Override
     public Trait getTrait() {
         return trait.get();
     }
 
-    @Override
     public int getLevel() {
         return level;
     }
 
-    @Override
     public Collection<ITraitCondition> getConditions() {
         return conditions;
     }
@@ -117,5 +102,26 @@ public final class TraitInstance implements ITraitInstance {
             Component description = TextUtil.withColor(this.trait.get().getDescription(level), ChatFormatting.DARK_GRAY);
             tooltip.add(Component.literal("    ").append(description));
         }
+    }
+
+    public boolean conditionsMatch(PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+        Trait trait = getTrait();
+        if (trait == null) return true;
+
+        for (ITraitCondition condition : getConditions()) {
+            if (!condition.matches(trait, key, components)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public MutableComponent getConditionsText() {
+        // Basically the same as AndTraitCondition
+        return getConditions().stream()
+                .map(ITraitCondition::getDisplayText)
+                .reduce((t1, t2) -> t1.append(TextUtil.translate("trait.condition", "and")).append(t2))
+                .orElseGet(() -> Component.literal(""));
     }
 }

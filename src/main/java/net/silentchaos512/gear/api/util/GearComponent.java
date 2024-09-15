@@ -11,7 +11,7 @@ import net.silentchaos512.gear.setup.gear.GearProperties;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-public interface GearComponent<D> extends PropertyProvider<D>, TraitProvider<D> {
+public interface GearComponent<D> extends PropertyProvider<D> {
     /**
      * Gets the ingredient to match for crafting.
      *
@@ -36,9 +36,4 @@ public interface GearComponent<D> extends PropertyProvider<D>, TraitProvider<D> 
     }
 
     Component getDisplayName(@Nullable D instance, PartType type);
-
-    @Override
-    default Collection<TraitInstance> getTraits(D instance, PartGearKey partKey) {
-        return getProperty(instance, partKey.partType(), PropertyKey.of(GearProperties.TRAITS.get(), partKey.gearType()));
-    }
 }

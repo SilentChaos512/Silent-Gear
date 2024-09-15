@@ -41,10 +41,9 @@ public class CompoundPartSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public boolean matches(SingleRecipeInput input, Level worldIn) {
-        if (!(input.getItem(0).getItem() instanceof CompoundPartItem))
-            return false;
+        var itemStack = input.getItem(0);
+        return itemStack.getItem() instanceof CompoundPartItem && PartInstance.from(itemStack) != null;
 
-        return PartInstance.from(input.getItem(0)) != null;
     }
 
     @Override

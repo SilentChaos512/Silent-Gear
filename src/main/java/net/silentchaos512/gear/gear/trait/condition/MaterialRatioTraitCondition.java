@@ -7,7 +7,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -37,7 +36,7 @@ public record MaterialRatioTraitCondition(float requiredRatio) implements ITrait
     }
 
     @Override
-    public boolean matches(Trait trait, PartGearKey key, ItemStack gear, List<? extends GearComponentInstance<?>> components) {
+    public boolean matches(Trait trait, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
         int count = 0;
         for (GearComponentInstance<?> comp : components) {
             Collection<TraitInstance> traits = comp.getTraits(key);

@@ -158,6 +158,10 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
         return part.map(GearPart::getGearType).orElse(GearTypes.NONE.get());
     }
 
+    public PartGearKey getKey() {
+        return PartGearKey.of(this.getGearType(), this.getType());
+    }
+
     public List<MaterialInstance> getMaterials() {
         var part = getNullable();
         return part != null ? part.getMaterials(this) : List.of();
@@ -182,12 +186,6 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
 
     public <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(PropertyKey<T, V> key) {
         return this.getPropertyModifiers(this.getType(), key);
-    }
-
-    @Override
-    public Collection<TraitInstance> getTraits(PartGearKey key) {
-        var part = getNullable();
-        return part != null ? part.getTraits(this, key) : Collections.emptyList();
     }
 
     public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingInput inventory) {

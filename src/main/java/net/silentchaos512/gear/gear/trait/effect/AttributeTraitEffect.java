@@ -140,11 +140,14 @@ public class AttributeTraitEffect extends TraitEffect {
             var itemId = BuiltInRegistries.ITEM.getKey(context.gear().getItem());
             var primaryPart = GearData.getConstruction(context.gear()).getPrimaryPart();
             var primaryMaterial = primaryPart != null ? primaryPart.getPrimaryMaterial() : null;
+            var primaryMaterialIdDotted = primaryMaterial != null
+                    ? primaryMaterial.getId().getNamespace() + "." + primaryMaterial.getId().getPath()
+                    : "";
             return ResourceLocation.fromNamespaceAndPath(
                     itemId.getNamespace(),
                     itemId.getPath()
                             + "/" + key.group.getSerializedName()
-                            + (primaryMaterial != null ? "/" + primaryMaterial.getId() : "")
+                            + "/" + primaryMaterialIdDotted
             );
         }
 

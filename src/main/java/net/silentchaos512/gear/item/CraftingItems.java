@@ -16,8 +16,8 @@ import java.util.Locale;
 public enum CraftingItems implements ItemLike {
     BLUEPRINT_PAPER,
     TEMPLATE_BOARD,
-    @Deprecated UPGRADE_BASE, // possible removal
-    @Deprecated ADVANCED_UPGRADE_BASE, // possible removal
+    UPGRADE_BASE,
+    ADVANCED_UPGRADE_BASE,
     BORT,
     BRONZE_INGOT,
     CRIMSON_IRON_INGOT,
@@ -40,8 +40,8 @@ public enum CraftingItems implements ItemLike {
     AZURE_SILVER_DUST,
     AZURE_ELECTRUM_DUST,
     TYRIAN_STEEL_DUST,
-    @Deprecated DIAMOND_SHARD, // possible removal
-    @Deprecated EMERALD_SHARD, // possible removal
+    DIAMOND_SHARD, // possible removal
+    EMERALD_SHARD, // possible removal
     NETHER_STAR_FRAGMENT,
     STARMETAL_DUST,
     GLOWING_DUST,
@@ -72,7 +72,6 @@ public enum CraftingItems implements ItemLike {
     WIDE_PLATE_UPGRADE,
     RED_CARD_UPGRADE;
 
-    @SuppressWarnings("NonFinalFieldInEnum")
     private DeferredItem<ItemInternal> item = null;
 
     @Override

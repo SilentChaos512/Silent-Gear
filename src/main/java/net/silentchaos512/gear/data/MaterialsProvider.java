@@ -863,6 +863,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
         // Netherwood
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.NETHERWOOD)
+                .parent(Const.Materials.WOOD)
                 .crafting(new MaterialCraftingData(
                         Ingredient.of(SgBlocks.NETHERWOOD_PLANKS),
                         List.of(MaterialCategories.ORGANIC, MaterialCategories.WOOD),
@@ -870,7 +871,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                         Map.of(PartTypes.ROD.get(), Ingredient.of(SgTags.Items.RODS_NETHERWOOD)),
                         true
                 ))
-                .displayWithDefaultName(0xD83200, TextureType.LOW_CONTRAST)
+                .displayWithDefaultName(0x7D272D, TextureType.LOW_CONTRAST)
                 //main
                 .mainStatsCommon(72, 12, 13, 4, 0.7f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.1f)

@@ -140,15 +140,6 @@ public abstract class AbstractMaterial implements Material {
     }
 
     @Override
-    public Collection<TraitInstance> getTraits(MaterialInstance material, PartGearKey partKey) {
-        var list = new ArrayList<>(Material.super.getTraits(material, partKey));
-        if (list.isEmpty() && getParent() != null) {
-            list.addAll(getParent().getTraits(material, partKey));
-        }
-        return list;
-    }
-
-    @Override
     public boolean isCraftingAllowed(MaterialInstance material, PartType partType, GearType gearType, @Nullable CraftingInput craftingInput) {
         if (isGearTypeBlacklisted(gearType) || !isAllowedInPart(material, partType)) {
             return false;
