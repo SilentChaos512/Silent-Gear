@@ -213,6 +213,8 @@ public final class Trait {
     }
 
     public ItemStack addLootDrops(TraitActionContext context, ItemStack stack) {
+        if (this.effects.isEmpty()) return ItemStack.EMPTY;
+
         ItemStack result = stack.copy();
         for (TraitEffect effect : this.effects) {
             result = effect.addLootDrops(context, result);
