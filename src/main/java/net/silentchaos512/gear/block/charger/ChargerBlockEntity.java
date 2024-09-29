@@ -115,7 +115,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
         if (material != null) {
             float rarity = material.getProperty(PartTypes.MAIN.get(), GearProperties.RARITY.get());
             float clampedRarity = Mth.clamp(rarity, 5, 500);
-            return (int) (5 * rarity);
+            return (int) (5 * clampedRarity);
         }
         return -1;
     }
@@ -178,7 +178,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
         ItemStack input = blockEntity.getItem(0);
         ItemStack catalyst = blockEntity.getItem(1);
         MaterialInstance material = MaterialInstance.from(input);
-        if (input.isEmpty() || catalyst.isEmpty() || material != null) {
+        if (input.isEmpty() || catalyst.isEmpty() || material == null) {
             return;
         }
 
@@ -211,16 +211,17 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends BaseC
         int drainRate = getDrainRate(input, chargeLevel);
 
         if (canCharge(input) && chargeLevel > getMaterialChargeLevel(input) && chargeLevel <= this.structureLevel && this.charge >= drainRate) {
-            if (wouldFitInOutputSlot(input, chargeLevel)) {
+            ItemStack output = input.copy();
+            output.setCount(1);
+            chargeMaterial(output, chargeLevel);
+
+            if (wouldFitInOutputSlot(output, chargeLevel)) {
                 ++this.progress;
                 this.charge -= drainRate;
                 this.workTime = getWorkTime(input);
 
                 if (this.progress >= this.workTime) {
                     if (getItem(2).isEmpty()) {
-                        ItemStack output = input.copy();
-                        output.setCount(1);
-                        chargeMaterial(output, chargeLevel);
                         setItem(2, output);
                     } else {
                         getItem(2).grow(1);

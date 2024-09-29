@@ -109,6 +109,7 @@ repositories {
         url = "https://modmaven.dev"
     }
     maven {
+        // EMI
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
     }

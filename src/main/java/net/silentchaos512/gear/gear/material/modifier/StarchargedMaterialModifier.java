@@ -86,7 +86,7 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
         if (key.property() == GearProperties.ARMOR_DURABILITY.get())
             return mod.value() * Math.pow(1.1, charge.getChargeValue());
         if (key.property() == GearProperties.ENCHANTMENT_VALUE.get())
-            return mod.value() * (1 + charge.chargeLevel() * (Math.sqrt(charge.chargeValue() - 1)));
+            return mod.value() * Math.pow(1.1, charge.getChargeValue());
         if (key.property() == GearProperties.HARVEST_SPEED.get())
             return mod.value() + 1.5 * charge.chargeLevel() * charge.getChargeValue();
         if (key.property() == GearProperties.ATTACK_DAMAGE.get())

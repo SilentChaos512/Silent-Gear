@@ -68,7 +68,6 @@ public final class TraitInstance {
         return new TraitInstance(trait, level, conditions);
     }
 
-    @javax.annotation.Nullable
     @Nonnull
     public Trait getTrait() {
         return trait.get();
@@ -106,7 +105,6 @@ public final class TraitInstance {
 
     public boolean conditionsMatch(PartGearKey key, List<? extends GearComponentInstance<?>> components) {
         Trait trait = getTrait();
-        if (trait == null) return true;
 
         for (ITraitCondition condition : getConditions()) {
             if (!condition.matches(trait, key, components)) {
@@ -123,5 +121,30 @@ public final class TraitInstance {
                 .map(ITraitCondition::getDisplayText)
                 .reduce((t1, t2) -> t1.append(TextUtil.translate("trait.condition", "and")).append(t2))
                 .orElseGet(() -> Component.literal(""));
+    }
+
+    @Override
+    public String toString() {
+        return getDisplayName().getString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof TraitInstance other)) return false;
+
+        if (!(this.trait.equals(other.trait)
+                && this.level == other.level
+                && this.conditions.size() == other.conditions.size())) {
+            return false;
+        }
+
+        for (int i = 0; i < this.conditions.size(); ++i) {
+            if (!this.conditions.get(i).equals(other.conditions.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

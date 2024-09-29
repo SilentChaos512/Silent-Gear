@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.TextUtil;
@@ -69,9 +70,18 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
 
     public abstract T compute(T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers);
 
+    public T computeForGear(T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers, List<PartInstance> parts) {
+        return compute(baseValue, clampResult, itemType, statType, modifiers);
+    }
+
     @SuppressWarnings("unchecked")
     public V computeUnchecked(boolean clampResult, GearType itemType, GearType statType, Collection<GearPropertyValue<?>> modifiers) {
         return valueOf(compute(getBaseValue(), clampResult, itemType, statType, (Collection<V>) modifiers));
+    }
+
+    @SuppressWarnings("unchecked")
+    public V computeUncheckedForGear(GearType itemType, GearType statType, Collection<GearPropertyValue<?>> modifiers, List<PartInstance> parts) {
+        return valueOf(computeForGear(getBaseValue(), true, itemType, statType, (Collection<V>) modifiers, parts));
     }
 
     public T getDefaultValue() {

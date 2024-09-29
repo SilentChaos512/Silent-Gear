@@ -205,7 +205,6 @@ public final class TooltipHandler {
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, PartInstance part) {
-
         if (event.getFlags().isAdvanced() && KeyTracker.isControlDown()) {
             event.getToolTip().add(Component.literal("* Part ID: " + part.getId()).withStyle(ChatFormatting.DARK_GRAY));
             event.getToolTip().add(Component.literal("* Part data pack: " + part.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
@@ -219,7 +218,7 @@ public final class TooltipHandler {
         event.getToolTip().add(TextUtil.withColor(part.getType().getDisplayName(), Color.AQUAMARINE));
 
         // Traits
-        List<TraitInstance> traits = new ArrayList<>();
+        /*List<TraitInstance> traits = new ArrayList<>();
         for (TraitInstance traitInstance : part.getTraits(PartGearKey.of(part.getGearType(), part.getType()))) {
             if (traitInstance.getTrait().showInTooltip(event.getFlags())) {
                 traits.add(traitInstance);
@@ -234,7 +233,7 @@ public final class TooltipHandler {
                 inst.addInformation(event.getToolTip(), event.getFlags());
             }
             ++i;
-        }
+        }*/
 
         // Properties
         if (KeyTracker.isControlDown()) {

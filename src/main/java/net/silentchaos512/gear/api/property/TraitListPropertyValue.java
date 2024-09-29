@@ -6,6 +6,7 @@ import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.trait.Trait;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,10 @@ public class TraitListPropertyValue extends GearPropertyValue<List<TraitInstance
 
     public static TraitListPropertyValue of(TraitInstance... traits) {
         return new TraitListPropertyValue(Arrays.stream(traits).toList());
+    }
+
+    public static TraitListPropertyValue from(Collection<TraitInstance> traits) {
+        return new TraitListPropertyValue(List.copyOf(traits));
     }
 
     @Override

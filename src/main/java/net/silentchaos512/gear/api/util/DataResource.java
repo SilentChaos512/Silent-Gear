@@ -112,6 +112,14 @@ public class DataResource<T> implements Supplier<T> {
         return "DataResource{" + this.objectId + "}";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof DataResource<?> other)) return false;
+
+        return this.getId().equals(other.getId());
+    }
+
     public static final Codec<DataResource<Material>> MATERIAL_CODEC = ResourceLocation.CODEC.xmap(
             DataResource::material,
             DataResource::getId

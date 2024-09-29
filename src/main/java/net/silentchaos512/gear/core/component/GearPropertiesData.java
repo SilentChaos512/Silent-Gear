@@ -1,12 +1,16 @@
 package net.silentchaos512.gear.core.component;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.util.CodecUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -15,9 +19,26 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public record GearPropertiesData(
-        Map<GearProperty<?, ?>, GearPropertyValue<?>> properties
+        Map<GearProperty<?, ? extends GearPropertyValue<?>>, GearPropertyValue<?>> properties
 ) {
     public static final GearPropertiesData EMPTY = new GearPropertiesData(Collections.emptyMap());
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static final Codec<GearPropertiesData> CODEC = Codec
+            .dispatchedMap(
+                    CodecUtils.byModNameCodec(SgRegistries.GEAR_PROPERTY),
+                    GearProperty::codec
+            )
+            .xmap(
+                    map -> {
+                        Map<GearProperty<?, ?>, GearPropertyValue<?>> input = new LinkedHashMap<>(map);
+                        return new GearPropertiesData(input);
+                    },
+                    data -> {
+                        // Black magic to dance around the generics, don't ask me why it works
+                        return (Map) data.properties;
+                    }
+            );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, GearPropertiesData> STREAM_CODEC = StreamCodec.of(
             GearPropertiesData::encode,

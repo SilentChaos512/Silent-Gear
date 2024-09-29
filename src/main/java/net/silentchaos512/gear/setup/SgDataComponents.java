@@ -45,6 +45,7 @@ public class SgDataComponents {
     public static final Supplier<DataComponentType<GearPropertiesData>> GEAR_PROPERTIES = REGISTRAR.registerComponentType(
             "properties",
             builder -> builder
+                    .persistent(GearPropertiesData.CODEC)
                     .networkSynchronized(GearPropertiesData.STREAM_CODEC)
     );
     public static final Supplier<DataComponentType<GearPropertiesData>> GEAR_BASE_PROPERTIES = REGISTRAR.registerComponentType(
@@ -60,11 +61,13 @@ public class SgDataComponents {
     public static final Supplier<DataComponentType<String>> GEAR_MODEL_KEY = REGISTRAR.registerComponentType(
             "model_key",
             builder -> builder
+                    .persistent(Codec.STRING)
                     .networkSynchronized(ByteBufCodecs.STRING_UTF8)
     );
     public static final Supplier<DataComponentType<Integer>> GEAR_MODEL_INDEX = REGISTRAR.registerComponentType(
             "model_index",
             builder -> builder
+                    .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
     );
     public static final Supplier<DataComponentType<Boolean>> GEAR_IS_EXAMPLE = REGISTRAR.registerComponentType(

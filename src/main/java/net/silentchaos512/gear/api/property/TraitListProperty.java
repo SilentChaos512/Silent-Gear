@@ -15,10 +15,12 @@ import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.gear.trait.Trait;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.lib.util.Color;
 
@@ -56,7 +58,12 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
     }
 
     @Override
-    public List<TraitInstance> compute(List<TraitInstance> baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers) {
+    public List<TraitInstance> compute(List<TraitInstance> baseValue, boolean filterConditions, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers) {
+        return computeForGear(baseValue, filterConditions, itemType, statType, modifiers, List.of());
+    }
+
+    @Override
+    public List<TraitInstance> computeForGear(List<TraitInstance> baseValue, boolean filterConditions, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers, List<PartInstance> parts) {
         if (modifiers.isEmpty()) {
             return baseValue;
         }
@@ -65,14 +72,10 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
         for (var mod : modifiers) {
             list.addAll(mod.value);
         }
-        return computeTraits(baseValue, list);
+        return computeTraits(filterConditions, itemType, baseValue, list, parts);
     }
 
-    public List<TraitInstance> computeTraits(Collection<TraitInstance> traits) {
-        return computeTraits(List.of(), traits);
-    }
-
-    public List<TraitInstance> computeTraits(List<TraitInstance> baseValue, Collection<TraitInstance> traits) {
+    public List<TraitInstance> computeTraits(boolean filterConditions, GearType itemType, List<TraitInstance> baseValue, Collection<TraitInstance> traits, List<PartInstance> parts) {
         if (traits.isEmpty()) {
             return baseValue;
         }
@@ -89,7 +92,7 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
 
         for (Trait trait : keys) {
             final int matsWithTrait = count.get(trait);
-            final float divisor = Math.max(traits.size() / 2f, matsWithTrait);
+            final float divisor = Math.min(traits.size() / 2f, matsWithTrait);
             final int value = Math.round(map.get(trait) / divisor);
             map.put(trait, Mth.clamp(value, 1, trait.getMaxLevel()));
         }
@@ -98,6 +101,10 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
 
         List<TraitInstance> ret = new ArrayList<>();
         map.forEach((trait, level) -> ret.add(TraitInstance.of(trait, level)));
+        // Remove if the conditions don't match the gear
+        if (filterConditions) {
+            ret.removeIf(trait -> !trait.conditionsMatch(PartGearKey.of(itemType, PartTypes.NONE.get()), parts));
+        }
         return ret;
     }
 
@@ -129,6 +136,11 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
                         .map(Component::getString)
                         .collect(Collectors.joining(", "))
         );
+    }
+
+    @Override
+    public List<TraitListPropertyValue> sortForDisplay(Collection<TraitListPropertyValue> mods) {
+        return List.of(valueOf(compute(this.baseValue, false, GearTypes.ALL.get(), mods)));
     }
 
     @Override
