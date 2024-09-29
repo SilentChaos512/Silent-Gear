@@ -202,7 +202,7 @@ public final class PartsProvider extends PartsProviderBase {
             .put(GearTypes.MACE.get(), b -> b
                     .numberProperty(GearProperties.DURABILITY, 1.0f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 3.0f, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.ATTACK_REACH, 0.6f, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 0.6f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .put(GearTypes.MACHETE.get(), b -> b

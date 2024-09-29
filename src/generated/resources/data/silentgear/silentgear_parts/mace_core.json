@@ -20,7 +20,7 @@
       "operation": "ADD",
       "value": 3.0
     },
-    "attack_reach": {
+    "attack_speed": {
       "operation": "ADD",
       "value": 0.6
     },
