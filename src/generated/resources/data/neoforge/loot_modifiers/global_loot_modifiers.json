@@ -1,0 +1,12 @@
+{
+  "entries": [
+    "silentgear:add_mob_drops/sinew",
+    "silentgear:add_mob_drops/leather_scraps_low",
+    "silentgear:add_mob_drops/fine_silk_low",
+    "silentgear:magmatic_smelting",
+    "silentgear:bonus_drops_trait",
+    "silentgear:add_mob_drops/leather_scraps_high",
+    "silentgear:add_mob_drops/fine_silk_high"
+  ],
+  "replace": false
+}

@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.data.loot;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -31,24 +30,11 @@ public class ModEntityLootTables extends EntityLootSubProvider {
 
     @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.COW),
-                addSinew(0.2f, 0.2f)
-        );
-        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.PIG),
-                addSinew(0.2f, 0.2f)
-        );
-        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.SHEEP),
-                addSinew(0.2f, 0.2f)
-        );
-        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.CAVE_SPIDER),
-                addFineSilk(0.04f, 0.01f)
-        );
-        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.SPIDER),
-                addFineSilk(0.02f, 0.005f)
-        );
-        consumer.accept(ResourceKey.create(Registries.LOOT_TABLE, SgLoot.Injector.Tables.ZOMBIE_VILLAGER),
-                addLeatherScraps()
-        );
+        consumer.accept(SgLoot.Tables.DROPS_SINEW, addSinew());
+        consumer.accept(SgLoot.Tables.DROPS_FINE_SILK_HIGH, addFineSilk(0.04f, 0.01f));
+        consumer.accept(SgLoot.Tables.DROPS_FINE_SILK_LOW, addFineSilk(0.02f, 0.005f));
+        consumer.accept(SgLoot.Tables.DROPS_LEATHER_SCRAPS_HIGH, addLeatherScraps());
+        consumer.accept(SgLoot.Tables.DROPS_LEATHER_SCRAPS_LOW, addLeatherScrapsLow());
 
         /*heroOfTheVillage(consumer,
                 GearVillages.HOTV_GEAR_SMITH,
@@ -64,13 +50,13 @@ public class ModEntityLootTables extends EntityLootSubProvider {
         );*/
     }
 
-    private LootTable.Builder addSinew(float baseChance, float lootingBonus) {
+    private LootTable.Builder addSinew() {
         return LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(CraftingItems.SINEW)
                                 .when(LootItemKilledByPlayerCondition.killedByPlayer())
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, baseChance, lootingBonus))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.2f, 0.05f))
                         )
                 );
     }
@@ -86,13 +72,25 @@ public class ModEntityLootTables extends EntityLootSubProvider {
                 );
     }
 
-    private static LootTable.Builder addLeatherScraps() {
+    private LootTable.Builder addLeatherScraps() {
         return LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(CraftingItems.LEATHER_SCRAP)
                                 .when(LootItemKilledByPlayerCondition.killedByPlayer())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5)))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5)))
+                        )
+                );
+    }
+
+    private LootTable.Builder addLeatherScrapsLow() {
+        return LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(CraftingItems.LEATHER_SCRAP)
+                                .when(LootItemKilledByPlayerCondition.killedByPlayer())
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.05f, 0.01f))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))
                         )
                 );
     }

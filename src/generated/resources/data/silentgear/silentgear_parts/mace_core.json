@@ -16,6 +16,18 @@
   "gear_type": "silentgear:mace",
   "part_type": "silentgear:main",
   "properties": {
+    "attack_damage": {
+      "operation": "ADD",
+      "value": 3.0
+    },
+    "attack_reach": {
+      "operation": "ADD",
+      "value": 0.6
+    },
+    "durability": {
+      "operation": "MULTIPLY_BASE",
+      "value": 1.0
+    },
     "repair_efficiency": 1.0
   }
 }

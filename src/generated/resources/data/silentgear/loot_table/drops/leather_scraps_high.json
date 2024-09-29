@@ -17,7 +17,7 @@
               "count": {
                 "type": "minecraft:uniform",
                 "max": 5.0,
-                "min": 1.0
+                "min": 2.0
               },
               "function": "minecraft:set_count"
             }
@@ -28,5 +28,5 @@
       "rolls": 1.0
     }
   ],
-  "random_sequence": "silentgear:inject/minecraft/entities/zombie_villager"
+  "random_sequence": "silentgear:drops/leather_scraps_high"
 }

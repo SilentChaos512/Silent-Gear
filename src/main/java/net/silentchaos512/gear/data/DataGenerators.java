@@ -16,6 +16,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.data.client.CompoundModelsProvider;
 import net.silentchaos512.gear.data.client.ModBlockStateProvider;
 import net.silentchaos512.gear.data.client.ModItemModelProvider;
+import net.silentchaos512.gear.data.loot.ModLootModifierProvider;
 import net.silentchaos512.gear.data.loot.ModLootTables;
 import net.silentchaos512.gear.data.recipes.ModRecipesProvider;
 import net.silentchaos512.gear.data.trait.TraitsProvider;
@@ -37,21 +38,22 @@ public final class DataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         ModBlockTagsProvider blocks = new ModBlockTagsProvider(event);
-        gen.addProvider(event.includeServer(), blocks);
-        gen.addProvider(event.includeServer(), new ModItemTagsProvider(event, blocks));
+        gen.addProvider(true, blocks);
+        gen.addProvider(true, new ModItemTagsProvider(event, blocks));
 
-        gen.addProvider(event.includeServer(), new TraitsProvider(gen));
-        gen.addProvider(event.includeServer(), new MaterialsProvider(gen, SilentGear.MOD_ID));
-        gen.addProvider(event.includeServer(), new PartsProvider(gen));
+        gen.addProvider(true, new TraitsProvider(gen));
+        gen.addProvider(true, new MaterialsProvider(gen, SilentGear.MOD_ID));
+        gen.addProvider(true, new PartsProvider(gen));
 
-        gen.addProvider(event.includeServer(), new ModLootTables(event));
-        gen.addProvider(event.includeServer(), new ModRecipesProvider(event));
-        gen.addProvider(event.includeServer(), new ModAdvancementProvider(event));
+        gen.addProvider(true, new ModLootTables(event));
+        gen.addProvider(true, new ModLootModifierProvider(event));
+        gen.addProvider(true, new ModRecipesProvider(event));
+        gen.addProvider(true, new ModAdvancementProvider(event));
 //        ModWorldGen.init(gen, existingFileHelper); //FIXME
 
-        gen.addProvider(event.includeServer(), new ModBlockStateProvider(gen, existingFileHelper));
-        gen.addProvider(event.includeServer(), new ModItemModelProvider(gen, existingFileHelper));
-        gen.addProvider(event.includeServer(), new CompoundModelsProvider(gen, existingFileHelper));
+        gen.addProvider(true, new ModBlockStateProvider(gen, existingFileHelper));
+        gen.addProvider(true, new ModItemModelProvider(gen, existingFileHelper));
+        gen.addProvider(true, new CompoundModelsProvider(gen, existingFileHelper));
     }
 
     public static CompletableFuture<?> saveStable(CachedOutput p_253653_, JsonElement p_254542_, Path p_254467_) {

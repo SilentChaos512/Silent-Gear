@@ -64,6 +64,18 @@ public final class SgLoot {
         return LOOT_MODIFIERS.register(name, codec);
     }
 
+    public static final class Tables {
+        public static final ResourceKey<LootTable> DROPS_LEATHER_SCRAPS_LOW = table("drops/leather_scraps_low");
+        public static final ResourceKey<LootTable> DROPS_LEATHER_SCRAPS_HIGH = table("drops/leather_scraps_high");
+        public static final ResourceKey<LootTable> DROPS_FINE_SILK_LOW = table("drops/fine_silk_low");
+        public static final ResourceKey<LootTable> DROPS_FINE_SILK_HIGH = table("drops/fine_silk_high");
+        public static final ResourceKey<LootTable> DROPS_SINEW = table("drops/sinew");
+
+        private static ResourceKey<LootTable> table(String path) {
+            return ResourceKey.create(Registries.LOOT_TABLE, SilentGear.getId(path));
+        }
+    }
+
     @EventBusSubscriber
     public static final class Injector {
         public static final class Tables {
@@ -75,14 +87,6 @@ public final class SgLoot {
             public static final ResourceLocation BASTION_OTHER = inject(BuiltInLootTables.BASTION_OTHER);
             public static final ResourceLocation BASTION_BRIDGE = inject(BuiltInLootTables.BASTION_BRIDGE);
             public static final ResourceLocation RUINED_PORTAL = inject(BuiltInLootTables.RUINED_PORTAL);
-
-            // Entities
-            public static final ResourceLocation CAVE_SPIDER = inject(EntityType.CAVE_SPIDER.getDefaultLootTable());
-            public static final ResourceLocation COW = inject(EntityType.COW.getDefaultLootTable());
-            public static final ResourceLocation PIG = inject(EntityType.PIG.getDefaultLootTable());
-            public static final ResourceLocation SHEEP = inject(EntityType.SHEEP.getDefaultLootTable());
-            public static final ResourceLocation SPIDER = inject(EntityType.SPIDER.getDefaultLootTable());
-            public static final ResourceLocation ZOMBIE_VILLAGER = inject(EntityType.ZOMBIE_VILLAGER.getDefaultLootTable());
 
             public static Optional<ResourceKey<LootTable>> get(ResourceLocation lootTable) {
                 return Optional.ofNullable(MAP.get(lootTable));
