@@ -47,6 +47,7 @@ class SideProxy implements IProxy {
         PartSerializers.REGISTRAR.register(modEventBus);
         TraitConditions.REGISTRAR.register(modEventBus);
 
+        SgArmorMaterials.REGISTRAR.register(modEventBus);
         SgBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         SgBlocks.BLOCKS.register(modEventBus);
         SgCreativeTabs.CREATIVE_TABS.register(modEventBus);

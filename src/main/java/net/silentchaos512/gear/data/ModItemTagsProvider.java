@@ -210,6 +210,12 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.PROSPECTOR_HAMMER.gearItem()
         );
 
+        tag(ItemTags.DYEABLE)
+                .add(GearItemSets.HELMET.gearItem())
+                .add(GearItemSets.CHESTPLATE.gearItem())
+                .add(GearItemSets.LEGGINGS.gearItem())
+                .add(GearItemSets.BOOTS.gearItem());
+
         // Silent Gear
 
         copy(SgTags.Blocks.FLUFFY_BLOCKS, SgTags.Items.FLUFFY_BLOCKS);

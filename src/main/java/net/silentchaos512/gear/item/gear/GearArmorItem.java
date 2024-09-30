@@ -21,6 +21,7 @@ import net.silentchaos512.gear.api.item.GearArmor;
 import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.setup.SgArmorMaterials;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
@@ -44,7 +45,7 @@ public class GearArmorItem extends ArmorItem implements GearArmor {
     private final Supplier<GearType> gearType;
 
     public GearArmorItem(Supplier<GearType> gearType, ArmorItem.Type armorType) {
-        super(GearHelper.DEFAULT_DUMMY_ARMOR_MATERIAL, armorType, GearHelper.getBaseItemProperties());
+        super(SgArmorMaterials.DUMMY, armorType, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
     }
 
@@ -186,7 +187,7 @@ public class GearArmorItem extends ArmorItem implements GearArmor {
         return TextureType.HIGH_CONTRAST.getArmorTexture(innerModel);
     }
 
-    private static int getArmorColor(ItemStack stack) {
+    public static int getArmorColor(ItemStack stack) {
         // Gets the outermost (coating or main) part and compute its color
         var data = GearData.getConstruction(stack);
         var part = data.getCoatingOrMainPart();

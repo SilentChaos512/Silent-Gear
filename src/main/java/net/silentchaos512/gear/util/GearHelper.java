@@ -2,7 +2,6 @@ package net.silentchaos512.gear.util;
 
 import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -73,7 +72,6 @@ import java.util.stream.Stream;
  */
 public final class GearHelper {
     public static Tiers DEFAULT_DUMMY_TIER = Tiers.WOOD;
-    public static Holder<ArmorMaterial> DEFAULT_DUMMY_ARMOR_MATERIAL = ArmorMaterials.LEATHER;
 
     private static final ResourceLocation REACH_MODIFIER_ID = SilentGear.getId("reach_modifier");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;

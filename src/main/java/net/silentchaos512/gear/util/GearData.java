@@ -4,9 +4,11 @@ import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -32,6 +34,7 @@ import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.item.gear.GearArmorItem;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
@@ -150,6 +153,12 @@ public final class GearData {
 
         var modelKey = calculateModelKey(gear, getConstruction(gear).parts());
         gear.set(SgDataComponents.GEAR_MODEL_KEY, modelKey);
+
+        if (gear.is(ItemTags.DYEABLE)) {
+            // Attach armor color
+            var color = GearArmorItem.getArmorColor(gear);
+            gear.set(DataComponents.DYED_COLOR, new DyedItemColor(color, false));
+        }
     }
 
     private static GearPropertiesData calculateBaseProperties(ItemStack gear, @Nullable Player player, GearType gearType, GearConstructionData gearConstructionData) {
