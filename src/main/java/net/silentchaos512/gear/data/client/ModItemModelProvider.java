@@ -173,6 +173,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempMainPart(GearItemSets.MACHETE);
         tempMainPart(GearItemSets.SPEAR);
         tempMainPart(GearItemSets.TRIDENT);
+        tempMainPart(GearItemSets.MACE);
         tempMainPart(GearItemSets.KNIFE);
         tempMainPart(GearItemSets.DAGGER);
         tempMainPart(GearItemSets.PICKAXE);
@@ -200,6 +201,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempMainPart(GearItemSets.ARROW);
         tempMainPart(GearItemSets.RING);
         tempMainPart(GearItemSets.BRACELET);
+        tempMainPart(GearItemSets.NECKLACE);
         tempGearPart(SgItems.ROD);
         tempGearPart(SgItems.TIP);
         tempCoatingPart(SgItems.COATING);
