@@ -18,10 +18,8 @@ import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -221,7 +219,10 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(material, item);
+        return Arrays.hashCode(new int[]{
+                this.material.getId().hashCode(),
+                ItemStack.hashItemAndComponents(this.item)
+        });
     }
 
     @Override
