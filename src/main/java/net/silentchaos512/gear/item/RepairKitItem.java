@@ -82,7 +82,6 @@ public class RepairKitItem extends Item {
     }
 
     private Pair<Map<MaterialInstance, Float>, Integer> getMaterialsToRepair(ItemStack gear, ItemStack repairKit, RepairContext.Type repairType) {
-        // Materials should be sorted by tier (ascending)
         Map<MaterialInstance, Float> stored = getStoredMaterials(repairKit);
         Map<MaterialInstance, Float> used = new HashMap<>();
         float gearRepairEfficiency = GearData.getProperties(gear).getNumber(GearProperties.REPAIR_EFFICIENCY);

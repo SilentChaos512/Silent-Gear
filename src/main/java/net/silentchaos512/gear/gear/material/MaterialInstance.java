@@ -173,7 +173,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public int getRepairValue(ItemStack gear, RepairContext.Type type) {
         if (this.canRepair(gear)) {
             float durability = getProperty(PartTypes.MAIN.get(), GearHelper.getDurabilityProperty(gear));
-            float repairValueMulti = getProperty(PartTypes.MAIN.get(), GearProperties.REPAIR_VALUE.get());
+            float repairValueMulti = 1 + getProperty(PartTypes.MAIN.get(), GearProperties.REPAIR_VALUE.get());
             float itemRepairModifier = GearHelper.getRepairModifier(gear);
             float typeBonus = 1f + type.getBonusEfficiency();
             return Math.round(durability * repairValueMulti * itemRepairModifier * typeBonus) + 1;
