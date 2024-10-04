@@ -18,6 +18,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.advancements.criterion.GearPropertyTrigger;
 import net.silentchaos512.gear.advancements.criterion.GearRepairedTrigger;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -238,7 +239,17 @@ public class ModAdvancementProvider extends AdvancementProvider {
                     .save(saver, id("azure_electrum"));
 
             ItemStack azureSilverBoots = new ItemStack(GearItemSets.BOOTS.gearItem());
-            GearData.writeConstructionParts(azureSilverBoots, Collections.singleton(PartInstance.create(Const.Parts.ARMOR_BODY, GearItemSets.BOOTS.mainPart(), Const.Materials.AZURE_SILVER)));
+            GearData.writeConstructionParts(
+                    azureSilverBoots,
+                    Collections.singleton(
+                            PartInstance.create(
+                                    DataResource.part(GearItemSets.BOOTS.partName()),
+                                    GearItemSets.BOOTS.mainPart(),
+                                    Const.Materials.AZURE_SILVER
+                            )
+                    )
+            );
+            GearData.recalculateGearData(azureSilverBoots, null);
             AdvancementHolder moonwalker = Advancement.Builder.advancement()
                     .parent(azureSilver)
                     .display(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, AdvancementType.TASK, true, true, false)

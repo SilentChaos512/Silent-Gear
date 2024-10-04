@@ -626,16 +626,16 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .define('/', SgTags.Items.RODS_ROUGH)
                 .save(consumer, SilentGear.getId("gear/rough/axe"));
 
-        // Coonversion recipes
-        toolConversion(consumer, GearItemSets.SWORD.gearItem(), Const.Parts.SWORD_BLADE, 2, Items.NETHERITE_SWORD, Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD);
-        toolConversion(consumer, GearItemSets.PICKAXE.gearItem(), Const.Parts.PICKAXE_HEAD, 3, Items.NETHERITE_PICKAXE, Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE);
-        toolConversion(consumer, GearItemSets.SHOVEL.gearItem(), Const.Parts.SHOVEL_HEAD, 1, Items.NETHERITE_SHOVEL, Items.DIAMOND_SHOVEL, Items.GOLDEN_SHOVEL, Items.IRON_SHOVEL, Items.STONE_SHOVEL, Items.WOODEN_SHOVEL);
-        toolConversion(consumer, GearItemSets.AXE.gearItem(), Const.Parts.AXE_HEAD, 3, Items.NETHERITE_AXE, Items.DIAMOND_AXE, Items.GOLDEN_AXE, Items.IRON_AXE, Items.STONE_AXE, Items.WOODEN_AXE);
-        toolConversion(consumer, GearItemSets.HOE.gearItem(), Const.Parts.HOE_HEAD, 2, Items.NETHERITE_HOE, Items.DIAMOND_HOE, Items.GOLDEN_HOE, Items.IRON_HOE, Items.STONE_HOE, Items.WOODEN_HOE);
-        armorConversion(consumer, GearItemSets.HELMET.gearItem(), Const.Parts.HELMET_PLATES, 5, Items.NETHERITE_HELMET, Items.DIAMOND_HELMET, Items.GOLDEN_HELMET, Items.IRON_HELMET, Items.LEATHER_HELMET);
-        armorConversion(consumer, GearItemSets.CHESTPLATE.gearItem(), Const.Parts.CHESTPLATE_PLATES, 8, Items.NETHERITE_CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.IRON_CHESTPLATE, Items.LEATHER_CHESTPLATE);
-        armorConversion(consumer, GearItemSets.LEGGINGS.gearItem(), Const.Parts.LEGGINGS_PLATES, 7, Items.NETHERITE_LEGGINGS, Items.DIAMOND_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.IRON_LEGGINGS, Items.LEATHER_LEGGINGS);
-        armorConversion(consumer, GearItemSets.BOOTS.gearItem(), Const.Parts.BOOTS_PLATES, 4, Items.NETHERITE_BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
+        // Conversion recipes
+        toolConversion(consumer, GearItemSets.SWORD, 2, Items.NETHERITE_SWORD, Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD);
+        toolConversion(consumer, GearItemSets.PICKAXE, 3, Items.NETHERITE_PICKAXE, Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE);
+        toolConversion(consumer, GearItemSets.SHOVEL, 1, Items.NETHERITE_SHOVEL, Items.DIAMOND_SHOVEL, Items.GOLDEN_SHOVEL, Items.IRON_SHOVEL, Items.STONE_SHOVEL, Items.WOODEN_SHOVEL);
+        toolConversion(consumer, GearItemSets.AXE, 3, Items.NETHERITE_AXE, Items.DIAMOND_AXE, Items.GOLDEN_AXE, Items.IRON_AXE, Items.STONE_AXE, Items.WOODEN_AXE);
+        toolConversion(consumer, GearItemSets.HOE, 2, Items.NETHERITE_HOE, Items.DIAMOND_HOE, Items.GOLDEN_HOE, Items.IRON_HOE, Items.STONE_HOE, Items.WOODEN_HOE);
+        armorConversion(consumer, GearItemSets.HELMET, 5, Items.NETHERITE_HELMET, Items.DIAMOND_HELMET, Items.GOLDEN_HELMET, Items.IRON_HELMET, Items.LEATHER_HELMET);
+        armorConversion(consumer, GearItemSets.CHESTPLATE, 8, Items.NETHERITE_CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.IRON_CHESTPLATE, Items.LEATHER_CHESTPLATE);
+        armorConversion(consumer, GearItemSets.LEGGINGS, 7, Items.NETHERITE_LEGGINGS, Items.DIAMOND_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.IRON_LEGGINGS, Items.LEATHER_LEGGINGS);
+        armorConversion(consumer, GearItemSets.BOOTS, 4, Items.NETHERITE_BOOTS, Items.DIAMOND_BOOTS, Items.GOLDEN_BOOTS, Items.IRON_BOOTS, Items.LEATHER_BOOTS);
     }
 
     private void registerModifierKits(RecipeOutput consumer) {
@@ -1595,15 +1595,15 @@ public class ModRecipesProvider extends LibRecipeProvider {
             .put(ArmorMaterials.LEATHER, Const.Materials.LEATHER)
             .build();
 
-    private void toolConversion(RecipeOutput consumer, GearItem result, DataResource<GearPart> mainPart, int mainCount, Item... toolItems) {
+    private void toolConversion(RecipeOutput consumer, GearItemSet<? extends GearItem> itemSet, int mainCount, Item... toolItems) {
         for (Item input : toolItems) {
             assert input instanceof TieredItem;
             Tier tier = ((TieredItem) input).getTier();
             DataResource<Material> coating = tier == Tiers.NETHERITE ? Const.Materials.NETHERITE : null;
-            shapelessConversion(RecipeCategory.MISC, result,
+            shapelessConversion(RecipeCategory.MISC, itemSet.gearItem(),
                     buildConversionParts(
-                            result.getGearType(),
-                            mainPart,
+                            itemSet.type(),
+                            DataResource.part(itemSet.partName()),
                             TOOL_MATERIALS.getOrDefault(tier, Const.Materials.EMERALD), mainCount,
                             Const.Materials.WOOD,
                             coating
@@ -1614,15 +1614,15 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
     }
 
-    private void armorConversion(RecipeOutput consumer, GearItem result, DataResource<GearPart> mainPart, int mainCount, Item... armorItems) {
+    private void armorConversion(RecipeOutput consumer, GearItemSet<? extends GearItem> itemSet, int mainCount, Item... armorItems) {
         for (Item input : armorItems) {
             assert input instanceof ArmorItem;
             var armorMaterial = ((ArmorItem) input).getMaterial();
             DataResource<Material> coating = armorMaterial == ArmorMaterials.NETHERITE ? Const.Materials.NETHERITE : null;
-            shapelessConversion(RecipeCategory.MISC, result,
+            shapelessConversion(RecipeCategory.MISC, itemSet.gearItem(),
                     buildConversionParts(
-                            result.getGearType(),
-                            mainPart,
+                            itemSet.type(),
+                            DataResource.part(itemSet.partName()),
                             ARMOR_MATERIALS.getOrDefault(armorMaterial, Const.Materials.EMERALD), mainCount,
                             null,
                             coating

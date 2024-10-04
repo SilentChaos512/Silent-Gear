@@ -27,10 +27,40 @@
                 "count": 1,
                 "id": "silentgear:boot_plates"
               },
-              "part": "silentgear:armor_body"
+              "part": "silentgear:boot_plates"
             }
           ],
           "repairedCount": 0
+        },
+        "silentgear:model_index": -1,
+        "silentgear:model_key": "boots:null,",
+        "silentgear:properties": {
+          "silentgear:armor": 0.0,
+          "silentgear:armor_durability": 0.0,
+          "silentgear:armor_toughness": 0.0,
+          "silentgear:attack_damage": 0.0,
+          "silentgear:attack_reach": 6.0,
+          "silentgear:attack_speed": 0.0,
+          "silentgear:block_reach": 0.0,
+          "silentgear:charging_value": 0.0,
+          "silentgear:draw_speed": 0.0,
+          "silentgear:durability": 0.0,
+          "silentgear:enchantment_value": 0.0,
+          "silentgear:harvest_speed": 0.0,
+          "silentgear:harvest_tier": {
+            "incorrect_blocks_for_tool": "minecraft:incorrect_for_wooden_tool",
+            "name": "wood"
+          },
+          "silentgear:knockback_resistance": 0.0,
+          "silentgear:magic_armor": 0.0,
+          "silentgear:magic_damage": 0.0,
+          "silentgear:projectile_accuracy": 0.0,
+          "silentgear:projectile_speed": 0.0,
+          "silentgear:ranged_damage": 0.0,
+          "silentgear:rarity": 0.0,
+          "silentgear:repair_efficiency": 0.0,
+          "silentgear:repair_value": 0.0,
+          "silentgear:traits": []
         }
       },
       "count": 1,

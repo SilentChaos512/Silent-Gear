@@ -66,6 +66,10 @@ public final class GearItemSet<I extends Item> {
         return this.type.getId().getPath();
     }
 
+    public String partName() {
+        return this.partName;
+    }
+
     public I gearItem() {
         return this.gearItem.get();
     }
