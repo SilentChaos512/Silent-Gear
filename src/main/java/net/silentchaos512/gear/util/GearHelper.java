@@ -470,10 +470,10 @@ public final class GearHelper {
     }
 
     // Formerly onUpdate
-    public static void inventoryTick(ItemStack stack, Level world, Entity entity, int itemSlot, boolean isSelected) {
+    public static void inventoryTick(ItemStack stack, Level world, Entity entity, int itemSlot, boolean isEquipped) {
         if (!world.isClientSide) {
             @Nullable Player player = entity instanceof Player ? (Player) entity : null;
-            TraitHelper.tickTraits(world, player, stack, isSelected);
+            TraitHelper.tickTraits(world, player, stack, isEquipped);
         }
     }
 

@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-4.0.2] - Unreleased
+### Added
+- Super Mixer. Can make alloys from anything. Work in progress, no recipe yet.
+  - This effectively replaces the "legacy mixing" option if you were to add an extremely cheap recipe for it...
+### Fixed
+- Wielder effect traits like Flame Ward not working correctly
+
 ## [1.21.1-4.0.1] - 2024-10-03
 ### Fixed
 - Build against current version of Caelus

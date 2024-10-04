@@ -82,7 +82,7 @@ public class WielderEffectTraitEffect extends TraitEffect {
 
         if (gearType.matches(entryType, true)) {
             int setPieceCount = getSetPieceCount(context, entryType, player);
-            boolean hasFullSet = !"armor".equals(entryType) || setPieceCount >= 4;
+            boolean hasFullSet = !entryType.matches(GearTypes.ARMOR.get()) || setPieceCount >= 4;
 
             for (PotionData potionData : effects) {
                 MobEffectInstance effect = potionData.getEffect(context.traitLevel(), setPieceCount, hasFullSet);
