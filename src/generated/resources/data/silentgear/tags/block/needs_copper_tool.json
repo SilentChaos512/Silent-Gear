@@ -5,6 +5,10 @@
     "minecraft:gold_ore",
     "minecraft:deepslate_gold_ore",
     "minecraft:redstone_ore",
-    "minecraft:deepslate_redstone_ore"
+    "minecraft:deepslate_redstone_ore",
+    {
+      "id": "#c:ores/silver",
+      "required": false
+    }
   ]
 }

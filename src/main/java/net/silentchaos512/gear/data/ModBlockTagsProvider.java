@@ -2,6 +2,7 @@ package net.silentchaos512.gear.data;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -54,7 +55,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                         Blocks.DEEPSLATE_GOLD_ORE,
                         Blocks.REDSTONE_ORE,
                         Blocks.DEEPSLATE_REDSTONE_ORE
-                );
+                )
+                .addOptionalTag(ResourceLocation.fromNamespaceAndPath("c", "ores/silver"));
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(SgBlocks.RAW_AZURE_SILVER_BLOCK.get())
                 .add(SgBlocks.RAW_CRIMSON_IRON_BLOCK.get());
