@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-4.0.1] - 2024-10-03
+### Fixed
+- Build against current version of Caelus
+
 ## [1.21.1-4.0.0] - 2024-10-03
 NeoForge 1.21.1 (and 1.21) port! Lots of internal changes: expect bugs!
 ### Known Bugs/Issues

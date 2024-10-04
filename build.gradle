@@ -151,9 +151,8 @@ dependencies {
 
     // Caelus
     dependencies {
-        // FIXME: MC version
-//        runtimeOnly "top.theillusivec4.caelus:caelus-neoforge:${caelus_version}+1.20.6"
-        compileOnly "top.theillusivec4.caelus:caelus-neoforge:${caelus_version}+1.20.6:api"
+        runtimeOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}+${minecraft_version}"
+        compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}+${minecraft_version}:api"
     }
 }
 
