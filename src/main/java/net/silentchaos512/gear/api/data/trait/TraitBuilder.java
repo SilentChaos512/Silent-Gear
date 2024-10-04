@@ -45,6 +45,9 @@ public class TraitBuilder {
     }
 
     public TraitBuilder effects(TraitEffect first, TraitEffect... rest) {
+        if (!this.effects.isEmpty()) {
+            throw new IllegalStateException("Already called 'effects' on this TraitBuilder!");
+        }
         this.effects.add(first);
         if (rest.length > 0) {
             this.effects.addAll(Arrays.stream(rest).toList());
