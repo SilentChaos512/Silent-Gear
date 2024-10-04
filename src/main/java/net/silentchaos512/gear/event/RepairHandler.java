@@ -28,7 +28,7 @@ public final class RepairHandler {
 
             if (material != null) {
                 handleGearRepair(event, material);
-            } else if (part != null && part.get() instanceof UpgradeGearPart) {
+            } else if (part != null && part.isValid() && part.get() instanceof UpgradeGearPart) {
                 handleUpgradeApplication(event, part);
             }
         }

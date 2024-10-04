@@ -168,7 +168,6 @@ public final class Const {
 
     public static final class Parts {
         // Try not to use these; use GearItemSet when possible
-        public static final DataResource<GearPart> ARMOR_BODY = DataResource.part("armor_body");
         public static final DataResource<GearPart> AXE_HEAD = DataResource.part("axe_head");
         public static final DataResource<GearPart> BINDING = DataResource.part("binding");
         public static final DataResource<GearPart> BOOTS_PLATES = DataResource.part("boot_plates");

@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
@@ -14,7 +15,6 @@ import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
@@ -129,6 +129,10 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
         return null;
     }
 
+    public boolean isValid() {
+        return this.part.isPresent();
+    }
+
     @Override
     public ResourceLocation getId() {
         return part.getId();
@@ -223,9 +227,12 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
     }
 
     public int getColor(ItemStack gear, int layer, int animationFrame) {
+        return getColor(GearHelper.getType(gear), layer, animationFrame);
+    }
+
+    public int getColor(GearType gearType, int layer, int animationFrame) {
         var part = getNullable();
         if (part != null) {
-            var gearType = GearHelper.getType(gear);
             return part.getColor(this, gearType, layer, animationFrame);
         }
         return Color.VALUE_WHITE;
@@ -240,6 +247,12 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
     public void onRemoveFromGear(ItemStack gear) {
         if (this.part.isPresent()) {
             this.part.get().onRemoveFromGear(gear, this);
+        }
+    }
+
+    public void addInformation(ItemStack gear, List<Component> tooltip, TooltipFlag flag) {
+        if (this.part.isPresent()) {
+            this.part.get().addInformation(this, gear, tooltip, flag);
         }
     }
 

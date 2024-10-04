@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
@@ -16,7 +17,6 @@ import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyGroups;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.client.KeyTracker;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -30,7 +30,6 @@ import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
@@ -74,9 +73,8 @@ public final class GearClientHelper {
 
         if (!Config.Client.vanillaStyleTooltips.get()) {
             // Let parts add information if they need to
-            //Collections.reverse(constructionParts);
-            for (PartInstance data : sortedConstructionParts) {
-                data.get().addInformation(data, stack, tooltip, flag);
+            for (PartInstance part : sortedConstructionParts) {
+                part.addInformation(stack, tooltip, flag);
             }
         }
 
@@ -151,7 +149,7 @@ public final class GearClientHelper {
         TextListBuilder builder = new TextListBuilder();
 
         for (PartInstance part : parts) {
-            if (part.get().isVisible()) {
+            if (part.isValid() && part.get().isVisible()) {
                 int partNameColor = Color.blend(part.getColor(gear), Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
                 MutableComponent partNameText = TextUtil.withColor(part.getDisplayName().copy(), partNameColor);
                 builder.add(flag.isAdvanced()

@@ -371,7 +371,7 @@ public final class GearData {
      * @param part The upgrade part
      */
     public static void addUpgradePart(ItemStack gear, PartInstance part) {
-        if (!GearHelper.isGear(gear)) return;
+        if (!GearHelper.isGear(gear) || !part.isValid()) return;
 
         List<PartInstance> parts = new ArrayList<>(getConstruction(gear).parts());
 
@@ -418,7 +418,7 @@ public final class GearData {
         if (checkNonGearItem(gear, "hasPart")) return false;
 
         for (var partInstance : getConstruction(gear).parts()) {
-            if (partInstance.get() == part) {
+            if (partInstance.isValid() && partInstance.get() == part) {
                 return true;
             }
         }

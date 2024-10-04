@@ -13,8 +13,10 @@ public class GearNamePrefixesEvent extends GearItemEvent {
     public GearNamePrefixesEvent(ItemStack gear, Collection<PartInstance> parts) {
         super(gear, parts);
         parts.forEach(p -> {
-            var gearPart = p.get();
-            prefixes.add(gearPart.getDisplayNamePrefix(p, gear));
+            var gearPart = p.getNullable();
+            if (gearPart != null) {
+                prefixes.add(gearPart.getDisplayNamePrefix(p, gear));
+            }
         });
     }
 

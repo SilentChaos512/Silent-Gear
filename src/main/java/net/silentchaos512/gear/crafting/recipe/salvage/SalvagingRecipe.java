@@ -86,7 +86,7 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
      */
     public static List<ItemStack> salvagePart(PartInstance part) {
         ItemStack partStack = part.getItem();
-        if (part.get() instanceof CoreGearPart && partStack.getItem() instanceof CompoundPartItem compoundPartItem) {
+        if (part.isValid() && part.get() instanceof CoreGearPart && partStack.getItem() instanceof CompoundPartItem compoundPartItem) {
             List<MaterialInstance> materialsInPart = CompoundPartItem.getMaterials(partStack);
             int craftedCount = materialsInPart.size();
             if (craftedCount < 1) {

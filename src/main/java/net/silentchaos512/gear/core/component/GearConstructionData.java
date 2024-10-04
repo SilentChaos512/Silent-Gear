@@ -70,7 +70,7 @@ public record GearConstructionData(
     @Nullable
     public MaterialInstance getMainTextureMaterial() {
         var part = getCoatingOrMainPart();
-        if (part != null && part.get() instanceof CoreGearPart) {
+        if (part != null && part.isValid() && part.get() instanceof CoreGearPart) {
             return CompoundPartItem.getPrimaryMaterial(part.getItem());
         }
         return null;

@@ -120,7 +120,7 @@ public final class ColorUtils {
         var list = GearData.getConstruction(stack).parts().getPartsOfType(partType);
         if (!list.isEmpty()) {
             var part = list.getFirst();
-            int color = part.get().getColor(part, GearHelper.getType(stack), 0, 0);
+            int color = part.getColor(GearHelper.getType(stack), 0, 0);
             setCachedColor(stack, partType, 0, color);
             return color;
         }

@@ -67,6 +67,7 @@ public class GearElytraItem extends ElytraItem implements GearArmor {
 
     @Override
     public boolean supportsPart(ItemStack gear, PartInstance part) {
+        if (!part.isValid()) return false;
         PartType type = part.getType();
         boolean canAdd = part.get().canAddToGear(gear, part);
         boolean supported = (requiresPartOfType(part.getType()) && canAdd) || canAdd;

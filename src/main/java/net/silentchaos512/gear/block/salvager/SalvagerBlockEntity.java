@@ -172,7 +172,7 @@ public class SalvagerBlockEntity extends BaseContainerBlockEntity implements Wor
             ItemStack copy = part.copy();
             int count = copy.getCount();
             PartInstance partData = PartInstance.from(part);
-            double partLossRate = partData != null
+            double partLossRate = partData != null && partData.isValid()
                     ? partData.get().getSalvageLossRate(partData, stack, lossRate)
                     : lossRate;
 

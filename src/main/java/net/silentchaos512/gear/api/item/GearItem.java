@@ -59,6 +59,7 @@ public interface GearItem extends ItemLike {
     }
 
     default boolean supportsPart(ItemStack gear, PartInstance part) {
+        if (!part.isValid()) return false;
         boolean canAdd = part.get().canAddToGear(gear, part);
         return (requiresPartOfType(part.getType()) && canAdd) || canAdd;
     }

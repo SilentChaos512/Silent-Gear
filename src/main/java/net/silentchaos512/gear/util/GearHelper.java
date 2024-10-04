@@ -372,7 +372,11 @@ public final class GearHelper {
 
     private static void damageParts(ItemStack stack, int amount) {
         var construction = GearData.getConstruction(stack);
-        construction.parts().forEach(p -> p.get().onGearDamaged(p, stack, amount));
+        construction.parts().forEach(part -> {
+            if (part.isValid()) {
+                part.get().onGearDamaged(part, stack, amount);
+            }
+        });
     }
 
     //endregion
