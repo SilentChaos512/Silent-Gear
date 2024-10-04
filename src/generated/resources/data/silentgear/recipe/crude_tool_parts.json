@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:cobblestones"
+    },
+    {
+      "tag": "minecraft:dirt"
+    },
+    {
+      "tag": "c:rods/wooden"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "silentgear:crude_tool_parts"
+  }
+}

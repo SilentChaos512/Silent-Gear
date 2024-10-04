@@ -156,13 +156,15 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.CROSSBOW.gearItem());
         builder(SgTags.Items.HAMMERS,
                 GearItemSets.HAMMER.gearItem(),
-                GearItemSets.PROSPECTOR_HAMMER.gearItem());
+                GearItemSets.PROSPECTOR_HAMMER.gearItem(),
+                SgItems.CRUDE_HAMMER);
         builder(ItemTags.HOES,
                 GearItemSets.HOE.gearItem(),
                 GearItemSets.MATTOCK.gearItem());
         builder(SgTags.Items.KNIVES,
                 GearItemSets.KNIFE.gearItem(),
-                GearItemSets.DAGGER.gearItem());
+                GearItemSets.DAGGER.gearItem(),
+                SgItems.CRUDE_KNIFE);
         builder(ItemTags.PICKAXES,
                 GearItemSets.HAMMER.gearItem(),
                 GearItemSets.PAXEL.gearItem(),

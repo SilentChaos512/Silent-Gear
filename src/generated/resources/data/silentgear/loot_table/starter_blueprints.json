@@ -46,7 +46,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "silentgear:knife_blueprint"
+          "name": "silentgear:hoe_blueprint"
         }
       ],
       "rolls": 1.0
@@ -56,33 +56,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "silentgear:sword_blueprint",
-          "weight": 11
-        },
-        {
-          "type": "minecraft:item",
-          "name": "silentgear:katana_blueprint",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
-          "name": "silentgear:machete_blueprint",
-          "weight": 7
-        },
-        {
-          "type": "minecraft:item",
-          "name": "silentgear:spear_blueprint",
-          "weight": 8
-        }
-      ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "silentgear:shield_blueprint"
+          "name": "silentgear:sword_blueprint"
         }
       ],
       "rolls": 1.0

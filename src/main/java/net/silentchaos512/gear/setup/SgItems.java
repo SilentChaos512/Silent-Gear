@@ -65,6 +65,11 @@ public final class SgItems {
     public static final DeferredItem<Item> COATING_SMITHING_TEMPLATE = register("coating_smithing_template", () ->
             new Item(baseProps()));
 
+    public static final DeferredItem<Item> CRUDE_KNIFE = register("crude_knife", () ->
+            new Item(baseProps().durability(32)));
+    public static final DeferredItem<Item> CRUDE_HAMMER = register("crude_hammer", () ->
+            new Item(baseProps().durability(32)));
+
     //region Blueprints and templates
     public static final DeferredItem<BlueprintBookItem> BLUEPRINT_BOOK = register("blueprint_book", () ->
             new BlueprintBookItem(unstackableProps().rarity(Rarity.UNCOMMON)));

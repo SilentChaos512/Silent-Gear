@@ -90,6 +90,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         registerSpecialRecipes(consumer);
         registerCraftingItems(consumer);
+        registerCrudeTools(consumer);
         registerBlueprints(consumer);
         registerCompoundParts(consumer);
         registerGear(consumer);
@@ -820,6 +821,13 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_template_board", has(SgTags.Items.TEMPLATE_BOARDS))
                 .save(consumer);
 
+        shapeless(RecipeCategory.MISC, CraftingItems.CRUDE_TOOL_PARTS, 4)
+                .requires(Tags.Items.COBBLESTONES)
+                .requires(ItemTags.DIRT)
+                .requires(Tags.Items.RODS_WOODEN)
+                .unlockedBy("has_item", has(Tags.Items.RODS_WOODEN))
+                .save(consumer);
+
         // TODO: stone anvil recipe
         /*damageGear(CraftingItems.GLOWING_DUST, 4, 4)
                 .requires()(ModTags.Items.HAMMERS)
@@ -1261,6 +1269,23 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .define('d', dye)
                 .unlockedBy("has_item", has(SgBlocks.WHITE_FLUFFY_BLOCK))
                 .save(consumer);
+    }
+
+    private void registerCrudeTools(RecipeOutput output) {
+        shaped(RecipeCategory.TOOLS, SgItems.CRUDE_KNIFE)
+                .pattern("#")
+                .pattern("/")
+                .define('#', Tags.Items.COBBLESTONES)
+                .define('/', CraftingItems.CRUDE_TOOL_PARTS)
+                .unlockedBy("has_item", has(CraftingItems.CRUDE_TOOL_PARTS))
+                .save(output);
+        shaped(RecipeCategory.TOOLS, SgItems.CRUDE_HAMMER)
+                .pattern("##")
+                .pattern(" /")
+                .define('#', Tags.Items.COBBLESTONES)
+                .define('/', CraftingItems.CRUDE_TOOL_PARTS)
+                .unlockedBy("has_item", has(CraftingItems.CRUDE_TOOL_PARTS))
+                .save(output);
     }
 
     private void registerSmithing(RecipeOutput consumer) {

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 public enum CraftingItems implements ItemLike {
+    CRUDE_TOOL_PARTS,
     BLUEPRINT_PAPER,
     TEMPLATE_BOARD,
     UPGRADE_BASE,

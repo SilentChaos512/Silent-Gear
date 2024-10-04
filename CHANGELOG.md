@@ -5,8 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.21.1-4.0.2] - Unreleased
 ### Added
+- Crude Knife and Crude Hammer. These are very cheap to craft and can be used with stone anvil recipes.
 - Super Mixer. Can make alloys from anything. Work in progress, no recipe yet.
   - This effectively replaces the "legacy mixing" option if you were to add an extremely cheap recipe for it...
+### Changed
+- Default loot table for the blueprint package changed to give blueprints for: rod, pickaxe, shovel, axe, hoe, and sword
 ### Fixed
 - Wielder effect traits like Flame Ward not working correctly
 - Saws crashing the game when used [#692]

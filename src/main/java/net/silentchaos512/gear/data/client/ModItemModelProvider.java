@@ -124,6 +124,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         builder(SgItems.CRIMSON_REPAIR_KIT, itemGenerated);
         builder(SgItems.AZURE_REPAIR_KIT, itemGenerated);
 
+        // Crude tools
+        builder(SgItems.CRUDE_KNIFE, itemGenerated);
+        builder(SgItems.CRUDE_HAMMER, itemGenerated);
+
         // Smithing templates
         builder(SgItems.COATING_SMITHING_TEMPLATE, itemGenerated);
 
