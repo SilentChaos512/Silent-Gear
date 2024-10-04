@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - This effectively replaces the "legacy mixing" option if you were to add an extremely cheap recipe for it...
 ### Fixed
 - Wielder effect traits like Flame Ward not working correctly
+- Saws crashing the game when used [#692]
 - Boots and leggings conversion recipes producing invalid items [#693]
 - Gear items with invalid parts crashing the game [#693]
 

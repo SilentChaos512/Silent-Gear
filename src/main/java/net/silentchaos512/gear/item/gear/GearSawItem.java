@@ -11,12 +11,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.BreakEventHandler;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.Config;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -150,28 +148,19 @@ public class GearSawItem extends GearAxeItem implements BreakEventHandler {
                         float localHardness = localState.getDestroySpeed(world, localPos);
 
                         if (isCorrectToolForDrops(result.tool, localState) && localHardness >= 0) {
-                            // Block break event
-                            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, localPos, localState, result.player);
-                            NeoForge.EVENT_BUS.post(event);
-                            boolean cancel = event.isCanceled();
-
                             int xDist = xPos - startPos.getX();
                             int yDist = yPos - startPos.getY();
                             int zDist = zPos - startPos.getZ();
 
                             if (9 * xDist * xDist + yDist * yDist + 9 * zDist * zDist < 1000) {
-                                if (cancel) {
-                                    breakTree(result, world, localPos, startPos, recursionDepth + 1);
-                                } else {
-                                    if (!result.player.getAbilities().instabuild) {
-                                        localBlock.playerDestroy(world, result.player, pos, localState, world.getBlockEntity(pos), result.tool);
-                                        mineBlock(result.tool, world, localState, localPos, result.player);
-                                        ++result.blocksBroken;
-                                    }
-
-                                    world.removeBlock(localPos, false);
-                                    breakTree(result, world, localPos, startPos, recursionDepth + 1);
+                                if (!result.player.getAbilities().instabuild) {
+                                    localBlock.playerDestroy(world, result.player, pos, localState, world.getBlockEntity(pos), result.tool);
+                                    mineBlock(result.tool, world, localState, localPos, result.player);
+                                    ++result.blocksBroken;
                                 }
+
+                                world.removeBlock(localPos, false);
+                                breakTree(result, world, localPos, startPos, recursionDepth + 1);
                             }
                         }
                     }
