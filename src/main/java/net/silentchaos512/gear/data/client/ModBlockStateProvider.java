@@ -104,10 +104,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         orientableMachineBlock(SgBlocks.METAL_PRESS, "metal_press");
         orientableMachineBlock(SgBlocks.SALVAGER, "salvager");
 
-        // Compounders
+        // Alloy Makers
         orientableMachineBlock(SgBlocks.ALLOY_FORGE, "alloy_forge");
         orientableMachineBlock(SgBlocks.RECRYSTALLIZER, "recrystallizer");
         orientableMachineBlock(SgBlocks.REFABRICATOR, "refabricator");
+        simpleBlock(SgBlocks.SUPER_MIXER.get());
 
         // Plants
         getVariantBuilder(SgBlocks.FLAX_PLANT.get()).forAllStates(state -> {

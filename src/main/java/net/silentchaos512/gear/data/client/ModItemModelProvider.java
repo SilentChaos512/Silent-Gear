@@ -74,6 +74,10 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer0", "item/hybrid_gem")
                 .texture("layer1", "item/hybrid_gem_highlight");
         builder(SgItems.MIXED_FABRIC, itemGenerated, "item/mixed_fabric");
+        builder(SgItems.SUPER_ALLOY)
+                .parent(itemGenerated)
+                .texture("layer0", "item/super_alloy")
+                .texture("layer1", "item/super_alloy_highlight");
 
         // Custom materials
         builder(SgItems.CUSTOM_INGOT)

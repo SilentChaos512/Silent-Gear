@@ -1,5 +1,5 @@
 {
-  "type": "silentgear:compounding/gem",
+  "type": "silentgear:alloy_making/gem",
   "ingredients": [
     {
       "tag": "c:gems/diamond"

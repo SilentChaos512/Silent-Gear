@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.silentchaos512.gear.block.compounder.AlloyMakerContainer;
+import net.silentchaos512.gear.block.alloymaker.AlloyMakerContainer;
 import net.silentchaos512.gear.item.ICycleItem;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.network.payload.client.*;

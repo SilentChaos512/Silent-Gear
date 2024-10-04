@@ -14,7 +14,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
-import net.silentchaos512.gear.block.compounder.AlloyMakerBlockEntity;
+import net.silentchaos512.gear.block.alloymaker.AlloyMakerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.block.press.MetalPressBlockEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerBlockEntity;
@@ -23,6 +23,7 @@ import net.silentchaos512.gear.client.renderer.blockentity.StoneAnvilRenderer;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.SuperAlloyRecipe;
 import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifier;
 import net.silentchaos512.gear.util.Const;
 
@@ -39,7 +40,7 @@ public final class SgBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<MetalAlloyRecipe>>> ALLOY_FORGE = register(
             "alloy_forge",
-            (pos, state) -> new AlloyMakerBlockEntity<>(Const.METAL_COMPOUNDER_INFO, pos, state),
+            (pos, state) -> new AlloyMakerBlockEntity<>(Const.METAL_ALLOY_MAKER_INFO, pos, state),
             SgBlocks.ALLOY_FORGE
     );
 
@@ -51,14 +52,20 @@ public final class SgBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<GemAlloyRecipe>>> RECRYSTALLIZER = register(
             "recrystallizer",
-            (pos, state) -> new AlloyMakerBlockEntity<>(Const.GEM_COMPOUNDER_INFO, pos, state),
+            (pos, state) -> new AlloyMakerBlockEntity<>(Const.GEM_ALLOY_MAKER_INFO, pos, state),
             SgBlocks.RECRYSTALLIZER
     );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<FabricAlloyRecipe>>> REFABRICATOR = register(
             "refabricator",
-            (pos, state) -> new AlloyMakerBlockEntity<>(Const.FABRIC_COMPOUNDER_INFO, pos, state),
+            (pos, state) -> new AlloyMakerBlockEntity<>(Const.FABRIC_ALLOY_MAKER_INFO, pos, state),
             SgBlocks.REFABRICATOR
+    );
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<SuperAlloyRecipe>>> SUPER_MIXER = register(
+            "super_mixer",
+            (pos, state) -> new AlloyMakerBlockEntity<>(Const.SUPER_MIXER_INFO, pos, state),
+            SgBlocks.SUPER_MIXER
     );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SalvagerBlockEntity>> SALVAGER = register(

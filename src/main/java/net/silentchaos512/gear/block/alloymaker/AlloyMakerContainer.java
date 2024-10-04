@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.block.compounder;
+package net.silentchaos512.gear.block.alloymaker;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;

@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.block.compounder;
+package net.silentchaos512.gear.block.alloymaker;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -77,7 +77,9 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
     public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
         Set<Component> catNameSet = this.info.getCategories().stream().map(IMaterialCategory::getDisplayName).collect(Collectors.toSet());
         Component catStr = TextUtil.separatedList(catNameSet);
-        tooltip.add(TextUtil.translate("block", "compounder.desc", catStr));
+        if (catStr != null) {
+            tooltip.add(TextUtil.translate("block", "compounder.desc", catStr));
+        }
     }
 
     @Nullable

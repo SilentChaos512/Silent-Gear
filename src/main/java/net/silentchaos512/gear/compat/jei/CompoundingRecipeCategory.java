@@ -12,9 +12,10 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.block.compounder.AlloyMakerInfo;
-import net.silentchaos512.gear.block.compounder.AlloyMakerScreen;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.block.alloymaker.AlloyMakerInfo;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
@@ -25,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
+    public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/alloy_maker.png");
 
     private static final int GUI_START_X = 15;
     private static final int GUI_START_Y = 29;
@@ -39,21 +41,23 @@ public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
 
     public CompoundingRecipeCategory(AlloyMakerInfo<?> info, String categoryName, IGuiHelper guiHelper) {
         this.info = info;
-        background = guiHelper.createDrawable(AlloyMakerScreen.TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
+        background = guiHelper.createDrawable(TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
         icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(info.getBlock()));
-        arrow = guiHelper.drawableBuilder(AlloyMakerScreen.TEXTURE, 176, 14, 24, 17)
+        arrow = guiHelper.drawableBuilder(TEXTURE, 176, 14, 24, 17)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
         localizedName = TextUtil.translate("jei", "group.compounding." + categoryName);
     }
 
     @Override
     public RecipeType<AlloyRecipe> getRecipeType() {
-        if (this.info == Const.FABRIC_COMPOUNDER_INFO) {
+        if (this.info == Const.FABRIC_ALLOY_MAKER_INFO) {
             return SGearJeiPlugin.COMPOUNDING_FABRIC_TYPE;
-        } else if (this.info == Const.GEM_COMPOUNDER_INFO) {
+        } else if (this.info == Const.GEM_ALLOY_MAKER_INFO) {
             return SGearJeiPlugin.COMPOUNDING_GEM_TYPE;
-        } else if (this.info == Const.METAL_COMPOUNDER_INFO) {
+        } else if (this.info == Const.METAL_ALLOY_MAKER_INFO) {
             return SGearJeiPlugin.COMPOUNDING_METAL_TYPE;
+        } else if (this.info == Const.SUPER_MIXER_INFO) {
+            return SGearJeiPlugin.COMPOUNDING_SUPER_TYPE;
         } else {
             throw new IllegalStateException("Unknown JEI recipe type: " + this.info.getRecipeType());
         }
@@ -82,7 +86,7 @@ public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
                     .addIngredients(VanillaTypes.ITEM_STACK, shiftIngredients(items, 3 * i));
         }
         builder.addSlot(RecipeIngredientRole.OUTPUT, 126 - GUI_START_X, 35 - GUI_START_Y)
-                        .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem(null)));
+                .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem(null)));
     }
 
     private static List<ItemStack> shiftIngredients(List<ItemStack> list, int amount) {

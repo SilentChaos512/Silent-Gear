@@ -11,9 +11,9 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.item.*;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
@@ -132,6 +132,8 @@ public final class SgItems {
     public static final DeferredItem<CompoundMaterialItem> HYBRID_GEM = register("hybrid_gem", () ->
             new CompoundMaterialItem(baseProps()));
     public static final DeferredItem<CompoundMaterialItem> MIXED_FABRIC = register("mixed_fabric", () ->
+            new CompoundMaterialItem(baseProps()));
+    public static final DeferredItem<CompoundMaterialItem> SUPER_ALLOY = register("super_alloy", () ->
             new CompoundMaterialItem(baseProps()));
 
     // Custom materials

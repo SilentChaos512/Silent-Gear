@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.block.compounder.AlloyMakerInfo;
+import net.silentchaos512.gear.block.alloymaker.AlloyMakerInfo;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CustomMaterialItem;

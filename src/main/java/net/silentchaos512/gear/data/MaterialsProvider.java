@@ -1116,6 +1116,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(compoundBuilder(modId("hybrid_gem"), SgItems.HYBRID_GEM));
         ret.add(compoundBuilder(modId("metal_alloy"), SgItems.ALLOY_INGOT));
         ret.add(compoundBuilder(modId("mixed_fabric"), SgItems.MIXED_FABRIC));
+        ret.add(compoundBuilder(modId("super_alloy"), SgItems.SUPER_ALLOY));
 
         // Dimerald
         ret.add(customCompoundBuilder(modId("dimerald"), SgItems.CUSTOM_GEM.get(), MaterialCategories.GEM, MaterialCategories.ADVANCED)

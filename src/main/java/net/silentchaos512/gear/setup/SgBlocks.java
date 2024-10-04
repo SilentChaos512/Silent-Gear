@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.setup;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -9,9 +10,14 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -22,7 +28,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.charger.StarlightChargerBlock;
-import net.silentchaos512.gear.block.compounder.AlloyMakerBlock;
+import net.silentchaos512.gear.block.alloymaker.AlloyMakerBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
@@ -31,6 +37,7 @@ import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.SuperAlloyRecipe;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -102,22 +109,37 @@ public final class SgBlocks {
                             .strength(5, 30)));
 
     public static final DeferredBlock<AlloyMakerBlock<MetalAlloyRecipe>> ALLOY_FORGE = register("alloy_forge", () ->
-            new AlloyMakerBlock<>(Const.METAL_COMPOUNDER_INFO,
+            new AlloyMakerBlock<>(Const.METAL_ALLOY_MAKER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final DeferredBlock<AlloyMakerBlock<GemAlloyRecipe>> RECRYSTALLIZER = register("recrystallizer", () ->
-            new AlloyMakerBlock<>(Const.GEM_COMPOUNDER_INFO,
+            new AlloyMakerBlock<>(Const.GEM_ALLOY_MAKER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final DeferredBlock<AlloyMakerBlock<FabricAlloyRecipe>> REFABRICATOR = register("refabricator", () ->
-            new AlloyMakerBlock<>(Const.FABRIC_COMPOUNDER_INFO,
+            new AlloyMakerBlock<>(Const.FABRIC_ALLOY_MAKER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
+
+    public static final DeferredBlock<AlloyMakerBlock<SuperAlloyRecipe>> SUPER_MIXER = register(
+            "super_mixer",
+            () -> new AlloyMakerBlock<>(
+                    Const.SUPER_MIXER_INFO,
+                    BlockBehaviour.Properties.of()
+                            .strength(4, 20)
+                            .sound(SoundType.METAL)
+            ) {
+                @Override
+                public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+                    return Shapes.block();
+                }
+            }
+    );
 
     public static final DeferredBlock<MetalPressBlock> METAL_PRESS = register("metal_press", () ->
             new MetalPressBlock(BlockBehaviour.Properties.of()

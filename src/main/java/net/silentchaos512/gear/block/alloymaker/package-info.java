@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package net.silentchaos512.gear.block.compounder;
+package net.silentchaos512.gear.block.alloymaker;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

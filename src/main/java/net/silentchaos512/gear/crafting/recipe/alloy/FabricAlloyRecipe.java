@@ -14,11 +14,11 @@ public class FabricAlloyRecipe extends AlloyRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return SgRecipes.COMPOUNDING_FABRIC.get();
+        return SgRecipes.ALLOY_MAKING_FABRIC.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return SgRecipes.COMPOUNDING_FABRIC_TYPE.get();
+        return SgRecipes.ALLOY_MAKING_FABRIC_TYPE.get();
     }
 }

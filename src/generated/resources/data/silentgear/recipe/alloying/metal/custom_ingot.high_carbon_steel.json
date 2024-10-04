@@ -1,5 +1,5 @@
 {
-  "type": "silentgear:compounding/metal",
+  "type": "silentgear:alloy_making/metal",
   "ingredients": [
     {
       "tag": "c:ingots/iron"

@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.block.compounder;
+package net.silentchaos512.gear.block.alloymaker;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.inventory.MenuType;
@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 
 import java.util.Collection;
@@ -43,6 +44,10 @@ public class AlloyMakerInfo<R extends AlloyRecipe> {
         this.inputSlotCount = inputSlotCount;
         this.categories = ImmutableList.copyOf(categories);
         this.recipeClass = recipeClass;
+    }
+
+    public boolean acceptsMaterial(MaterialInstance material) {
+        return this.categories.isEmpty() || material.hasAnyCategory(this.categories);
     }
 
     public AlloyMakerBlock<R> getBlock() {

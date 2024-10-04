@@ -2,7 +2,7 @@ package net.silentchaos512.gear.crafting.recipe.alloy;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
-import net.silentchaos512.gear.block.compounder.AlloyMakerBlockEntity;
+import net.silentchaos512.gear.block.alloymaker.AlloyMakerBlockEntity;
 
 public class AlloyRecipeInput implements RecipeInput {
     private final AlloyMakerBlockEntity<?> blockEntity;

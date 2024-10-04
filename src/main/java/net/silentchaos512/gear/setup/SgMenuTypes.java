@@ -13,12 +13,13 @@ import net.neoforged.neoforge.network.IContainerFactory;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.block.alloymaker.AlloyMakerContainer;
+import net.silentchaos512.gear.block.alloymaker.screen.AlloyForgeScreen;
+import net.silentchaos512.gear.block.alloymaker.screen.RecrystallizerScreen;
+import net.silentchaos512.gear.block.alloymaker.screen.RefabricatorScreen;
+import net.silentchaos512.gear.block.alloymaker.screen.SuperMixerScreen;
 import net.silentchaos512.gear.block.charger.ChargerContainerMenu;
 import net.silentchaos512.gear.block.charger.ChargerContainerScreen;
-import net.silentchaos512.gear.block.compounder.AlloyForgeScreen;
-import net.silentchaos512.gear.block.compounder.AlloyMakerContainer;
-import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
-import net.silentchaos512.gear.block.compounder.RefabricatorScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.press.MetalPressContainer;
@@ -27,6 +28,8 @@ import net.silentchaos512.gear.block.salvager.SalvagerContainer;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainerMenu;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookContainerScreen;
+
+import java.util.List;
 
 public final class SgMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(BuiltInRegistries.MENU, SilentGear.MOD_ID);
@@ -58,6 +61,17 @@ public final class SgMenuTypes {
                     buffer,
                     SgBlocks.REFABRICATOR.get().getCategories()));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> SUPER_MIXER = register(
+            "super_mixer",
+            (id, playerInventory, buf) -> new AlloyMakerContainer(
+                    getSuperMixer(),
+                    id,
+                    playerInventory,
+                    buf,
+                    List.of()
+            )
+    );
+
     public static final DeferredHolder<MenuType<?>, MenuType<SalvagerContainer>> SALVAGER = register("salvager",
             SalvagerContainer::new);
 
@@ -86,6 +100,10 @@ public final class SgMenuTypes {
         return REFABRICATOR.get();
     }
 
+    private static MenuType<?> getSuperMixer() {
+        return SUPER_MIXER.get();
+    }
+
     @OnlyIn(Dist.CLIENT)
     @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientEvents {
@@ -98,6 +116,7 @@ public final class SgMenuTypes {
             event.register(REFABRICATOR.get(), RefabricatorScreen::new);
             event.register(SALVAGER.get(), SalvagerScreen::new);
             event.register(STARLIGHT_CHARGER.get(), ChargerContainerScreen::new);
+            event.register(SUPER_MIXER.get(), SuperMixerScreen::new);
 
             event.register(BLUEPRINT_BOOK.get(), BlueprintBookContainerScreen::new);
         }

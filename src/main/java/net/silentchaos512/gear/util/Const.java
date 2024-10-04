@@ -9,18 +9,20 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.block.compounder.AlloyMakerInfo;
+import net.silentchaos512.gear.block.alloymaker.AlloyMakerInfo;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.SuperAlloyRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.*;
 
+import java.util.List;
+
 public final class Const {
     // Model loaders
     public static final ResourceLocation COMPOUND_PART_MODEL_LOADER = modId("compound_part_model");
-    public static final ResourceLocation FRAGMENT_MODEL_LOADER = modId("fragment_model");
     public static final ResourceLocation GEAR_MODEL_LOADER = modId("gear_model");
 
     // Model properties
@@ -28,15 +30,14 @@ public final class Const {
     public static final ResourceLocation MODEL = SilentGear.getId("model");
 
     // Recipe types and categories
-    public static final ResourceLocation COMBINE_FRAGMENTS = modId("combine_fragments");
+    public static final ResourceLocation ALLOY_MAKING = modId("alloy_making");
+    public static final ResourceLocation ALLOY_MAKING_FABRIC = modId("alloy_making/fabric");
+    public static final ResourceLocation ALLOY_MAKING_GEM = modId("alloy_making/gem");
+    public static final ResourceLocation ALLOY_MAKING_METAL = modId("alloy_making/metal");
+    public static final ResourceLocation ALLOY_MAKING_SUPER = modId("alloy_making/super");
     public static final ResourceLocation COMPOUND_PART = modId("compound_part");
-    public static final ResourceLocation COMPOUNDING = modId("compounding");
-    public static final ResourceLocation COMPOUNDING_FABRIC = modId("compounding/fabric");
-    public static final ResourceLocation COMPOUNDING_GEM = modId("compounding/gem");
-    public static final ResourceLocation COMPOUNDING_METAL = modId("compounding/metal");
     public static final ResourceLocation CONVERSION = modId("conversion");
     public static final ResourceLocation CRAFTING_SPECIAL_REPAIRITEM = modId("crafting_special_repairitem");
-    public static final ResourceLocation DAMAGE_ITEM = modId("damage_item");
     public static final ResourceLocation FILL_REPAIR_KIT = modId("fill_repair_kit");
     public static final ResourceLocation GRADING = modId("grading");
     public static final ResourceLocation MOD_KIT_REMOVE_PART = modId("mod_kit_remove_part");
@@ -63,11 +64,10 @@ public final class Const {
     // Material Modifiers
     public static final ResourceLocation GRADE = SilentGear.getId("grade");
     public static final ResourceLocation STARCHARGED = SilentGear.getId("starcharged");
-    public static final String NBT_IS_FOIL = "SG_IsFoil";
 
     // Compound-crafting block info
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final AlloyMakerInfo<MetalAlloyRecipe> METAL_COMPOUNDER_INFO = new AlloyMakerInfo<>(
+    public static final AlloyMakerInfo<MetalAlloyRecipe> METAL_ALLOY_MAKER_INFO = new AlloyMakerInfo<>(
             ImmutableList.of(
                     MaterialCategories.METAL,
                     MaterialCategories.DUST
@@ -77,12 +77,13 @@ public final class Const {
             () -> SgBlocks.ALLOY_FORGE.get(),
             () -> SgBlockEntities.ALLOY_FORGE.get(),
             () -> SgMenuTypes.METAL_ALLOYER.get(),
-            () -> SgRecipes.COMPOUNDING_METAL.get(),
-            () -> SgRecipes.COMPOUNDING_METAL_TYPE.get(),
-            MetalAlloyRecipe.class);
+            () -> SgRecipes.ALLOY_MAKING_METAL.get(),
+            () -> SgRecipes.ALLOY_MAKING_METAL_TYPE.get(),
+            MetalAlloyRecipe.class
+    );
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final AlloyMakerInfo<GemAlloyRecipe> GEM_COMPOUNDER_INFO = new AlloyMakerInfo<>(
+    public static final AlloyMakerInfo<GemAlloyRecipe> GEM_ALLOY_MAKER_INFO = new AlloyMakerInfo<>(
             ImmutableList.of(
                     MaterialCategories.GEM,
                     MaterialCategories.DUST
@@ -92,12 +93,13 @@ public final class Const {
             () -> SgBlocks.RECRYSTALLIZER.get(),
             () -> SgBlockEntities.RECRYSTALLIZER.get(),
             () -> SgMenuTypes.RECRYSTALLIZER.get(),
-            () -> SgRecipes.COMPOUNDING_GEM.get(),
-            () -> SgRecipes.COMPOUNDING_GEM_TYPE.get(),
-            GemAlloyRecipe.class);
+            () -> SgRecipes.ALLOY_MAKING_GEM.get(),
+            () -> SgRecipes.ALLOY_MAKING_GEM_TYPE.get(),
+            GemAlloyRecipe.class
+    );
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final AlloyMakerInfo<FabricAlloyRecipe> FABRIC_COMPOUNDER_INFO = new AlloyMakerInfo<>(
+    public static final AlloyMakerInfo<FabricAlloyRecipe> FABRIC_ALLOY_MAKER_INFO = new AlloyMakerInfo<>(
             ImmutableList.of(
                     MaterialCategories.CLOTH,
                     MaterialCategories.FIBER,
@@ -108,9 +110,23 @@ public final class Const {
             () -> SgBlocks.REFABRICATOR.get(),
             () -> SgBlockEntities.REFABRICATOR.get(),
             () -> SgMenuTypes.REFABRICATOR.get(),
-            () -> SgRecipes.COMPOUNDING_FABRIC.get(),
-            () -> SgRecipes.COMPOUNDING_FABRIC_TYPE.get(),
-            FabricAlloyRecipe.class);
+            () -> SgRecipes.ALLOY_MAKING_FABRIC.get(),
+            () -> SgRecipes.ALLOY_MAKING_FABRIC_TYPE.get(),
+            FabricAlloyRecipe.class
+    );
+
+    @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
+    public static final AlloyMakerInfo<SuperAlloyRecipe> SUPER_MIXER_INFO = new AlloyMakerInfo<>(
+            List.of(),
+            4,
+            () -> SgItems.SUPER_ALLOY.get(),
+            () -> SgBlocks.SUPER_MIXER.get(),
+            () -> SgBlockEntities.SUPER_MIXER.get(),
+            () -> SgMenuTypes.SUPER_MIXER.get(),
+            () -> SgRecipes.ALLOY_MAKING_SUPER.get(),
+            () -> SgRecipes.ALLOY_MAKING_SUPER_TYPE.get(),
+            SuperAlloyRecipe.class
+    );
 
     private Const() {}
 

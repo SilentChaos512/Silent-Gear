@@ -1,0 +1,23 @@
+{
+  "type": "silentgear:compound",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "gem"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:super_alloy"
+    },
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFFFFFFF",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.super_alloy"
+    },
+    "name_prefix": ""
+  }
+}

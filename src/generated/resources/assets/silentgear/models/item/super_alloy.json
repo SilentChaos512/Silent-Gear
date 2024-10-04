@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "silentgear:item/super_alloy",
+    "layer1": "silentgear:item/super_alloy_highlight"
+  }
+}

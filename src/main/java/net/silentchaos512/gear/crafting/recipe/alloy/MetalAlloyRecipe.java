@@ -14,11 +14,11 @@ public class MetalAlloyRecipe extends AlloyRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return SgRecipes.COMPOUNDING_METAL.get();
+        return SgRecipes.ALLOY_MAKING_METAL.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return SgRecipes.COMPOUNDING_METAL_TYPE.get();
+        return SgRecipes.ALLOY_MAKING_METAL_TYPE.get();
     }
 }

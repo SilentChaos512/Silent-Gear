@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.block.compounder;
+package net.silentchaos512.gear.block.alloymaker;
 
 import net.minecraft.Util;
 import net.minecraft.core.*;
@@ -33,7 +33,6 @@ import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipeInput;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.setup.SgRegistries;
-import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.TimeUtils;
 
 import javax.annotation.Nullable;
@@ -233,7 +232,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends BaseContainerB
     private boolean canCompoundMaterials(Iterable<MaterialInstance> materials) {
         Set<PartType> partTypes = new HashSet<>(SgRegistries.PART_TYPE.stream().toList());
         for (MaterialInstance material : materials) {
-            if (!material.hasAnyCategory(this.info.getCategories())) {
+            if (!this.info.acceptsMaterial(material)) {
                 return false;
             }
             partTypes.removeIf(pt -> !material.getPartTypes().contains(pt));

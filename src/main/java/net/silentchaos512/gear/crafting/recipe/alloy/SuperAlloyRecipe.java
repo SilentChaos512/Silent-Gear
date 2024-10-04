@@ -7,18 +7,18 @@ import net.silentchaos512.gear.setup.SgRecipes;
 
 import java.util.List;
 
-public class GemAlloyRecipe extends AlloyRecipe {
-    public GemAlloyRecipe(Result result, List<Ingredient> ingredients) {
+public class SuperAlloyRecipe extends AlloyRecipe {
+    public SuperAlloyRecipe(Result result, List<Ingredient> ingredients) {
         super(result, ingredients);
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return SgRecipes.ALLOY_MAKING_GEM.get();
+        return SgRecipes.ALLOY_MAKING_SUPER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return SgRecipes.ALLOY_MAKING_GEM_TYPE.get();
+        return SgRecipes.ALLOY_MAKING_SUPER_TYPE.get();
     }
 }

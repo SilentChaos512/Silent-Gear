@@ -19,9 +19,9 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearTool;
-import net.silentchaos512.gear.block.compounder.AlloyForgeScreen;
-import net.silentchaos512.gear.block.compounder.RecrystallizerScreen;
-import net.silentchaos512.gear.block.compounder.RefabricatorScreen;
+import net.silentchaos512.gear.block.alloymaker.screen.AlloyForgeScreen;
+import net.silentchaos512.gear.block.alloymaker.screen.RecrystallizerScreen;
+import net.silentchaos512.gear.block.alloymaker.screen.RefabricatorScreen;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
@@ -56,6 +56,7 @@ public class SGearJeiPlugin implements IModPlugin {
     public static final RecipeType<AlloyRecipe> COMPOUNDING_FABRIC_TYPE = RecipeType.create(SilentGear.MOD_ID, "compounding_fabric", AlloyRecipe.class);
     public static final RecipeType<AlloyRecipe> COMPOUNDING_GEM_TYPE = RecipeType.create(SilentGear.MOD_ID, "compounding_gem", AlloyRecipe.class);
     public static final RecipeType<AlloyRecipe> COMPOUNDING_METAL_TYPE = RecipeType.create(SilentGear.MOD_ID, "compounding_metal", AlloyRecipe.class);
+    public static final RecipeType<AlloyRecipe> COMPOUNDING_SUPER_TYPE = RecipeType.create(SilentGear.MOD_ID, "compounding_super", AlloyRecipe.class);
     static final RecipeType<CraftingRecipe> GEAR_CRAFTING_TYPE = RecipeType.create(SilentGear.MOD_ID, "gear_crafting", CraftingRecipe.class);
     static final RecipeType<MaterialGraderRecipeCategory.GraderRecipe> GRADING_TYPE = RecipeType.create(SilentGear.MOD_ID, "grading", MaterialGraderRecipeCategory.GraderRecipe.class);
     static final RecipeType<SalvagingRecipe> SALVAGING_TYPE = RecipeType.create(SilentGear.MOD_ID, "salvaging", SalvagingRecipe.class);
@@ -70,9 +71,9 @@ public class SGearJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration reg) {
         IGuiHelper guiHelper = reg.getJeiHelpers().getGuiHelper();
         reg.addRecipeCategories(new GearCraftingRecipeCategoryJei(guiHelper));
-        reg.addRecipeCategories(new CompoundingRecipeCategory(Const.FABRIC_COMPOUNDER_INFO, "fabric", guiHelper));
-        reg.addRecipeCategories(new CompoundingRecipeCategory(Const.GEM_COMPOUNDER_INFO, "gem", guiHelper));
-        reg.addRecipeCategories(new CompoundingRecipeCategory(Const.METAL_COMPOUNDER_INFO, "metal", guiHelper));
+        reg.addRecipeCategories(new CompoundingRecipeCategory(Const.FABRIC_ALLOY_MAKER_INFO, "fabric", guiHelper));
+        reg.addRecipeCategories(new CompoundingRecipeCategory(Const.GEM_ALLOY_MAKER_INFO, "gem", guiHelper));
+        reg.addRecipeCategories(new CompoundingRecipeCategory(Const.METAL_ALLOY_MAKER_INFO, "metal", guiHelper));
         reg.addRecipeCategories(new MaterialGraderRecipeCategory(guiHelper));
         reg.addRecipeCategories(new SalvagingRecipeCategoryJei(guiHelper));
         reg.addRecipeCategories(new ToolActionRecipeCategory(guiHelper));
@@ -107,18 +108,18 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipes(TOOL_ACTION_TYPE, getRecipes(recipeManager, SgRecipes.TOOL_ACTION_TYPE.get(), ToolActionRecipe.class));
 
         // Compounders
-        reg.addRecipes(COMPOUNDING_FABRIC_TYPE, getRecipes(recipeManager, SgRecipes.COMPOUNDING_FABRIC_TYPE.get(), AlloyRecipe.class));
-        reg.addRecipes(COMPOUNDING_GEM_TYPE, getRecipes(recipeManager, SgRecipes.COMPOUNDING_GEM_TYPE.get(), AlloyRecipe.class));
-        reg.addRecipes(COMPOUNDING_METAL_TYPE, getRecipes(recipeManager, SgRecipes.COMPOUNDING_METAL_TYPE.get(), AlloyRecipe.class));
+        reg.addRecipes(COMPOUNDING_FABRIC_TYPE, getRecipes(recipeManager, SgRecipes.ALLOY_MAKING_FABRIC_TYPE.get(), AlloyRecipe.class));
+        reg.addRecipes(COMPOUNDING_GEM_TYPE, getRecipes(recipeManager, SgRecipes.ALLOY_MAKING_GEM_TYPE.get(), AlloyRecipe.class));
+        reg.addRecipes(COMPOUNDING_METAL_TYPE, getRecipes(recipeManager, SgRecipes.ALLOY_MAKING_METAL_TYPE.get(), AlloyRecipe.class));
 
         for (int i = 2; i <= 4; ++i) {
             reg.addRecipes(COMPOUNDING_FABRIC_TYPE, Collections.singletonList(
-                    AlloyRecipe.makeExample(Const.FABRIC_COMPOUNDER_INFO, i, FabricAlloyRecipe::new)
+                    AlloyRecipe.makeExample(Const.FABRIC_ALLOY_MAKER_INFO, i, FabricAlloyRecipe::new)
             ));
             reg.addRecipes(COMPOUNDING_GEM_TYPE, Collections.singletonList(
-                    AlloyRecipe.makeExample(Const.GEM_COMPOUNDER_INFO, i, GemAlloyRecipe::new)));
+                    AlloyRecipe.makeExample(Const.GEM_ALLOY_MAKER_INFO, i, GemAlloyRecipe::new)));
             reg.addRecipes(COMPOUNDING_METAL_TYPE, Collections.singletonList(
-                    AlloyRecipe.makeExample(Const.METAL_COMPOUNDER_INFO, i, MetalAlloyRecipe::new)));
+                    AlloyRecipe.makeExample(Const.METAL_ALLOY_MAKER_INFO, i, MetalAlloyRecipe::new)));
         }
 
         // Grading
