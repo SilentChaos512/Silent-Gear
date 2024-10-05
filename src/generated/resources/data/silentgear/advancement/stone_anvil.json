@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "silentgear:blueprint_paper"
+            "items": "silentgear:stone_anvil"
           }
         ]
       },
@@ -14,14 +14,14 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.silentgear.blueprint_paper.description"
+      "translate": "advancements.silentgear.stone_anvil.description"
     },
     "icon": {
       "count": 1,
-      "id": "silentgear:blueprint_paper"
+      "id": "silentgear:stone_anvil"
     },
     "title": {
-      "translate": "advancements.silentgear.blueprint_paper.title"
+      "translate": "advancements.silentgear.stone_anvil.title"
     }
   },
   "requirements": [

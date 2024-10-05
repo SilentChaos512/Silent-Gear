@@ -87,9 +87,14 @@ public class ModAdvancementProvider extends AdvancementProvider {
                     .addCriterion("dagger", getItem(ModItems.DAGGER))
                     .requirements(RequirementsStrategy.OR)
                     .save(consumer, id("survival_tool"));*/
-            AdvancementHolder templateBoard = simpleGetItem(saver, CraftingItems.TEMPLATE_BOARD, root);
 
-            AdvancementHolder blueprintPaper = simpleGetItem(saver, CraftingItems.BLUEPRINT_PAPER, templateBoard);
+            AdvancementHolder stoneAnvil = simpleGetItem(saver, SgBlocks.STONE_ANVIL, root);
+
+            AdvancementHolder crudeKnife = simpleGetItem(saver, SgItems.CRUDE_KNIFE, stoneAnvil);
+
+            AdvancementHolder templateBoard = simpleGetItem(saver, CraftingItems.TEMPLATE_BOARD, crudeKnife);
+
+            AdvancementHolder blueprintPaper = simpleGetItem(saver, CraftingItems.BLUEPRINT_PAPER, root);
             AdvancementHolder repairKit;
             {
                 Advancement.Builder builder = Advancement.Builder.advancement()

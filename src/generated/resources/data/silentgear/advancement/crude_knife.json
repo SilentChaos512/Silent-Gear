@@ -1,11 +1,11 @@
 {
-  "parent": "silentgear:root",
+  "parent": "silentgear:stone_anvil",
   "criteria": {
     "get_item": {
       "conditions": {
         "items": [
           {
-            "items": "silentgear:blueprint_paper"
+            "items": "silentgear:crude_knife"
           }
         ]
       },
@@ -14,14 +14,14 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.silentgear.blueprint_paper.description"
+      "translate": "advancements.silentgear.crude_knife.description"
     },
     "icon": {
       "count": 1,
-      "id": "silentgear:blueprint_paper"
+      "id": "silentgear:crude_knife"
     },
     "title": {
-      "translate": "advancements.silentgear.blueprint_paper.title"
+      "translate": "advancements.silentgear.crude_knife.title"
     }
   },
   "requirements": [
