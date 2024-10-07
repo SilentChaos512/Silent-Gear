@@ -43,7 +43,7 @@ public class GraderBlockEntity extends BaseContainerBlockEntity implements World
     private static final int[] SLOTS_INPUT = {INPUT_SLOT, CATALYST_SLOT};
     private static final int[] SLOTS_OUTPUT = {2, 3, 4, 5};
     static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
-    private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, INVENTORY_SIZE).toArray();
+    private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, INVENTORY_SIZE - 1).toArray();
 
     private NonNullList<ItemStack> items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private int progress = 0;
