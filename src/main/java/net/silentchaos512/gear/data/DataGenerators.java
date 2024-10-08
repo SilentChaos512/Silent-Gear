@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import net.minecraft.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.util.GsonHelper;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -36,6 +37,7 @@ public final class DataGenerators {
     public static void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        PackOutput packOutput = gen.getPackOutput();
 
         ModBlockTagsProvider blocks = new ModBlockTagsProvider(event);
         gen.addProvider(true, blocks);
@@ -54,6 +56,7 @@ public final class DataGenerators {
         gen.addProvider(true, new ModBlockStateProvider(gen, existingFileHelper));
         gen.addProvider(true, new ModItemModelProvider(gen, existingFileHelper));
         gen.addProvider(true, new CompoundModelsProvider(gen, existingFileHelper));
+        gen.addProvider(true, new ModSoundDefinitionsProvider(packOutput, existingFileHelper));
     }
 
     public static CompletableFuture<?> saveStable(CachedOutput p_253653_, JsonElement p_254542_, Path p_254467_) {

@@ -53,6 +53,7 @@ import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgCriteriaTriggers;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.SgSounds;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -290,9 +291,7 @@ public final class GearHelper {
 
     private static void onDamageFactorChange(ServerPlayer player, int preDamageFactor, int newDamageFactor) {
         if (newDamageFactor > preDamageFactor) {
-            if (Config.Client.playKachinkSound.get()) {
-                player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 0.5f, 2.0f);
-            }
+            player.level().playSound(null, player.blockPosition(), SgSounds.GEAR_DAMAGED.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
             SgCriteriaTriggers.DAMAGE_FACTOR_CHANGE.get().trigger(player);
         }
     }
@@ -447,7 +446,7 @@ public final class GearHelper {
         for (var traitInstance : TraitHelper.getTraits(stack)) {
             totalModifier += traitInstance.getTrait().getMiningSpeedModifier(traitInstance.getLevel(), state, baseSpeed);
         }
-        return  baseSpeed * (1f + totalModifier);
+        return baseSpeed * (1f + totalModifier);
     }
 
     public static boolean onBlockDestroyed(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entityLiving) {

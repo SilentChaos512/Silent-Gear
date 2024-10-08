@@ -362,8 +362,6 @@ public final class Config {
         static final ModConfigSpec SPEC;
 
         public static final ModConfigSpec.BooleanValue allowEnchantedEffect;
-        public static final ModConfigSpec.BooleanValue playKachinkSound;
-        //public static final ModConfigSpec.BooleanValue useLiteModels;
         //Tooltip
         public static final ModConfigSpec.BooleanValue showMaterialTooltips;
         public static final ModConfigSpec.BooleanValue showPartTooltips;
@@ -378,13 +376,6 @@ public final class Config {
                             "The way vanilla handles the effect is bugged, and it is recommended to disable this until it can be fixed",
                             "The bug is not harmful and some like the way the overpowered effect looks")
                     .define("gear.allowEnchantedEffect", false);
-            playKachinkSound = builder
-                    .comment("Plays a sped-up 'item breaking' sound when an item's stats are recalculated due to durability loss")
-                    .define("gear.playKachinkSound", true);
-            /*useLiteModels = builder
-                    .comment("Use 'lite' gear models. These should be easier on some systems, but do not allow unique textures for different materials.",
-                            "Currently, this option has no effect, as the normal model system is not working yet (lite models are used)")
-                    .define("gear.useLiteModels", false);*/
 
             showMaterialTooltips = builder
                     .comment("Show SGear Material tooltips on items that can be used as materials.")

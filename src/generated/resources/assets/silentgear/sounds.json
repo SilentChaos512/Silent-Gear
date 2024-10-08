@@ -1,0 +1,9 @@
+{
+  "item.silentgear.gear_damaged": {
+    "sounds": [
+      "silentgear:kachink",
+      "silentgear:snap"
+    ],
+    "subtitle": "subtitles.item.silentgear.gear_damaged"
+  }
+}

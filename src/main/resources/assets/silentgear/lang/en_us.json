@@ -833,6 +833,7 @@
   "property.silentgear.repair_efficiency": "Repair Efficiency",
   "property.silentgear.repair_value": "Repair Bonus",
   "property.silentgear.traits": "Traits",
+  "subtitles.item.silentgear.gear_damaged": "Gear item damaged",
   "trait.condition.silentgear.and": " AND ",
   "trait.condition.silentgear.gear_type": "Gear Type: %s",
   "trait.condition.silentgear.material_count": "Material Count: %d",
