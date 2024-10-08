@@ -19,6 +19,7 @@ import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.item.ProcessedMaterialItem;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -31,12 +32,9 @@ public class ProcessedMaterial extends AbstractMaterial {
         super(parent, crafting, display, properties);
     }
 
+    @Nullable
     public static MaterialInstance getBaseMaterial(MaterialInstance material) {
-        var baseMaterial = ProcessedMaterialItem.getMaterial(material.getItem());
-        if (baseMaterial == null) {
-            return MaterialInstance.of(Const.Materials.EMPTY);
-        }
-        return baseMaterial;
+        return ProcessedMaterialItem.getMaterial(material.getItem());
     }
 
     @Override
@@ -48,7 +46,9 @@ public class ProcessedMaterial extends AbstractMaterial {
     public Collection<IMaterialCategory> getCategories(MaterialInstance material) {
         Collection<IMaterialCategory> set = super.getCategories(material);
         MaterialInstance base = getBaseMaterial(material);
-        set.addAll(base.getCategories());
+        if (base != null) {
+            set.addAll(base.getCategories());
+        }
         return set;
     }
 
@@ -64,14 +64,17 @@ public class ProcessedMaterial extends AbstractMaterial {
 
     @Override
     public int getColor(MaterialInstance material, PartType partType, GearType gearType) {
-        return getBaseMaterial(material).getColor(gearType, partType);
+        var baseMaterial = getBaseMaterial(material);
+        return baseMaterial != null ? baseMaterial.getColor(gearType, partType) : -1;
     }
 
     @Override
     public <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(MaterialInstance material, PartType partType, PropertyKey<T, V> key) {
         var ret = super.getPropertyModifiers(material, partType, key);
         MaterialInstance baseMaterial = getBaseMaterial(material);
-        ret.addAll(baseMaterial.getPropertyModifiers(partType, key));
+        if (baseMaterial != null) {
+            ret.addAll(baseMaterial.getPropertyModifiers(partType, key));
+        }
         return ret;
     }
 
@@ -79,14 +82,17 @@ public class ProcessedMaterial extends AbstractMaterial {
     public Collection<PropertyKey<?, ?>> getPropertyKeys(MaterialInstance material, PartType type) {
         var ret = new LinkedHashSet<>(super.getPropertyKeys(material, type));
         MaterialInstance baseMaterial = getBaseMaterial(material);
-        ret.addAll(baseMaterial.get().getPropertyKeys(baseMaterial, type));
+        if (baseMaterial != null) {
+            ret.addAll(baseMaterial.get().getPropertyKeys(baseMaterial, type));
+        }
         return ret;
     }
 
     @Override
     public Component getBaseMaterialName(@Nullable MaterialInstance material, PartType partType) {
         if (material != null) {
-            return getBaseMaterial(material).getDisplayName(partType).plainCopy();
+            var baseMaterial = getBaseMaterial(material);
+            return baseMaterial != null ? baseMaterial.getDisplayName(partType).plainCopy() : TextUtil.misc("unknown");
         }
         return super.getBaseMaterialName(null, partType);
     }
@@ -102,13 +108,13 @@ public class ProcessedMaterial extends AbstractMaterial {
     @Override
     public int getNameColor(MaterialInstance material, PartType partType, GearType gearType) {
         MaterialInstance base = getBaseMaterial(material);
-        return base.getNameColor(partType, gearType);
+        return base != null ? base.getNameColor(partType, gearType) : -1;
     }
 
     @Override
     public String getModelKey(MaterialInstance material) {
         MaterialInstance base = getBaseMaterial(material);
-        return super.getModelKey(material) + "[" + base.getModelKey() + "]";
+        return super.getModelKey(material) + (base != null ? "[" + base.getModelKey() + "]" : "");
     }
 
     public static class Serializer extends MaterialSerializer<ProcessedMaterial> {

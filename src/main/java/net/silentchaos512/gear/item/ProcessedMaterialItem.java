@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class ProcessedMaterialItem extends SingleMaterialItem implements IColoredMaterialItem {
@@ -30,7 +31,7 @@ public class ProcessedMaterialItem extends SingleMaterialItem implements IColore
     @Override
     public Component getName(ItemStack stack) {
         var baseMaterial = getMaterial(stack);
-        if (baseMaterial == null) return super.getName(stack);
-        return Component.translatable(this.getDescriptionId(), baseMaterial.getDisplayName(PartTypes.MAIN.get()));
+        var materialName = baseMaterial != null ? baseMaterial.getDisplayName(PartTypes.MAIN.get()) : TextUtil.misc("unknown");
+        return Component.translatable(this.getDescriptionId(), materialName);
     }
 }

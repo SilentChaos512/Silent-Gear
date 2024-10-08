@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.21.1-4.0.3] - Unreleased
 ### Fixed
 - Crash when feeding a material grader through the side with a hopper [#701]
+- Crash when looking at sheet metal with no material [#696]
 - Being able to combine two gear items into an invalid item in the crafting grid [#695]
 
 ## [1.21.1-4.0.2] - 2024-10-04
