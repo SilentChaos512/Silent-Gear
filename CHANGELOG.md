@@ -3,10 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.21.1-4.0.3] - Unreleased
+## [1.21.1-4.0.3] - 2024-10-08
 ### Added
 - New sounds to replace the "gear item damage factor change" (kachink) sound. Removed the config option. A resource pack could be used to easily change or remove these. [Related: #704]
 ### Fixed
+- Crimson iron and azure silver ores not generating correctly
 - Blocks sometimes failed to be broken [#704]
 - Crash when feeding a material grader through the side with a hopper [#701]
 - Crash when looking at sheet metal with no material [#696]
