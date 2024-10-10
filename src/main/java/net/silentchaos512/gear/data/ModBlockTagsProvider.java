@@ -183,6 +183,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(BlockTags.WOODEN_SLABS, SgBlocks.NETHERWOOD_SLAB);
         builder(BlockTags.WOODEN_STAIRS, SgBlocks.NETHERWOOD_STAIRS);
         builder(BlockTags.WOODEN_TRAPDOORS, SgBlocks.NETHERWOOD_TRAPDOOR);
+        builder(BlockTags.WALL_POST_OVERRIDE, SgBlocks.STONE_TORCH);
     }
 
     private void builder(TagKey<Block> tag, DeferredBlock<?>... items) {

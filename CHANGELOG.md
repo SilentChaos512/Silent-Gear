@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All sickle behavior errors [#703]
 - Sinew and flax mapping to the wrong material [#700]
 - Netherwood sticks becoming regular sticks during tool crafting
+- Stone torches not connecting to the top of walls [#678]
 - Cannot use netherwood sticks as fuel [#672]
 - Fishing rods render upside down [#671] and have zero attack speed
 
