@@ -12,10 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Furnace fuel burn times are now handled by the NeoForge data map; netherwood charcoal burn time config option removed
 ### Fixed
 - Alloy makers missing their last input slot [#705]
-- Cannot use netherwood sticks as fuel [#672]
 - All sickle behavior errors [#703]
 - Sinew and flax mapping to the wrong material [#700]
 - Netherwood sticks becoming regular sticks during tool crafting
+- Cannot use netherwood sticks as fuel [#672]
+- Fishing rods render upside down [#671]
 
 ## [1.21.1-4.0.3] - 2024-10-08
 ### Added

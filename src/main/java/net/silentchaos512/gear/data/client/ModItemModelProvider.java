@@ -162,7 +162,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearStandardTool(GearItemSets.MATTOCK, itemHandheld);
         tempGearStandardTool(GearItemSets.SICKLE, itemHandheld);
         tempGearStandardTool(GearItemSets.SHEARS, itemHandheld);
-        tempGearBow(GearItemSets.FISHING_ROD, itemHandheld);
+        tempGearBow(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
         // tempGearBow(SgItems.BOW, itemHandheld);
         // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
         // tempGearBow(SgItems.SLINGSHOT, itemHandheld);
