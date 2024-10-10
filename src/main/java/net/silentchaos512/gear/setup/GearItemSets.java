@@ -3,12 +3,14 @@ package net.silentchaos512.gear.setup;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.item.GearItemSet;
 import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -58,11 +60,11 @@ public class GearItemSets {
     public static final GearItemSet<GearCurioItem> BRACELET = set(GearTypes.BRACELET, "bracelet_band", gt -> new GearCurioItem(gt, "bracelet", SgItems.unstackableProps()));
     public static final GearItemSet<GearCurioItem> NECKLACE = set(GearTypes.NECKLACE, "necklace_chain", gt -> new GearCurioItem(gt, "necklace", SgItems.unstackableProps()));
 
-    private static <I extends Item> GearItemSet<I> set(DeferredHolder<GearType, GearType> type, String partName, Function<Supplier<GearType>, I> itemFactory) {
+    private static <I extends Item & GearItem> GearItemSet<I> set(DeferredHolder<GearType, GearType> type, String partName, Function<Supplier<GearType>, I> itemFactory) {
         return set(new GearItemSet<>(type, partName, itemFactory));
     }
 
-    private static <I extends Item> GearItemSet<I> set(GearItemSet<I> set) {
+    private static <I extends Item & GearItem> GearItemSet<I> set(GearItemSet<I> set) {
         LIST.add(set);
         return set;
     }
@@ -81,5 +83,9 @@ public class GearItemSets {
 
     static void registerTemplateItems() {
         LIST.forEach(set -> set.registerTemplateItem(SgItems.ITEMS));
+    }
+
+    public static Iterator<GearItemSet<?>> getIterator() {
+        return LIST.iterator();
     }
 }

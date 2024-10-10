@@ -1,19 +1,29 @@
 package net.silentchaos512.gear.item;
 
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.core.BuiltinMaterials;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
+import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.Const;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class GearItemSet<I extends Item> {
+public final class GearItemSet<I extends Item & GearItem> {
     private final DeferredHolder<GearType, GearType> type;
     private final String partName;
 
@@ -115,5 +125,24 @@ public final class GearItemSet<I extends Item> {
             var gearTypeName = SgRegistries.GEAR_TYPE.getKey(this.type.get());
             throw new IllegalStateException(itemTypeName + " for " + gearTypeName + " has already been registered!");
         }
+    }
+
+    public ItemStack constructBasicItem(BuiltinMaterials builtinMaterial) {
+        GearItem item = gearItem();
+        List<PartInstance> parts = new ArrayList<>();
+        parts.add(PartInstance.from(mainPart().create(MaterialInstance.of(builtinMaterial.getMaterial()))));
+        if (item.requiresPartOfType(PartTypes.ROD.get())) {
+            parts.add(PartInstance.from(SgItems.ROD.get().create(MaterialInstance.of(Const.Materials.WOOD))));
+        }
+        if (item.requiresPartOfType(PartTypes.CORD.get())) {
+            parts.add(PartInstance.from(SgItems.CORD.get().create(MaterialInstance.of(Const.Materials.STRING))));
+        }
+        if (item.requiresPartOfType(PartTypes.BINDING.get())) {
+            parts.add(PartInstance.from(SgItems.BINDING.get().create(MaterialInstance.of(Const.Materials.STRING))));
+        }
+        if (item.requiresPartOfType(PartTypes.SETTING.get())) {
+            parts.add(PartInstance.from(SgItems.SETTING.get().create(MaterialInstance.of(Const.Materials.DIAMOND))));
+        }
+        return item.construct(parts);
     }
 }

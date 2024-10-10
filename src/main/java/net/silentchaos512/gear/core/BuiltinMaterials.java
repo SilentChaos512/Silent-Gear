@@ -13,6 +13,7 @@ import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.setup.SgTags;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Function;
 
 public enum BuiltinMaterials {
@@ -47,6 +48,25 @@ public enum BuiltinMaterials {
     AZURE_ELECTRUM("azure_electrum", Tiers.NETHERITE),
     TYRIAN_STEEL("tyrian_steel", Tiers.NETHERITE)
     ;
+
+    public static final List<BuiltinMaterials> EXAMPLE_SUB_ITEM_MATERIALS = List.of(
+            WOOD,
+            NETHERWOOD,
+            STONE,
+            FLINT,
+            COPPER,
+            GOLD,
+            IRON,
+            DIAMOND,
+            EMERALD,
+            DIMERALD,
+            BLAZE_GOLD,
+            CRIMSON_IRON,
+            CRIMSON_STEEL,
+            AZURE_SILVER,
+            AZURE_ELECTRUM,
+            TYRIAN_STEEL
+    );
 
     private final ResourceLocation id;
     private final DataResource<Material> material;
