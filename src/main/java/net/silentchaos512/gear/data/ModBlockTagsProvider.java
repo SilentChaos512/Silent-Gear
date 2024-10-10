@@ -178,6 +178,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(BlockTags.SAPLINGS, SgBlocks.NETHERWOOD_SAPLING);
         builder(BlockTags.WOODEN_DOORS, SgBlocks.NETHERWOOD_DOOR);
         builder(BlockTags.WOODEN_FENCES, SgBlocks.NETHERWOOD_FENCE);
+        builder(BlockTags.FENCE_GATES, SgBlocks.NETHERWOOD_FENCE_GATE);
+        builder(Tags.Blocks.FENCE_GATES_WOODEN, SgBlocks.NETHERWOOD_FENCE_GATE);
         builder(BlockTags.WOODEN_SLABS, SgBlocks.NETHERWOOD_SLAB);
         builder(BlockTags.WOODEN_STAIRS, SgBlocks.NETHERWOOD_STAIRS);
         builder(BlockTags.WOODEN_TRAPDOORS, SgBlocks.NETHERWOOD_TRAPDOOR);

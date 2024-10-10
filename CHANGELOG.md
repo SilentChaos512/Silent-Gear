@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.21.1-4.0.4] - Unreleased
 ### Added
 - Better Combat support [#694]
+- Tags for netherwood fence gates [#680]
 - A new creative tab with sample gear items, mostly intended to aid with testing
 ### Changed
 - Furnace fuel burn times are now handled by the NeoForge data map; netherwood charcoal burn time config option removed
