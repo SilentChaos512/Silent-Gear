@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sinew and flax mapping to the wrong material [#700]
 - Netherwood sticks becoming regular sticks during tool crafting
 - Cannot use netherwood sticks as fuel [#672]
-- Fishing rods render upside down [#671]
+- Fishing rods render upside down [#671] and have zero attack speed
 
 ## [1.21.1-4.0.3] - 2024-10-08
 ### Added

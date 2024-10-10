@@ -165,6 +165,7 @@ public final class PartsProvider extends PartsProviderBase {
                     .numberProperty(GearProperties.DURABILITY, -0.5f, NumberProperty.Operation.MULTIPLY_BASE)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1.25f)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.75f, NumberProperty.Operation.MULTIPLY_BASE)
+                    .numberProperty(GearProperties.ATTACK_SPEED, 4f, NumberProperty.Operation.ADD)
             )
             .put(GearTypes.HAMMER.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 4, NumberProperty.Operation.ADD)

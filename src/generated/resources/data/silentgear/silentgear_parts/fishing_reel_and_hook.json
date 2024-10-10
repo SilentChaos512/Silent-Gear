@@ -16,6 +16,10 @@
   "gear_type": "silentgear:fishing_rod",
   "part_type": "silentgear:main",
   "properties": {
+    "attack_speed": {
+      "operation": "ADD",
+      "value": 4.0
+    },
     "durability": {
       "operation": "MULTIPLY_BASE",
       "value": -0.5
