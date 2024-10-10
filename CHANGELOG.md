@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.21.1-4.0.4] - Unreleased
 ### Added
 - Better Combat support [#694]
+### Fixed
+- All sickle behavior errors [#703]
 
 ## [1.21.1-4.0.3] - 2024-10-08
 ### Added

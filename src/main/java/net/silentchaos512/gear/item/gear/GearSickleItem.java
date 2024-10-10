@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
@@ -12,40 +13,21 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.silentchaos512.gear.api.item.BreakEventHandler;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.GearHelper;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Supplier;
 
 public class GearSickleItem extends GearDiggerItem implements BreakEventHandler {
     private static final int DURABILITY_USAGE = 3;
     private static final int BREAK_RANGE = 4;
     private static final int HARVEST_RANGE = 2;
-    private static final Map<Block, BlockState> HARVEST_STATES = new HashMap<>();
-
-    static {
-        putHarvestState(Blocks.SWEET_BERRY_BUSH, Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 1));
-    }
-
-    /**
-     * When a block is harvested by right-clicking with a sickle, the block is normally reset to the
-     * default state. This can be used to override that with a different state.
-     *
-     * @param block The block to match
-     * @param state The state to set after harvesting
-     */
-    public static void putHarvestState(Block block, BlockState state) {
-        HARVEST_STATES.put(block, state);
-    }
 
     public GearSickleItem(Supplier<GearType> gearType) {
         super(gearType, SgTags.Blocks.MINEABLE_WITH_SICKLE, GearHelper.getBaseItemProperties());
@@ -55,35 +37,54 @@ public class GearSickleItem extends GearDiggerItem implements BreakEventHandler 
 
     private static boolean canRightClickHarvestBlock(BlockState state) {
         Block block = state.getBlock();
-        return block instanceof BonemealableBlock;
+        return block instanceof CropBlock || block instanceof SweetBerryBushBlock;
     }
 
-    private static boolean tryHarvest(ServerLevel world, BlockPos pos, BlockState state, Player player, ItemStack sickle) {
+    private static boolean tryHarvest(ServerLevel level, BlockPos pos, BlockState state, Player player, ItemStack sickle) {
         Block block = state.getBlock();
         BonemealableBlock growable = (BonemealableBlock) block;
 
-        if (!growable.isValidBonemealTarget(world, pos, state)) {
+        if (!growable.isValidBonemealTarget(level, pos, state)) {
             // Fully grown crop
-            NonNullList<ItemStack> drops = NonNullList.create();
-            drops.addAll(Block.getDrops(state, world, pos, null, player, sickle));
-
-            // Spawn drops in world, remove first seed
-            boolean foundSeed = false;
-            for (ItemStack drop : drops) {
-                Item item = drop.getItem();
-                if (!foundSeed && item instanceof BlockItem && ((BlockItem) item).getBlock() == block) {
-                    foundSeed = true;
-                } else {
-                    Block.popResource(world, pos, drop);
-                }
+            if (block instanceof SweetBerryBushBlock) {
+                harvestBerryBush(level, pos, state, player);
+            } else {
+                harvestCrops(level, pos, state, player, sickle, block);
             }
 
             // Reset state
-            world.setBlock(pos, HARVEST_STATES.getOrDefault(block, block.defaultBlockState()), 2);
+            level.setBlock(pos, getHarvestedBlockState(state), 2);
             return true;
         }
 
         return false;
+    }
+
+    private static void harvestBerryBush(ServerLevel level, BlockPos pos, BlockState state, Player player) {
+        state.useWithoutItem(level, player, new BlockHitResult(new Vec3(pos.getX(), pos.getY(), pos.getZ()), Direction.UP, pos, false));
+    }
+
+    private static void harvestCrops(ServerLevel world, BlockPos pos, BlockState state, Player player, ItemStack sickle, Block block) {
+        NonNullList<ItemStack> drops = NonNullList.create();
+        drops.addAll(Block.getDrops(state, world, pos, null, player, sickle));
+
+        // Spawn drops in world, remove first seed
+        boolean foundSeed = false;
+        for (ItemStack drop : drops) {
+            Item item = drop.getItem();
+            if (!foundSeed && item instanceof BlockItem && ((BlockItem) item).getBlock() == block) {
+                foundSeed = true;
+            } else {
+                Block.popResource(world, pos, drop);
+            }
+        }
+    }
+
+    private static BlockState getHarvestedBlockState(BlockState original) {
+        if (original.getBlock() instanceof SweetBerryBushBlock) {
+            return original.setValue(SweetBerryBushBlock.AGE, 1);
+        }
+        return original.getBlock().defaultBlockState();
     }
 
     @Override

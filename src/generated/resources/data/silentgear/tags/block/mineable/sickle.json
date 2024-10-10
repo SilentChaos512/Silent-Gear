@@ -2,6 +2,29 @@
   "values": [
     "#minecraft:crops",
     "#minecraft:flowers",
-    "#minecraft:leaves"
+    "#minecraft:leaves",
+    "#minecraft:saplings",
+    "minecraft:short_grass",
+    "minecraft:tall_grass",
+    "minecraft:fern",
+    "minecraft:large_fern",
+    "minecraft:brown_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:crimson_fungus",
+    "minecraft:warped_fungus",
+    "minecraft:sugar_cane",
+    "minecraft:cactus",
+    "minecraft:dead_bush",
+    "minecraft:vine",
+    "minecraft:glow_lichen",
+    "minecraft:hanging_roots",
+    "minecraft:pitcher_plant",
+    "minecraft:seagrass",
+    "minecraft:tall_seagrass",
+    "minecraft:nether_sprouts",
+    "minecraft:crimson_roots",
+    "minecraft:warped_roots",
+    "silentgear:wild_flax_plant",
+    "silentgear:wild_fluffy_plant"
   ]
 }

@@ -40,7 +40,33 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(SgTags.Blocks.MINEABLE_WITH_SICKLE)
                 .addTag(BlockTags.CROPS)
                 .addTag(BlockTags.FLOWERS)
-                .addTag(BlockTags.LEAVES);
+                .addTag(BlockTags.LEAVES)
+                .addTag(BlockTags.SAPLINGS)
+                .add(
+                        Blocks.SHORT_GRASS,
+                        Blocks.TALL_GRASS,
+                        Blocks.FERN,
+                        Blocks.LARGE_FERN,
+                        Blocks.BROWN_MUSHROOM,
+                        Blocks.RED_MUSHROOM,
+                        Blocks.CRIMSON_FUNGUS,
+                        Blocks.WARPED_FUNGUS,
+                        Blocks.SUGAR_CANE,
+                        Blocks.CACTUS,
+                        Blocks.DEAD_BUSH,
+                        Blocks.VINE,
+                        Blocks.GLOW_LICHEN,
+                        Blocks.HANGING_ROOTS,
+                        Blocks.PITCHER_PLANT,
+                        Blocks.SEAGRASS,
+                        Blocks.TALL_SEAGRASS,
+                        Blocks.NETHER_SPROUTS,
+                        Blocks.CRIMSON_ROOTS,
+                        Blocks.WARPED_ROOTS,
+                        SgBlocks.WILD_FLAX_PLANT.get(),
+                        SgBlocks.WILD_FLUFFY_PLANT.get()
+                )
+        ;
 
         tag(Tags.Blocks.NEEDS_NETHERITE_TOOL)
                 .addTag(SgTags.Blocks.ORES_AZURE_SILVER);
