@@ -13,7 +13,7 @@
     },
     "part_substitutes": {
       "silentgear:rod": {
-        "tag": "c:rods/wooden"
+        "item": "minecraft:stick"
       }
     }
   },

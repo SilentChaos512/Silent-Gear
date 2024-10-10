@@ -10,7 +10,7 @@
     ],
     "gear_type_blacklist": [],
     "ingredient": {
-      "tag": "c:strings"
+      "item": "minecraft:string"
     },
     "part_substitutes": {}
   },

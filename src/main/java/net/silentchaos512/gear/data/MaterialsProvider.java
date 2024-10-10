@@ -814,7 +814,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                         Ingredient.of(ItemTags.PLANKS),
                         List.of(MaterialCategories.ORGANIC, MaterialCategories.WOOD),
                         List.of(),
-                        Map.of(PartTypes.ROD.get(), Ingredient.of(Tags.Items.RODS_WOODEN)),
+                        Map.of(PartTypes.ROD.get(), Ingredient.of(Items.STICK)),
                         true
                 ))
                 .displayWithDefaultName(0x896727, TextureType.LOW_CONTRAST)
@@ -1049,7 +1049,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // String
         ret.add(MaterialBuilder.simple(modId("string"))
-                .crafting(Tags.Items.STRINGS, MaterialCategories.ORGANIC, MaterialCategories.FIBER, MaterialCategories.BASIC)
+                .crafting(Items.STRING, MaterialCategories.ORGANIC, MaterialCategories.FIBER, MaterialCategories.BASIC)
                 .displayWithDefaultName(Color.VALUE_WHITE, TextureType.LOW_CONTRAST)
                 //binding
                 .stat(PartTypes.BINDING, GearProperties.REPAIR_EFFICIENCY, 0.05f, NumberProperty.Operation.MULTIPLY_BASE)
