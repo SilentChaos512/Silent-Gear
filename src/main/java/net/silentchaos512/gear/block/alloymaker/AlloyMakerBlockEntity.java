@@ -83,7 +83,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends BaseContainerB
 
     public AlloyMakerBlockEntity(AlloyMakerInfo<R> info, BlockPos pos, BlockState state) {
         super(info.getBlockEntityType(), pos, state);
-        this.items = NonNullList.withSize(info.getInputSlotCount() + 1, ItemStack.EMPTY);
+        this.items = NonNullList.withSize(info.getInputSlotCount() + 2, ItemStack.EMPTY);
         this.info = info;
         this.allSlots = IntStream.range(0, this.items.size()).toArray();
         this.quickCheck = RecipeManager.createCheck(info.getRecipeType());

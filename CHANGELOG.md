@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Better Combat support [#694]
 - A new creative tab with sample gear items, mostly intended to aid with testing
 ### Fixed
+- Alloy makers missing their last input slot [#705]
 - All sickle behavior errors [#703]
 - Sinew and flax mapping to the wrong material [#700]
 - Netherwood sticks becoming regular sticks during tool crafting
