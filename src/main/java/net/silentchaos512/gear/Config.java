@@ -57,8 +57,6 @@ public final class Config {
         public static final ModConfigSpec.IntValue sawRecursionDepth;
         public static final ModConfigSpec.BooleanValue upgradesInAnvilOnly;
         public static final ModConfigSpec.BooleanValue destroySwappedParts;
-        // Other items
-        public static final ModConfigSpec.IntValue netherwoodCharcoalBurnTime;
         // Salvager
         public static final ModConfigSpec.DoubleValue salvagerMinLossRate;
         public static final ModConfigSpec.DoubleValue salvagerMaxLossRate;
@@ -125,10 +123,6 @@ public final class Config {
 
                     builder.pop();
                 }
-
-                netherwoodCharcoalBurnTime = builder
-                        .comment("Burn time of netherwood charcoal, in ticks. Vanilla charcoal is 1600.")
-                        .defineInRange("netherwood_charcoal.burn_time", 2400, 0, Integer.MAX_VALUE);
 
                 builder.pop();
             }

@@ -1,0 +1,32 @@
+{
+  "values": {
+    "silentgear:flax_fiber": {
+      "can_villager_compost": true,
+      "chance": 0.5
+    },
+    "silentgear:flax_seeds": {
+      "can_villager_compost": true,
+      "chance": 0.3
+    },
+    "silentgear:fluffy_puff": {
+      "can_villager_compost": true,
+      "chance": 0.5
+    },
+    "silentgear:fluffy_seeds": {
+      "can_villager_compost": true,
+      "chance": 0.3
+    },
+    "silentgear:golden_nether_banana": {
+      "can_villager_compost": true,
+      "chance": 1.0
+    },
+    "silentgear:nether_banana": {
+      "can_villager_compost": true,
+      "chance": 0.85
+    },
+    "silentgear:netherwood_sapling": {
+      "can_villager_compost": true,
+      "chance": 0.3
+    }
+  }
+}

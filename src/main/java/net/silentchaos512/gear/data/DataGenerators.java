@@ -6,12 +6,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonWriter;
 import net.minecraft.Util;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
 import net.minecraft.util.GsonHelper;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.data.client.CompoundModelsProvider;
@@ -35,28 +32,31 @@ public final class DataGenerators {
 
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
-        DataGenerator gen = event.getGenerator();
-        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-        PackOutput packOutput = gen.getPackOutput();
+        var generator = event.getGenerator();
+        var existingFileHelper = event.getExistingFileHelper();
+        var packOutput = generator.getPackOutput();
+        var lookupProvider = event.getLookupProvider();
+
+        generator.addProvider(true, new ModDataMapProvider(packOutput, lookupProvider));
 
         ModBlockTagsProvider blocks = new ModBlockTagsProvider(event);
-        gen.addProvider(true, blocks);
-        gen.addProvider(true, new ModItemTagsProvider(event, blocks));
+        generator.addProvider(true, blocks);
+        generator.addProvider(true, new ModItemTagsProvider(event, blocks));
 
-        gen.addProvider(true, new TraitsProvider(gen));
-        gen.addProvider(true, new MaterialsProvider(gen, SilentGear.MOD_ID));
-        gen.addProvider(true, new PartsProvider(gen));
+        generator.addProvider(true, new TraitsProvider(generator));
+        generator.addProvider(true, new MaterialsProvider(generator, SilentGear.MOD_ID));
+        generator.addProvider(true, new PartsProvider(generator));
 
-        gen.addProvider(true, new ModLootTables(event));
-        gen.addProvider(true, new ModLootModifierProvider(event));
-        gen.addProvider(true, new ModRecipesProvider(event));
-        gen.addProvider(true, new ModAdvancementProvider(event));
-//        ModWorldGen.init(gen, existingFileHelper); //FIXME
+        generator.addProvider(true, new ModLootTables(event));
+        generator.addProvider(true, new ModLootModifierProvider(event));
+        generator.addProvider(true, new ModRecipesProvider(event));
+        generator.addProvider(true, new ModAdvancementProvider(event));
+//        ModWorldGen.init(generator, existingFileHelper); //FIXME
 
-        gen.addProvider(true, new ModBlockStateProvider(gen, existingFileHelper));
-        gen.addProvider(true, new ModItemModelProvider(gen, existingFileHelper));
-        gen.addProvider(true, new CompoundModelsProvider(gen, existingFileHelper));
-        gen.addProvider(true, new ModSoundDefinitionsProvider(packOutput, existingFileHelper));
+        generator.addProvider(true, new ModBlockStateProvider(generator, existingFileHelper));
+        generator.addProvider(true, new ModItemModelProvider(generator, existingFileHelper));
+        generator.addProvider(true, new CompoundModelsProvider(generator, existingFileHelper));
+        generator.addProvider(true, new ModSoundDefinitionsProvider(packOutput, existingFileHelper));
     }
 
     public static CompletableFuture<?> saveStable(CachedOutput p_253653_, JsonElement p_254542_, Path p_254467_) {

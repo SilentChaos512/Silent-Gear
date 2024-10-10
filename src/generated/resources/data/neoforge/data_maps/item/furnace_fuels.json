@@ -1,0 +1,13 @@
+{
+  "values": {
+    "silentgear:netherwood_charcoal": {
+      "burn_time": 2400
+    },
+    "silentgear:netherwood_charcoal_block": {
+      "burn_time": 24000
+    },
+    "silentgear:netherwood_stick": {
+      "burn_time": 150
+    }
+  }
+}

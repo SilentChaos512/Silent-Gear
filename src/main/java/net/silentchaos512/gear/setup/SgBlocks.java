@@ -8,8 +8,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -26,14 +28,13 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
+import net.silentchaos512.gear.block.alloymaker.AlloyMakerBlock;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.charger.StarlightChargerBlock;
-import net.silentchaos512.gear.block.alloymaker.AlloyMakerBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlock;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
@@ -41,7 +42,6 @@ import net.silentchaos512.gear.crafting.recipe.alloy.SuperAlloyRecipe;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -206,13 +206,7 @@ public final class SgBlocks {
     public static final DeferredBlock<Block> NETHERWOOD_CHARCOAL_BLOCK = register("netherwood_charcoal_block",
             () -> new Block(BlockBehaviour.Properties.of()
                     .requiresCorrectToolForDrops()
-                    .strength(5, 6)),
-            bro -> () -> new BlockItem(bro.get(), new Item.Properties()) {
-                @Override
-                public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
-                    return 10 * Config.Common.netherwoodCharcoalBurnTime.get();
-                }
-            });
+                    .strength(5, 6)));
 
     public static final DeferredBlock<WoodBlock> NETHERWOOD_LOG = register("netherwood_log", () ->
             new WoodBlock(STRIPPED_WOOD::get, netherWoodProps(2f, 2f)));

@@ -5,9 +5,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -21,7 +19,6 @@ import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.util.TimeUtils;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -173,12 +170,7 @@ public final class SgItems {
                             .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
                             .build())));
     public static final DeferredItem<Item> NETHERWOOD_CHARCOAL = register("netherwood_charcoal", () ->
-            new Item(baseProps()) {
-                @Override
-                public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
-                    return Config.Common.netherwoodCharcoalBurnTime.get();
-                }
-            });
+            new Item(baseProps()));
 
     static {
         GearItemSets.registerGearItems();
