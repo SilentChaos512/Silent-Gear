@@ -3,7 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.21.1-4.0.4] - Unreleased
+## [1.21.1-4.0.5] - Unreleased
+### Fixed
+- Deepslate bort ore making stone sounds [#571]
+
+## [1.21.1-4.0.4] - 2024-10-10
 ### Added
 - Better Combat support [#694]
 - Tags for netherwood fence gates [#680]

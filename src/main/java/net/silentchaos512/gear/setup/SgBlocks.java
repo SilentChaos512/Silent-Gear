@@ -58,7 +58,7 @@ public final class SgBlocks {
     public static final DeferredBlock<DropExperienceBlock> BORT_ORE = register("bort_ore", () ->
             getOre(UniformInt.of(3, 7), SoundType.STONE));
     public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_BORT_ORE = register("deepslate_bort_ore", () ->
-            getOre(UniformInt.of(3, 7), SoundType.STONE));
+            getOre(UniformInt.of(3, 7), SoundType.DEEPSLATE));
     public static final DeferredBlock<DropExperienceBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
             getOre(ConstantInt.of(0), SoundType.NETHER_GOLD_ORE));
     public static final DeferredBlock<DropExperienceBlock> BLACKSTONE_CRIMSON_IRON_ORE = register("blackstone_crimson_iron_ore", () ->
