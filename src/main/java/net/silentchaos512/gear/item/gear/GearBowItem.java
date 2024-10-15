@@ -8,12 +8,15 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearRangedWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -58,6 +61,16 @@ public class GearBowItem extends BowItem implements GearRangedWeapon {
 
     public float getArrowDamage(ItemStack stack) {
         return GearData.getProperties(stack).getNumber(GearProperties.RANGED_DAMAGE);
+    }
+
+    @Override
+    protected Projectile createProjectile(Level pLevel, LivingEntity pShooter, ItemStack pWeapon, ItemStack pAmmo, boolean pIsCrit) {
+        var projectile = super.createProjectile(pLevel, pShooter, pWeapon, pAmmo, pIsCrit);
+        if (projectile instanceof AbstractArrow arrow) {
+            var rangedDamage = GearData.getProperties(pWeapon).getNumber(GearProperties.RANGED_DAMAGE);
+            arrow.setBaseDamage(arrow.getBaseDamage() - 1 + rangedDamage);
+        }
+        return projectile;
     }
 
     @Override

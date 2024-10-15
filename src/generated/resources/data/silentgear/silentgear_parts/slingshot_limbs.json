@@ -27,7 +27,7 @@
     "ranged_damage": [
       {
         "operation": "ADD",
-        "value": 0.0
+        "value": 0.5
       },
       {
         "operation": "MULTIPLY_BASE",

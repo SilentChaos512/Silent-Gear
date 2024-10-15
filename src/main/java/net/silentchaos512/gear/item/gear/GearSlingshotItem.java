@@ -9,6 +9,8 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.ISlingshotAmmo;
 import net.silentchaos512.gear.item.SlingshotAmmoItem;
 import net.silentchaos512.gear.setup.SgItems;
+import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.util.GearData;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -39,6 +41,8 @@ public class GearSlingshotItem extends GearBowItem {
         AbstractArrow projectile = item.createArrow(pLevel, pAmmo, pShooter, pWeapon);
         if (pIsCrit) {
             projectile.setCritArrow(true);
+            var rangedDamage = GearData.getProperties(pWeapon).getNumber(GearProperties.RANGED_DAMAGE);
+            projectile.setBaseDamage(projectile.getBaseDamage() - 1 + rangedDamage);
         }
 
         return customArrow(projectile, pAmmo, pWeapon);

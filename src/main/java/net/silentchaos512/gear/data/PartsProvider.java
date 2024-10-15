@@ -127,7 +127,7 @@ public final class PartsProvider extends PartsProviderBase {
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1)
             )
             .put(GearTypes.BOW.get(), b -> b
-                    .numberProperty(GearProperties.RANGED_DAMAGE, 2, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.RANGED_DAMAGE, 1, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.DRAW_SPEED, 1, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.45f, NumberProperty.Operation.MULTIPLY_BASE)
@@ -269,7 +269,7 @@ public final class PartsProvider extends PartsProviderBase {
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .put(GearTypes.SLINGSHOT.get(), b -> b
-                    .numberProperty(GearProperties.RANGED_DAMAGE, 0, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.RANGED_DAMAGE, 0.5f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.DRAW_SPEED, 1.5f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 2)
                     .numberProperty(GearProperties.ENCHANTMENT_VALUE, -0.65f, NumberProperty.Operation.MULTIPLY_BASE)
