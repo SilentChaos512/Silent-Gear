@@ -8,6 +8,12 @@
     "count": 6,
     "id": "silentgear:template_board"
   },
+  "sound": {
+    "pitch": 1.0,
+    "pitch_deviation": 0.1,
+    "sound": "silentgear:block.silentgear.stone_anvil.knife",
+    "volume": 1.0
+  },
   "tool": {
     "tag": "c:tools/knife"
   }

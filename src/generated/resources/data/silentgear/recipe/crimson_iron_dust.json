@@ -8,6 +8,12 @@
     "count": 1,
     "id": "silentgear:crimson_iron_dust"
   },
+  "sound": {
+    "pitch": 1.0,
+    "pitch_deviation": 0.1,
+    "sound": "silentgear:block.silentgear.stone_anvil.hammer",
+    "volume": 1.0
+  },
   "tool": {
     "tag": "c:tools/hammer"
   }

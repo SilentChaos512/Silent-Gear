@@ -94,7 +94,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
             if (serverPlayer == null || !serverPlayer.getAbilities().instabuild) {
                 tool.hurtAndBreak(damage, entity, LivingEntity.getSlotForHand(hand));
             }
-            level.playSound(null, getBlockPos(), SoundEvents.STONE_HIT, SoundSource.PLAYERS, 1f, 1f);
+            recipe.getSound().playAt(level, getBlockPos(), SoundSource.PLAYERS);
             level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
             this.markUpdated();
 

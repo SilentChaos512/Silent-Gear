@@ -22,5 +22,21 @@ public class ModSoundDefinitionsProvider extends SoundDefinitionsProvider {
                                 sound(SilentGear.getId("snap"))
                         )
         );
+        add(
+                SgSounds.STONE_ANVIL_HAMMER,
+                definition()
+                        .subtitle("subtitles.block.silentgear.stone_anvil.hammer")
+                        .with(
+                                sound(SilentGear.getId("hammer"))
+                        )
+        );
+        add(
+                SgSounds.STONE_ANVIL_KNIFE,
+                definition()
+                        .subtitle("subtitles.block.silentgear.stone_anvil.knife")
+                        .with(
+                                sound(SilentGear.getId("knife_scrape"))
+                        )
+        );
     }
 }

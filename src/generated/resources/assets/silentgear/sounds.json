@@ -1,4 +1,16 @@
 {
+  "block.silentgear.stone_anvil.hammer": {
+    "sounds": [
+      "silentgear:hammer"
+    ],
+    "subtitle": "subtitles.block.silentgear.stone_anvil.hammer"
+  },
+  "block.silentgear.stone_anvil.knife": {
+    "sounds": [
+      "silentgear:knife_scrape"
+    ],
+    "subtitle": "subtitles.block.silentgear.stone_anvil.knife"
+  },
   "item.silentgear.gear_damaged": {
     "sounds": [
       "silentgear:kachink",

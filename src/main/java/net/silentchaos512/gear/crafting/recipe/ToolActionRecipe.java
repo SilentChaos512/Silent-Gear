@@ -5,10 +5,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.silentchaos512.gear.core.SoundPlayback;
 import net.silentchaos512.gear.setup.SgRecipes;
 
 public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
@@ -16,12 +18,14 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
     private final Ingredient ingredient;
     private final int damageToTool;
     private final ItemStack result;
+    private final SoundPlayback sound;
 
-    public ToolActionRecipe(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStack result) {
+    public ToolActionRecipe(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStack result, SoundPlayback sound) {
         this.tool = tool;
         this.ingredient = ingredient;
         this.damageToTool = damageToTool;
         this.result = result;
+        this.sound = sound;
     }
 
     public Ingredient getTool() {
@@ -38,6 +42,10 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
 
     public ItemStack getResult() {
         return result.copy();
+    }
+
+    public SoundPlayback getSound() {
+        return sound;
     }
 
     @Override
@@ -76,7 +84,8 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
                         Ingredient.CODEC_NONEMPTY.fieldOf("tool").forGetter(r -> r.tool),
                         Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.ingredient),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("damage_to_tool").forGetter(r -> r.damageToTool),
-                        ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result)
+                        ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result),
+                        SoundPlayback.CODEC.fieldOf("sound").forGetter(r -> r.sound)
                 ).apply(instance, ToolActionRecipe::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, ToolActionRecipe> STREAM_CODEC = StreamCodec.of(
@@ -99,7 +108,8 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
             var ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
             var damageToTool = buf.readVarInt();
             var result = ItemStack.STREAM_CODEC.decode(buf);
-            return new ToolActionRecipe(tool, ingredient, damageToTool, result);
+            var soundEffect = SoundPlayback.STREAM_CODEC.decode(buf);
+            return new ToolActionRecipe(tool, ingredient, damageToTool, result, soundEffect);
         }
 
         public static void toNetwork(RegistryFriendlyByteBuf buf, ToolActionRecipe recipe) {
@@ -107,6 +117,7 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
             Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.ingredient);
             buf.writeVarInt(recipe.damageToTool);
             ItemStack.STREAM_CODEC.encode(buf, recipe.result);
+            SoundPlayback.STREAM_CODEC.encode(buf, recipe.sound);
         }
     }
 
