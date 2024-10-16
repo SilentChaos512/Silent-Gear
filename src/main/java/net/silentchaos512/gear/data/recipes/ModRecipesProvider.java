@@ -842,13 +842,13 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(Tags.Items.DUSTS_GLOWSTONE))
                 .save(consumer);
 
-        toolAction(consumer, SgTags.Items.HAMMERS, Tags.Items.COBBLESTONES, 1, SgItems.PEBBLE, 9)
+        toolAction(consumer, SgTags.Items.TOOLS_HAMMER, Tags.Items.COBBLESTONES, 1, SgItems.PEBBLE, 9)
                 .save(consumer);
 
-        toolAction(consumer, SgTags.Items.KNIVES, ItemTags.LOGS, 1, CraftingItems.TEMPLATE_BOARD, 6)
+        toolAction(consumer, SgTags.Items.TOOLS_KNIFE, ItemTags.LOGS, 1, CraftingItems.TEMPLATE_BOARD, 6)
                 .save(consumer);
 
-        toolAction(consumer, SgTags.Items.HAMMERS, Items.SHULKER_SHELL, 10, CraftingItems.CRUSHED_SHULKER_SHELL, 1)
+        toolAction(consumer, SgTags.Items.TOOLS_HAMMER, Items.SHULKER_SHELL, 10, CraftingItems.CRUSHED_SHULKER_SHELL, 1)
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CraftingItems.AZURE_ELECTRUM_INGOT)
@@ -1762,7 +1762,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
 
         if (metal.dust != null) {
-            toolAction(consumer, SgTags.Items.HAMMERS, metal.ingotTag, 1, metal.dust, 1)
+            toolAction(consumer, SgTags.Items.TOOLS_HAMMER, metal.ingotTag, 1, metal.dust, 1)
                     .save(consumer);
         }
     }

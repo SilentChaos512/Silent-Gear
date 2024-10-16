@@ -154,14 +154,14 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.BOW.gearItem());
         builder(Tags.Items.TOOLS_CROSSBOW,
                 GearItemSets.CROSSBOW.gearItem());
-        builder(SgTags.Items.HAMMERS,
+        builder(SgTags.Items.TOOLS_HAMMER,
                 GearItemSets.HAMMER.gearItem(),
                 GearItemSets.PROSPECTOR_HAMMER.gearItem(),
                 SgItems.CRUDE_HAMMER);
         builder(ItemTags.HOES,
                 GearItemSets.HOE.gearItem(),
                 GearItemSets.MATTOCK.gearItem());
-        builder(SgTags.Items.KNIVES,
+        builder(SgTags.Items.TOOLS_KNIFE,
                 GearItemSets.KNIFE.gearItem(),
                 GearItemSets.DAGGER.gearItem(),
                 SgItems.CRUDE_KNIFE);
@@ -169,7 +169,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.HAMMER.gearItem(),
                 GearItemSets.PAXEL.gearItem(),
                 GearItemSets.PICKAXE.gearItem());
-        builder(SgTags.Items.TOOLS_SAWS,
+        builder(SgTags.Items.TOOLS_SAW,
                 GearItemSets.SAW.gearItem());
         builder(Tags.Items.TOOLS_SHEAR,
                 GearItemSets.SHEARS.gearItem());
@@ -180,7 +180,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.MATTOCK.gearItem(),
                 GearItemSets.PAXEL.gearItem(),
                 GearItemSets.SHOVEL.gearItem());
-        builder(SgTags.Items.TOOLS_SICKLES,
+        builder(SgTags.Items.TOOLS_SICKLE,
                 GearItemSets.SICKLE.gearItem());
         builder(ItemTags.SWORDS,
                 GearItemSets.DAGGER.gearItem(),

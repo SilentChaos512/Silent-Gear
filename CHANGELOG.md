@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.21.1-4.0.5] - Unreleased
 ### Fixed
 - Deepslate bort ore making stone sounds [#722]
+- Correct some tool-related tags, such as `c:tools/knife` (was "knives") [#711]
 - Bows, crossbows, and slingshots dealing vanilla damage, ignoring the ranged damage property [#708]
 - Bows and crossbows not being enchantable (going to add different enchantments for slingshots... eventually)
 

@@ -115,10 +115,10 @@ public final class SgTags {
         public static final TagKey<Item> FRUITS = common("fruits");
 
         public static final TagKey<Item> ARMORS_ELYTRA = common("armors/elytra");
-        public static final TagKey<Item> HAMMERS = common("tools/hammers");
-        public static final TagKey<Item> KNIVES = common("tools/knives");
-        public static final TagKey<Item> TOOLS_SAWS = common("tools/saws");
-        public static final TagKey<Item> TOOLS_SICKLES = common("tools/sickles");
+        public static final TagKey<Item> TOOLS_HAMMER = common("tools/hammer");
+        public static final TagKey<Item> TOOLS_KNIFE = common("tools/knife");
+        public static final TagKey<Item> TOOLS_SAW = common("tools/saw");
+        public static final TagKey<Item> TOOLS_SICKLE = common("tools/sickle");
 
         public static final TagKey<Item> BLUEPRINTS = mod("blueprints");
 
