@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.21.1-4.0.5] - Unreleased
 ### Fixed
 - Deepslate bort ore making stone sounds [#722]
-- Bows, crossbows, and slingshots dealing vanilla damage, ignoring the ranged damage property [#708] 
+- Bows, crossbows, and slingshots dealing vanilla damage, ignoring the ranged damage property [#708]
+- Bows and crossbows not being enchantable (going to add different enchantments for slingshots... eventually)
 
 ## [1.21.1-4.0.4] - 2024-10-10
 ### Added

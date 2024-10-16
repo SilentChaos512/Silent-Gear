@@ -36,7 +36,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        // Forge
+        // Common
         copy(SgTags.Blocks.ORES_BORT, SgTags.Items.ORES_BORT);
         copy(SgTags.Blocks.ORES_CRIMSON_IRON, SgTags.Items.ORES_CRIMSON_IRON);
         copy(SgTags.Blocks.ORES_AZURE_SILVER, SgTags.Items.ORES_AZURE_SILVER);
@@ -200,6 +200,9 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
         copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
         copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
+
+        tag(ItemTags.BOW_ENCHANTABLE).add(GearItemSets.BOW.gearItem());
+        tag(ItemTags.CROSSBOW_ENCHANTABLE).add(GearItemSets.CROSSBOW.gearItem());
 
         tag(ItemTags.ARROWS).add(GearItemSets.ARROW.gearItem());
         builder(ItemTags.PIGLIN_LOVED,
