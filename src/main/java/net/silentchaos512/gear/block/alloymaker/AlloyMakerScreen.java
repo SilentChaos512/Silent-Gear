@@ -45,7 +45,7 @@ public abstract class AlloyMakerScreen extends AbstractContainerScreen<AlloyMake
     @Nonnull
     private Component getWorkEnabledButtonTitle() {
         Component text = TextUtil.misc(this.menu.getWorkEnabled() ? "on" : "off");
-        return TextUtil.translate("block", "compounder.workEnabled", text);
+        return TextUtil.translate("block", "alloy_maker.workEnabled", text);
     }
 
     @Override

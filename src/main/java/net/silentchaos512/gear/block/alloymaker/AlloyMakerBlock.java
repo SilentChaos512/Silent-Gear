@@ -78,7 +78,9 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
         Set<Component> catNameSet = this.info.getCategories().stream().map(IMaterialCategory::getDisplayName).collect(Collectors.toSet());
         Component catStr = TextUtil.separatedList(catNameSet);
         if (catStr != null) {
-            tooltip.add(TextUtil.translate("block", "compounder.desc", catStr));
+            tooltip.add(TextUtil.translate("block", "alloy_maker.desc", catStr));
+        } else {
+            tooltip.add(TextUtil.translate("block", "super_mixer.desc"));
         }
     }
 
