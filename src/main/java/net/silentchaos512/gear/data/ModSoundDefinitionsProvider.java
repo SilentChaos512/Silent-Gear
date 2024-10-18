@@ -19,6 +19,7 @@ public class ModSoundDefinitionsProvider extends SoundDefinitionsProvider {
                         .subtitle("subtitles.item.silentgear.gear_damaged")
                         .with(
                                 sound(SilentGear.getId("kachink")),
+                                sound(SilentGear.getId("kachink_long")),
                                 sound(SilentGear.getId("snap"))
                         )
         );

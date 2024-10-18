@@ -14,6 +14,7 @@
   "item.silentgear.gear_damaged": {
     "sounds": [
       "silentgear:kachink",
+      "silentgear:kachink_long",
       "silentgear:snap"
     ],
     "subtitle": "subtitles.item.silentgear.gear_damaged"
