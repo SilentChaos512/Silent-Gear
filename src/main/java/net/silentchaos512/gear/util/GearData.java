@@ -114,9 +114,9 @@ public final class GearData {
             SilentGear.LOGGER.debug("Not recalculating stats for {}", getPlayersItemNameText(gear, player));
         }
 
-        onRecalculatePre(gear, player);
-
         @Nullable var oldProperties = gear.get(SgDataComponents.GEAR_PROPERTIES);
+
+        onRecalculatePre(gear, player, oldProperties);
 
         // Calculate base values, then bonuses from traits and such, then the final values!
         // All of these are stored for tooltip purposes
@@ -132,16 +132,21 @@ public final class GearData {
 
         printStatsForDebugging(gear, oldProperties, baseProperties, bonusValues, finalProperties);
 
-        onRecalculatePost(gear, player);
+        onRecalculatePost(gear, player, finalProperties);
     }
 
-    private static void onRecalculatePre(ItemStack gear, @Nullable Player player) {
+    private static void onRecalculatePre(ItemStack gear, @Nullable Player player, @Nullable GearPropertiesData oldProperties) {
+        if (oldProperties == null) return;
+
         // TODO: Remove trait-added enchantments
+
+        // Let traits do their thing
+        for (var trait : oldProperties.getTraits()) {
+            trait.getTrait().onRecalculatePre(gear, trait.getLevel());
+        }
     }
 
-    private static void onRecalculatePost(ItemStack gear, @Nullable Player player) {
-        // TODO: Add trait-added enchantments
-
+    private static void onRecalculatePost(ItemStack gear, @Nullable Player player, GearPropertiesData finalProperties) {
         // Set other data components
         if (gear.getItem() instanceof GearTool gearTool) {
             GearPropertiesData properties = gear.getOrDefault(SgDataComponents.GEAR_PROPERTIES, GearPropertiesData.EMPTY);
@@ -158,6 +163,13 @@ public final class GearData {
             // Attach armor color
             var color = GearArmorItem.getArmorColor(gear);
             gear.set(DataComponents.DYED_COLOR, new DyedItemColor(color, false));
+        }
+
+        // TODO: Add trait-added enchantments
+
+        // Let traits do their thing
+        for (var trait : finalProperties.getTraits()) {
+            trait.getTrait().onRecalculatePost(gear, trait.getLevel());
         }
     }
 

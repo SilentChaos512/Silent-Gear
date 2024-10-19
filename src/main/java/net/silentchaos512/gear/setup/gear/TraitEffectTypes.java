@@ -15,6 +15,8 @@ import java.util.function.Supplier;
 public class TraitEffectTypes {
     public static final DeferredRegister<TraitEffectType<?>> REGISTRAR = DeferredRegister.create(SgRegistries.TRAIT_EFFECT_TYPE, SilentGear.MOD_ID);
 
+    public static final Supplier<TraitEffectType<AttachDataComponentsTraitEffect>> ATTACH_DATA_COMPONENTS = register("attach_data_components",
+            AttachDataComponentsTraitEffect.CODEC, AttachDataComponentsTraitEffect.STREAM_CODEC);
     public static final Supplier<TraitEffectType<AttributeTraitEffect>> ATTRIBUTE = register("attribute",
             AttributeTraitEffect.CODEC, AttributeTraitEffect.STREAM_CODEC);
     public static final Supplier<TraitEffectType<BlockFillerTraitEffect>> BLOCK_FILLER = register("block_filler",

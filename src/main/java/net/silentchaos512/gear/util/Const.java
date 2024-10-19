@@ -258,6 +258,7 @@ public final class Const {
         public static final DataResource<Trait> VOID_WARD = DataResource.trait("void_ward");
         public static final DataResource<Trait> VULCAN = DataResource.trait("vulcan");
         public static final DataResource<Trait> WIDEN = DataResource.trait("widen");
+        public static final DataResource<Trait> YUMMY = DataResource.trait("yummy");
 
         // Misc constants
         public static final float ANCIENT_XP_BOOST = 0.25f;

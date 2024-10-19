@@ -1,0 +1,26 @@
+{
+  "conditions": [],
+  "description": {
+    "translate": "trait.silentgear.yummy.desc"
+  },
+  "effects": [
+    {
+      "type": "silentgear:attach_data_components",
+      "components": {
+        "minecraft:food": {
+          "can_always_eat": true,
+          "eat_seconds": 3.2,
+          "nutrition": 10,
+          "saturation": 1.0,
+          "using_converts_to": {
+            "id": "minecraft:stick"
+          }
+        }
+      }
+    }
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.yummy"
+  }
+}

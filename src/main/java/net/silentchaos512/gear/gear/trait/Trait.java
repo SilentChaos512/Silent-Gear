@@ -150,15 +150,15 @@ public final class Trait {
         }
     }
 
-    public void onRecalculatePre(TraitActionContext context) {
+    public void onRecalculatePre(ItemStack gear, int traitLevel) {
         for (TraitEffect effect : this.effects) {
-            effect.onRecalculatePre(context);
+            effect.onRecalculatePre(gear, traitLevel);
         }
     }
 
-    public void onRecalculatePost(TraitActionContext context) {
+    public void onRecalculatePost(ItemStack gear, int traitLevel) {
         for (TraitEffect effect : this.effects) {
-            effect.onRecalculatePost(context);
+            effect.onRecalculatePost(gear, traitLevel);
         }
     }
 

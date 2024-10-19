@@ -8,6 +8,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.NumberProperty;
+import net.silentchaos512.gear.api.property.TraitListPropertyValue;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.CodecUtils;
@@ -15,6 +17,7 @@ import net.silentchaos512.gear.util.CodecUtils;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -89,6 +92,10 @@ public record GearPropertiesData(
 
     public int getNumberInt(Supplier<NumberProperty> propertyType) {
         return Math.round(getNumber(propertyType, propertyType.get().getDefaultValue()));
+    }
+
+    public List<TraitInstance> getTraits() {
+        return getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty()).value();
     }
 
     public boolean contains(GearProperty<?, ?> property) {

@@ -1,17 +1,23 @@
 package net.silentchaos512.gear.data.trait;
 
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.data.trait.*;
+import net.silentchaos512.gear.api.data.trait.TraitBuilder;
+import net.silentchaos512.gear.api.data.trait.TraitsProviderBase;
 import net.silentchaos512.gear.core.SoundPlayback;
 import net.silentchaos512.gear.gear.trait.effect.*;
 import net.silentchaos512.gear.setup.SgBlocks;
@@ -23,6 +29,7 @@ import net.silentchaos512.gear.util.Const;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public class TraitsProvider extends TraitsProviderBase {
@@ -567,6 +574,19 @@ public class TraitsProvider extends TraitsProviderBase {
                                 2f,
                                 Ingredient.of(SgTags.Items.GREEDY_MAGNET_ATTRACTED),
                                 "ores and gems"
+                        )
+                )
+        );
+
+        ret.add(TraitBuilder.of(Const.Traits.YUMMY, 1)
+                .effects(
+                        new AttachDataComponentsTraitEffect(
+                                DataComponentPatch.builder()
+                                        .set(
+                                                DataComponents.FOOD,
+                                                new FoodProperties(10, 1f, true, 3.2f, Optional.of(new ItemStack(Items.STICK)), List.of())
+                                        )
+                                        .build()
                         )
                 )
         );

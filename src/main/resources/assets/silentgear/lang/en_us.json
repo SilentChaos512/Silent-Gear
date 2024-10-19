@@ -985,5 +985,7 @@
   "trait.silentgear.vulcan": "Vulcan",
   "trait.silentgear.vulcan.desc": "Places obsidian at a high durability cost",
   "trait.silentgear.widen": "Widen",
-  "trait.silentgear.widen.desc": "Increases the effect radius of hammers and excavators"
+  "trait.silentgear.widen.desc": "Increases the effect radius of hammers and excavators",
+  "trait.silentgear.yummy": "Yummy",
+  "trait.silentgear.yummy.desc": "Makes the item edible, but..."
 }

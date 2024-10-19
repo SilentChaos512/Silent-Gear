@@ -334,7 +334,7 @@ public final class GearHelper {
     }
 
     public static boolean isUnbreakable(ItemStack stack) {
-        return TraitHelper.getTraitLevel(stack, Const.Traits.INDESTRUCTIBLE) > 0;
+        return TraitHelper.getTraitLevel(stack, Const.Traits.INDESTRUCTIBLE) > 0 || stack.has(DataComponents.UNBREAKABLE);
     }
 
     public static void setDamage(ItemStack stack, int damage, BiConsumer<ItemStack, Integer> superFunction) {

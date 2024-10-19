@@ -56,11 +56,11 @@ public abstract class TraitEffect {
         // Nothing
     }
 
-    public void onRecalculatePre(TraitActionContext context) {
+    public void onRecalculatePre(ItemStack gear, int traitLevel) {
         // Nothing
     }
 
-    public void onRecalculatePost(TraitActionContext context) {
+    public void onRecalculatePost(ItemStack gear, int traitLevel) {
         // Nothing
     }
 
