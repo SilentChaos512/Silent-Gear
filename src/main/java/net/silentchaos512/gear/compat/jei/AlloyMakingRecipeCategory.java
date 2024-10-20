@@ -14,6 +14,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.alloymaker.AlloyMakerInfo;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
@@ -25,7 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
+public class AlloyMakingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
     public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/alloy_maker.png");
 
     private static final int GUI_START_X = 15;
@@ -39,25 +41,35 @@ public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
     private final IDrawableAnimated arrow;
     private final Component localizedName;
 
-    public CompoundingRecipeCategory(AlloyMakerInfo<?> info, String categoryName, IGuiHelper guiHelper) {
+    public AlloyMakingRecipeCategory(AlloyMakerInfo<?> info, String categoryName, IGuiHelper guiHelper) {
         this.info = info;
         background = guiHelper.createDrawable(TEXTURE, GUI_START_X, GUI_START_Y, GUI_WIDTH, GUI_HEIGHT);
         icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(info.getBlock()));
         arrow = guiHelper.drawableBuilder(TEXTURE, 176, 14, 24, 17)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
-        localizedName = TextUtil.translate("jei", "group.compounding." + categoryName);
+        localizedName = TextUtil.translate("jei", "group.alloy_making." + categoryName);
+    }
+
+    @Override
+    public int getWidth() {
+        return GUI_WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return GUI_HEIGHT;
     }
 
     @Override
     public RecipeType<AlloyRecipe> getRecipeType() {
         if (this.info == Const.FABRIC_ALLOY_MAKER_INFO) {
-            return SGearJeiPlugin.COMPOUNDING_FABRIC_TYPE;
+            return SGearJeiPlugin.ALLOY_MAKING_FABRIC_TYPE;
         } else if (this.info == Const.GEM_ALLOY_MAKER_INFO) {
-            return SGearJeiPlugin.COMPOUNDING_GEM_TYPE;
+            return SGearJeiPlugin.ALLOY_MAKING_GEM_TYPE;
         } else if (this.info == Const.METAL_ALLOY_MAKER_INFO) {
-            return SGearJeiPlugin.COMPOUNDING_METAL_TYPE;
+            return SGearJeiPlugin.ALLOY_MAKING_METAL_TYPE;
         } else if (this.info == Const.SUPER_MIXER_INFO) {
-            return SGearJeiPlugin.COMPOUNDING_SUPER_TYPE;
+            return SGearJeiPlugin.ALLOY_MAKING_SUPER_TYPE;
         } else {
             throw new IllegalStateException("Unknown JEI recipe type: " + this.info.getRecipeType());
         }
@@ -69,11 +81,6 @@ public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
     }
 
     @Override
-    public IDrawable getBackground() {
-        return background;
-    }
-
-    @Override
     public IDrawable getIcon() {
         return icon;
     }
@@ -81,12 +88,19 @@ public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, AlloyRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < info.getInputSlotCount() && i < recipe.getIngredients().size(); ++i) {
-            List<ItemStack> items = Arrays.asList(recipe.getIngredients().get(i).getItems());
+            var ingredient = recipe.getIngredients().get(i);
+            List<ItemStack> items = getValidItemsFromIngredient(ingredient);
             builder.addSlot(RecipeIngredientRole.INPUT, 18 * i + 17 - GUI_START_X, 35 - GUI_START_Y)
                     .addIngredients(VanillaTypes.ITEM_STACK, shiftIngredients(items, 3 * i));
         }
         builder.addSlot(RecipeIngredientRole.OUTPUT, 126 - GUI_START_X, 35 - GUI_START_Y)
                 .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem(null)));
+    }
+
+    private static List<ItemStack> getValidItemsFromIngredient(Ingredient ingredient) {
+        return Arrays.stream(ingredient.getItems())
+                .filter(stack -> stack.getItem() != Items.BARRIER)
+                .toList();
     }
 
     private static List<ItemStack> shiftIngredients(List<ItemStack> list, int amount) {
@@ -104,6 +118,7 @@ public class CompoundingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
 
     @Override
     public void draw(AlloyRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        background.draw(guiGraphics);
         arrow.draw(guiGraphics, 93 - GUI_START_X, 34 - GUI_START_Y);
     }
 }

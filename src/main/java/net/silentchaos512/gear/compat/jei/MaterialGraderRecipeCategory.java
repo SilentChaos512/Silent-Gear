@@ -3,11 +3,13 @@ package net.silentchaos512.gear.compat.jei;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -40,6 +42,16 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     }
 
     @Override
+    public int getWidth() {
+        return GUI_WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return GUI_HEIGHT;
+    }
+
+    @Override
     public RecipeType<GraderRecipe> getRecipeType() {
         return SGearJeiPlugin.GRADING_TYPE;
     }
@@ -47,11 +59,6 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     @Override
     public Component getTitle() {
         return localizedName;
-    }
-
-    @Override
-    public IDrawable getBackground() {
-        return background;
     }
 
     @Override
@@ -81,6 +88,11 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
                 .map(ItemStack::new)
                 .filter(stack -> stack.is(SgTags.Items.GRADER_CATALYSTS))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void draw(GraderRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        background.draw(guiGraphics);
     }
 
     public static class GraderRecipe {

@@ -47,7 +47,7 @@ public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
         IMaterialCategory[] cats = info.getCategories().toArray(new IMaterialCategory[0]);
         List<Ingredient> list = new ArrayList<>();
         for (int i = 0; i < count; ++i) {
-            var partMaterialIngredient = PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.ALL.get(), cats);
+            var partMaterialIngredient = PartMaterialIngredient.of(PartTypes.NONE.get(), GearTypes.ALL.get(), cats);
             list.add(new Ingredient(partMaterialIngredient));
         }
         return recipeFactory.apply(new Result(info.getOutputItem(), count, Const.Materials.EXAMPLE), list);

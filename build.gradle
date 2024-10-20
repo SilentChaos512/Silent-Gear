@@ -135,13 +135,13 @@ dependencies {
         compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
         compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
         // at runtime, use the full JEI jar for NeoForge
-//        runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+        runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
     }
 
     // EMI
     if (project.hasProperty("emi_version")) {
         compileOnly("dev.emi:emi-neoforge:${emi_version}:api")
-        runtimeOnly("dev.emi:emi-neoforge:${emi_version}")
+//        runtimeOnly("dev.emi:emi-neoforge:${emi_version}")
     }
 
     // Curios

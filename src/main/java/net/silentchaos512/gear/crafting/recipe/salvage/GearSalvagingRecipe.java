@@ -37,6 +37,12 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
+    public List<ItemStack> getPossibleResultsForDisplay() {
+        // Cannot compute anything without an input item
+        return List.of();
+    }
+
+    @Override
     public RecipeSerializer<?> getSerializer() {
         return SgRecipes.SALVAGING_GEAR.get();
     }

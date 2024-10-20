@@ -38,7 +38,17 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
         ResourceLocation location = SilentGear.getId("textures/gui/gear_crafting_jei.png");
         this.background = guiHelper.createDrawable(location, 0, 0, WIDTH, HEIGHT);
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, SgItems.BLUEPRINT_PACKAGE.toStack());
-        this.localizedName = TextUtil.translate("gui", "group.gearCrafting");
+        this.localizedName = TextUtil.translate("jei", "group.gearCrafting");
+    }
+
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
     }
 
     @Override
@@ -49,11 +59,6 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
     @Override
     public Component getTitle() {
         return this.localizedName;
-    }
-
-    @Override
-    public IDrawable getBackground() {
-        return this.background;
     }
 
     @Override
@@ -79,6 +84,8 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
 
     @Override
     public void draw(CraftingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        background.draw(guiGraphics);
+
         Collection<Component> lines = new ArrayList<>();
 
         NonNullList<Ingredient> ingredients = recipe.getIngredients();

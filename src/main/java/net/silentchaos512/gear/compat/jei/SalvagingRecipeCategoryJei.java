@@ -43,6 +43,16 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     }
 
     @Override
+    public int getWidth() {
+        return GUI_WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return GUI_HEIGHT;
+    }
+
+    @Override
     public RecipeType<SalvagingRecipe> getRecipeType() {
         return SGearJeiPlugin.SALVAGING_TYPE;
     }
@@ -53,25 +63,20 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     }
 
     @Override
-    public IDrawable getBackground() {
-        return background;
-    }
-
-    @Override
     public IDrawable getIcon() {
         return icon;
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SalvagingRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 8 - GUI_START_X, 34 - GUI_START_Y)
+        builder.addSlot(RecipeIngredientRole.INPUT, 9 - GUI_START_X, 35 - GUI_START_Y)
                 .addIngredients(VanillaTypes.ITEM_STACK, Arrays.asList(recipe.getIngredient().getItems()));
 
-        List<ItemStack> results = recipe.getPossibleResults(new SimpleContainer(1));
+        List<ItemStack> results = recipe.getPossibleResultsForDisplay();
 
         for (int i = 0; i < 9 && i < results.size(); ++i) {
-            int x = 18 * (i % 3) + 61 - GUI_START_X;
-            int y = 18 * (i / 3) + 16 - GUI_START_Y;
+            int x = 18 * (i % 3) + 62 - GUI_START_X;
+            int y = 18 * (i / 3) + 17 - GUI_START_Y;
             builder.addSlot(RecipeIngredientRole.OUTPUT, x, y)
                     .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(results.get(i)));
         }
@@ -79,6 +84,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
 
     @Override
     public void draw(SalvagingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        background.draw(guiGraphics);
         arrow.draw(guiGraphics, 32 - GUI_START_X, 34 - GUI_START_Y);
     }
 }

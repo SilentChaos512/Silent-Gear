@@ -13,9 +13,7 @@ import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -141,11 +139,11 @@ public abstract class AbstractMaterial implements Material {
 
     @Override
     public boolean isCraftingAllowed(MaterialInstance material, PartType partType, GearType gearType, @Nullable CraftingInput craftingInput) {
-        if (isGearTypeBlacklisted(gearType) || !isAllowedInPart(material, partType)) {
+        if (isGearTypeBlacklisted(gearType) || (partType != PartTypes.NONE.get() && !isAllowedInPart(material, partType))) {
             return false;
         }
 
-        if (properties.containsKey(partType) || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType, craftingInput))) {
+        if (properties.containsKey(partType) || partType == PartTypes.NONE.get() || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType, craftingInput))) {
             if (partType == PartTypes.MAIN.get()) {
                 var durabilityProperty = gearType.durabilityStat().get();
                 var durabilityKey = PropertyKey.of(durabilityProperty, gearType);
