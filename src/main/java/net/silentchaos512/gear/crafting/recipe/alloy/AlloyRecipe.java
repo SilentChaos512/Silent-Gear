@@ -145,7 +145,7 @@ public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
             if (item instanceof CustomMaterialItem customMaterialItem && material != null) {
                 return customMaterialItem.create(MaterialInstance.of(material), count);
             }
-            return new ItemStack(item);
+            return new ItemStack(item, count);
         }
     }
 

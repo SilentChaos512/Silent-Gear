@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Replaced one of the new "gear damaged" sounds with two that are based of the item breaking sound (like older versions of the mod)
 ### Fixed
+- Some alloy recipes not outputting the correct number of items [#723]
 - Added missing lang keys for the super mixer and super alloy
 
 ## [1.21.1-4.0.5] - 2024-10-15
