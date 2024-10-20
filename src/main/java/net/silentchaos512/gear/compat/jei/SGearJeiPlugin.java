@@ -23,14 +23,12 @@ import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.block.alloymaker.screen.AlloyForgeScreen;
 import net.silentchaos512.gear.block.alloymaker.screen.RecrystallizerScreen;
 import net.silentchaos512.gear.block.alloymaker.screen.RefabricatorScreen;
+import net.silentchaos512.gear.block.alloymaker.screen.SuperMixerScreen;
 import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.ToolActionRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.*;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomMaterialItem;
@@ -75,6 +73,7 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipeCategories(new AlloyMakingRecipeCategory(Const.FABRIC_ALLOY_MAKER_INFO, "fabric", guiHelper));
         reg.addRecipeCategories(new AlloyMakingRecipeCategory(Const.GEM_ALLOY_MAKER_INFO, "gem", guiHelper));
         reg.addRecipeCategories(new AlloyMakingRecipeCategory(Const.METAL_ALLOY_MAKER_INFO, "metal", guiHelper));
+        reg.addRecipeCategories(new AlloyMakingRecipeCategory(Const.SUPER_MIXER_INFO, "super", guiHelper));
         reg.addRecipeCategories(new MaterialGraderRecipeCategory(guiHelper));
         reg.addRecipeCategories(new SalvagingRecipeCategoryJei(guiHelper));
         reg.addRecipeCategories(new ToolActionRecipeCategory(guiHelper));
@@ -108,10 +107,11 @@ public class SGearJeiPlugin implements IModPlugin {
         // Tool Action (Stone Anvil)
         reg.addRecipes(TOOL_ACTION_TYPE, getRecipes(recipeManager, SgRecipes.TOOL_ACTION_TYPE.get(), ToolActionRecipe.class));
 
-        // Compounders
+        // Alloy Makers
         reg.addRecipes(ALLOY_MAKING_FABRIC_TYPE, getRecipes(recipeManager, SgRecipes.ALLOY_MAKING_FABRIC_TYPE.get(), AlloyRecipe.class));
         reg.addRecipes(ALLOY_MAKING_GEM_TYPE, getRecipes(recipeManager, SgRecipes.ALLOY_MAKING_GEM_TYPE.get(), AlloyRecipe.class));
         reg.addRecipes(ALLOY_MAKING_METAL_TYPE, getRecipes(recipeManager, SgRecipes.ALLOY_MAKING_METAL_TYPE.get(), AlloyRecipe.class));
+        reg.addRecipes(ALLOY_MAKING_SUPER_TYPE, getRecipes(recipeManager, SgRecipes.ALLOY_MAKING_SUPER_TYPE.get(), AlloyRecipe.class));
 
         for (int i = 2; i <= 4; ++i) {
             reg.addRecipes(ALLOY_MAKING_FABRIC_TYPE, Collections.singletonList(
@@ -122,6 +122,9 @@ public class SGearJeiPlugin implements IModPlugin {
             ));
             reg.addRecipes(ALLOY_MAKING_METAL_TYPE, Collections.singletonList(
                     AlloyRecipe.makeExample(Const.METAL_ALLOY_MAKER_INFO, i, MetalAlloyRecipe::new)
+            ));
+            reg.addRecipes(ALLOY_MAKING_SUPER_TYPE, List.of(
+                    AlloyRecipe.makeExample(Const.SUPER_MIXER_INFO, i, SuperAlloyRecipe::new)
             ));
         }
 
@@ -165,6 +168,7 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipeCatalyst(new ItemStack(SgBlocks.REFABRICATOR), ALLOY_MAKING_FABRIC_TYPE);
         reg.addRecipeCatalyst(new ItemStack(SgBlocks.RECRYSTALLIZER), ALLOY_MAKING_GEM_TYPE);
         reg.addRecipeCatalyst(new ItemStack(SgBlocks.ALLOY_FORGE), ALLOY_MAKING_METAL_TYPE);
+        reg.addRecipeCatalyst(new ItemStack(SgBlocks.SUPER_MIXER), ALLOY_MAKING_SUPER_TYPE);
         reg.addRecipeCatalyst(new ItemStack(SgBlocks.MATERIAL_GRADER), GRADING_TYPE);
         reg.addRecipeCatalyst(new ItemStack(SgBlocks.SALVAGER), SALVAGING_TYPE);
         reg.addRecipeCatalyst(new ItemStack(SgBlocks.STONE_ANVIL), TOOL_ACTION_TYPE);
@@ -175,6 +179,7 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addRecipeClickArea(RefabricatorScreen.class, 90, 30, 28, 23, ALLOY_MAKING_FABRIC_TYPE);
         reg.addRecipeClickArea(RecrystallizerScreen.class, 90, 30, 28, 23, ALLOY_MAKING_GEM_TYPE);
         reg.addRecipeClickArea(AlloyForgeScreen.class, 90, 30, 28, 23, ALLOY_MAKING_METAL_TYPE);
+        reg.addRecipeClickArea(SuperMixerScreen.class, 90, 30, 28, 23, ALLOY_MAKING_SUPER_TYPE);
         reg.addRecipeClickArea(GraderScreen.class, 48, 30, 28, 23, GRADING_TYPE);
         reg.addRecipeClickArea(SalvagerScreen.class, 30, 30, 28, 23, SALVAGING_TYPE);
     }
