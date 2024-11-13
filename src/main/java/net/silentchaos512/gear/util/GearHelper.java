@@ -238,7 +238,11 @@ public final class GearHelper {
         final int previousDamageFactor = getDamageFactor(stack, maxDamage);
         if (!canBreakPermanently(stack))
             amount = Math.min(maxDamage - stack.getDamageValue(), amount);
-        stack.hurtAndBreak(amount, entity, slot);
+        if (amount < 0) {
+            stack.setDamageValue(Math.max(0, stack.getDamageValue() + amount));
+        } else {
+            stack.hurtAndBreak(amount, entity, slot);
+        }
 
         // Recalculate stats occasionally
         var currentDamageFactory = getDamageFactor(stack, maxDamage);
