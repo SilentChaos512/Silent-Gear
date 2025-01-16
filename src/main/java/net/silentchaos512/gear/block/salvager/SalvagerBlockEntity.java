@@ -100,7 +100,7 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
                 ++blockEntity.progress;
             }
 
-            if (blockEntity.progress >= BASE_WORK_TIME && blockEntity.areAllOutputSlotsFree()) {
+            if (blockEntity.progress >= BASE_WORK_TIME && !blockEntity.isOutputFull()) {
                 for (ItemStack stack : blockEntity.getSalvagedPartsWithChance(recipe, input)) {
                     int slot = blockEntity.getFreeOutputSlot();
                     if (slot > 0) {
@@ -166,9 +166,9 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
         return -1;
     }
 
-    private boolean areAllOutputSlotsFree() {
+    private boolean isOutputFull() {
         for (int slot : SLOTS_OUTPUT) {
-            if (!getItem(slot).isEmpty()) {
+            if (getItem(slot).isEmpty()) {
                 return false;
             }
         }
