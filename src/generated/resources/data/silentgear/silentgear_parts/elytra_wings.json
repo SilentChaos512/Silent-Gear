@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.elytra_wings"
+      "translate": "item.silentgear.elytra_wings"
     },
     "name_prefix": ""
   },

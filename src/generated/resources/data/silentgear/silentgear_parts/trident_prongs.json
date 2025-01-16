@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.trident_prongs"
+      "translate": "item.silentgear.trident_prongs"
     },
     "name_prefix": ""
   },

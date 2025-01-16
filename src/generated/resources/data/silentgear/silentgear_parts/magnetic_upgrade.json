@@ -4,38 +4,30 @@
     "can_salvage": true,
     "gear_type_blacklist": [],
     "ingredient": {
-      "item": "silentgear:spoon_upgrade"
+      "item": "silentgear:magnetic_upgrade"
     }
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.misc.spoon"
+      "translate": "item.silentgear.magnetic_upgrade"
     },
     "name_prefix": ""
   },
   "gear_type": "silentgear:all",
   "part_type": "silentgear:misc_upgrade",
   "properties": {
-    "durability": {
-      "operation": "MULTIPLY_BASE",
-      "value": 0.2
-    },
-    "rarity": {
-      "operation": "ADD",
-      "value": 10.0
-    },
     "traits": [
       {
         "conditions": [],
-        "level": 1,
-        "trait": "silentgear:spoon"
+        "level": 5,
+        "trait": "silentgear:magnetic"
       }
     ]
   },
   "upgrade_gear_types": {
-    "match_parents": false,
+    "match_parents": true,
     "types": [
-      "silentgear:pickaxe"
+      "silentgear:all"
     ]
   }
 }

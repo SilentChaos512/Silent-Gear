@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.slingshot_limbs"
+      "translate": "item.silentgear.slingshot_limbs"
     },
     "name_prefix": ""
   },

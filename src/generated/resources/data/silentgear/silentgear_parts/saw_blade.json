@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.saw_blade"
+      "translate": "item.silentgear.saw_blade"
     },
     "name_prefix": ""
   },

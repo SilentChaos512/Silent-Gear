@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.crossbow_limbs"
+      "translate": "item.silentgear.crossbow_limbs"
     },
     "name_prefix": ""
   },

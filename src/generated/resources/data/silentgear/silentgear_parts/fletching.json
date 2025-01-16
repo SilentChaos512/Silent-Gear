@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.fletching"
+      "translate": "item.silentgear.fletching"
     },
     "name_prefix": ""
   },

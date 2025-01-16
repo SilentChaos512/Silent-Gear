@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.helmet_plates"
+      "translate": "item.silentgear.helmet_plates"
     },
     "name_prefix": ""
   },

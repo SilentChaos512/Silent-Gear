@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.tip"
+      "translate": "item.silentgear.tip"
     },
     "name_prefix": ""
   },

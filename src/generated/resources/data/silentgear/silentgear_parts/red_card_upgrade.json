@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.misc.red_card"
+      "translate": "item.silentgear.red_card_upgrade"
     },
     "name_prefix": ""
   },

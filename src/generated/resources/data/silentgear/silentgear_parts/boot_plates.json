@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.boot_plates"
+      "translate": "item.silentgear.boot_plates"
     },
     "name_prefix": ""
   },

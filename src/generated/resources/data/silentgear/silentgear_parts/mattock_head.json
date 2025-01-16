@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.mattock_head"
+      "translate": "item.silentgear.mattock_head"
     },
     "name_prefix": ""
   },

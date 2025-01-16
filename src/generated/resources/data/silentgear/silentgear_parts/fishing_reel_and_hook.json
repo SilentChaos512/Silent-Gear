@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.fishing_reel_and_hook"
+      "translate": "item.silentgear.fishing_reel_and_hook"
     },
     "name_prefix": ""
   },

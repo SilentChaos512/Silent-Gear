@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.shield_plate"
+      "translate": "item.silentgear.shield_plate"
     },
     "name_prefix": ""
   },

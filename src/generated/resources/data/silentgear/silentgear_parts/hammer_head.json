@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.hammer_head"
+      "translate": "item.silentgear.hammer_head"
     },
     "name_prefix": ""
   },

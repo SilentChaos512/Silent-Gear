@@ -9,7 +9,7 @@
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.hoe_head"
+      "translate": "item.silentgear.hoe_head"
     },
     "name_prefix": ""
   },

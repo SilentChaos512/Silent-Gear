@@ -4,30 +4,39 @@
     "can_salvage": true,
     "gear_type_blacklist": [],
     "ingredient": {
-      "item": "silentgear:magnetic_upgrade"
+      "item": "silentgear:wide_plate_upgrade"
     }
   },
   "display": {
     "name": {
-      "translate": "part.silentgear.misc.magnetic"
+      "translate": "item.silentgear.wide_plate_upgrade"
     },
     "name_prefix": ""
   },
   "gear_type": "silentgear:all",
   "part_type": "silentgear:misc_upgrade",
   "properties": {
+    "durability": {
+      "operation": "MULTIPLY_BASE",
+      "value": 0.1
+    },
+    "rarity": {
+      "operation": "ADD",
+      "value": 10.0
+    },
     "traits": [
       {
         "conditions": [],
-        "level": 5,
-        "trait": "silentgear:magnetic"
+        "level": 1,
+        "trait": "silentgear:widen"
       }
     ]
   },
   "upgrade_gear_types": {
-    "match_parents": true,
+    "match_parents": false,
     "types": [
-      "silentgear:all"
+      "silentgear:hammer",
+      "silentgear:excavator"
     ]
   }
 }
