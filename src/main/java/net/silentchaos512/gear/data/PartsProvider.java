@@ -78,29 +78,29 @@ public final class PartsProvider extends PartsProviderBase {
             ret.add(addMainPartStats(builder));
         });
 
-        ret.add(upgradePart("misc/magnetic", CraftingItems.MAGNETIC_UPGRADE)
+        ret.add(upgradePart("magnetic_upgrade", CraftingItems.MAGNETIC_UPGRADE)
                 .upgradeGearTypes(GearTypeMatcher.ALL)
                 .property(GearProperties.TRAITS, TraitListPropertyValue.single(Const.Traits.MAGNETIC, 5))
         );
-        ret.add(upgradePart("misc/spoon", CraftingItems.SPOON_UPGRADE)
+        ret.add(upgradePart("spoon_upgrade", CraftingItems.SPOON_UPGRADE)
                 .upgradeGearTypes(GearTypes.PICKAXE.get().getMatcher(false))
                 .numberProperty(GearProperties.DURABILITY, 0.2f, NumberProperty.Operation.MULTIPLY_BASE)
                 .numberProperty(GearProperties.RARITY, 10, NumberProperty.Operation.ADD)
                 .property(GearProperties.TRAITS, TraitListPropertyValue.single(Const.Traits.SPOON, 1))
         );
-        ret.add(upgradePart("misc/road_maker", CraftingItems.ROAD_MAKER_UPGRADE)
+        ret.add(upgradePart("road_maker_upgrade", CraftingItems.ROAD_MAKER_UPGRADE)
                 .upgradeGearTypes(GearTypes.EXCAVATOR.get().getMatcher(false))
                 .numberProperty(GearProperties.DURABILITY, 0.1f, NumberProperty.Operation.MULTIPLY_BASE)
                 .numberProperty(GearProperties.RARITY, 10, NumberProperty.Operation.ADD)
                 .property(GearProperties.TRAITS, TraitListPropertyValue.single(Const.Traits.ROAD_MAKER, 1))
         );
-        ret.add(upgradePart("misc/wide_plate", CraftingItems.WIDE_PLATE_UPGRADE)
+        ret.add(upgradePart("wide_plate_upgrade", CraftingItems.WIDE_PLATE_UPGRADE)
                 .upgradeGearTypes(new GearTypeMatcher(false, GearTypes.HAMMER.get(), GearTypes.EXCAVATOR.get()))
                 .numberProperty(GearProperties.DURABILITY, 0.1f, NumberProperty.Operation.MULTIPLY_BASE)
                 .numberProperty(GearProperties.RARITY, 10, NumberProperty.Operation.ADD)
                 .property(GearProperties.TRAITS, TraitListPropertyValue.single(Const.Traits.WIDEN, 1))
         );
-        ret.add(upgradePart("misc/red_card", CraftingItems.RED_CARD_UPGRADE)
+        ret.add(upgradePart("red_card_upgrade", CraftingItems.RED_CARD_UPGRADE)
                 .upgradeGearTypes(GearTypeMatcher.ALL)
                 .numberProperty(GearProperties.RARITY, -5, NumberProperty.Operation.ADD)
                 .property(GearProperties.TRAITS, TraitListPropertyValue.single(Const.Traits.RED_CARD, 1))
@@ -111,13 +111,13 @@ public final class PartsProvider extends PartsProviderBase {
 
     private static PartBuilder part(String name, Supplier<GearType> gearType, Supplier<PartType> partType) {
         return new PartBuilder(SilentGear.getId(name), gearType, partType)
-                .display(Component.translatable("part.silentgear." + name.replace('/', '.')));
+                .display(Component.translatable("item.silentgear." + name.replace('/', '.')));
     }
 
     private static UpgradePartBuilder upgradePart(String name, ItemLike item) {
         return (UpgradePartBuilder) new UpgradePartBuilder(SilentGear.getId(name), GearTypes.ALL, PartTypes.MISC_UPGRADE)
                 .crafting(item)
-                .display(Component.translatable("part.silentgear." + name.replace('/', '.')));
+                .display(Component.translatable("item.silentgear." + name.replace('/', '.')));
     }
 
     public static Map<GearType, Consumer<PartBuilder>> MAIN_PART_PROPERTIES = ImmutableMap.<GearType, Consumer<PartBuilder>>builder()
