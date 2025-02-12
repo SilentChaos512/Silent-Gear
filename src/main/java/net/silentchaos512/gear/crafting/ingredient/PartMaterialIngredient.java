@@ -40,9 +40,10 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
                     MaterialGrade.CODEC.optionalFieldOf("min_grade", MaterialGrade.NONE).forGetter(ing -> ing.minGrade),
                     MaterialGrade.CODEC.optionalFieldOf("max_grade", MaterialGrade.NONE).forGetter(ing -> ing.maxGrade),
                     DataResource.MATERIAL_CODEC.optionalFieldOf("material").forGetter(ing -> Optional.ofNullable(ing.material)),
-                    MaterialCategories.CODEC.listOf().optionalFieldOf("categories", Collections.emptyList()).forGetter(ing -> ImmutableList.copyOf(ing.categories))
-            ).apply(instance, (pt, gt, minGrade, maxGrade, material, categories) -> {
-                return new PartMaterialIngredient(pt, gt.orElse(GearTypes.NONE.get()), minGrade, maxGrade, material.orElse(null), categories);
+                    MaterialCategories.CODEC.listOf().optionalFieldOf("categories", Collections.emptyList()).forGetter(ing -> ImmutableList.copyOf(ing.categories)),
+                    MaterialCategories.CODEC.listOf().optionalFieldOf("not_categories", Collections.emptyList()).forGetter(ing -> ImmutableList.copyOf(ing.notCategories))
+            ).apply(instance, (pt, gt, minGrade, maxGrade, material, categories, notCategories) -> {
+                return new PartMaterialIngredient(pt, gt.orElse(GearTypes.NONE.get()), minGrade, maxGrade, material.orElse(null), categories, notCategories);
             })
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, PartMaterialIngredient> STREAM_CODEC = StreamCodec.of(
@@ -56,6 +57,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
                     DataResource.MATERIAL_STREAM_CODEC.encode(buf, ing.material);
                 }
                 CodecUtils.encodeList(buf, ing.categories, MaterialCategories.STREAM_CODEC);
+                CodecUtils.encodeList(buf, ing.notCategories, MaterialCategories.STREAM_CODEC);
             },
             buf -> {
                 var partType = PartType.STREAM_CODEC.decode(buf);
@@ -64,7 +66,8 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
                 var maxGrade = MaterialGrade.STREAM_CODEC.decode(buf);
                 var material = buf.readBoolean() ? DataResource.MATERIAL_STREAM_CODEC.decode(buf) : null;
                 List<IMaterialCategory> categories = CodecUtils.decodeList(buf, MaterialCategories.STREAM_CODEC);
-                return new PartMaterialIngredient(partType, gearType, minGrade, maxGrade, material, categories);
+                List<IMaterialCategory> notCategories = CodecUtils.decodeList(buf, MaterialCategories.STREAM_CODEC);
+                return new PartMaterialIngredient(partType, gearType, minGrade, maxGrade, material, categories, notCategories);
             }
     );
 
@@ -75,11 +78,13 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
     @Nullable
     private final DataResource<Material> material;
     private final Set<IMaterialCategory> categories = new LinkedHashSet<>();
+    private final Set<IMaterialCategory> notCategories = new LinkedHashSet<>();
 
     public PartMaterialIngredient(PartType partType, GearType gearType,
                                   MaterialGrade minGrade, MaterialGrade maxGrade,
                                   @Nullable DataResource<Material> material,
-                                  Collection<IMaterialCategory> categories
+                                  Collection<IMaterialCategory> categories,
+                                  Collection<IMaterialCategory> notCategories
     ) {
         this.partType = partType;
         this.gearType = gearType;
@@ -87,10 +92,11 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
         this.maxGrade = maxGrade;
         this.material = material;
         this.categories.addAll(categories);
+        this.notCategories.addAll(notCategories);
     }
 
     private PartMaterialIngredient(PartType partType, GearType gearType) {
-        this(partType, gearType, MaterialGrade.NONE, MaterialGrade.NONE, null, Collections.emptySet());
+        this(partType, gearType, MaterialGrade.NONE, MaterialGrade.NONE, null, Collections.emptySet(), Collections.emptySet());
     }
 
     public static PartMaterialIngredient of(PartType partType) {
@@ -109,6 +115,11 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
         PartMaterialIngredient ret = new PartMaterialIngredient(partType, gearType);
         ret.categories.addAll(Arrays.asList(categories));
         return ret;
+    }
+
+    public PartMaterialIngredient not(IMaterialCategory... notCategories) {
+        this.notCategories.addAll(Arrays.asList(notCategories));
+        return this;
     }
 
     public static Builder builder(PartType partType) {
@@ -147,6 +158,13 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
             MutableComponent any = TextUtil.translate("material.group", "any");
             text = TextUtil.withColor(any, Color.LIGHTGREEN);
         }
+        if (!this.notCategories.isEmpty()) {
+            MutableComponent cats = TextUtil.separatedList(notCategories.stream()
+                    .map(IMaterialCategory::getDisplayName)
+                    .collect(Collectors.toList())
+            );
+            text.append(TextUtil.withColor(Component.translatable("jei.silentgear.material_category.not_separator"), Color.DARKGRAY)).append(TextUtil.withColor(cats, Color.DARKGRAY));
+        }
 
         PartGearKey key = PartGearKey.of(this.gearType, this.partType);
         text.append(TextUtil.misc("spaceBrackets", key.getDisplayName()).withStyle(ChatFormatting.GRAY));
@@ -166,6 +184,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
 
         return mat.get().isCraftingAllowed(mat, partType, gearType)
                 && (categories.isEmpty() || mat.hasAnyCategory(categories))
+                && (notCategories.isEmpty() || !mat.hasAnyCategory(notCategories))
                 && (this.material == null || this.material.getId().equals(mat.getId()))
                 && gradesMatch(MaterialGrade.fromStack(stack));
     }
@@ -184,6 +203,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
                     .filter(mat -> mat.get().isCraftingAllowed(mat, partType, gearType))
                     .filter(mat -> this.material == null || this.material.getId().equals(mat.getId()))
                     .filter(mat -> categories.isEmpty() || mat.hasAnyCategory(categories))
+                    .filter(mat -> notCategories.isEmpty() || !mat.hasAnyCategory(notCategories))
                     .flatMap(mat -> Stream.of(mat.get().getIngredient().getItems()))
                     .filter(stack -> !stack.isEmpty())
                     .map(stack -> this.minGrade != MaterialGrade.NONE ? this.minGrade.copyWithGrade(stack) : stack);
@@ -203,6 +223,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
         private MaterialGrade maxGrade = MaterialGrade.NONE;
         private DataResource<Material> material;
         private final Set<IMaterialCategory> categories = new LinkedHashSet<>();
+        private final Set<IMaterialCategory> notCategories = new LinkedHashSet<>();
 
         public Builder(PartType partType, GearType gearType) {
             this.partType = partType;
@@ -211,6 +232,11 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
 
         public Builder withCategories(IMaterialCategory... categories) {
             this.categories.addAll(Arrays.asList(categories));
+            return this;
+        }
+
+        public Builder withoutCategories(IMaterialCategory... notCategories) {
+            this.notCategories.addAll(Arrays.asList(notCategories));
             return this;
         }
 
@@ -230,7 +256,7 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
         }
 
         public PartMaterialIngredient build() {
-            return new PartMaterialIngredient(partType, gearType, minGrade, maxGrade, material, categories);
+            return new PartMaterialIngredient(partType, gearType, minGrade, maxGrade, material, categories, notCategories);
         }
     }
 }
