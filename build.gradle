@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.145'
+    id 'net.neoforged.gradle.userdev' version '7.0.170'
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -114,20 +114,15 @@ repositories {
         url = "https://maven.terraformersmc.com/"
     }
     maven {
-        // Caelus
+        // Curios, Caelus
         url = "https://maven.theillusivec4.top/"
-    }
-    maven {
-        // Curios
-        name = "OctoStudios"
-        url = uri("https://maven.octo-studios.com/releases")
     }
 }
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
-    implementation("net.silentchaos512:silent-lib-1.21-neoforge:${project.silentlib_version}")
+    implementation("net.silentchaos512:silent-lib-${minecraft_version}-neoforge:${silentlib_version}")
 
     // JEI
     if (project.hasProperty("jei_version")) {
@@ -146,7 +141,7 @@ dependencies {
 
     // Curios
     dependencies {
-        implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+1.21"
+        implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+1.21.1"
     }
 
     // Caelus
