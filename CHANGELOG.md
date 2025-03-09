@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Curio slots not appearing
+
 ## [1.21.1-4.0.13] - 2025-02-15
 ### Added
 - PartMaterialIngredient can now exclude specific material categories (JaisDK) [#780]

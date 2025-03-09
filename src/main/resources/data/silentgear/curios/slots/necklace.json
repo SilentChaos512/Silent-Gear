@@ -1,0 +1,8 @@
+{
+  "size": 1,
+  "icon": "curios:slot/empty_necklace_slot",
+  "add_cosmetic": true,
+  "validators": [
+    "curios:tag"
+  ]
+}

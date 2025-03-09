@@ -19,6 +19,7 @@ import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -104,14 +105,14 @@ public class CurioGearItemCapability {
         }
 
         @Override
-        public int getLootingLevel(SlotContext slotContext, DamageSource source, LivingEntity target, int baseLooting) {
+        public int getLootingLevel(SlotContext slotContext, @Nullable LootContext lootContext) {
             // TODO: Add trait
             return 0;
         }
 
-        @Nonnull
+        @NotNull
         @Override
-        public DropRule getDropRule(SlotContext slotContext, DamageSource source, int lootingLevel, boolean recentlyHit) {
+        public DropRule getDropRule(SlotContext slotContext, DamageSource source, boolean recentlyHit) {
             return DropRule.ALWAYS_KEEP;
         }
 
