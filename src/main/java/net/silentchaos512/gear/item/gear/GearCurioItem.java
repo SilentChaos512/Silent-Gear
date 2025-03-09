@@ -75,9 +75,8 @@ public class GearCurioItem extends Item implements GearItem {
 
     @Override
     public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
-        var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder);
-        return builder.build();
+        // Not the normal behavior for gear items; add attributes only in the curio capability
+        return super.getDefaultAttributeModifiers(stack);
     }
 
     @Override

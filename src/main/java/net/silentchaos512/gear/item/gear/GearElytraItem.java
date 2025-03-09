@@ -13,10 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ElytraItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.neoforged.fml.ModList;
@@ -139,8 +136,10 @@ public class GearElytraItem extends ElytraItem implements GearArmor {
 
         float armor = GearData.getProperties(stack).getNumber(GearProperties.ARMOR);
         if (armor > 0 && includeArmor) {
-            var id = ResourceLocation.withDefaultNamespace("armor.body");
-            builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.BODY);
+            var armorType = ArmorItem.Type.CHESTPLATE;
+            var equipmentSlotGroup = EquipmentSlotGroup.bySlot(armorType.getSlot());
+            var id = ResourceLocation.withDefaultNamespace("armor." + armorType.getName());
+            builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
         }
         GearHelper.addAttributeModifiers(stack, builder, false);
         CaelusCompat.tryAddFlightAttribute(builder);

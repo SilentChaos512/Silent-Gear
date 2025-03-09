@@ -3,9 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.0.14] - 2025-03-09
 ### Fixed
 - Curio slots not appearing
+- Invalid attributes modifiers on some items (armor, shields, arrows, shears, fishing rods, and curios) [#741]
 
 ## [1.21.1-4.0.13] - 2025-02-15
 ### Added

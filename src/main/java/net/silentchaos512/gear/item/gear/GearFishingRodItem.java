@@ -136,7 +136,7 @@ public class GearFishingRodItem extends FishingRodItem implements GearTool {
     @Override
     public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder);
+        GearHelper.addAttributeModifiers(stack, builder, false);
         return builder.build();
     }
 

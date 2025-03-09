@@ -85,7 +85,7 @@ public class CurioGearItemCapability {
         @Override
         public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id) {
             var builder = ItemAttributeModifiers.builder();
-            GearHelper.addAttributeModifiers(stack, builder);
+            GearHelper.addAttributeModifiers(stack, builder, false);
             ItemAttributeModifiers itemAttributeModifiers = builder.build();
 
             Multimap<Holder<Attribute>, AttributeModifier> result = ArrayListMultimap.create();

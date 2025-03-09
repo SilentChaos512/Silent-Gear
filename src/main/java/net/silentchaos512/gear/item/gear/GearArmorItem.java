@@ -111,7 +111,7 @@ public class GearArmorItem extends ArmorItem implements GearArmor {
             if (knockbackResistance > 0) {
                 builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(resourcelocation, knockbackResistance, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
             }
-            GearHelper.addAttributeModifiers(stack, builder);
+            GearHelper.addAttributeModifiers(stack, builder, false);
         }
         return builder.build();
     }
