@@ -15,36 +15,43 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.model.GearTridentModel;
+import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 
 public class SgBlockEntityWithoutLevelRenderer extends BlockEntityWithoutLevelRenderer {
 	private GearTridentModel trident_model;
     // We need some boilerplate in the constructor, telling the superclass where to find the central block entity and entity renderers.
     public SgBlockEntityWithoutLevelRenderer() {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
-        bakeModel();
-    }
-    
-    private void bakeModel() {
-    	List<Cube> cubes = new ArrayList<Cube>();
-    	Map<String, ModelPart> children = new HashMap<String, ModelPart>();
-    	
-    	children.put("tool_rod", GearTridentModel.createToolRodLayer().bakeRoot());
-    	children.put("grip", GearTridentModel.createGripLayer().bakeRoot());
-    	children.put("spikes", GearTridentModel.createSpikesLayer().bakeRoot());
-    	children.put("tip", GearTridentModel.createTipLayer().bakeRoot());
-    	
-    	trident_model = new GearTridentModel(new ModelPart(cubes, children));
+        trident_model = GearTridentModel.bakeModel();
     }
     
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext transform, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-       poseStack.pushPose();
-       poseStack.scale(1.0F, -1.0F, -1.0F);
-       VertexConsumer vertexconsumer = ItemRenderer.getFoilBuffer(bufferSource, trident_model.renderType(GearTridentModel.TEXTURE), false, false);
-       trident_model.renderToBuffer(poseStack, vertexconsumer, packedLight, packedOverlay);
-       poseStack.popPose();
+    	ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+	   	if (false && (transform == ItemDisplayContext.GUI || transform == ItemDisplayContext.FIXED || transform == ItemDisplayContext.GROUND)) {
+			BakedModel model = itemRenderer.getItemModelShaper().getModelManager().getModel(ModelResourceLocation.inventory(ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, "trident_item")));
+			itemRenderer.render(stack, transform, false, poseStack, bufferSource, packedLight, packedOverlay, model);
+		} else {
+	       poseStack.pushPose();
+	       poseStack.scale(1.0F, -1.0F, -1.0F);
+	       VertexConsumer vertexconsumer = ItemRenderer.getFoilBuffer(bufferSource, trident_model.renderType(GearTridentModel.TEXTURE), false, false);
+	       int color_toolrod = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+	       int color_grip = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.GRIP.get());
+	       int color_spikes = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+	       int color_tip = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.TIP.get());
+	       color_grip = (color_grip == -1) ? color_toolrod : color_grip;
+	       color_tip = (color_tip) == -1 ? color_spikes : color_tip;
+	       trident_model.renderWithColors(poseStack, vertexconsumer, packedLight, packedOverlay, color_toolrod, color_grip, color_spikes, color_tip);
+	       poseStack.popPose();
+		}
+       
     }
 }

@@ -1,11 +1,17 @@
 package net.silentchaos512.gear.client.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.ModelPart.Cube;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
@@ -78,5 +84,24 @@ public class GearTridentModel extends Model {
     	root.getChild("grip").render(poseStack, buffer, packedLight, packedOverlay, 16775936);
     	root.getChild("spikes").render(poseStack, buffer, packedLight, packedOverlay,65293);
     	root.getChild("tip").render(poseStack, buffer, packedLight, packedOverlay,16711888);
+    }
+    
+    
+    public static GearTridentModel bakeModel() {
+    	List<Cube> cubes = new ArrayList<Cube>();
+    	Map<String, ModelPart> children = new HashMap<String, ModelPart>();
+    	
+    	children.put("tool_rod", GearTridentModel.createToolRodLayer().bakeRoot());
+    	children.put("grip", GearTridentModel.createGripLayer().bakeRoot());
+    	children.put("spikes", GearTridentModel.createSpikesLayer().bakeRoot());
+    	children.put("tip", GearTridentModel.createTipLayer().bakeRoot());
+    	
+    	return new GearTridentModel(new ModelPart(cubes, children));
+    }
+    public void renderWithColors(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color_toolrod, int color_grip, int color_spikes, int color_tip) {
+    	root.getChild("tool_rod").render(poseStack, buffer, packedLight, packedOverlay, color_toolrod);
+    	root.getChild("grip").render(poseStack, buffer, packedLight, packedOverlay, color_grip);
+    	root.getChild("spikes").render(poseStack, buffer, packedLight, packedOverlay,color_spikes);
+    	root.getChild("tip").render(poseStack, buffer, packedLight, packedOverlay,color_tip);
     }
 }
