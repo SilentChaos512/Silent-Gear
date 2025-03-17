@@ -23,7 +23,11 @@ import net.silentchaos512.gear.util.TextUtil;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public final class TraitInstance {
+public record TraitInstance(
+        DataResource<Trait> trait,
+        int level,
+        ImmutableList<ITraitCondition> conditions
+) {
     public static final Codec<TraitInstance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     DataResource.TRAIT_CODEC.fieldOf("trait").forGetter(t -> t.trait),
@@ -40,10 +44,6 @@ public final class TraitInstance {
             TraitInstance::new
     );
 
-    private final DataResource<Trait> trait;
-    private final int level;
-    private final ImmutableList<ITraitCondition> conditions;
-
     private TraitInstance(Trait trait, int level, ITraitCondition... conditions) {
         this(DataResource.trait(SgRegistries.TRAIT.getKey(trait)), level, conditions);
     }
@@ -53,12 +53,21 @@ public final class TraitInstance {
     }
 
     private TraitInstance(DataResource<Trait> trait, int level, List<ITraitCondition> conditions) {
-        this.trait = trait;
-        this.level = level;
-        this.conditions = ImmutableList.<ITraitCondition>builder()
-                .add(trait.isPresent() ? trait.get().getConditions().toArray(new ITraitCondition[0]) : new ITraitCondition[0])
-                .addAll(conditions)
-                .build();
+        this(
+                trait,
+                level,
+                createFilteredConditionsList(trait, conditions)
+        );
+    }
+
+    private static ImmutableList<ITraitCondition> createFilteredConditionsList(DataResource<Trait> trait, List<ITraitCondition> conditions) {
+        // Use a set to filter out duplicates, then create the immutable list
+        var set = new LinkedHashSet<ITraitCondition>();
+        if (trait.isPresent()) {
+            set.addAll(trait.get().getConditions());
+        }
+        set.addAll(conditions);
+        return ImmutableList.copyOf(set);
     }
 
     public static TraitInstance of(DataResource<Trait> trait, int level, ITraitCondition... conditions) {
