@@ -8,6 +8,7 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.setup.SgItems;
@@ -65,6 +66,10 @@ public final class ModItemModelProperties {
         register(event, GearItemSets.SHIELD.gearItem(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, par4) -> {
             return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
         });
+        
+        register(event, GearItemSets.TRIDENT.gearItem(), ResourceLocation.withDefaultNamespace("throwing"), (stack, level, entity, par4) -> { 
+    		return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
+    	});
 
         SgItems.getItems(GearItem.class).forEach(item -> {
             register(event, item.asItem(), Const.MODEL, (stack, level, entity, par4) -> {

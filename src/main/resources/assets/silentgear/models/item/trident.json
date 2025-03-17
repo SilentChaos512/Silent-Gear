@@ -1,0 +1,29 @@
+{
+	"parent": "minecraft:item/handheld",
+	"loader": "neoforge:separate_transforms",
+	"base": {
+		"parent": "silentgear:item/trident_item"
+	},
+	"perspectives": {
+		"thirdperson_righthand": {
+			"parent": "silentgear:item/trident_in_hand"
+		},
+		"thirdperson_lefthand": {
+			"parent": "silentgear:item/trident_in_hand"
+		},
+		"firstperson_righthand": {
+			"parent": "silentgear:item/trident_in_hand"
+		},
+		"firstperson_lefthand": {
+			"parent": "silentgear:item/trident_in_hand"
+		}
+	},
+    "overrides": [
+        {
+            "predicate": {
+                "throwing": 1
+            },
+            "model": "silentgear:item/trident_throwing"
+        }
+    ]
+}
