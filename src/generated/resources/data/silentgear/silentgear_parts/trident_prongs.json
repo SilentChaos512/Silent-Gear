@@ -28,10 +28,16 @@
 	  "operation": "ADD",
 	  "value": 1.0
 	},
-	"ranged_damage": {
-	  "operation": "ADD",
-	  "value": 1.0
-	},
+	"ranged_damage": 	[
+	    {
+	      "operation": "MULTIPLY_TOTAL",
+	      "value": -0.75
+	    },
+	    {
+	      "operation": "ADD",
+	      "value": 1.0
+	    }
+	  ],
     "repair_efficiency": 1.0
   }
 }

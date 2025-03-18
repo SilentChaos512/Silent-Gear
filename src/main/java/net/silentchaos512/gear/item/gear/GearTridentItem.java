@@ -155,7 +155,6 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     
     public static float getProjectileAttackDamage(ItemStack stack) {
     	float mult = GearData.getProperties(stack).getNumber(GearProperties.RANGED_DAMAGE);
-    	mult = 1 + (mult - 1)/4;
     	return GearHelper.getAttackDamageModifier(stack) * mult;
     }
     
