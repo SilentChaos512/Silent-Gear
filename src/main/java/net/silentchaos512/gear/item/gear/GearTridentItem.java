@@ -29,6 +29,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -96,7 +98,10 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
 
     @Override
     public boolean isFoil(ItemStack stack) {
-        return GearClientHelper.hasEffect(stack);
+    	if (FMLEnvironment.dist == Dist.CLIENT) {
+    		return GearClientHelper.hasEffect(stack);
+    	}
+        return super.isFoil(stack); //client config will be applied in the renderer
     }
 
     @Override

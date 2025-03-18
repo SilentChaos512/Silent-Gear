@@ -2,7 +2,6 @@ package net.silentchaos512.gear.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.logging.LogUtils;
 import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -12,11 +11,9 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.client.model.GearTridentModel;
-import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.entity.projectile.GearTridentProjectile;
-import net.silentchaos512.gear.setup.gear.PartTypes;
 
 public class GearTridentProjectileRenderer extends EntityRenderer<GearTridentProjectile> {
     public static final ResourceLocation TRIDENT_LOCATION = GearTridentModel.TEXTURE;
@@ -32,7 +29,7 @@ public class GearTridentProjectileRenderer extends EntityRenderer<GearTridentPro
         poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) + 90.0F));
         VertexConsumer vertexconsumer = ItemRenderer.getFoilBufferDirect(
-            buffer, this.model.renderType(TRIDENT_LOCATION), false, entity.isFoil()
+            buffer, this.model.renderType(TRIDENT_LOCATION), false, Config.Client.allowEnchantedEffect.get() && entity.isFoil()
         );
 	    this.model.renderWithColors(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY, 
 	    		entity.getToolRodColor(), entity.getGripColor(), entity.getSpikesColor(), entity.getTipColor());

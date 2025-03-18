@@ -20,6 +20,7 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.client.model.GearTridentModel;
 import net.silentchaos512.gear.client.renderer.SgClientItemExtensions;
 import net.silentchaos512.gear.client.renderer.entity.GearArrowRenderer;
 import net.silentchaos512.gear.client.renderer.entity.GearTridentProjectileRenderer;
@@ -52,11 +53,6 @@ public final class SgEntities {
     		.eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20)
     		.build(SilentGear.getId("thrown_trident").toString())
     	);
-    
-    //TEMP
-    public static final ModelResourceLocation TRIDENT_ICON = ModelResourceLocation.standalone(
-	        ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, "item/trident_icon")
-	    );
     
 
     private SgEntities() {
@@ -92,7 +88,7 @@ public final class SgEntities {
         @OnlyIn(Dist.CLIENT)
 		@SubscribeEvent
 		public static void registerAdditional(ModelEvent.RegisterAdditional event) {
-		    event.register(TRIDENT_ICON);
+		    event.register(GearTridentModel.TRIDENT_ICON);
 		}
     }
 }
