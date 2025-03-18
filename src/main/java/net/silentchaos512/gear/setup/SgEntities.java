@@ -53,6 +53,10 @@ public final class SgEntities {
     		.build(SilentGear.getId("thrown_trident").toString())
     	);
     
+    //TEMP
+    public static final ModelResourceLocation TRIDENT_ICON = ModelResourceLocation.standalone(
+	        ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, "item/trident_icon")
+	    );
     
 
     private SgEntities() {
@@ -83,7 +87,13 @@ public final class SgEntities {
                     new SgClientItemExtensions(),
                     GearItemSets.TRIDENT.gearItem()
             );
-        } 
+        }
+        
+        @OnlyIn(Dist.CLIENT)
+		@SubscribeEvent
+		public static void registerAdditional(ModelEvent.RegisterAdditional event) {
+		    event.register(TRIDENT_ICON);
+		}
     }
 }
 

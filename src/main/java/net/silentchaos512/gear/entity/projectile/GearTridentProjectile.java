@@ -49,14 +49,7 @@ public class GearTridentProjectile extends AbstractArrow {
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(pickupItemStack));
         this.entityData.set(ID_FOIL, pickupItemStack.hasFoil());
         
-        int toolRodColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.ROD.get());
-        int gripColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.GRIP.get());
-        int spikesColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.MAIN.get());
-        int tipColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.TIP.get());
-        this.entityData.set(ID_COLOR_TOOLROD, toolRodColor);
-        this.entityData.set(ID_COLOR_GRIP, gripColor == -1 ? toolRodColor : gripColor);
-        this.entityData.set(ID_COLOR_SPIKES, spikesColor);
-        this.entityData.set(ID_COLOR_TIP, tipColor == -1 ? spikesColor : tipColor);
+        setColors(pickupItemStack);
     }
 
     public GearTridentProjectile(Level level, double x, double y, double z, ItemStack pickupItemStack) {
@@ -64,14 +57,7 @@ public class GearTridentProjectile extends AbstractArrow {
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(pickupItemStack));
         this.entityData.set(ID_FOIL, pickupItemStack.hasFoil());
         
-        int toolRodColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.ROD.get());
-        int gripColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.GRIP.get());
-        int spikesColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.MAIN.get());
-        int tipColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.TIP.get());
-        this.entityData.set(ID_COLOR_TOOLROD, toolRodColor);
-        this.entityData.set(ID_COLOR_GRIP, gripColor == -1 ? toolRodColor : gripColor);
-        this.entityData.set(ID_COLOR_SPIKES, spikesColor);
-        this.entityData.set(ID_COLOR_TIP, tipColor == -1 ? spikesColor : tipColor);
+        setColors(pickupItemStack);
     }
 
     @Override
@@ -96,6 +82,18 @@ public class GearTridentProjectile extends AbstractArrow {
     }
     public int getTipColor() {
     	return this.entityData.get(ID_COLOR_TIP);
+    }
+    
+    private void setColors(ItemStack pickupItemStack) {
+        int toolRodColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.ROD.get());
+        int gripColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.GRIP.get());
+        int spikesColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.MAIN.get());
+        int tipColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.TIP.get());
+        int coatingColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.COATING.get());
+        this.entityData.set(ID_COLOR_TOOLROD, toolRodColor);
+        this.entityData.set(ID_COLOR_GRIP, gripColor == -1 ? toolRodColor : gripColor);
+        this.entityData.set(ID_COLOR_SPIKES, coatingColor == -1 ? spikesColor : coatingColor);
+        this.entityData.set(ID_COLOR_TIP, tipColor == -1 ? spikesColor : tipColor);
     }
 
     @Override
@@ -238,6 +236,8 @@ public class GearTridentProjectile extends AbstractArrow {
         super.readAdditionalSaveData(compound);
         this.dealtDamage = compound.getBoolean("DealtDamage");
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(this.getPickupItemStackOrigin()));
+        
+        setColors(this.getPickupItemStackOrigin());
     }
 
     @Override
