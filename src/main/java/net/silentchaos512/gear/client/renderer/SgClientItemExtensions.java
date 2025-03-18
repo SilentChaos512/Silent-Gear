@@ -29,7 +29,8 @@ public class SgClientItemExtensions implements IClientItemExtensions {
     @Override
     public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm humanoidarm, ItemStack stack, float partialTicks, float equippedProgress, float swingProcess) {
     	boolean isRightHand = humanoidarm == HumanoidArm.RIGHT;
-    	boolean isUsingItem = (isRightHand && player.getUsedItemHand() == InteractionHand.MAIN_HAND) || !isRightHand;
+    	boolean isMainItemItem = player.getUsedItemHand() == InteractionHand.MAIN_HAND;
+    	boolean isUsingItem = (isRightHand && isMainItemItem) || (!isRightHand && !isMainItemItem);
     	if (!(player.isUsingItem() && player.getUseItemRemainingTicks() > 0 && isUsingItem)) {
     		return false;
     	}
