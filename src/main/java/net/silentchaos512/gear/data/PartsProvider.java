@@ -293,6 +293,8 @@ public final class PartsProvider extends PartsProviderBase {
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)
             )
             .put(GearTypes.TRIDENT.get(), b -> b
+                    .numberProperty(GearProperties.RANGED_DAMAGE, 1, NumberProperty.Operation.ADD)
+                    .numberProperty(GearProperties.DRAW_SPEED, 1, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 4, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.ATTACK_SPEED, 1.1f, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1f)

@@ -26,9 +26,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.item.gear.GearTridentItem;
 import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.GearHelper;
 
 public class GearTridentProjectile extends AbstractArrow {
     private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(GearTridentProjectile.class, EntityDataSerializers.BYTE);
@@ -38,6 +40,7 @@ public class GearTridentProjectile extends AbstractArrow {
     private static final EntityDataAccessor<Integer> ID_COLOR_SPIKES = SynchedEntityData.defineId(GearTridentProjectile.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ID_COLOR_TIP = SynchedEntityData.defineId(GearTridentProjectile.class, EntityDataSerializers.INT);
     private boolean dealtDamage;
+    private float attackDamage;
     public int clientSideReturnTridentTickCount;
 
     public GearTridentProjectile(EntityType<? extends GearTridentProjectile> entityType, Level level) {
@@ -49,6 +52,7 @@ public class GearTridentProjectile extends AbstractArrow {
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(pickupItemStack));
         this.entityData.set(ID_FOIL, pickupItemStack.hasFoil());
         
+        attackDamage = GearTridentItem.getProjectileAttackDamage(pickupItemStack);
         setColors(pickupItemStack);
     }
 
@@ -57,6 +61,7 @@ public class GearTridentProjectile extends AbstractArrow {
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(pickupItemStack));
         this.entityData.set(ID_FOIL, pickupItemStack.hasFoil());
         
+        attackDamage = GearHelper.getAttackDamageModifier(pickupItemStack);
         setColors(pickupItemStack);
     }
 
@@ -156,7 +161,7 @@ public class GearTridentProjectile extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
-        float f = 8.0F;
+        float f = attackDamage;
         Entity entity1 = this.getOwner();
         DamageSource damagesource = this.damageSources().trident(this, (Entity)(entity1 == null ? this : entity1));
         if (this.level() instanceof ServerLevel serverlevel) {

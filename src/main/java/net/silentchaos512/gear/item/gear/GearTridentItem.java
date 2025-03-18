@@ -33,6 +33,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.entity.projectile.GearTridentProjectile;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
@@ -145,6 +146,14 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     
     // Throwing
     
+    
+    
+    public static float getProjectileAttackDamage(ItemStack stack) {
+    	float mult = GearData.getProperties(stack).getNumber(GearProperties.RANGED_DAMAGE);
+    	mult = 1 + (mult - 1)/4;
+    	return GearHelper.getAttackDamageModifier(stack) * mult;
+    }
+    
     private static boolean isTooDamagedToUse(ItemStack stack) {
         return stack.getDamageValue() >= stack.getMaxDamage() - 1;
     }
@@ -195,7 +204,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
                             f3 *= f / f5;
                             f4 *= f / f5;
                             player.push((double)f2, (double)f3, (double)f4);
-                            player.startAutoSpinAttack(20, 8.0F, stack);
+                            player.startAutoSpinAttack(20, getProjectileAttackDamage(stack), stack);
                             if (player.onGround()) {
                                 float f6 = 1.1999999F;
                                 player.move(MoverType.SELF, new Vec3(0.0, 1.1999999F, 0.0));
