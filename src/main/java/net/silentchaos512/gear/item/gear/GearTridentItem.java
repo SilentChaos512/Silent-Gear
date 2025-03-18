@@ -17,7 +17,6 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -151,10 +150,20 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     
     // Throwing
     
+    public static float getUseTimeRequiredToThrow(ItemStack stack) {
+    	float mult = GearData.getProperties(stack).getNumber(GearProperties.DRAW_SPEED);
+    	return Mth.floor(10.0F / ( mult == 0 ? 1.0F : mult ));
+    }
     
+    public static float getProjectileSpeedMultiplier(ItemStack stack) {
+    	float mult = GearData.getProperties(stack).getNumber(GearProperties.PROJECTILE_SPEED);
+    	return mult == 0 ? 1.0F : mult;
+    	
+    }
     
     public static float getProjectileAttackDamage(ItemStack stack) {
     	float mult = GearData.getProperties(stack).getNumber(GearProperties.RANGED_DAMAGE);
+    	mult = 1 + (mult-1)/4;
     	return GearHelper.getAttackDamageModifier(stack) * mult;
     }
     
@@ -173,7 +182,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof Player player) {
             int i = this.getUseDuration(stack, entityLiving) - timeLeft;
-            if (i >= 10) {
+            if (i >= getUseTimeRequiredToThrow(stack)) {
                 float f = EnchantmentHelper.getTridentSpinAttackStrength(stack, player);
                 if (!(f > 0.0F) || player.isInWaterOrRain()) {
                     if (!isTooDamagedToUse(stack)) {
@@ -183,7 +192,8 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
                             stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(entityLiving.getUsedItemHand()));
                             if (f == 0.0F) {
                             	GearTridentProjectile throwntrident = new GearTridentProjectile(level, player, stack);
-                                throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F, 1.0F);
+                            	float vel = Mth.clamp(2.5F*getProjectileSpeedMultiplier(stack), 0.0F, 4.0F); //capped speed due to client sync issue
+                                throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, vel, 1.0F);
                                 if (player.hasInfiniteMaterials()) {
                                     throwntrident.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                                 }
@@ -198,6 +208,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
 
                         player.awardStat(Stats.ITEM_USED.get(this));
                         if (f > 0.0F) {
+                        	f = f * getProjectileSpeedMultiplier(stack);
                             float f7 = player.getYRot();
                             float f1 = player.getXRot();
                             float f2 = -Mth.sin(f7 * (float) (Math.PI / 180.0)) * Mth.cos(f1 * (float) (Math.PI / 180.0));

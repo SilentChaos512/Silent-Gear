@@ -41,6 +41,7 @@ public class GearTridentProjectile extends AbstractArrow {
     private boolean dealtDamage;
     private float attackDamage;
     public int clientSideReturnTridentTickCount;
+	private int life;;
 
     public GearTridentProjectile(EntityType<? extends GearTridentProjectile> entityType, Level level) {
         super(entityType, level);
@@ -260,7 +261,10 @@ public class GearTridentProjectile extends AbstractArrow {
     public void tickDespawn() {
         int i = this.entityData.get(ID_LOYALTY);
         if (this.pickup != AbstractArrow.Pickup.ALLOWED || i <= 0) {
-            super.tickDespawn();
+            this.life++;
+            if (this.life > 6000) {
+            	this.discard();
+            }
         }
     }
 
