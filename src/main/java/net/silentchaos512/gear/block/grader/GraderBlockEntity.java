@@ -18,12 +18,14 @@ import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.block.SgContainerBlockEntity;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgBlockEntities;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.lib.util.EnumUtils;
 import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.TimeUtils;
 
+import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 public class GraderBlockEntity extends SgContainerBlockEntity {
@@ -83,8 +85,7 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
         int catalystTier = getCatalystTier(catalyst);
         if (catalystTier < 1) return;
 
-        MaterialInstance material = MaterialInstance.from(input);
-        if (material != null && canGrade(input)) {
+        if (canGrade(input)) {
             if (blockEntity.progress < BASE_ANALYZE_TIME) {
                 ++blockEntity.progress;
             }
@@ -92,28 +93,86 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
             if (blockEntity.progress >= BASE_ANALYZE_TIME && !level.isClientSide) {
                 blockEntity.progress = 0;
                 catalyst.shrink(1);
-                blockEntity.tryGradeItem(input, catalystTier, material);
+                blockEntity.tryGradeItem(input, catalystTier);
             }
         } else {
             blockEntity.progress = 0;
         }
     }
 
-    private void tryGradeItem(ItemStack input, int catalystTier, MaterialInstance material) {
-        MaterialGrade targetGrade = MaterialGrade.selectWithCatalyst(SilentGear.RANDOM, catalystTier);
-        this.lastGradeAttempt = targetGrade;
-        var currentGradeMod = material.getModifier(MaterialModifiers.GRADE.get());
+    private void tryGradeItem(ItemStack input, int catalystTier) {
+        // Gear grading
+        var data = input.get(SgDataComponents.MATERIAL_LIST);
+        if (data != null) {
+            data = new ArrayList<>(data); // turn mutable
+            MaterialInstance lowestMaterial = null;
+            for (MaterialInstance materialInstance : data) {
+                var materialGradeMod = materialInstance.getModifier(MaterialModifiers.GRADE.get());
+                if (lowestMaterial == null || materialGradeMod == null || materialGradeMod.grade().ordinal() < lowestMaterial.getModifier(MaterialModifiers.GRADE.get()).grade().ordinal()) {
+                    lowestMaterial = materialInstance;
+                    if (materialGradeMod == null) {
+                        break; // no need to find another material if this one doesn't have a grade yet
+                    }
+                }
+            }
+            if (lowestMaterial != null) {
+                MaterialGrade targetGrade = MaterialGrade.selectWithCatalyst(SilentGear.RANDOM, catalystTier);
+                this.lastGradeAttempt = targetGrade;
+                var currentGradeMod = lowestMaterial.getModifier(MaterialModifiers.GRADE.get());
 
-        if (currentGradeMod == null || targetGrade.ordinal() > currentGradeMod.grade().ordinal()) {
-            // Assign grade, move to output slot
-            ItemStack stack = input.split(1);
-            targetGrade.setGradeOnStack(stack);
+                if (currentGradeMod == null || targetGrade.ordinal() > currentGradeMod.grade().ordinal()) {
+                    // Assign grade, replace part and move to output slot
+                    ItemStack stack = input.split(1);
 
-            InventoryUtils.mergeItem(this, 2, 2 + SLOTS_OUTPUT.length, stack);
+                    data.remove(lowestMaterial);
+                    var materialStack = lowestMaterial.getItem();
+                    targetGrade.setGradeOnStack(materialStack);
+                    data.add(MaterialInstance.of(lowestMaterial.get(), materialStack));
+                    // Make sure the highest graded material is first
+                    data.sort((o1, o2) -> {
+                        var g1 = o1.getModifier(MaterialModifiers.GRADE.get());
+                        if (g1 == null) return 1;
+                        var g2 = o2.getModifier(MaterialModifiers.GRADE.get());
+                        if (g2 == null) return -1;
+                        return g2.grade().ordinal() - g1.grade().ordinal();
+                    });
+
+                    stack.set(SgDataComponents.MATERIAL_LIST, data);
+
+                    InventoryUtils.mergeItem(this, 2, 2 + SLOTS_OUTPUT.length, stack);
+                }
+                return;
+            }
+        }
+
+        // Material grading
+        MaterialInstance material = MaterialInstance.from(input);
+        if (material != null) {
+            MaterialGrade targetGrade = MaterialGrade.selectWithCatalyst(SilentGear.RANDOM, catalystTier);
+            this.lastGradeAttempt = targetGrade;
+            var currentGradeMod = material.getModifier(MaterialModifiers.GRADE.get());
+
+            if (currentGradeMod == null || targetGrade.ordinal() > currentGradeMod.grade().ordinal()) {
+                // Assign grade, move to output slot
+                ItemStack stack = input.split(1);
+                targetGrade.setGradeOnStack(stack);
+
+                InventoryUtils.mergeItem(this, 2, 2 + SLOTS_OUTPUT.length, stack);
+            }
         }
     }
 
     public static boolean canGrade(ItemStack stack) {
+        var data = stack.get(SgDataComponents.MATERIAL_LIST);
+        if (data != null) {
+            for (MaterialInstance materialInstance : data) {
+                var materialGradeMod = materialInstance.getModifier(MaterialModifiers.GRADE.get());
+                if (materialGradeMod == null || materialGradeMod.grade() != MaterialGrade.MAX) {
+                    return true;
+                }
+            }
+        }
+
         var material = MaterialInstance.from(stack);
         if (material == null) return false;
 
