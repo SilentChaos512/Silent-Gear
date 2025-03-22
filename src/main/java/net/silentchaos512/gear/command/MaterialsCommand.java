@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
@@ -97,7 +98,7 @@ public final class MaterialsCommand {
         }
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8)) {
-            StringBuilder builder = new StringBuilder("Pack\tName\tType\tID\tParent\t");
+            StringBuilder builder = new StringBuilder("Pack\tName\tType\tID\tParent\tCategories\t");
             SgRegistries.GEAR_PROPERTY.forEach(prop -> builder.append(prop.getDisplayName().getString()).append("\t"));
             writer.write(builder + "\n");
 
@@ -129,6 +130,7 @@ public final class MaterialsCommand {
         appendTsv(builder, partType.getDisplayName().getString());
         appendTsv(builder, material.getId().toString());
         appendTsv(builder, getParentId(material.get()));
+        appendTsv(builder, material.getCategories().stream().map(cat -> cat.getDisplayName().getString()).collect(Collectors.joining(", ")));
 
         // Properties
         for (var property : SgRegistries.GEAR_PROPERTY) {
@@ -143,7 +145,7 @@ public final class MaterialsCommand {
     private static String getParentId(Material material) {
         Material parent = material.getParent();
         if (parent != null) {
-            return SgRegistries.MATERIAL.getKey(material).toString();
+            return SgRegistries.MATERIAL.getKey(parent).toString();
         }
         return "";
     }

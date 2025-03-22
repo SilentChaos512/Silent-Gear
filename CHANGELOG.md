@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Japanese localization (twister716) [#784]
 ### Fixed
 - Tridents not being throwable on server (Electroely) [#790, #770]
+- Materials dump command not including categories [#670]
+- Materials dump command listing parent ID as the child ID
 
 ## [1.21.1-4.0.15] - 2025-03-14
 ### Fixed
