@@ -1,5 +1,5 @@
 {
-  "parent": "silentgear:item/trident",
+  "parent": "silentgear:item/trident_icon",
   "textures": {
     "layer0": "silentgear:item/trident/rod_generic_lc",
     "layer1": "silentgear:item/trident/main_generic_hc",

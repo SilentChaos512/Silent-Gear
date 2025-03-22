@@ -65,6 +65,17 @@ public class GearTypes {
                             GearPropertyGroups.PROJECTILE
                     )
                     .build()
+    );         
+    public static final DeferredHolder<GearType, GearType> HYBRID_WEAPON = REGISTRAR.register("hybrid_weapon",
+            () -> GearType.Builder.of(WEAPON)
+                    .relevantPropertyGroups(
+                            GearPropertyGroups.TRAITS,
+                            GearPropertyGroups.GENERAL,
+                            GearPropertyGroups.ATTACK,
+                            GearPropertyGroups.PROJECTILE
+                    )
+                    .build()
+                                    
     );
     public static final DeferredHolder<GearType, GearType> CURIO = REGISTRAR.register("curio",
             () -> GearType.Builder.of(ALL)
@@ -183,11 +194,6 @@ public class GearTypes {
                     .toolActions(ItemAbilities.SWORD_DIG)
                     .build()
     );
-    public static final DeferredHolder<GearType, GearType> TRIDENT = REGISTRAR.register("trident",
-            () -> GearType.Builder.of(MELEE_WEAPON)
-                    .toolActions(ItemAbilities.DEFAULT_TRIDENT_ACTIONS)
-                    .build()
-    );
     public static final DeferredHolder<GearType, GearType> MACE = REGISTRAR.register("mace",
             () -> GearType.Builder.of(MELEE_WEAPON)
                     .build()
@@ -217,6 +223,13 @@ public class GearTypes {
     public static final DeferredHolder<GearType, GearType> SLINGSHOT = REGISTRAR.register("slingshot",
             () -> GearType.Builder.of(RANGED_WEAPON)
                     .animationFrames(4)
+                    .build()
+    );
+    
+    //Hybrid weapons
+    public static final DeferredHolder<GearType, GearType> TRIDENT = REGISTRAR.register("trident",
+            () -> GearType.Builder.of(HYBRID_WEAPON)
+                    .toolActions(ItemAbilities.DEFAULT_TRIDENT_ACTIONS)
                     .build()
     );
 

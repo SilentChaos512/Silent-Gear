@@ -1,0 +1,44 @@
+{
+    "parent": "builtin/entity",
+    "gui_light": "front",
+    "textures": {
+        "particle": "silentgear:item/trident"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [ 0, 90, 180 ],
+            "translation": [ 8, -17, 9 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 0, 90, 180 ],
+            "translation": [ 8, -17, -7 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, -90, 25 ],
+            "translation": [ -3, 17, 1],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, 90, -25 ],
+            "translation": [  13, 17, 1],
+            "scale": [ 1, 1, 1 ]
+        },
+		"gui": {
+		    "rotation": [ 0, 0, 0 ],
+		    "translation": [ 8, 8, 8 ],
+		    "scale": [ 1, 1, 1 ]
+		},
+		"ground": {
+		    "rotation": [ 0, 0, 0 ],
+		    "translation": [ 8, 8, 8 ],
+		    "scale": [ 1, 1, 1 ]
+		},
+		"fixed": {
+		    "rotation": [ 0, 0, 0 ],
+		    "translation": [ 8, 8, 8 ],
+		    "scale": [ 1, 1, 1 ]
+		}
+    }
+}

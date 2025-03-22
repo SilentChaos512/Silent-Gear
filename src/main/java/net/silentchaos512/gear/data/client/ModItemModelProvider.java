@@ -238,6 +238,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         String path = BuiltInRegistries.ITEM.getKey(item.gearItem()).getPath();
         ModelFile mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path));
 
+        if (item == GearItemSets.TRIDENT) { // "item/trident" points to the special renderer
+        	mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path + "_icon"));
+        }
+        
         ItemModelBuilder model_lc = getBuilder(path + "_lc")
                 .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")

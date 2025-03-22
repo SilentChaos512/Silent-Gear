@@ -1,21 +1,40 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.entity.projectile.GearTridentProjectile;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
@@ -78,7 +97,10 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
 
     @Override
     public boolean isFoil(ItemStack stack) {
-        return GearClientHelper.hasEffect(stack);
+    	if (FMLEnvironment.dist == Dist.CLIENT) {
+    		return GearClientHelper.hasEffect(stack);
+    	}
+        return super.isFoil(stack); //client config will be applied in the renderer
     }
 
     @Override
@@ -124,6 +146,91 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     @Override
     public int getBarColor(ItemStack stack) {
         return GearHelper.getBarColor(stack);
+    }
+    
+    // Throwing
+    
+    public static float getUseTimeRequiredToThrow(ItemStack stack) {
+    	float mult = GearData.getProperties(stack).getNumber(GearProperties.DRAW_SPEED);
+    	return Mth.floor(10.0F / ( mult == 0 ? 1.0F : mult ));
+    }
+    
+    public static float getProjectileSpeedMultiplier(ItemStack stack) {
+    	float mult = GearData.getProperties(stack).getNumber(GearProperties.PROJECTILE_SPEED);
+    	return mult == 0 ? 1.0F : mult;
+    	
+    }
+    
+    public static float getProjectileAttackDamage(ItemStack stack) {
+    	float mult = GearData.getProperties(stack).getNumber(GearProperties.RANGED_DAMAGE);
+    	mult = 1 + (mult-1)/4;
+    	return GearHelper.getAttackDamageModifier(stack) * mult;
+    }
+    
+    private static boolean isTooDamagedToUse(ItemStack stack) {
+        return stack.getDamageValue() >= stack.getMaxDamage() - 1;
+    }
+    
+    @Override
+    public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
+        GearTridentProjectile throwntrident = new GearTridentProjectile(level, pos.x(), pos.y(), pos.z(), stack.copyWithCount(1));
+        throwntrident.pickup = AbstractArrow.Pickup.ALLOWED;
+        return throwntrident;
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
+        if (entityLiving instanceof Player player) {
+            int i = this.getUseDuration(stack, entityLiving) - timeLeft;
+            if (i >= getUseTimeRequiredToThrow(stack)) {
+                float f = EnchantmentHelper.getTridentSpinAttackStrength(stack, player);
+                if (!(f > 0.0F) || player.isInWaterOrRain()) {
+                    if (!isTooDamagedToUse(stack)) {
+                        Holder<SoundEvent> holder = EnchantmentHelper.pickHighestLevel(stack, EnchantmentEffectComponents.TRIDENT_SOUND)
+                            .orElse(SoundEvents.TRIDENT_THROW);
+                        if (!level.isClientSide) {
+                            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(entityLiving.getUsedItemHand()));
+                            if (f == 0.0F) {
+                            	GearTridentProjectile throwntrident = new GearTridentProjectile(level, player, stack);
+                            	float vel = Mth.clamp(2.5F*getProjectileSpeedMultiplier(stack), 0.0F, 4.0F); //capped speed due to client sync issue
+                                throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, vel, 1.0F);
+                                if (player.hasInfiniteMaterials()) {
+                                    throwntrident.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                                }
+
+                                level.addFreshEntity(throwntrident);
+                                level.playSound(null, throwntrident, holder.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                                if (!player.hasInfiniteMaterials()) {
+                                    player.getInventory().removeItem(stack);
+                                }
+                            }
+                        }
+
+                        player.awardStat(Stats.ITEM_USED.get(this));
+                        if (f > 0.0F) {
+                        	f = f * getProjectileSpeedMultiplier(stack);
+                            float f7 = player.getYRot();
+                            float f1 = player.getXRot();
+                            float f2 = -Mth.sin(f7 * (float) (Math.PI / 180.0)) * Mth.cos(f1 * (float) (Math.PI / 180.0));
+                            float f3 = -Mth.sin(f1 * (float) (Math.PI / 180.0));
+                            float f4 = Mth.cos(f7 * (float) (Math.PI / 180.0)) * Mth.cos(f1 * (float) (Math.PI / 180.0));
+                            float f5 = Mth.sqrt(f2 * f2 + f3 * f3 + f4 * f4);
+                            f2 *= f / f5;
+                            f3 *= f / f5;
+                            f4 *= f / f5;
+                            player.push((double)f2, (double)f3, (double)f4);
+                            player.startAutoSpinAttack(20, getProjectileAttackDamage(stack), stack);
+                            if (player.onGround()) {
+                                float f6 = 1.1999999F;
+                                player.move(MoverType.SELF, new Vec3(0.0, 1.1999999F, 0.0));
+                            }
+
+                            level.playSound(null, player, holder.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     //endregion
