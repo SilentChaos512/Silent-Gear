@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Custom models for thrown tridents (Electroely) [#790]
+- Tridents now use ranged weapon and projectile stats to determine thrown damage, charge time, and speed (Electroely) [#790]
+- Gear parts can now be placed in the material grader to make grading attempts on their individual materials (JaisDK) [#792]
+  - Added a config option to enable this feature, disabled by default (SilentChaos512)
+### Changed
+- Updated Japanese localization (twister716) [#784]
+### Fixed
+- Tridents not being throwable on server (Electroely) [#790, #770]
+
 ## [1.21.1-4.0.15] - 2025-03-14
 ### Fixed
 - Gear items not being equal on client and server in some cases, creating issues with Refined Storage 2 and probably others [#753]
