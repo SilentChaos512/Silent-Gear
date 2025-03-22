@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.0.16] - 2025-03-22
 ### Added
 - Custom models for thrown tridents (Electroely) [#790]
 - Tridents now use ranged weapon and projectile stats to determine thrown damage, charge time, and speed (Electroely) [#790]
@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated Japanese localization (twister716) [#784]
 ### Fixed
+- Some gear items breaking completely in some cases, especially with the Brittle trait (shields still break...) [#791, #707]
 - Tridents not being throwable on server (Electroely) [#790, #770]
 - Materials dump command not including categories [#670]
 - Materials dump command listing parent ID as the child ID

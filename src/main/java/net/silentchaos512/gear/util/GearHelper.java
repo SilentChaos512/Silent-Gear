@@ -230,14 +230,13 @@ public final class GearHelper {
             return;
 
         ServerPlayer player = entity instanceof ServerPlayer ? (ServerPlayer) entity : null;
-        final int preTraitAmount = amount;
-        amount = TraitHelper.activateTraits(stack, preTraitAmount, (trait, val) ->
-                (int) trait.getTrait().onDurabilityDamage(new TraitActionContext(player, trait, stack), val));
-
         final int maxDamage = stack.getMaxDamage();
         final int previousDamageFactor = getDamageFactor(stack, maxDamage);
-        if (!canBreakPermanently(stack))
-            amount = Math.min(maxDamage - stack.getDamageValue(), amount);
+        if (!canBreakPermanently(stack)) {
+            // Always leave items with at least 1 durability (which is the broken state)
+            amount = Math.min(maxDamage - stack.getDamageValue() - 1, amount);
+        }
+
         if (amount < 0) {
             stack.setDamageValue(Math.max(0, stack.getDamageValue() + amount));
         } else {
@@ -355,22 +354,34 @@ public final class GearHelper {
     }
 
     public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+        var gearBreaksPermanently = Config.Common.isLoaded() && Config.Common.gearBreaksPermanently.get();
         final int preTraitValue;
+        final int clampedValue;
         if (GearHelper.isUnbreakable(stack)) {
-            preTraitValue = 0;
-        } else if (!(Config.Common.isLoaded() && Config.Common.gearBreaksPermanently.get())) {
-            preTraitValue = Mth.clamp(amount, 0, stack.getMaxDamage() - stack.getDamageValue() - 1);
-            if (!isBroken(stack) && stack.getDamageValue() + preTraitValue >= stack.getMaxDamage() - 1) {
-                onBroken.accept(stack.getItem());
-            }
+            // Gear is indestructible
+            clampedValue = 0;
         } else {
             preTraitValue = amount;
+            final int postTraitValue = TraitHelper.activateTraits(stack, preTraitValue, (trait, val) ->
+                    trait.getTrait().onDurabilityDamage(new TraitActionContext(null, trait, stack), val));
+
+            if (gearBreaksPermanently) {
+                // Gear can break permanently, no clamping necessary
+                clampedValue = postTraitValue;
+            } else {
+                // Gear does not break permanently, so adjust damage amount. This prevents damage value from dropping
+                // below 1 (the broken state)
+                clampedValue = Math.min(stack.getMaxDamage() - stack.getDamageValue() - 1, postTraitValue);
+                SilentGear.LOGGER.debug("Damage: preTrait = {}, postTrait = {}, clamped = {}", preTraitValue, postTraitValue, clampedValue);
+                if (!isBroken(stack) && stack.getDamageValue() + preTraitValue >= stack.getMaxDamage() - 1) {
+                    onBroken.accept(stack.getItem());
+                }
+            }
         }
 
-        final int value = TraitHelper.activateTraits(stack, preTraitValue, (trait, val) ->
-                (int) trait.getTrait().onDurabilityDamage(new TraitActionContext(null, trait, stack), val));
-        GearHelper.damageParts(stack, value);
-        return value;
+        // Apply damage to gear item
+        GearHelper.damageParts(stack, clampedValue);
+        return clampedValue;
     }
 
     private static void damageParts(ItemStack stack, int amount) {
