@@ -30,9 +30,6 @@ public class SgBlockEntityWithoutLevelRenderer extends BlockEntityWithoutLevelRe
 			BakedModel model = modelManager.getModel(GearTridentModel.TRIDENT_ICON);
 			model = model.getOverrides().resolve(model, stack, null, null, 0);
 			itemRenderer.render(stack, transform, false, poseStack, bufferSource, packedLight, packedOverlay, model);
-			BakedModel model = modelManager.getModel(GearTridentModel.TRIDENT_ICON);
-			model = model.getOverrides().resolve(model, stack, null, null, 0);
-			itemRenderer.render(stack, transform, false, poseStack, bufferSource, packedLight, packedOverlay, model);
 		} else {
 	       poseStack.pushPose();
 	       poseStack.scale(1.0F, -1.0F, -1.0F);
