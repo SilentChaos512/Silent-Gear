@@ -28,12 +28,9 @@ public class SgBlockEntityWithoutLevelRenderer extends BlockEntityWithoutLevelRe
     	ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
     	ModelManager modelManager = Minecraft.getInstance().getModelManager();
 	   	if (transform == ItemDisplayContext.GUI || transform == ItemDisplayContext.FIXED || transform == ItemDisplayContext.GROUND) {
-	   		//LogUtils.getLogger().info("loading item model");
 			BakedModel model = modelManager.getModel(GearTridentModel.TRIDENT_ICON);
 			model = model.getOverrides().resolve(model, stack, null, null, 0);
 			itemRenderer.render(stack, transform, false, poseStack, bufferSource, packedLight, packedOverlay, model);
-			//itemRenderer.renderModelLists(model, stack, packedLight, packedOverlay, poseStack, null);
-	   		//itemRenderer.renderStatic(stack, transform, packedLight, packedOverlay, poseStack, bufferSource, null, packedOverlay);
 		} else {
 	       poseStack.pushPose();
 	       poseStack.scale(1.0F, -1.0F, -1.0F);

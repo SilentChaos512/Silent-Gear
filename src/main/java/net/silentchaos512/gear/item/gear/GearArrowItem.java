@@ -2,13 +2,15 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +23,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
@@ -30,7 +31,6 @@ import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
-import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.MathUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,6 +85,13 @@ public class GearArrowItem extends ArrowItem implements GearItem {
         arrow.setBaseDamage(GearData.getProperties(ammo).getNumber(GearProperties.RANGED_DAMAGE));
         return arrow;
     }
+    @Override
+    public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
+    	GearArrowEntity arrow = new GearArrowEntity(level, pos.x(), pos.y(), pos.z(), stack.copyWithCount(1), null);
+        arrow.pickup = AbstractArrow.Pickup.ALLOWED;
+        return arrow;
+    }
+    
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
