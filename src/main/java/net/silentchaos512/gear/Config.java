@@ -40,6 +40,7 @@ public final class Config {
         public static final ModConfigSpec.BooleanValue gearBreaksPermanently;
         public static final ModConfigSpec.EnumValue<MaterialGrade> graderMedianGrade;
         public static final ModConfigSpec.DoubleValue graderStandardDeviation;
+        public static final ModConfigSpec.BooleanValue graderCanGradeParts;
         public static final ModConfigSpec.IntValue prospectorHammerRange;
         public static final ModConfigSpec.DoubleValue repairFactorAnvil;
         public static final ModConfigSpec.IntValue repairKitVeryCrudeCapacity;
@@ -265,6 +266,9 @@ public final class Config {
                                 "Larger numbers will make both higher and lower grades more common.",
                                 "Extremely large values may completely break the curve, yielding mostly the lowest and highest grades.")
                         .defineInRange("standard_deviation", 1.5, 0.0, 100.0);
+                graderCanGradeParts = builder
+                        .comment("If enabled, allows the material grader to grade the individual materials inside a gear part")
+                        .define("can_grade_parts", false);
                 builder.pop();
             }
 
