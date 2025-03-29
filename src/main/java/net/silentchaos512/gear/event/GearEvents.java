@@ -243,6 +243,11 @@ public final class GearEvents {
             event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
         }
 
+        if (TraitHelper.hasTrait(tool, Const.Traits.SILKY)) { // TODO: Make it a trait effect?
+            // Block has been silk touched, no XP
+            event.setDroppedExperience(0);
+        }
+
         if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().is(Tags.Blocks.ORES_DIAMOND) && !hasSilkTouch(event.getLevel(), tool)) {
             Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getBreaker().getCommandSenderWorld());
             entity.teleportTo(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);

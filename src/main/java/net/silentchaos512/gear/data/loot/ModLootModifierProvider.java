@@ -17,6 +17,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.modifier.BonusDropsTraitLootModifier;
 import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
+import net.silentchaos512.gear.loot.modifier.SilkTouchTraitLootModifier;
 import net.silentchaos512.gear.setup.SgLoot;
 import net.silentchaos512.gear.util.Const;
 
@@ -38,6 +39,15 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                 new MagmaticTraitLootModifier(
                         new LootItemCondition[]{
                                 HasTraitCondition.builder(Const.Traits.MAGMATIC).build()
+                        }
+                )
+        );
+
+        add(
+                "silk_touch_trait",
+                new SilkTouchTraitLootModifier(
+                        new LootItemCondition[] {
+                                HasTraitCondition.builder(Const.Traits.SILKY).build()
                         }
                 )
         );

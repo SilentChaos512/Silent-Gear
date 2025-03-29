@@ -266,7 +266,7 @@ public final class GearData {
             GearPropertiesData newProperties
     ) {
         // Prints stats that have changed for debugging purposes
-        if (oldProperties != null && Config.Common.propertiesDebugLogging.get()) {
+        if (oldProperties != null && Config.Common.isLoaded() && Config.Common.propertiesDebugLogging.get()) {
             SilentGear.LOGGER.debug("{}: properties updated", stack.getDisplayName().getString());
 
             GearType gearType = GearHelper.getType(stack);
