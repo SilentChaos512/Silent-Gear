@@ -372,7 +372,6 @@ public final class GearHelper {
                 // Gear does not break permanently, so adjust damage amount. This prevents damage value from dropping
                 // below 1 (the broken state)
                 clampedValue = Math.min(stack.getMaxDamage() - stack.getDamageValue() - 1, postTraitValue);
-                SilentGear.LOGGER.debug("Damage: preTrait = {}, postTrait = {}, clamped = {}", preTraitValue, postTraitValue, clampedValue);
                 if (!isBroken(stack) && stack.getDamageValue() + preTraitValue >= stack.getMaxDamage() - 1) {
                     onBroken.accept(stack.getItem());
                 }
