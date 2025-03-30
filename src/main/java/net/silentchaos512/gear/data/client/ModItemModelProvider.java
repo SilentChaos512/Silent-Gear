@@ -146,7 +146,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearStandardTool(GearItemSets.KATANA, itemHandheld);
         tempGearStandardTool(GearItemSets.MACHETE, itemHandheld);
         tempGearStandardTool(GearItemSets.SPEAR, itemHandheld);
-        tempGearStandardTool(GearItemSets.TRIDENT, itemHandheld);
+        tempGearStandardTool(GearItemSets.TRIDENT, itemHandheld, false);
         tempGearStandardTool(GearItemSets.MACE, itemHandheld);
         tempGearStandardTool(GearItemSets.KNIFE, itemHandheld);
         tempGearStandardTool(GearItemSets.DAGGER, itemHandheld);
@@ -233,7 +233,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         return BuiltInRegistries.ITEM.getKey(item).getPath();
     }
 
-    private ItemModelBuilder tempGearStandardTool(GearItemSet<? extends GearItem> item, ModelFile parent) {
+    private void tempGearStandardTool(GearItemSet<? extends GearItem> item, ModelFile parent) {
+        tempGearStandardTool(item, parent, true);
+    }
+
+    private void tempGearStandardTool(GearItemSet<? extends GearItem> item, ModelFile parent, boolean buildMainModel) {
         String name = gearTypeName(item.type());
         String path = BuiltInRegistries.ITEM.getKey(item.gearItem()).getPath();
         ModelFile mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path));
@@ -292,19 +296,20 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer3", "item/" + name + "/tip_sharp")
                 .texture("layer4", "item/" + name + "/grip_wool");
 
-        ItemModelBuilder mainBuilder = getBuilder(path)
-                .parent(parent)
-                .override().predicate(Const.MODEL, 2).model(model_lc).end()
-                .override().predicate(Const.MODEL, 3).model(model_hc).end()
-                .override().predicate(Const.MODEL, 4 | 2).model(model_lc_tip).end()
-                .override().predicate(Const.MODEL, 4 | 3).model(model_hc_tip).end()
-                .override().predicate(Const.MODEL, 8 | 2).model(model_lc_grip).end()
-                .override().predicate(Const.MODEL, 8 | 3).model(model_hc_grip).end()
-                .override().predicate(Const.MODEL, 8 | 4 | 2).model(model_lc_tip_grip).end()
-                .override().predicate(Const.MODEL, 8 | 4 | 3).model(model_hc_tip_grip).end()
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_lc");
-        return mainBuilder;
+        if (buildMainModel) {
+            ItemModelBuilder mainBuilder = getBuilder(path)
+                    .parent(parent)
+                    .override().predicate(Const.MODEL, 2).model(model_lc).end()
+                    .override().predicate(Const.MODEL, 3).model(model_hc).end()
+                    .override().predicate(Const.MODEL, 4 | 2).model(model_lc_tip).end()
+                    .override().predicate(Const.MODEL, 4 | 3).model(model_hc_tip).end()
+                    .override().predicate(Const.MODEL, 8 | 2).model(model_lc_grip).end()
+                    .override().predicate(Const.MODEL, 8 | 3).model(model_hc_grip).end()
+                    .override().predicate(Const.MODEL, 8 | 4 | 2).model(model_lc_tip_grip).end()
+                    .override().predicate(Const.MODEL, 8 | 4 | 3).model(model_hc_tip_grip).end()
+                    .texture("layer0", "item/" + name + "/rod_generic_lc")
+                    .texture("layer1", "item/" + name + "/main_generic_lc");
+        }
     }
 
     private ItemModelBuilder tempGear(DeferredItem<? extends GearItem> item, ModelFile parent) {
