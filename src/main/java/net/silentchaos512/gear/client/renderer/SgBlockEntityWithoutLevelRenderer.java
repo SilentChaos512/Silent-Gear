@@ -17,7 +17,6 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 
 public class SgBlockEntityWithoutLevelRenderer extends BlockEntityWithoutLevelRenderer {
 	private GearTridentModel trident_model;
-    // We need some boilerplate in the constructor, telling the superclass where to find the central block entity and entity renderers.
     public SgBlockEntityWithoutLevelRenderer() {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
         trident_model = GearTridentModel.bakeModel();
@@ -28,12 +27,9 @@ public class SgBlockEntityWithoutLevelRenderer extends BlockEntityWithoutLevelRe
     	ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
     	ModelManager modelManager = Minecraft.getInstance().getModelManager();
 	   	if (transform == ItemDisplayContext.GUI || transform == ItemDisplayContext.FIXED || transform == ItemDisplayContext.GROUND) {
-	   		//LogUtils.getLogger().info("loading item model");
 			BakedModel model = modelManager.getModel(GearTridentModel.TRIDENT_ICON);
 			model = model.getOverrides().resolve(model, stack, null, null, 0);
 			itemRenderer.render(stack, transform, false, poseStack, bufferSource, packedLight, packedOverlay, model);
-			//itemRenderer.renderModelLists(model, stack, packedLight, packedOverlay, poseStack, null);
-	   		//itemRenderer.renderStatic(stack, transform, packedLight, packedOverlay, poseStack, bufferSource, null, packedOverlay);
 		} else {
 	       poseStack.pushPose();
 	       poseStack.scale(1.0F, -1.0F, -1.0F);
