@@ -3,8 +3,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.0.17] - 2025-03-29
 ### Added
+- Arrow entities now have custom colored models (Electroely) [#794]
 - Fortunate trait, which makes the tool behave like it has Fortune (see the notes for Silky under "Fixed" below!)
   - Only works up to level 3 (might be possible to change with a data pack, but I did not test this)
   - Uses three loot modifier instances, `silentgear:fortune_trait_1`, `...2` and `...3`
