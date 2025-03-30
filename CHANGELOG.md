@@ -3,6 +3,20 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Fortunate trait, which makes the tool behave like it has Fortune (see the notes for Silky under "Fixed" below!)
+  - Only works up to level 3 (might be possible to change with a data pack, but I did not test this)
+  - Uses three loot modifier instances, `silentgear:fortune_trait_1`, `...2` and `...3`
+### Changed
+- Azure silver tip upgrades now have the Fortunate trait (level 3) instead of Soft
+### Fixed
+- Silky trait now works, but differently from earlier versions. Functionally, it is almost identical to Silk Touch. [#795, #697]
+  - Enchantment traits still do not exist and are not currently planned
+  - It uses a loot modifier (`silentgear:silk_touch_trait`) to completely override the block drops
+  - XP drops are also cancelled during an event
+  - Only applies when breaking blocks, not other contexts (it will not activate if a mod checks for Silk Touch in an entity loot table or whatever)
+
 ## [1.21.1-4.0.16] - 2025-03-22
 ### Added
 - Custom models for thrown tridents (Electroely) [#790]

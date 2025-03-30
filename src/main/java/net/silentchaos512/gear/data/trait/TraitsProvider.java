@@ -242,6 +242,7 @@ public class TraitsProvider extends TraitsProviderBase {
         // FIXME: Bring back enchantment trait
         ret.add(new TraitBuilder(Const.Traits.FIERY, 2));
         ret.add(new TraitBuilder(Const.Traits.SILKY, 1));
+        ret.add(new TraitBuilder(Const.Traits.FORTUNATE, 3));
 
         /*ret.add(new EnchantmentTraitBuilder(Const.Traits.FIERY, 2)
                 .addEnchantments(GearTypes.MELEE_WEAPON, Enchantments.FIRE_ASPECT, 1, 2)

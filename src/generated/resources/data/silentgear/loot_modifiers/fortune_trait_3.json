@@ -1,0 +1,11 @@
+{
+  "type": "silentgear:fortune_trait",
+  "conditions": [
+    {
+      "condition": "silentgear:has_trait",
+      "level": 3,
+      "trait": "silentgear:fortunate"
+    }
+  ],
+  "level": 3
+}

@@ -216,6 +216,7 @@ public final class Const {
         public static final DataResource<Trait> FLAMMABLE = DataResource.trait("flammable");
         public static final DataResource<Trait> FLEXIBLE = DataResource.trait("flexible");
         public static final DataResource<Trait> FLOATSTONER = DataResource.trait("floatstoner");
+        public static final DataResource<Trait> FORTUNATE = DataResource.trait("fortunate");
         public static final DataResource<Trait> GOLD_DIGGER = DataResource.trait("gold_digger");
         public static final DataResource<Trait> GREEDY = DataResource.trait("greedy");
         public static final DataResource<Trait> HARD = DataResource.trait("hard");

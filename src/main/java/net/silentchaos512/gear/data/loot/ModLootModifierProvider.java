@@ -1,14 +1,11 @@
 package net.silentchaos512.gear.data.loot;
 
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.neoforged.neoforge.common.loot.AddTableLootModifier;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
@@ -16,6 +13,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.modifier.BonusDropsTraitLootModifier;
+import net.silentchaos512.gear.loot.modifier.FortuneTraitLootModifier;
 import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
 import net.silentchaos512.gear.loot.modifier.SilkTouchTraitLootModifier;
 import net.silentchaos512.gear.setup.SgLoot;
@@ -48,6 +46,36 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                 new SilkTouchTraitLootModifier(
                         new LootItemCondition[] {
                                 HasTraitCondition.builder(Const.Traits.SILKY).build()
+                        }
+                )
+        );
+
+        add(
+                "fortune_trait_1",
+                new FortuneTraitLootModifier(
+                        1,
+                        new LootItemCondition[] {
+                                HasTraitCondition.builder(Const.Traits.FORTUNATE, 1, 1).build()
+                        }
+                )
+        );
+
+        add(
+                "fortune_trait_2",
+                new FortuneTraitLootModifier(
+                        2,
+                        new LootItemCondition[] {
+                                HasTraitCondition.builder(Const.Traits.FORTUNATE, 2, 2).build()
+                        }
+                )
+        );
+
+        add(
+                "fortune_trait_3",
+                new FortuneTraitLootModifier(
+                        3,
+                        new LootItemCondition[] {
+                                HasTraitCondition.builder(Const.Traits.FORTUNATE, 3, 3).build()
                         }
                 )
         );

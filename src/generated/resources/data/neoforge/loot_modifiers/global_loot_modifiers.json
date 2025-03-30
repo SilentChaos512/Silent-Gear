@@ -2,7 +2,10 @@
   "entries": [
     "silentgear:add_mob_drops/sinew",
     "silentgear:silk_touch_trait",
+    "silentgear:fortune_trait_3",
     "silentgear:add_mob_drops/leather_scraps_low",
+    "silentgear:fortune_trait_1",
+    "silentgear:fortune_trait_2",
     "silentgear:add_mob_drops/fine_silk_low",
     "silentgear:magmatic_smelting",
     "silentgear:bonus_drops_trait",

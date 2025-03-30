@@ -126,8 +126,8 @@
         },
         {
           "conditions": [],
-          "level": 2,
-          "trait": "silentgear:soft"
+          "level": 3,
+          "trait": "silentgear:fortunate"
         }
       ]
     }

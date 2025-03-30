@@ -192,7 +192,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.TIP, GearProperties.ATTACK_SPEED, 0.2f, NumberProperty.Operation.ADD)
                 .stat(PartTypes.TIP, GearProperties.RARITY, 31, NumberProperty.Operation.ADD)
                 .trait(PartTypes.TIP, Const.Traits.MALLEABLE, 2)
-                .trait(PartTypes.TIP, Const.Traits.SOFT, 2)
+                .trait(PartTypes.TIP, Const.Traits.FORTUNATE, 3)
         );
         // Blaze Gold
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.BLAZE_GOLD)

@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.loot.modifier;
 
 import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
@@ -12,19 +13,24 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 
 import java.util.function.Supplier;
 
-public class SilkTouchTraitLootModifier extends EnchantedDropsTraitLootModifier {
-    public static final Supplier<MapCodec<SilkTouchTraitLootModifier>> CODEC = Suppliers.memoize(() ->
+public class FortuneTraitLootModifier extends EnchantedDropsTraitLootModifier {
+    public static final Supplier<MapCodec<FortuneTraitLootModifier>> CODEC = Suppliers.memoize(() ->
             RecordCodecBuilder.mapCodec(inst ->
-                    codecStart(inst).apply(inst, SilkTouchTraitLootModifier::new)));
+                    inst.group(
+                            Codec.INT.fieldOf("level").forGetter(glm -> glm.traitLevel),
+                            IGlobalLootModifier.LOOT_CONDITIONS_CODEC.fieldOf("conditions").forGetter(glm -> glm.conditions)
+                    ).apply(inst, FortuneTraitLootModifier::new)
+            )
+    );
 
-    public SilkTouchTraitLootModifier(LootItemCondition[] conditionsIn) {
-        super(1, conditionsIn);
+    public FortuneTraitLootModifier(int traitLevel, LootItemCondition[] conditionsIn) {
+        super(traitLevel, conditionsIn);
     }
 
     @Override
     protected void addEnchantments(HolderLookup.RegistryLookup<Enchantment> registry, ItemEnchantments.Mutable enchantments, int traitLevel) {
-        var silkTouch = registry.getOrThrow(Enchantments.SILK_TOUCH);
-        enchantments.set(silkTouch, 1);
+        var fortune = registry.getOrThrow(Enchantments.FORTUNE);
+        enchantments.set(fortune, traitLevel);
     }
 
     @Override
