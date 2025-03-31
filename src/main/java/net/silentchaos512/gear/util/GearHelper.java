@@ -579,7 +579,7 @@ public final class GearHelper {
                 : GearProperties.ATTACK_REACH.get().getBaseValue();
 
         // Also check Forge reach distance, to allow curios to add more reach
-        AttributeInstance attribute = entity.getAttribute(Attributes.BLOCK_INTERACTION_RANGE);
+        AttributeInstance attribute = entity.getAttribute(Attributes.ENTITY_INTERACTION_RANGE);
         if (attribute != null) {
             double reachBonus = attribute.getValue() - attribute.getBaseValue();
             return base + reachBonus;
