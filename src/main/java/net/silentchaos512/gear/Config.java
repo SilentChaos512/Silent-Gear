@@ -66,6 +66,7 @@ public final class Config {
         // Starlight Charger
         public static final ModConfigSpec.IntValue starlightChargerChargeRate;
         public static final ModConfigSpec.IntValue starlightChargerMaxCharge;
+        public static final ModConfigSpec.BooleanValue starlightChargerCanChargeParts;
         // Debug
         public static final ModConfigSpec.BooleanValue propertiesDebugLogging;
         // Other
@@ -299,6 +300,9 @@ public final class Config {
                 starlightChargerMaxCharge = builder
                         .comment("The maximum amount of energy the starlight charger can store")
                         .defineInRange("max_charge", 1_000_000, 0, Integer.MAX_VALUE);
+                starlightChargerCanChargeParts = builder
+                        .comment("If enabled, allows the starlight charger to charge the individual materials inside a gear part")
+                        .define("can_charge_parts", false);
                 builder.pop();
             }
 

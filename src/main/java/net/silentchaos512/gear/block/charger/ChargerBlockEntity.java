@@ -14,10 +14,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
+import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.api.util.ChargedProperties;
 import net.silentchaos512.gear.block.INamedContainerExtraData;
 import net.silentchaos512.gear.block.SgContainerBlockEntity;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -25,6 +28,7 @@ import net.silentchaos512.gear.gear.material.modifier.ChargedMaterialModifier;
 import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifier;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.MaterialModifiers;
@@ -33,6 +37,8 @@ import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.MathUtils;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.lib.util.TimeUtils;
+
+import java.util.ArrayList;
 
 public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgContainerBlockEntity implements INamedContainerExtraData {
     static final int INVENTORY_SIZE = 3;
@@ -108,6 +114,17 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
             float clampedRarity = Mth.clamp(rarity, 5, 500);
             return (int) (5 * clampedRarity);
         }
+        var data = input.get(SgDataComponents.MATERIAL_LIST);
+        if (data != null) {
+            for (MaterialInstance materialInstance : data) {
+                var materialChargeMod = materialInstance.getModifier(MaterialModifiers.STARCHARGED.get());
+                if (materialChargeMod == null) {
+                    float rarity = materialInstance.getProperty(PartTypes.MAIN.get(), GearProperties.RARITY.get());
+                    float clampedRarity = Mth.clamp(rarity, 5, 500);
+                    return (int) (5 * clampedRarity);
+                }
+            }
+        }
         return -1;
     }
 
@@ -133,12 +150,11 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
         return modifierType.checkLevel(stack);
     }
 
-    private static boolean canCharge(ItemStack stack) {
-        MaterialInstance material = MaterialInstance.from(stack);
+    public static boolean canCharge(ItemStack stack) {
+        if (canChargePartItem(stack)) return true;
 
-        if (material == null) {
-            return false;
-        }
+        var material = MaterialInstance.from(stack);
+        if (material == null) return false;
 
         for (IMaterialModifier modifier : material.getModifiers()) {
             if (modifier instanceof ChargedMaterialModifier) {
@@ -149,9 +165,52 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
         return true;
     }
 
+    private static boolean canChargePartItem(ItemStack stack) {
+        if (!(Config.Common.starlightChargerCanChargeParts.get() || ModList.get().isLoaded("sgearmetalworks"))) {
+            return false;
+        }
+
+        var data = stack.get(SgDataComponents.MATERIAL_LIST);
+        if (data != null) {
+            for (MaterialInstance materialInstance : data) {
+                var materialChargeMod = materialInstance.getModifier(MaterialModifiers.STARCHARGED.get());
+                if (materialChargeMod == null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     protected void chargeMaterial(ItemStack output, int level) {
+        if (chargePartItem(output, level)) return;
+
         T mod = modifierType.create(level);
         modifierType.addModifier(mod, output);
+    }
+
+    protected boolean chargePartItem(ItemStack output, int level) {
+        T mod = modifierType.create(level);
+
+        var data = output.get(SgDataComponents.MATERIAL_LIST);
+        if (data != null) {
+            data = new ArrayList<>(data); // turn mutable
+            for (int i = 0; i < data.size(); i++) {
+                MaterialInstance materialInstance = data.get(i);
+                var materialChargeMod = materialInstance.getModifier(MaterialModifiers.STARCHARGED.get());
+                if (materialChargeMod == null) {
+                    // charge material
+                    data.remove(i);
+                    var materialStack = materialInstance.getItem();
+                    modifierType.addModifier(mod, materialStack);
+                    data.add(MaterialInstance.of(materialInstance.get(), materialStack));
+                    break;
+                }
+            }
+            output.set(SgDataComponents.MATERIAL_LIST, data);
+            return true;
+        }
+        return false;
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, ChargerBlockEntity<?> blockEntity) {
@@ -168,8 +227,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
 
         ItemStack input = blockEntity.getItem(0);
         ItemStack catalyst = blockEntity.getItem(1);
-        MaterialInstance material = MaterialInstance.from(input);
-        if (input.isEmpty() || catalyst.isEmpty() || material == null) {
+        if (input.isEmpty() || catalyst.isEmpty()) {
             return;
         }
 
@@ -274,7 +332,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
                 return switch (slot) {
-                    case 0 -> MaterialInstance.from(stack) != null;
+                    case 0 -> canCharge(stack);
                     case 1 -> stack.is(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS);
                     default -> false;
                 };

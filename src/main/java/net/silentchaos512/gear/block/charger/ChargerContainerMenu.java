@@ -32,7 +32,7 @@ public class ChargerContainerMenu extends AbstractContainerMenu {
         addSlot(new Slot(inventory, 0, 56, 23) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return MaterialInstance.from(stack) != null;
+                return ChargerBlockEntity.canCharge(stack);
             }
         });
         addSlot(new Slot(inventory, 1, 56, 46) {
