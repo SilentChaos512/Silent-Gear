@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
+import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -122,12 +123,24 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return value;
     }
 
+    @Deprecated(forRemoval = true)
     public List<Component> getTooltipLines(V value, GearTooltipFlag flag) {
         return List.of(formatText(value, flag));
     }
 
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("unchecked")
     public final List<Component> getTooltipLinesUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag) {
-        return List.of(formatTextUnchecked(value, flag));
+        return getTooltipLines((V) value, flag);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final void buildTooltipUnchecked(TextListBuilder listBuilder, GearPropertyValue<?> value, GearTooltipFlag flag) {
+        buildTooltip(listBuilder, (V) value, flag);
+    }
+
+    public void buildTooltip(TextListBuilder listBuilder, V value, GearTooltipFlag flag) {
+        listBuilder.add(formatText(value, flag));
     }
 
     @SuppressWarnings("unchecked")

@@ -80,7 +80,7 @@ public final class GearClientHelper {
 
         if (!Config.Client.vanillaStyleTooltips.get()) {
             // Properties
-            addStatsInfo(stack, tooltip, flag, item);
+            addPropertiesInfo(stack, tooltip, flag, item);
         }
 
         // Tool construction
@@ -94,7 +94,7 @@ public final class GearClientHelper {
         }
     }
 
-    public static void addStatsInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag, GearItem item) {
+    public static void addPropertiesInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag, GearItem item) {
         if (KeyTracker.isDisplayPropertiesDown() && flag.showProperties()) {
             tooltip.add(TextUtil.withColor(misc("tooltip.properties"), Color.GOLD));
 
@@ -114,11 +114,11 @@ public final class GearClientHelper {
                     // Durability-specific formatting
                     int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
                     int durabilityMax = stack.getMaxDamage();
-                    var text = statText("durabilityFormat", durabilityLeft, durabilityMax);
+                    var text = propertyText("durabilityFormat", durabilityLeft, durabilityMax);
                     builder.add(property.formatText(text));
                 } else {
                     // All other properties
-                    property.getTooltipLinesUnchecked(value, flag).forEach(builder::add);
+                    property.buildTooltipUnchecked(builder, value, flag);
                 }
             }
 
@@ -141,7 +141,7 @@ public final class GearClientHelper {
         return Component.translatable("misc.silentgear." + key, formatArgs);
     }
 
-    private static MutableComponent statText(String key, Object... formatArgs) {
+    private static MutableComponent propertyText(String key, Object... formatArgs) {
         return Component.translatable("property.silentgear." + key, formatArgs);
     }
 

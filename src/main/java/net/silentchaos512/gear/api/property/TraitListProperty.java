@@ -144,43 +144,28 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
     }
 
     @Override
-    public List<Component> getTooltipLines(TraitListPropertyValue value, GearTooltipFlag flag) {
-        List<Component> result = new ArrayList<>();
-        var traits = value.value;
-        var displayIndex = getTraitDisplayIndex(traits.size(), flag);
+    public void buildTooltip(TextListBuilder listBuilder, TraitListPropertyValue value, GearTooltipFlag flag) {
+        var propertyName = TextUtil.withColor(getDisplayName(), this.nameColor);
 
-        MutableComponent textTraits = TextUtil.withColor(TextUtil.misc("tooltip.traits"), Color.GOLD);
-        if (displayIndex < 0) {
-            if (!Config.Client.vanillaStyleTooltips.get()) {
-                result.add(textTraits);
-            }
+        if (value.value.isEmpty()) {
+            var noneText = Component.translatable("misc.silentgear.tooltip.none");
+            listBuilder.add(Component.translatable("property.silentgear.displayFormat", propertyName, noneText));
+            return;
         }
 
-        int i = 0;
-        for (var trait : traits) {
-            if (displayIndex < 0 || displayIndex == i) {
-                final int level = trait.getLevel();
-                trait.getTrait().addInformation(level, result, flag, text -> {
-                    if (Config.Client.vanillaStyleTooltips.get()) {
-                        var bullet = Component.literal(TextListBuilder.VANILLA_BULLET + " ");
-                        return TextUtil.withColor(bullet, Color.GRAY).append(text);
-                    }
-                    if (displayIndex >= 0) {
-                        var colon = Component.literal(": ");
-                        return textTraits.append(TextUtil.withColor(colon, ChatFormatting.GRAY).append(text));
-                    }
-                    return Component.literal(TextListBuilder.BULLETS[0] + " ").append(text);
-                });
+        listBuilder.add(propertyName);
+        listBuilder.indent();
+        var displayDescriptions = KeyTracker.isDisplayTraitDescriptionsDown();
+        for (TraitInstance trait : value.value) {
+            var text = trait.getDisplayName(FormatContext.GEAR);
+            if (displayDescriptions) {
+                var descriptionColored = TextUtil.withColor(trait.getDescription(), ChatFormatting.GRAY);
+                var textWithDescription = Component.translatable("property.silentgear.traits.displayWithDescription", text, descriptionColored);
+                listBuilder.add(textWithDescription);
+            } else {
+                listBuilder.add(text);
             }
-            ++i;
         }
-
-        return result;
-    }
-
-    private static int getTraitDisplayIndex(int numTraits, GearTooltipFlag flag) {
-        if (Config.Client.vanillaStyleTooltips.get() || KeyTracker.isDisplayTraitsDown() || numTraits == 0)
-            return -1;
-        return ClientTicks.ticksInGame() / 20 % numTraits;
+        listBuilder.unindent();
     }
 }
