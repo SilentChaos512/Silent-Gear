@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
@@ -134,12 +135,16 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return getTooltipLines((V) value, flag);
     }
 
-    @SuppressWarnings("unchecked")
-    public final void buildTooltipUnchecked(TextListBuilder listBuilder, GearPropertyValue<?> value, GearTooltipFlag flag) {
-        buildTooltip(listBuilder, (V) value, flag);
+    public boolean isHidden(GearTooltipFlag flag) {
+        return false;
     }
 
-    public void buildTooltip(TextListBuilder listBuilder, V value, GearTooltipFlag flag) {
+    @SuppressWarnings("unchecked")
+    public final void buildTooltipUnchecked(TextListBuilder listBuilder, GearPropertyValue<?> value, ItemStack gearItemStack, GearTooltipFlag flag) {
+        buildTooltip(listBuilder, (V) value, gearItemStack, flag);
+    }
+
+    public void buildTooltip(TextListBuilder listBuilder, V value, ItemStack gearItemStack, GearTooltipFlag flag) {
         listBuilder.add(formatText(value, flag));
     }
 

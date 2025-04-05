@@ -102,24 +102,12 @@ public final class GearClientHelper {
             var gearProperties = GearData.getProperties(stack);
 
             for (GearProperty<?, ?> property : getDisplayProperties(stack, flag)) {
-                if (property == GearProperties.ENCHANTMENT_VALUE && !Config.Common.allowEnchanting.get()) {
-                    // Enchanting not allowed, so hide the stat
-                    continue;
-                }
+                if (property.isHidden(flag)) continue;
 
                 GearPropertyValue<?> value = gearProperties.get(property);
                 if (value == null) continue;
 
-                if (property == GearProperties.DURABILITY.get()) {
-                    // Durability-specific formatting
-                    int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
-                    int durabilityMax = stack.getMaxDamage();
-                    var text = propertyText("durabilityFormat", durabilityLeft, durabilityMax);
-                    builder.add(property.formatText(text));
-                } else {
-                    // All other properties
-                    property.buildTooltipUnchecked(builder, value, flag);
-                }
+                property.buildTooltipUnchecked(builder, value, stack, flag);
             }
 
             tooltip.addAll(builder.build());

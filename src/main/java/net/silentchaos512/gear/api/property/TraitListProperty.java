@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
@@ -14,15 +15,12 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.client.util.TextListBuilder;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.lib.event.ClientTicks;
-import net.silentchaos512.lib.util.Color;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -144,7 +142,7 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
     }
 
     @Override
-    public void buildTooltip(TextListBuilder listBuilder, TraitListPropertyValue value, GearTooltipFlag flag) {
+    public void buildTooltip(TextListBuilder listBuilder, TraitListPropertyValue value, ItemStack gearItemStack, GearTooltipFlag flag) {
         var propertyName = TextUtil.withColor(getDisplayName(), this.nameColor);
 
         if (value.value.isEmpty()) {
