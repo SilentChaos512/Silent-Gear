@@ -3,11 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [Unreleased]
+### [1.21.1-4.0.18] - 2025-04-08
 ### Changed
 - Traits are now displayed as a bulleted list under gear properties. A key (shift by default) can be held to display descriptions for the traits
 - Removed all mentions of trait cancelling from the en_us translation file
 - (API) `getTooltipLines` and `getTooltipLinesUnchecked` in `GearProperty` have been deprecated and are no longer called anywhere. Override `buildTooltip` instead.
+### Fixed
+- Grader not grading compound materials correctly (BerzinsU) [#799, #798]
 
 ## [1.21.1-4.0.17] - 2025-03-29
 ### Added
