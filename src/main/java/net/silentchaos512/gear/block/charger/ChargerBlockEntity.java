@@ -26,6 +26,7 @@ import net.silentchaos512.gear.block.SgContainerBlockEntity;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.material.modifier.ChargedMaterialModifier;
 import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifier;
+import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -166,7 +167,8 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
     }
 
     private static boolean canChargePartItem(ItemStack stack) {
-        if (!(Config.Common.starlightChargerCanChargeParts.get() || ModList.get().isLoaded("sgearmetalworks"))) {
+        boolean isCompoundMaterial = stack.getItem() instanceof CompoundMaterialItem;
+        if (isCompoundMaterial || !(Config.Common.starlightChargerCanChargeParts.get() || ModList.get().isLoaded("sgearmetalworks"))) {
             return false;
         }
 
@@ -192,8 +194,9 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
     protected boolean chargePartItem(ItemStack output, int level) {
         T mod = modifierType.create(level);
 
+        boolean isCompoundMaterial = output.getItem() instanceof CompoundMaterialItem;
         var data = output.get(SgDataComponents.MATERIAL_LIST);
-        if (data != null) {
+        if (data != null && !isCompoundMaterial) {
             data = new ArrayList<>(data); // turn mutable
             for (int i = 0; i < data.size(); i++) {
                 MaterialInstance materialInstance = data.get(i);
