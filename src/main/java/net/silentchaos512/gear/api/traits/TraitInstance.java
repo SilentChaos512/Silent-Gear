@@ -103,6 +103,10 @@ public record TraitInstance(
         return text;
     }
 
+    public MutableComponent getDescription() {
+        return this.trait.get().getDescription(this.level);
+    }
+
     public void addInformation(List<Component> tooltip, TooltipFlag flag) {
         if (!this.trait.get().showInTooltip(flag)) return;
 

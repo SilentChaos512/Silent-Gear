@@ -11,8 +11,8 @@ public record GearTooltipFlag(
         boolean showProperties,
         boolean showConstruction
 ) implements TooltipFlag {
-    public static GearTooltipFlag withModifierKeys(boolean advanced, boolean showStats, boolean showConstruction) {
-        return new GearTooltipFlag(KeyTracker.isControlDown(), KeyTracker.isAltDown(), KeyTracker.isShiftDown(), advanced, showStats, showConstruction);
+    public static GearTooltipFlag withModifierKeys(boolean advanced, boolean showProperties, boolean showConstruction) {
+        return new GearTooltipFlag(KeyTracker.isControlDown(), KeyTracker.isAltDown(), KeyTracker.isShiftDown(), advanced, showProperties, showConstruction);
     }
 
     @Override

@@ -276,7 +276,7 @@ public final class Trait {
         tooltip.add(affixFirst.apply(displayName));
 
         // Description (usually not shown)
-        if (KeyTracker.isDisplayTraitsDown() && !Config.Client.vanillaStyleTooltips.get()) {
+        if (KeyTracker.isDisplayTraitDescriptionsDown() && !Config.Client.vanillaStyleTooltips.get()) {
             Component description = TextUtil.withColor(this.getDescription(level), ChatFormatting.DARK_GRAY);
             tooltip.add(Component.literal("    ").append(description));
         }

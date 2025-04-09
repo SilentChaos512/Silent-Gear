@@ -7,10 +7,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
+import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -122,12 +124,28 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return value;
     }
 
+    @Deprecated(forRemoval = true)
     public List<Component> getTooltipLines(V value, GearTooltipFlag flag) {
         return List.of(formatText(value, flag));
     }
 
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("unchecked")
     public final List<Component> getTooltipLinesUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag) {
-        return List.of(formatTextUnchecked(value, flag));
+        return getTooltipLines((V) value, flag);
+    }
+
+    public boolean isHidden(GearTooltipFlag flag) {
+        return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    public final void buildTooltipUnchecked(TextListBuilder listBuilder, GearPropertyValue<?> value, ItemStack gearItemStack, GearTooltipFlag flag) {
+        buildTooltip(listBuilder, (V) value, gearItemStack, flag);
+    }
+
+    public void buildTooltip(TextListBuilder listBuilder, V value, ItemStack gearItemStack, GearTooltipFlag flag) {
+        listBuilder.add(formatText(value, flag));
     }
 
     @SuppressWarnings("unchecked")

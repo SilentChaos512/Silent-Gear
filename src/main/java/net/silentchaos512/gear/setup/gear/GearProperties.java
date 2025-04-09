@@ -1,9 +1,14 @@
 package net.silentchaos512.gear.setup.gear;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.property.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.client.util.GearTooltipFlag;
+import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.setup.SgRegistries;
 
 import java.util.Collections;
@@ -30,7 +35,16 @@ public class GearProperties {
                             .group(GearPropertyGroups.GENERAL)
                             .affectedByGrades(true)
                             .affectedBySynergy(true)
-            )
+            ) {
+                @Override
+                public void buildTooltip(TextListBuilder listBuilder, NumberPropertyValue value, ItemStack stack, GearTooltipFlag flag) {
+                    // Durability-specific formatting
+                    int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
+                    int durabilityMax = stack.getMaxDamage();
+                    var text = Component.translatable("property.silentgear.durabilityFormat", durabilityLeft, durabilityMax);
+                    listBuilder.add(formatText(text));
+                }
+            }
     );
     public static final Supplier<NumberProperty> ARMOR_DURABILITY = REGISTRAR.register(
             "armor_durability",
@@ -78,7 +92,13 @@ public class GearProperties {
                             .group(GearPropertyGroups.GENERAL)
                             .affectedByGrades(true)
                             .affectedBySynergy(true)
-            )
+            ) {
+                @Override
+                public boolean isHidden(GearTooltipFlag flag) {
+                    // No need to display if enchanting is not allowed per config
+                    return Config.Common.isLoaded() && !Config.Common.allowEnchanting.get();
+                }
+            }
     );
     public static final Supplier<NumberProperty> CHARGING_VALUE = REGISTRAR.register(
             "charging_value",

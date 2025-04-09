@@ -19,6 +19,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.block.SgContainerBlockEntity;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgTags;
@@ -104,9 +105,12 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     }
 
     private void tryGradeItem(ItemStack input, int catalystTier) {
+
+        boolean isCompoundMaterial = input.getItem() instanceof CompoundMaterialItem;
+
         // Gear part grading
         var data = input.get(SgDataComponents.MATERIAL_LIST);
-        if (data != null) {
+        if (data != null && !isCompoundMaterial) {
             if (tryGradePartItem(input, catalystTier, data)) return;
         }
 
@@ -175,7 +179,9 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     }
 
     public static boolean canGrade(ItemStack stack) {
-        if (canGradePartItem(stack)) return true;
+        boolean isCompoundMaterial = stack.getItem() instanceof CompoundMaterialItem;
+
+        if (canGradePartItem(stack) && !isCompoundMaterial) return true;
 
         var material = MaterialInstance.from(stack);
         if (material == null) return false;
@@ -186,6 +192,11 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
 
     private static boolean canGradePartItem(ItemStack stack) {
         if (!(Config.Common.graderCanGradeParts.get() || ModList.get().isLoaded("sgearmetalworks"))) {
+            return false;
+        }
+
+        // Skip for compound materials like alloy ingots
+        if (stack.getItem() instanceof CompoundMaterialItem) {
             return false;
         }
 
