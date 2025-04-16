@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- Shield blueprint/template now requires an iron ingot to craft
+
 ### [1.21.1-4.0.18] - 2025-04-08
 ### Changed
 - Traits are now displayed as a bulleted list under gear properties. A key (shift by default) can be held to display descriptions for the traits

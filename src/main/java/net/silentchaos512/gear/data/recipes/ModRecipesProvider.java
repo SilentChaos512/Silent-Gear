@@ -152,7 +152,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         toolBlueprint(consumer, "bow", GearItemSets.BOW, " #/", "# /", " #/");
         toolBlueprint(consumer, "crossbow", GearItemSets.CROSSBOW, "/#/", "###", " / ");
         toolBlueprint(consumer, "slingshot", GearItemSets.SLINGSHOT, "# #", " / ", " / ");
-        toolBlueprint(consumer, "shield", GearItemSets.SHIELD, "# #", "///", " # ");
+        toolBlueprint(consumer, "shield", GearItemSets.SHIELD, Ingredient.of(Tags.Items.INGOTS_IRON), "#@#", "///", " # ");
         toolBlueprint(consumer, "arrow", GearItemSets.ARROW, Ingredient.of(Tags.Items.FEATHERS), "#", "/", "@");
         armorBlueprint(consumer, "helmet", GearItemSets.HELMET, "###", "# #");
         armorBlueprint(consumer, "chestplate", GearItemSets.CHESTPLATE, "# #", "###", "###");
