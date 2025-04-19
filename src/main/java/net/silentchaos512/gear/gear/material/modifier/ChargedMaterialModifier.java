@@ -14,7 +14,9 @@ import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.util.ChargedProperties;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 
@@ -55,6 +57,17 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
         }
 
         public int checkLevel(ItemStack stack) {
+            // Find the lowest leveled material if it's a gear part
+            var data = stack.get(SgDataComponents.MATERIAL_LIST);
+            if (data != null) {
+                int lowestLevel = 0;
+                for (MaterialInstance materialInstance : data) {
+                    var i = materialInstance.getItem().get(this.dataComponentType.get());
+                    lowestLevel = Math.min(lowestLevel, i == null ? 0 : i);
+                }
+                return lowestLevel;
+            }
+
             var i = stack.get(this.dataComponentType.get());
             return i != null ? i : 0;
         }
