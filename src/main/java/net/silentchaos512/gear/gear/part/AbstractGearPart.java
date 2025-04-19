@@ -49,6 +49,11 @@ public abstract class AbstractGearPart implements GearPart {
 
     @Override
     public <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(PartInstance instance, PartType partType, PropertyKey<T, V> key) {
+        if (key.property().isForMaterialsOnly()) {
+            // Property does not apply to parts/gear
+            return List.of();
+        }
+
         var mods = new ArrayList<>(this.properties.getValues(key));
         var event = new GetPropertyModifiersEvent<>(instance, key, mods);
         NeoForge.EVENT_BUS.post(event);

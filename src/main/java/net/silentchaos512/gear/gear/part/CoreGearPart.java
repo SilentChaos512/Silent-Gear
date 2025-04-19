@@ -122,6 +122,11 @@ public class CoreGearPart extends AbstractGearPart {
 
     @Override
     public <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(PartInstance part, PartType partType, PropertyKey<T, V> key) {
+        if (key.property().isForMaterialsOnly()) {
+            // Property does not apply to parts/gear
+            return List.of();
+        }
+
         var materials = getMaterials(part);
         List<V> mods = materials.stream()
                 .flatMap(m -> m.getPropertyModifiers(partType, key).stream())

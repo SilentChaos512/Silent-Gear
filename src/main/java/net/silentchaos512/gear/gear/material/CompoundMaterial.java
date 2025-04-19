@@ -20,6 +20,7 @@ import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -93,7 +94,7 @@ public class CompoundMaterial extends AbstractMaterial {
             Set<PartType> set1 = subMaterials.get(i).getPartTypes();
             Set<PartType> toRemove = new HashSet<>();
             for (PartType type : set) {
-                if (!set1.contains(type)) {
+                if (!set1.contains(type) || !isValidMaterialSet(subMaterials, type)) {
                     toRemove.add(type);
                 }
             }
@@ -101,6 +102,15 @@ public class CompoundMaterial extends AbstractMaterial {
         }
 
         return set;
+    }
+
+    private boolean isValidMaterialSet(List<MaterialInstance> materials, PartType partType) {
+        for (MaterialInstance material : materials) {
+            if (!material.getProperty(partType, GearProperties.ADDITIVE.get())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

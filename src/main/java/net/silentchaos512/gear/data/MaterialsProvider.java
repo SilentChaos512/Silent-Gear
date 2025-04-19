@@ -18,6 +18,7 @@ import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.material.MaterialCraftingData;
 import net.silentchaos512.gear.api.material.TextureType;
+import net.silentchaos512.gear.api.property.BooleanPropertyValue;
 import net.silentchaos512.gear.api.property.HarvestTier;
 import net.silentchaos512.gear.api.property.HarvestTierPropertyValue;
 import net.silentchaos512.gear.api.property.NumberProperty;
@@ -588,10 +589,31 @@ public class MaterialsProvider extends MaterialsProviderBase {
     }
 
     private void addDusts(Collection<MaterialBuilder<?>> ret) {
+        ret.add(MaterialBuilder.simple(modId("crushed_shulker_shell"))
+                .crafting(CraftingItems.CRUSHED_SHULKER_SHELL, MaterialCategories.ROCK, MaterialCategories.DUST, MaterialCategories.ENDGAME)
+                .displayWithDefaultName(0xE08BDF, TextureType.LOW_CONTRAST)
+                // main (additive)
+                .stat(PartTypes.MAIN, GearProperties.ADDITIVE, new BooleanPropertyValue(true))
+                .stat(PartTypes.MAIN, GearProperties.DURABILITY, 2500)
+                .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 50)
+                .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 10)
+                .stat(PartTypes.MAIN, GearProperties.CHARGING_VALUE, -0.15f)
+                .stat(PartTypes.MAIN, GearProperties.RARITY, 91)
+                .trait(PartTypes.MAIN, Const.Traits.ERODED, 4)
+        );
         // Glowstone
         ret.add(MaterialBuilder.simple(modId("glowstone"))
                 .crafting(Tags.Items.DUSTS_GLOWSTONE, MaterialCategories.GEM, MaterialCategories.DUST, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xD2D200, TextureType.HIGH_CONTRAST)
+                // main (additive)
+                .stat(PartTypes.MAIN, GearProperties.ADDITIVE, new BooleanPropertyValue(true))
+                .stat(PartTypes.MAIN, GearProperties.CHARGING_VALUE, 0.15f, NumberProperty.Operation.MULTIPLY_BASE)
+                .stat(PartTypes.MAIN, GearProperties.RARITY, 40)
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 15)
+                .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 3)
+                .stat(PartTypes.MAIN, GearProperties.ATTACK_SPEED, 0.4f, NumberProperty.Operation.ADD)
+                .stat(PartTypes.MAIN, GearProperties.RANGED_DAMAGE, 3)
+                .trait(PartTypes.MAIN, Const.Traits.RENEW, 3)
                 //tip
                 .stat(PartTypes.TIP, GearProperties.HARVEST_SPEED, 0.4f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .stat(PartTypes.TIP, GearProperties.ATTACK_DAMAGE, 2, NumberProperty.Operation.ADD)
@@ -603,12 +625,21 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Redstone
         ret.add(MaterialBuilder.simple(modId("redstone"))
-                .crafting(Tags.Items.DUSTS_REDSTONE, MaterialCategories.GEM, MaterialCategories.DUST)
+                .crafting(Tags.Items.DUSTS_REDSTONE, MaterialCategories.METAL, MaterialCategories.DUST, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xBB0000, TextureType.HIGH_CONTRAST)
+                // main (additive)
+                .stat(PartTypes.MAIN, GearProperties.ADDITIVE, new BooleanPropertyValue(true))
+                .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, -0.1f, NumberProperty.Operation.MULTIPLY_BASE)
+                .stat(PartTypes.MAIN, GearProperties.CHARGING_VALUE, 0.1f, NumberProperty.Operation.MULTIPLY_BASE)
+                .stat(PartTypes.MAIN, GearProperties.RARITY, 30)
+                .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 12)
+                .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 4)
+                .stat(PartTypes.MAIN, GearProperties.RANGED_DAMAGE, 2)
+                .trait(PartTypes.MAIN, Const.Traits.IMPERIAL, 3)
                 //tip
                 .stat(PartTypes.TIP, GearProperties.HARVEST_SPEED, 0.2f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .stat(PartTypes.TIP, GearProperties.ATTACK_DAMAGE, 2, NumberProperty.Operation.ADD)
-                .stat(PartTypes.TIP, GearProperties.ATTACK_SPEED, 0.5f, NumberProperty.Operation.ADD)
+                .stat(PartTypes.TIP, GearProperties.ATTACK_SPEED, 0.3f, NumberProperty.Operation.ADD)
                 .stat(PartTypes.TIP, GearProperties.RANGED_DAMAGE, 2, NumberProperty.Operation.ADD)
                 .stat(PartTypes.TIP, GearProperties.RARITY, 10, NumberProperty.Operation.ADD)
         );

@@ -18,11 +18,19 @@ import java.util.function.Supplier;
 public class GearProperties {
     public static final DeferredRegister<GearProperty<?, ?>> REGISTRAR = DeferredRegister.create(SgRegistries.GEAR_PROPERTY, SilentGear.MOD_ID);
 
+    public static final Supplier<BooleanProperty> ADDITIVE = REGISTRAR.register(
+            "additive",
+            () -> new BooleanProperty(
+                    new GearProperty.Builder<>(false, false, false, true)
+                            .group(GearPropertyGroups.SPECIAL)
+                            .forMaterialsOnly(true)
+            )
+    );
     public static final Supplier<TraitListProperty> TRAITS = REGISTRAR.register(
             "traits",
             () -> new TraitListProperty(
                     new GearProperty.Builder<List<TraitInstance>>(Collections.emptyList())
-                            .group(GearPropertyGroups.TRAITS)
+                            .group(GearPropertyGroups.SPECIAL)
             )
     );
     public static final Supplier<NumberProperty> DURABILITY = REGISTRAR.register(
@@ -94,7 +102,7 @@ public class GearProperties {
                             .affectedBySynergy(true)
             ) {
                 @Override
-                public boolean isHidden(GearTooltipFlag flag) {
+                public boolean isHidden(NumberPropertyValue value, GearTooltipFlag flag) {
                     // No need to display if enchanting is not allowed per config
                     return Config.Common.isLoaded() && !Config.Common.allowEnchanting.get();
                 }

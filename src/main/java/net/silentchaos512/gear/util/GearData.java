@@ -181,6 +181,11 @@ public final class GearData {
         final Map<GearProperty<?, ?>, GearPropertyValue<?>> finalBaseValues = new LinkedHashMap<>();
 
         for (var property : SgRegistries.GEAR_PROPERTY) {
+            if (property.isForMaterialsOnly()) {
+                // No parts should return material-only property values, but this safety check makes sure they don't end
+                // up on gear items, just in case!
+                continue;
+            }
             var key = PropertyKey.of(property, gearType);
             Collection<GearPropertyValue<?>> modifiers = propertyMods.get(key);
             GearType statGearType = propertyMods.getMostSpecificKey(key).gearType();
@@ -232,10 +237,12 @@ public final class GearData {
         Map<GearProperty<?, ?>, GearPropertyValue<?>> finalValues = new LinkedHashMap<>();
 
         for (var property : SgRegistries.GEAR_PROPERTY) {
-            var key = PropertyKey.of(property, gearType);
-            combinedMods.put(key, baseProperties.get(property));
-            combinedMods.putAll(key, bonusProperties.get(key));
-            finalValues.put(property, property.computeUnchecked(true, gearType, gearType, combinedMods.get(key)));
+            if (baseProperties.contains(property)) {
+                var key = PropertyKey.of(property, gearType);
+                combinedMods.put(key, baseProperties.get(property));
+                combinedMods.putAll(key, bonusProperties.get(key));
+                finalValues.put(property, property.computeUnchecked(true, gearType, gearType, combinedMods.get(key)));
+            }
         }
 
         return new GearPropertiesData(finalValues);

@@ -23,6 +23,28 @@
     "name_prefix": ""
   },
   "properties": {
+    "silentgear:main": {
+      "additive": true,
+      "attack_damage": 3.0,
+      "attack_speed": {
+        "operation": "ADD",
+        "value": 0.4
+      },
+      "charging_value": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.15
+      },
+      "harvest_speed": 15.0,
+      "ranged_damage": 3.0,
+      "rarity": 40.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:renew"
+        }
+      ]
+    },
     "silentgear:tip": {
       "attack_damage": {
         "operation": "ADD",

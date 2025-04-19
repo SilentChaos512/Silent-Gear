@@ -10,7 +10,7 @@ import java.util.Set;
 public enum GearPropertyGroups implements GearPropertyGroup {
     // Mods are free to add their own categories, but these are the standard ones
     // TODO: Add a helper method to return all registered gear properties sorted by group
-    TRAITS(Color.GOLDENROD),
+    SPECIAL(Color.GOLDENROD),
     GENERAL(Color.STEELBLUE),
     HARVEST(Color.SEAGREEN),
     ATTACK(Color.SANDYBROWN),

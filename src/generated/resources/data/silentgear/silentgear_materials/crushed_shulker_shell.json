@@ -1,0 +1,42 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "rock",
+      "dust",
+      "endgame"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "item": "silentgear:crushed_shulker_shell"
+    },
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFE08BDF",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.crushed_shulker_shell"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "additive": true,
+      "armor_durability": 50.0,
+      "charging_value": -0.15,
+      "durability": 2500.0,
+      "enchantment_value": 10.0,
+      "rarity": 91.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:eroded"
+        }
+      ]
+    }
+  }
+}

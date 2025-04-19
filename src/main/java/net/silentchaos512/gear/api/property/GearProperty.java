@@ -32,6 +32,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     protected final Color nameColor;
     protected final boolean affectedBySynergy;
     protected final boolean affectedByGrades;
+    protected final boolean forMaterialsOnly;
     protected final boolean visible;
 
     protected GearProperty(Builder<T> builder) {
@@ -42,6 +43,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         this.maximumValue = builder.maximumValue;
         this.affectedBySynergy = builder.affectedBySynergy;
         this.affectedByGrades = builder.affectedByGrades;
+        this.forMaterialsOnly = builder.forMaterialsOnly;
         this.group = builder.group;
         this.nameColor = builder.nameColor;
         this.visible = builder.visible;
@@ -114,6 +116,10 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return affectedBySynergy;
     }
 
+    public boolean isForMaterialsOnly() {
+        return forMaterialsOnly;
+    }
+
     public GearPropertyGroup getGroup() {
         return group;
     }
@@ -135,7 +141,12 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return getTooltipLines((V) value, flag);
     }
 
-    public boolean isHidden(GearTooltipFlag flag) {
+    @SuppressWarnings("unchecked")
+    public final boolean isHiddenUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag) {
+        return isHidden((V) value, flag);
+    }
+
+    public boolean isHidden(V value, GearTooltipFlag flag) {
         return false;
     }
 
@@ -249,6 +260,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         private Color nameColor;
         private boolean affectedBySynergy;
         private boolean affectedByGrades;
+        public boolean forMaterialsOnly;
         private boolean visible;
 
         public Builder(T defaultValue) {
@@ -294,6 +306,11 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
 
         public Builder<T> affectedByGrades(boolean value) {
             affectedByGrades = value;
+            return this;
+        }
+
+        public Builder<T> forMaterialsOnly(boolean value) {
+            forMaterialsOnly = value;
             return this;
         }
 

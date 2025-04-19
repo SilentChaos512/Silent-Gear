@@ -18,7 +18,7 @@ public class GearTypes {
     public static final DeferredHolder<GearType, GearType> ALL = REGISTRAR.register("all",
             () -> GearType.Builder.of()
                     .relevantPropertyGroups(
-                            GearPropertyGroups.TRAITS,
+                            GearPropertyGroups.SPECIAL,
                             GearPropertyGroups.GENERAL
                     )
                     .build()
@@ -28,7 +28,7 @@ public class GearTypes {
     public static final DeferredHolder<GearType, GearType> TOOL = REGISTRAR.register("tool",
             () -> GearType.Builder.of(ALL)
                     .relevantPropertyGroups(
-                            GearPropertyGroups.TRAITS,
+                            GearPropertyGroups.SPECIAL,
                             GearPropertyGroups.GENERAL,
                             GearPropertyGroups.HARVEST,
                             GearPropertyGroups.ATTACK
@@ -43,7 +43,7 @@ public class GearTypes {
             () -> GearType.Builder.of(ALL)
                     .durabilityStat(GearProperties.ARMOR_DURABILITY)
                     .relevantPropertyGroups(
-                            GearPropertyGroups.TRAITS,
+                            GearPropertyGroups.SPECIAL,
                             GearPropertyGroups.GENERAL,
                             GearPropertyGroups.ARMOR
                     )
@@ -60,7 +60,7 @@ public class GearTypes {
     public static final DeferredHolder<GearType, GearType> RANGED_WEAPON = REGISTRAR.register("ranged_weapon",
             () -> GearType.Builder.of(WEAPON)
                     .relevantPropertyGroups(
-                            GearPropertyGroups.TRAITS,
+                            GearPropertyGroups.SPECIAL,
                             GearPropertyGroups.GENERAL,
                             GearPropertyGroups.PROJECTILE
                     )
@@ -69,7 +69,7 @@ public class GearTypes {
     public static final DeferredHolder<GearType, GearType> HYBRID_WEAPON = REGISTRAR.register("hybrid_weapon",
             () -> GearType.Builder.of(WEAPON)
                     .relevantPropertyGroups(
-                            GearPropertyGroups.TRAITS,
+                            GearPropertyGroups.SPECIAL,
                             GearPropertyGroups.GENERAL,
                             GearPropertyGroups.ATTACK,
                             GearPropertyGroups.PROJECTILE
@@ -80,14 +80,14 @@ public class GearTypes {
     public static final DeferredHolder<GearType, GearType> CURIO = REGISTRAR.register("curio",
             () -> GearType.Builder.of(ALL)
                     .relevantPropertyGroups(
-                            GearPropertyGroups.TRAITS
+                            GearPropertyGroups.SPECIAL
                     )
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> PROJECTILE = REGISTRAR.register("projectile",
             () -> GearType.Builder.of(ALL)
                     .relevantPropertyGroups(
-                            GearPropertyGroups.TRAITS,
+                            GearPropertyGroups.SPECIAL,
                             GearPropertyGroups.PROJECTILE
                     )
                     .build()
@@ -238,7 +238,7 @@ public class GearTypes {
             () -> GearType.Builder.of(TOOL)
                     .toolActions(ItemAbilities.DEFAULT_FISHING_ROD_ACTIONS)
                     .relevantPropertyGroups(
-                            GearPropertyGroups.TRAITS,
+                            GearPropertyGroups.SPECIAL,
                             GearPropertyGroups.GENERAL
                     )
                     .build()
@@ -249,7 +249,7 @@ public class GearTypes {
                     .durabilityStat(GearProperties.ARMOR_DURABILITY)
                     .armorDurabilityMultiplier(337f / 15f)
                     .relevantPropertyGroups(
-                            GearPropertyGroups.TRAITS,
+                            GearPropertyGroups.SPECIAL,
                             GearPropertyGroups.GENERAL
                     )
                     .build()

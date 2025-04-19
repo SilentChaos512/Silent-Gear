@@ -31,6 +31,7 @@ import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipeInput;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.lib.util.TimeUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -231,6 +232,15 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
             }
             partTypes.removeIf(pt -> !material.getPartTypes().contains(pt));
         }
+        // Can only compound if not all materials are additives
+        partTypes.removeIf(partType -> {
+            for (MaterialInstance material : materials) {
+                if (!material.getProperty(partType, GearProperties.ADDITIVE.get())) {
+                    return false;
+                }
+            }
+            return true;
+        });
         return !partTypes.isEmpty();
     }
 

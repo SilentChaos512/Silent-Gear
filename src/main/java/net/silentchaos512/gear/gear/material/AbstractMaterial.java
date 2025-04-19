@@ -16,6 +16,7 @@ import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.util.Color;
 
@@ -144,6 +145,9 @@ public abstract class AbstractMaterial implements Material {
         }
 
         if (properties.containsKey(partType) || partType == PartTypes.NONE.get() || (getParent() != null && getParent().isCraftingAllowed(material, partType, gearType, craftingInput))) {
+            if (isAdditiveMaterial(material, partType, gearType)) {
+                return false;
+            }
             if (partType == PartTypes.MAIN.get()) {
                 var durabilityProperty = gearType.durabilityStat().get();
                 var durabilityKey = PropertyKey.of(durabilityProperty, gearType);
@@ -152,6 +156,11 @@ public abstract class AbstractMaterial implements Material {
             return true;
         }
         return false;
+    }
+
+    private boolean isAdditiveMaterial(MaterialInstance material, PartType partType, GearType gearType) {
+        var additiveKey = PropertyKey.of(GearProperties.ADDITIVE.get(), gearType);
+        return getPropertyUnclamped(material, partType, additiveKey);
     }
 
     private boolean isGearTypeBlacklisted(GearType gearType) {

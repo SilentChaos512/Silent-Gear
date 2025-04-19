@@ -22,7 +22,6 @@ import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.SgRegistries;
-import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -102,12 +101,10 @@ public final class GearClientHelper {
             var gearProperties = GearData.getProperties(stack);
 
             for (GearProperty<?, ?> property : getDisplayProperties(stack, flag)) {
-                if (property.isHidden(flag)) continue;
-
                 GearPropertyValue<?> value = gearProperties.get(property);
-                if (value == null) continue;
-
-                property.buildTooltipUnchecked(builder, value, stack, flag);
+                if (value != null && !property.isHiddenUnchecked(value, flag)) {
+                    property.buildTooltipUnchecked(builder, value, stack, flag);
+                }
             }
 
             tooltip.addAll(builder.build());
