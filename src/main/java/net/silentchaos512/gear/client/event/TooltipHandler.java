@@ -355,7 +355,7 @@ public final class TooltipHandler {
             // Cast to true types
             var property = (P) propertyIn;
             var modifiers = (Collection<V>) modifiersIn;
-            T value = property.compute(property.getZeroValue(), true, gearType, modifiers);
+            T value = property.compute(property.getZeroValue(), false, gearType, modifiers);
             boolean isZero = property.isZero(value);
             if (event.getFlags().isAdvanced() || !isZero) {
                 Color nameColor = isZero ? MC_DARK_GRAY : property.getGroup().getColor();
