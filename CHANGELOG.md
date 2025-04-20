@@ -3,9 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.0.19] - 2025-04-20
+### Added
+- Additive property for materials. Additive materials can be used to make compound materials, but cannot be used to craft gear directly.
+- Boolean property type (used for additive property)
+- Crushed shulker shell material (additive only)
+- Option to allow starlight charger to charge the materials of a gear part (disabled by default) (JaisDK) [#797]
 ### Changed
 - Shield blueprint/template now requires an iron ingot to craft
+- Materials that have an empty tag as their crafting item will no longer be loaded. This can be changed in the config file.
+### Fixed
+- Gear using block interaction range for attack range (STS15) [#796]
 
 ### [1.21.1-4.0.18] - 2025-04-08
 ### Changed

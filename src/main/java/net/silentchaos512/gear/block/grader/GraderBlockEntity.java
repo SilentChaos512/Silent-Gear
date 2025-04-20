@@ -191,7 +191,7 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     }
 
     private static boolean canGradePartItem(ItemStack stack) {
-        if (!(Config.Common.graderCanGradeParts.get() || ModList.get().isLoaded("sgearmetalworks"))) {
+        if (!isGradingPartsAllowed()) {
             return false;
         }
 
@@ -210,6 +210,10 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
             }
         }
         return false;
+    }
+
+    private static boolean isGradingPartsAllowed() {
+        return (Config.Common.isLoaded() && Config.Common.graderCanGradeParts.get()) || ModList.get().isLoaded("sgearmetalworks");
     }
 
     private ItemStack getInputStack() {

@@ -19,8 +19,6 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
-import net.silentchaos512.gear.api.part.MaterialGrade;
-import net.silentchaos512.gear.api.util.ChargedProperties;
 import net.silentchaos512.gear.block.INamedContainerExtraData;
 import net.silentchaos512.gear.block.SgContainerBlockEntity;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -168,7 +166,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
 
     private static boolean canChargePartItem(ItemStack stack) {
         boolean isCompoundMaterial = stack.getItem() instanceof CompoundMaterialItem;
-        if (isCompoundMaterial || !(Config.Common.starlightChargerCanChargeParts.get() || ModList.get().isLoaded("sgearmetalworks"))) {
+        if (isCompoundMaterial || !isChargingPartsAllowed()) {
             return false;
         }
 
@@ -182,6 +180,10 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
             }
         }
         return false;
+    }
+
+    private static boolean isChargingPartsAllowed() {
+        return (Config.Common.isLoaded() && Config.Common.starlightChargerCanChargeParts.get()) || ModList.get().isLoaded("sgearmetalworks");
     }
 
     protected void chargeMaterial(ItemStack output, int level) {
