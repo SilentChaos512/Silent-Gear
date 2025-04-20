@@ -7,6 +7,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.silentchaos512.gear.api.part.MaterialGrade;
+import net.silentchaos512.gear.api.property.BooleanPropertyValue;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
@@ -57,6 +58,8 @@ public final class Config {
         public static final ModConfigSpec.IntValue sawRecursionDepth;
         public static final ModConfigSpec.BooleanValue upgradesInAnvilOnly;
         public static final ModConfigSpec.BooleanValue destroySwappedParts;
+        // Materials
+        public static final ModConfigSpec.BooleanValue skipMaterialsWithEmptyTags;
         // Traits
         public static final ModConfigSpec.BooleanValue magnetPullDisabledOnCrouch;
         // Salvager
@@ -249,6 +252,11 @@ public final class Config {
                 }
                 builder.pop();
             }
+
+            skipMaterialsWithEmptyTags = builder
+                    .comment("When true, materials that have empty tags (and thus no valid way of obtaining them) will be disabled",
+                            "This does not disable materials with empty ingredients, such as the example material.")
+                    .define("material.skip_materials_with_empty_tags", true);
 
             magnetPullDisabledOnCrouch = builder
                     .comment("Disable magnetic pull effects when the player is crouching/sneaking.")

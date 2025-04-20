@@ -64,14 +64,34 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
         );
     }
 
-    public void validate(T value, JsonObject json) {
-        // Do nothing
+    /**
+     * Can be used to check for issues during resource loading. Called after value has been decoded, but before it is
+     * registered. Returning a failing {@link ValidationResult} which cause the object to not be registered.
+     *
+     * @param value The object, which may not be complete if {@link #attachExtraData(Object, String, JsonObject)} is used
+     * @param json  The JSON that was decoded to create {@code value}
+     * @return A validation result which should include a reason if validation fails
+     */
+    public ValidationResult validate(T value, JsonObject json) {
+        return ValidationResult.success("No problem here.");
     }
 
+    /**
+     * An additional validation check on all objects. Can be used for logging minor issues. Called after all values have
+     * been registered.
+     */
     public void validateAll() {
         // Do nothing
     }
 
+    /**
+     * Can be used to attach additional data to the object. This should be used sparingly, as most data should have
+     * already been obtained from the decoding process.
+     *
+     * @param value    The object
+     * @param packName The name of the data pack
+     * @param json     The JSON that was decoded to create {@code value}
+     */
     public void attachExtraData(T value, String packName, JsonObject json) {
         // Do nothing
     }
@@ -144,33 +164,8 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
             this.errorList.clear();
             this.logger.info(this.logMarker, "Reloading {} files", this.typeName);
 
-            String packName;
             for (ResourceLocation id : resources.keySet()) {
-                String path = id.getPath().substring(this.dataPath.length() + 1, id.getPath().length() - ".json".length());
-                ResourceLocation name = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), path);
-
-                Optional<Resource> resourceOptional = resourceManager.getResource(id);
-                if (resourceOptional.isPresent()) {
-                    Resource resource = resourceOptional.get();
-                    packName = resource.sourcePackId();
-                    JsonObject json = null;
-                    try {
-                        var string = IOUtils.toString(resource.open(), StandardCharsets.UTF_8);
-                        json = GsonHelper.fromJson(gson, string, JsonObject.class);
-                    } catch (IOException ex) {
-                        this.logger.error(this.logMarker, "Could not read {}: {}", this.typeName, name, ex);
-                        this.errorList.add(name);
-                    }
-
-                    if (json == null) {
-                        this.logger.error(this.logMarker, "Could not load {} \"{}\" as it's null or empty", this.typeName, name);
-                    } else {
-                        var value = tryDecode(name, packName, json);
-                        validate(value, json);
-                        attachExtraData(value, packName, json);
-                        tryAddObject(name, value);
-                    }
-                }
+                reloadResource(resourceManager, id, gson);
             }
         }
 
@@ -184,13 +179,46 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
         validateAll();
     }
 
-    private void tryAddObject(ResourceLocation id, T value) {
+    private void reloadResource(ResourceManager resourceManager, ResourceLocation id, Gson gson) {
+        String path = id.getPath().substring(this.dataPath.length() + 1, id.getPath().length() - ".json".length());
+        ResourceLocation name = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), path);
+
+        Optional<Resource> resourceOptional = resourceManager.getResource(id);
+        if (resourceOptional.isPresent()) {
+            Resource resource = resourceOptional.get();
+            String packName = resource.sourcePackId();
+            JsonObject json = null;
+            try {
+                var string = IOUtils.toString(resource.open(), StandardCharsets.UTF_8);
+                json = GsonHelper.fromJson(gson, string, JsonObject.class);
+            } catch (IOException ex) {
+                this.logger.error(this.logMarker, "Could not read {}: {}", this.typeName, name, ex);
+                this.errorList.add(name);
+            }
+
+            if (json == null) {
+                this.logger.error(this.logMarker, "Could not load {} \"{}\" as it's null or empty", this.typeName, name);
+            } else {
+                var value = tryDecode(name, packName, json);
+                var validationResult = validate(value, json);
+                attachExtraData(value, packName, json);
+                tryAddObject(name, value, validationResult);
+            }
+        }
+    }
+
+    private void tryAddObject(ResourceLocation id, T value, ValidationResult validationResult) {
         if (this.byKey.containsKey(id)) {
             throw new IllegalArgumentException("Duplicate " + this.typeName + ": " + id);
-        } else {
-            this.byKey.put(id, value);
-            this.values.add(value);
         }
+
+        if (!validationResult.isValid) {
+            this.logger.warn(this.logMarker, "Skipping invalid {} {}: {}", this.typeName, id, validationResult.reason);
+            return;
+        }
+
+        this.byKey.put(id, value);
+        this.values.add(value);
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -240,5 +268,15 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
 
     public Stream<T> stream() {
         return StreamSupport.stream(this.spliterator(), false);
+    }
+
+    public record ValidationResult(boolean isValid, String reason) {
+        public static ValidationResult success(String reason) {
+            return new ValidationResult(true, reason);
+        }
+
+        public static ValidationResult fail(String reason) {
+            return new ValidationResult(false, reason);
+        }
     }
 }
