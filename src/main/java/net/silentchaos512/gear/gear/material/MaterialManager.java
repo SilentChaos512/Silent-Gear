@@ -10,8 +10,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.core.DataResourceManager;
@@ -38,19 +36,8 @@ public class MaterialManager extends DataResourceManager<Material> {
     }
 
     @Override
-    public ValidationResult validate(Material value, JsonObject json) {
+    public void validate(Material value, JsonObject json) {
         addIngredientChecks(value, json);
-        if (isCraftingItemEmptyTag(value)) {
-            return ValidationResult.fail("Crafting ingredient matches no items! Is the tag empty or invalid?");
-        }
-        return super.validate(value, json);
-    }
-
-    private static boolean isCraftingItemEmptyTag(Material value) {
-        return Config.Common.isLoaded()
-                && Config.Common.skipMaterialsWithEmptyTags.get()
-                && !value.getIngredient().isEmpty()
-                && value.getIngredient().hasNoItems();
     }
 
     @Override
