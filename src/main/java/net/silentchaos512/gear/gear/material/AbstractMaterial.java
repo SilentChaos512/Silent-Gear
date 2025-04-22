@@ -109,6 +109,12 @@ public abstract class AbstractMaterial implements Material {
     }
 
     @Override
+    public boolean isValid() {
+        // Materials with empty tags for a crafting item will be hidden, empty ingredients will not be
+        return getIngredient().isEmpty() || !getIngredient().hasNoItems();
+    }
+
+    @Override
     public Set<PartType> getPartTypes(MaterialInstance material) {
         // Grab the part types from this part and its parent(s)
         return Sets.union(properties.keySet(), getParentOptional()

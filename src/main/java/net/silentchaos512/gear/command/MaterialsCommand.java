@@ -105,12 +105,10 @@ public final class MaterialsCommand {
             List<PartType> partTypes = new ArrayList<>(SgRegistries.PART_TYPE.stream().toList());
             partTypes.sort((o1, o2) -> Comparator.comparing(o -> ((PartType) o).getDisplayName().getString()).compare(o1, o2));
             for (PartType partType : partTypes) {
-                for (Material material : SgRegistries.MATERIAL) {
-                    if (includeChildren || getParentId(material).isEmpty()) {
-                        MaterialInstance inst = MaterialInstance.of(material);
-                        if (material.isAllowedInPart(inst, partType)) {
-                            writer.write(makeTsvLine(inst, partType) + "\n");
-                        }
+                for (Material material : SgRegistries.MATERIAL.getValues(includeChildren)) {
+                    MaterialInstance inst = MaterialInstance.of(material);
+                    if (material.isAllowedInPart(inst, partType)) {
+                        writer.write(makeTsvLine(inst, partType) + "\n");
                     }
                 }
             }

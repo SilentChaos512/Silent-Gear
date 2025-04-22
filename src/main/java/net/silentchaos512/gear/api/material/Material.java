@@ -88,6 +88,14 @@ public interface Material extends GearComponent<MaterialInstance> {
     boolean isSimple();
 
     /**
+     * Check if the material is valid. Materials that are not considered valid will still be loaded and retained in
+     * memory, but will not be displayed in most contexts.
+     *
+     * @return True if the material is valid and obtainable, false otherwise
+     */
+    boolean isValid();
+
+    /**
      * Gets the part types this material supports. In general, a material will support a part type
      * if the type is present in the stats JSON object (even if the value is empty).
      *
@@ -116,7 +124,8 @@ public interface Material extends GearComponent<MaterialInstance> {
      *
      * @param oldMaterial The material object being overwritten
      */
-    default void retainData(@Nullable Material oldMaterial) {}
+    default void retainData(@Nullable Material oldMaterial) {
+    }
 
     Collection<PropertyKey<?, ?>> getPropertyKeys(MaterialInstance material, PartType type);
 

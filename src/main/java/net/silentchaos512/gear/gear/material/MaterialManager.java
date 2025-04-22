@@ -10,6 +10,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.core.DataResourceManager;
@@ -72,7 +73,7 @@ public class MaterialManager extends DataResourceManager<Material> {
         synchronized (this) {
             List<Material> list = new ArrayList<>();
             for (Material m : this) {
-                if (includeChildren || m.getParent() == null) {
+                if ((includeChildren || m.getParent() == null) && m.isValid()) {
                     list.add(m);
                 }
             }
