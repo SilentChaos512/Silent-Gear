@@ -81,6 +81,41 @@
           "trait": "silentgear:soft"
         }
       ]
+    },
+    "silentgear:tip": {
+      "armor_durability": {
+        "operation": "ADD",
+        "value": 1.0
+      },
+      "durability": {
+        "operation": "ADD",
+        "value": 32.0
+      },
+      "harvest_speed": {
+        "operation": "ADD",
+        "value": 1.0
+      },
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgear:incorrect_for_copper_tools",
+        "level_hint": "1.5",
+        "name": "copper"
+      },
+      "rarity": {
+        "operation": "ADD",
+        "value": 4.0
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:malleable"
+        },
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:dulling"
+        }
+      ]
     }
   }
 }

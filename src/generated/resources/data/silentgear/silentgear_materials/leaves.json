@@ -25,6 +25,30 @@
     "silentgear:fletching": {
       "projectile_accuracy": 0.9,
       "projectile_speed": 1.1
+    },
+    "silentgear:main": {
+      "armor": 3.0,
+      "armor/boots": 0.5,
+      "armor/chestplate": 1.0,
+      "armor/helmet": 0.5,
+      "armor/leggings": 1.0,
+      "armor_durability": 2.0,
+      "charging_value": 1.1,
+      "durability": 0.0,
+      "enchantment_value": 12.0,
+      "rarity": 1.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:flammable"
+        },
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:light"
+        }
+      ]
     }
   }
 }

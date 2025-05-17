@@ -165,6 +165,16 @@ public class TraitsProvider extends TraitsProviderBase {
                 .cancelsWith(Const.Traits.LUCKY)
                 .extraWikiLines("  - Please see the extra info on the Lucky trait and this wiki page: https://minecraft.gamepedia.com/Luck")
         );
+        ret.add(TraitBuilder.of(Const.Traits.FLUTTER, 5)
+                .effects(AttributeTraitEffect.builder()
+                        .addArmorSlots(
+                                Attributes.SAFE_FALL_DISTANCE,
+                                AttributeModifier.Operation.ADD_VALUE,
+                                0.25f, 0.5f, 0.75f, 1.0f, 1.25f
+                        )
+                        .build()
+                )
+        );
         ret.add(TraitBuilder.of(Const.Traits.LUCKY, 7)
                 .effects(AttributeTraitEffect.builder()
                         .addAnySlot(GearTypes.ALL,
@@ -364,6 +374,14 @@ public class TraitsProvider extends TraitsProviderBase {
                         NumberPropertyModifierTraitEffect.builder()
                                 .add(GearProperties.ARMOR, 0.05f, true, true)
                                 .add(GearProperties.ATTACK_DAMAGE, -0.1667f, true, true)
+                                .build()
+                )
+        );
+        ret.add(new TraitBuilder(Const.Traits.DULLING, 5)
+                .effects(
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.ATTACK_DAMAGE, -1, true, false)
+                                .add(GearProperties.HARVEST_SPEED, -1, true, false)
                                 .build()
                 )
         );

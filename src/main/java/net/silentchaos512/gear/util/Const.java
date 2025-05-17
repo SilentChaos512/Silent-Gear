@@ -208,7 +208,7 @@ public final class Const {
         public static final DataResource<Trait> CURE_POISON = DataResource.trait("cure_poison");
         public static final DataResource<Trait> CURE_WITHER = DataResource.trait("cure_wither");
         public static final DataResource<Trait> CURSED = DataResource.trait("cursed");
-        public static final DataResource<Trait> SWIFT_SWIM = DataResource.trait("swift_swim");
+        public static final DataResource<Trait> DULLING = DataResource.trait("dulling");
         public static final DataResource<Trait> ERODED = DataResource.trait("eroded");
         public static final DataResource<Trait> FIERY = DataResource.trait("fiery");
         public static final DataResource<Trait> FIREPROOF = DataResource.trait("fireproof");
@@ -216,6 +216,7 @@ public final class Const {
         public static final DataResource<Trait> FLAMMABLE = DataResource.trait("flammable");
         public static final DataResource<Trait> FLEXIBLE = DataResource.trait("flexible");
         public static final DataResource<Trait> FLOATSTONER = DataResource.trait("floatstoner");
+        public static final DataResource<Trait> FLUTTER = DataResource.trait("flutter");
         public static final DataResource<Trait> FORTUNATE = DataResource.trait("fortunate");
         public static final DataResource<Trait> GOLD_DIGGER = DataResource.trait("gold_digger");
         public static final DataResource<Trait> GREEDY = DataResource.trait("greedy");
@@ -252,6 +253,7 @@ public final class Const {
         public static final DataResource<Trait> SPOON = DataResource.trait("spoon");
         public static final DataResource<Trait> STELLAR = DataResource.trait("stellar");
         public static final DataResource<Trait> STURDY = DataResource.trait("sturdy");
+        public static final DataResource<Trait> SWIFT_SWIM = DataResource.trait("swift_swim");
         public static final DataResource<Trait> SYNERGISTIC = DataResource.trait("synergistic");
         public static final DataResource<Trait> TERMINUS = DataResource.trait("terminus");
         public static final DataResource<Trait> TURTLE = DataResource.trait("turtle");

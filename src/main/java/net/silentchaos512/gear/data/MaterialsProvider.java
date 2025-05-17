@@ -245,6 +245,15 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 // rod
                 .stat(PartTypes.ROD, GearProperties.ATTACK_DAMAGE, 0.05f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 1)
+                //tip
+                .stat(PartTypes.TIP, GearProperties.DURABILITY, 96, NumberProperty.Operation.ADD)
+                .stat(PartTypes.TIP, GearProperties.ARMOR_DURABILITY, 2, NumberProperty.Operation.ADD)
+                .harvestTierBuiltin(PartTypes.TIP)
+                .stat(PartTypes.TIP, GearProperties.HARVEST_SPEED, 0.75f, NumberProperty.Operation.ADD)
+                .stat(PartTypes.TIP, GearProperties.ATTACK_DAMAGE, 0.75f, NumberProperty.Operation.ADD)
+                .stat(PartTypes.TIP, GearProperties.ATTACK_SPEED, 0.1f, NumberProperty.Operation.ADD)
+                .stat(PartTypes.TIP, GearProperties.RARITY, 6, NumberProperty.Operation.ADD)
+                .trait(PartTypes.TIP, Const.Traits.MALLEABLE, 2)
         );
         // Crimson Iron
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.CRIMSON_IRON)
@@ -342,6 +351,14 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.ROD, GearProperties.HARVEST_SPEED, 0.2f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .trait(PartTypes.ROD, Const.Traits.BENDING, 3)
                 .trait(PartTypes.ROD, Const.Traits.SOFT, 3)
+                //tip
+                .stat(PartTypes.TIP, GearProperties.DURABILITY, 32, NumberProperty.Operation.ADD)
+                .stat(PartTypes.TIP, GearProperties.ARMOR_DURABILITY, 1, NumberProperty.Operation.ADD)
+                .harvestTierBuiltin(PartTypes.TIP)
+                .stat(PartTypes.TIP, GearProperties.HARVEST_SPEED, 1, NumberProperty.Operation.ADD)
+                .stat(PartTypes.TIP, GearProperties.RARITY, 4, NumberProperty.Operation.ADD)
+                .trait(PartTypes.TIP, Const.Traits.MALLEABLE, 1)
+                .trait(PartTypes.TIP, Const.Traits.DULLING, 1)
         );
         // Gold
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.GOLD)
@@ -955,6 +972,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsArmor(1, 3, 2, 1, 0, 2) //7
                 .trait(PartTypes.MAIN, Const.Traits.FLAMMABLE, 1)
                 .trait(PartTypes.MAIN, Const.Traits.FLEXIBLE, 2)
+                // rod
                 .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 3)
         );
     }
@@ -1108,7 +1126,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(MaterialBuilder.simple(modId("vine"))
                 .crafting(Items.VINE, MaterialCategories.ORGANIC, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x007F0E, TextureType.LOW_CONTRAST)
+                // binding
                 .stat(PartTypes.BINDING, GearProperties.REPAIR_EFFICIENCY, 0.03f, NumberProperty.Operation.MULTIPLY_BASE)
+                // cord
+                .stat(PartTypes.CORD, GearProperties.RANGED_DAMAGE, -0.1f, NumberProperty.Operation.MULTIPLY_BASE)
         );
     }
 
@@ -1117,6 +1138,11 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(MaterialBuilder.simple(modId("feather"))
                 .crafting(Tags.Items.FEATHERS, MaterialCategories.ORGANIC, MaterialCategories.BASIC)
                 .displayWithDefaultName(Color.VALUE_WHITE, TextureType.LOW_CONTRAST)
+                // main
+                .mainStatsCommon(0, 2, 9, 1, 1.1f)
+                .mainStatsArmor(0.5f, 1f, 1f, 0.5f, 0f, 0f)
+                .trait(PartTypes.MAIN, Const.Traits.FLUTTER, 1)
+                // fletching
                 .stat(PartTypes.FLETCHING, GearProperties.PROJECTILE_SPEED, 0.9f)
                 .stat(PartTypes.FLETCHING, GearProperties.PROJECTILE_ACCURACY, 1.1f)
         );
@@ -1124,6 +1150,12 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(MaterialBuilder.simple(modId("leaves"))
                 .crafting(ItemTags.LEAVES, MaterialCategories.ORGANIC, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x4A8F28, TextureType.LOW_CONTRAST)
+                // main
+                .mainStatsCommon(0, 2, 12, 1, 1.1f)
+                .mainStatsArmor(0.5f, 1f, 1f, 0.5f, 0f, 0f)
+                .trait(PartTypes.MAIN, Const.Traits.FLAMMABLE, 1)
+                .trait(PartTypes.MAIN, Const.Traits.LIGHT, 1)
+                // fletching
                 .stat(PartTypes.FLETCHING, GearProperties.PROJECTILE_SPEED, 1.1f)
                 .stat(PartTypes.FLETCHING, GearProperties.PROJECTILE_ACCURACY, 0.9f)
         );
@@ -1142,6 +1174,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(MaterialBuilder.simple(modId("slime"))
                 .crafting(Items.SLIME_BLOCK, MaterialCategories.SLIME, MaterialCategories.ORGANIC, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0x8CD782, TextureType.LOW_CONTRAST)
+                // lining
                 .stat(PartTypes.LINING, GearProperties.ARMOR_TOUGHNESS, 0.5f, NumberProperty.Operation.ADD)
                 .trait(PartTypes.LINING, Const.Traits.BOUNCE, 1)
         );
@@ -1149,6 +1182,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(MaterialBuilder.simple(modId("turtle"))
                 .crafting(Items.TURTLE_SCUTE, MaterialCategories.ORGANIC, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0x47BF4A, TextureType.LOW_CONTRAST)
+                // main
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 0)
                 .stat(PartGearKey.ofMain(GearTypes.HELMET), GearProperties.ARMOR_DURABILITY, 25)
                 .stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, 9)

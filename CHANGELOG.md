@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Many materials now support rod substitutes using common rods (`c:rods/...`)
+- Some missing tags including `c:tools/melee_weapon`
 ### Changed
 - Vanilla items now retain all data components when converted to Silent Gear items. Theoretically, this should include Apotheosis modifiers. 
 

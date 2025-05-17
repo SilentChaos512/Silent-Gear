@@ -1,0 +1,69 @@
+{
+  "conditions": [],
+  "description": {
+    "translate": "trait.silentgear.flutter.desc"
+  },
+  "effects": [
+    {
+      "type": "silentgear:attribute",
+      "attribute_modifiers": {
+        "armor/chest": [
+          {
+            "attribute": "minecraft:generic.safe_fall_distance",
+            "operation": "add_value",
+            "values": [
+              0.25,
+              0.5,
+              0.75,
+              1.0,
+              1.25
+            ]
+          }
+        ],
+        "armor/feet": [
+          {
+            "attribute": "minecraft:generic.safe_fall_distance",
+            "operation": "add_value",
+            "values": [
+              0.25,
+              0.5,
+              0.75,
+              1.0,
+              1.25
+            ]
+          }
+        ],
+        "armor/head": [
+          {
+            "attribute": "minecraft:generic.safe_fall_distance",
+            "operation": "add_value",
+            "values": [
+              0.25,
+              0.5,
+              0.75,
+              1.0,
+              1.25
+            ]
+          }
+        ],
+        "armor/legs": [
+          {
+            "attribute": "minecraft:generic.safe_fall_distance",
+            "operation": "add_value",
+            "values": [
+              0.25,
+              0.5,
+              0.75,
+              1.0,
+              1.25
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.flutter"
+  }
+}

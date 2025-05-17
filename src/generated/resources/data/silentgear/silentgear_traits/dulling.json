@@ -1,0 +1,27 @@
+{
+  "conditions": [],
+  "description": {
+    "translate": "trait.silentgear.dulling.desc"
+  },
+  "effects": [
+    {
+      "type": "silentgear:number_property_modifier",
+      "property_modifiers": {
+        "silentgear:attack_damage": {
+          "base_multiplier": -1.0,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": false
+        },
+        "silentgear:harvest_speed": {
+          "base_multiplier": -1.0,
+          "multiply_damage_ratio": true,
+          "multiply_original_value": false
+        }
+      }
+    }
+  ],
+  "max_level": 5,
+  "name": {
+    "translate": "trait.silentgear.dulling"
+  }
+}
