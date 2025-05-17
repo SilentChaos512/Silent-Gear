@@ -51,12 +51,8 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         ItemStack result = item.construct(getParts());
         ItemStack original = findOriginalItem(inv);
         if (!original.isEmpty()) {
-            // Copy relevant data components
-            result.setDamageValue(original.getDamageValue());
-            if (original.isEnchanted()) {
-                // Copy enchantments
-                result.set(DataComponents.ENCHANTMENTS, original.getEnchantments());
-            }
+            // Copy data components
+            result.applyComponents(original.getComponents());
         }
         return result;
     }
