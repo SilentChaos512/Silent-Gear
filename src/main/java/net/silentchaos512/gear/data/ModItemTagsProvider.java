@@ -145,6 +145,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .addTag(SgTags.Items.SEEDS_FLUFFY_PUFF);
         builder(Tags.Items.STRINGS, CraftingItems.FLAX_STRING, CraftingItems.SINEW_FIBER);
 
+        // Tool/Armor tags
         builder(ItemTags.HEAD_ARMOR,
                 GearItemSets.HELMET.gearItem());
         builder(ItemTags.CHEST_ARMOR,
@@ -187,6 +188,26 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.KATANA.gearItem(),
                 GearItemSets.MACHETE.gearItem(),
                 GearItemSets.SWORD.gearItem());
+        builder(Tags.Items.MELEE_WEAPON_TOOLS,
+                GearItemSets.AXE.gearItem(),
+                GearItemSets.DAGGER.gearItem(),
+                GearItemSets.KATANA.gearItem(),
+                GearItemSets.KNIFE.gearItem(),
+                GearItemSets.MACE.gearItem(),
+                GearItemSets.MACHETE.gearItem(),
+                GearItemSets.SPEAR.gearItem(),
+                GearItemSets.SWORD.gearItem(),
+                GearItemSets.TRIDENT.gearItem());
+        builder(Tags.Items.RANGED_WEAPON_TOOLS,
+                GearItemSets.BOW.gearItem(),
+                GearItemSets.CROSSBOW.gearItem(),
+                GearItemSets.SLINGSHOT.gearItem(),
+                GearItemSets.TRIDENT.gearItem());
+        builder(Tags.Items.MINING_TOOL_TOOLS,
+                GearItemSets.HAMMER.gearItem(),
+                GearItemSets.PAXEL.gearItem(),
+                GearItemSets.PICKAXE.gearItem(),
+                GearItemSets.PROSPECTOR_HAMMER.gearItem());
 
         // Minecraft
         copy(BlockTags.LEAVES, ItemTags.LEAVES);
