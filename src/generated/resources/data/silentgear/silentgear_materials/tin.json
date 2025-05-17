@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/tin"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/tin"
+      }
+    }
   },
   "display": {
     "color": "#FF89A5B4",

@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/osmium"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/osmium"
+      }
+    }
   },
   "display": {
     "color": "#FF92A6B8",

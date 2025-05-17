@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/compressed_iron"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/compressed_iron"
+      }
+    }
   },
   "display": {
     "color": "#FFA6A6A6",

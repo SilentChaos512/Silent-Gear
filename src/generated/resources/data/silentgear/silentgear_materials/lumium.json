@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/lumium"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/lumium"
+      }
+    }
   },
   "display": {
     "color": "#FFFFD789",

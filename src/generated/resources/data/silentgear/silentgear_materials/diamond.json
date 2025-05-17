@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:gems/diamond"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/diamond"
+      }
+    }
   },
   "display": {
     "color": "#FF33EBCB",

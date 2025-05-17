@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/crimson_iron"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/crimson_iron"
+      }
+    }
   },
   "display": {
     "color": "#FFFF6189",

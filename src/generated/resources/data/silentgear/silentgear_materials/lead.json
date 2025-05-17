@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/lead"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/lead"
+      }
+    }
   },
   "display": {
     "color": "#FFC2CBB8",

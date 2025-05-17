@@ -1023,11 +1023,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.NETHER_STAR_FRAGMENT))
                 .save(consumer);
 
-        shapeless(RecipeCategory.MISC, CraftingItems.BRONZE_INGOT, 4)
+        /*shapeless(RecipeCategory.MISC, CraftingItems.BRONZE_INGOT, 4)
                 .requires(Tags.Items.INGOTS_COPPER, 3)
                 .requires(Tags.Items.INGOTS_IRON, 1)
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_COPPER))
-                .save(consumer);
+                .save(consumer);*/
 
         // TODO: Maybe should organize these better...
         // A

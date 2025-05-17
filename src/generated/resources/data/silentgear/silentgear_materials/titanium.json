@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/titanium"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/titanium"
+      }
+    }
   },
   "display": {
     "color": "#FF2E4CE6",

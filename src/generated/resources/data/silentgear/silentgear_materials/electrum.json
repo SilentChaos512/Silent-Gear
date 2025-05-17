@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/electrum"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/electrum"
+      }
+    }
   },
   "display": {
     "color": "#FFD6E037",

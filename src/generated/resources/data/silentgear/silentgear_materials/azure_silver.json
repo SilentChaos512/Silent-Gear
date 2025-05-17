@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/azure_silver"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/azure_silver"
+      }
+    }
   },
   "display": {
     "color": "#FFCBBAFF",

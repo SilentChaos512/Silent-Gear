@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/bismuth_brass"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/bismuth_brass"
+      }
+    }
   },
   "display": {
     "color": "#FFE9C1B4",

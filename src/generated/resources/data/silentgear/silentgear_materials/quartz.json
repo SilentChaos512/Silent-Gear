@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:gems/quartz"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/quartz"
+      }
+    }
   },
   "display": {
     "color": "#FFD4CABA",

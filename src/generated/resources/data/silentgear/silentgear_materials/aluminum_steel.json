@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/aluminum_steel"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/aluminum_steel"
+      }
+    }
   },
   "display": {
     "color": "#FF98D9DA",

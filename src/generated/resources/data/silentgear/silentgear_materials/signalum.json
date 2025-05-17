@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/signalum"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/signalum"
+      }
+    }
   },
   "display": {
     "color": "#FFFF5E28",

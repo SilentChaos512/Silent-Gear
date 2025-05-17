@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/azure_electrum"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/azure_electrum"
+      }
+    }
   },
   "display": {
     "color": "#FF4575E3",

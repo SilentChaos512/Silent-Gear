@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/refined_obsidian"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/refined_obsidian"
+      }
+    }
   },
   "display": {
     "color": "#FF665482",

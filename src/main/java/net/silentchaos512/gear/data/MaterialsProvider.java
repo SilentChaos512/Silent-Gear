@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -43,6 +44,7 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -140,7 +142,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
     private void addModMetals(Collection<MaterialBuilder<?>> ret) {
         // Azure Electrum
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.AZURE_ELECTRUM)
-                .crafting(SgTags.Items.INGOTS_AZURE_ELECTRUM, MaterialCategories.METAL, MaterialCategories.ENDGAME)
+                .craftingWithCommonRod(SgTags.Items.INGOTS_AZURE_ELECTRUM, MaterialCategories.METAL, MaterialCategories.ENDGAME)
                 .displayWithDefaultName(0x4575E3, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(1259, 61, 37, 109, 1.5f)
@@ -167,7 +169,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Azure Silver
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.AZURE_SILVER)
-                .crafting(SgTags.Items.INGOTS_AZURE_SILVER, MaterialCategories.METAL, MaterialCategories.ADVANCED)
+                .craftingWithCommonRod(SgTags.Items.INGOTS_AZURE_SILVER, MaterialCategories.METAL, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0xCBBAFF, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(197, 17, 29, 83, 1.4f)
@@ -197,7 +199,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Blaze Gold
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.BLAZE_GOLD)
-                .crafting(SgTags.Items.INGOTS_BLAZE_GOLD, MaterialCategories.METAL, MaterialCategories.ADVANCED)
+                .craftingWithCommonRod(SgTags.Items.INGOTS_BLAZE_GOLD, MaterialCategories.METAL, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0xDD8500)
                 //main
                 .mainStatsCommon(69, 9, 24, 45, 1.2f)
@@ -231,7 +233,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Bronze
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.BRONZE)
-                .crafting(SgTags.Items.INGOTS_BRONZE, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
+                .craftingWithCommonRod(SgTags.Items.INGOTS_BRONZE, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xD6903B, TextureType.HIGH_CONTRAST)
                 .mainStatsCommon(300, 13, 12, 15, 1.1f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
@@ -246,7 +248,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Crimson Iron
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.CRIMSON_IRON)
-                .crafting(SgTags.Items.INGOTS_CRIMSON_IRON, MaterialCategories.METAL, MaterialCategories.ADVANCED)
+                .craftingWithCommonRod(SgTags.Items.INGOTS_CRIMSON_IRON, MaterialCategories.METAL, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0xFF6189, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(420, 27, 14, 31, 0.7f)
@@ -272,7 +274,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Crimson Steel
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.CRIMSON_STEEL)
-                .crafting(SgTags.Items.INGOTS_CRIMSON_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
+                .craftingWithCommonRod(SgTags.Items.INGOTS_CRIMSON_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
                 .displayWithDefaultName(0xDC143C, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(2400, 42, 19, 83, 0.9f)
@@ -299,7 +301,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Tyrian Steel
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.TYRIAN_STEEL)
-                .crafting(SgTags.Items.INGOTS_TYRIAN_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
+                .craftingWithCommonRod(SgTags.Items.INGOTS_TYRIAN_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
                 .displayWithDefaultName(0xB01080, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(3652, 81, 16, 100, 1.1f)
@@ -325,7 +327,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
     private void addVanillaMetals(Collection<MaterialBuilder<?>> ret) {
         // Copper
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.COPPER)
-                .crafting(Tags.Items.INGOTS_COPPER, MaterialCategories.METAL, MaterialCategories.BASIC)
+                .craftingWithCommonRod(Tags.Items.INGOTS_COPPER, MaterialCategories.METAL, MaterialCategories.BASIC)
                 .displayWithDefaultName(0xFD804C, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(151, 12, 15, 12, 1.3f)
@@ -343,7 +345,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Gold
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.GOLD)
-                .crafting(Tags.Items.INGOTS_GOLD, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
+                .craftingWithCommonRod(Tags.Items.INGOTS_GOLD, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xFDFF70, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(32, 7, 22, 50, 1.2f)
@@ -377,13 +379,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Iron
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.IRON)
-                .crafting(new MaterialCraftingData(
-                        Ingredient.of(Tags.Items.INGOTS_IRON),
-                        List.of(MaterialCategories.METAL, MaterialCategories.INTERMEDIATE),
-                        List.of(),
-                        Map.of(PartTypes.ROD.get(), Ingredient.of(SgTags.Items.RODS_IRON)),
-                        true
-                ))
+                .craftingWithCommonRod(Tags.Items.INGOTS_IRON, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(Color.VALUE_WHITE, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(250, 15, 14, 20, 0.7f)
@@ -440,7 +436,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
     private void addGems(Collection<MaterialBuilder<?>> ret) {
         // Diamond
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.DIAMOND)
-                .crafting(Tags.Items.GEMS_DIAMOND, MaterialCategories.GEM, MaterialCategories.ADVANCED)
+                .craftingWithCommonRod(Tags.Items.GEMS_DIAMOND, MaterialCategories.GEM, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0x33EBCB, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(1561, 33, 10, 70, 0.8f)
@@ -472,7 +468,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Emerald
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.EMERALD)
-                .crafting(Tags.Items.GEMS_EMERALD, MaterialCategories.GEM, MaterialCategories.ADVANCED)
+                .craftingWithCommonRod(Tags.Items.GEMS_EMERALD, MaterialCategories.GEM, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0x00B038, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(1080, 24, 16, 40, 1.0f)
@@ -539,7 +535,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Quartz
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.QUARTZ)
-                .crafting(Tags.Items.GEMS_QUARTZ, MaterialCategories.GEM, MaterialCategories.INTERMEDIATE)
+                .craftingWithCommonRod(Tags.Items.GEMS_QUARTZ, MaterialCategories.GEM, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xD4CABA, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(330, 13, 10, 40, 1.2f)
@@ -897,6 +893,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 2)
         );
 
+        // TODO: Remove me
         // Rough wood
         ret.add(MaterialBuilder.simple(modId("wood/rough"))
                 .crafting(new MaterialCraftingData(
@@ -1909,7 +1906,25 @@ public class MaterialsProvider extends MaterialsProviderBase {
         var tierCategory = List.of(MaterialCategories.BASIC, MaterialCategories.BASIC, MaterialCategories.INTERMEDIATE, MaterialCategories.ADVANCED, MaterialCategories.ENDGAME)
                 .get(tier);
         return MaterialBuilder.simple(DataResource.material(SilentGear.getId(name)))
-                .crafting(Ingredient.of(TagKey.create(Registries.ITEM, tag)), MaterialCategories.METAL, tierCategory);
+                .crafting(craftingMetalWithDefaultRod(tag, tierCategory, commonRodTag(name)));
+    }
+
+    private static MaterialCraftingData craftingMetalWithDefaultRod(ResourceLocation materialTag, MaterialCategories tierCategory, TagKey<Item> rodTag) {
+        return craftingMetalWithDefaultRod(TagKey.create(Registries.ITEM, materialTag), tierCategory, rodTag);
+    }
+
+    private static MaterialCraftingData craftingMetalWithDefaultRod(TagKey<Item> materialTag, MaterialCategories tierCategory, TagKey<Item> rodTag) {
+        return new MaterialCraftingData(
+                Ingredient.of(materialTag),
+                List.of(MaterialCategories.METAL, tierCategory),
+                List.of(),
+                Map.of(PartTypes.ROD.get(), Ingredient.of(rodTag)),
+                true
+        );
+    }
+
+    private static TagKey<Item> commonRodTag(String name) {
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "rods/" + name));
     }
 
     private static MaterialBuilder<SimpleMaterial> terracotta(DataResource<Material> parent, String suffix, ItemLike item, int color) {

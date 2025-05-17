@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:gems/emerald"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/emerald"
+      }
+    }
   },
   "display": {
     "color": "#FF00B038",

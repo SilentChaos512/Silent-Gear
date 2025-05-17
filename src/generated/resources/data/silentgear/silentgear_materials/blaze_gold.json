@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/blaze_gold"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/blaze_gold"
+      }
+    }
   },
   "display": {
     "color": "#FFDD8500",

@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/refined_iron"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/refined_iron"
+      }
+    }
   },
   "display": {
     "color": "#FFD7D7D7",

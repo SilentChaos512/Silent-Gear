@@ -11,7 +11,11 @@
     "ingredient": {
       "tag": "c:ingots/copper"
     },
-    "part_substitutes": {}
+    "part_substitutes": {
+      "silentgear:rod": {
+        "tag": "c:rods/copper"
+      }
+    }
   },
   "display": {
     "color": "#FFFD804C",

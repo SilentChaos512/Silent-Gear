@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Many materials now support rod substitutes using common rods (`c:rods/...`)
+
 ## [1.21.1-4.0.20] - 2025-04-21
 ### Fixed
 - Revert materials with empty tags not being loaded. In many cases this would cause most materials to erroneously fail to load on the first time loading a world.
