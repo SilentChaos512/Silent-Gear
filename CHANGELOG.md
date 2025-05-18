@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.0.21] - 2025-05-18
 ### Added
 - Many materials now support rod substitutes using common rods (`c:rods/...`)
 - Some missing tags including `c:tools/melee_weapon`
