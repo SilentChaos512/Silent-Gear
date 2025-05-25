@@ -3,19 +3,7 @@
   "category": "equipment",
   "ingredients": [
     {
-      "type": "silentgear:blueprint",
-      "gear_type": "silentgear:shield",
-      "part_type": "silentgear:main"
-    },
-    {
-      "type": "silentgear:material",
-      "gear_type": "silentgear:armor",
-      "part_type": "silentgear:main"
-    },
-    {
-      "type": "silentgear:material",
-      "gear_type": "silentgear:armor",
-      "part_type": "silentgear:main"
+      "item": "silentgear:shield_plate"
     },
     {
       "type": "silentgear:part_type",

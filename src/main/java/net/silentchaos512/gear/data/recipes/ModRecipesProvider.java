@@ -564,11 +564,20 @@ public class ModRecipesProvider extends LibRecipeProvider {
         curioRecipes(consumer, "bracelet", 3, GearItemSets.BRACELET);
         curioRecipes(consumer, "necklace", 3, GearItemSets.NECKLACE);
 
-        shapelessGear(RecipeCategory.COMBAT, GearItemSets.SHIELD.gearItem())
+        // Shield
+        shapelessPart(RecipeCategory.COMBAT, GearItemSets.SHIELD.mainPart())
                 .requires(BlueprintIngredient.of(GearItemSets.SHIELD))
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.ARMOR.get()), 2)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.SHIELD.get()), 2)
+                .save(consumer, SilentGear.getId("gear/shield_plate"));
+        shapelessGear(RecipeCategory.COMBAT, GearItemSets.SHIELD.gearItem())
+                .requires(GearItemSets.SHIELD.mainPart())
                 .requires(GearPartIngredient.of(PartTypes.ROD.get()))
                 .save(consumer, SilentGear.getId("gear/shield"));
+        shapelessGear(RecipeCategory.COMBAT, GearItemSets.SHIELD.gearItem())
+                .requires(BlueprintIngredient.of(GearItemSets.SHIELD))
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.SHIELD.get()), 2)
+                .requires(GearPartIngredient.of(PartTypes.ROD.get()))
+                .save(consumer, SilentGear.getId("gear/shield_quick"));
 
         armorRecipes(consumer, 5, GearItemSets.HELMET);
         armorRecipes(consumer, 8, GearItemSets.CHESTPLATE);
