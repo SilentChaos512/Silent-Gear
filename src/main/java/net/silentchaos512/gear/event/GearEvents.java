@@ -327,7 +327,8 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
         var player = event.getEntity();
-        if (!player.level().isClientSide) {
+        var level = player.level();
+        if (!level.isClientSide) {
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
             if (!player.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
@@ -336,10 +337,10 @@ public final class GearEvents {
             }
 
             // Void Ward trait
-            if (player.getY() < -64 && TraitHelper.hasTraitArmor(player, Const.Traits.VOID_WARD)) {
+            if (player.getY() < level.getMinBuildHeight() - 32 && TraitHelper.hasTraitArmor(player, Const.Traits.VOID_WARD)) {
                 // A small boost to get the player out of the void, then levitation and slow falling
                 // to allow them to navigate back to safety
-                player.push(0, 10, 0);
+                player.push(0, 20, 0);
                 player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 400, 3, true, false));
                 player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 9, true, false));
             }
