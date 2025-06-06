@@ -308,7 +308,7 @@ public final class Config {
 
             propertiesDebugLogging = builder
                     .comment("Log property calculations in the log file every time gear properties are recalculated")
-                    .define("debug.logging.properties", true);
+                    .define("debug.logging.properties", false);
 
             // Other random stuff
             showWipText = builder

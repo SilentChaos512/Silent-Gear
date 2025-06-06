@@ -116,11 +116,6 @@ public class GearArrowItem extends ArrowItem implements GearItem {
     }
 
     @Override
-    public Component getName(ItemStack stack) {
-        return GearHelper.getDisplayName(stack);
-    }
-
-    @Override
     public int getMaxDamage(ItemStack stack) {
         return 256;
     }

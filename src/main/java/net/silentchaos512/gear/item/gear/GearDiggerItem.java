@@ -130,11 +130,6 @@ public class GearDiggerItem extends DiggerItem implements GearDiggerTool {
     }
 
     @Override
-    public Component getName(ItemStack stack) {
-        return GearHelper.getDisplayName(stack);
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, context, tooltip, flagIn);
     }

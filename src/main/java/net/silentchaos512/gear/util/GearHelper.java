@@ -740,11 +740,11 @@ public final class GearHelper {
         return Const.Materials.EXAMPLE;
     }
 
-    public static Component getDisplayName(ItemStack gear) {
+    @Nullable
+    public static Component getItemName(ItemStack gear, GearConstructionData constructionData) {
         // TODO: cache with a data component in 1.21.2
-        var data = GearData.getConstruction(gear);
-        var part = data.getPrimaryPart();
-        if (part == null) return Component.translatable(gear.getDescriptionId());
+        var part = constructionData.getPrimaryPart();
+        if (part == null) return null;
 
         Component partName = part.getMaterialName(gear);
         if (TimedEvents.isAprilFools()) {
@@ -762,7 +762,7 @@ public final class GearHelper {
         }
 
         // Prefixes
-        for (Component t : getNamePrefixes(gear, data.parts())) {
+        for (Component t : getNamePrefixes(gear, constructionData.parts())) {
             if (t.getContents() != PlainTextContents.EMPTY) {
                 result = t.copy().append(TextUtil.misc("space")).append(result);
             }

@@ -4,6 +4,7 @@ import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -116,7 +117,7 @@ public final class GearData {
 
         @Nullable var oldProperties = gear.get(SgDataComponents.GEAR_PROPERTIES);
 
-        onRecalculatePre(gear, player, oldProperties);
+        onRecalculatePre(gear, player, oldProperties, gearConstructionData);
 
         // Calculate base values, then bonuses from traits and such, then the final values!
         // All of these are stored for tooltip purposes
@@ -135,7 +136,13 @@ public final class GearData {
         onRecalculatePost(gear, player, finalProperties);
     }
 
-    private static void onRecalculatePre(ItemStack gear, @Nullable Player player, @Nullable GearPropertiesData oldProperties) {
+    private static void onRecalculatePre(ItemStack gear, @Nullable Player player, @Nullable GearPropertiesData oldProperties, GearConstructionData gearConstructionData) {
+        // Set item name
+        Component itemName = GearHelper.getItemName(gear, gearConstructionData);
+        if (itemName != null) {
+            gear.set(DataComponents.ITEM_NAME, itemName);
+        }
+
         if (oldProperties == null) return;
 
         // TODO: Remove trait-added enchantments

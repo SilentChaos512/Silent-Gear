@@ -78,11 +78,6 @@ public class GearSwordItem extends SwordItem implements GearWeapon {
     }
 
     @Override
-    public Component getName(ItemStack stack) {
-        return GearHelper.getDisplayName(stack);
-    }
-
-    @Override
     public void setDamage(ItemStack stack, int damage) {
         GearHelper.setDamage(stack, damage, super::setDamage);
     }

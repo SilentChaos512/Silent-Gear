@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearRangedWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -106,11 +105,6 @@ public class GearBowItem extends BowItem implements GearRangedWeapon {
     @Override
     public int getEnchantmentValue(ItemStack stack) {
         return GearHelper.getEnchantmentValue(stack);
-    }
-
-    @Override
-    public Component getName(ItemStack stack) {
-        return GearHelper.getDisplayName(stack);
     }
 
     @Override

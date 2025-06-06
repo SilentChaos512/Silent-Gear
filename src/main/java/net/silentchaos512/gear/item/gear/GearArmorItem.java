@@ -204,11 +204,6 @@ public class GearArmorItem extends ArmorItem implements GearArmor {
     }
 
     @Override
-    public Component getName(ItemStack stack) {
-        return GearHelper.getDisplayName(stack);
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
         GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
     }

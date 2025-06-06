@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- Cache gear item names in a data component
+### Fixed
+- Crash when computing gear item names
+
 ## [1.21.1-4.0.22] - 2025-05-25
 ### Changed
 - Shield plates can now be crafted and used to craft shields. The old "quick" recipe still exists. [#810]

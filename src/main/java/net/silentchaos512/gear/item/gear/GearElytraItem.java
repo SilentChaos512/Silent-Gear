@@ -146,11 +146,6 @@ public class GearElytraItem extends ElytraItem implements GearArmor {
     }
 
     @Override
-    public Component getName(ItemStack stack) {
-        return GearHelper.getDisplayName(stack);
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
         if (!ModList.get().isLoaded(Const.CAELUS)) {
             tooltip.add(TextUtil.misc("caelusNotInstalled").withStyle(ChatFormatting.RED));

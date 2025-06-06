@@ -49,7 +49,7 @@ public record GearConstructionData(
     @Nullable
     public PartInstance getPartOfType(PartType type) {
         for (PartInstance part : parts) {
-            if (part.getType() == type) {
+            if (part != null && part.getType() == type) {
                 return part;
             }
         }
