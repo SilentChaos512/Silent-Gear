@@ -22,14 +22,6 @@ import java.util.Set;
  */
 public interface Material extends GearComponent<MaterialInstance> {
     /**
-     * The name of the data pack this material is from. For mods, this is the name of the JAR file.
-     * In userdev, it's "main".
-     *
-     * @return The data pack name
-     */
-    String getPackName();
-
-    /**
      * Gets the material serializer. Most materials should not require custom serializers.
      *
      * @return The serializer

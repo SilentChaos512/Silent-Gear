@@ -17,7 +17,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
@@ -123,11 +122,11 @@ public final class MaterialsCommand {
 
     private static String makeTsvLine(MaterialInstance material, PartType partType) {
         StringBuilder builder = new StringBuilder();
-        appendTsv(builder, material.get().getPackName());
+        appendTsv(builder, SgRegistries.MATERIAL.getPackName(material.get()));
         appendTsv(builder, material.getDisplayName(partType).getString());
         appendTsv(builder, partType.getDisplayName().getString());
         appendTsv(builder, material.getId().toString());
-        appendTsv(builder, getParentId(material.get()));
+        appendTsv(builder, getParentName(material.get(), partType));
         appendTsv(builder, material.getCategories().stream().map(cat -> cat.getDisplayName().getString()).collect(Collectors.joining(", ")));
 
         // Properties
@@ -140,10 +139,11 @@ public final class MaterialsCommand {
         return builder.toString();
     }
 
-    private static String getParentId(Material material) {
+    private static String getParentName(Material material, PartType partType) {
         Material parent = material.getParent();
         if (parent != null) {
-            return SgRegistries.MATERIAL.getKey(parent).toString();
+            MaterialInstance parentInstance = MaterialInstance.of(parent);
+            return parentInstance.getDisplayName(partType).getString();
         }
         return "";
     }

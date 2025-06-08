@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -43,6 +44,7 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
     private final Logger logger;
     private final Map<ResourceLocation, T> byKey = Collections.synchronizedMap(new LinkedHashMap<>());
     private final Map<T, ResourceLocation> byValue = Collections.synchronizedMap(new LinkedHashMap<>());
+    private final Map<ResourceLocation, String> packNameByKey = new HashMap<>();
     private final List<T> values = new ArrayList<>();
     private final Collection<ResourceLocation> errorList = new ArrayList<>();
     private final Codec<T> byNameCodec;
@@ -87,6 +89,14 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
 
     public ResourceLocation getKey(T value) {
         return this.byValue.get(value);
+    }
+
+    @Nonnull
+    public String getPackName(T value) {
+        if (this.byValue.containsKey(value)) {
+            return this.packNameByKey.get(getKey(value));
+        }
+        return "UNKNOWN PACK";
     }
 
     public Set<ResourceLocation> keySet() {
@@ -141,10 +151,10 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
 
         synchronized (this.byKey) {
             this.byKey.clear();
+            this.packNameByKey.clear();
             this.errorList.clear();
             this.logger.info(this.logMarker, "Reloading {} files", this.typeName);
 
-            String packName;
             for (ResourceLocation id : resources.keySet()) {
                 String path = id.getPath().substring(this.dataPath.length() + 1, id.getPath().length() - ".json".length());
                 ResourceLocation name = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), path);
@@ -152,7 +162,7 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
                 Optional<Resource> resourceOptional = resourceManager.getResource(id);
                 if (resourceOptional.isPresent()) {
                     Resource resource = resourceOptional.get();
-                    packName = resource.sourcePackId();
+                    String packName = resource.sourcePackId();
                     JsonObject json = null;
                     try {
                         var string = IOUtils.toString(resource.open(), StandardCharsets.UTF_8);
@@ -169,6 +179,7 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
                         validate(value, json);
                         attachExtraData(value, packName, json);
                         tryAddObject(name, value);
+                        this.packNameByKey.put(name, packName);
                     }
                 }
             }
@@ -220,12 +231,8 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
 
     public void handleSyncPacket(DataResourcesPayload<T> data, IPayloadContext ctx) {
         synchronized (this.byKey) {
-            var oldMap = ImmutableMap.copyOf(this.byKey);
             this.byKey.clear();
-            data.values().forEach((key, value) -> {
-                // TODO: retain any data from old map?
-                this.byKey.put(key, value);
-            });
+            this.byKey.putAll(data.values());
         }
         synchronized (this.byValue) {
             this.byValue.clear();

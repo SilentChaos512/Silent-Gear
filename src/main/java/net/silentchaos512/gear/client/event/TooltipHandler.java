@@ -108,7 +108,8 @@ public final class TooltipHandler {
 
         if (event.getFlags().isAdvanced()) {
             event.getToolTip().add(Component.literal("Material ID: " + material.getId()).withStyle(ChatFormatting.DARK_GRAY));
-            event.getToolTip().add(Component.literal("Material data pack: " + material.get().getPackName()).withStyle(ChatFormatting.DARK_GRAY));
+            var packName = SgRegistries.MATERIAL.getPackName(material.get());
+            event.getToolTip().add(Component.literal("Material data pack: " + packName).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         if (!Config.Client.showMaterialTooltips.get()) {

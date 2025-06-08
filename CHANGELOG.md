@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Cache gear item names in a data component
+- Material dump command now displays the parent as a name instead of ID, pack name is now shown correctly
 ### Fixed
 - Crash when computing gear item names
 

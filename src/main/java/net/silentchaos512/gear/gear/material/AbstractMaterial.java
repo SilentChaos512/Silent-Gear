@@ -24,9 +24,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public abstract class AbstractMaterial implements Material {
-    String packName = "UNKNOWN PACK";
     protected final DataResource<Material> parent;
-
     protected final MaterialCraftingData crafting;
     protected final MaterialDisplayData display;
     protected final Map<PartType, GearPropertyMap> properties = new LinkedHashMap<>();
@@ -41,11 +39,6 @@ public abstract class AbstractMaterial implements Material {
         this.crafting = crafting;
         this.display = display;
         this.properties.putAll(properties);
-    }
-
-    @Override
-    public String getPackName() {
-        return packName;
     }
 
     @Nullable
