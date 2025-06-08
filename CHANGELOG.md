@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Material dump command now displays the parent as a name instead of ID, pack name is now shown correctly
 ### Fixed
 - Crash when computing gear item names
+- Attribute modifiers not updating in some cases (#813)
 
 ## [1.21.1-4.0.22] - 2025-05-25
 ### Changed

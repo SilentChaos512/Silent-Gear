@@ -145,6 +145,9 @@ public final class GearData {
 
         if (oldProperties == null) return;
 
+        // Remove attribute modifiers, so they can be completely redone
+        gear.remove(DataComponents.ATTRIBUTE_MODIFIERS);
+
         // TODO: Remove trait-added enchantments
 
         // Let traits do their thing
