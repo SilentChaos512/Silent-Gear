@@ -38,6 +38,7 @@ import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.lib.util.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgContainerBlockEntity implements INamedContainerExtraData {
     static final int INVENTORY_SIZE = 3;
@@ -248,7 +249,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
 
     protected void gatherEnergy() {
         assert level != null;
-        if (charge < getMaxCharge() && level.isNight() && level.canSeeSkyFromBelowWater(worldPosition.above())) {
+        if (canGatherEnergy()) {
             // Charge up, but watch for overflows since the config allows any value for charge rate and max charge.
             final int newCharge = charge + Config.Common.starlightChargerChargeRate.get();
             if (newCharge < 0 || newCharge > getMaxCharge()) {
@@ -257,6 +258,20 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
                 charge = newCharge;
             }
         }
+    }
+
+    protected boolean canGatherEnergy() {
+        return this.charge < getMaxCharge() && checkTimeOfDay() && checkViewOfSky(this.worldPosition.above());
+    }
+
+    protected boolean checkTimeOfDay() {
+        var workTime = Config.Common.isLoaded() ? Config.Common.starlightChargerWorkTime.get() : WorkTime.NIGHTTIME;
+        return this.level != null && workTime.isWorkTime(this.level);
+    }
+
+    protected boolean checkViewOfSky(BlockPos pos) {
+        var requiresSky = Config.Common.isLoaded() ? Config.Common.starlightChargerRequiresViewOfSky.get() : true;
+        return !requiresSky || (this.level != null && this.level.canSeeSkyFromBelowWater(pos));
     }
 
     private void handleCharging(ItemStack input, ItemStack catalyst) {
@@ -383,5 +398,21 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
         tags.putInt("Charge", this.charge);
         tags.putInt("StructureLevel", this.structureLevel);
         return tags;
+    }
+
+    public enum WorkTime {
+        DAYTIME(Level::isDay),
+        NIGHTTIME(Level::isNight),
+        ANYTIME(level -> true);
+
+        private final Function<Level, Boolean> canWork;
+
+        WorkTime(Function<Level, Boolean> canWork) {
+            this.canWork = canWork;
+        }
+
+        public boolean isWorkTime(Level level) {
+            return this.canWork.apply(level);
+        }
     }
 }

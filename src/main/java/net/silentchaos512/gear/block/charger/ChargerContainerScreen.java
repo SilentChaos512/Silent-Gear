@@ -36,6 +36,9 @@ public class ChargerContainerScreen extends AbstractContainerScreen<ChargerConta
                     TextUtil.translate("container", "material_charger.charge.hint")
             );
             graphics.renderTooltip(this.font, text, Optional.empty(), x, y);
+        } else if (isHovering(8, 70, 100, 8, x, y)) {
+            var text = TextUtil.translate("container", "material_charger.structure_level.hint");
+            graphics.renderTooltip(this.font, List.of(text), Optional.empty(), x, y);
         }
         super.renderTooltip(graphics, x, y);
     }
@@ -43,7 +46,10 @@ public class ChargerContainerScreen extends AbstractContainerScreen<ChargerConta
     @Override
     protected void renderLabels(GuiGraphics graphics, int x, int y) {
         Component text = TextUtil.translate("container", "material_charger");
-        graphics.drawString(this.font, text.getString(), 28, 6, 0x404040, false);
+        graphics.drawString(this.font, text.getString(), 8, 6, 0x404040, false);
+        var structureLevel = this.menu.fields.get(2);
+        var structureText = TextUtil.translate("container", "material_charger.structure_level", structureLevel);
+        graphics.drawString(this.font, structureText.getString(), 8, 70, 0x404040, false);
     }
 
     @Override

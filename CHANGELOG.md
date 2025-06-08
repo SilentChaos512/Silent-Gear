@@ -4,6 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- New config options for the starlight charger
+  - `work_time` - Sets the time of day energy can be gathered (daytime, nighttime, or anytime)
+  - `requires_view_of_sky` - If disabled, energy can be gathered even with solid blocks above the starlight charger
+- Starlight charger now displays the structure level in the menu screen
 ### Changed
 - Cache gear item names in a data component
 - Material dump command now displays the parent as a name instead of ID, pack name is now shown correctly

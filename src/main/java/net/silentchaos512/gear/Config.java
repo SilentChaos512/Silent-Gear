@@ -9,6 +9,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.setup.NerfedGear;
 import net.silentchaos512.gear.util.IAoeTool;
@@ -66,6 +67,8 @@ public final class Config {
         // Starlight Charger
         public static final ModConfigSpec.IntValue starlightChargerChargeRate;
         public static final ModConfigSpec.IntValue starlightChargerMaxCharge;
+        public static final ModConfigSpec.EnumValue<ChargerBlockEntity.WorkTime> starlightChargerWorkTime;
+        public static final ModConfigSpec.BooleanValue starlightChargerRequiresViewOfSky;
         public static final ModConfigSpec.BooleanValue starlightChargerCanChargeParts;
         // Debug
         public static final ModConfigSpec.BooleanValue propertiesDebugLogging;
@@ -300,6 +303,12 @@ public final class Config {
                 starlightChargerMaxCharge = builder
                         .comment("The maximum amount of energy the starlight charger can store")
                         .defineInRange("max_charge", 1_000_000, 0, Integer.MAX_VALUE);
+                starlightChargerWorkTime = builder
+                        .comment("The time of day the starlight charger can gather energy")
+                        .defineEnum("work_time", ChargerBlockEntity.WorkTime.NIGHTTIME);
+                starlightChargerRequiresViewOfSky = builder
+                        .comment("If true, the starlight charger only works with a clear view of the sky above it")
+                        .define("requires_view_of_sky", true);
                 starlightChargerCanChargeParts = builder
                         .comment("If enabled, allows the starlight charger to charge the individual materials inside a gear part")
                         .define("can_charge_parts", false);

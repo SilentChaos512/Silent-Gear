@@ -15,8 +15,8 @@ import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.MathUtils;
 
 public class ChargerContainerMenu extends AbstractContainerMenu {
-    private final Container inventory;
-    private final ContainerData fields;
+    final Container inventory;
+    final ContainerData fields;
 
     public ChargerContainerMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf data) {
         this(type, id, inv, new SimpleContainer(ChargerBlockEntity.INVENTORY_SIZE), new SimpleContainerData(data.readByte()));
