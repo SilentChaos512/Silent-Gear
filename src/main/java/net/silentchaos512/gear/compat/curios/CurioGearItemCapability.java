@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ElytraItem;
@@ -15,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.silentchaos512.gear.compat.caelus.CaelusCompat;
+import net.silentchaos512.gear.item.gear.GearElytraItem;
 import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
@@ -90,6 +91,9 @@ public class CurioGearItemCapability {
 
             Multimap<Holder<Attribute>, AttributeModifier> result = ArrayListMultimap.create();
             itemAttributeModifiers.modifiers().forEach(entry -> result.put(entry.attribute(), entry.modifier()));
+            if (stack.getItem() instanceof GearElytraItem) {
+                CaelusCompat.tryAddFlightAttribute(result);
+            }
             return result;
         }
 

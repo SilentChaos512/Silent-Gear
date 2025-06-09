@@ -3,6 +3,7 @@
     "player"
   ],
   "slots": [
+    "back",
     "bracelet",
     "necklace",
     "ring"
