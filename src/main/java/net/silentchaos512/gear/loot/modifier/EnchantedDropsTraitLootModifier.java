@@ -65,11 +65,16 @@ public abstract class EnchantedDropsTraitLootModifier extends LootModifier {
         var newContext = createEnchantedLootContext(context, enchantedTool);
 
         var lootTableLookup = context.getLevel().getServer().reloadableRegistries().lookup().lookup(Registries.LOOT_TABLE).orElseThrow();
-        var lootTable = lootTableLookup.get(ResourceKey.create(Registries.LOOT_TABLE, context.getQueriedLootTableId())).orElseThrow().value();
+        var lootTableOptional = lootTableLookup.get(ResourceKey.create(Registries.LOOT_TABLE, context.getQueriedLootTableId()));
+        if (lootTableOptional.isEmpty()) {
+            return generatedLoot;
+        } else {
+            var lootTable = lootTableOptional.value();
 
-        generatedLoot.clear();
-        //noinspection deprecation
-        lootTable.getRandomItemsRaw(newContext, generatedLoot::add);
-        return generatedLoot;
+            generatedLoot.clear();
+            //noinspection deprecation
+            lootTable.getRandomItemsRaw(newContext, generatedLoot::add);
+            return generatedLoot;
+        }
     }
 }
