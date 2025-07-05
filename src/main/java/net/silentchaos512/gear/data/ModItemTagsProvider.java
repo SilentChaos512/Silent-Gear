@@ -31,7 +31,7 @@ import java.util.Comparator;
 
 public class ModItemTagsProvider extends ItemTagsProvider {
     public ModItemTagsProvider(GatherDataEvent event, BlockTagsProvider blocks) {
-        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), blocks.contentsGetter(), SilentGear.MOD_ID, event.getExistingFileHelper());
+        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), blocks.contentsGetter(), SilentGear.MOD_ID);
     }
 
     @Override
@@ -329,6 +329,13 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .add(GearItemSets.LEGGINGS.gearItem())
                 .add(GearItemSets.BOOTS.gearItem())
                 .add(GearItemSets.ELYTRA.gearItem());
+
+        tag(ItemTags.CHICKEN_FOOD)
+                .add(SgItems.FLAX_SEEDS.get())
+                .add(SgItems.FLUFFY_SEEDS.get());
+        tag(ItemTags.PARROT_FOOD)
+                .add(SgItems.FLAX_SEEDS.get())
+                .add(SgItems.FLUFFY_SEEDS.get());
 
         // Silent Gear
 

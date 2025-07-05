@@ -14,7 +14,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
@@ -87,7 +87,7 @@ class SideProxy implements IProxy {
     private static void commonSetup(FMLCommonSetupEvent event) {
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
             if (Config.Common.spawnWithStarterBlueprints.get())
-                return Collections.singleton(SgItems.BLUEPRINT_PACKAGE.get().getStack());
+                return Collections.singleton(SgItems.BLUEPRINT_PACKAGE.get().getDefaultStack());
             return Collections.emptyList();
         });
 
@@ -117,10 +117,10 @@ class SideProxy implements IProxy {
     private static void imcProcess(InterModProcessEvent event) {
     }
 
-    private static void onAddReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(SgRegistries.TRAIT);
-        event.addListener(SgRegistries.MATERIAL);
-        event.addListener(SgRegistries.PART);
+    private static void onAddReloadListeners(AddServerReloadListenersEvent event) {
+        event.addListener(SilentGear.getId("trait"), SgRegistries.TRAIT);
+        event.addListener(SilentGear.getId("material"), SgRegistries.MATERIAL);
+        event.addListener(SilentGear.getId("part"), SgRegistries.PART);
     }
 
     private static void serverStarted(ServerStartedEvent event) {

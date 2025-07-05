@@ -41,11 +41,6 @@ public final class SgNetwork {
                 CommandOutputPayload.STREAM_CODEC,
                 (data, ctx) -> SgClientPayloadHandler.getInstance().handleCommandOutput(data, ctx)
         );
-        registrar.playToClient(
-                OpenGuideBookPayload.TYPE,
-                StreamCodec.unit(new OpenGuideBookPayload()),
-                (data, ctx) -> SgClientPayloadHandler.getInstance().handleOpenGuideBook(data, ctx)
-        );
 
         // Play phase client 2 server play packets
         registrar.playToServer(

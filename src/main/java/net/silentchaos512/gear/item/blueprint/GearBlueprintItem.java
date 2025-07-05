@@ -9,8 +9,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.silentchaos512.gear.api.item.GearType;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.silentchaos512.gear.api.item.GearItem;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
@@ -23,9 +24,9 @@ import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.MathUtils;
 import net.silentchaos512.lib.util.NameUtils;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
@@ -69,36 +70,36 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flags) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
         String itemClass = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(gearType())).getPath();
 
         // Flavor text
         if (!gearType().isArmor()) {
             String key = "item." + NameUtils.fromItem(stack).getNamespace() + ".blueprint." + itemClass + ".desc";
-            tooltip.add(Component.translatable(key).withStyle(ChatFormatting.ITALIC));
+            tooltipAdder.accept(Component.translatable(key).withStyle(ChatFormatting.ITALIC));
         }
 
         // Armor durability text
         if (!MathUtils.floatsEqual(gearType().armorDurabilityMultiplier(), 1f)) {
-            tooltip.add(TextUtil.translate("item", "blueprint.armorDurability", gearType().armorDurabilityMultiplier())
+            tooltipAdder.accept(TextUtil.translate("item", "blueprint.armorDurability", gearType().armorDurabilityMultiplier())
                     .withStyle(ChatFormatting.ITALIC));
         }
 
-        super.appendHoverText(stack, tooltipContext, tooltip, flags);
+        super.appendHoverText(stack, context, tooltipDisplay, tooltipAdder, flag);
 
         // Single use or multiple uses? Or disabled?
         if (isDisabled()) {
-            tooltip.add(Component.translatable("item.silentgear.blueprint.disabled").withStyle(ChatFormatting.DARK_RED));
+            tooltipAdder.accept(Component.translatable("item.silentgear.blueprint.disabled").withStyle(ChatFormatting.DARK_RED));
         } else if (this.isSingleUse()) {
-            tooltip.add(Component.translatable("item.silentgear.blueprint.singleUse").withStyle(ChatFormatting.RED));
+            tooltipAdder.accept(Component.translatable("item.silentgear.blueprint.singleUse").withStyle(ChatFormatting.RED));
         } else {
-            tooltip.add(Component.translatable("item.silentgear.blueprint.multiUse").withStyle(ChatFormatting.GREEN));
+            tooltipAdder.accept(Component.translatable("item.silentgear.blueprint.multiUse").withStyle(ChatFormatting.GREEN));
         }
 
-        appendSupportedTypesText(tooltip);
+        appendSupportedTypesText(tooltipAdder);
     }
 
-    private void appendSupportedTypesText(Collection<Component> list) {
+    private void appendSupportedTypesText(Consumer<Component> tooltipAdder) {
         if (KeyTracker.isDisplayPropertiesDown()) {
             GearItem item = GearType.getItem(gearType());
 
@@ -118,12 +119,12 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
 
                 List<Component> lines = builder.build();
                 if (!lines.isEmpty()) {
-                    list.add(TextUtil.withColor(TextUtil.misc("supportedPartTypes"), Color.GOLD));
-                    list.addAll(lines);
+                    tooltipAdder.accept(TextUtil.withColor(TextUtil.misc("supportedPartTypes"), Color.GOLD));
+                    lines.forEach(tooltipAdder);
                 }
             }
         } else {
-            list.add(TextUtil.withColor(TextUtil.misc("supportedPartTypes"), Color.GOLD)
+            tooltipAdder.accept(TextUtil.withColor(TextUtil.misc("supportedPartTypes"), Color.GOLD)
                     .append(" ")
                     .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_PROPERTIES), ChatFormatting.GRAY)));
         }

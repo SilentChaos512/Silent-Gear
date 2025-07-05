@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearSwordItem extends SwordItem implements GearWeapon {
+public class GearSwordItem extends Item implements GearWeapon {
     private final Supplier<GearType> gearType;
 
     public GearSwordItem(Supplier<GearType> gearType) {

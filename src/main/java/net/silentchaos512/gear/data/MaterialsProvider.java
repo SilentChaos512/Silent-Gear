@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.data;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
@@ -44,7 +45,6 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -115,7 +115,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Example
         ret.add(MaterialBuilder.simple(modId("example"))
                 .crafting(new MaterialCraftingData(
-                        Ingredient.EMPTY,
+                        Ingredient.of(),
                         Collections.singletonList(MaterialCategories.INTANGIBLE),
                         Collections.singletonList(GearTypes.ALL.get()),
                         Collections.emptyMap(),
@@ -796,10 +796,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Stone
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.STONE)
                 .crafting(new MaterialCraftingData(
-                        Ingredient.of(Tags.Items.COBBLESTONES),
+                        taggedItems(Tags.Items.COBBLESTONES),
                         List.of(MaterialCategories.ROCK, MaterialCategories.BASIC),
                         List.of(),
-                        Map.of(PartTypes.ROD.get(), Ingredient.of(SgTags.Items.RODS_STONE)),
+                        Map.of(PartTypes.ROD.get(), taggedItems(SgTags.Items.RODS_STONE)),
                         true
                 ))
                 .displayWithDefaultName(0x9A9A9A, TextureType.LOW_CONTRAST)
@@ -874,7 +874,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Wood
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.WOOD)
                 .crafting(new MaterialCraftingData(
-                        Ingredient.of(ItemTags.PLANKS),
+                        taggedItems(ItemTags.PLANKS),
                         List.of(MaterialCategories.ORGANIC, MaterialCategories.WOOD),
                         List.of(),
                         Map.of(PartTypes.ROD.get(), Ingredient.of(Items.STICK)),
@@ -914,10 +914,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Rough wood
         ret.add(MaterialBuilder.simple(modId("wood/rough"))
                 .crafting(new MaterialCraftingData(
-                        Ingredient.EMPTY,
+                        Ingredient.of(),
                         List.of(MaterialCategories.ORGANIC, MaterialCategories.WOOD),
                         List.of(),
-                        Map.of(PartTypes.ROD.get(), Ingredient.of(SgTags.Items.RODS_ROUGH)),
+                        Map.of(PartTypes.ROD.get(), taggedItems(SgTags.Items.RODS_ROUGH)),
                         false
                 ))
                 .displayWithDefaultName(TextUtil.misc("crude"), 0x6B4909, TextureType.LOW_CONTRAST)
@@ -932,7 +932,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                         Ingredient.of(SgBlocks.NETHERWOOD_PLANKS),
                         List.of(MaterialCategories.ORGANIC, MaterialCategories.WOOD),
                         List.of(),
-                        Map.of(PartTypes.ROD.get(), Ingredient.of(SgTags.Items.RODS_NETHERWOOD)),
+                        Map.of(PartTypes.ROD.get(), taggedItems(SgTags.Items.RODS_NETHERWOOD)),
                         true
                 ))
                 .displayWithDefaultName(0x7D272D, TextureType.LOW_CONTRAST)
@@ -1244,10 +1244,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Blaze Rod
         ret.add(MaterialBuilder.simple(modId("blaze_rod"))
                 .crafting(new MaterialCraftingData(
-                        Ingredient.EMPTY,
+                        Ingredient.of(),
                         List.of(MaterialCategories.METAL),
                         List.of(),
-                        Map.of(PartTypes.ROD.get(), Ingredient.of(Tags.Items.RODS_BLAZE)),
+                        Map.of(PartTypes.ROD.get(), taggedItems(Tags.Items.RODS_BLAZE)),
                         true
                 ))
                 .displayWithDefaultName(0xFFC600, TextureType.HIGH_CONTRAST)
@@ -1282,7 +1282,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // End Rod
         ret.add(MaterialBuilder.simple(modId("end_rod"))
                 .crafting(new MaterialCraftingData(
-                        Ingredient.EMPTY,
+                        Ingredient.of(),
                         List.of(MaterialCategories.METAL),
                         List.of(),
                         Map.of(PartTypes.ROD.get(), Ingredient.of(Items.END_ROD)),
@@ -1949,10 +1949,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private static MaterialCraftingData craftingMetalWithDefaultRod(TagKey<Item> materialTag, MaterialCategories tierCategory, TagKey<Item> rodTag) {
         return new MaterialCraftingData(
-                Ingredient.of(materialTag),
+                taggedItems(materialTag),
                 List.of(MaterialCategories.METAL, tierCategory),
                 List.of(),
-                Map.of(PartTypes.ROD.get(), Ingredient.of(rodTag)),
+                Map.of(PartTypes.ROD.get(), taggedItems(rodTag)),
                 true
         );
     }
@@ -1992,4 +1992,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         return new OrTraitCondition(new MaterialCountTraitCondition(count), new MaterialRatioTraitCondition(ratio));
     }
 
+    private static Ingredient taggedItems(TagKey<Item> tag) {
+        return Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tag));
+    }
 }

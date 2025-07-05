@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearArmorItem extends ArmorItem implements GearArmor {
+public class GearArmorItem extends Item implements GearArmor {
     // Caches armor colors by model key to speed up armor rendering
     private static final Cache<String, Integer> ARMOR_COLORS = CacheBuilder.newBuilder()
             .maximumSize(1000)
@@ -164,10 +164,14 @@ public class GearArmorItem extends ArmorItem implements GearArmor {
         return TraitHelper.hasTrait(stack, Const.Traits.BRILLIANT);
     }
 
+    @Override
+    public boolean canWalkOnPowderedSnow(ItemStack stack, LivingEntity wearer) {
+        return this.getEquipmentSlot(stack) == EquipmentSlot.FEET && TraitHelper.hasTrait(stack, Const.Traits.SNOW_WALKER);
+    }
+
     //endregion
 
     //region Client-side methods and rendering horrors
-
 
     @Override
     public @Nullable ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {

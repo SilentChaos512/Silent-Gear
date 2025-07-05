@@ -1,29 +1,30 @@
-package net.silentchaos512.gear.block;
+package net.silentchaos512.gear.item.block;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.valueproviders.IntProvider;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.util.TextUtil;
 
-import java.util.List;
+import java.util.function.Consumer;
 
-public class ModOreBlock extends DropExperienceBlock {
-    public ModOreBlock(IntProvider xpDrop, Properties properties) {
-        super(xpDrop, properties);
+public class OreBlockItem extends BlockItem {
+    public OreBlockItem(Block block, Properties properties) {
+        super(block, properties);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
         // Harvest level tips
-        int harvestLevel = guessHarvestLevel(defaultBlockState());
+        int harvestLevel = guessHarvestLevel(this.getBlock().defaultBlockState());
         Component harvestLevelName = TextUtil.misc("harvestLevel." + harvestLevel);
-        tooltip.add(TextUtil.misc("harvestLevel", harvestLevelName));
+        tooltipAdder.accept(TextUtil.misc("harvestLevel", harvestLevelName));
     }
 
     private static int guessHarvestLevel(BlockState state) {

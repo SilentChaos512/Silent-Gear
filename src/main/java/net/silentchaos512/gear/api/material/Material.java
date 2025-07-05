@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.api.material;
 
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
@@ -148,8 +150,8 @@ public interface Material extends GearComponent<MaterialInstance> {
      * @return An item matching the normal ingredient, or {@link ItemStack#EMPTY} if there are none
      */
     default ItemStack getDisplayItem(PartType type, int ticks) {
-        ItemStack[] stacks = getIngredient().getItems();
-        if (stacks.length == 0) return ItemStack.EMPTY;
-        return stacks[(ticks / 20) % stacks.length];
+        HolderSet<Item> items = getIngredient().getValues();
+        if (items.size() == 0) return ItemStack.EMPTY;
+        return new ItemStack(items.get((ticks / 20) % items.size()));
     }
 }

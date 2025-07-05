@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.util;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -100,14 +101,16 @@ public final class PropertyKey<T, V extends GearPropertyValue<T>> {
             return DataResult.error(() -> "Invalid key: " + s);
         }
 
-        var property = SgRegistries.GEAR_PROPERTY.get(SilentGear.getIdWithDefaultNamespace(split[0]));
+        var propertyId = SilentGear.getIdWithDefaultNamespace(split[0]);
+        GearProperty<?, ? extends GearPropertyValue<?>> property = SgRegistries.GEAR_PROPERTY.get(propertyId).map(Holder.Reference::value).orElse(null);
         if (property == null) {
             return DataResult.error(() -> "Unknown gear property: \"" + split[0] + "\" in key " + s);
         }
 
         GearType gearType;
         if (split.length > 1) {
-            gearType = SgRegistries.GEAR_TYPE.get(SilentGear.getIdWithDefaultNamespace(split[1]));
+            var gearTypeId = SilentGear.getIdWithDefaultNamespace(split[1]);
+            gearType = SgRegistries.GEAR_TYPE.get(gearTypeId).map(Holder.Reference::value).orElse(null);
             if (gearType == null || gearType == GearTypes.NONE.get()) {
                 return DataResult.error(() -> "Unknown gear type: \"" + split[1] + "\" in key " + s);
             }

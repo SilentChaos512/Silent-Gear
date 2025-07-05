@@ -7,10 +7,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.silentchaos512.gear.Config;
 
-import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     final BlueprintType type;
@@ -32,15 +33,13 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     }
 
     @Override
-    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
-        ItemStack copy = itemStack.copy();
-        copy.setCount(1);
-        return copy;
-    }
-
-    @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) {
-        return this.type == BlueprintType.BLUEPRINT;
+    public ItemStack getCraftingRemainder(ItemStack itemStack) {
+        if (this.type == BlueprintType.BLUEPRINT) {
+            ItemStack copy = itemStack.copy();
+            copy.setCount(1);
+            return copy;
+        }
+        return ItemStack.EMPTY;
     }
 
     boolean isDisabled() {
@@ -59,7 +58,8 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flags) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
     }
 }

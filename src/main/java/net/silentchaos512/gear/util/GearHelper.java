@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.Sets;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -57,6 +58,7 @@ import net.silentchaos512.gear.setup.SgSounds;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.lib.util.NameUtils;
 import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
@@ -302,7 +304,7 @@ public final class GearHelper {
     private static void notifyPlayerOfBrokenGear(ItemStack stack, Player player) {
         if (Config.Common.sendGearBrokenMessage.get()) {
             // Notify player. Mostly for armor, but might help new players as well.
-            player.sendSystemMessage(Component.translatable("misc.silentgear.notifyOnBreak", stack.getHoverName()));
+            player.displayClientMessage(Component.translatable("misc.silentgear.notifyOnBreak", stack.getHoverName()), false);
         }
     }
 
@@ -742,7 +744,6 @@ public final class GearHelper {
 
     @Nullable
     public static Component getItemName(ItemStack gear, GearConstructionData constructionData) {
-        // TODO: cache with a data component in 1.21.2
         var part = constructionData.getPrimaryPart();
         if (part == null) return null;
 
@@ -750,14 +751,15 @@ public final class GearHelper {
         if (TimedEvents.isAprilFools()) {
             partName = partName.copy().append(Component.literal(" & Knuckles"));
         }
-        Component gearName = Component.translatable(gear.getDescriptionId() + ".nameProper", partName);
+        String prefix = Util.makeDescriptionId("item", NameUtils.fromItem(gear));
+        Component gearName = Component.translatable(prefix + ".nameProper", partName);
         Component result = gearName;
 
         if (gear.getItem() instanceof GearTool item) {
             if (item.requiresPartOfType(PartTypes.ROD.get()) && GearData.getPartOfType(gear, PartTypes.ROD.get()) == null) {
-                result = Component.translatable(gear.getDescriptionId() + ".noRod", gearName);
+                result = Component.translatable(prefix + ".noRod", gearName);
             } else if (item.requiresPartOfType(PartTypes.CORD.get()) && GearData.getPartOfType(gear, PartTypes.CORD.get()) == null) {
-                result = Component.translatable(gear.getDescriptionId() + ".unstrung", gearName);
+                result = Component.translatable(prefix + ".unstrung", gearName);
             }
         }
 

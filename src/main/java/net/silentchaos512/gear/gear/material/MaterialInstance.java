@@ -146,7 +146,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
 
     public Ingredient getIngredient() {
         var mat = getNullable();
-        return mat != null ? mat.getIngredient() : Ingredient.EMPTY;
+        return mat != null ? mat.getIngredient() : Ingredient.of();
     }
 
     public boolean canRepair(ItemStack gear) {

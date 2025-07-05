@@ -92,8 +92,7 @@ public final class SgBlockEntities {
     private static <T extends BlockEntity> DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> factory, DeferredBlock<?>... blocks) {
         return BLOCK_ENTITIES.register(name, () -> {
             Block[] validBlocks = Arrays.stream(blocks).map(DeferredBlock::get).toArray(Block[]::new);
-            //noinspection ConstantConditions - null in build
-            return BlockEntityType.Builder.of(factory, validBlocks).build(null);
+            return new BlockEntityType<>(factory, validBlocks);
         });
     }
 

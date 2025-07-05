@@ -2,6 +2,7 @@ package net.silentchaos512.gear.setup;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -17,6 +18,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -39,6 +42,9 @@ import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.SuperAlloyRecipe;
+import net.silentchaos512.gear.item.block.AlloyMakerBlockItem;
+import net.silentchaos512.gear.item.block.BlockItemWithTooltip;
+import net.silentchaos512.gear.item.block.OreBlockItem;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -55,21 +61,42 @@ public final class SgBlocks {
 
     private static final Map<Block, Block> STRIPPED_WOOD = new HashMap<>();
 
-    public static final DeferredBlock<DropExperienceBlock> BORT_ORE = register("bort_ore", () ->
-            getOre(UniformInt.of(3, 7), SoundType.STONE));
-    public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_BORT_ORE = register("deepslate_bort_ore", () ->
-            getOre(UniformInt.of(3, 7), SoundType.DEEPSLATE));
-    public static final DeferredBlock<DropExperienceBlock> CRIMSON_IRON_ORE = register("crimson_iron_ore", () ->
-            getOre(ConstantInt.of(0), SoundType.NETHER_GOLD_ORE));
-    public static final DeferredBlock<DropExperienceBlock> BLACKSTONE_CRIMSON_IRON_ORE = register("blackstone_crimson_iron_ore", () ->
-            getOre(ConstantInt.of(0), SoundType.GILDED_BLACKSTONE));
-    public static final DeferredBlock<DropExperienceBlock> AZURE_SILVER_ORE = register("azure_silver_ore", () ->
-            getOre(ConstantInt.of(0), SoundType.STONE));
+    public static final DeferredBlock<DropExperienceBlock> BORT_ORE = register(
+            "bort_ore",
+            () -> getOre(UniformInt.of(3, 7), SoundType.STONE),
+            SgBlocks::oreBlockItem
+    );
+    public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_BORT_ORE = register(
+            "deepslate_bort_ore",
+            () -> getOre(UniformInt.of(3, 7), SoundType.DEEPSLATE),
+            SgBlocks::oreBlockItem
+    );
+    public static final DeferredBlock<DropExperienceBlock> CRIMSON_IRON_ORE = register(
+            "crimson_iron_ore",
+            () -> getOre(ConstantInt.of(0), SoundType.NETHER_GOLD_ORE),
+            SgBlocks::oreBlockItem
+    );
+    public static final DeferredBlock<DropExperienceBlock> BLACKSTONE_CRIMSON_IRON_ORE = register(
+            "blackstone_crimson_iron_ore",
+            () -> getOre(ConstantInt.of(0), SoundType.GILDED_BLACKSTONE),
+            SgBlocks::oreBlockItem
+    );
+    public static final DeferredBlock<DropExperienceBlock> AZURE_SILVER_ORE = register(
+            "azure_silver_ore",
+            () -> getOre(ConstantInt.of(0), SoundType.STONE),
+            SgBlocks::oreBlockItem
+    );
 
-    public static final DeferredBlock<Block> RAW_CRIMSON_IRON_BLOCK = register("raw_crimson_iron_block", () ->
-            getRawOreBlock(SoundType.NETHER_GOLD_ORE));
-    public static final DeferredBlock<Block> RAW_AZURE_SILVER_BLOCK = register("raw_azure_silver_block", () ->
-            getRawOreBlock(SoundType.STONE));
+    public static final DeferredBlock<Block> RAW_CRIMSON_IRON_BLOCK = register(
+            "raw_crimson_iron_block",
+            () -> getRawOreBlock(SoundType.NETHER_GOLD_ORE),
+            SgBlocks::oreBlockItem
+    );
+    public static final DeferredBlock<Block> RAW_AZURE_SILVER_BLOCK = register(
+            "raw_azure_silver_block",
+            () -> getRawOreBlock(SoundType.STONE),
+            SgBlocks::oreBlockItem
+    );
 
     public static final DeferredBlock<Block> BORT_BLOCK = register("bort_block",
             SgBlocks::getStorageBlock);
@@ -91,40 +118,69 @@ public final class SgBlocks {
                     .strength(2.5F)
                     .sound(SoundType.WOOD)));
 
-    public static final DeferredBlock<StoneAnvilBlock> STONE_ANVIL = register("stone_anvil", () ->
-            new StoneAnvilBlock(BlockBehaviour.Properties.of()
-                    .strength(3, 10)));
-
-    public static final DeferredBlock<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
-            new GraderBlock(BlockBehaviour.Properties.of()
-                    .strength(5, 30)));
-
-    public static final DeferredBlock<SalvagerBlock> SALVAGER = register("salvager", () ->
-            new SalvagerBlock(BlockBehaviour.Properties.of()
-                    .strength(5, 30)));
-
-    public static final DeferredBlock<StarlightChargerBlock> STARLIGHT_CHARGER = register("starlight_charger", () ->
-            new StarlightChargerBlock(ChargerBlockEntity::createStarlightCharger,
+    public static final DeferredBlock<StoneAnvilBlock> STONE_ANVIL = register(
+            "stone_anvil",
+            () -> new StoneAnvilBlock(
                     BlockBehaviour.Properties.of()
-                            .strength(5, 30)));
+                            .strength(3, 10)
+            ),
+            SgBlocks::blockItemWithTooltip
+    );
 
-    public static final DeferredBlock<AlloyMakerBlock<MetalAlloyRecipe>> ALLOY_FORGE = register("alloy_forge", () ->
-            new AlloyMakerBlock<>(Const.METAL_ALLOY_MAKER_INFO,
+    public static final DeferredBlock<GraderBlock> MATERIAL_GRADER = register(
+            "material_grader",
+            () -> new GraderBlock(
+                    BlockBehaviour.Properties.of()
+                            .strength(5, 30)
+            ),
+            SgBlocks::blockItemWithTooltip
+    );
+
+    public static final DeferredBlock<SalvagerBlock> SALVAGER = register(
+            "salvager",
+            () -> new SalvagerBlock(
+                    BlockBehaviour.Properties.of()
+                            .strength(5, 30)
+            ),
+            SgBlocks::blockItemWithTooltip
+    );
+
+    public static final DeferredBlock<StarlightChargerBlock> STARLIGHT_CHARGER = register(
+            "starlight_charger",
+            () -> new StarlightChargerBlock(
+                    ChargerBlockEntity::createStarlightCharger,
+                    BlockBehaviour.Properties.of()
+                            .strength(5, 30)
+            ),
+            SgBlocks::blockItemWithTooltip
+    );
+
+    public static final DeferredBlock<AlloyMakerBlock<MetalAlloyRecipe>> ALLOY_FORGE = register(
+            "alloy_forge",
+            () -> new AlloyMakerBlock<>(Const.METAL_ALLOY_MAKER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
-                            .sound(SoundType.METAL)));
+                            .sound(SoundType.METAL)),
+            deferredBlock -> () -> new AlloyMakerBlockItem(deferredBlock.get(), new Item.Properties().useItemDescriptionPrefix())
+    );
 
-    public static final DeferredBlock<AlloyMakerBlock<GemAlloyRecipe>> RECRYSTALLIZER = register("recrystallizer", () ->
-            new AlloyMakerBlock<>(Const.GEM_ALLOY_MAKER_INFO,
+    public static final DeferredBlock<AlloyMakerBlock<GemAlloyRecipe>> RECRYSTALLIZER = register(
+            "recrystallizer",
+            () -> new AlloyMakerBlock<>(Const.GEM_ALLOY_MAKER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
-                            .sound(SoundType.METAL)));
+                            .sound(SoundType.METAL)),
+            deferredBlock -> () -> new AlloyMakerBlockItem(deferredBlock.get(), new Item.Properties().useItemDescriptionPrefix())
+    );
 
-    public static final DeferredBlock<AlloyMakerBlock<FabricAlloyRecipe>> REFABRICATOR = register("refabricator", () ->
-            new AlloyMakerBlock<>(Const.FABRIC_ALLOY_MAKER_INFO,
+    public static final DeferredBlock<AlloyMakerBlock<FabricAlloyRecipe>> REFABRICATOR = register(
+            "refabricator",
+            () -> new AlloyMakerBlock<>(Const.FABRIC_ALLOY_MAKER_INFO,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
-                            .sound(SoundType.METAL)));
+                            .sound(SoundType.METAL)),
+            deferredBlock -> () -> new AlloyMakerBlockItem(deferredBlock.get(), new Item.Properties().useItemDescriptionPrefix())
+    );
 
     public static final DeferredBlock<AlloyMakerBlock<SuperAlloyRecipe>> SUPER_MIXER = register(
             "super_mixer",
@@ -138,13 +194,19 @@ public final class SgBlocks {
                 public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
                     return Shapes.block();
                 }
-            }
+            },
+            deferredBlock -> () -> new AlloyMakerBlockItem(deferredBlock.get(), new Item.Properties().useItemDescriptionPrefix())
     );
 
-    public static final DeferredBlock<MetalPressBlock> METAL_PRESS = register("metal_press", () ->
-            new MetalPressBlock(BlockBehaviour.Properties.of()
-                    .strength(4, 20)
-                    .sound(SoundType.METAL)));
+    public static final DeferredBlock<MetalPressBlock> METAL_PRESS = register(
+            "metal_press",
+            () -> new MetalPressBlock(
+                    BlockBehaviour.Properties.of()
+                            .strength(4, 20)
+                            .sound(SoundType.METAL)
+            ),
+            SgBlocks::blockItemWithTooltip
+    );
 
     public static final DeferredBlock<ModCropBlock> FLAX_PLANT = registerNoItem("flax_plant", () ->
             new ModCropBlock(SgItems.FLAX_SEEDS::get, BlockBehaviour.Properties.of()
@@ -189,19 +251,18 @@ public final class SgBlocks {
     public static final DeferredBlock<TorchBlock> STONE_TORCH = register("stone_torch",
             () -> new TorchBlock(ParticleTypes.FLAME,
                     BlockBehaviour.Properties.of()
-                                .noCollission()
-                                .strength(0)
-                                .lightLevel(state -> 14)
-                                .sound(SoundType.STONE)),
+                            .noCollission()
+                            .strength(0)
+                            .lightLevel(state -> 14)
+                            .sound(SoundType.STONE)),
             bro -> getStoneTorchItem());
     public static final DeferredBlock<WallTorchBlock> WALL_STONE_TORCH = registerNoItem("wall_stone_torch", () ->
             new WallTorchBlock(ParticleTypes.FLAME,
                     BlockBehaviour.Properties.of()
-                                .noCollission()
-                                .strength(0)
-                                .lightLevel(state -> 14)
-                                .sound(SoundType.STONE)
-                                .lootFrom(STONE_TORCH)));
+                            .noCollission()
+                            .strength(0)
+                            .lightLevel(state -> 14)
+                            .sound(SoundType.STONE)));
 
     public static final DeferredBlock<Block> NETHERWOOD_CHARCOAL_BLOCK = register("netherwood_charcoal_block",
             () -> new Block(BlockBehaviour.Properties.of()
@@ -232,11 +293,23 @@ public final class SgBlocks {
     public static final DeferredBlock<TrapDoorBlock> NETHERWOOD_TRAPDOOR = register("netherwood_trapdoor", () ->
             new TrapDoorBlock(BlockSetType.CRIMSON, netherWoodProps(3f, 3f).noOcclusion()));
     public static final DeferredBlock<LeavesBlock> NETHERWOOD_LEAVES = register("netherwood_leaves", () ->
-            new LeavesBlock(BlockBehaviour.Properties.of()
-                    .strength(0.2f)
-                    .randomTicks()
-                    .noOcclusion()
-                    .sound(SoundType.GRASS)));
+            new UntintedParticleLeavesBlock(
+                    0.01f,
+                    ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, 0x8F005F),
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.PLANT)
+                            .strength(0.2F)
+                            .randomTicks()
+                            .sound(SoundType.GRASS)
+                            .noOcclusion()
+                            .isValidSpawn(Blocks::ocelotOrParrot)
+                            .isSuffocating(Blocks::never)
+                            .isViewBlocking(Blocks::never)
+                            .ignitedByLava()
+                            .pushReaction(PushReaction.DESTROY)
+                            .isRedstoneConductor(Blocks::never)
+            )
+    );
     public static final DeferredBlock<NetherwoodSapling> NETHERWOOD_SAPLING = register("netherwood_sapling", () ->
             new NetherwoodSapling(BlockBehaviour.Properties.of()
                     .strength(0)
@@ -259,14 +332,14 @@ public final class SgBlocks {
     }
 
     private static DropExperienceBlock getOre(IntProvider xpDrop, SoundType soundType) {
-        return new ModOreBlock(xpDrop, BlockBehaviour.Properties.of()
+        return new DropExperienceBlock(xpDrop, BlockBehaviour.Properties.of()
                 .strength(4, 10)
                 .requiresCorrectToolForDrops()
                 .sound(soundType));
     }
 
     private static Block getRawOreBlock(SoundType soundType) {
-        return new ModOreBlock(ConstantInt.of(0), BlockBehaviour.Properties.of()
+        return new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.of()
                 .strength(4, 20)
                 .requiresCorrectToolForDrops()
                 .sound(soundType));
@@ -301,7 +374,7 @@ public final class SgBlocks {
     }
 
     private static Supplier<BlockItem> getStoneTorchItem() {
-        return () -> new StandingAndWallBlockItem(STONE_TORCH.get(), WALL_STONE_TORCH.get(), new Item.Properties(), Direction.DOWN);
+        return () -> new StandingAndWallBlockItem(STONE_TORCH.get(), WALL_STONE_TORCH.get(), Direction.DOWN, new Item.Properties());
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -325,5 +398,19 @@ public final class SgBlocks {
                 .filter(clazz::isInstance)
                 .map(block -> (T) block)
                 .collect(Collectors.toList());
+    }
+
+    private static Supplier<BlockItem> blockItemWithTooltip(DeferredBlock<?> block) {
+        return () -> new BlockItemWithTooltip(
+                block.get(),
+                new Item.Properties().useItemDescriptionPrefix()
+        );
+    }
+
+    private static Supplier<BlockItem> oreBlockItem(DeferredBlock<?> block) {
+        return () -> new OreBlockItem(
+                block.get(),
+                new Item.Properties().useItemDescriptionPrefix()
+        );
     }
 }

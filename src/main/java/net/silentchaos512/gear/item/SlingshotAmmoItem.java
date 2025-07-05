@@ -7,13 +7,14 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.ISlingshotAmmo;
 import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
 import net.silentchaos512.gear.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class SlingshotAmmoItem extends ArrowItem implements ISlingshotAmmo {
     public SlingshotAmmoItem(Properties properties) {
@@ -25,8 +26,9 @@ public class SlingshotAmmoItem extends ArrowItem implements ISlingshotAmmo {
         return new SlingshotProjectile(shooter, level, ammo, weapon);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(TextUtil.translate("item", "slingshot_ammo.desc").withStyle(ChatFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
+        tooltipAdder.accept(TextUtil.translate("item", "slingshot_ammo.desc").withStyle(ChatFormatting.ITALIC));
     }
 }

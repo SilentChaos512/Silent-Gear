@@ -32,7 +32,7 @@ public abstract class TraitEffect {
             },
             buf -> {
                 var type = SgRegistries.TRAIT_EFFECT_TYPE.get(buf.readResourceLocation());
-                return Objects.requireNonNull(type).streamCodec().decode(buf);
+                return type.orElseThrow().value().streamCodec().decode(buf);
             }
     );
 

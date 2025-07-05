@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.gear.material.CustomCompoundMaterial;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -14,7 +15,7 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.function.Consumer;
 
 public class CustomMaterialItem extends SingleMaterialItem implements IColoredMaterialItem, ItemWithSubItems {
     public CustomMaterialItem(Properties properties) {
@@ -43,11 +44,12 @@ public class CustomMaterialItem extends SingleMaterialItem implements IColoredMa
         return Component.translatable(this.getDescriptionId(), material.getDisplayName(PartTypes.MAIN.get()));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pTooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
         var translatable = Component.translatable(getDescriptionId() + ".literal");
         var withStyle = translatable.withStyle(ChatFormatting.ITALIC);
-        pTooltipComponents.add(withStyle);
+        tooltipAdder.accept(withStyle);
     }
 
     @Override

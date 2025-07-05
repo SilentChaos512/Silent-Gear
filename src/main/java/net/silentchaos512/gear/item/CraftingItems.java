@@ -6,12 +6,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 public enum CraftingItems implements ItemLike {
     CRUDE_TOOL_PARTS,
@@ -99,11 +100,12 @@ public enum CraftingItems implements ItemLike {
             super(new Properties());
         }
 
+        @SuppressWarnings("deprecation")
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
             String descKey = this.getDescriptionId() + ".desc";
             if (I18n.exists(descKey)) {
-                tooltip.add(Component.translatable(descKey).withStyle(ChatFormatting.ITALIC));
+                tooltipAdder.accept(Component.translatable(descKey).withStyle(ChatFormatting.ITALIC));
             }
         }
     }

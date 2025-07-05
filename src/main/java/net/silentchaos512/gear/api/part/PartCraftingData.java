@@ -17,7 +17,7 @@ public record PartCraftingData(
 ) {
     public static final Codec<PartCraftingData> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(d -> d.craftingItem),
+                    Ingredient.CODEC.fieldOf("ingredient").forGetter(d -> d.craftingItem),
                     Codec.list(GearType.CODEC).fieldOf("gear_type_blacklist").forGetter(d -> d.gearTypeBlacklist),
                     Codec.BOOL.fieldOf("can_salvage").forGetter(d -> d.canSalvage)
             ).apply(instance, PartCraftingData::new)

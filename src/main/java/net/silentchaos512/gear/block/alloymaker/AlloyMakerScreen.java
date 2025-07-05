@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.block.alloymaker;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -60,15 +60,11 @@ public abstract class AlloyMakerScreen extends AbstractContainerScreen<AlloyMake
         if (minecraft == null) return;
 
         ResourceLocation texture = getTexture();
-
-        RenderSystem.clearColor(1, 1, 1, 1);
-        RenderSystem.setShaderTexture(0, texture);
-
         int posX = (this.width - this.imageWidth) / 2;
         int posY = (this.height - this.imageHeight) / 2;
-        graphics.blit(texture, posX, posY, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(RenderType::guiTextured, texture, posX, posY, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
         // Progress arrow
-        graphics.blit(texture, posX + 93, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16);
+        graphics.blit(RenderType::guiTextured, texture, posX + 93, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16, 256, 256);
     }
 }

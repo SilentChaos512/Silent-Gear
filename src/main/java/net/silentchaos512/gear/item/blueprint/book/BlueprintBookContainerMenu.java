@@ -59,7 +59,7 @@ public class BlueprintBookContainerMenu extends AbstractContainerMenu {
                 }
             });
 
-            if (x == playerInventory.selected && ItemStack.matches(playerInventory.getSelected(), this.item)) {
+            if (x == playerInventory.getSelectedSlot() && ItemStack.matches(playerInventory.getSelectedItem(), this.item)) {
                 bookSlot = slot.index;
             }
         }

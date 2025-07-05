@@ -3,9 +3,11 @@ package net.silentchaos512.gear.setup;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -20,6 +22,7 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.util.TimeUtils;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -28,11 +31,8 @@ import java.util.stream.Collectors;
 public final class SgItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(SilentGear.MOD_ID);
 
-    public static final DeferredItem<GuideBookItem> GUIDE_BOOK = register("guide_book", () ->
-            new GuideBookItem(unstackableProps()));
-
     public static final DeferredItem<BlueprintPackageItem> BLUEPRINT_PACKAGE = register("blueprint_package", () ->
-            new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
+            new BlueprintPackageItem(baseProps()));
 
     public static final DeferredItem<Item> MOD_KIT = register("mod_kit", () ->
             new ModKitItem(unstackableProps().rarity(Rarity.UNCOMMON)));
@@ -153,22 +153,34 @@ public final class SgItems {
 
     public static final DeferredItem<SlingshotAmmoItem> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
-    public static final DeferredItem<ItemNameBlockItem> FLAX_SEEDS = register("flax_seeds", () ->
-            new SeedItem(SgBlocks.FLAX_PLANT.get(), baseProps()));
-    public static final DeferredItem<ItemNameBlockItem> FLUFFY_SEEDS = register("fluffy_seeds", () ->
-            new SeedItem(SgBlocks.FLUFFY_PLANT.get(), baseProps()));
+    public static final DeferredItem<BlockItem> FLAX_SEEDS = register("flax_seeds", () ->
+            new BlockItem(SgBlocks.FLAX_PLANT.get(), blockItemProps()));
+    public static final DeferredItem<BlockItem> FLUFFY_SEEDS = register("fluffy_seeds", () ->
+            new BlockItem(SgBlocks.FLUFFY_PLANT.get(), blockItemProps()));
 
     public static final DeferredItem<Item> NETHER_BANANA = register("nether_banana", () ->
             new Item(baseProps()
                     .food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.4f).build())));
     public static final DeferredItem<Item> GOLDEN_NETHER_BANANA = register("golden_nether_banana", () ->
             new Item(baseProps()
-                    .food(new FoodProperties.Builder().nutrition(10).saturationModifier(1.0f)
-                            .alwaysEdible()
-                            .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, TimeUtils.ticksFromMinutes(10)), 1f)
-                            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, TimeUtils.ticksFromMinutes(5)), 1f)
-                            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, TimeUtils.ticksFromSeconds(10)), 1f)
-                            .build())));
+                    .food(
+                            new FoodProperties.Builder().nutrition(10).saturationModifier(1.0f)
+                                    .alwaysEdible()
+                                    .build(),
+                            Consumables.defaultFood()
+                                    .onConsume(
+                                            new ApplyStatusEffectsConsumeEffect(
+                                                    List.of(
+                                                            new MobEffectInstance(MobEffects.FIRE_RESISTANCE, TimeUtils.ticksFromMinutes(10)),
+                                                            new MobEffectInstance(MobEffects.RESISTANCE, TimeUtils.ticksFromMinutes(5)),
+                                                            new MobEffectInstance(MobEffects.REGENERATION, TimeUtils.ticksFromSeconds(10))
+                                                    )
+                                            )
+                                    )
+                                    .build()
+                    )
+            )
+    );
     public static final DeferredItem<Item> NETHERWOOD_CHARCOAL = register("netherwood_charcoal", () ->
             new Item(baseProps()));
 
@@ -181,6 +193,10 @@ public final class SgItems {
 
     private static Item.Properties baseProps() {
         return new Item.Properties();
+    }
+
+    private static Item.Properties blockItemProps() {
+        return baseProps().useItemDescriptionPrefix();
     }
 
     public static Item.Properties unstackableProps() {

@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.silentchaos512.gear.item.gear.GearTridentItem;
 
 public class SgClientItemExtensions implements IClientItemExtensions {
-    private final SgBlockEntityWithoutLevelRenderer renderer = new SgBlockEntityWithoutLevelRenderer();
+    private final GearTridentSpecialRenderer renderer = new GearTridentSpecialRenderer();
 
     @Override
     public BlockEntityWithoutLevelRenderer getCustomRenderer() {

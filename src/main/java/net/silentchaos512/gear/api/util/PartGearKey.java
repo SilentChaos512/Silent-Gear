@@ -3,6 +3,7 @@ package net.silentchaos512.gear.api.util;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -86,11 +87,11 @@ public record PartGearKey (
         }
         var partTypeId = SilentGear.getIdWithDefaultNamespace(split[0]);
         var gearTypeId = SilentGear.getIdWithDefaultNamespace(split[1]);
-        var gearType = SgRegistries.GEAR_TYPE.get(gearTypeId);
+        var gearType = SgRegistries.GEAR_TYPE.get(gearTypeId).map(Holder.Reference::value).orElse(null);
         if (gearType == null || gearType == GearTypes.NONE.get()) {
             return DataResult.error(() -> "Unknown gear type: " + gearTypeId);
         }
-        var partType = SgRegistries.PART_TYPE.get(partTypeId);
+        var partType = SgRegistries.PART_TYPE.get(partTypeId).map(Holder.Reference::value).orElse(null);
         if (partType == null || partType == PartTypes.NONE.get()) {
             return DataResult.error(() -> "Unknown part type: " + partTypeId);
         }

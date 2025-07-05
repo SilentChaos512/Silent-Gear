@@ -6,6 +6,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -16,6 +17,7 @@ import net.silentchaos512.lib.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ModKitItem extends Item implements ICycleItem {
     public ModKitItem(Properties properties) {
@@ -63,29 +65,25 @@ public class ModKitItem extends Item implements ICycleItem {
         return list;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
         PartType selected = getSelectedType(stack);
         var selectedName = selected.getDisplayName().withStyle(ChatFormatting.GRAY);
-        tooltip.add(TextUtil.withColor(TextUtil.translate("item", "mod_kit.selected", selectedName), Color.SKYBLUE));
+        tooltipAdder.accept(TextUtil.withColor(TextUtil.translate("item", "mod_kit.selected", selectedName), Color.SKYBLUE));
 
-        tooltip.add(TextUtil.translate("item", "mod_kit.keyHint",
+        tooltipAdder.accept(TextUtil.translate("item", "mod_kit.keyHint",
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE)));
 
-        if (flagIn.isAdvanced()) {
+        if (flag.isAdvanced()) {
             MutableComponent text = Component.literal("Removable types: " + getRemovableTypes().size());
-            tooltip.add(TextUtil.withColor(text, ChatFormatting.DARK_GRAY));
+            tooltipAdder.accept(TextUtil.withColor(text, ChatFormatting.DARK_GRAY));
         }
     }
 
     @Override
-    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
+    public ItemStack getCraftingRemainder(ItemStack itemStack) {
         return itemStack.copy();
-    }
-
-    @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) {
-        return true;
     }
 }

@@ -3,6 +3,7 @@ package net.silentchaos512.gear.block.press;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -61,7 +62,9 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
         if (level == null || stack.isEmpty()) {
             return null;
         }
-        var holder = quickCheck.getRecipeFor(new SingleRecipeInput(stack), level).orElse(null);
+        if (!(level instanceof ServerLevel serverLevel)) return null;
+
+        var holder = quickCheck.getRecipeFor(new SingleRecipeInput(stack), serverLevel).orElse(null);
         if (holder != null) {
             return holder.value();
         }

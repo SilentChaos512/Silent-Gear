@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -80,8 +81,8 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
 
     @Nullable
     private SalvagingRecipe getRecipe(ItemStack input) {
-        if (level == null || input.isEmpty()) return null;
-        var holder = quickCheck.getRecipeFor(new SingleRecipeInput(getInputItem()), level).orElse(null);
+        if (level == null || input.isEmpty() || !(level instanceof ServerLevel serverLevel)) return null;
+        var holder = quickCheck.getRecipeFor(new SingleRecipeInput(getInputItem()), serverLevel).orElse(null);
         if (holder != null) {
             return holder.value();
         }

@@ -3,8 +3,6 @@ package net.silentchaos512.gear.block.grader;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.Container;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -33,10 +31,11 @@ import net.silentchaos512.gear.setup.SgBlockEntities;
 import javax.annotation.Nullable;
 
 public class GraderBlock extends ModContainerBlock<GraderBlockEntity> implements SimpleWaterloggedBlock {
-    private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    private static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape SHAPE = Block.box(1, 0, 0, 15, 12, 16);
+    private static final MapCodec<GraderBlock> CODEC = simpleCodec(GraderBlock::new);
 
     public GraderBlock(Properties properties) {
         super(GraderBlockEntity::new, properties);
@@ -45,7 +44,7 @@ public class GraderBlock extends ModContainerBlock<GraderBlockEntity> implements
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
-        return null;
+        return CODEC;
     }
 
     @Override
@@ -56,16 +55,6 @@ public class GraderBlock extends ModContainerBlock<GraderBlockEntity> implements
     @Override
     public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
-    }
-
-    @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if (tileEntity instanceof Container) {
-            Container inventory = (Container) tileEntity;
-            Containers.dropContents(worldIn, pos, inventory);
-        }
-        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
     @Override

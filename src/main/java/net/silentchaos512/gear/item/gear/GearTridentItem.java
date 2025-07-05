@@ -33,7 +33,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.entity.projectile.GearTridentProjectile;
+import net.silentchaos512.gear.entity.projectile.GearThrownTrident;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -168,7 +168,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     
     @Override
     public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
-        GearTridentProjectile throwntrident = new GearTridentProjectile(level, pos.x(), pos.y(), pos.z(), stack.copyWithCount(1));
+        GearThrownTrident throwntrident = new GearThrownTrident(level, pos.x(), pos.y(), pos.z(), stack.copyWithCount(1));
         throwntrident.pickup = AbstractArrow.Pickup.ALLOWED;
         return throwntrident;
     }
@@ -186,7 +186,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
                         if (!level.isClientSide) {
                             stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(entityLiving.getUsedItemHand()));
                             if (f == 0.0F) {
-                            	GearTridentProjectile throwntrident = new GearTridentProjectile(level, player, stack);
+                            	GearThrownTrident throwntrident = new GearThrownTrident(level, player, stack);
                             	float vel = Mth.clamp(2.5F*getProjectileSpeedMultiplier(stack), 0.0F, 4.0F); //capped speed due to client sync issue
                                 throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, vel, 1.0F);
                                 if (player.hasInfiniteMaterials()) {

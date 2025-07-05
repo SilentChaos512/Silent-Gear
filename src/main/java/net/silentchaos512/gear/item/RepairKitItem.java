@@ -8,6 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -18,8 +19,8 @@ import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class RepairKitItem extends Item {
@@ -137,23 +138,23 @@ public class RepairKitItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(TextUtil.translate("item", "repair_kit.efficiency",
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
+        tooltipAdder.accept(TextUtil.translate("item", "repair_kit.efficiency",
                 (int) (this.getRepairEfficiency(RepairContext.Type.QUICK) * 100)));
-        tooltip.add(TextUtil.translate("item", "repair_kit.capacity",
+        tooltipAdder.accept(TextUtil.translate("item", "repair_kit.capacity",
                 format(getTotalStoredMaterialAmount(stack)),
                 getKitCapacity()));
 
         Map<MaterialInstance, Float> storedMaterials = getStoredMaterials(stack);
         if (storedMaterials.isEmpty()) {
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint1").withStyle(ChatFormatting.ITALIC));
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint2").withStyle(ChatFormatting.ITALIC));
-            tooltip.add(TextUtil.translate("item", "repair_kit.hint3").withStyle(ChatFormatting.ITALIC));
+            tooltipAdder.accept(TextUtil.translate("item", "repair_kit.hint1").withStyle(ChatFormatting.ITALIC));
+            tooltipAdder.accept(TextUtil.translate("item", "repair_kit.hint2").withStyle(ChatFormatting.ITALIC));
+            tooltipAdder.accept(TextUtil.translate("item", "repair_kit.hint3").withStyle(ChatFormatting.ITALIC));
             return;
         }
 
         for (Map.Entry<MaterialInstance, Float> entry : storedMaterials.entrySet()) {
-            tooltip.add(TextUtil.translate("item", "repair_kit.material",
+            tooltipAdder.accept(TextUtil.translate("item", "repair_kit.material",
                     entry.getKey().getDisplayNameWithModifiers(PartTypes.MAIN.get(), ItemStack.EMPTY),
                     format(entry.getValue())));
         }

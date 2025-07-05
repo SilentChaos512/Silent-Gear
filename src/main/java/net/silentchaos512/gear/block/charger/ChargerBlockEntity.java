@@ -375,10 +375,10 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
     @Override
     protected void loadAdditional(CompoundTag tags, HolderLookup.Provider provider) {
         super.loadAdditional(tags, provider);
-        this.progress = tags.getInt("Progress");
-        this.workTime = tags.getInt("WorkTime");
-        this.charge = tags.getInt("Charge");
-        this.structureLevel = tags.getInt("StructureLevel");
+        this.progress = tags.getInt("Progress").orElse(0);
+        this.workTime = tags.getInt("WorkTime").orElse(0);
+        this.charge = tags.getInt("Charge").orElse(0);
+        this.structureLevel = tags.getInt("StructureLevel").orElse(0);
     }
 
     @Override
@@ -401,8 +401,8 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
     }
 
     public enum WorkTime {
-        DAYTIME(Level::isDay),
-        NIGHTTIME(Level::isNight),
+        DAYTIME(Level::isBrightOutside),
+        NIGHTTIME(Level::isMoonVisible), // or Level::isDarkOutside? Not sure how it behaves in different dimensions.
         ANYTIME(level -> true);
 
         private final Function<Level, Boolean> canWork;

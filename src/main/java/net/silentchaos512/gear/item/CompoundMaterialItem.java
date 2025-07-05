@@ -4,13 +4,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.AbstractMaterial;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -19,12 +19,12 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
@@ -84,8 +84,9 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         return Component.translatable(this.getDescriptionId(), text);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
         if (Config.Client.showMaterialTooltips.get()) {
             MaterialInstance material = MaterialInstance.from(stack);
             if (material == null) return;
@@ -94,14 +95,14 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
             List<TraitInstance> traits = material.getProperty(PartTypes.MAIN, PropertyKey.of(GearProperties.TRAITS, GearTypes.ALL));
 
             float synergy = SynergyUtils.getSynergy(PartTypes.MAIN.get(), subMaterials, traits);
-            tooltip.add(SynergyUtils.getDisplayText(synergy));
+            tooltipAdder.accept(SynergyUtils.getDisplayText(synergy));
 
-            TextListBuilder statsBuilder = new TextListBuilder();
+            TextListBuilder materialListBuilder = new TextListBuilder();
             for (MaterialInstance subMaterial : subMaterials) {
                 int nameColor = subMaterial.getNameColor(PartTypes.MAIN.get(), GearTypes.ALL.get());
-                statsBuilder.add(TextUtil.withColor(subMaterial.getDisplayName(PartTypes.MAIN.get()).copy(), nameColor));
+                materialListBuilder.add(TextUtil.withColor(subMaterial.getDisplayName(PartTypes.MAIN.get()).copy(), nameColor));
             }
-            tooltip.addAll(statsBuilder.build());
+            materialListBuilder.build().forEach(tooltipAdder);
         }
     }
 }

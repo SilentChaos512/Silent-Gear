@@ -2,10 +2,10 @@ package net.silentchaos512.gear.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -23,6 +23,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class CompoundPartItem extends Item {
@@ -107,11 +108,12 @@ public class CompoundPartItem extends Item {
         return super.getName(stack);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
         var basicItemName = Component.translatable(this.getDescriptionId());
         var gearPartText = Component.translatable("item.silentgear.compound_part.part_name", basicItemName);
-        tooltip.add(gearPartText.withStyle(ChatFormatting.ITALIC));
+        tooltipAdder.accept(gearPartText.withStyle(ChatFormatting.ITALIC));
 
         PartInstance part = PartInstance.from(stack);
         MaterialInstance material = getPrimaryMaterial(stack);
@@ -119,7 +121,7 @@ public class CompoundPartItem extends Item {
         if (part != null && material != null && Config.Client.showPartTooltips.get()) {
             var nameColor = material.getNameColor(part.getType(), this.getGearType());
             var displayNameWithModifiers = material.getDisplayNameWithModifiers(part.getType(), ItemStack.EMPTY);
-            tooltip.add(TextUtil.withColor(displayNameWithModifiers, nameColor));
+            tooltipAdder.accept(TextUtil.withColor(displayNameWithModifiers, nameColor));
         }
     }
 }

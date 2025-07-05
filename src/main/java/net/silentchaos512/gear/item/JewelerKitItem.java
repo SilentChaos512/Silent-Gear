@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.item;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.part.PartType;
@@ -15,7 +17,8 @@ public class JewelerKitItem extends PartBlueprintItem {
 
     @Override
     public Component getName(ItemStack stack) {
-        return Component.translatable(this.getDescriptionId(stack));
+        // Restore default behavior
+        return stack.getComponents().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY);
     }
 
     @Override

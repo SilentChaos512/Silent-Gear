@@ -10,7 +10,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -79,7 +78,7 @@ public class CodecUtils {
     private static <T> Codec<Holder.Reference<T>> referenceHolderWithLifecycle(Registry<T> registry) {
         Codec<Holder.Reference<T>> codec = ResourceLocation.CODEC
                 .comapFlatMap(
-                        p_315852_ -> registry.getHolder(p_315852_)
+                        p_315852_ -> registry.get(p_315852_)
                                 .map(DataResult::success)
                                 .orElseGet(() -> DataResult.error(() -> "Unknown registry key in " + registry.key() + ": " + p_315852_)),
                         p_325513_ -> SilentGear.getId(p_325513_.key().location().toString())

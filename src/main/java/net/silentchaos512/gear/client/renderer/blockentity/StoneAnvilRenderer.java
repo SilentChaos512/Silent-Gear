@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlockEntity;
@@ -23,22 +24,21 @@ public class StoneAnvilRenderer implements BlockEntityRenderer<StoneAnvilBlockEn
     }
 
     @Override
-    public void render(StoneAnvilBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
-        Direction direction = pBlockEntity.getBlockState().getValue(CampfireBlock.FACING);
-        ItemStack item = pBlockEntity.getItem();
-        int i = (int) pBlockEntity.getBlockPos().asLong();
+    public void render(StoneAnvilBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay, Vec3 cameraPos) {
+        Direction direction = blockEntity.getBlockState().getValue(CampfireBlock.FACING);
+        ItemStack item = blockEntity.getItem();
+        int i = (int) blockEntity.getBlockPos().asLong();
 
         if (!item.isEmpty()) {
-            pPoseStack.pushPose();
-            pPoseStack.translate(0.5f, 0.9375f, 0.5f);
+            poseStack.pushPose();
+            poseStack.translate(0.5f, 0.9375f, 0.5f);
             Direction direction1 = Direction.from2DDataValue((direction.get2DDataValue()) % 4);
             float f = -direction1.toYRot();
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(f));
-            pPoseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-//            pPoseStack.translate(-0.3125F, -0.3125F, 0.0F);
-            pPoseStack.scale(0.5f, 0.5f, 0.5f);
-            this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, pPackedLight, pPackedOverlay, pPoseStack, pBuffer, pBlockEntity.getLevel(), i);
-            pPoseStack.popPose();
+            poseStack.mulPose(Axis.YP.rotationDegrees(f));
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            poseStack.scale(0.5f, 0.5f, 0.5f);
+            this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, packedLight, packedOverlay, poseStack, bufferSource, blockEntity.getLevel(), i);
+            poseStack.popPose();
         }
     }
 }

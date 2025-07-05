@@ -136,7 +136,7 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        this.items.deserializeNBT(registries, tag.getCompound("items"));
+        this.items.deserializeNBT(registries, tag.getCompound("items").orElse(new CompoundTag()));
     }
 
     @Override

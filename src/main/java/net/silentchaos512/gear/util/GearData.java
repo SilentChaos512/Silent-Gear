@@ -172,7 +172,7 @@ public final class GearData {
         if (gear.is(ItemTags.DYEABLE)) {
             // Attach armor color
             var color = GearArmorItem.getArmorColor(gear);
-            gear.set(DataComponents.DYED_COLOR, new DyedItemColor(color, false));
+            gear.set(DataComponents.DYED_COLOR, new DyedItemColor(color));
         }
 
         // TODO: Add trait-added enchantments

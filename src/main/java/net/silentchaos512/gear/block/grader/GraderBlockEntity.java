@@ -257,7 +257,7 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     @Override
     protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
         super.loadAdditional(pTag, pRegistries);
-        this.progress = pTag.getInt("Progress");
+        this.progress = pTag.getInt("Progress").orElse(0);
     }
 
     @Override
@@ -290,10 +290,10 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
         CompoundTag tags = pkt.getTag();
         if (tags == null) return;
 
-        this.progress = tags.getInt("Progress");
+        this.progress = tags.getInt("Progress").orElse(0);
 
         if (tags.contains("input_item")) {
-            var inputItem = ItemStack.parse(lookupProvider, tags.getCompound("input_item")).orElse(ItemStack.EMPTY);
+            var inputItem = ItemStack.parse(lookupProvider, tags.getCompound("input_item").orElse(new CompoundTag())).orElse(ItemStack.EMPTY);
             setItem(INPUT_SLOT, inputItem);
         } else {
             setItem(INPUT_SLOT, ItemStack.EMPTY);

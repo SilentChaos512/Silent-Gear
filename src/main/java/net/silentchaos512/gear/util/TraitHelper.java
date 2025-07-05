@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.util;
 
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -143,7 +144,8 @@ public final class TraitHelper {
 
     public static int getHighestLevelArmor(Player player, DataResource<Trait> trait) {
         int max = 0;
-        for (ItemStack stack : player.getInventory().armor) {
+        for (EquipmentSlot equipmentSlot : new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
+            ItemStack stack = player.getItemBySlot(equipmentSlot);
             max = Math.max(max, getTraitLevel(stack, trait));
         }
         return max;
@@ -167,7 +169,8 @@ public final class TraitHelper {
     }
 
     public static boolean hasTraitArmor(Player player, DataResource<Trait> trait) {
-        for (ItemStack stack : player.getInventory().armor) {
+        for (EquipmentSlot equipmentSlot : new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
+            ItemStack stack = player.getItemBySlot(equipmentSlot);
             if (hasTrait(stack, trait)) {
                 return true;
             }

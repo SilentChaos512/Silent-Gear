@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.data.part;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -64,7 +65,7 @@ public class PartBuilder {
     }
 
     public PartBuilder crafting(TagKey<Item> tag) {
-        return crafting(new PartCraftingData(Ingredient.of(tag), Collections.emptyList(), true));
+        return crafting(new PartCraftingData(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tag)), Collections.emptyList(), true));
     }
 
     public PartBuilder crafting(ItemLike item) {

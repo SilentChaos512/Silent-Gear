@@ -40,17 +40,17 @@ public abstract class EnchantedDropsTraitLootModifier extends LootModifier {
     private LootContext createEnchantedLootContext(LootContext original, ItemStack enchantedTool) {
         var builder = new LootParams.Builder(original.getLevel())
                 .withLuck(original.getLuck())
-                .withParameter(LootContextParams.BLOCK_STATE, original.getParam(LootContextParams.BLOCK_STATE))
-                .withParameter(LootContextParams.ORIGIN, original.getParam(LootContextParams.ORIGIN))
+                .withParameter(LootContextParams.BLOCK_STATE, original.getParameter(LootContextParams.BLOCK_STATE))
+                .withParameter(LootContextParams.ORIGIN, original.getParameter(LootContextParams.ORIGIN))
                 .withParameter(LootContextParams.TOOL, enchantedTool);
-        if (original.hasParam(LootContextParams.THIS_ENTITY)) {
-            builder.withParameter(LootContextParams.THIS_ENTITY, original.getParam(LootContextParams.THIS_ENTITY));
+        if (original.hasParameter(LootContextParams.THIS_ENTITY)) {
+            builder.withParameter(LootContextParams.THIS_ENTITY, original.getParameter(LootContextParams.THIS_ENTITY));
         }
-        if (original.hasParam(LootContextParams.BLOCK_ENTITY)) {
-            builder.withParameter(LootContextParams.BLOCK_ENTITY, original.getParam(LootContextParams.BLOCK_ENTITY));
+        if (original.hasParameter(LootContextParams.BLOCK_ENTITY)) {
+            builder.withParameter(LootContextParams.BLOCK_ENTITY, original.getParameter(LootContextParams.BLOCK_ENTITY));
         }
-        if (original.hasParam(LootContextParams.EXPLOSION_RADIUS)) {
-            builder.withParameter(LootContextParams.EXPLOSION_RADIUS, original.getParam(LootContextParams.EXPLOSION_RADIUS));
+        if (original.hasParameter(LootContextParams.EXPLOSION_RADIUS)) {
+            builder.withParameter(LootContextParams.EXPLOSION_RADIUS, original.getParameter(LootContextParams.EXPLOSION_RADIUS));
         }
         var lootParams = builder.create(LootContextParamSets.BLOCK);
         return new LootContext.Builder(lootParams).create(Optional.empty());
@@ -58,9 +58,9 @@ public abstract class EnchantedDropsTraitLootModifier extends LootModifier {
 
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        if (!context.hasParam(LootContextParams.TOOL)) return generatedLoot;
+        if (!context.hasParameter(LootContextParams.TOOL)) return generatedLoot;
 
-        var tool = context.getParam(LootContextParams.TOOL);
+        var tool = context.getParameter(LootContextParams.TOOL);
         var enchantedTool = createEnchantedCopy(tool, context.getLevel());
         var newContext = createEnchantedLootContext(context, enchantedTool);
 

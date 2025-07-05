@@ -26,7 +26,7 @@ public record MaterialCraftingData(
                     Ingredient.CODEC.fieldOf("ingredient").forGetter(d -> d.craftingItem),
                     Codec.list(MaterialCategories.CODEC).fieldOf("categories").forGetter(d -> d.categories),
                     Codec.list(GearType.CODEC).fieldOf("gear_type_blacklist").forGetter(d -> d.gearTypeBlacklist),
-                    Codec.unboundedMap(PartType.CODEC, Ingredient.CODEC_NONEMPTY).fieldOf("part_substitutes").forGetter(d -> d.partSubstitutes),
+                    Codec.unboundedMap(PartType.CODEC, Ingredient.CODEC).fieldOf("part_substitutes").forGetter(d -> d.partSubstitutes),
                     Codec.BOOL.fieldOf("can_salvage").forGetter(d -> d.canSalvage)
             ).apply(instance, MaterialCraftingData::new)
     );

@@ -12,6 +12,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -136,7 +137,9 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
             return;
         }
 
-        var recipe = blockEntity.quickCheck.getRecipeFor(AlloyRecipeInput.of(blockEntity), level).orElse(null);
+        if (!(level instanceof ServerLevel serverLevel)) return;
+
+        var recipe = blockEntity.quickCheck.getRecipeFor(AlloyRecipeInput.of(blockEntity), serverLevel).orElse(null);
         if (recipe != null) {
             // Inputs match a custom recipe
             blockEntity.doWork(recipe.value(), level.registryAccess(), Collections.emptyList());
@@ -348,8 +351,8 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     @Override
     public void loadAdditional(CompoundTag tags, HolderLookup.Provider provider) {
         super.loadAdditional(tags, provider);
-        this.progress = tags.getInt("Progress");
-        this.workEnabled = tags.getBoolean("WorkEnabled");
+        this.progress = tags.getInt("Progress").orElse(0);
+        this.workEnabled = tags.getBoolean("WorkEnabled").orElse(false);
     }
 
     @Override
@@ -372,8 +375,8 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
         super.onDataPacket(net, packet, provider);
         CompoundTag tags = packet.getTag();
         if (tags != null) {
-            this.progress = tags.getInt("Progress");
-            this.workEnabled = tags.getBoolean("WorkEnabled");
+            this.progress = tags.getInt("Progress").orElse(0);
+            this.workEnabled = tags.getBoolean("WorkEnabled").orElse(false);
         }
     }
 }

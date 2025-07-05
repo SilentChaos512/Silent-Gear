@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -103,7 +104,7 @@ public class MaterialBuilder<M extends Material> {
 
     public MaterialBuilder<M> crafting(TagKey<Item> craftingItem, IMaterialCategory... categories) {
         return crafting(new MaterialCraftingData(
-                Ingredient.of(craftingItem),
+                Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(craftingItem)),
                 Lists.newArrayList(categories),
                 Collections.emptyList(),
                 Collections.emptyMap(),
@@ -133,10 +134,10 @@ public class MaterialBuilder<M extends Material> {
         var rodTagLocation = ResourceLocation.fromNamespaceAndPath("c", "rods/" + this.builtinMaterial.name().toLowerCase(Locale.ROOT));
         var commonRodTag = TagKey.create(Registries.ITEM, rodTagLocation);
         return crafting(new MaterialCraftingData(
-                Ingredient.of(craftingItem),
+                Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(craftingItem)),
                 Lists.newArrayList(categories),
                 Collections.emptyList(),
-                Map.of(PartTypes.ROD.get(), Ingredient.of(commonRodTag)),
+                Map.of(PartTypes.ROD.get(), Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(commonRodTag))),
                 true
         ));
     }

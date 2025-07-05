@@ -16,7 +16,7 @@ public class SgCreativeTabs {
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN = CREATIVE_TABS.register("main", () ->
             CreativeModeTab.builder()
-                    .icon(() -> SgItems.BLUEPRINT_PACKAGE.get().getStack())
+                    .icon(() -> SgItems.BLUEPRINT_PACKAGE.get().getDefaultStack())
                     .title(Component.translatable("itemGroup.silentgear"))
                     .displayItems((itemDisplayParameters, output) ->
                             SgItems.ITEMS.getEntries()

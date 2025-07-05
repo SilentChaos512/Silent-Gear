@@ -37,28 +37,28 @@ public class FluffyBlock extends Block {
     }
 
     @Override
-    public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float distance) {
-        if (distance < 2 || world.isClientSide) return;
+    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
+        if (fallDistance < 2 || level.isClientSide) return;
 
         // Count the number of fluffy blocks that are stacked up.
         int stackedBlocks = 0;
-        while (stackedBlocks < 10 && world.getBlockState(pos).is(SgTags.Blocks.FLUFFY_BLOCKS)) {
+        while (stackedBlocks < 10 && level.getBlockState(pos).is(SgTags.Blocks.FLUFFY_BLOCKS)) {
             pos = pos.below();
             ++stackedBlocks;
         }
 
         // Reduce fall distance per stacked block
-        float newDistance = distance - Math.min(8 * stackedBlocks, distance);
-        entity.fallDistance = 0f;
-        entity.causeFallDamage(newDistance, 1f, world.damageSources().fall());
+        double newDistance = fallDistance - Math.min(8 * stackedBlocks, fallDistance);
+        entity.fallDistance = 0.0;
+        entity.causeFallDamage(newDistance, 1f, level.damageSources().fall());
     }
 
     @Override
-    public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entityIn) {
-        if (entityIn.isSuppressingBounce()) {
-            super.updateEntityAfterFallOn(worldIn, entityIn);
+    public void updateEntityMovementAfterFallOn(BlockGetter level, Entity entity) {
+        if (entity.isSuppressingBounce()) {
+            super.updateEntityMovementAfterFallOn(level, entity);
         } else {
-            FluffyBlock.bounceEntity(entityIn);
+            FluffyBlock.bounceEntity(entity);
         }
     }
 

@@ -5,12 +5,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -22,24 +18,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.block.IDroppableInventory;
 import net.silentchaos512.gear.block.ModContainerBlock;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<AlloyMakerBlockEntity<R>> {
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 27, 15);
 
@@ -73,8 +69,8 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
         }
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
+    public List<Component> getTooltipLines() {
+        List<Component> tooltip = new ArrayList<>();
         Set<Component> catNameSet = this.info.getCategories().stream().map(IMaterialCategory::getDisplayName).collect(Collectors.toSet());
         Component catStr = TextUtil.separatedList(catNameSet);
         if (catStr != null) {
@@ -82,6 +78,7 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
         } else {
             tooltip.add(TextUtil.translate("block", "super_mixer.desc"));
         }
+        return tooltip;
     }
 
     @Nullable
@@ -90,19 +87,6 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
-    @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
-            BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-            if (tileEntity instanceof IDroppableInventory droppableInventory) {
-                Containers.dropContents(worldIn, pos, droppableInventory.getItemsToDrop());
-                worldIn.updateNeighbourForOutputSignal(pos, this);
-            }
-            super.onRemove(state, worldIn, pos, newState, isMoving);
-        }
-    }
-
-    @SuppressWarnings("deprecation")
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));

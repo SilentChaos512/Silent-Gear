@@ -31,7 +31,7 @@ public class SlingshotProjectile extends AbstractArrow {
     @Override
     public void tick() {
         super.tick();
-        if (inGround) {
+        if (isInGround()) {
             this.discard();
         }
     }

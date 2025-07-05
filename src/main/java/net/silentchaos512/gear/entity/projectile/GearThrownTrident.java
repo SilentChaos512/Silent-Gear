@@ -1,7 +1,5 @@
 package net.silentchaos512.gear.entity.projectile;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -31,23 +29,25 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearHelper;
 
-public class GearTridentProjectile extends AbstractArrow {
-    private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(GearTridentProjectile.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(GearTridentProjectile.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> ID_COLOR_TOOLROD = SynchedEntityData.defineId(GearTridentProjectile.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> ID_COLOR_GRIP = SynchedEntityData.defineId(GearTridentProjectile.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> ID_COLOR_SPIKES = SynchedEntityData.defineId(GearTridentProjectile.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> ID_COLOR_TIP = SynchedEntityData.defineId(GearTridentProjectile.class, EntityDataSerializers.INT);
+import javax.annotation.Nullable;
+
+public class GearThrownTrident extends AbstractArrow {
+    private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(GearThrownTrident.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(GearThrownTrident.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> ID_COLOR_TOOLROD = SynchedEntityData.defineId(GearThrownTrident.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ID_COLOR_GRIP = SynchedEntityData.defineId(GearThrownTrident.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ID_COLOR_SPIKES = SynchedEntityData.defineId(GearThrownTrident.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ID_COLOR_TIP = SynchedEntityData.defineId(GearThrownTrident.class, EntityDataSerializers.INT);
     private boolean dealtDamage;
     private float attackDamage;
     public int clientSideReturnTridentTickCount;
 	private int life;;
 
-    public GearTridentProjectile(EntityType<? extends GearTridentProjectile> entityType, Level level) {
+    public GearThrownTrident(EntityType<? extends GearThrownTrident> entityType, Level level) {
         super(entityType, level);
     }
 
-    public GearTridentProjectile(Level level, LivingEntity shooter, ItemStack pickupItemStack) {
+    public GearThrownTrident(Level level, LivingEntity shooter, ItemStack pickupItemStack) {
         super(SgEntities.TRIDENT_PROJECTILE.get(), shooter, level, pickupItemStack, null);
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(pickupItemStack));
         this.entityData.set(ID_FOIL, pickupItemStack.hasFoil());
@@ -56,7 +56,7 @@ public class GearTridentProjectile extends AbstractArrow {
         setColors(pickupItemStack);
     }
 
-    public GearTridentProjectile(Level level, double x, double y, double z, ItemStack pickupItemStack) {
+    public GearThrownTrident(Level level, double x, double y, double z, ItemStack pickupItemStack) {
         super(SgEntities.TRIDENT_PROJECTILE.get(), x, y, z, level, pickupItemStack, pickupItemStack);
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(pickupItemStack));
         this.entityData.set(ID_FOIL, pickupItemStack.hasFoil());
@@ -111,8 +111,8 @@ public class GearTridentProjectile extends AbstractArrow {
         int i = this.entityData.get(ID_LOYALTY);
         if (i > 0 && (this.dealtDamage || this.isNoPhysics()) && entity != null) {
             if (!this.isAcceptibleReturnOwner()) {
-                if (!this.level().isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
-                    this.spawnAtLocation(this.getPickupItem(), 0.1F);
+                if (this.level() instanceof ServerLevel serverLevel && this.pickup == AbstractArrow.Pickup.ALLOWED) {
+                    this.spawnAtLocation(serverLevel, this.getPickupItem(), 0.1F);
                 }
 
                 this.discard();
@@ -169,7 +169,7 @@ public class GearTridentProjectile extends AbstractArrow {
         }
 
         this.dealtDamage = true;
-        if (entity.hurt(damagesource, f)) {
+        if (entity.hurtOrSimulate(damagesource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {
                 return;
             }
@@ -199,7 +199,7 @@ public class GearTridentProjectile extends AbstractArrow {
             null,
             vec3,
             level.getBlockState(hitResult.getBlockPos()),
-            p_348680_ -> this.kill()
+            p_348680_ -> this.kill(level)
         );
     }
 
@@ -239,7 +239,7 @@ public class GearTridentProjectile extends AbstractArrow {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.dealtDamage = compound.getBoolean("DealtDamage");
+        this.dealtDamage = compound.getBooleanOr("DealtDamage", false);
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(this.getPickupItemStackOrigin()));
         
         setColors(this.getPickupItemStackOrigin());

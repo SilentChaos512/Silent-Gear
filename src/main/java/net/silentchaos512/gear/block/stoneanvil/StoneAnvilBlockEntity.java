@@ -7,6 +7,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Clearable;
@@ -41,9 +42,9 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     }
 
     public Optional<RecipeHolder<ToolActionRecipe>> getRecipe(ItemStack tool, ItemStack item) {
-        if (item.isEmpty() || this.level == null) return Optional.empty();
+        if (item.isEmpty() || this.level == null || !(this.level instanceof ServerLevel serverLevel)) return Optional.empty();
 
-        return quickCheck.getRecipeFor(new ToolActionRecipe.Input(tool, item), this.level);
+        return quickCheck.getRecipeFor(new ToolActionRecipe.Input(tool, item), serverLevel);
     }
 
     public boolean interact(LivingEntity entity, ItemStack stack, InteractionHand hand) {
@@ -126,7 +127,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
         super.loadAdditional(tag, provider);
         this.item = ItemStack.EMPTY;
         if (tag.contains("Item")) {
-            this.item = ItemStack.parse(provider, tag.getCompound("Item")).orElse(null);
+            this.item = ItemStack.parse(provider, tag.getCompound("Item").orElse(new CompoundTag())).orElse(null);
         } else {
             this.item = ItemStack.EMPTY;
         }
@@ -160,7 +161,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
         super.onDataPacket(net, pkt, lookupProvider);
         var tag = pkt.getTag();
         if (tag.contains("Item")) {
-            this.item = ItemStack.parse(lookupProvider, tag.getCompound("Item")).orElse(null);
+            this.item = ItemStack.parse(lookupProvider, tag.getCompound("Item").orElse(new CompoundTag())).orElse(null);
         } else {
             this.item = ItemStack.EMPTY;
         }

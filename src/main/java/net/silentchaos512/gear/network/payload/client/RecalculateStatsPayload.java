@@ -21,7 +21,7 @@ public record RecalculateStatsPayload(int slot, Supplier<GearProperty<?, ?>> tri
             buf -> {
                 var slot = buf.readVarInt();
                 var id = buf.readResourceLocation();
-                return new RecalculateStatsPayload(slot, () -> SgRegistries.GEAR_PROPERTY.get(id));
+                return new RecalculateStatsPayload(slot, () -> SgRegistries.GEAR_PROPERTY.get(id).orElseThrow().value());
             }
     );
 

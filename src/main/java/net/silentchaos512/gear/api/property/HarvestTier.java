@@ -2,6 +2,7 @@ package net.silentchaos512.gear.api.property;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -50,8 +51,8 @@ public record HarvestTier(
     public boolean isBetterThan(@Nullable HarvestTier other) {
         if (other == null) return true;
 
-        var thisHolderSet = BuiltInRegistries.BLOCK.getOrCreateTag(this.incorrectForTool);
-        var otherHolderSet = BuiltInRegistries.BLOCK.getOrCreateTag(other.incorrectForTool);
+        HolderSet.Named<Block> thisHolderSet = BuiltInRegistries.BLOCK.getOrThrow(this.incorrectForTool);
+        HolderSet.Named<Block> otherHolderSet = BuiltInRegistries.BLOCK.getOrThrow(other.incorrectForTool);
         return thisHolderSet.size() < otherHolderSet.size();
     }
 
