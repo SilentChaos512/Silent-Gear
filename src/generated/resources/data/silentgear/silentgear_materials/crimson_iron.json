@@ -63,6 +63,11 @@
           "conditions": [],
           "level": 2,
           "trait": "silentgear:hard"
+        },
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:heat_resistant"
         }
       ]
     },

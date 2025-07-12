@@ -8,7 +8,13 @@
   "description": {
     "translate": "trait.silentgear.bounce.desc"
   },
-  "effects": [],
+  "effects": [
+    {
+      "type": "silentgear:negate_damage",
+      "damage_type_tag": "silentgear:bounce_protects",
+      "negated_damage_scale": 0.2
+    }
+  ],
   "max_level": 1,
   "name": {
     "translate": "trait.silentgear.bounce"

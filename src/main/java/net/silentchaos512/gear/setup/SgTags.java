@@ -1,10 +1,12 @@
 package net.silentchaos512.gear.setup;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.silentchaos512.gear.SilentGear;
@@ -53,6 +55,14 @@ public final class SgTags {
 
         private static TagKey<Block> mod(String path) {
             return BlockTags.create(SilentGear.getId(path));
+        }
+    }
+
+    public static final class DamageTypes {
+        public static final TagKey<DamageType> BOUNCE_PROTECTS = mod("bounce_protects");
+
+        private static TagKey<DamageType> mod(String path) {
+            return TagKey.create(Registries.DAMAGE_TYPE, SilentGear.getId(path));
         }
     }
 

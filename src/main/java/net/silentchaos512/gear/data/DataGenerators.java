@@ -42,6 +42,7 @@ public final class DataGenerators {
         ModBlockTagsProvider blocks = new ModBlockTagsProvider(event);
         generator.addProvider(true, blocks);
         generator.addProvider(true, new ModItemTagsProvider(event, blocks));
+        generator.addProvider(true, new ModDamageTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
 
         generator.addProvider(true, new TraitsProvider(generator));
         generator.addProvider(true, new MaterialsProvider(generator, SilentGear.MOD_ID));

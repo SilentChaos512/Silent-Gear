@@ -46,9 +46,9 @@ import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.BreakEventHandler;
+import net.silentchaos512.gear.api.item.GearArmor;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
@@ -61,52 +61,61 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.*;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 @EventBusSubscriber
 public final class GearEvents {
-    private GearEvents() {}
-
-    @SubscribeEvent
-    public static void onServerTick(ServerTickEvent.Post events) {
-        entityAttackedThisTick.clear();
+    private GearEvents() {
     }
 
     //region Damaging traits
 
-    private static final Set<UUID> entityAttackedThisTick = new HashSet<>();
+    private static final EquipmentSlot[] ARMOR_SLOTS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     @SubscribeEvent
-    public static void onAttackEntity(LivingIncomingDamageEvent event) {
-        // Check if already handled
-        LivingEntity attacked = event.getEntity();
-        if (attacked == null || attacked.level().isClientSide || entityAttackedThisTick.contains(attacked.getUUID()))
-            return;
+    public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
+        LivingEntity target = event.getEntity();
+        if (target.level().isClientSide) return;
 
         DamageSource source = event.getSource();
-        if (source == null || !"player".equals(source.getMsgId())) return;
+        @Nullable Entity attacker = source.getEntity();
 
-        Entity attacker = source.getEntity();
-        if (!(attacker instanceof Player)) return;
+        ItemStack weapon = attacker instanceof LivingEntity attackingLivingEntity
+                ? attackingLivingEntity.getItemBySlot(EquipmentSlot.MAINHAND)
+                : ItemStack.EMPTY;
 
-        Player player = (Player) attacker;
-        ItemStack weapon = player.getMainHandItem();
-        if (!(weapon.getItem() instanceof GearTool)) return;
+        // Traits that effect the entity being attacked
+        if (attacker instanceof Player attackingPlayer && weapon.getItem() instanceof GearTool) {
+            final float baseDamage = event.getAmount();
+            final float newDamage = TraitHelper.activateTraits(weapon, baseDamage, (trait, value) -> {
+                return trait.getTrait().onAttackEntity(new TraitActionContext(attackingPlayer, trait, weapon), target, value);
+            });
+            event.setAmount(newDamage);
+        }
 
-        final float baseDamage = event.getAmount();
-        final float newDamage = TraitHelper.activateTraits(weapon, baseDamage, (trait, value) ->
-                trait.getTrait().onAttackEntity(new TraitActionContext(player, trait, weapon), attacked, value));
-
-        if (Math.abs(newDamage - baseDamage) > 0.0001f) {
+        // Traits that protect the target entity
+        float incomingDamage = event.getAmount();
+        float newIncomingDamage = event.getAmount();
+        for (EquipmentSlot armorSlot : ARMOR_SLOTS) {
+            ItemStack armor = target.getItemBySlot(armorSlot);
+            if (armor.getItem() instanceof GearArmor) {
+                newIncomingDamage = TraitHelper.activateTraits(armor, newIncomingDamage, (trait, value) -> {
+                    return trait.getTrait().onEntityIncomingDamage(armor, trait.getLevel(), target, source, value, incomingDamage);
+                });
+            }
+        }
+        event.setAmount(newIncomingDamage);
+        if (newIncomingDamage < 0.0001f) {
             event.setCanceled(true);
-            entityAttackedThisTick.add(attacked.getUUID());
-            attacked.hurt(source, newDamage);
         }
     }
 
     @SubscribeEvent
-    public static void onLivingDamage(LivingDamageEvent.Post event) {
+    public static void onLivingDamagePost(LivingDamageEvent.Post event) {
         if (event.getEntity() instanceof Player)
             if (isFireDamage(event.getSource())) {
                 damageFlammableItems(event);
