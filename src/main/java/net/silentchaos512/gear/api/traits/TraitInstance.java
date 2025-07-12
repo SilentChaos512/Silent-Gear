@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.TooltipFlag;
 import net.silentchaos512.gear.api.property.GearProperty;
@@ -76,6 +77,14 @@ public record TraitInstance(
 
     public static TraitInstance of(Trait trait, int level, ITraitCondition... conditions) {
         return new TraitInstance(trait, level, conditions);
+    }
+
+    public boolean isValid() {
+        return trait.isPresent() && level > 0;
+    }
+
+    public ResourceLocation getTraitId() {
+        return trait.getId();
     }
 
     @Nonnull

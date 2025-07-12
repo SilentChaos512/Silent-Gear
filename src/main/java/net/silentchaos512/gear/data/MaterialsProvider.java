@@ -269,6 +269,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .mainStatsArmor(3, 7, 5, 3, 2, 6) //18
                 .trait(PartTypes.MAIN, Const.Traits.MALLEABLE, 3)
                 .trait(PartTypes.MAIN, Const.Traits.HARD, 2)
+                .trait(PartTypes.MAIN, Const.Traits.HEAT_RESISTANT, 4)
                 //rod
                 .stat(PartTypes.ROD, GearProperties.ATTACK_DAMAGE, 0.1f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 3)

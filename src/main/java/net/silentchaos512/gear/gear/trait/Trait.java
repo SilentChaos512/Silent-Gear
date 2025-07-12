@@ -12,6 +12,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -125,7 +126,19 @@ public final class Trait {
     }
 
     public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
-        return baseValue;
+        float result = baseValue;
+        for (TraitEffect effect : this.effects) {
+            result = effect.onAttackEntity(context, target, result);
+        }
+        return result;
+    }
+
+    public float onEntityIncomingDamage(ItemStack armor, int traitLevel, LivingEntity target, DamageSource source, float amount, float originalAmount) {
+        float result = amount;
+        for (TraitEffect effect : this.effects) {
+            result = effect.onEntityIncomingDamage(armor, traitLevel, target, source, result, originalAmount);
+        }
+        return result;
     }
 
     public double onCalculateSynergy(double synergy, int traitLevel) {

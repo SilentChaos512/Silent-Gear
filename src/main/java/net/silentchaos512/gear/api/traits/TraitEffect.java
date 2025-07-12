@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -46,6 +47,10 @@ public abstract class TraitEffect {
 
     public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
         return baseValue;
+    }
+
+    public float onEntityIncomingDamage(ItemStack armor, int traitLevel, LivingEntity target, DamageSource source, float amount, float originalAmount) {
+        return amount;
     }
 
     public int onDurabilityDamage(TraitActionContext context, int damageTaken) {

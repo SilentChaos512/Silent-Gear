@@ -39,6 +39,8 @@ public class TraitEffectTypes {
             FireproofTraitEffect.CODEC, FireproofTraitEffect.STREAM_CODEC);
     public static final Supplier<TraitEffectType<ItemMagnetTraitEffect>> ITEM_MAGNET = register("item_magnet",
             ItemMagnetTraitEffect.CODEC, ItemMagnetTraitEffect.STREAM_CODEC);
+    public static final Supplier<TraitEffectType<NegateDamageTraitEffect>> NEGATE_DAMAGE = register("negate_damage",
+            NegateDamageTraitEffect.CODEC, NegateDamageTraitEffect.STREAM_CODEC);
     public static final Supplier<TraitEffectType<NumberPropertyModifierTraitEffect>> NUMBER_PROPERTY_MODIFIER = register("number_property_modifier",
             NumberPropertyModifierTraitEffect.CODEC, NumberPropertyModifierTraitEffect.STREAM_CODEC);
     public static final Supplier<TraitEffectType<SelfRepairTraitEffect>> SELF_REPAIR = register("self_repair",

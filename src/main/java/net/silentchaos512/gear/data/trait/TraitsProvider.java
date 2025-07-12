@@ -4,6 +4,7 @@ import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -49,6 +50,9 @@ public class TraitsProvider extends TraitsProviderBase {
         );
         ret.add(TraitBuilder.of(Const.Traits.BOUNCE, 1)
                 .withGearTypeCondition(GearTypes.ARMOR)
+                .effects(
+                        new NegateDamageTraitEffect(SgTags.DamageTypes.BOUNCE_PROTECTS, 0.2f)
+                )
         );
         ret.add(TraitBuilder.of(Const.Traits.BRILLIANT, 1));
         ret.add(TraitBuilder.of(Const.Traits.CONFETTI, 5)
@@ -75,13 +79,13 @@ public class TraitsProvider extends TraitsProviderBase {
                 .withGearTypeCondition(GearTypes.HARVEST_TOOL)
                 .extraWikiLines("Smelted drops are not affected by fortune to prevent item duplication"));
         ret.add(TraitBuilder.of(Const.Traits.MAGNETIC, 5)
-                        .effects(
-                                new ItemMagnetTraitEffect(
-                                        0.06f,
-                                        3f,
-                                        Ingredient.EMPTY
-                                )
+                .effects(
+                        new ItemMagnetTraitEffect(
+                                0.06f,
+                                3f,
+                                Ingredient.EMPTY
                         )
+                )
                 .extraWikiLines("Higher levels increase range"));
         ret.add(TraitBuilder.of(Const.Traits.MULTI_BREAK, 5)
                 .extraWikiLines("  - This trait has never been coded ~~and has almost achieved meme status~~",
@@ -614,6 +618,14 @@ public class TraitsProvider extends TraitsProviderBase {
                                         )
                                         .build()
                         )
+                )
+        );
+
+        ret.add(TraitBuilder.of(Const.Traits.HEAT_RESISTANT, 5)
+                .withGearTypeCondition(GearTypes.ARMOR)
+                .effects(
+                        FireproofTraitEffect.INSTANCE,
+                        new NegateDamageTraitEffect(DamageTypeTags.IS_FIRE, 0.04f)
                 )
         );
 

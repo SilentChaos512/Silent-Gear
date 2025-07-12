@@ -11,6 +11,7 @@
     },
     "icon": {
       "components": {
+        "!minecraft:attribute_modifiers": {},
         "silentgear:construction": {
           "broken_count": 0,
           "example": false,
