@@ -3,12 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.0.25] - 2025-07-12
 ### Added
 - A new trait effect, "silentgear:negates_damage". On armor, it reduces damage taken from specific damage types determining by a tag. [#821]
 - Heat-Resistant trait, which reduces fire damage (fire, lava, magma, etc.) and prevents the item from being destroyed by fire when dropped. Added to crimson iron.
 ### Fixed
 - Crash when logging in with items that have traits that no longer exist
+- Bounce trait now actually bounces the player when they land after falling more than 3 blocks, as originally intended
 
 ## [1.21.1-4.0.24] - 2025-06-26
 ### Fixed

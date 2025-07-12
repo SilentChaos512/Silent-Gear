@@ -59,12 +59,11 @@ import net.silentchaos512.gear.setup.SgCriteriaTriggers;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.*;
+import net.silentchaos512.lib.event.ServerTicks;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 @EventBusSubscriber
@@ -373,12 +372,10 @@ public final class GearEvents {
             }
 
             // Bounce fall damage nullification and bouncing
-            // FIXME: bounce is very unpredictable. Usually it does not work at all. The few times
-            //  it does, the bounce height is inconsistent
             int bounce = TraitHelper.getHighestLevelArmorOrCurio(player, Const.Traits.BOUNCE);
-            if (bounce > 0 && event.getDistance() > 3) {
-                if (!event.getEntity().isSuppressingBounce()) {
-//                    bounceEntity(event.getEntity());
+            if (bounce > 0) {
+                if (!event.getEntity().isSuppressingBounce() && !event.getEntity().isFallFlying()) {
+                    bounceEntity(event.getEntity());
                     int damage = (int) (event.getDistance() / 3) - 1;
                     if (damage > 0) {
                         GearHelper.attemptDamage(stack, damage, event.getEntity(), EquipmentSlot.FEET);
@@ -390,34 +387,12 @@ public final class GearEvents {
         }
     }
 
-    private static final Map<Entity, Vec3> BOUNCE_TICKS = new HashMap<>();
-
-//    @SubscribeEvent
-    public static void onPlayerTickBouncing(PlayerTickEvent.Post event) {
-        var player = event.getEntity();
-        if (!player.isFallFlying() && BOUNCE_TICKS.containsKey(player)) {
-//            player.moveForced(player.getPosX(), player.getPosY() + 0.1, player.getPosZ());
-            Vec3 motion = BOUNCE_TICKS.get(player);
-            player.setDeltaMovement(motion.x, motion.y * 20, motion.z); // why * 20?
-            player.setOnGround(false);
-            BOUNCE_TICKS.remove(player);
-            SilentGear.LOGGER.debug("bounce {}", motion);
-
-            if (player.getDeltaMovement().y < 0) {
-                bounceEntity(player);
-            }
-        }
-    }
-
     private static void bounceEntity(Entity entity) {
-        Vec3 vector3d = entity.getDeltaMovement();
-        if (vector3d.y < 0) {
-//            entity.moveForced(entity.getPosX(), entity.getPosY() + 0.1, entity.getPosZ());
-//            entity.setOnGround(false);
-            Vec3 vec = new Vec3(vector3d.x, -vector3d.y * 0.75, vector3d.z);
-//            entity.setMotion(vec);
-            SilentGear.LOGGER.debug("{} -> {}", vector3d, vec);
-            BOUNCE_TICKS.put(entity, vec);
+        Vec3 movement = entity.getDeltaMovement();
+        if (movement.y < 0) {
+            Vec3 vec = new Vec3(0, -0.75f * movement.y, 0);
+            // Pushing the entity now will do nothing, so we schedule it for the next server tick
+            ServerTicks.scheduleAction(() -> entity.push(vec));
         }
     }
 
@@ -431,8 +406,8 @@ public final class GearEvents {
                 if (bounce > 0) {
                     SilentGear.LOGGER.debug("knockback");
                     ((LivingEntity) source).knockback(2 * bounce,
-                            -Mth.sin(source.getYRot() * ((float)Math.PI / 180F)),
-                            Mth.cos(source.getYRot() * ((float)Math.PI / 180F)));
+                            -Mth.sin(source.getYRot() * ((float) Math.PI / 180F)),
+                            Mth.cos(source.getYRot() * ((float) Math.PI / 180F)));
                 }
             }
         }
