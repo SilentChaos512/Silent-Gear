@@ -152,7 +152,9 @@ public final class GearData {
 
         // Let traits do their thing
         for (var trait : oldProperties.getTraits()) {
-            trait.getTrait().onRecalculatePre(gear, trait.getLevel());
+            if (trait.isValid()) {
+                trait.getTrait().onRecalculatePre(gear, trait.getLevel());
+            }
         }
     }
 
