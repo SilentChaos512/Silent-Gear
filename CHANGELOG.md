@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.21.1-4.0.25] - 2025-07-12
 ### Added
-- A new trait effect, "silentgear:negates_damage". On armor, it reduces damage taken from specific damage types determining by a tag. [#821]
+- A new trait effect, "silentgear:negates_damage". On armor, it reduces damage taken from specific damage types determined by a tag. [#821]
 - Heat-Resistant trait, which reduces fire damage (fire, lava, magma, etc.) and prevents the item from being destroyed by fire when dropped. Added to crimson iron.
 ### Fixed
 - Crash when logging in with items that have traits that no longer exist
