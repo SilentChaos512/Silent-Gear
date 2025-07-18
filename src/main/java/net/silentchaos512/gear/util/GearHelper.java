@@ -400,6 +400,7 @@ public final class GearHelper {
         return new Item.Properties()
                 .stacksTo(1)
                 .durability(100)
+                .setNoRepair()
                 .component(SgDataComponents.GEAR_CONSTRUCTION, new GearConstructionData(PartList.empty(), false, 0, 0))
                 .component(SgDataComponents.GEAR_PROPERTIES, new GearPropertiesData(Map.of()));
     }

@@ -46,7 +46,7 @@ public final class GearItemSet<I extends Item & GearItem> {
                 type,
                 partName,
                 gearItem,
-                () -> new MainPartItem(type::value, new Item.Properties().stacksTo(1)),
+                () -> new MainPartItem(type::value, new Item.Properties().stacksTo(1).setNoRepair()),
                 () -> new GearBlueprintItem(type::value, BlueprintType.BLUEPRINT, new Item.Properties()),
                 () -> new GearBlueprintItem(type::value, BlueprintType.TEMPLATE, new Item.Properties())
         );
