@@ -81,11 +81,6 @@ public final class SgRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ToolActionRecipe>> TOOL_ACTION = register(Const.TOOL_ACTION,
             ToolActionRecipe.Serializer::new);
 
-    // This overrides the vanilla crafting grid repair recipe, to prevent it from destroying gear items
-    @SuppressWarnings("unused")
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<RepairItemRecipeFix>> REPAIR_ITEM_OVERRIDE = register(Const.CRAFTING_SPECIAL_REPAIRITEM, () ->
-            new SimpleCraftingRecipeSerializer<>(RepairItemRecipeFix::new));
-
     private SgRecipes() {
     }
 
