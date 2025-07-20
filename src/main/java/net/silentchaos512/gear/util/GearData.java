@@ -16,10 +16,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearTool;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearItem;
-import net.silentchaos512.gear.api.material.TextureType;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
@@ -33,13 +31,11 @@ import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.gear.GearArmorItem;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
-import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -148,6 +144,10 @@ public final class GearData {
         // Remove attribute modifiers, so they can be completely redone
         gear.remove(DataComponents.ATTRIBUTE_MODIFIERS);
 
+        if (gear.getItem() instanceof GearItem gearItem) {
+            gearItem.onRecalculatePre(gear, player, oldProperties, gearConstructionData);
+        }
+
         // TODO: Remove trait-added enchantments
 
         // Let traits do their thing
@@ -160,16 +160,9 @@ public final class GearData {
 
     private static void onRecalculatePost(ItemStack gear, @Nullable Player player, GearPropertiesData finalProperties) {
         // Set other data components
-        if (gear.getItem() instanceof GearTool gearTool) {
-            GearPropertiesData properties = gear.getOrDefault(SgDataComponents.GEAR_PROPERTIES, GearPropertiesData.EMPTY);
-            gear.set(DataComponents.TOOL, gearTool.createToolProperties(properties));
+        if (gear.getItem() instanceof GearItem gearItem) {
+            gearItem.onRecalculatePost(gear, player, finalProperties);
         }
-
-        var modelIndex = calculateModelIndex(gear);
-        gear.set(SgDataComponents.GEAR_MODEL_INDEX, modelIndex);
-
-        var modelKey = calculateModelKey(gear, getConstruction(gear).parts());
-        gear.set(SgDataComponents.GEAR_MODEL_KEY, modelKey);
 
         if (gear.is(ItemTags.DYEABLE)) {
             // Attach armor color
@@ -302,53 +295,6 @@ public final class GearData {
                 );
             }
         }
-    }
-
-    public static String getModelKey(ItemStack stack, int animationFrame) {
-        var key = stack.get(SgDataComponents.GEAR_MODEL_KEY);
-        if (key == null) return "null";
-        return key + (animationFrame > 0 ? "_" + animationFrame : "");
-    }
-
-    private static String calculateModelKey(ItemStack stack, Collection<? extends PartInstance> parts) {
-        StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + ":");
-
-        for (PartInstance part : parts) {
-            s.append(part.getModelKey()).append(',');
-        }
-
-        return s.toString();
-    }
-
-    private static int calculateModelIndex(ItemStack gear) {
-        if (GearHelper.isBroken(gear)) {
-            // Special broken gear model
-            return 0;
-        }
-
-        var data = getConstruction(gear);
-        var coatingOrMainPart = data.getCoatingOrMainPart();
-        if (coatingOrMainPart == null || coatingOrMainPart.getPrimaryMaterial() == null) {
-            // Data packs may not be fully loaded yet, or something else has gone wrong
-            return -1;
-        }
-        MaterialInstance mainMaterial = coatingOrMainPart.getPrimaryMaterial();
-        boolean highContrast = mainMaterial.getMainTextureType() == TextureType.HIGH_CONTRAST;
-
-        int ret = highContrast ? 3 : 2;
-
-        if (getPartOfType(gear, PartTypes.TIP.get()) != null) {
-            ret |= 4;
-        }
-        if (getPartOfType(gear, PartTypes.GRIP.get()) != null) {
-            ret |= 8;
-        }
-
-        return ret;
-    }
-
-    public static int getModelIndex(ItemStack stack) {
-        return stack.getOrDefault(SgDataComponents.GEAR_MODEL_INDEX, 0);
     }
 
     //region Part getters and checks

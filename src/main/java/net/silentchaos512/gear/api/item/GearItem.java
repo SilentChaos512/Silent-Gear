@@ -2,27 +2,32 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.core.component.GearConstructionData;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TraitHelper;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.function.Supplier;
 
 /**
  * Interface for all equipment items, including tools and armor.
  */
+@Deprecated
 public interface GearItem extends ItemLike {
     Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
             PartTypes.MAIN.get()
@@ -50,10 +55,6 @@ public interface GearItem extends ItemLike {
 
     GearType getGearType();
 
-    default boolean isValidSlot(String slot) {
-        return false;
-    }
-
     default boolean requiresPartOfType(PartType type) {
         return getRequiredParts().contains(type);
     }
@@ -68,6 +69,21 @@ public interface GearItem extends ItemLike {
         return REQUIRED_PARTS.get();
     }
 
+    default void onRecalculatePre(ItemStack gear, @Nullable Player player, @Nullable GearPropertiesData oldProperties, GearConstructionData constructionData) {
+    }
+
+    default void onRecalculatePost(ItemStack gear, @Nullable Player player, GearPropertiesData finalProperties) {
+        var properties = GearData.getProperties(gear, player);
+        gear.set(DataComponents.ENCHANTABLE, new Enchantable(properties.getNumberInt(GearProperties.ENCHANTMENT_VALUE)));
+    }
+
+    default void buildAttributes(ItemStack gear, ItemAttributeModifiers.Builder builder) {
+        TraitHelper.getTraits(gear).forEach(inst -> {
+            var context = new TraitActionContext(null, inst, gear);
+            inst.getTrait().onGetAttributeModifiers(context, builder);
+        });
+    }
+
     //endregion
 
     //region Stats and config
@@ -78,31 +94,6 @@ public interface GearItem extends ItemLike {
 
     default float getRepairModifier(ItemStack stack) {
         return 1f;
-    }
-
-    //endregion
-
-    //region Client-side stuff
-
-    @OnlyIn(Dist.CLIENT)
-    default ItemColor getItemColors() {
-        //noinspection OverlyLongLambda
-        return (stack, tintIndex) -> {
-            return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
-                case 1 -> {
-                    if (GearData.hasPartOfType(stack, PartTypes.COATING.get())) {
-                        yield ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get());
-                    } else {
-                        yield ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
-                    }
-                }
-                // 2: highlight layer, no color needed
-                case 3 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.TIP.get());
-                case 4 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.GRIP.get());
-                default -> 0xFFFFFFFF;
-            };
-        };
     }
 
     //endregion

@@ -12,8 +12,7 @@ public class GearDaggerItem extends GearSwordItem {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         target.invulnerableTime = (int) (0.67f * target.invulnerableTime); // Make target vulnerable sooner
-        return super.hurtEnemy(stack, target, attacker);
     }
 }

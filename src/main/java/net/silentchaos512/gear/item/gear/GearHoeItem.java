@@ -1,17 +1,17 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -24,7 +24,6 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -32,7 +31,7 @@ public class GearHoeItem extends HoeItem implements GearDiggerTool {
     private final Supplier<GearType> gearType;
 
     public GearHoeItem(Supplier<GearType> gearType) {
-        super(GearHelper.DEFAULT_DUMMY_TIER, GearHelper.getBaseItemProperties());
+        super(ToolMaterial.NETHERITE, -4f, 0f, GearHelper.getBaseItemProperties());
         this.gearType = gearType;
     }
 
@@ -42,7 +41,7 @@ public class GearHoeItem extends HoeItem implements GearDiggerTool {
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet() {
+    public TagKey<Block> getToolBlockSet(ItemStack gear) {
         return BlockTags.MINEABLE_WITH_HOE;
     }
 
@@ -57,40 +56,13 @@ public class GearHoeItem extends HoeItem implements GearDiggerTool {
         if (GearHelper.isBroken(stack)) return InteractionResult.PASS;
 
         // Try to let traits do their thing first
-        InteractionResult result = GearHelper.onItemUse(context);
+        InteractionResult result = GearHelper.useOn(context);
         if (result == InteractionResult.PASS)
             return super.useOn(context);
         return result;
     }
 
     //region Standard tool overrides
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
-    }
-
-    @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
-        var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder);
-        return builder.build();
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return GearHelper.getDestroySpeed(stack, state);
-    }
-
-    @Override
-    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantmentValue(stack);
-    }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
@@ -113,23 +85,16 @@ public class GearHoeItem extends HoeItem implements GearDiggerTool {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hurtEnemy(stack, target, attacker);
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
+        if (!GearHelper.isBroken(stack)) {
+            return super.mineBlock(stack, level, state, pos, miningEntity);
+        }
+        return true;
     }
 
     @Override
-    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        GearHelper.postHurtEnemy(stack, target, attacker);
-    }
-
-    @Override
-    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        GearHelper.inventoryTick(stack, level, entity, slot);
     }
 
     @Override

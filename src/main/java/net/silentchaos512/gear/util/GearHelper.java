@@ -2,11 +2,11 @@ package net.silentchaos512.gear.util;
 
 import com.google.common.collect.Sets;
 import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -21,7 +21,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
@@ -74,13 +77,12 @@ import java.util.stream.Stream;
  * Also see {@link GearData}, which focuses on getting/updating item data and NBT.
  */
 public final class GearHelper {
-    public static Tiers DEFAULT_DUMMY_TIER = Tiers.WOOD;
-
     private static final ResourceLocation REACH_MODIFIER_ID = SilentGear.getId("reach_modifier");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
     private static final float BROKEN_DESTROY_SPEED = 0.25f;
 
-    private GearHelper() {}
+    private GearHelper() {
+    }
 
     public static Optional<GearItem> getItem(ItemStack gear) {
         if (gear.getItem() instanceof GearItem) {
@@ -148,10 +150,12 @@ public final class GearHelper {
         return speed;
     }
 
+    @Deprecated(forRemoval = true)
     public static void addAttributeModifiers(ItemStack stack, ItemAttributeModifiers.Builder builder) {
         addAttributeModifiers(stack, builder, true);
     }
 
+    @Deprecated(forRemoval = true)
     public static void addAttributeModifiers(ItemStack stack, ItemAttributeModifiers.Builder builder, boolean addStandardMainHandMods) {
         if (addStandardMainHandMods) {
             builder
@@ -188,14 +192,6 @@ public final class GearHelper {
             var context = new TraitActionContext(null, inst, stack);
             inst.getTrait().onGetAttributeModifiers(context, builder);
         });
-    }
-
-    @Deprecated
-    public static boolean isValidSlot(ItemStack gear, String slot) {
-        if (gear.getItem() instanceof GearItem) {
-            return ((GearItem) gear.getItem()).isValidSlot(slot);
-        }
-        return false;
     }
 
     //endregion
@@ -400,7 +396,7 @@ public final class GearHelper {
         return new Item.Properties()
                 .stacksTo(1)
                 .durability(100)
-                .setNoRepair()
+                .setNoCombineRepair()
                 .component(SgDataComponents.GEAR_CONSTRUCTION, new GearConstructionData(PartList.empty(), false, 0, 0))
                 .component(SgDataComponents.GEAR_PROPERTIES, new GearPropertiesData(Map.of()));
     }
@@ -466,39 +462,14 @@ public final class GearHelper {
         return baseSpeed * (1f + totalModifier);
     }
 
-    public static boolean onBlockDestroyed(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!isBroken(stack) && stack.getItem() instanceof GearTool) {
-            int damage = ((GearTool) stack.getItem()).getDamageOnBlockBreak(stack, world, state, pos);
-            attemptDamage(stack, damage, entityLiving, EquipmentSlot.MAINHAND);
-        }
-//        GearStatistics.incrementStat(stack, GearStatistics.BLOCKS_MINED);
-
-        // TODO: Implement multi-break skill
-
-        return true;
-    }
-
-    public static boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return !isBroken(stack);
-    }
-
-    public static void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (!isBroken(stack) && stack.getItem() instanceof GearTool gearToolItem) {
-            var damageOnHitEntity = gearToolItem.getDamageOnHitEntity(stack, target, attacker);
-            attemptDamage(stack, damageOnHitEntity, attacker, EquipmentSlot.MAINHAND);
-        }
-    }
-
     // Formerly onUpdate
-    public static void inventoryTick(ItemStack stack, Level world, Entity entity, int itemSlot, boolean isSelected) {
-        var isEquipped = isSelected || itemSlot == 40; // include offhand slot
-        if (!world.isClientSide) {
-            @Nullable Player player = entity instanceof Player ? (Player) entity : null;
-            TraitHelper.tickTraits(world, player, stack, isEquipped);
-        }
+    public static void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        var isEquipped = slot != null;
+        @Nullable Player player = entity instanceof Player ? (Player) entity : null;
+        TraitHelper.tickTraits(level, player, stack, isEquipped);
     }
 
-    public static InteractionResult onItemUse(UseOnContext context) {
+    public static InteractionResult useOn(UseOnContext context) {
         InteractionResult ret = InteractionResult.PASS;
         for (var traitInstance : TraitHelper.getTraits(context.getItemInHand())) {
             InteractionResult result = traitInstance.getTrait().onItemUse(context, traitInstance.getLevel());

@@ -2,7 +2,6 @@ package net.silentchaos512.gear.core.component;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.property.GearProperty;
@@ -116,10 +115,12 @@ public record GearPropertiesData(
         Map<GearProperty<?, ?>, GearPropertyValue<?>> map = new LinkedHashMap<>();
         int count = buf.readVarInt();
         for (int i = 0; i < count; ++i) {
-            var property = SgRegistries.GEAR_PROPERTY.get(buf.readResourceLocation());
-            assert property != null;
-            var value = property.rawStreamCodec().decode(buf);
-            map.put(property, value);
+            var optionalReference = SgRegistries.GEAR_PROPERTY.get(buf.readResourceLocation());
+            if (optionalReference.isPresent()) {
+                GearProperty<?, ? extends GearPropertyValue<?>> property = optionalReference.get().value();
+                GearPropertyValue<?> value = property.rawStreamCodec().decode(buf);
+                map.put(property, value);
+            }
         }
         return new GearPropertiesData(map);
     }

@@ -1,24 +1,27 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTool;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.gear.GearProperties;
@@ -34,7 +37,7 @@ public class GearShearsItem extends ShearsItem implements GearTool {
     private final Supplier<GearType> gearType;
 
     public GearShearsItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties().durability(100));
+        super(GearHelper.getBaseItemProperties());
         this.gearType = gearType;
     }
 
@@ -44,40 +47,45 @@ public class GearShearsItem extends ShearsItem implements GearTool {
     }
 
     @Override
-    public Tool createToolProperties(GearPropertiesData properties) {
-        // Mimic ShearsItem. Adjust speed so that iron shears are identical to vanilla.
+    public Tool createToolProperties(ItemStack gear, GearPropertiesData properties) {
+        // Mimic ShearsItem. Adjust speed so that iron shears are identical to vanilla (iron = 6 / 6 = 1)
         final float adjustedSpeed = properties.getNumber(GearProperties.HARVEST_SPEED) / 6f;
+        var holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
         return new Tool(
                 List.of(
-                        Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 15f * adjustedSpeed),
-                        Tool.Rule.overrideSpeed(BlockTags.LEAVES, 15f * adjustedSpeed),
-                        Tool.Rule.overrideSpeed(BlockTags.WOOL, 5f * adjustedSpeed),
-                        Tool.Rule.overrideSpeed(List.of(Blocks.VINE, Blocks.GLOW_LICHEN), 2f * adjustedSpeed)
+                        Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15f * adjustedSpeed),
+                        Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.LEAVES), 15f * adjustedSpeed),
+                        Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.WOOL), 5f * adjustedSpeed),
+                        Tool.Rule.overrideSpeed(HolderSet.direct(Blocks.VINE.builtInRegistryHolder(), Blocks.GLOW_LICHEN.builtInRegistryHolder()), 2f * adjustedSpeed)
                 ),
                 1.0f,
-                1
+                1,
+                true
         );
     }
 
     @Override
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
+        if (!GearHelper.isBroken(stack)) {
+            return super.mineBlock(stack, level, state, pos, miningEntity);
+        }
+        return true;
+    }
+
+    @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
-        if (GearHelper.isBroken(stack)) {
-            return InteractionResult.PASS;
+        if (!GearHelper.isBroken(stack)) {
+            return super.interactLivingEntity(stack, playerIn, entity, hand);
         }
-        return super.interactLivingEntity(stack, playerIn, entity, hand);
+        return InteractionResult.PASS;
     }
 
     @Override
-    public int getDamageOnBlockBreak(ItemStack gear, Level world, BlockState state, BlockPos pos) {
-        if (!state.is(BlockTags.FIRE)) {
-            return 1;
+    public InteractionResult useOn(UseOnContext context) {
+        if (!GearHelper.isBroken(context.getItemInHand())) {
+            return super.useOn(context);
         }
-        return GearTool.super.getDamageOnBlockBreak(gear, world, state, pos);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -88,26 +96,8 @@ public class GearShearsItem extends ShearsItem implements GearTool {
     }
 
     @Override
-    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantmentValue(stack);
-    }
-
-    @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
-
-    @Override
     public void setDamage(ItemStack stack, int damage) {
-        super.setDamage(stack, GearHelper.calcDamageClamped(stack, damage));
-        if (GearHelper.isBroken(stack)) {
-            GearData.recalculateGearData(stack, null);
-        }
+        GearHelper.setDamage(stack, damage, super::setDamage);
     }
 
     @Override
@@ -126,23 +116,8 @@ public class GearShearsItem extends ShearsItem implements GearTool {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hurtEnemy(stack, target, attacker);
-    }
-
-    @Override
-    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        GearHelper.postHurtEnemy(stack, target, attacker);
-    }
-
-    @Override
-    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        GearHelper.inventoryTick(stack, level, entity, slot);
     }
 
     @Override

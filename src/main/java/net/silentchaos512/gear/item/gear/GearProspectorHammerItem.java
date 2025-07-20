@@ -37,7 +37,7 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
         Player player = context.getPlayer();
         Direction face = context.getClickedFace();
         if (range <= 0 || player == null || face.getAxis() == Direction.Axis.Y) {
-            return GearHelper.onItemUse(context);
+            return GearHelper.useOn(context);
         }
 
         if (context.getLevel().isClientSide || !(player instanceof ServerPlayer)) {
@@ -47,10 +47,10 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
         Set<BlockState> matches = getTargetedBlocks(context, range, face);
 
         // List the ores found in chat, if any
-        player.sendSystemMessage(listFoundBlocks(matches));
+        player.displayClientMessage(listFoundBlocks(matches), false);
 
         GearHelper.attemptDamage(context.getItemInHand(), 2, player, context.getHand());
-        player.getCooldowns().addCooldown(this, 20);
+        player.getCooldowns().addCooldown(context.getItemInHand(), 20);
 
         return InteractionResult.SUCCESS;
     }

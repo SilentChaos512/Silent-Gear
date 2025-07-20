@@ -59,20 +59,6 @@ public class SgDataComponents {
             builder -> builder
                     .networkSynchronized(GearPropertyMap.STREAM_CODEC)
     );
-    @Deprecated // Remove in 1.21.2
-    public static final Supplier<DataComponentType<String>> GEAR_MODEL_KEY = REGISTRAR.registerComponentType(
-            "model_key",
-            builder -> builder
-                    .persistent(Codec.STRING)
-                    .networkSynchronized(ByteBufCodecs.STRING_UTF8)
-    );
-    @Deprecated // Remove in 1.21.2
-    public static final Supplier<DataComponentType<Integer>> GEAR_MODEL_INDEX = REGISTRAR.registerComponentType(
-            "model_index",
-            builder -> builder
-                    .persistent(Codec.INT)
-                    .networkSynchronized(ByteBufCodecs.VAR_INT)
-    );
     public static final Supplier<DataComponentType<Boolean>> GEAR_IS_EXAMPLE = REGISTRAR.registerComponentType(
             "is_example",
             builder -> builder

@@ -19,7 +19,7 @@ public class GearPaxelItem extends GearPickaxeItem {
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet() {
+    public TagKey<Block> getToolBlockSet(ItemStack gear) {
         return SgTags.Blocks.MINEABLE_WITH_PAXEL;
     }
 
@@ -34,7 +34,7 @@ public class GearPaxelItem extends GearPickaxeItem {
         if (GearHelper.isBroken(context.getItemInHand()) || context.getPlayer() != null && context.getPlayer().isCrouching())
             return InteractionResult.PASS;
         // Try to let traits do their thing first
-        InteractionResult result = GearHelper.onItemUse(context);
+        InteractionResult result = GearHelper.useOn(context);
         // Other vanilla actions (strip, scrape, wax off)
         if (result == InteractionResult.PASS) {
             return GearHelper.useAndCheckBroken(context, Items.NETHERITE_AXE::useOn);

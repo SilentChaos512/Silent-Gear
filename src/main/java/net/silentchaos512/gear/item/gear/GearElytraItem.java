@@ -2,39 +2,42 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.level.Level;
-import net.neoforged.fml.ModList;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.item.equipment.Equippable;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.item.GearArmor;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.compat.caelus.CaelusCompat;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
-import net.silentchaos512.gear.util.*;
+import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.TraitHelper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearElytraItem extends ElytraItem implements GearArmor {
+public class GearElytraItem extends BasicGearItem implements GearArmor {
     private static final Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableSet.of(
             PartTypes.MAIN.get(),
             PartTypes.BINDING.get()
@@ -53,8 +56,28 @@ public class GearElytraItem extends ElytraItem implements GearArmor {
     }
 
     @Override
-    public boolean isValidSlot(String slot) {
-        return EquipmentSlot.CHEST.getName().equalsIgnoreCase(slot) || "back".equalsIgnoreCase(slot);
+    public void onRecalculatePost(ItemStack gear, @Nullable Player player, GearPropertiesData finalProperties) {
+        super.onRecalculatePost(gear, player, finalProperties);
+        gear.set(DataComponents.GLIDER, Unit.INSTANCE);
+        gear.set(
+                DataComponents.EQUIPPABLE,
+                Equippable.builder(EquipmentSlot.CHEST)
+                        .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA)
+                        .setAsset(EquipmentAssets.ELYTRA)
+                        .setDamageOnHurt(false)
+                        .build()
+        );
+
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        float armor = GearData.getProperties(gear).getNumber(GearProperties.ARMOR);
+        if (armor > 0) {
+            var armorType = ArmorType.CHESTPLATE;
+            var equipmentSlotGroup = EquipmentSlotGroup.bySlot(armorType.getSlot());
+            var id = ResourceLocation.withDefaultNamespace("armor." + armorType.getName());
+            builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+        }
+        this.buildAttributes(gear, builder);
+        gear.set(DataComponents.ATTRIBUTE_MODIFIERS, builder.build());
     }
 
     @Override
@@ -108,58 +131,7 @@ public class GearElytraItem extends ElytraItem implements GearArmor {
     }
 
     @Override
-    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-    }
-
-    @Override
     public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
         return TraitHelper.hasTrait(stack, Const.Traits.BRILLIANT);
-    }
-
-    @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
-        var builder = ItemAttributeModifiers.builder();
-        addAttributes(stack, builder, true);
-        return builder.build();
-    }
-
-    public void addAttributes(ItemStack stack, ItemAttributeModifiers.Builder builder, boolean includeArmor) {
-        if (GearHelper.isBroken(stack)) {
-            return;
-        }
-
-        float armor = GearData.getProperties(stack).getNumber(GearProperties.ARMOR);
-        if (armor > 0 && includeArmor) {
-            var armorType = ArmorItem.Type.CHESTPLATE;
-            var equipmentSlotGroup = EquipmentSlotGroup.bySlot(armorType.getSlot());
-            var id = ResourceLocation.withDefaultNamespace("armor." + armorType.getName());
-            builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
-        }
-        GearHelper.addAttributeModifiers(stack, builder, false);
-        CaelusCompat.tryAddFlightAttribute(builder);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
-        if (!ModList.get().isLoaded(Const.CAELUS)) {
-            tooltip.add(TextUtil.misc("caelusNotInstalled").withStyle(ChatFormatting.RED));
-        }
-        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return GearHelper.getBarWidth(stack);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return GearHelper.getBarColor(stack);
     }
 }

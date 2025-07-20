@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
@@ -44,30 +46,33 @@ public class GearMacheteItem extends GearSwordItem implements BreakEventHandler,
         float axeSpeed = GearHelper.getDestroySpeed(stack, state);
         float speed = Math.max(axeSpeed, super.getDestroySpeed(stack, state));
         // Slower on materials normally harvested with axes
-        if (GearHelper.isCorrectToolForDrops(stack, state, getToolBlockSet()))
+        if (GearHelper.isCorrectToolForDrops(stack, state, getToolBlockSet(stack)))
             return speed * 0.4f;
         return speed;
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet() {
+    public TagKey<Block> getToolBlockSet(ItemStack gear) {
         return SgTags.Blocks.MINEABLE_WITH_MACHETE;
     }
 
     @Override
-    public Tool createToolProperties(GearPropertiesData properties) {
+    public Tool createToolProperties(ItemStack gear, GearPropertiesData properties) {
         // Works like both a sword and an axe
         var harvestSpeed = properties.getNumber(GearProperties.HARVEST_SPEED);
         var harvestTier = properties.getOrDefault(GearProperties.HARVEST_TIER, new HarvestTierPropertyValue(HarvestTier.ZERO));
+        var holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
         return new Tool(
                 List.of(
-                        Tool.Rule.deniesDrops(harvestTier.value().incorrectForTool()),
-                        Tool.Rule.minesAndDrops(getToolBlockSet(), harvestSpeed),
-                        Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 15.0F),
-                        Tool.Rule.overrideSpeed(BlockTags.SWORD_EFFICIENT, 1.5F)
+                        Tool.Rule.deniesDrops(holderGetter.getOrThrow(harvestTier.value().incorrectForTool())),
+                        Tool.Rule.minesAndDrops(holderGetter.getOrThrow(getToolBlockSet(gear)), harvestSpeed),
+                        Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F),
+                        Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
+                        Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f)
                 ),
                 1.0F,
-                2
+                2,
+                false
         );
     }
 }

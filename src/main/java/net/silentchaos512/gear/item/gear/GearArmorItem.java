@@ -1,7 +1,5 @@
 package net.silentchaos512.gear.item.gear;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -14,6 +12,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -31,32 +30,20 @@ import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GearArmorItem extends Item implements GearArmor {
-    // Caches armor colors by model key to speed up armor rendering
-    private static final Cache<String, Integer> ARMOR_COLORS = CacheBuilder.newBuilder()
-            .maximumSize(1000)
-            .expireAfterWrite(5, TimeUnit.MINUTES)
-            .build();
-
+public class GearArmorItem extends BasicGearItem implements GearArmor {
     private final Supplier<GearType> gearType;
 
-    public GearArmorItem(Supplier<GearType> gearType, ArmorItem.Type armorType) {
-        super(SgArmorMaterials.DUMMY, armorType, GearHelper.getBaseItemProperties());
+    public GearArmorItem(Supplier<GearType> gearType, ArmorType armorType) {
+        super(GearHelper.getBaseItemProperties());
         this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
         return this.gearType.get();
-    }
-
-    @Override
-    public boolean isValidSlot(String slot) {
-        return this.getType().getSlot().getName().equalsIgnoreCase(slot);
     }
 
     //region Stats and attributes
@@ -142,23 +129,7 @@ public class GearArmorItem extends Item implements GearArmor {
             onBroken.accept(item);
         });
     }
-
-    @Override
-    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantmentValue(stack);
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        var equipped = itemSlot >= 36 && itemSlot <= 39; // armor slots
-        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, equipped);
-    }
-
+    
     @Override
     public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
         return TraitHelper.hasTrait(stack, Const.Traits.BRILLIANT);
@@ -200,26 +171,6 @@ public class GearArmorItem extends Item implements GearArmor {
             return part.getColor(stack);
         }
         return Color.VALUE_WHITE;
-    }
-
-    @Override
-    public boolean isFoil(ItemStack stack) {
-        return GearClientHelper.hasEffect(stack);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return GearHelper.getBarWidth(stack);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return GearHelper.getBarColor(stack);
     }
 
     //endregion

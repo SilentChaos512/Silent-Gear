@@ -26,11 +26,6 @@ public class GearSlingshotItem extends GearBowItem {
     }
 
     @Override
-    public float getArrowVelocity(ItemStack stack, int charge) {
-        return super.getArrowVelocity(stack, charge);
-    }
-
-    @Override
     public Predicate<ItemStack> getAllSupportedProjectiles() {
         return stack -> stack.getItem() instanceof ISlingshotAmmo;
     }
@@ -41,8 +36,9 @@ public class GearSlingshotItem extends GearBowItem {
         AbstractArrow projectile = item.createArrow(pLevel, pAmmo, pShooter, pWeapon);
         if (pIsCrit) {
             projectile.setCritArrow(true);
-            var rangedDamage = GearData.getProperties(pWeapon).getNumber(GearProperties.RANGED_DAMAGE);
-            projectile.setBaseDamage(projectile.getBaseDamage() - 1 + rangedDamage);
+            var ammoDamage = getArrowDamage(pAmmo);
+            var slingshotDamage = GearData.getProperties(pWeapon).getNumber(GearProperties.RANGED_DAMAGE);
+            projectile.setBaseDamage(ammoDamage + slingshotDamage);
         }
 
         return customArrow(projectile, pAmmo, pWeapon);

@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Main gear part items being "merged" into an example part item
+
 ## [1.21.1-4.0.25] - 2025-07-12
 ### Added
 - A new trait effect, "silentgear:negates_damage". On armor, it reduces damage taken from specific damage types determined by a tag. [#821]

@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Position;
-import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -12,6 +12,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
@@ -19,9 +20,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.TridentItem;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -39,7 +38,6 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -57,28 +55,6 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     }
 
     //region Standard tool overrides
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
-    }
-
-    @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
-        var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder);
-        return builder.build();
-    }
-
-    @Override
-    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantmentValue(stack);
-    }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
@@ -99,23 +75,16 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hurtEnemy(stack, target, attacker);
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
+        if (!GearHelper.isBroken(stack)) {
+            return super.mineBlock(stack, level, state, pos, miningEntity);
+        }
+        return true;
     }
 
     @Override
-    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        GearHelper.postHurtEnemy(stack, target, attacker);
-    }
-
-    @Override
-    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        GearHelper.inventoryTick(stack, level, entity, slot);
     }
 
     @Override
@@ -125,7 +94,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        return GearHelper.onItemUse(context);
+        return GearHelper.useOn(context);
     }
 
     @Override
@@ -161,11 +130,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     	mult = 1 + (mult-1)/4;
     	return GearHelper.getAttackDamageModifier(stack) * mult;
     }
-    
-    private static boolean isTooDamagedToUse(ItemStack stack) {
-        return stack.getDamageValue() >= stack.getMaxDamage() - 1;
-    }
-    
+
     @Override
     public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
         GearThrownTrident throwntrident = new GearThrownTrident(level, pos.x(), pos.y(), pos.z(), stack.copyWithCount(1));
@@ -174,20 +139,21 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof Player player) {
             int i = this.getUseDuration(stack, entityLiving) - timeLeft;
             if (i >= getUseTimeRequiredToThrow(stack)) {
                 float f = EnchantmentHelper.getTridentSpinAttackStrength(stack, player);
                 if (!(f > 0.0F) || player.isInWaterOrRain()) {
-                    if (!isTooDamagedToUse(stack)) {
+                    if (!GearHelper.isBroken(stack)) {
                         Holder<SoundEvent> holder = EnchantmentHelper.pickHighestLevel(stack, EnchantmentEffectComponents.TRIDENT_SOUND)
                             .orElse(SoundEvents.TRIDENT_THROW);
-                        if (!level.isClientSide) {
+                        player.awardStat(Stats.ITEM_USED.get(this));
+                        if (level instanceof ServerLevel serverLevels) {
                             stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(entityLiving.getUsedItemHand()));
                             if (f == 0.0F) {
-                            	GearThrownTrident throwntrident = new GearThrownTrident(level, player, stack);
-                            	float vel = Mth.clamp(2.5F*getProjectileSpeedMultiplier(stack), 0.0F, 4.0F); //capped speed due to client sync issue
+                                GearThrownTrident throwntrident = new GearThrownTrident(level, player, stack);
+                                float vel = Mth.clamp(2.5F*getProjectileSpeedMultiplier(stack), 0.0F, 4.0F); //capped speed due to client sync issue
                                 throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, vel, 1.0F);
                                 if (player.hasInfiniteMaterials()) {
                                     throwntrident.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
@@ -201,7 +167,6 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
                             }
                         }
 
-                        player.awardStat(Stats.ITEM_USED.get(this));
                         if (f > 0.0F) {
                         	f = f * getProjectileSpeedMultiplier(stack);
                             float f7 = player.getYRot();
@@ -226,6 +191,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
                 }
             }
         }
+        return false;
     }
 
     //endregion

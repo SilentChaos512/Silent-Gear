@@ -6,6 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -13,24 +14,39 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.silentchaos512.gear.api.item.BreakEventHandler;
+import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.setup.SgTags;
+import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.function.Supplier;
 
-public class GearSickleItem extends GearDiggerItem implements BreakEventHandler {
+public class GearSickleItem extends BasicGearItem implements GearDiggerTool, BreakEventHandler {
     private static final int DURABILITY_USAGE = 3;
     private static final int BREAK_RANGE = 4;
     private static final int HARVEST_RANGE = 2;
 
     public GearSickleItem(Supplier<GearType> gearType) {
-        super(gearType, SgTags.Blocks.MINEABLE_WITH_SICKLE, GearHelper.getBaseItemProperties());
+        super(GearHelper.getBaseItemProperties());
+    }
+
+    @Override
+    public GearType getGearType() {
+        return GearTypes.SICKLE.get();
+    }
+
+    @Override
+    public TagKey<Block> getToolBlockSet(ItemStack gear) {
+        return SgTags.Blocks.MINEABLE_WITH_SICKLE;
     }
 
     //region Sickle harvesting
@@ -123,7 +139,7 @@ public class GearSickleItem extends GearDiggerItem implements BreakEventHandler 
             return InteractionResult.SUCCESS;
         }
 
-        return GearHelper.onItemUse(context);
+        return GearHelper.useOn(context);
     }
 
     @Override
@@ -137,7 +153,7 @@ public class GearSickleItem extends GearDiggerItem implements BreakEventHandler 
         Level world = player.level();
         BlockState state = world.getBlockState(pos);
 
-        if (!state.is(getToolBlockSet())) return;
+        if (!state.is(getToolBlockSet(sickle))) return;
 
         int blocksBroken = 1;
 
@@ -193,11 +209,6 @@ public class GearSickleItem extends GearDiggerItem implements BreakEventHandler 
         }
 
         return true;
-    }
-
-    @Override
-    public int getDamageOnBlockBreak(ItemStack gear, Level world, BlockState state, BlockPos pos) {
-        return DURABILITY_USAGE;
     }
 
     //endregion

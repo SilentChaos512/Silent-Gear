@@ -1,11 +1,12 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -13,27 +14,23 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearRangedWeapon;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
     private static final int MIN_CHARGE_TIME = 5;
     private static final int MAX_CHARGE_TIME = 50;
-
-    private boolean startSoundPlayed = false;
-    private boolean midLoadSoundPlayed = false;
 
     private final Supplier<GearType> gearType;
 
@@ -51,8 +48,9 @@ public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
     protected Projectile createProjectile(Level pLevel, LivingEntity pShooter, ItemStack pWeapon, ItemStack pAmmo, boolean pIsCrit) {
         var projectile = super.createProjectile(pLevel, pShooter, pWeapon, pAmmo, pIsCrit);
         if (projectile instanceof AbstractArrow arrow) {
-            var rangedDamage = GearData.getProperties(pWeapon).getNumber(GearProperties.RANGED_DAMAGE);
-            arrow.setBaseDamage(arrow.getBaseDamage() - 1 + rangedDamage);
+            var arrowDamage = getArrowDamage(pAmmo);
+            var crossbowDamage = GearData.getProperties(pWeapon).getNumber(GearProperties.RANGED_DAMAGE);
+            arrow.setBaseDamage(arrowDamage + crossbowDamage);
         }
         return projectile;
     }
@@ -65,17 +63,28 @@ public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (GearHelper.isBroken(itemstack)) {
-            return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
+            return InteractionResult.PASS;
         }
         return super.use(level, player, hand);
     }
 
-    public static int getChargeTime(ItemStack stack) {
-        float baseTime = 25 / GearData.getProperties(stack).getNumber(GearProperties.DRAW_SPEED);
-        return Math.round(Mth.clamp(baseTime, MIN_CHARGE_TIME, MAX_CHARGE_TIME));
+    // FIXME: This isn't actually used anywhere. Maybe we could do a mixin to edit the version in CrossbowItem?
+    public static int getChargeDuration(ItemStack stack, LivingEntity shooter) {
+        var drawSpeed = GearData.getProperties(stack).getNumber(GearProperties.DRAW_SPEED);
+        float f = EnchantmentHelper.modifyCrossbowChargingTime(stack, shooter, 1.25F / drawSpeed);
+        return Mth.floor(f * 20.0F);
+    }
+
+    private static float getPowerForTime(int timeLeft, ItemStack stack, LivingEntity shooter) {
+        float f = (float)timeLeft / getChargeDuration(stack, shooter);
+        if (f > 1.0F) {
+            f = 1.0F;
+        }
+
+        return f;
     }
 
     //endregion
@@ -83,26 +92,10 @@ public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
     //region Standard tool overrides
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, tooltipContext, tooltip, flagIn);
-        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
-    }
-
-    @Override
     public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         var builder = ItemAttributeModifiers.builder();
         GearHelper.addAttributeModifiers(stack, builder, false);
         return builder.build();
-    }
-
-    @Override
-    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantmentValue(stack);
     }
 
     @Override
@@ -126,8 +119,8 @@ public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        GearHelper.inventoryTick(stack, level, entity, slot);
     }
 
     @Override
