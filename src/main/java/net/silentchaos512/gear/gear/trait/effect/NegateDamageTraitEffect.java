@@ -51,7 +51,7 @@ public class NegateDamageTraitEffect extends TraitEffect {
     public Collection<String> getExtraWikiLines() {
         return List.of(
                 String.format(
-                        "Reduces \"%s\" type damage by %d%% per level per armor piece",
+                        "  - Reduces \"%s\" type damage by %d%% per level per armor piece",
                         this.damageType.location(),
                         (int) (this.negatedDamageScale * 100)
                 )

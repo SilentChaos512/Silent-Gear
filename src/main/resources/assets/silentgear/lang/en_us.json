@@ -973,6 +973,7 @@
   "trait.silentgear.hard": "Hard",
   "trait.silentgear.hard.desc": "Increases harvest speed or decreases ranged damage as item is damaged",
   "trait.silentgear.heat_resistant": "Heat-Resistant",
+  "trait.silentgear.heat_resistant.desc": "Reduces fire damage",
   "trait.silentgear.heavy": "Heavy",
   "trait.silentgear.heavy.desc": "Armor decreases movement speed",
   "trait.silentgear.holy": "Holy",

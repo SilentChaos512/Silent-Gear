@@ -72,12 +72,12 @@ public class TraitsProvider extends TraitsProviderBase {
         );
         ret.add(TraitBuilder.of(Const.Traits.JABBERWOCKY, 1)
                 .withGearTypeCondition(GearTypes.HARVEST_TOOL)
-                .extraWikiLines("Something may happen if you mine certain blocks with this"));
+                .extraWikiLines("  - Something may happen if you mine certain blocks with this"));
         ret.add(TraitBuilder.of(Const.Traits.LUSTROUS, 5)
                 .withGearTypeCondition(GearTypes.HARVEST_TOOL));
         ret.add(TraitBuilder.of(Const.Traits.MAGMATIC, 1)
                 .withGearTypeCondition(GearTypes.HARVEST_TOOL)
-                .extraWikiLines("Smelted drops are not affected by fortune to prevent item duplication"));
+                .extraWikiLines("  - Smelted drops are not affected by fortune to prevent item duplication"));
         ret.add(TraitBuilder.of(Const.Traits.MAGNETIC, 5)
                 .effects(
                         new ItemMagnetTraitEffect(
@@ -99,7 +99,7 @@ public class TraitsProvider extends TraitsProviderBase {
                 .withGearTypeCondition(GearTypes.HELMET, GearTypes.CURIO));
         ret.add(TraitBuilder.of(Const.Traits.VOID_WARD, 1)
                 .withGearTypeCondition(GearTypes.ARMOR)
-                .extraWikiLines("When void damage is taken, the player is launched upward and given a levitation and slow falling effect"));
+                .extraWikiLines("  - When void damage is taken, the player is launched upward and given a levitation and slow falling effect"));
         ret.add(TraitBuilder.of(Const.Traits.WIDEN, 3)
                 .withGearTypeCondition(GearTypes.HARVEST_TOOL)
                 .extraWikiLines("  - Adds the trait level to the effect radius",
