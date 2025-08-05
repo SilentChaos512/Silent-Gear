@@ -32,7 +32,7 @@ public class FireproofTraitEffect extends TraitEffect {
 
     @Override
     public Collection<String> getExtraWikiLines() {
-        return List.of("The item cannot be destroyed by fire or lava");
+        return List.of("  - The item cannot be destroyed by fire or lava");
     }
 
     @Override

@@ -23,6 +23,7 @@ import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
+import net.silentchaos512.gear.api.traits.TraitEffectType;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -46,7 +47,8 @@ public final class TraitsCommand {
             SharedSuggestionProvider.suggestResource(SgRegistries.TRAIT.stream().map(SgRegistries.TRAIT::getKey), builder);
     private static final String TRAITS_DATA_PATH = "https://github.com/SilentChaos512/Silent-Gear/tree/1.21.x/src/generated/resources/data/silentgear/silentgear_traits/";
 
-    private TraitsCommand() {}
+    private TraitsCommand() {
+    }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_traits")
@@ -129,23 +131,16 @@ public final class TraitsCommand {
             writer.write("The following mods and data packs have added traits to the output. Running the dump command yourself may produce different results.\n\n");
             writer.write(getDataSources() + "\n");
 
-            // FIXME: Replace with a list of trait effects
             writer.write("## Trait Effects\n\n");
-            writer.write("This part of the command was not coded! Please bug SilentChaos512 to fix it. :)\n");
-            /*writer.write("## Trait Types\n\n");
-            writer.write("These are trait serializers. You can define custom instances of these types using data packs.\n");
-            writer.write("Code for traits and their serializers can be found in `net.silentchaos512.gear.gear.trait`.\n\n");
-            writer.write("Note that \"simple\" traits are often used where custom code is required.\n");
-            writer.write("They are not especially useful when just defined by a data pack.\n\n");
-
-            for (ITraitSerializer<?> serializer : TraitSerializers.getSerializers()) {
-                String typeName = serializer instanceof Trait.Serializer ? ((Trait.Serializer) serializer).getTypeName() : "";
-                writer.write("- `" + serializer.getName() + "`");
-                if (!typeName.isEmpty()) {
-                    writer.write(" _(" + typeName + ")_");
-                }
-                writer.write("\n");
-            }*/
+            writer.write("""
+                    Traits can be assigned any number of effects. Each effect type has its own codec (JSON structure)\
+                     and associated code that causes the trait it is assigned to to do specific things. Mods could\
+                     potentially add new effect types. This is a list of all effect types registered in this modded\
+                     instance:
+                    """);
+            for (TraitEffectType<?> type : SgRegistries.TRAIT_EFFECT_TYPE) {
+                writer.write(String.format("- `%s` - %s\n", SgRegistries.TRAIT_EFFECT_TYPE.getKey(type), type.getWikiDescription()));
+            }
 
             writer.write("\n## List of Traits");
 
@@ -178,13 +173,14 @@ public final class TraitsCommand {
                     writer.write("- Effects:\n");
                 }
                 for (var effect : trait.getEffects()) {
-                    writer.write("  - `" + SgRegistries.TRAIT_EFFECT_TYPE.getKey(effect.type()) + "`");
+                    writer.write("  - `" + SgRegistries.TRAIT_EFFECT_TYPE.getKey(effect.type()) + "`\n");
+                    // TODO: getExtraWikiLines would be better off with some kind of indented list builder
+                    //  Consider changing TextListBuilder to have custom bullet settings and pass one in here.
+                    //  Maybe create a more flexible IndentedListBuilder that can handle Strings as well?
+                    for (String extraWikiLine : effect.getExtraWikiLines()) {
+                        writer.write("  " + extraWikiLine + "\n");
+                    }
                 }
-
-                /*Collection<String> cancelsWithSet = trait.getCancelsWithSet().stream().map(s -> "`" + s + "`").collect(Collectors.toList());
-                if (!cancelsWithSet.isEmpty()) {
-                    writer.write("- Cancels With: " + String.join(", ", cancelsWithSet) + "\n");
-                }*/
 
                 Collection<String> wikiLines = trait.getExtraWikiLines();
                 if (!wikiLines.isEmpty()) {
@@ -230,7 +226,7 @@ public final class TraitsCommand {
                 Collection<TraitInstance> traits = instance.getTraits(PartGearKey.of(GearTypes.ALL.get(), partType));
 
                 for (TraitInstance inst : traits) {
-                    if (inst.getTrait().equals(trait)) {
+                    if (inst.getTraitId().equals(SgRegistries.TRAIT.getKey(trait))) {
                         typesWithTrait.add(partType);
                         break;
                     }
