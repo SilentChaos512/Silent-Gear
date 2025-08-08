@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public final class ColorUtils {
     private ColorUtils() {
@@ -109,6 +110,10 @@ public final class ColorUtils {
         }
 
         return 0xFFFFFFFF;
+    }
+
+    public static int getBlendedColorForPartInGear(ItemStack stack, Supplier<PartType> partType) {
+        return getBlendedColorForPartInGear(stack, partType.get());
     }
 
     public static int getBlendedColorForPartInGear(ItemStack stack, PartType partType) {

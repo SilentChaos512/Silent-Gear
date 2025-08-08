@@ -145,12 +145,6 @@ dependencies {
     dependencies {
         implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
     }
-
-    // Caelus
-    /*dependencies {
-        runtimeOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}+${minecraft_version}"
-        compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}+${minecraft_version}:api"
-    }*/
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

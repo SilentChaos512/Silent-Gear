@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.setup;
 
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
@@ -50,10 +50,10 @@ public class GearItemSets {
     public static final GearItemSet<GearShearsItem> SHEARS = set(GearTypes.SHEARS, "shear_blades", GearShearsItem::new);
     public static final GearItemSet<GearFishingRodItem> FISHING_ROD = set(GearTypes.FISHING_ROD, "fishing_reel_and_hook", GearFishingRodItem::new);
 
-    public static final GearItemSet<GearArmorItem> HELMET = set(GearTypes.HELMET, "helmet_plates", gt -> new GearArmorItem(gt, ArmorItem.Type.HELMET));
-    public static final GearItemSet<GearArmorItem> CHESTPLATE = set(GearTypes.CHESTPLATE, "chestplate_plates", gt -> new GearArmorItem(gt, ArmorItem.Type.CHESTPLATE));
-    public static final GearItemSet<GearArmorItem> LEGGINGS = set(GearTypes.LEGGINGS, "legging_plates", gt -> new GearArmorItem(gt, ArmorItem.Type.LEGGINGS));
-    public static final GearItemSet<GearArmorItem> BOOTS = set(GearTypes.BOOTS, "boot_plates", gt -> new GearArmorItem(gt, ArmorItem.Type.BOOTS));
+    public static final GearItemSet<GearArmorItem> HELMET = set(GearTypes.HELMET, "helmet_plates", gt -> new GearArmorItem(gt, ArmorType.HELMET));
+    public static final GearItemSet<GearArmorItem> CHESTPLATE = set(GearTypes.CHESTPLATE, "chestplate_plates", gt -> new GearArmorItem(gt, ArmorType.CHESTPLATE));
+    public static final GearItemSet<GearArmorItem> LEGGINGS = set(GearTypes.LEGGINGS, "legging_plates", gt -> new GearArmorItem(gt, ArmorType.LEGGINGS));
+    public static final GearItemSet<GearArmorItem> BOOTS = set(GearTypes.BOOTS, "boot_plates", gt -> new GearArmorItem(gt, ArmorType.BOOTS));
     public static final GearItemSet<GearElytraItem> ELYTRA = set(GearTypes.ELYTRA, "elytra_wings", GearElytraItem::new);
 
     public static final GearItemSet<GearCurioItem> RING = set(GearTypes.RING, "ring_shank", gt -> new GearCurioItem(gt, "ring", SgItems.unstackableProps()));

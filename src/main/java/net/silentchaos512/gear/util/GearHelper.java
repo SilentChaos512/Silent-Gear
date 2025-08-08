@@ -465,6 +465,10 @@ public final class GearHelper {
     // Formerly onUpdate
     public static void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
         var isEquipped = slot != null;
+        inventoryTick(stack, level, entity, isEquipped);
+    }
+
+    public static void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, boolean isEquipped) {
         @Nullable Player player = entity instanceof Player ? (Player) entity : null;
         TraitHelper.tickTraits(level, player, stack, isEquipped);
     }

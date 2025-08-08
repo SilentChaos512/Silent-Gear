@@ -12,6 +12,7 @@ import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.Const;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -74,5 +75,10 @@ public record GearConstructionData(
             return CompoundPartItem.getPrimaryMaterial(part.getItem());
         }
         return null;
+    }
+
+    public MaterialInstance getMainTextureMaterialOrPlaceholder() {
+        var material = getMainTextureMaterial();
+        return material != null ? material : MaterialInstance.of(Const.Materials.EXAMPLE);
     }
 }

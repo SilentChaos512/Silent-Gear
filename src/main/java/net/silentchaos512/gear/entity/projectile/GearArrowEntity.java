@@ -20,13 +20,11 @@ import net.silentchaos512.gear.util.GearData;
 import javax.annotation.Nullable;
 
 public class GearArrowEntity extends AbstractArrow {
-	
     private static final EntityDataAccessor<Integer> ID_COLOR_ROD = SynchedEntityData.defineId(GearArrowEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ID_COLOR_TIP = SynchedEntityData.defineId(GearArrowEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ID_COLOR_FLETCHING = SynchedEntityData.defineId(GearArrowEntity.class, EntityDataSerializers.INT);
-    
-	private ItemStack arrowStack = ItemStack.EMPTY;
-    
+
+    private ItemStack arrowStack = ItemStack.EMPTY;
 
     public GearArrowEntity(EntityType<? extends GearArrowEntity> entityType, Level level) {
         super(entityType, level);
@@ -58,30 +56,32 @@ public class GearArrowEntity extends AbstractArrow {
         builder.define(ID_COLOR_TIP, -1);
         builder.define(ID_COLOR_FLETCHING, -1);
     }
-    
+
     private void setColors(ItemStack stack) {
-    	int rodColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
-    	int tipColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
-    	int fletchingColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.FLETCHING.get());
-    	this.entityData.set(ID_COLOR_ROD, rodColor);
-    	this.entityData.set(ID_COLOR_TIP, tipColor);
-    	this.entityData.set(ID_COLOR_FLETCHING, fletchingColor);
-    }
-    
-    public int getRodColor() {
-    	return this.entityData.get(ID_COLOR_ROD);
-    }
-    public int getTipColor() {
-    	return this.entityData.get(ID_COLOR_TIP);
-    }
-    public int getFletchingColor() {
-    	return this.entityData.get(ID_COLOR_FLETCHING);
+        int rodColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+        int tipColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+        int fletchingColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.FLETCHING.get());
+        this.entityData.set(ID_COLOR_ROD, rodColor);
+        this.entityData.set(ID_COLOR_TIP, tipColor);
+        this.entityData.set(ID_COLOR_FLETCHING, fletchingColor);
     }
 
-	@Override
-	protected ItemStack getDefaultPickupItem() {
-		return new ItemStack(GearType.getItem(GearTypes.ARROW.get()));
-	}
+    public int getRodColor() {
+        return this.entityData.get(ID_COLOR_ROD);
+    }
+
+    public int getTipColor() {
+        return this.entityData.get(ID_COLOR_TIP);
+    }
+
+    public int getFletchingColor() {
+        return this.entityData.get(ID_COLOR_FLETCHING);
+    }
+
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return new ItemStack(GearType.getItem(GearTypes.ARROW.get()));
+    }
 
     public void setArrowStack(ItemStack stack) {
         this.arrowStack = stack.copyWithCount(1);
@@ -93,5 +93,5 @@ public class GearArrowEntity extends AbstractArrow {
         float accuracy = GearData.getProperties(arrowStack).getNumber(GearProperties.PROJECTILE_ACCURACY);
         super.shootFromRotation(shooter, x, y, z, velocity * speedMulti, accuracy > 0f ? inaccuracy / accuracy : inaccuracy);
     }
-	
+
 }

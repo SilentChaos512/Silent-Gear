@@ -20,6 +20,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.DyeColor;
@@ -54,7 +55,7 @@ import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.NumberPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.item.gear.GearArmorItem;
+import net.silentchaos512.gear.setup.SgAttributes;
 import net.silentchaos512.gear.setup.SgCriteriaTriggers;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -130,11 +131,18 @@ public final class GearEvents {
             ItemStack stack = event.getEntity().getItemBySlot(slot);
             if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
                 GearHelper.attemptDamage(stack, 2, event.getEntity(), slot);
-                if (GearHelper.isBroken(stack)) {
-                    event.getEntity().sendSystemMessage(TextUtil.translate("trait", "flammable.itemDestroyed", stack.getHoverName()));
-                    event.getEntity().onEquippedItemBroken(stack.getItem(), slot);
-                    stack.shrink(1);
-                }
+                checkAndDisplayFlammableItemBroken(event, slot, stack);
+            }
+        }
+    }
+
+    private static void checkAndDisplayFlammableItemBroken(LivingDamageEvent.Post event, EquipmentSlot slot, ItemStack stack) {
+        if (GearHelper.isBroken(stack)) {
+            event.getEntity().onEquippedItemBroken(stack.getItem(), slot);
+            stack.shrink(1);
+            if (event.getEntity() instanceof Player player) {
+                var text = TextUtil.translate("trait", "flammable.itemDestroyed", stack.getHoverName());
+                player.displayClientMessage(text, false);
             }
         }
     }
@@ -157,20 +165,11 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onLivingHurtMagicArmor(LivingDamageEvent.Pre event) {
         if (event.getSource().is(DamageTypes.MAGIC)) {
-            float magicArmor = getTotalMagicArmor(event.getEntity());
+            var attributeInstance = event.getEntity().getAttribute(SgAttributes.MAGIC_ARMOR);
+            float magicArmor = attributeInstance != null ? (float) attributeInstance.getValue() : 0f;
             float scale = 1f - getReducedMagicDamageScale(magicArmor);
             event.setNewDamage(event.getNewDamage() * scale);
         }
-    }
-
-    private static float getTotalMagicArmor(LivingEntity entity) {
-        float total = 0f;
-        for (ItemStack stack : entity.getArmorSlots()) {
-            if (stack.getItem() instanceof GearArmorItem) {
-                total += ((GearArmorItem) stack.getItem()).getArmorMagicProtection(stack);
-            }
-        }
-        return total;
     }
 
     private static float getReducedMagicDamageScale(float magicArmor) {
@@ -229,13 +228,13 @@ public final class GearEvents {
     }
 
     private static final List<Function<Level, Entity>> JABBERWOCKY_MOBS = ImmutableList.of(
-            world -> new Wolf(EntityType.WOLF, world),
-            world -> new Cat(EntityType.CAT, world),
-            world -> new Rabbit(EntityType.RABBIT, world),
-            world -> new Chicken(EntityType.CHICKEN, world),
-            world -> new Cod(EntityType.COD, world),
-            world -> new Salmon(EntityType.SALMON, world),
-            world -> new Pufferfish(EntityType.PUFFERFISH, world)
+            level -> new Wolf(EntityType.WOLF, level),
+            level -> new Cat(EntityType.CAT, level),
+            level -> new Rabbit(EntityType.RABBIT, level),
+            level -> new Chicken(EntityType.CHICKEN, level),
+            level -> new Cod(EntityType.COD, level),
+            level -> new Salmon(EntityType.SALMON, level),
+            level -> new Pufferfish(EntityType.PUFFERFISH, level)
     );
 
     @SubscribeEvent
@@ -265,8 +264,8 @@ public final class GearEvents {
 
     private static boolean hasSilkTouch(Level level, ItemStack tool) {
         Holder.Reference<Enchantment> silkTouch = level.registryAccess()
-                .registryOrThrow(Registries.ENCHANTMENT)
-                .getHolderOrThrow(Enchantments.SILK_TOUCH);
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(Enchantments.SILK_TOUCH);
         return EnchantmentHelper.getTagEnchantmentLevel(silkTouch, tool) > 0;
     }
 
@@ -345,7 +344,7 @@ public final class GearEvents {
             }
 
             // Void Ward trait
-            if (player.getY() < level.getMinBuildHeight() - 32 && TraitHelper.hasTraitArmor(player, Const.Traits.VOID_WARD)) {
+            if (player.getY() < level.getMinY() - 32 && TraitHelper.hasTraitArmor(player, Const.Traits.VOID_WARD)) {
                 // A small boost to get the player out of the void, then levitation and slow falling
                 // to allow them to navigate back to safety
                 player.push(0, 20, 0);

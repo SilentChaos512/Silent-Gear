@@ -1,9 +1,13 @@
 package net.silentchaos512.gear.util;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.neoforged.fml.ModList;
 import net.silentchaos512.gear.SilentGear;
@@ -16,7 +20,10 @@ import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public final class TraitHelper {
     private TraitHelper() {
@@ -187,6 +194,17 @@ public final class TraitHelper {
             return traitList.value();
         }
         return Collections.emptyList();
+    }
+
+    public static void addAttributeModifiersFromTraits(ItemStack gear, BiConsumer<Holder<Attribute>, AttributeModifier> adder) {
+        ItemAttributeModifiers.Builder traitAttributesBuilder = ItemAttributeModifiers.builder();
+        for (TraitInstance trait : TraitHelper.getTraits(gear)) {
+            var context = new TraitActionContext(null, trait, gear);
+            trait.getTrait().onGetAttributeModifiers(context, traitAttributesBuilder);
+        }
+        for (ItemAttributeModifiers.Entry modifier : traitAttributesBuilder.build().modifiers()) {
+            adder.accept(modifier.attribute(), modifier.modifier());
+        }
     }
 
     public static void cancelTraits(Map<Trait, Integer> mapToModify, Trait[] keys) {

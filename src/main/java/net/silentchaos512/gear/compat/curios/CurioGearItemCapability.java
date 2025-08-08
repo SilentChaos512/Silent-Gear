@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -14,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.compat.caelus.CaelusCompat;
 import net.silentchaos512.gear.item.gear.GearElytraItem;
 import net.silentchaos512.gear.setup.GearItemSets;
@@ -21,12 +24,14 @@ import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import org.jetbrains.annotations.NotNull;
-import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.*;
+import top.theillusivec4.curios.api.common.DropRule;
+import top.theillusivec4.curios.api.type.ISlotType;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class CurioGearItemCapability {
@@ -80,21 +85,20 @@ public class CurioGearItemCapability {
 
         @Override
         public void curioTick(SlotContext slotContext) {
-            GearHelper.inventoryTick(stack, slotContext.entity().level(), slotContext.entity(), -1, true);
+            if (slotContext.entity().level() instanceof ServerLevel serverLevel) {
+                GearHelper.inventoryTick(stack, serverLevel, slotContext.entity(), true);
+            }
         }
 
         @Override
-        public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id) {
-            var builder = ItemAttributeModifiers.builder();
-            GearHelper.addAttributeModifiers(stack, builder, false);
-            ItemAttributeModifiers itemAttributeModifiers = builder.build();
+        public CurioAttributeModifiers getDefaultCurioAttributeModifiers() {
+            Map<String, ISlotType> slots = CuriosSlotTypes.getItemSlotTypes(this.getStack(), true);
+            CurioAttributeModifiers.Builder builder = CurioAttributeModifiers.builder();
 
-            Multimap<Holder<Attribute>, AttributeModifier> result = ArrayListMultimap.create();
-            itemAttributeModifiers.modifiers().forEach(entry -> result.put(entry.attribute(), entry.modifier()));
-            if (stack.getItem() instanceof GearElytraItem) {
-                CaelusCompat.tryAddFlightAttribute(result);
+            for (String slot : slots.keySet()) {
+                TraitHelper.addAttributeModifiersFromTraits(this.stack, (attribute, modifier) -> builder.addModifier(attribute, modifier, slot));
             }
-            return result;
+            return builder.build();
         }
 
         @Override

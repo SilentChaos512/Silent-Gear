@@ -22,6 +22,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
+import net.silentchaos512.gear.client.material.SgEquippableInfo;
 import net.silentchaos512.gear.core.BuiltinMaterials;
 import net.silentchaos512.gear.gear.material.CustomCompoundMaterial;
 import net.silentchaos512.gear.gear.material.ProcessedMaterial;
@@ -55,7 +56,8 @@ public class MaterialBuilder<M extends Material> {
                 getDefaultTranslatedName(),
                 Component.empty(),
                 Color.WHITE,
-                TextureType.HIGH_CONTRAST
+                TextureType.HIGH_CONTRAST,
+                SgEquippableInfo.GENERIC_SHINY
         );
     }
 
@@ -150,8 +152,16 @@ public class MaterialBuilder<M extends Material> {
         return displayWithDefaultName(Component.empty(), color, textureType);
     }
 
+    public MaterialBuilder<M> displayWithDefaultName(int color, TextureType textureType, MaterialEquippableInfo armor) {
+        return displayWithDefaultName(Component.empty(), color, textureType, armor);
+    }
+
     public MaterialBuilder<M> displayWithDefaultName(Component namePrefix, int color, TextureType textureType) {
-        return display(getDefaultTranslatedName(), namePrefix, color, textureType);
+        return displayWithDefaultName(namePrefix, color, textureType, SgEquippableInfo.GENERIC_SHINY);
+    }
+
+    public MaterialBuilder<M> displayWithDefaultName(Component namePrefix, int color, TextureType textureType, MaterialEquippableInfo armor) {
+        return display(getDefaultTranslatedName(), namePrefix, color, textureType, armor);
     }
 
     public MaterialBuilder<M> display(Component name, int color) {
@@ -166,11 +176,16 @@ public class MaterialBuilder<M extends Material> {
     }
 
     public MaterialBuilder<M> display(Component name, Component namePrefix, int color, TextureType textureType) {
+        return display(name, namePrefix, color, textureType, SgEquippableInfo.GENERIC_SHINY);
+    }
+
+    public MaterialBuilder<M> display(Component name, Component namePrefix, int color, TextureType textureType, MaterialEquippableInfo armor) {
         return display(new MaterialDisplayData(
                 name,
                 namePrefix,
                 new Color(color),
-                textureType
+                textureType,
+                armor
         ));
     }
 

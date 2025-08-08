@@ -135,6 +135,7 @@ public interface Material extends GearComponent<MaterialInstance> {
 
     int getNameColor(MaterialInstance material, PartType partType, GearType gearType);
 
+    @Deprecated(forRemoval = true)
     default String getModelKey(MaterialInstance material) {
         return SilentGear.shortenId(SgRegistries.MATERIAL.getKey(this));
     }
@@ -154,4 +155,6 @@ public interface Material extends GearComponent<MaterialInstance> {
         if (items.size() == 0) return ItemStack.EMPTY;
         return new ItemStack(items.get((ticks / 20) % items.size()));
     }
+
+    MaterialEquippableInfo getEquippableInfo();
 }

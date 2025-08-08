@@ -27,6 +27,7 @@ import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.client.material.SgEquippableInfo;
 import net.silentchaos512.gear.core.BuiltinMaterials;
 import net.silentchaos512.gear.crafting.ingredient.CustomAlloyIngredient;
 import net.silentchaos512.gear.gear.material.CompoundMaterial;
@@ -285,7 +286,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Crimson Steel
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.CRIMSON_STEEL)
                 .craftingWithCommonRod(SgTags.Items.INGOTS_CRIMSON_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
-                .displayWithDefaultName(0xDC143C, TextureType.HIGH_CONTRAST)
+                .displayWithDefaultName(0xDC143C, TextureType.HIGH_CONTRAST, SgEquippableInfo.CRIMSON_STEEL)
                 //main
                 .mainStatsCommon(2400, 42, 19, 83, 0.9f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.5f)

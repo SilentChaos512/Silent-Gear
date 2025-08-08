@@ -13,6 +13,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.data.client.CompoundModelsProvider;
 import net.silentchaos512.gear.data.client.ModBlockStateProvider;
+import net.silentchaos512.gear.data.client.ModEquipmentAssetsProvider;
 import net.silentchaos512.gear.data.client.ModItemModelProvider;
 import net.silentchaos512.gear.data.loot.ModLootModifierProvider;
 import net.silentchaos512.gear.data.loot.ModLootTables;
@@ -33,7 +34,6 @@ public final class DataGenerators {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
         var generator = event.getGenerator();
-        var existingFileHelper = event.getExistingFileHelper();
         var packOutput = generator.getPackOutput();
         var lookupProvider = event.getLookupProvider();
 
@@ -42,7 +42,7 @@ public final class DataGenerators {
         ModBlockTagsProvider blocks = new ModBlockTagsProvider(event);
         generator.addProvider(true, blocks);
         generator.addProvider(true, new ModItemTagsProvider(event, blocks));
-        generator.addProvider(true, new ModDamageTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
+        generator.addProvider(true, new ModDamageTypeTagsProvider(packOutput, lookupProvider));
 
         generator.addProvider(true, new TraitsProvider(generator));
         generator.addProvider(true, new MaterialsProvider(generator, SilentGear.MOD_ID));
@@ -58,6 +58,7 @@ public final class DataGenerators {
         generator.addProvider(true, new ModItemModelProvider(generator, existingFileHelper));
         generator.addProvider(true, new CompoundModelsProvider(generator, existingFileHelper));
         generator.addProvider(true, new ModSoundDefinitionsProvider(packOutput, existingFileHelper));
+        generator.addProvider(true, new ModEquipmentAssetsProvider(packOutput));
     }
 
     public static CompletableFuture<?> saveStable(CachedOutput p_253653_, JsonElement p_254542_, Path p_254467_) {

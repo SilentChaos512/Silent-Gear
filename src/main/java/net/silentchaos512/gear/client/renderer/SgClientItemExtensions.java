@@ -2,9 +2,7 @@ package net.silentchaos512.gear.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -15,10 +13,10 @@ import net.silentchaos512.gear.item.gear.GearTridentItem;
 public class SgClientItemExtensions implements IClientItemExtensions {
     private final GearTridentSpecialRenderer renderer = new GearTridentSpecialRenderer();
 
-    @Override
+/*    @Override
     public BlockEntityWithoutLevelRenderer getCustomRenderer() {
         return renderer;
-    }
+    }*/
     
     private void applyItemArmTransform(PoseStack poseStack, HumanoidArm hand, float equippedProg) {
         int i = hand == HumanoidArm.RIGHT ? 1 : -1;

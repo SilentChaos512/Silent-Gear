@@ -18,8 +18,6 @@ import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
-import net.silentchaos512.gear.client.ColorHandlers;
-import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
@@ -51,7 +49,7 @@ class SideProxy implements IProxy {
         PartSerializers.REGISTRAR.register(modEventBus);
         TraitConditions.REGISTRAR.register(modEventBus);
 
-        SgArmorMaterials.REGISTRAR.register(modEventBus);
+        SgAttributes.ATTRIBUTES.register(modEventBus);
         SgBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         SgBlocks.BLOCKS.register(modEventBus);
         SgCreativeTabs.CREATIVE_TABS.register(modEventBus);
@@ -174,9 +172,7 @@ class SideProxy implements IProxy {
 
             modEventBus.addListener(Client::clientSetup);
             modEventBus.addListener(Client::postSetup);
-            modEventBus.addListener(ColorHandlers::onItemColors);
 
-            NeoForge.EVENT_BUS.register(ExtraBlockBreakHandler.INSTANCE);
             NeoForge.EVENT_BUS.register(new GearHudOverlay());
             NeoForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
             NeoForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);

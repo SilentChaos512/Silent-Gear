@@ -104,7 +104,7 @@ public abstract class AbstractMaterial implements Material {
     @Override
     public boolean isValid() {
         // Materials with empty tags for a crafting item will be hidden, empty ingredients will not be
-        return getIngredient().isEmpty() || !getIngredient().hasNoItems();
+        return getIngredient().isEmpty() /*|| !getIngredient().hasNoItems()*/; // FIXME?
     }
 
     @Override
@@ -195,6 +195,11 @@ public abstract class AbstractMaterial implements Material {
     public int getNameColor(MaterialInstance material, PartType partType, GearType gearType) {
         int color = getColor(material, partType, gearType);
         return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
+    }
+
+    @Override
+    public MaterialEquippableInfo getEquippableInfo() {
+        return display.equippableInfo();
     }
 
     @Override
