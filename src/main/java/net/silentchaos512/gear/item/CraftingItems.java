@@ -63,6 +63,7 @@ public enum CraftingItems implements ItemLike {
     FLUFFY_STRING,
     FLUFFY_FEATHER,
     // Rods
+    @Deprecated(forRemoval = true)
     ROUGH_ROD,
     STONE_ROD,
     IRON_ROD,

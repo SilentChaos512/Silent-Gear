@@ -10,7 +10,7 @@
   },
   "effects": [],
   "extra_wiki_lines": [
-    "Smelted drops are not affected by fortune to prevent item duplication"
+    "  - Smelted drops are not affected by fortune to prevent item duplication"
   ],
   "max_level": 1,
   "name": {
