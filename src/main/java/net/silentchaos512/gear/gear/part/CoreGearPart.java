@@ -11,28 +11,24 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetPropertyModifiersEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.Material;
-import net.silentchaos512.gear.api.part.PartSerializer;
-import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.property.NumberProperty;
-import net.silentchaos512.gear.api.property.NumberPropertyValue;
-import net.silentchaos512.gear.api.property.GearPropertyMap;
-import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.part.PartCraftingData;
 import net.silentchaos512.gear.api.part.PartDisplayData;
-import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.api.part.PartSerializer;
+import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.GearPropertyMap;
+import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
-import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class CoreGearPart extends AbstractGearPart {
@@ -129,6 +125,7 @@ public class CoreGearPart extends AbstractGearPart {
 
         var materials = getMaterials(part);
         List<V> mods = materials.stream()
+                .filter(MaterialInstance::isValid)
                 .flatMap(m -> m.getPropertyModifiers(partType, key).stream())
                 .collect(Collectors.toList());
 

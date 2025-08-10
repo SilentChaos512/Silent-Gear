@@ -84,6 +84,8 @@ public class PartList implements List<PartInstance> {
             PropertyKey<?, ?> key = PropertyKey.of(property, gearType);
 
             for (PartInstance part : this) {
+                if (!part.isValid()) continue;
+
                 for (GearPropertyValue<?> mod : part.getPropertyModifiers(key)) {
                     stats.put(key, mod);
                 }
