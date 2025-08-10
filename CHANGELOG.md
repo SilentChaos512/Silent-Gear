@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.0.26] - 2025-08-10
 ### Fixed
 - Some parts and materials not displaying all properties [#822, #806]
 - Block destroy speed on hammers and excavators now depends on all blocks being broken, not just the target [#820]
