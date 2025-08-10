@@ -40,7 +40,7 @@ public final class PartsProvider extends PartsProviderBase {
     public Collection<PartBuilder> getParts() {
         Collection<PartBuilder> ret = new ArrayList<>();
 
-        ret.add(part("binding", GearTypes.TOOL, PartTypes.BINDING)
+        ret.add(part("binding", GearTypes.ALL, PartTypes.BINDING)
                 .crafting(SgItems.BINDING)
         );
         ret.add(part("coating", GearTypes.ALL, PartTypes.COATING)
@@ -68,7 +68,7 @@ public final class PartsProvider extends PartsProviderBase {
         ret.add(part("setting", GearTypes.CURIO, PartTypes.SETTING)
                 .crafting(SgItems.SETTING)
         );
-        ret.add(part("tip", GearTypes.TOOL, PartTypes.TIP)
+        ret.add(part("tip", GearTypes.ALL, PartTypes.TIP)
                 .crafting(SgItems.TIP)
         );
 

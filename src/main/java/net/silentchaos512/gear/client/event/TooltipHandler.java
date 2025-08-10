@@ -6,6 +6,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
@@ -21,7 +22,6 @@ import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.util.TextListBuilder;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -29,6 +29,7 @@ import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.lib.util.Color;
@@ -276,12 +277,20 @@ public final class TooltipHandler {
         GearType gearType = getPartGearType(part);
         TextListBuilder builder = new TextListBuilder();
 
-        var sortedRelevantProperties = GearPropertyGroups.getSortedRelevantProperties(part.getGearType().relevantPropertyGroups());
-        for (GearProperty<?, ?> property : sortedRelevantProperties) {
+        for (GearProperty<?, ?> property : getPartRelevantProperties(part, gearType)) {
+            var temp_propertyKey = SgRegistries.GEAR_PROPERTY.getKey(property);
             var modifiers = new ArrayList<GearPropertyValue<?>>(part.getPropertyModifiers(part.getType(), PropertyKey.of(property, gearType)));
             getStatTooltipLine(event, part.getGearType(), property, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
+    }
+
+    private static Iterable<GearProperty<?, ?>> getPartRelevantProperties(PartInstance part, GearType gearType) {
+        // Narrow down properties for main parts, display everything for other part types
+        if (part.getType().is(PartTypes.MAIN)) {
+            return GearPropertyGroups.getSortedRelevantProperties(gearType.relevantPropertyGroups());
+        }
+        return SgRegistries.GEAR_PROPERTY;
     }
 
     private static GearType getPartGearType(PartInstance part) {
@@ -299,6 +308,7 @@ public final class TooltipHandler {
         TextListBuilder builder = new TextListBuilder();
 
         for (GearProperty<?, ?> property : SgRegistries.GEAR_PROPERTY) {
+            var temp_propertyKey = SgRegistries.GEAR_PROPERTY.getKey(property);
             getMaterialStatModLines(event, partType, material, builder, property);
         }
 
@@ -357,7 +367,7 @@ public final class TooltipHandler {
             var property = (P) propertyIn;
             var modifiers = (Collection<V>) modifiersIn;
             T value = property.compute(property.getZeroValue(), false, gearType, modifiers);
-            boolean isZero = property.isZero(value);
+            boolean isZero = isTrueZeroValue(property, value, modifiers);
             if (event.getFlags().isAdvanced() || !isZero) {
                 Color nameColor = isZero ? MC_DARK_GRAY : property.getGroup().getColor();
                 Color statColor = isZero ? MC_DARK_GRAY : Color.WHITE;
@@ -386,7 +396,7 @@ public final class TooltipHandler {
     ) {
         if (!modifiers.isEmpty()) {
             T value = property.compute(property.getZeroValue(), modifiers);
-            boolean isZero = property.isZero(value);
+            boolean isZero = isTrueZeroValue(property, value, modifiers);
             if (event.getFlags().isAdvanced() || !isZero) {
                 Color color = isZero ? MC_DARK_GRAY : Color.WHITE;
 
@@ -403,5 +413,20 @@ public final class TooltipHandler {
         }
 
         return Optional.empty();
+    }
+
+    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> boolean isTrueZeroValue(P property, T value, Collection<V> modifiers) {
+        if (!property.isZero(value)) {
+            // The computed value is not zero
+            return false;
+        }
+        for (V modifier : modifiers) {
+            if (!property.isZero(modifier.value())) {
+                // The modifier value is not zero (multiplier, etc.)
+                return false;
+            }
+        }
+        // The computed value and all modifiers are zero
+        return true;
     }
 }
