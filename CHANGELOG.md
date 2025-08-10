@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Some parts and materials not displaying all properties [#822, #806]
+- Block destroy speed on hammers and excavators now depends on all blocks being broken, not just the target [#820]
 - Gear recipes not accepting materials with more specific gear type restrictions
 - Add missing "shine" layer to tip upgrade model
 
