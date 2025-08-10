@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Some parts and materials not displaying all properties [#822, #806]
 - Gear recipes not accepting materials with more specific gear type restrictions
+- Add missing "shine" layer to tip upgrade model
 
 ## [1.21.1-4.0.25] - 2025-07-12
 ### Added
