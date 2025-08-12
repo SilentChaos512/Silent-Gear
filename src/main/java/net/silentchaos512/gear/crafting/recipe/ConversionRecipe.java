@@ -99,7 +99,10 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         if (!original.isEmpty()) {
             // Copy relevant NBT
             result.setDamageValue(original.getDamageValue());
-            result.addTagElement("affix_data", original.getTagElement("affix_data"));
+            if (original.hasTag() && original.getTag().contains("affix_data"))
+            {
+                result.addTagElement("affix_data", original.getTagElement("affix_data"));
+            }
             if (original.isEnchanted()) {
                 // Copy enchantments
                 Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(original);
