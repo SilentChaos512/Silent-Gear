@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Cache lists of all materials to possibly fix [#826] and improve performance slightly
+### Fixed
+- Data-less items (in JEI, etc.) having an unintended gold coating (literally) and appearing yellow
 
 ## [1.21.1-4.0.26] - 2025-08-10
 ### Fixed
