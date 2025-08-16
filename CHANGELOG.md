@@ -4,9 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- JEI search aliases for materials. You can now search for "materials" or the category (such as "metal" or "advanced").
 ### Changed
 - Cache lists of all materials to possibly fix [#826] and improve performance slightly
 ### Fixed
+- Tridents not working with channeling [#816]
+  - To fix this, I had to override the channeling.json file and added an entity type tag, `c:tridents`, to match compatible trident entities.
 - Data-less items (in JEI, etc.) having an unintended gold coating (literally) and appearing yellow
 
 ## [1.21.1-4.0.26] - 2025-08-10

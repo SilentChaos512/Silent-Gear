@@ -7,6 +7,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.silentchaos512.gear.SilentGear;
@@ -63,6 +64,14 @@ public final class SgTags {
 
         private static TagKey<DamageType> mod(String path) {
             return TagKey.create(Registries.DAMAGE_TYPE, SilentGear.getId(path));
+        }
+    }
+
+    public static final class EntityTypes {
+        public static final TagKey<EntityType<?>> TRIDENTS = common("tridents");
+
+        private static TagKey<EntityType<?>> common(String path) {
+            return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("c", path));
         }
     }
 

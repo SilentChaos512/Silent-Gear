@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.data;
+package net.silentchaos512.gear.data.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class ModDamageTypeTagsProvider extends TagsProvider<DamageType> {
-    protected ModDamageTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+    public ModDamageTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, Registries.DAMAGE_TYPE, lookupProvider, SilentGear.MOD_ID, existingFileHelper);
     }
 
