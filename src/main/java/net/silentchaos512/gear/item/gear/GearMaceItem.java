@@ -86,12 +86,17 @@ public class GearMaceItem extends MaceItem implements GearTool {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hurtEnemy(stack, target, attacker);
+        if (!GearHelper.isBroken(stack)) {
+            super.hurtEnemy(stack, target, attacker);
+        }
+        return false;
     }
 
     @Override
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        GearHelper.postHurtEnemy(stack, target, attacker);
+        if (!GearHelper.isBroken(stack)) {
+            super.postHurtEnemy(stack, target, attacker);
+        }
     }
 
     @Override

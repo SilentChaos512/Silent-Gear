@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Tridents not working with channeling [#816]
   - To fix this, I had to override the channeling.json file and added an entity type tag, `c:tridents`, to match compatible trident entities.
+- Maces not working correctly (no smash attack or wind burst) [#805]
 - Data-less items (in JEI, etc.) having an unintended gold coating (literally) and appearing yellow
 
 ## [1.21.1-4.0.26] - 2025-08-10
