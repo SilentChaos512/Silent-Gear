@@ -9,7 +9,7 @@
     },
     {
       "type": "silentgear:material",
-      "gear_type": "silentgear:projectile",
+      "gear_type": "silentgear:arrow",
       "part_type": "silentgear:main"
     }
   ],

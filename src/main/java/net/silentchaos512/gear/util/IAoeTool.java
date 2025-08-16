@@ -17,8 +17,10 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.silentchaos512.gear.Config;
+import net.silentchaos512.lib.util.MathUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -104,8 +106,46 @@ public interface IAoeTool {
      */
     @EventBusSubscriber
     final class BreakHandler {
-        private BreakHandler() {}
+        private BreakHandler() {
+        }
 
+        // This will make block breaking speed match that of the hardest block being mined, rather than the targeted one
+        @SubscribeEvent
+        public static void onBreakSpeedEvent(PlayerEvent.BreakSpeed event) {
+            if (event.getPosition().isEmpty()) return;
+
+            Player player = event.getEntity();
+            ItemStack tool = player.getMainHandItem();
+            if (!(tool.getItem() instanceof IAoeTool aoeToolItem)) return;
+
+            BlockState state = event.getState();
+            if (!aoeToolItem.isEffectiveOnBlock(tool, state, player)) return;
+
+            Level level = player.level();
+            BlockPos pos = event.getPosition().get();
+
+            HitResult hitResult = aoeToolItem.rayTraceBlocks(level, player);
+            if (hitResult == null || hitResult.getType() != HitResult.Type.BLOCK) return;
+
+            BlockHitResult blockHitResult = (BlockHitResult) hitResult;
+            List<BlockPos> extraBlocks = aoeToolItem.getExtraBlocks(level, blockHitResult, player, tool);
+
+            float maxHardness = 0;
+            for (BlockPos otherPos : extraBlocks) {
+                BlockState otherState = level.getBlockState(otherPos);
+                float hardness = otherState.getDestroySpeed(level, otherPos);
+                if (hardness > maxHardness) {
+                    maxHardness = hardness;
+                }
+            }
+
+            float targetBlockHardness = state.getDestroySpeed(level, pos);
+            if (!MathUtils.floatsEqual(targetBlockHardness, maxHardness)) {
+                event.setNewSpeed(event.getNewSpeed() * targetBlockHardness / maxHardness);
+            }
+        }
+
+        // Handles the actual breaking of multiple blocks with AOE tools
         @SubscribeEvent
         public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
             var player = event.getPlayer();

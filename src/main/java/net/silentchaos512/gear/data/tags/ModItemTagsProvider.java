@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.data;
+package net.silentchaos512.gear.data.tags;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;

@@ -341,6 +341,7 @@ public final class Config {
             return null;
         }
 
+        @Deprecated
         @SuppressWarnings("TypeMayBeWeakened")
         public static boolean isNerfedItem(Item item) {
             return nerfedItemsEnabled.get() && isThingInList(NameUtils.fromItem(item), nerfedItems);

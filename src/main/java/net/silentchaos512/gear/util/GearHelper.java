@@ -44,6 +44,7 @@ import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
@@ -392,12 +393,13 @@ public final class GearHelper {
 
     //endregion
 
+    @Deprecated
     public static Item.Properties getBaseItemProperties() {
         return new Item.Properties()
                 .stacksTo(1)
                 .durability(100)
                 .setNoCombineRepair()
-                .component(SgDataComponents.GEAR_CONSTRUCTION, new GearConstructionData(PartList.empty(), false, 0, 0))
+                .component(SgDataComponents.GEAR_CONSTRUCTION, new GearConstructionData(PartList.empty(), true, 0, 0))
                 .component(SgDataComponents.GEAR_PROPERTIES, new GearPropertiesData(Map.of()));
     }
 

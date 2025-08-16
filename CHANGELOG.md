@@ -3,9 +3,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.0.27] - 2025-08-16
+### Added
+- JEI search aliases for materials. You can now search for "materials" or the category (such as "metal" or "advanced").
+### Changed
+- Cache lists of all materials to possibly fix [#826] and improve performance slightly
 ### Fixed
-- Main gear part items being "merged" into an example part item
+- Tridents not working with channeling [#816]
+  - To fix this, I had to override the channeling.json file and added an entity type tag, `c:tridents`, to match compatible trident entities.
+- Maces not working correctly (no smash attack or wind burst) [#805]
+- Data-less items (in JEI, etc.) having an unintended gold coating (literally) and appearing yellow
+
+## [1.21.1-4.0.26] - 2025-08-10
+### Fixed
+- Some parts and materials not displaying all properties [#822, #806]
+- Block destroy speed on hammers and excavators now depends on all blocks being broken, not just the target [#820]
+- Gear recipes not accepting materials with more specific gear type restrictions
+- Add missing "shine" layer to tip upgrade model
 
 ## [1.21.1-4.0.25] - 2025-07-12
 ### Added

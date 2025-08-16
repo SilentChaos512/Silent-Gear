@@ -13,7 +13,7 @@
     },
     "name_prefix": ""
   },
-  "gear_type": "silentgear:tool",
+  "gear_type": "silentgear:all",
   "part_type": "silentgear:tip",
   "properties": {}
 }

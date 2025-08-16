@@ -202,8 +202,8 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
                     .map(MaterialInstance::of)
                     .filter(mat -> mat.get().isCraftingAllowed(mat, partType, gearType))
                     .filter(mat -> this.material == null || this.material.getId().equals(mat.getId()))
-                    .filter(mat -> categories.isEmpty() || mat.hasAnyCategory(categories))
-                    .filter(mat -> notCategories.isEmpty() || !mat.hasAnyCategory(notCategories))
+                    .filter(mat -> this.categories.isEmpty() || mat.hasAnyCategory(this.categories))
+                    .filter(mat -> this.notCategories.isEmpty() || !mat.hasAnyCategory(this.notCategories))
                     .flatMap(mat -> Stream.of(mat.get().getIngredient().getItems()))
                     .filter(stack -> !stack.isEmpty())
                     .map(stack -> this.minGrade != MaterialGrade.NONE ? this.minGrade.copyWithGrade(stack) : stack);

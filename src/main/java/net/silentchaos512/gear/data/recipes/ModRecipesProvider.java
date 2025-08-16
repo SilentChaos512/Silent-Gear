@@ -597,48 +597,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires(GearPartIngredient.of(PartTypes.BINDING.get()))
                 .save(consumer, SilentGear.getId("gear/elytra"));
 
-        // Rough recipes
-        shapedGear(RecipeCategory.COMBAT, GearItemSets.SWORD.gearItem())
-                .pattern("#")
-                .pattern("#")
-                .pattern("/")
-                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()))
-                .define('/', SgTags.Items.RODS_ROUGH)
-                .save(consumer, SilentGear.getId("gear/rough/sword"));
-        shapedGear(RecipeCategory.COMBAT, GearItemSets.DAGGER.gearItem())
-                .pattern("#")
-                .pattern("/")
-                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()))
-                .define('/', SgTags.Items.RODS_ROUGH)
-                .save(consumer, SilentGear.getId("gear/rough/dagger"));
-        shapedGear(RecipeCategory.COMBAT, GearItemSets.KNIFE.gearItem())
-                .pattern(" #")
-                .pattern("/ ")
-                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()))
-                .define('/', SgTags.Items.RODS_ROUGH)
-                .save(consumer, SilentGear.getId("gear/rough/knife"));
-        shapedGear(RecipeCategory.TOOLS, GearItemSets.PICKAXE.gearItem())
-                .pattern("###")
-                .pattern(" / ")
-                .pattern(" / ")
-                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()))
-                .define('/', SgTags.Items.RODS_ROUGH)
-                .save(consumer, SilentGear.getId("gear/rough/pickaxe"));
-        shapedGear(RecipeCategory.TOOLS, GearItemSets.SHOVEL.gearItem())
-                .pattern("#")
-                .pattern("/")
-                .pattern("/")
-                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()))
-                .define('/', SgTags.Items.RODS_ROUGH)
-                .save(consumer, SilentGear.getId("gear/rough/shovel"));
-        shapedGear(RecipeCategory.TOOLS, GearItemSets.AXE.gearItem())
-                .pattern("##")
-                .pattern("#/")
-                .pattern(" /")
-                .define('#', PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()))
-                .define('/', SgTags.Items.RODS_ROUGH)
-                .save(consumer, SilentGear.getId("gear/rough/axe"));
-
         // Conversion recipes
         toolConversion(consumer, GearItemSets.SWORD, 2, Items.NETHERITE_SWORD, Items.DIAMOND_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.STONE_SWORD, Items.WOODEN_SWORD);
         toolConversion(consumer, GearItemSets.PICKAXE, 3, Items.NETHERITE_PICKAXE, Items.DIAMOND_PICKAXE, Items.GOLDEN_PICKAXE, Items.IRON_PICKAXE, Items.STONE_PICKAXE, Items.WOODEN_PICKAXE);
@@ -1038,8 +996,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_COPPER))
                 .save(consumer);*/
 
-        // TODO: Maybe should organize these better...
-        // A
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CraftingItems.ADVANCED_UPGRADE_BASE)
                 .define('/', SgTags.Items.NUGGETS_DIAMOND)
                 .define('D', Tags.Items.DYES_BLUE)
@@ -1050,7 +1007,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("GGG")
                 .unlockedBy("has_item", has(CraftingItems.UPGRADE_BASE))
                 .save(consumer);
-        // B
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.BLAZE_GOLD_INGOT)
                 .requires(Tags.Items.INGOTS_GOLD)
                 .requires(Items.BLAZE_POWDER, 4)
@@ -1066,7 +1022,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires(Tags.Items.DYES_BLUE)
                 .unlockedBy("has_paper", has(SgTags.Items.PAPER))
                 .save(consumer);
-        // C
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Blocks.COBBLESTONE)
                 .requires(SgItems.PEBBLE, 9)
                 .unlockedBy("has_pebble", has(SgItems.PEBBLE))
@@ -1080,7 +1035,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("# #")
                 .unlockedBy("has_item", has(CraftingItems.CRIMSON_IRON_INGOT))
                 .save(consumer);
-        // D
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.DIAMOND_SHARD, 9)
                 .requires(Tags.Items.GEMS_DIAMOND)
                 .unlockedBy("has_item", has(Tags.Items.GEMS_DIAMOND))
@@ -1095,7 +1049,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(CraftingItems.SINEW), RecipeCategory.MISC, CraftingItems.DRIED_SINEW, 0.35f, 200)
                 .unlockedBy("has_item", has(CraftingItems.SINEW))
                 .save(consumer);
-        // E
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.EMERALD_SHARD, 9)
                 .requires(Tags.Items.GEMS_EMERALD)
                 .unlockedBy("has_item", has(Tags.Items.GEMS_EMERALD))
@@ -1107,12 +1060,10 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("###")
                 .unlockedBy("has_item", has(Tags.Items.GEMS_EMERALD))
                 .save(consumer, SilentGear.getId("emerald_from_shards"));
-        // F
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.FLAX_STRING)
                 .requires(CraftingItems.FLAX_FIBER, 2)
                 .unlockedBy("has_item", has(CraftingItems.FLAX_FIBER))
                 .save(consumer);
-        // G
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CraftingItems.GLITTERY_DUST, 8)
                 .define('o', Items.POPPED_CHORUS_FRUIT)
                 .define('/', SgTags.Items.NUGGETS_EMERALD)
@@ -1131,14 +1082,12 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("ggg")
                 .unlockedBy("has_item", has(SgItems.NETHER_BANANA))
                 .save(consumer);
-        // I
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CraftingItems.IRON_ROD, 4)
                 .define('/', Tags.Items.INGOTS_IRON)
                 .pattern("/")
                 .pattern("/")
                 .unlockedBy("has_item", has(Items.IRON_INGOT))
                 .save(consumer);
-        // L
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.LEATHER)
                 .define('#', CraftingItems.LEATHER_SCRAP)
                 .pattern("###")
@@ -1150,7 +1099,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .requires(Items.LEATHER)
                 .unlockedBy("has_item", has(CraftingItems.LEATHER_SCRAP))
                 .save(consumer);
-        // M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SgBlocks.MATERIAL_GRADER)
                 .define('Q', Tags.Items.GEMS_QUARTZ)
                 .define('I', Tags.Items.INGOTS_IRON)
@@ -1161,7 +1109,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("GGG")
                 .unlockedBy("has_item", has(SgTags.Items.INGOTS_BLAZE_GOLD))
                 .save(consumer);
-        // N
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SgBlocks.NETHERWOOD_DOOR, 3)
                 .define('#', SgBlocks.NETHERWOOD_PLANKS)
                 .pattern("##")
@@ -1229,24 +1176,11 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("# ")
                 .unlockedBy("has_item", has(SgBlocks.NETHERWOOD_LOG))
                 .save(consumer);
-        // R
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.RED_CARD_UPGRADE, 4)
                 .requires(CraftingItems.UPGRADE_BASE)
                 .requires(Tags.Items.DYES_RED)
                 .unlockedBy("has_item", has(CraftingItems.UPGRADE_BASE))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CraftingItems.ROUGH_ROD, 2)
-                .define('/', Tags.Items.RODS_WOODEN)
-                .pattern(" /")
-                .pattern("/ ")
-                .unlockedBy("has_item", has(Items.STICK))
-                .save(consumer);
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.ROUGH_ROD, 2)
-                .requires(SgItems.ROD_BLUEPRINT.get().getItemTag())
-                .requires(Ingredient.of(Tags.Items.RODS_WOODEN), 2)
-                .unlockedBy("has_item", has(SgItems.ROD_BLUEPRINT.get().getItemTag()))
-                .save(consumer, SilentGear.getId("rough_rod2"));
-        // S
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SgBlocks.SALVAGER)
                 .define('P', Blocks.PISTON)
                 .define('/', SgTags.Items.INGOTS_CRIMSON_IRON)
@@ -1274,7 +1208,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("/")
                 .unlockedBy("has_item", has(ItemTags.COALS))
                 .save(consumer);
-        // U
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CraftingItems.UPGRADE_BASE, 4)
                 .requires(Ingredient.of(SgTags.Items.PAPER), 2)
                 .requires(ItemTags.PLANKS)
@@ -1454,7 +1387,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Tool head
         shapelessPart(RecipeCategory.TOOLS, itemSet.mainPart())
                 .requires(BlueprintIngredient.of(itemSet))
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type()), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + name + "_head"));
         // Tool from head and rod
         shapelessGear(RecipeCategory.TOOLS, itemSet.gearItem())
@@ -1464,7 +1397,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Quick tool (mains and rods, skipping head)
         shapelessGear(RecipeCategory.TOOLS, itemSet.gearItem())
                 .requires(BlueprintIngredient.of(itemSet))
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type()), mainCount)
                 .requires(GearPartIngredient.of(PartTypes.ROD.get()))
                 .save(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
@@ -1474,7 +1407,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         shapelessPart(RecipeCategory.TOOLS, itemSet.mainPart())
                 .requires(BlueprintIngredient.of(itemSet))
                 .requires(Items.HEAVY_CORE)
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()), 3)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type()), 3)
                 .save(output, SilentGear.getId("gear/mace_core"));
         shapelessGear(RecipeCategory.TOOLS, itemSet.gearItem())
                 .requires(itemSet.mainPart())
@@ -1483,7 +1416,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         shapelessGear(RecipeCategory.TOOLS, itemSet.gearItem())
                 .requires(BlueprintIngredient.of(itemSet))
                 .requires(Items.HEAVY_CORE)
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()), 3)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type()), 3)
                 .requires(GearPartIngredient.of(PartTypes.ROD.get()))
                 .save(output, SilentGear.getId("gear/mace_quick"));
     }
@@ -1493,7 +1426,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Main part
         shapelessPart(RecipeCategory.COMBAT, itemSet.mainPart())
                 .requires(BlueprintIngredient.of(itemSet))
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type()), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + name + "_main"));
         // Tool from main, rod, and cord
         shapelessGear(RecipeCategory.COMBAT, itemSet.gearItem())
@@ -1504,7 +1437,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Quick tool (main materials, rod, and cord, skipping main part)
         shapelessGear(RecipeCategory.COMBAT, itemSet.gearItem())
                 .requires(BlueprintIngredient.of(itemSet))
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type()), mainCount)
                 .requires(GearPartIngredient.of(PartTypes.ROD.get()))
                 .requires(GearPartIngredient.of(PartTypes.CORD.get()))
                 .save(consumer, SilentGear.getId("gear/" + name + "_quick"));
@@ -1515,7 +1448,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Arrow head
         shapelessPart(RecipeCategory.COMBAT, itemSet.mainPart())
                 .requires(blueprint)
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.PROJECTILE.get()))
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type()))
                 .save(consumer, SilentGear.getId("gear/" + name + "_head"));
         // Arrows from head
         shapelessGear(RecipeCategory.COMBAT, itemSet.gearItem())
@@ -1526,7 +1459,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Quick arrows
         shapelessGear(RecipeCategory.COMBAT, itemSet.gearItem())
                 .requires(BlueprintIngredient.of(itemSet))
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.TOOL.get()))
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type()))
                 .requires(GearPartIngredient.of(PartTypes.ROD.get()))
                 .requires(GearPartIngredient.of(PartTypes.FLETCHING.get()))
                 .save(consumer, SilentGear.getId("gear/" + name + "_quick"));
@@ -1535,7 +1468,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void armorRecipes(RecipeOutput consumer, int mainCount, GearItemSet<? extends GearArmorItem> itemSet) {
         shapelessPart(RecipeCategory.COMBAT, itemSet.mainPart())
                 .requires(BlueprintIngredient.of(itemSet))
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.gearItem().getGearType()), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type()), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + NameUtils.fromItem(itemSet.mainPart()).getPath()));
 
         shapelessGear(RecipeCategory.COMBAT, itemSet.gearItem())
@@ -1551,7 +1484,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void curioRecipes(RecipeOutput consumer, String name, int mainCount, GearItemSet<?> itemSet) {
         shapelessPart(RecipeCategory.MISC, itemSet.mainPart())
                 .requires(BlueprintIngredient.of(itemSet))
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.CURIO.get(), MaterialCategories.METAL), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type(), MaterialCategories.METAL), mainCount)
                 .save(consumer, SilentGear.getId("gear/" + name + "_main_only"));
 
         shapelessGear(RecipeCategory.MISC, itemSet.gearItem())
@@ -1567,7 +1500,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         shapelessGear(RecipeCategory.MISC, itemSet.gearItem())
                 .requires(BlueprintIngredient.of(itemSet))
-                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), GearTypes.CURIO.get(), MaterialCategories.METAL), mainCount)
+                .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(), itemSet.type(), MaterialCategories.METAL), mainCount)
                 .requires(GearPartIngredient.of(PartTypes.SETTING.get()))
                 .save(consumer, SilentGear.getId("gear/" + name + "_quick"));
     }
@@ -1628,7 +1561,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private static final Map<Tier, DataResource<Material>> TOOL_MATERIALS = ImmutableMap.<Tier, DataResource<Material>>builder()
-            .put(Tiers.NETHERITE, Const.Materials.DIAMOND) // Yes, diamond is correct, this is for the main part
+            .put(Tiers.NETHERITE, Const.Materials.DIAMOND) // Yes, DIAMOND is correct. This is for the main part
             .put(Tiers.DIAMOND, Const.Materials.DIAMOND)
             .put(Tiers.GOLD, Const.Materials.GOLD)
             .put(Tiers.IRON, Const.Materials.IRON)
@@ -1636,7 +1569,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
             .put(Tiers.WOOD, Const.Materials.WOOD)
             .build();
     private static final Map<Holder<ArmorMaterial>, DataResource<Material>> ARMOR_MATERIALS = ImmutableMap.<Holder<ArmorMaterial>, DataResource<Material>>builder()
-            .put(ArmorMaterials.NETHERITE, Const.Materials.DIAMOND) // Again, this is correct (see TOOL_MATERIALS)
+            .put(ArmorMaterials.NETHERITE, Const.Materials.DIAMOND) // Again, DIAMOND is correct (see TOOL_MATERIALS)
             .put(ArmorMaterials.DIAMOND, Const.Materials.DIAMOND)
             .put(ArmorMaterials.GOLD, Const.Materials.GOLD)
             .put(ArmorMaterials.IRON, Const.Materials.IRON)

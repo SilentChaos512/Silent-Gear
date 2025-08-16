@@ -18,6 +18,10 @@ import net.silentchaos512.gear.data.client.ModItemModelProvider;
 import net.silentchaos512.gear.data.loot.ModLootModifierProvider;
 import net.silentchaos512.gear.data.loot.ModLootTables;
 import net.silentchaos512.gear.data.recipes.ModRecipesProvider;
+import net.silentchaos512.gear.data.tags.ModBlockTagsProvider;
+import net.silentchaos512.gear.data.tags.ModDamageTypeTagsProvider;
+import net.silentchaos512.gear.data.tags.ModEntityTypeTagsProvider;
+import net.silentchaos512.gear.data.tags.ModItemTagsProvider;
 import net.silentchaos512.gear.data.trait.TraitsProvider;
 
 import java.io.ByteArrayOutputStream;
@@ -39,21 +43,26 @@ public final class DataGenerators {
 
         generator.addProvider(true, new ModDataMapProvider(packOutput, lookupProvider));
 
+        // Tags
         ModBlockTagsProvider blocks = new ModBlockTagsProvider(event);
         generator.addProvider(true, blocks);
         generator.addProvider(true, new ModItemTagsProvider(event, blocks));
-        generator.addProvider(true, new ModDamageTypeTagsProvider(packOutput, lookupProvider));
+        generator.addProvider(true, new ModDamageTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
+        generator.addProvider(true, new ModEntityTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
 
+        // Gear data
         generator.addProvider(true, new TraitsProvider(generator));
         generator.addProvider(true, new MaterialsProvider(generator, SilentGear.MOD_ID));
         generator.addProvider(true, new PartsProvider(generator));
 
+        // Others
         generator.addProvider(true, new ModLootTables(event));
         generator.addProvider(true, new ModLootModifierProvider(event));
         generator.addProvider(true, new ModRecipesProvider(event));
         generator.addProvider(true, new ModAdvancementProvider(event));
 //        ModWorldGen.init(generator, existingFileHelper); //FIXME
 
+        // Client
         generator.addProvider(true, new ModBlockStateProvider(generator, existingFileHelper));
         generator.addProvider(true, new ModItemModelProvider(generator, existingFileHelper));
         generator.addProvider(true, new CompoundModelsProvider(generator, existingFileHelper));

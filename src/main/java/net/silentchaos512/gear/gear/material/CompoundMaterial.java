@@ -13,7 +13,6 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
@@ -23,7 +22,6 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.SynergyUtils;
-import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.MathUtils;
 
@@ -60,7 +58,9 @@ public class CompoundMaterial extends AbstractMaterial {
     public Collection<IMaterialCategory> getCategories(MaterialInstance material) {
         Set<IMaterialCategory> set = new HashSet<>(this.crafting.categories());
         for (MaterialInstance mat : getSubMaterials(material)) {
-            set.addAll(mat.getCategories());
+            if (mat.isValid()) {
+                set.addAll(mat.getCategories());
+            }
         }
         return set;
     }
@@ -82,7 +82,9 @@ public class CompoundMaterial extends AbstractMaterial {
 
     @Override
     public Set<PartType> getPartTypes(MaterialInstance material) {
-        List<MaterialInstance> subMaterials = getSubMaterials(material);
+        List<MaterialInstance> subMaterials = getSubMaterials(material).stream()
+                .filter(MaterialInstance::isValid)
+                .toList();
         if (subMaterials.isEmpty()) {
             return Collections.emptySet();
         } else if (subMaterials.size() == 1) {
@@ -121,6 +123,7 @@ public class CompoundMaterial extends AbstractMaterial {
     @Override
     public Collection<PropertyKey<?, ?>> getPropertyKeys(MaterialInstance material, PartType type) {
         return getSubMaterials(material).stream()
+                .filter(MaterialInstance::isValid)
                 .flatMap(mat -> mat.get().getPropertyKeys(mat, type).stream())
                 .collect(Collectors.toSet());
     }
@@ -130,6 +133,7 @@ public class CompoundMaterial extends AbstractMaterial {
         // Get the materials and all the stat modifiers they provide for this stat
         var subMaterials = getSubMaterials(material);
         var propertyMods = subMaterials.stream()
+                .filter(MaterialInstance::isValid)
                 .map(AbstractMaterial::removeEnhancements)
                 .flatMap(m -> m.getPropertyModifiers(partType, key).stream())
                 .collect(Collectors.toList());
@@ -193,7 +197,6 @@ public class CompoundMaterial extends AbstractMaterial {
 
     @Override
     public int getColor(MaterialInstance material, PartType partType, GearType gearType) {
-        // TODO: Might need to cache the computed color value somewhere...
         return ColorUtils.getBlendedColorForCompoundMaterial(getSubMaterials(material));
     }
 
@@ -206,6 +209,7 @@ public class CompoundMaterial extends AbstractMaterial {
     @Override
     public String getModelKey(MaterialInstance material) {
         var commaSeparatedMaterialList = getSubMaterials(material).stream()
+                .filter(MaterialInstance::isValid)
                 .map(MaterialInstance::getModelKey)
                 .collect(Collectors.joining(","));
         return super.getModelKey(material) + "[" + commaSeparatedMaterialList + "]";

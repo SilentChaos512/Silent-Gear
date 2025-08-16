@@ -211,7 +211,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempMainPart(GearItemSets.BRACELET);
         tempMainPart(GearItemSets.NECKLACE);
         tempGearPart(SgItems.ROD);
-        tempGearPart(SgItems.TIP);
+        tipUpgradePart(SgItems.TIP);
         tempCoatingPart(SgItems.COATING);
         tempGearPart(SgItems.GRIP);
         tempGearPart(SgItems.BINDING);
@@ -387,6 +387,14 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .parent(getExistingFile(ResourceLocation.withDefaultNamespace("item/generated")))
                 .texture("layer0", texture)
                 .texture("layer1", "item/part_marker");
+    }
+
+    private ItemModelBuilder tipUpgradePart(DeferredItem<CompoundPartItem> item) {
+        return getBuilder(item.getId().getPath())
+                .parent(getExistingFile(ResourceLocation.withDefaultNamespace("item/generated")))
+                .texture("layer0", "item/part/tip")
+                .texture("layer1", "item/part/tip_shine")
+                .texture("layer2", "item/part_marker");
     }
 
     private ItemModelBuilder tempCoatingPart(DeferredItem<CompoundPartItem> item) {

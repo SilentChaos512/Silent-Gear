@@ -11,6 +11,7 @@ import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
@@ -25,6 +26,10 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
 
     @Override
     protected ItemStack applyUpgrade(ItemStack gear, ItemStack upgradeItem) {
+        if (GearData.getPartOfType(gear, PartTypes.MAIN.get()) == null) {
+            return gear.copy();
+        }
+
         MaterialInstance material = MaterialInstance.from(upgradeItem);
         if (material != null) {
             GearType gearType = GearHelper.getType(gear);

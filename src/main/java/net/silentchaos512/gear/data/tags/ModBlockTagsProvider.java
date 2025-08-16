@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.data;
+package net.silentchaos512.gear.data.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.TagsProvider;

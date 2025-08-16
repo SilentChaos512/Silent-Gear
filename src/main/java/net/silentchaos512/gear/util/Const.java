@@ -173,6 +173,7 @@ public final class Const {
         public static final DataResource<GearPart> BOOTS_PLATES = DataResource.part("boot_plates");
         public static final DataResource<GearPart> CHESTPLATE_PLATES = DataResource.part("chestplate_plates");
         public static final DataResource<GearPart> COATING = DataResource.part("coating");
+        public static final DataResource<GearPart> CORD = DataResource.part("cord");
         public static final DataResource<GearPart> GRIP = DataResource.part("grip");
         public static final DataResource<GearPart> HELMET_PLATES = DataResource.part("helmet_plates");
         public static final DataResource<GearPart> HOE_HEAD = DataResource.part("hoe_head");

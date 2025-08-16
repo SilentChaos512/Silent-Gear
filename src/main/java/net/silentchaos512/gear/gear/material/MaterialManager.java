@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import net.minecraft.ChatFormatting;
@@ -8,6 +9,7 @@ import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.Config;
@@ -43,8 +45,12 @@ public class MaterialManager extends DataResourceManager<Material> {
 
     @Override
     public void validateAll() {
+        // Fresh reload!
         checkForIngredientConflicts();
         this.ingredientChecks.clear();
+        // Clear caches to be recomputed
+        GET_VALUES_CACHE_WITH_CHILDREN = null;
+        GET_VALUES_CACHE_WITHOUT_CHILDREN = null;
     }
 
     private void addIngredientChecks(Material material, JsonObject json) {
@@ -68,16 +74,32 @@ public class MaterialManager extends DataResourceManager<Material> {
         }
     }
 
+    private static List<Material> GET_VALUES_CACHE_WITH_CHILDREN = null;
+    private static List<Material> GET_VALUES_CACHE_WITHOUT_CHILDREN = null;
+
     public List<Material> getValues(boolean includeChildren) {
-        // TODO: Add a cache?
+        if (includeChildren) {
+            if (GET_VALUES_CACHE_WITH_CHILDREN == null) {
+                GET_VALUES_CACHE_WITH_CHILDREN = computeValuesList(true);
+            }
+            return GET_VALUES_CACHE_WITH_CHILDREN;
+        } else {
+            if (GET_VALUES_CACHE_WITHOUT_CHILDREN == null) {
+                GET_VALUES_CACHE_WITHOUT_CHILDREN = computeValuesList(false);
+            }
+            return GET_VALUES_CACHE_WITHOUT_CHILDREN;
+        }
+    }
+
+    private List<Material> computeValuesList(boolean includeChildren) {
         synchronized (this) {
-            List<Material> list = new ArrayList<>();
+            ImmutableList.Builder<Material> builder = ImmutableList.builder();
             for (Material m : this) {
                 if ((includeChildren || m.getParent() == null) && m.isValid()) {
-                    list.add(m);
+                    builder.add(m);
                 }
             }
-            return list;
+            return builder.build();
         }
     }
 

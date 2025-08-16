@@ -24,7 +24,9 @@ import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -94,6 +96,10 @@ public record PartType(
         }
 
         return Optional.empty();
+    }
+
+    public boolean is(Supplier<PartType> partType) {
+        return this.equals(partType.get());
     }
 
     @Override

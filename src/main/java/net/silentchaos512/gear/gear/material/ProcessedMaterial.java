@@ -12,13 +12,10 @@ import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.item.ProcessedMaterialItem;
 import net.silentchaos512.gear.setup.gear.PartTypes;
-import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
@@ -46,7 +43,7 @@ public class ProcessedMaterial extends AbstractMaterial {
     public Collection<IMaterialCategory> getCategories(MaterialInstance material) {
         Collection<IMaterialCategory> set = super.getCategories(material);
         MaterialInstance base = getBaseMaterial(material);
-        if (base != null) {
+        if (base != null && base.isValid()) {
             set.addAll(base.getCategories());
         }
         return set;
@@ -65,14 +62,14 @@ public class ProcessedMaterial extends AbstractMaterial {
     @Override
     public int getColor(MaterialInstance material, PartType partType, GearType gearType) {
         var baseMaterial = getBaseMaterial(material);
-        return baseMaterial != null ? baseMaterial.getColor(gearType, partType) : -1;
+        return baseMaterial != null && baseMaterial.isValid() ? baseMaterial.getColor(gearType, partType) : -1;
     }
 
     @Override
     public <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(MaterialInstance material, PartType partType, PropertyKey<T, V> key) {
         var ret = super.getPropertyModifiers(material, partType, key);
         MaterialInstance baseMaterial = getBaseMaterial(material);
-        if (baseMaterial != null) {
+        if (baseMaterial != null && baseMaterial.isValid()) {
             ret.addAll(baseMaterial.getPropertyModifiers(partType, key));
         }
         return ret;
@@ -82,7 +79,7 @@ public class ProcessedMaterial extends AbstractMaterial {
     public Collection<PropertyKey<?, ?>> getPropertyKeys(MaterialInstance material, PartType type) {
         var ret = new LinkedHashSet<>(super.getPropertyKeys(material, type));
         MaterialInstance baseMaterial = getBaseMaterial(material);
-        if (baseMaterial != null) {
+        if (baseMaterial != null && baseMaterial.isValid()) {
             ret.addAll(baseMaterial.get().getPropertyKeys(baseMaterial, type));
         }
         return ret;
@@ -92,7 +89,9 @@ public class ProcessedMaterial extends AbstractMaterial {
     public Component getBaseMaterialName(@Nullable MaterialInstance material, PartType partType) {
         if (material != null) {
             var baseMaterial = getBaseMaterial(material);
-            return baseMaterial != null ? baseMaterial.getDisplayName(partType).plainCopy() : TextUtil.misc("unknown");
+            return baseMaterial != null && baseMaterial.isValid()
+                    ? baseMaterial.getDisplayName(partType).plainCopy()
+                    : TextUtil.misc("unknown");
         }
         return super.getBaseMaterialName(null, partType);
     }
@@ -108,13 +107,13 @@ public class ProcessedMaterial extends AbstractMaterial {
     @Override
     public int getNameColor(MaterialInstance material, PartType partType, GearType gearType) {
         MaterialInstance base = getBaseMaterial(material);
-        return base != null ? base.getNameColor(partType, gearType) : -1;
+        return base != null && base.isValid() ? base.getNameColor(partType, gearType) : -1;
     }
 
     @Override
     public String getModelKey(MaterialInstance material) {
         MaterialInstance base = getBaseMaterial(material);
-        return super.getModelKey(material) + (base != null ? "[" + base.getModelKey() + "]" : "");
+        return super.getModelKey(material) + (base != null && base.isValid() ? "[" + base.getModelKey() + "]" : "");
     }
 
     public static class Serializer extends MaterialSerializer<ProcessedMaterial> {

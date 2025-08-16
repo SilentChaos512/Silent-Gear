@@ -33,6 +33,20 @@ public class GearMaceItem extends MaceItem implements GearWeapon {
         return this.gearType.get();
     }
 
+    @Override
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (!GearHelper.isBroken(stack)) {
+            super.hurtEnemy(stack, target, attacker);
+        }
+    }
+
+    @Override
+    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (!GearHelper.isBroken(stack)) {
+            super.postHurtEnemy(stack, target, attacker);
+        }
+    }
+
     //region Standard tool overrides
 
     @Override

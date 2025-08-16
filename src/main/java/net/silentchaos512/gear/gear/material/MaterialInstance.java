@@ -119,6 +119,10 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return material.getNullable();
     }
 
+    public boolean isValid() {
+        return material.isPresent();
+    }
+
     public Collection<IMaterialModifier> getModifiers() {
         return this.modifiers;
     }
