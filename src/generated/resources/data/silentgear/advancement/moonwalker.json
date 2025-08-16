@@ -14,7 +14,7 @@
         "!minecraft:attribute_modifiers": {},
         "silentgear:construction": {
           "broken_count": 0,
-          "example": false,
+          "example": true,
           "parts": [
             {
               "item": {
