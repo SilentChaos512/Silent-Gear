@@ -20,6 +20,8 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearTool;
+import net.silentchaos512.gear.api.material.IMaterialCategory;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.block.alloymaker.screen.AlloyForgeScreen;
 import net.silentchaos512.gear.block.alloymaker.screen.RecrystallizerScreen;
 import net.silentchaos512.gear.block.alloymaker.screen.RefabricatorScreen;
@@ -30,20 +32,20 @@ import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.ToolActionRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.*;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.item.RepairKitItem;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRecipes;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -221,5 +223,17 @@ public class SGearJeiPlugin implements IModPlugin {
 
     private static String getDescKey(ResourceLocation name) {
         return "jei." + name.getNamespace() + "." + name.getPath() + ".desc";
+    }
+
+    @Override
+    public void registerIngredientAliases(IIngredientAliasRegistration registration) {
+        for (Material material : SgRegistries.MATERIAL.getValues(true)) {
+            List<ItemStack> itemStacks = Arrays.asList(material.getIngredient().getItems());
+            List<String> aliases = new ArrayList<>(List.of("materials"));
+            for (IMaterialCategory category : material.getCategories(MaterialInstance.of(material))) {
+                aliases.add("materials/" + category.getName());
+            }
+            registration.addAliases(VanillaTypes.ITEM_STACK, itemStacks, aliases);
+        }
     }
 }
