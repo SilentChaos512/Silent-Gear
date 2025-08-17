@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-4.0.27.1] - 2025-08-17
+### Fixed
+- Crash when accessing the list of materials in some cases (caused by cached lists added in version 4.0.27) [#828, #827, #826]
+
 ## [1.21.1-4.0.27] - 2025-08-16
 ### Added
 - JEI search aliases for materials. You can now search for "materials" or the category (such as "metal" or "advanced").
