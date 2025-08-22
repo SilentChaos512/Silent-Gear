@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-4.0.28] - 2025-08-21
+### Added
+- Breeze Rod material
+- Wind Blast trait (found on breeze rod)
+### Fixed
+- Gear mod kit missing the "Tip Upgrade" option [#831]
+- Crafted gear items showing as "example items" in the tooltip
+  - If existing items have this bug, simply modify them in some way (add a grip or change the head, etc.) to clear the example flag
+
 ## [1.21.1-4.0.27.1] - 2025-08-17
 ### Fixed
 - Crash when accessing the list of materials in some cases (caused by cached lists added in version 4.0.27) [#828, #827, #826]
