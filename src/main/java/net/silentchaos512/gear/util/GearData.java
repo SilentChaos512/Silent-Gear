@@ -530,7 +530,7 @@ public final class GearData {
         var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
         var newData = new GearConstructionData(
                 PartList.immutable(parts),
-                data != null && data.isExample(),
+                parts.isEmpty(), // clear example flag, assuming the item actually has any parts
                 data != null ? data.brokenCount() : 0,
                 data != null ? data.repairedCount() : 0
         );
