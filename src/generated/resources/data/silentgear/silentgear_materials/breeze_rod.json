@@ -10,15 +10,15 @@
     "ingredient": [],
     "part_substitutes": {
       "silentgear:rod": {
-        "tag": "c:rods/blaze"
+        "tag": "c:rods/breeze"
       }
     }
   },
   "display": {
-    "color": "#FFFFC600",
+    "color": "#FF9398C1",
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
-      "translate": "material.silentgear.blaze_rod"
+      "translate": "material.silentgear.breeze_rod"
     },
     "name_prefix": ""
   },
@@ -26,15 +26,15 @@
     "silentgear:rod": {
       "attack_damage": {
         "operation": "MULTIPLY_TOTAL",
-        "value": 0.2
+        "value": 0.1
       },
       "harvest_speed": {
         "operation": "MULTIPLY_TOTAL",
-        "value": 0.1
+        "value": 0.2
       },
       "ranged_damage": {
         "operation": "MULTIPLY_TOTAL",
-        "value": 0.1
+        "value": 0.2
       },
       "traits": [
         {
@@ -45,7 +45,7 @@
         {
           "conditions": [],
           "level": 1,
-          "trait": "silentgear:reach"
+          "trait": "silentgear:wind_blast"
         }
       ]
     }

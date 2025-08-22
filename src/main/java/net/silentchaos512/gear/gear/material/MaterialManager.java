@@ -3,16 +3,15 @@ package net.silentchaos512.gear.gear.material;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
-import com.google.gson.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.core.DataResourceManager;
@@ -20,7 +19,10 @@ import net.silentchaos512.gear.gear.MaterialJsonException;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MaterialManager extends DataResourceManager<Material> {
@@ -44,13 +46,9 @@ public class MaterialManager extends DataResourceManager<Material> {
     }
 
     @Override
-    public void validateAll() {
-        // Fresh reload!
+    public void onReloadPost() {
         checkForIngredientConflicts();
         this.ingredientChecks.clear();
-        // Clear caches to be recomputed
-        GET_VALUES_CACHE_WITH_CHILDREN = null;
-        GET_VALUES_CACHE_WITHOUT_CHILDREN = null;
     }
 
     private void addIngredientChecks(Material material, JsonObject json) {
@@ -74,21 +72,29 @@ public class MaterialManager extends DataResourceManager<Material> {
         }
     }
 
-    private static List<Material> GET_VALUES_CACHE_WITH_CHILDREN = null;
-    private static List<Material> GET_VALUES_CACHE_WITHOUT_CHILDREN = null;
+    private static List<Material> GET_VALUES_CACHE_WITH_CHILDREN = List.of();
+    private static List<Material> GET_VALUES_CACHE_WITHOUT_CHILDREN = List.of();
 
     public List<Material> getValues(boolean includeChildren) {
+        if (isReloading()) {
+            return List.of();
+        }
+
         if (includeChildren) {
-            if (GET_VALUES_CACHE_WITH_CHILDREN == null) {
+            if (isCacheInvalid(GET_VALUES_CACHE_WITH_CHILDREN)) {
                 GET_VALUES_CACHE_WITH_CHILDREN = computeValuesList(true);
             }
             return GET_VALUES_CACHE_WITH_CHILDREN;
         } else {
-            if (GET_VALUES_CACHE_WITHOUT_CHILDREN == null) {
+            if (isCacheInvalid(GET_VALUES_CACHE_WITHOUT_CHILDREN)) {
                 GET_VALUES_CACHE_WITHOUT_CHILDREN = computeValuesList(false);
             }
             return GET_VALUES_CACHE_WITHOUT_CHILDREN;
         }
+    }
+
+    private boolean isCacheInvalid(List<Material> list) {
+        return list.isEmpty() || getKey(list.getFirst()) == null;
     }
 
     private List<Material> computeValuesList(boolean includeChildren) {

@@ -117,6 +117,12 @@ public class TraitEffectTypes {
             WielderEffectTraitEffect.STREAM_CODEC,
             "Applies potion effects to the entity equipped with the item"
     );
+    public static final Supplier<TraitEffectType<WindBlastTraitEffect>> WIND_BLAST = register(
+            "wind_blast",
+            WindBlastTraitEffect.CODEC,
+            WindBlastTraitEffect.STREAM_CODEC,
+            "Creates an explosion similar to a wind charge on attack"
+    );
 
     private static <T extends TraitEffect> Supplier<TraitEffectType<T>> register(String name, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec, String wikiDescription) {
         return REGISTRAR.register(name, () -> new TraitEffectType<>(codec, streamCodec, wikiDescription));

@@ -629,6 +629,13 @@ public class TraitsProvider extends TraitsProviderBase {
                 )
         );
 
+        ret.add(TraitBuilder.of(Const.Traits.WIND_BLAST, 1)
+                .withGearTypeCondition(GearTypes.TOOL)
+                .effects(
+                        WindBlastTraitEffect.INSTANCE
+                )
+        );
+
         return ret;
     }
 }

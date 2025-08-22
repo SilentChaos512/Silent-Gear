@@ -85,19 +85,6 @@ public record PartType(
                 });
     }
 
-    public static Optional<CompoundPartItem> getToolHeadItem(GearType gearType) {
-        for (Item item : BuiltInRegistries.ITEM.stream().toList()) {
-            if (item instanceof MainPartItem) {
-                var itemGearType = ((MainPartItem) item).getGearType();
-                if (itemGearType.matches(gearType)) {
-                    return Optional.of((CompoundPartItem) item);
-                }
-            }
-        }
-
-        return Optional.empty();
-    }
-
     public boolean is(Supplier<PartType> partType) {
         return this.equals(partType.get());
     }

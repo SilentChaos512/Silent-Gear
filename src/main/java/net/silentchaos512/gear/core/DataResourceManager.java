@@ -49,6 +49,8 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
     private final Collection<ResourceLocation> errorList = new ArrayList<>();
     private final Codec<T> byNameCodec;
 
+    private boolean reloading = false;
+
     public DataResourceManager(Codec<T> codec, JsonExceptionFactory<?> exceptionFactory, String typeName, String dataPath, String logMarkerName, Logger logger) {
         this.codec = codec;
         this.exceptionFactory = exceptionFactory;
@@ -66,11 +68,19 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
         );
     }
 
+    public boolean isReloading() {
+        return this.reloading;
+    }
+
     public void validate(T value, JsonObject json) {
         // Do nothing
     }
 
-    public void validateAll() {
+    public void onReloadPre() {
+        // Do nothing
+    }
+
+    public void onReloadPost() {
         // Do nothing
     }
 
@@ -149,6 +159,9 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
         Map<ResourceLocation, Resource> resources = resourceManager.listResources(this.dataPath, s -> s.toString().endsWith(".json"));
         if (resources.isEmpty()) return;
 
+        onReloadPre();
+        this.reloading = true;
+
         synchronized (this.byKey) {
             this.byKey.clear();
             this.packNameByKey.clear();
@@ -192,7 +205,8 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
         }
 
         this.logger.info(this.logMarker, "Decoded {} {}s", this.byKey.size(), this.typeName);
-        validateAll();
+        onReloadPost();
+        this.reloading = false;
     }
 
     private void tryAddObject(ResourceLocation id, T value) {

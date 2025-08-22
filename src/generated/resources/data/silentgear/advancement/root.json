@@ -21,7 +21,7 @@
       "components": {
         "silentgear:construction": {
           "broken_count": 0,
-          "example": true,
+          "example": false,
           "parts": [
             {
               "item": {
