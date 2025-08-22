@@ -263,6 +263,7 @@ public final class Const {
         public static final DataResource<Trait> VOID_WARD = DataResource.trait("void_ward");
         public static final DataResource<Trait> VULCAN = DataResource.trait("vulcan");
         public static final DataResource<Trait> WIDEN = DataResource.trait("widen");
+        public static final DataResource<Trait> WIND_BLAST = DataResource.trait("wind_blast");
         public static final DataResource<Trait> YUMMY = DataResource.trait("yummy");
 
         // Misc constants

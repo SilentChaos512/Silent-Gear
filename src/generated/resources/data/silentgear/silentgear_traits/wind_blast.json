@@ -1,0 +1,20 @@
+{
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "silentgear:tool"
+    }
+  ],
+  "description": {
+    "translate": "trait.silentgear.wind_blast.desc"
+  },
+  "effects": [
+    {
+      "type": "silentgear:wind_blast"
+    }
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.wind_blast"
+  }
+}

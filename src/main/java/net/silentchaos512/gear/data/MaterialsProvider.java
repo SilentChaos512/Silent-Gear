@@ -1254,8 +1254,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.ROD, GearProperties.HARVEST_SPEED, 0.1f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .stat(PartTypes.ROD, GearProperties.ATTACK_DAMAGE, 0.2f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .stat(PartTypes.ROD, GearProperties.RANGED_DAMAGE, 0.1f, NumberProperty.Operation.MULTIPLY_TOTAL)
-                .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 4)
-                .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 2)
+                .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 4)
                 .trait(PartTypes.ROD, Const.Traits.REACH, 1)
         );
         // Bone
@@ -1278,6 +1277,22 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 //rod
                 .stat(PartTypes.ROD, GearProperties.ATTACK_DAMAGE, 0.2f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 2)
+        );
+        // Breeze Rod
+        ret.add(MaterialBuilder.simple(modId("breeze_rod"))
+                .crafting(new MaterialCraftingData(
+                        Ingredient.EMPTY,
+                        List.of(MaterialCategories.METAL),
+                        List.of(),
+                        Map.of(PartTypes.ROD.get(), Ingredient.of(Tags.Items.RODS_BREEZE)),
+                        true
+                ))
+                .displayWithDefaultName(0x9398C1, TextureType.HIGH_CONTRAST)
+                .stat(PartTypes.ROD, GearProperties.HARVEST_SPEED, 0.2f, NumberProperty.Operation.MULTIPLY_TOTAL)
+                .stat(PartTypes.ROD, GearProperties.ATTACK_DAMAGE, 0.1f, NumberProperty.Operation.MULTIPLY_TOTAL)
+                .stat(PartTypes.ROD, GearProperties.RANGED_DAMAGE, 0.2f, NumberProperty.Operation.MULTIPLY_TOTAL)
+                .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 4)
+                .trait(PartTypes.ROD, Const.Traits.WIND_BLAST, 1)
         );
         // End Rod
         ret.add(MaterialBuilder.simple(modId("end_rod"))
