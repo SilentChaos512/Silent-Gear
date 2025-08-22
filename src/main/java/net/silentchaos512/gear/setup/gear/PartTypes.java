@@ -40,6 +40,7 @@ public class PartTypes {
     );
     public static final DeferredHolder<PartType, PartType> TIP = register("tip", builder -> builder
             .compoundPartItem(() -> SgItems.TIP.get())
+            .isRemovable(true)
     );
     public static final DeferredHolder<PartType, PartType> CORD = register("cord", builder -> builder
             .compoundPartItem(() -> SgItems.CORD.get())
