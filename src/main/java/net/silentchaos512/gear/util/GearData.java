@@ -10,6 +10,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,6 +26,7 @@ import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.TraitListPropertyValue;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PropertyKey;
@@ -164,6 +166,8 @@ public final class GearData {
             gearItem.onRecalculatePost(gear, player, finalProperties);
         }
 
+        setGearAttributeModifiers(gear, finalProperties);
+
         if (gear.is(ItemTags.DYEABLE)) {
             // Attach armor color
             var color = GearArmorItem.getArmorColor(gear);
@@ -175,6 +179,34 @@ public final class GearData {
         // Let traits do their thing
         for (var trait : finalProperties.getTraits()) {
             trait.getTrait().onRecalculatePost(gear, trait.getLevel());
+        }
+    }
+
+    private static void setGearAttributeModifiers(ItemStack gear, GearPropertiesData finalProperties) {
+        ItemAttributeModifiers.Builder attributesBuilder = ItemAttributeModifiers.builder();
+        for (GearProperty<?, ? extends GearPropertyValue<?>> property : finalProperties.keySet()) {
+            addAttributesForProperty(gear, attributesBuilder, finalProperties, property);
+        }
+        for (TraitInstance inst : TraitHelper.getTraits(gear)) {
+            var context = new TraitActionContext(null, inst, gear);
+            inst.getTrait().onGetAttributeModifiers(context, attributesBuilder);
+        }
+        gear.set(DataComponents.ATTRIBUTE_MODIFIERS, attributesBuilder.build());
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> void addAttributesForProperty(
+            ItemStack stack,
+            ItemAttributeModifiers.Builder builder,
+            GearPropertiesData propertiesData,
+            GearProperty<?, ?> propertyIn
+    ) {
+        // Must cast the property into its true type to call the addAttributes method
+        P property = (P) propertyIn;
+        V valueInstance = propertiesData.get(property);
+        if (valueInstance != null) {
+            T value = valueInstance.value();
+            property.addAttributes(stack, value, builder);
         }
     }
 

@@ -1,224 +1,243 @@
 package net.silentchaos512.gear.data.client;
 
+import net.minecraft.client.color.item.ItemTintSource;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.ItemModelOutput;
+import net.minecraft.client.data.models.model.*;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
-import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearItem;
+import net.silentchaos512.gear.client.setup.SgItemTintSources;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.item.GearItemSet;
 import net.silentchaos512.gear.item.blueprint.GearBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.setup.GearItemSets;
-import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRegistries;
-import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.lib.util.NameUtils;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
-public class ModItemModelProvider extends ItemModelProvider {
-    public ModItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator.getPackOutput(), SilentGear.MOD_ID, existingFileHelper);
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return "Silent Gear - Item Models";
+public class ModItemModelProvider extends ItemModelGenerators {
+    public ModItemModelProvider(ItemModelOutput itemModelOutput, BiConsumer<ResourceLocation, ModelInstance> modelOutput) {
+        super(itemModelOutput, modelOutput);
     }
 
     @Override
-    protected void registerModels() {
-        // Blocks
-        SgBlocks.BLOCKS.getEntries().stream()
-                .map(DeferredHolder::get)
-                .forEach(this::blockItemModel);
-
-        ModelFile itemGenerated = getExistingFile(ResourceLocation.withDefaultNamespace("item/generated"));
-        ModelFile itemHandheld = getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld"));
-
+    public void run() {
         for (CraftingItems item : CraftingItems.values()) {
-            builder(item, itemGenerated, "item/" + item.getName());
+            flatItem(item);
         }
 
-        builder(SgItems.NETHERWOOD_CHARCOAL, itemGenerated);
+        flatItem(SgItems.NETHERWOOD_CHARCOAL);
 
         // Crafted materials
-        builder(SgItems.SHEET_METAL)
-                .parent(itemGenerated)
-                .texture("layer0", "item/sheet_metal")
-                .texture("layer1", "item/sheet_metal_highlight");
+        generateWithTintedBaseLayer(SgItems.SHEET_METAL, "_highlight", SgItemTintSources.blendedMaterialColor());
 
         // Compound materials
-        builder(SgItems.ALLOY_INGOT)
-                .parent(itemGenerated)
-                .texture("layer0", "item/alloy_ingot")
-                .texture("layer1", "item/alloy_ingot_highlight");
-        builder(SgItems.HYBRID_GEM)
-                .parent(itemGenerated)
-                .texture("layer0", "item/hybrid_gem")
-                .texture("layer1", "item/hybrid_gem_highlight");
-        builder(SgItems.MIXED_FABRIC, itemGenerated, "item/mixed_fabric");
-        builder(SgItems.SUPER_ALLOY)
-                .parent(itemGenerated)
-                .texture("layer0", "item/super_alloy")
-                .texture("layer1", "item/super_alloy_highlight");
+        generateWithTintedBaseLayer(SgItems.ALLOY_INGOT, "_highlight", SgItemTintSources.blendedMaterialColor());
+        generateWithTintedBaseLayer(SgItems.HYBRID_GEM, "_highlight", SgItemTintSources.blendedMaterialColor());
+        generateTintedSingleLayer(SgItems.MIXED_FABRIC, SgItemTintSources.blendedMaterialColor());
+        generateWithTintedBaseLayer(SgItems.SUPER_ALLOY, "_highlight", SgItemTintSources.blendedMaterialColor());
 
         // Custom materials
-        builder(SgItems.CUSTOM_INGOT)
-                .parent(itemGenerated)
-                .texture("layer0", "item/alloy_ingot")
-                .texture("layer1", "item/alloy_ingot_highlight");
-        builder(SgItems.CUSTOM_GEM)
-                .parent(itemGenerated)
-                .texture("layer0", "item/hybrid_gem")
-                .texture("layer1", "item/hybrid_gem_highlight");
+        generateWithTintedBaseLayer(SgItems.CUSTOM_INGOT, "item/alloy_ingot", "_highlight", SgItemTintSources.blendedMaterialColor());
+        generateWithTintedBaseLayer(SgItems.CUSTOM_GEM, "item/hybrid_gem", "_highlight", SgItemTintSources.blendedMaterialColor());
 
-        builder(SgItems.BLUEPRINT_BOOK)
-                .parent(itemGenerated)
-                .texture("layer0", "item/blueprint_book_cover")
-                .texture("layer1", "item/blueprint_book_pages")
-                .texture("layer2", "item/blueprint_book_deco");
 
-        builder(SgItems.JEWELER_TOOLS, itemGenerated, "item/jeweler_tools");
-
-        // Blueprints and templates
+        // Blueprints and templates and related
+        layeredItem(SgItems.BLUEPRINT_BOOK, "item/blueprint_book_cover", "item/blueprint_book_pages", "item/blueprint_book_deco");
+        flatItem(SgItems.JEWELER_TOOLS);
         SgItems.getItems(PartBlueprintItem.class).forEach(item -> {
             if (item.hasStandardModel()) {
-                var key = SgRegistries.PART_TYPE.getKey(item.getPartType());
-                builder(item)
-                        .parent(itemGenerated)
-                        .texture("layer0", "item/" + (item.isSingleUse() ? "template" : "blueprint"))
-                        .texture("layer1", "item/blueprint_" + Objects.requireNonNull(key).getPath());
+                var partTypeKey = SgRegistries.PART_TYPE.getKey(item.getPartType());
+                layeredItem(
+                        item,
+                        "item/" + (item.isSingleUse() ? "template" : "blueprint"),
+                        "item/blueprint_" + Objects.requireNonNull(partTypeKey).getPath()
+                );
             }
         });
         SgItems.getItems(GearBlueprintItem.class).forEach(item -> {
-            var key = SgRegistries.GEAR_TYPE.getKey(item.gearType());
-            builder(item)
-                    .parent(itemGenerated)
-                    .texture("layer0", "item/" + (item.isSingleUse() ? "template" : "blueprint"))
-                    .texture("layer1", "item/blueprint_" + Objects.requireNonNull(key).getPath());
+            var gearTypeKey = SgRegistries.GEAR_TYPE.getKey(item.gearType());
+            layeredItem(
+                    item,
+                    "item/" + (item.isSingleUse() ? "template" : "blueprint"),
+                    "item/blueprint_" + Objects.requireNonNull(gearTypeKey).getPath()
+            );
         });
 
-        builder(SgItems.MOD_KIT, itemGenerated);
+        flatItem(SgItems.MOD_KIT);
 
         // Repair kits
-        builder(SgItems.VERY_CRUDE_REPAIR_KIT, itemGenerated);
-        builder(SgItems.CRUDE_REPAIR_KIT, itemGenerated);
-        builder(SgItems.STURDY_REPAIR_KIT, itemGenerated);
-        builder(SgItems.CRIMSON_REPAIR_KIT, itemGenerated);
-        builder(SgItems.AZURE_REPAIR_KIT, itemGenerated);
+        flatItem(SgItems.VERY_CRUDE_REPAIR_KIT);
+        flatItem(SgItems.CRUDE_REPAIR_KIT);
+        flatItem(SgItems.STURDY_REPAIR_KIT);
+        flatItem(SgItems.CRIMSON_REPAIR_KIT);
+        flatItem(SgItems.AZURE_REPAIR_KIT);
 
         // Crude tools
-        builder(SgItems.CRUDE_KNIFE, itemGenerated);
-        builder(SgItems.CRUDE_HAMMER, itemGenerated);
+        flatItem(SgItems.CRUDE_KNIFE);
+        flatItem(SgItems.CRUDE_HAMMER);
 
         // Smithing templates
-        builder(SgItems.COATING_SMITHING_TEMPLATE, itemGenerated);
+        flatItem(SgItems.COATING_SMITHING_TEMPLATE);
 
         // Misc
-        builder(SgItems.GUIDE_BOOK, itemGenerated);
-        builder(SgItems.BLUEPRINT_PACKAGE, itemGenerated);
-        builder(SgItems.FLAX_SEEDS, itemGenerated);
-        builder(SgItems.FLUFFY_SEEDS, itemGenerated);
-        builder(SgItems.GOLDEN_NETHER_BANANA, itemGenerated);
-        builder(SgItems.NETHER_BANANA, itemGenerated);
-        builder(SgItems.PEBBLE, itemGenerated);
+        flatItem(SgItems.BLUEPRINT_PACKAGE);
+        flatItem(SgItems.FLAX_SEEDS);
+        flatItem(SgItems.FLUFFY_SEEDS);
+        flatItem(SgItems.GOLDEN_NETHER_BANANA);
+        flatItem(SgItems.NETHER_BANANA);
+        flatItem(SgItems.PEBBLE);
 
-        // Temp models
         // Gear
-        tempGearStandardTool(GearItemSets.SWORD, itemHandheld);
-        tempGearStandardTool(GearItemSets.KATANA, itemHandheld);
-        tempGearStandardTool(GearItemSets.MACHETE, itemHandheld);
-        tempGearStandardTool(GearItemSets.SPEAR, itemHandheld);
-        tempGearStandardTool(GearItemSets.TRIDENT, itemHandheld, false);
-        tempGearStandardTool(GearItemSets.MACE, itemHandheld);
-        tempGearStandardTool(GearItemSets.KNIFE, itemHandheld);
-        tempGearStandardTool(GearItemSets.DAGGER, itemHandheld);
-        tempGearStandardTool(GearItemSets.PICKAXE, itemHandheld);
-        tempGearStandardTool(GearItemSets.SHOVEL, itemHandheld);
-        tempGearStandardTool(GearItemSets.AXE, itemHandheld);
-        tempGearStandardTool(GearItemSets.PAXEL, itemHandheld);
-        tempGearStandardTool(GearItemSets.HAMMER, itemHandheld);
-        tempGearStandardTool(GearItemSets.EXCAVATOR, itemHandheld);
+        tempGearStandardTool(GearItemSets.SWORD);
+        tempGearStandardTool(GearItemSets.KATANA);
+        tempGearStandardTool(GearItemSets.MACHETE);
+        tempGearStandardTool(GearItemSets.SPEAR);
+        tempGearStandardTool(GearItemSets.TRIDENT, false);
+        tempGearStandardTool(GearItemSets.MACE);
+        tempGearStandardTool(GearItemSets.KNIFE);
+        tempGearStandardTool(GearItemSets.DAGGER);
+        tempGearStandardTool(GearItemSets.PICKAXE);
+        tempGearStandardTool(GearItemSets.SHOVEL);
+        tempGearStandardTool(GearItemSets.AXE);
+        tempGearStandardTool(GearItemSets.PAXEL);
+        tempGearStandardTool(GearItemSets.HAMMER);
+        tempGearStandardTool(GearItemSets.EXCAVATOR);
         tempGearStandardTool(GearItemSets.SAW, getExistingFile(modLoc("item/saw_base")));
-        tempGearStandardTool(GearItemSets.PROSPECTOR_HAMMER, itemHandheld);
-        tempGearStandardTool(GearItemSets.HOE, itemHandheld);
-        tempGearStandardTool(GearItemSets.MATTOCK, itemHandheld);
-        tempGearStandardTool(GearItemSets.SICKLE, itemHandheld);
-        tempGearStandardTool(GearItemSets.SHEARS, itemHandheld);
-        tempGearBow(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
+        tempGearStandardTool(GearItemSets.PROSPECTOR_HAMMER);
+        tempGearStandardTool(GearItemSets.HOE);
+        tempGearStandardTool(GearItemSets.MATTOCK);
+        tempGearStandardTool(GearItemSets.SICKLE);
+        tempGearStandardTool(GearItemSets.SHEARS);
+        gearBowItem(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
         // tempGearBow(SgItems.BOW, itemHandheld);
         // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
         // tempGearBow(SgItems.SLINGSHOT, itemHandheld);
-        tempGearArrow(GearItemSets.ARROW, itemGenerated);
-        tempGearArmor(GearItemSets.HELMET, itemGenerated);
-        tempGearArmor(GearItemSets.CHESTPLATE, itemGenerated);
-        tempGearArmor(GearItemSets.LEGGINGS, itemGenerated);
-        tempGearArmor(GearItemSets.BOOTS, itemGenerated);
-        tempGearElytra(GearItemSets.ELYTRA, itemGenerated);
-        tempGearCurio(GearItemSets.RING, itemGenerated);
-        tempGearCurio(GearItemSets.BRACELET, itemGenerated);
-        tempGearCurio(GearItemSets.NECKLACE, itemGenerated);
+        gearArrowItem(GearItemSets.ARROW, itemGenerated);
+        gearArmorItem(GearItemSets.HELMET);
+        gearArmorItem(GearItemSets.CHESTPLATE);
+        gearArmorItem(GearItemSets.LEGGINGS);
+        gearArmorItem(GearItemSets.BOOTS);
+        gearElytraItem(GearItemSets.ELYTRA);
+        gearCurioItem(GearItemSets.RING);
+        gearCurioItem(GearItemSets.BRACELET);
+        gearCurioItem(GearItemSets.NECKLACE);
         // Parts
-        tempMainPart(GearItemSets.SWORD);
-        tempMainPart(GearItemSets.KATANA);
-        tempMainPart(GearItemSets.MACHETE);
-        tempMainPart(GearItemSets.SPEAR);
-        tempMainPart(GearItemSets.TRIDENT);
-        tempMainPart(GearItemSets.MACE);
-        tempMainPart(GearItemSets.KNIFE);
-        tempMainPart(GearItemSets.DAGGER);
-        tempMainPart(GearItemSets.PICKAXE);
-        tempMainPart(GearItemSets.SHOVEL);
-        tempMainPart(GearItemSets.AXE);
-        tempMainPart(GearItemSets.PAXEL);
-        tempMainPart(GearItemSets.HAMMER);
-        tempMainPart(GearItemSets.EXCAVATOR);
-        tempMainPart(GearItemSets.SAW);
-        tempMainPart(GearItemSets.HOE);
-        tempMainPart(GearItemSets.MATTOCK);
-        tempMainPart(GearItemSets.PROSPECTOR_HAMMER);
-        tempMainPart(GearItemSets.SICKLE);
-        tempMainPart(GearItemSets.SHEARS);
-        tempMainPart(GearItemSets.FISHING_ROD);
-        tempMainPart(GearItemSets.BOW);
-        tempMainPart(GearItemSets.CROSSBOW);
-        tempMainPart(GearItemSets.SLINGSHOT);
-        tempMainPart(GearItemSets.SHIELD);
-        tempMainPart(GearItemSets.HELMET);
-        tempMainPart(GearItemSets.CHESTPLATE);
-        tempMainPart(GearItemSets.LEGGINGS);
-        tempMainPart(GearItemSets.BOOTS);
-        tempMainPart(GearItemSets.ELYTRA);
-        tempMainPart(GearItemSets.ARROW);
-        tempMainPart(GearItemSets.RING);
-        tempMainPart(GearItemSets.BRACELET);
-        tempMainPart(GearItemSets.NECKLACE);
-        tempGearPart(SgItems.ROD);
-        tipUpgradePart(SgItems.TIP);
-        tempCoatingPart(SgItems.COATING);
-        tempGearPart(SgItems.GRIP);
-        tempGearPart(SgItems.BINDING);
-        tempGearPart(SgItems.LINING, "item/part/lining_cloth");
-        tempGearPart(SgItems.CORD);
-        tempGearPart(SgItems.FLETCHING);
-        tempGearPart(SgItems.SETTING);
+        mainPartItem(GearItemSets.SWORD);
+        mainPartItem(GearItemSets.KATANA);
+        mainPartItem(GearItemSets.MACHETE);
+        mainPartItem(GearItemSets.SPEAR);
+        mainPartItem(GearItemSets.TRIDENT);
+        mainPartItem(GearItemSets.MACE);
+        mainPartItem(GearItemSets.KNIFE);
+        mainPartItem(GearItemSets.DAGGER);
+        mainPartItem(GearItemSets.PICKAXE);
+        mainPartItem(GearItemSets.SHOVEL);
+        mainPartItem(GearItemSets.AXE);
+        mainPartItem(GearItemSets.PAXEL);
+        mainPartItem(GearItemSets.HAMMER);
+        mainPartItem(GearItemSets.EXCAVATOR);
+        mainPartItem(GearItemSets.SAW);
+        mainPartItem(GearItemSets.HOE);
+        mainPartItem(GearItemSets.MATTOCK);
+        mainPartItem(GearItemSets.PROSPECTOR_HAMMER);
+        mainPartItem(GearItemSets.SICKLE);
+        mainPartItem(GearItemSets.SHEARS);
+        mainPartItem(GearItemSets.FISHING_ROD);
+        mainPartItem(GearItemSets.BOW);
+        mainPartItem(GearItemSets.CROSSBOW);
+        mainPartItem(GearItemSets.SLINGSHOT);
+        mainPartItem(GearItemSets.SHIELD);
+        mainPartItem(GearItemSets.HELMET);
+        mainPartItem(GearItemSets.CHESTPLATE);
+        mainPartItem(GearItemSets.LEGGINGS);
+        mainPartItem(GearItemSets.BOOTS);
+        mainPartItem(GearItemSets.ELYTRA);
+        mainPartItem(GearItemSets.ARROW);
+        mainPartItem(GearItemSets.RING);
+        mainPartItem(GearItemSets.BRACELET);
+        mainPartItem(GearItemSets.NECKLACE);
+        gearPartItem(SgItems.ROD);
+        tipUpgradePartItem(SgItems.TIP);
+        coatingPartItem(SgItems.COATING);
+        gearPartItem(SgItems.GRIP);
+        gearPartItem(SgItems.BINDING);
+        gearPartItem(SgItems.LINING, "item/part/lining_cloth");
+        gearPartItem(SgItems.CORD);
+        gearPartItem(SgItems.FLETCHING);
+        gearPartItem(SgItems.SETTING);
+    }
+
+    private void flatItem(ItemLike item) {
+        generateFlatItem(item.asItem(), ModelTemplates.FLAT_ITEM);
+    }
+
+    private void generateWithTintedBaseLayer(ItemLike item, String overlaySuffix, ItemTintSource tintSource) {
+        ResourceLocation key = this.generateLayeredItem(
+                item.asItem(),
+                TextureMapping.getItemTexture(item.asItem()),
+                TextureMapping.getItemTexture(item.asItem(), overlaySuffix)
+        );
+        this.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(key, tintSource, BLANK_LAYER));
+    }
+
+    private void generateWithTintedBaseLayer(ItemLike item, String texturePath, String overlaySuffix, ItemTintSource tintSource) {
+        ResourceLocation key = this.generateLayeredItem(
+                item.asItem(),
+                SilentGear.getId(texturePath),
+                SilentGear.getId(texturePath + overlaySuffix)
+        );
+        this.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(key, tintSource, BLANK_LAYER));
+    }
+
+    private void generateTintedSingleLayer(ItemLike item, ItemTintSource tintSource) {
+        ResourceLocation key = createFlatItemModel(item.asItem(), ModelTemplates.FLAT_ITEM);
+        this.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(key, tintSource));
+    }
+
+    private void layeredItem(ItemLike item, String texture0, String texture1) {
+        generateLayeredItem(item.asItem(), SilentGear.getId(texture0), SilentGear.getId(texture1));
+    }
+
+    private void layeredItem(ItemLike item, String texture0, String texture1, String texture2) {
+        ModelTemplates.THREE_LAYERED_ITEM.create(
+                item.asItem(),
+                TextureMapping.layered(SilentGear.getId(texture0), SilentGear.getId(texture1), SilentGear.getId(texture2)),
+                this.modelOutput
+        );
+    }
+
+    private void generateMaterialColoredItemWithOverlay(ItemLike item, String texturePath, String overlayTexture) {
+        ResourceLocation key = this.generateLayeredItem(
+                item.asItem(),
+                SilentGear.getId(texturePath),
+                SilentGear.getId(overlayTexture)
+        );
+        this.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(key, SgItemTintSources.blendedMaterialColor(), BLANK_LAYER));
+    }
+
+    private void generateMaterialColoredItemWithOverlay(ItemLike item, String texturePath, String overlayTexture1, String overlayTexture2) {
+        ResourceLocation key = ModelTemplates.THREE_LAYERED_ITEM.create(
+                item.asItem(),
+                TextureMapping.layered(
+                        SilentGear.getId(texturePath),
+                        SilentGear.getId(overlayTexture1),
+                        SilentGear.getId(overlayTexture2)
+                ),
+                this.modelOutput
+        );
+        this.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(key, SgItemTintSources.blendedMaterialColor(), BLANK_LAYER));
     }
 
     private String gearTypeName(GearType gearType) {
@@ -233,209 +252,106 @@ public class ModItemModelProvider extends ItemModelProvider {
         return BuiltInRegistries.ITEM.getKey(item).getPath();
     }
 
-    private void tempGearStandardTool(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        tempGearStandardTool(item, parent, true);
+    private void tempGearStandardTool(GearItemSet<? extends GearItem> item) {
+        tempGearStandardTool(item, true);
     }
 
-    private void tempGearStandardTool(GearItemSet<? extends GearItem> item, ModelFile parent, boolean buildMainModel) {
+    private void tempGearStandardTool(GearItemSet<? extends GearItem> itemSet, boolean buildMainModel) {
+        new GearItemModelBuilder(itemSet)
+                .tintedLayer(PartTypes.ROD, "rod_generic_lc")
+                .tintedLayer(PartTypes.MAIN, "main_generic_hc")
+                .simpleLayer(PartTypes.NONE, "_highlight")
+                .tintedLayer(PartTypes.FLETCHING, "bowstring_string")
+                .generateModel(this.itemModelOutput, this.modelOutput);
+    }
+
+    private void gearBowItem(GearItemSet<? extends GearItem> itemSet) {
+        new GearItemModelBuilder(itemSet)
+                .tintedLayer(PartTypes.ROD, "rod_generic_lc")
+                .tintedLayer(PartTypes.MAIN, "main_generic_hc")
+                .simpleLayer(PartTypes.NONE, "_highlight")
+                .tintedLayer(PartTypes.FLETCHING, "bowstring_string")
+                .generateModel(this.itemModelOutput, this.modelOutput);
+    }
+
+    private void gearCurioItem(GearItemSet<? extends GearItem> itemSet) {
+        new GearItemModelBuilder(itemSet)
+                .tintedLayer(PartTypes.MAIN, "main_generic_hc")
+                .tintedLayer(PartTypes.SETTING, "adornment_generic")
+                .simpleLayer(PartTypes.NONE, "_highlight")
+                .generateModel(this.itemModelOutput, this.modelOutput);
+    }
+
+    private void gearArmorItem(GearItemSet<? extends GearItem> itemSet) {
+        new GearItemModelBuilder(itemSet)
+                .tintedLayer(PartTypes.MAIN, "main_generic_hc")
+                .simpleLayer(PartTypes.NONE, "_highlight")
+                .generateModel(this.itemModelOutput, this.modelOutput);
+    }
+
+    private void gearElytraItem(GearItemSet<? extends GearItem> itemSet) {
+        new GearItemModelBuilder(itemSet)
+                .tintedLayer(PartTypes.MAIN, "main_generic_hc")
+                .simpleLayer(PartTypes.NONE, "_highlight")
+                .tintedLayer(PartTypes.BINDING, "binding_generic")
+                .generateModel(this.itemModelOutput, this.modelOutput);
+    }
+
+    private void gearArrowItem(GearItemSet<? extends GearItem> itemSet) {
+        new GearItemModelBuilder(itemSet)
+                .tintedLayer(PartTypes.ROD, "rod_generic_lc")
+                .tintedLayer(PartTypes.MAIN, "main_generic_hc")
+                .simpleLayer(PartTypes.NONE, "_highlight")
+                .tintedLayer(PartTypes.FLETCHING, "fletching_generic")
+                .generateModel(this.itemModelOutput, this.modelOutput);
+    }
+
+    private void mainPartItem(GearItemSet<? extends GearItem> item) {
         String name = gearTypeName(item.type());
-        String path = BuiltInRegistries.ITEM.getKey(item.gearItem()).getPath();
-        ModelFile mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path));
-
-        if (item == GearItemSets.TRIDENT) { // "item/trident" points to the special renderer
-        	mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path + "_icon"));
-        }
-        
-        ItemModelBuilder model_lc = getBuilder(path + "_lc")
-                .parent(mainModelFile)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_lc");
-        ItemModelBuilder model_hc = getBuilder(path + "_hc")
-                .parent(mainModelFile)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_hc")
-                .texture("layer2", "item/" + name + "/_highlight");
-        ItemModelBuilder model_lc_tip = getBuilder(path + "_lc_tip")
-                .parent(mainModelFile)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_lc")
-                .texture("layer2", "item/blank")
-                .texture("layer3", "item/" + name + "/tip_sharp");
-        ItemModelBuilder model_hc_tip = getBuilder(path + "_hc_tip")
-                .parent(mainModelFile)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_hc")
-                .texture("layer2", "item/" + name + "/_highlight")
-                .texture("layer3", "item/" + name + "/tip_sharp");
-        ItemModelBuilder model_lc_grip = getBuilder(path + "_lc_grip")
-                .parent(mainModelFile)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_lc")
-                .texture("layer2", "item/blank")
-                .texture("layer3", "item/blank")
-                .texture("layer4", "item/" + name + "/grip_wool");
-        ItemModelBuilder model_hc_grip = getBuilder(path + "_hc_grip")
-                .parent(mainModelFile)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_hc")
-                .texture("layer2", "item/" + name + "/_highlight")
-                .texture("layer3", "item/blank")
-                .texture("layer4", "item/" + name + "/grip_wool");
-        ItemModelBuilder model_lc_tip_grip = getBuilder(path + "_lc_tip_grip")
-                .parent(mainModelFile)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_lc")
-                .texture("layer2", "item/blank")
-                .texture("layer3", "item/" + name + "/tip_sharp")
-                .texture("layer4", "item/" + name + "/grip_wool");
-        ItemModelBuilder model_hc_tip_grip = getBuilder(path + "_hc_tip_grip")
-                .parent(mainModelFile)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_hc")
-                .texture("layer2", "item/" + name + "/_highlight")
-                .texture("layer3", "item/" + name + "/tip_sharp")
-                .texture("layer4", "item/" + name + "/grip_wool");
-
-        if (buildMainModel) {
-            ItemModelBuilder mainBuilder = getBuilder(path)
-                    .parent(parent)
-                    .override().predicate(Const.MODEL, 2).model(model_lc).end()
-                    .override().predicate(Const.MODEL, 3).model(model_hc).end()
-                    .override().predicate(Const.MODEL, 4 | 2).model(model_lc_tip).end()
-                    .override().predicate(Const.MODEL, 4 | 3).model(model_hc_tip).end()
-                    .override().predicate(Const.MODEL, 8 | 2).model(model_lc_grip).end()
-                    .override().predicate(Const.MODEL, 8 | 3).model(model_hc_grip).end()
-                    .override().predicate(Const.MODEL, 8 | 4 | 2).model(model_lc_tip_grip).end()
-                    .override().predicate(Const.MODEL, 8 | 4 | 3).model(model_hc_tip_grip).end()
-                    .texture("layer0", "item/" + name + "/rod_generic_lc")
-                    .texture("layer1", "item/" + name + "/main_generic_lc");
-        }
+        generateMaterialColoredItemWithOverlay(
+                item.mainPart(),
+                "item/" + name + "/main_generic_hc",
+                "item/" + name + "/_highlight",
+                "item/part_marker"
+        );
     }
 
-    private ItemModelBuilder tempGear(DeferredItem<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.get().getGearType());
-        return getBuilder(item.getId().getPath())
-                .parent(parent)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_hc")
-                .texture("layer2", "item/" + name + "/_highlight");
-    }
-
-    private ItemModelBuilder tempGearBow(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
-        return getBuilder(itemNamePath(item))
-                .parent(parent)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_hc")
-                .texture("layer2", "item/" + name + "/_highlight")
-                .texture("layer3", "item/" + name + "/bowstring_string");
-    }
-
-    private ItemModelBuilder tempGearCurio(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
-        return getBuilder(itemNamePath(item))
-                .parent(parent)
-                .texture("layer0", "item/" + name + "/main_generic_hc")
-                .texture("layer1", "item/" + name + "/_highlight")
-                .texture("layer2", "item/" + name + "/adornment_generic")
-                .texture("layer3", "item/" + name + "/adornment_highlight");
-    }
-
-    private ItemModelBuilder tempGearArmor(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
-        return getBuilder(itemNamePath(item))
-                .parent(parent)
-                .texture("layer0", "item/" + name + "/main_generic_hc")
-                .texture("layer1", "item/" + name + "/_highlight");
-    }
-
-    private ItemModelBuilder tempGearElytra(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
-        return getBuilder(itemNamePath(item))
-                .parent(parent)
-                .texture("layer0", "item/" + name + "/main_generic_hc")
-                .texture("layer1", "item/" + name + "/_highlight")
-                .texture("layer2", "item/" + name + "/binding_generic");
-    }
-
-    private ItemModelBuilder tempGearArrow(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
-        return getBuilder(itemNamePath(item))
-                .parent(parent)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_hc")
-                .texture("layer2", "item/" + name + "/_highlight")
-                .texture("layer3", "item/" + name + "/fletching_generic");
-    }
-
-    private ItemModelBuilder tempMainPart(GearItemSet<? extends GearItem> item) {
-        String name = gearTypeName(item.type());
-        return getBuilder(itemNamePath(item.mainPart()))
-                .parent(getExistingFile(ResourceLocation.withDefaultNamespace("item/generated")))
-                .texture("layer0", "item/" + name + "/main_generic_hc")
-                .texture("layer1", "item/" + name + "/_highlight")
-                .texture("layer2", "item/part_marker");
-    }
-
-    private ItemModelBuilder tempGearPart(DeferredItem<CompoundPartItem> item) {
+    private void gearPartItem(DeferredItem<CompoundPartItem> item) {
         String name = Objects.requireNonNull(SgRegistries.PART_TYPE.getKey(item.get().getPartType())).getPath();
-        return tempGearPart(item, "item/part/" + name);
+        gearPartItem(item, "item/part/" + name);
     }
 
-    private ItemModelBuilder tempGearPart(DeferredItem<CompoundPartItem> item, String texture) {
-        return getBuilder(item.getId().getPath())
-                .parent(getExistingFile(ResourceLocation.withDefaultNamespace("item/generated")))
-                .texture("layer0", texture)
-                .texture("layer1", "item/part_marker");
+    private void gearPartItem(DeferredItem<CompoundPartItem> item, String texture) {
+        generateMaterialColoredItemWithOverlay(item, texture, "item/part_marker");
     }
 
-    private ItemModelBuilder tipUpgradePart(DeferredItem<CompoundPartItem> item) {
-        return getBuilder(item.getId().getPath())
-                .parent(getExistingFile(ResourceLocation.withDefaultNamespace("item/generated")))
-                .texture("layer0", "item/part/tip")
-                .texture("layer1", "item/part/tip_shine")
-                .texture("layer2", "item/part_marker");
+    private void tipUpgradePartItem(DeferredItem<CompoundPartItem> item) {
+        generateMaterialColoredItemWithOverlay(
+                item,
+                "item/part/tip",
+                "item/part/tip_shine",
+                "item/part_marker"
+        );
     }
 
-    private ItemModelBuilder tempCoatingPart(DeferredItem<CompoundPartItem> item) {
-        return getBuilder(item.getId().getPath())
-                .parent(getExistingFile(ResourceLocation.withDefaultNamespace("item/generated")))
-                .texture("layer0", "item/part/coating_material")
-                .texture("layer1", "item/part/coating_jar")
-                .texture("layer2", "item/part_marker");
+    private void coatingPartItem(DeferredItem<CompoundPartItem> item) {
+        generateMaterialColoredItemWithOverlay(
+                item,
+                "item/part/coating_material",
+                "item/part/coating_jar",
+                "item/part_marker"
+        );
     }
 
-    private void blockItemModel(Block block) {
-        if (block == SgBlocks.FLAX_PLANT.get() || block == SgBlocks.FLUFFY_PLANT.get()) {
-            return;
-        }
-
-        if (block == SgBlocks.PHANTOM_LIGHT.get())
-            builder(block, getExistingFile(mcLoc("item/generated")), "item/phantom_light");
-        else if (block == SgBlocks.NETHERWOOD_SAPLING.get() || block == SgBlocks.STONE_TORCH.get())
-            builder(block, getExistingFile(mcLoc("item/generated")), "block/" + NameUtils.fromBlock(block).getPath());
-        else if (block == SgBlocks.NETHERWOOD_FENCE.get())
-            withExistingParent("netherwood_fence", modLoc("block/netherwood_fence_inventory"));
-        else if (block == SgBlocks.NETHERWOOD_DOOR.get())
-            builder(block, getExistingFile(mcLoc("item/generated")), "item/netherwood_door");
-        else if (block == SgBlocks.NETHERWOOD_TRAPDOOR.get())
-            withExistingParent("netherwood_trapdoor", modLoc("block/netherwood_trapdoor_bottom"));
-        else if (block.asItem() != Items.AIR) {
-            String name = NameUtils.fromBlock(block).getPath();
-            withExistingParent(name, modLoc("block/" + name));
-        }
+    static class ExtraSlots {
+        static final TextureSlot LAYER3 = TextureSlot.create("layer3");
+        static final TextureSlot LAYER4 = TextureSlot.create("layer4");
+        static final TextureSlot LAYER5 = TextureSlot.create("layer5");
     }
 
-    private ItemModelBuilder builder(ItemLike item) {
-        return getBuilder(NameUtils.fromItem(item).getPath());
-    }
-
-    private ItemModelBuilder builder(ItemLike item, ModelFile parent) {
-        String name = NameUtils.fromItem(item).getPath();
-        return builder(item, parent, "item/" + name);
-    }
-
-    private ItemModelBuilder builder(ItemLike item, ModelFile parent, String texture) {
-        return getBuilder(NameUtils.fromItem(item).getPath()).parent(parent).texture("layer0", texture);
+    static class ExtraModelTemplates {
+        static final ModelTemplate FOUR_LAYERED_ITEM = ModelTemplates.createItem("generated", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3);
+        static final ModelTemplate FIVE_LAYERED_ITEM = ModelTemplates.createItem("generated", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3, ExtraSlots.LAYER4);
+        static final ModelTemplate SIX_LAYERED_ITEM = ModelTemplates.createItem("generated", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3, ExtraSlots.LAYER4, ExtraSlots.LAYER5);
     }
 }

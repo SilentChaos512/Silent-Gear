@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.data.tags;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -9,7 +10,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.FluffyBlock;
@@ -18,10 +18,11 @@ import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgTags;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagsProvider extends BlockTagsProvider {
-    public ModBlockTagsProvider(GatherDataEvent event) {
-        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), SilentGear.MOD_ID, event.getExistingFileHelper());
+    public ModBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider, SilentGear.MOD_ID);
     }
 
     @Override

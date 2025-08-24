@@ -12,7 +12,7 @@ import net.silentchaos512.gear.setup.SgTags;
 import java.util.concurrent.CompletableFuture;
 
 public class ModDamageTypeTagsProvider extends TagsProvider<DamageType> {
-    protected ModDamageTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    public ModDamageTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, Registries.DAMAGE_TYPE, lookupProvider, SilentGear.MOD_ID);
     }
 

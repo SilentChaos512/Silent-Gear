@@ -14,10 +14,7 @@ import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.CodecUtils;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public record GearPropertiesData(
@@ -99,6 +96,10 @@ public record GearPropertiesData(
 
     public boolean contains(GearProperty<?, ?> property) {
         return this.properties.containsKey(property);
+    }
+
+    public Set<GearProperty<?, ? extends GearPropertyValue<?>>> keySet() {
+        return this.properties.keySet();
     }
 
     private static void encode(RegistryFriendlyByteBuf buf, GearPropertiesData data) {

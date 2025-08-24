@@ -1,30 +1,23 @@
 package net.silentchaos512.gear.compat.curios;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.compat.caelus.CaelusCompat;
-import net.silentchaos512.gear.item.gear.GearElytraItem;
 import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
 import org.jetbrains.annotations.NotNull;
-import top.theillusivec4.curios.api.*;
+import top.theillusivec4.curios.api.CurioAttributeModifiers;
+import top.theillusivec4.curios.api.CuriosCapability;
+import top.theillusivec4.curios.api.CuriosSlotTypes;
+import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.common.DropRule;
 import top.theillusivec4.curios.api.type.ISlotType;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -45,13 +38,10 @@ public class CurioGearItemCapability {
         );
         event.registerItem(
                 CuriosCapability.ITEM,
-                (stack, context) -> new GearCurio(stack, builder -> {
-                    // Add armor, flight, and trait-related attributes
-                    GearItemSets.ELYTRA.gearItem().addAttributes(stack, builder, false);
-                }) {
+                (stack, context) -> new GearCurio(stack, builder -> {}) {
                     @Override
                     public void curioTick(SlotContext context) {
-                        if (context.entity().level().isClientSide || !ElytraItem.isFlyEnabled(stack)) {
+                        if (context.entity().level().isClientSide || !canGlideWith(stack)) {
                             return;
                         }
                         int ticksFlying = context.entity().getFallFlyingTicks();
@@ -63,6 +53,10 @@ public class CurioGearItemCapability {
                 },
                 GearItemSets.ELYTRA.gearItem()
         );
+    }
+
+    private static boolean canGlideWith(ItemStack stack) {
+        return stack.has(DataComponents.GLIDER) && stack.has(DataComponents.EQUIPPABLE) && !stack.nextDamageWillBreak();
     }
 
     public static class GearCurio implements ICurio {

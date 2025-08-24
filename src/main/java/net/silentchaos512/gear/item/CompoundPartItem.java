@@ -81,6 +81,7 @@ public class CompoundPartItem extends Item {
         return s.toString();
     }
 
+    @Deprecated
     public int getColor(ItemStack stack, int layer) {
         if (layer == 0) {
             var primaryMaterial = getPrimaryMaterial(stack);

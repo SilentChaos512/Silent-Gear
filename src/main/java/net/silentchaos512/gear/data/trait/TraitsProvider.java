@@ -1,17 +1,24 @@
 package net.silentchaos512.gear.data.trait;
 
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -30,17 +37,18 @@ import net.silentchaos512.gear.util.Const;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public class TraitsProvider extends TraitsProviderBase {
-    public TraitsProvider(DataGenerator generator) {
-        super(generator, SilentGear.MOD_ID);
+    public TraitsProvider(CompletableFuture<HolderLookup.Provider> lookupProvider, DataGenerator generator) {
+        super(lookupProvider, generator, SilentGear.MOD_ID);
     }
 
     @Override
     @SuppressWarnings({"OverlyLongMethod", "MethodMayBeStatic"})
-    public Collection<TraitBuilder> getTraits() {
+    public Collection<TraitBuilder> getTraits(HolderLookup.Provider registries) {
+        HolderGetter<Item> items = registries.lookupOrThrow(Registries.ITEM);
         Collection<TraitBuilder> ret = new ArrayList<>();
 
         // Simple
@@ -83,7 +91,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         new ItemMagnetTraitEffect(
                                 0.06f,
                                 3f,
-                                Ingredient.EMPTY
+                                Ingredient.of()
                         )
                 )
                 .extraWikiLines("Higher levels increase range"));
@@ -273,7 +281,7 @@ public class TraitsProvider extends TraitsProviderBase {
         ret.add(TraitBuilder.of(Const.Traits.ADAMANT, 5)
                 .effects(
                         WielderEffectTraitEffect.builder()
-                                .add(GearTypes.ARMOR, WielderEffectTraitEffect.LevelType.PIECE_COUNT, MobEffects.DAMAGE_RESISTANCE, 1, 1, 1, 2)
+                                .add(GearTypes.ARMOR, WielderEffectTraitEffect.LevelType.PIECE_COUNT, MobEffects.RESISTANCE, 1, 1, 1, 2)
                                 .build(),
                         ExtraDamageTraitEffect.affectingHighHealth(2.0f)
                 )
@@ -309,9 +317,9 @@ public class TraitsProvider extends TraitsProviderBase {
         ret.add(TraitBuilder.of(Const.Traits.MIGHTY, 5)
                 .effects(
                         WielderEffectTraitEffect.builder()
-                                .add(GearTypes.TOOL, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.DAMAGE_BOOST, 0, 0, 1, 1, 2)
-                                .add(GearTypes.TOOL, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 1, 2, 3)
-                                .add(GearTypes.CURIO, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.DIG_SPEED, 1, 1, 2, 2, 3)
+                                .add(GearTypes.TOOL, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.STRENGTH, 0, 0, 1, 1, 2)
+                                .add(GearTypes.TOOL, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.HASTE, 1, 1, 1, 2, 3)
+                                .add(GearTypes.CURIO, WielderEffectTraitEffect.LevelType.TRAIT_LEVEL, MobEffects.HASTE, 1, 1, 2, 2, 3)
                                 .build()
                 )
                 .withGearTypeCondition(GearTypes.TOOL, GearTypes.CURIO)
@@ -322,12 +330,12 @@ public class TraitsProvider extends TraitsProviderBase {
                         WielderEffectTraitEffect.builder()
                                 .add(GearTypes.ARMOR,
                                         WielderEffectTraitEffect.LevelType.PIECE_COUNT,
-                                        MobEffects.MOVEMENT_SPEED,
+                                        MobEffects.SPEED,
                                         0, 1, 2, 3
                                 )
                                 .add(GearTypes.ARMOR,
                                         WielderEffectTraitEffect.LevelType.PIECE_COUNT,
-                                        MobEffects.JUMP,
+                                        MobEffects.JUMP_BOOST,
                                         1, 2, 3, 4
                                 )
                                 .build()
@@ -551,7 +559,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         new BonusDropsTraitEffect(
                                 0.15f,
                                 0.5f,
-                                Ingredient.of(SgTags.Items.GOLD_DIGGER_DROPS),
+                                itemTagIngredient(SgTags.Items.GOLD_DIGGER_DROPS),
                                 "nuggets"
                         )
                 )
@@ -562,7 +570,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         new BonusDropsTraitEffect(
                                 0.15f,
                                 0.5f,
-                                Ingredient.of(SgTags.Items.IMPERIAL_DROPS),
+                                itemTagIngredient(SgTags.Items.IMPERIAL_DROPS),
                                 "gems"
                         )
                 )
@@ -602,7 +610,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         new ItemMagnetTraitEffect(
                                 0.06f,
                                 2f,
-                                Ingredient.of(SgTags.Items.GREEDY_MAGNET_ATTRACTED),
+                                itemTagIngredient(SgTags.Items.GREEDY_MAGNET_ATTRACTED),
                                 "ores and gems"
                         )
                 )
@@ -614,7 +622,19 @@ public class TraitsProvider extends TraitsProviderBase {
                                 DataComponentPatch.builder()
                                         .set(
                                                 DataComponents.FOOD,
-                                                new FoodProperties(10, 1f, true, 3.2f, Optional.of(new ItemStack(Items.STICK)), List.of())
+                                                new FoodProperties(
+                                                        10,
+                                                        1f,
+                                                        true
+                                                )
+                                        )
+                                        .set(
+                                                DataComponents.CONSUMABLE,
+                                                Consumables.defaultFood().build()
+                                        )
+                                        .set(
+                                                DataComponents.USE_REMAINDER,
+                                                new UseRemainder(new ItemStack(Items.STICK))
                                         )
                                         .build()
                         )
@@ -637,5 +657,9 @@ public class TraitsProvider extends TraitsProviderBase {
         );
 
         return ret;
+    }
+
+    private Ingredient itemTagIngredient(HolderGetter<Item> item, TagKey<Item> tag) {
+        return Ingredient.of(item.getOrThrow(tag));
     }
 }

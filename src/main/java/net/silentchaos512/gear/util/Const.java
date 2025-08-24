@@ -155,6 +155,7 @@ public final class Const {
         public static final DataResource<Material> IRON = DataResource.material("iron");
         public static final DataResource<Material> STONE = DataResource.material("stone");
         public static final DataResource<Material> STRING = DataResource.material("string");
+        public static final DataResource<Material> TURTLE = DataResource.material("turtle");
         public static final DataResource<Material> TYRIAN_STEEL = DataResource.material("tyrian_steel");
 
         public static final DataResource<Material> WOOD = DataResource.material("wood");

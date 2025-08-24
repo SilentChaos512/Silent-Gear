@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.silentchaos512.gear.item.BlueprintPackageItem;
 import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.setup.SgItems;
 
@@ -17,7 +18,7 @@ public class ModGiftLootTables implements LootTableSubProvider {
 
     @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
-        biConsumer.accept(SgItems.BLUEPRINT_PACKAGE.get().getDefaultLootTable(), LootTable.lootTable()
+        biConsumer.accept(BlueprintPackageItem.DEFAULT_LOOT_TABLE, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(SgItems.ROD_BLUEPRINT))
                 )

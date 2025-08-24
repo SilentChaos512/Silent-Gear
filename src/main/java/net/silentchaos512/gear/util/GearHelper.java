@@ -44,7 +44,6 @@ import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.Material;
-import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
@@ -125,74 +124,48 @@ public final class GearHelper {
 
     //region Attribute modifiers
 
-    public static float getAttackDamageModifier(ItemStack stack) {
-        if (isBroken(stack))
-            return 1f;
-
-        float val = GearData.getProperties(stack).getNumber(GearProperties.ATTACK_DAMAGE);
-        return val < 0 ? 0 : val;
+    public static void onAddAttackDamageModifier(ItemStack stack, float value, ItemAttributeModifiers.Builder builder) {
+        float adjustedValue = isBroken(stack) ? 1f : Math.max(value, 0f);
+        builder.add(
+                Attributes.ATTACK_DAMAGE,
+                new AttributeModifier(
+                        Item.BASE_ATTACK_DAMAGE_ID,
+                        adjustedValue,
+                        AttributeModifier.Operation.ADD_VALUE
+                ),
+                EquipmentSlotGroup.MAINHAND
+        );
     }
 
-    public static float getMagicDamageModifier(ItemStack stack) {
-        if (isBroken(stack))
-            return 0f;
-
-        float val = GearData.getProperties(stack).getNumber(GearProperties.MAGIC_DAMAGE);
-        return val < 0 ? 0 : val;
-    }
-
-    public static float getAttackSpeedModifier(ItemStack stack) {
-        if (!(stack.getItem() instanceof GearTool))
-            return 0.0f;
-
-        float speed = GearData.getProperties(stack).getNumber(GearProperties.ATTACK_SPEED) - 4.0f;
-        if (isBroken(stack))
-            speed += BROKEN_ATTACK_SPEED_CHANGE;
-        return speed;
-    }
-
-    @Deprecated(forRemoval = true)
-    public static void addAttributeModifiers(ItemStack stack, ItemAttributeModifiers.Builder builder) {
-        addAttributeModifiers(stack, builder, true);
-    }
-
-    @Deprecated(forRemoval = true)
-    public static void addAttributeModifiers(ItemStack stack, ItemAttributeModifiers.Builder builder, boolean addStandardMainHandMods) {
-        if (addStandardMainHandMods) {
-            builder
-                    .add(
-                            Attributes.ATTACK_DAMAGE,
-                            new AttributeModifier(
-                                    Item.BASE_ATTACK_DAMAGE_ID,
-                                    getAttackDamageModifier(stack),
-                                    AttributeModifier.Operation.ADD_VALUE
-                            ),
-                            EquipmentSlotGroup.MAINHAND
-                    )
-                    .add(
-                            Attributes.ATTACK_SPEED,
-                            new AttributeModifier(
-                                    Item.BASE_ATTACK_SPEED_ID,
-                                    getAttackSpeedModifier(stack),
-                                    AttributeModifier.Operation.ADD_VALUE
-                            ),
-                            EquipmentSlotGroup.MAINHAND
-                    )
-                    .add(
-                            Attributes.BLOCK_INTERACTION_RANGE,
-                            new AttributeModifier(
-                                    REACH_MODIFIER_ID,
-                                    GearData.getProperties(stack).getNumber(GearProperties.BLOCK_REACH),
-                                    AttributeModifier.Operation.ADD_VALUE
-                            ),
-                            EquipmentSlotGroup.MAINHAND
-                    );
+    public static void onAddAttackSpeedModifier(ItemStack stack, float value, ItemAttributeModifiers.Builder builder) {
+        if (!(stack.getItem() instanceof GearTool)) {
+            return;
         }
+        float speed = value - 4.0f;
+        if (isBroken(stack)) {
+            speed += BROKEN_ATTACK_SPEED_CHANGE;
+        }
+        builder.add(
+                Attributes.ATTACK_SPEED,
+                new AttributeModifier(
+                        Item.BASE_ATTACK_SPEED_ID,
+                        speed,
+                        AttributeModifier.Operation.ADD_VALUE
+                ),
+                EquipmentSlotGroup.MAINHAND
+        );
+    }
 
-        TraitHelper.getTraits(stack).forEach(inst -> {
-            var context = new TraitActionContext(null, inst, stack);
-            inst.getTrait().onGetAttributeModifiers(context, builder);
-        });
+    public static void onAddBlockReachModifier(ItemStack stack, float value, ItemAttributeModifiers.Builder builder) {
+        builder.add(
+                Attributes.BLOCK_INTERACTION_RANGE,
+                new AttributeModifier(
+                        REACH_MODIFIER_ID,
+                        value,
+                        AttributeModifier.Operation.ADD_VALUE
+                ),
+                EquipmentSlotGroup.MAINHAND
+        );
     }
 
     //endregion

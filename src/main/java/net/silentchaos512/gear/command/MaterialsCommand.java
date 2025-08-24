@@ -92,7 +92,7 @@ public final class MaterialsCommand {
         File output = new File(dirPath, fileName);
         File directory = output.getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            player.sendSystemMessage(Component.literal("Could not create directory: " + output.getParent()));
+            player.displayClientMessage(Component.literal("Could not create directory: " + output.getParent()), false);
             return;
         }
 
@@ -116,7 +116,7 @@ public final class MaterialsCommand {
         } finally {
             Component fileNameText = (Component.literal(output.getAbsolutePath())).withStyle(ChatFormatting.UNDERLINE).withStyle(style ->
                     style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
-            player.sendSystemMessage(Component.literal("Wrote materials info to ").append(fileNameText));
+            player.displayClientMessage(Component.literal("Wrote materials info to ").append(fileNameText), false);
         }
     }
 

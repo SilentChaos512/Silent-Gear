@@ -75,6 +75,7 @@ public final class SgItems {
             new JewelerKitItem(PartTypes.SETTING, BlueprintType.BLUEPRINT, unstackableProps()));
     public static final DeferredItem<PartBlueprintItem> ROD_BLUEPRINT = registerPartBlueprint(PartTypes.ROD, false);
     public static final DeferredItem<PartBlueprintItem> TIP_BLUEPRINT = registerPartBlueprint(PartTypes.TIP, false);
+    @Deprecated
     public static final DeferredItem<PartBlueprintItem> COATING_BLUEPRINT = registerPartBlueprint(PartTypes.COATING, false);
     public static final DeferredItem<PartBlueprintItem> GRIP_BLUEPRINT = registerPartBlueprint(PartTypes.GRIP, false);
     public static final DeferredItem<PartBlueprintItem> BINDING_BLUEPRINT = registerPartBlueprint(PartTypes.BINDING, false);
@@ -89,6 +90,7 @@ public final class SgItems {
     // Templates
     public static final DeferredItem<PartBlueprintItem> ROD_TEMPLATE = registerPartBlueprint(PartTypes.ROD, true);
     public static final DeferredItem<PartBlueprintItem> TIP_TEMPLATE = registerPartBlueprint(PartTypes.TIP, true);
+    @Deprecated
     public static final DeferredItem<PartBlueprintItem> COATING_TEMPLATE = registerPartBlueprint(PartTypes.COATING, true);
     public static final DeferredItem<PartBlueprintItem> GRIP_TEMPLATE = registerPartBlueprint(PartTypes.GRIP, true);
     public static final DeferredItem<PartBlueprintItem> BINDING_TEMPLATE = registerPartBlueprint(PartTypes.BINDING, true);
@@ -112,6 +114,7 @@ public final class SgItems {
             new CompoundPartItem(PartTypes.ROD, baseProps()));
     public static final DeferredItem<CompoundPartItem> TIP = registerCompoundPart("tip", () ->
             new CompoundPartItem(PartTypes.TIP, baseProps()));
+    @Deprecated
     public static final DeferredItem<CompoundPartItem> COATING = registerCompoundPart("coating", () ->
             new CompoundPartItem(PartTypes.COATING, baseProps()));
     public static final DeferredItem<CompoundPartItem> GRIP = registerCompoundPart("grip", () ->

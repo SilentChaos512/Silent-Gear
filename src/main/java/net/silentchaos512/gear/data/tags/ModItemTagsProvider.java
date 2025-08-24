@@ -124,13 +124,11 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         builder(SgTags.Items.RODS_IRON, CraftingItems.IRON_ROD);
         builder(SgTags.Items.RODS_NETHERWOOD, CraftingItems.NETHERWOOD_STICK);
-        builder(SgTags.Items.RODS_ROUGH, CraftingItems.ROUGH_ROD);
         builder(SgTags.Items.RODS_STONE, CraftingItems.STONE_ROD);
         builder(Tags.Items.RODS_WOODEN, CraftingItems.NETHERWOOD_STICK);
         tag(Tags.Items.RODS)
                 .addTag(SgTags.Items.RODS_IRON)
                 .addTag(SgTags.Items.RODS_NETHERWOOD)
-                .addTag(SgTags.Items.RODS_ROUGH)
                 .addTag(SgTags.Items.RODS_STONE);
 
         builder(SgTags.Items.PAPER, Items.PAPER);

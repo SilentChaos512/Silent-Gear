@@ -3,7 +3,12 @@ package net.silentchaos512.gear.data;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.advancements.AdvancementProvider;
+import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -12,9 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.advancements.criterion.GearPropertyTrigger;
 import net.silentchaos512.gear.advancements.criterion.GearRepairedTrigger;
@@ -30,18 +32,22 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class ModAdvancementProvider extends AdvancementProvider {
-    public ModAdvancementProvider(GatherDataEvent event) {
-        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper(), Collections.singletonList(new Advancements()));
+    public ModAdvancementProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
+        super(packOutput, registries, List.of(new Advancements()));
     }
 
-    private static class Advancements implements AdvancementGenerator {
+    private static class Advancements implements AdvancementSubProvider {
         @SuppressWarnings("unused")
         @Override
-        public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+        public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
+            HolderGetter<Item> items = registries.lookupOrThrow(Registries.ITEM);
+
             ItemStack rootIcon = new ItemStack(GearItemSets.PICKAXE.gearItem());
             GearData.writeConstructionParts(rootIcon, ImmutableList.of(
                     PartInstance.create(Const.Parts.PICKAXE_HEAD, GearItemSets.PICKAXE.mainPart(), Const.Materials.CRIMSON_STEEL),
@@ -74,19 +80,6 @@ public class ModAdvancementProvider extends AdvancementProvider {
                     .display(CraftingItems.DIAMOND_SHARD, title("kachink2"), description("kachink2"), null, AdvancementType.TASK, true, true, false)
                     .addCriterion("kachink", SgCriteriaTriggers.BRITTLE_DAMAGE.get().createCriterion(new PlayerTrigger.TriggerInstance(Optional.empty())))
                     .save(saver, id("kachink2"));
-
-            /*Advancement crudeTool = Advancement.Builder.advancement()
-                    .parent(root)
-                    .display(CraftingItems.ROUGH_ROD, title("crude_tool"), description("crude_tool"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("tool_has_rough_rod", genericInt(GearEvents.CRAFTED_WITH_ROUGH_ROD, 1))
-                    .save(consumer, id("crude_tool"));
-            Advancement survivalTool = Advancement.Builder.advancement()
-                    .parent(crudeTool)
-                    .display(ModItems.KNIFE, title("survival_tool"), description("survival_tool"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("knife", getItem(ModItems.KNIFE))
-                    .addCriterion("dagger", getItem(ModItems.DAGGER))
-                    .requirements(RequirementsStrategy.OR)
-                    .save(consumer, id("survival_tool"));*/
 
             AdvancementHolder stoneAnvil = simpleGetItem(saver, SgBlocks.STONE_ANVIL, root);
 
@@ -197,7 +190,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
                     .parent(blazeGold)
                     .display(SgBlocks.MATERIAL_GRADER, title("material_grader"), description("material_grader"), null, AdvancementType.TASK, true, true, false)
                     .addCriterion("get_grader", getItem(SgBlocks.MATERIAL_GRADER))
-                    .addCriterion("get_catalyst", getItem(SgTags.Items.GRADER_CATALYSTS_TIER_1))
+                    .addCriterion("get_catalyst", getItem(items, SgTags.Items.GRADER_CATALYSTS_TIER_1))
                     .save(saver, id("material_grader"));
 
             AdvancementHolder crimsonSteel = simpleGetItem(saver, CraftingItems.CRIMSON_STEEL_INGOT, crimsonIron, "crimson_steel");
@@ -211,13 +204,13 @@ public class ModAdvancementProvider extends AdvancementProvider {
             AdvancementHolder graderCatalyst2 = Advancement.Builder.advancement()
                     .parent(materialGrader)
                     .display(CraftingItems.BLAZING_DUST, title("grader_catalyst_2"), description("grader_catalyst_2"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("get_item", getItem(SgTags.Items.GRADER_CATALYSTS_TIER_2))
+                    .addCriterion("get_item", getItem(items, SgTags.Items.GRADER_CATALYSTS_TIER_2))
                     .save(saver, id("grader_catalyst_2"));
 
             AdvancementHolder graderCatalyst3 = Advancement.Builder.advancement()
                     .parent(graderCatalyst2)
                     .display(CraftingItems.GLITTERY_DUST, title("grader_catalyst_3"), description("grader_catalyst_3"), null, AdvancementType.TASK, true, true, false)
-                    .addCriterion("get_item", getItem(SgTags.Items.GRADER_CATALYSTS_TIER_3))
+                    .addCriterion("get_item", getItem(items, SgTags.Items.GRADER_CATALYSTS_TIER_3))
                     .save(saver, id("grader_catalyst_3"));
 
             //endregion
@@ -288,9 +281,9 @@ public class ModAdvancementProvider extends AdvancementProvider {
             return InventoryChangeTrigger.TriggerInstance.hasItems(items);
         }
 
-        private static Criterion<InventoryChangeTrigger.TriggerInstance> getItem(TagKey<Item> tag) {
+        private static Criterion<InventoryChangeTrigger.TriggerInstance> getItem(HolderGetter<Item> items, TagKey<Item> tag) {
             return InventoryChangeTrigger.TriggerInstance.hasItems(
-                    ItemPredicate.Builder.item().of(tag).build()
+                    ItemPredicate.Builder.item().of(items, tag).build()
             );
         }
 

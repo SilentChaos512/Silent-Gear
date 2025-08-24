@@ -7,12 +7,12 @@ import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.crafting.recipe.salvage.GearSalvagingRecipe;
@@ -41,10 +41,6 @@ public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements 
     }
 
     public static SalvagingRecipeBuilder<SalvagingRecipe> builder(ItemLike ingredient) {
-        return builder(Ingredient.of(ingredient));
-    }
-
-    public static SalvagingRecipeBuilder<SalvagingRecipe> builder(TagKey<Item> ingredient) {
         return builder(Ingredient.of(ingredient));
     }
 
@@ -82,7 +78,7 @@ public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements 
     }
 
     @Override
-    public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+    public void save(RecipeOutput pRecipeOutput, ResourceKey<Recipe<?>> pId) {
         this.ensureValid(pId);
 
         Advancement.Builder advancement$builder = null;
@@ -96,12 +92,12 @@ public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements 
 
         var recipe = factory.apply(ingredient, results);
         var advancementHolder = advancement$builder != null
-                ? advancement$builder.build(pId.withPrefix("recipes/" + recipeFolder + "/"))
+                ? advancement$builder.build(pId.location().withPrefix("recipes/" + recipeFolder + "/"))
                 : null;
         pRecipeOutput.accept(pId, recipe, advancementHolder);
     }
 
-    private void ensureValid(ResourceLocation pId) {
+    private void ensureValid(ResourceKey<Recipe<?>> pId) {
         if (resultsMustBePresent && results.isEmpty()) {
             throw new IllegalStateException("Empty results for standard salvaging recipe");
         }

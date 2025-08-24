@@ -1,8 +1,11 @@
 package net.silentchaos512.gear.data.recipes;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Recipe;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.crafting.recipe.ConversionRecipe;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -14,14 +17,14 @@ public class ShapelessConversionBuilder extends ExtendedShapelessRecipeBuilder<C
     private final GearItem resultItem;
     private final List<PartInstance> parts;
 
-    public ShapelessConversionBuilder(RecipeCategory category, GearItem result, List<PartInstance> parts) {
-        super(category, result);
+    public ShapelessConversionBuilder(HolderGetter<Item> items, RecipeCategory category, GearItem result, List<PartInstance> parts) {
+        super(items, category, result);
         this.resultItem = result;
         this.parts = parts;
     }
 
     @Override
-    public ConversionRecipe createRecipe(ResourceLocation id) {
+    public ConversionRecipe createRecipe(ResourceKey<Recipe<?>> id) {
         return new ConversionRecipe(
                 group != null ? group : "",
                 RecipeBuilder.determineBookCategory(category),

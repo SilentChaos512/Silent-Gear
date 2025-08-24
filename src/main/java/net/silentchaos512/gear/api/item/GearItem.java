@@ -27,7 +27,6 @@ import java.util.function.Supplier;
 /**
  * Interface for all equipment items, including tools and armor.
  */
-@Deprecated
 public interface GearItem extends ItemLike {
     Supplier<Collection<PartType>> REQUIRED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
             PartTypes.MAIN.get()

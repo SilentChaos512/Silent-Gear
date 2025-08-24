@@ -1,14 +1,13 @@
 package net.silentchaos512.gear.data;
 
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.setup.SgSounds;
 
 public class ModSoundDefinitionsProvider extends SoundDefinitionsProvider {
-    protected ModSoundDefinitionsProvider(PackOutput output, ExistingFileHelper helper) {
-        super(output, SilentGear.MOD_ID, helper);
+    protected ModSoundDefinitionsProvider(PackOutput output) {
+        super(output, SilentGear.MOD_ID);
     }
 
     @Override

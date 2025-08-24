@@ -10,6 +10,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -163,6 +164,7 @@ public class GearProperties {
                             .group(GearPropertyGroups.HARVEST)
                             .affectedByGrades(false)
                             .affectedBySynergy(false)
+                            .onGetAttributes(GearHelper::onAddBlockReachModifier)
             )
     );
     public static final Supplier<NumberProperty> ATTACK_DAMAGE = REGISTRAR.register(
@@ -175,6 +177,7 @@ public class GearProperties {
                             .group(GearPropertyGroups.ATTACK)
                             .affectedByGrades(true)
                             .affectedBySynergy(true)
+                            .onGetAttributes(GearHelper::onAddAttackDamageModifier)
             )
     );
     public static final Supplier<NumberProperty> ATTACK_SPEED = REGISTRAR.register(
@@ -187,6 +190,7 @@ public class GearProperties {
                             .group(GearPropertyGroups.ATTACK)
                             .affectedByGrades(false)
                             .affectedBySynergy(false)
+                            .onGetAttributes(GearHelper::onAddAttackSpeedModifier)
             )
     );
     public static final Supplier<NumberProperty> ATTACK_REACH = REGISTRAR.register(

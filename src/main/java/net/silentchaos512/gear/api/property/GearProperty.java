@@ -8,6 +8,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
@@ -18,7 +19,9 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
+import org.apache.commons.lang3.function.TriConsumer;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +37,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     protected final boolean affectedByGrades;
     protected final boolean forMaterialsOnly;
     protected final boolean visible;
+    @Nullable private final TriConsumer<ItemStack, T, ItemAttributeModifiers.Builder> attributeAdder;
 
     protected GearProperty(Builder<T> builder) {
         builder.validate();
@@ -47,6 +51,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         this.group = builder.group;
         this.nameColor = builder.nameColor;
         this.visible = builder.visible;
+        this.attributeAdder = builder.attributeAdder;
     }
 
     public abstract Codec<V> codec();
@@ -227,6 +232,12 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return Component.translatable("property." + name.getNamespace() + "." + name.getPath());
     }
 
+    public void addAttributes(ItemStack stack, T value, ItemAttributeModifiers.Builder builder) {
+        if (this.attributeAdder != null) {
+            this.attributeAdder.accept(stack, value, builder);
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -262,6 +273,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         private boolean affectedByGrades;
         public boolean forMaterialsOnly;
         private boolean visible;
+        @Nullable private TriConsumer<ItemStack, T, ItemAttributeModifiers.Builder> attributeAdder = null;
 
         public Builder(T defaultValue) {
             this (defaultValue, defaultValue);
@@ -316,6 +328,11 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
 
         public Builder<T> visible(boolean visible) {
             this.visible = visible;
+            return this;
+        }
+
+        public Builder<T> onGetAttributes(TriConsumer<ItemStack, T, ItemAttributeModifiers.Builder> consumer) {
+            this.attributeAdder = consumer;
             return this;
         }
     }

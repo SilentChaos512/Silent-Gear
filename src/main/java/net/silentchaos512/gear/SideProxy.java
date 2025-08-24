@@ -20,7 +20,6 @@ import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
-import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartSerializers;
@@ -185,7 +184,6 @@ class SideProxy implements IProxy {
         }
 
         private static void clientSetup(FMLClientSetupEvent event) {
-            ModItemModelProperties.register(event);
         }
 
         private static void postSetup(FMLLoadCompleteEvent event) {

@@ -6,13 +6,15 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.PartType;
@@ -80,11 +82,11 @@ public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements 
 
     public void save(RecipeOutput pRecipeOutput) {
         String name = "smithing/" + recipeFolder + "/" + BuiltInRegistries.ITEM.getKey(gearItem).getPath();
-        save(pRecipeOutput, SilentGear.getId(name));
+        save(pRecipeOutput, ResourceKey.create(Registries.RECIPE, SilentGear.getId(name)));
     }
 
     @Override
-    public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+    public void save(RecipeOutput pRecipeOutput, ResourceKey<Recipe<?>> pId) {
         Advancement.Builder advancement$builder = null;
         if (!this.criteria.isEmpty()) {
             advancement$builder = pRecipeOutput.advancement()
@@ -96,7 +98,7 @@ public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements 
 
         var recipe = factory.create(new ItemStack(gearItem), template, addition);
         var advancementHolder = advancement$builder != null
-                ? advancement$builder.build(pId.withPrefix("recipes/smithing/" + recipeFolder + "/"))
+                ? advancement$builder.build(pId.location().withPrefix("recipes/smithing/" + recipeFolder + "/"))
                 : null;
         pRecipeOutput.accept(pId, recipe, advancementHolder);
     }

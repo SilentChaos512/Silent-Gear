@@ -3,12 +3,12 @@ package net.silentchaos512.gear.data.recipes;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.silentchaos512.gear.core.SoundPlayback;
 import net.silentchaos512.gear.crafting.recipe.ToolActionRecipe;
 import org.jetbrains.annotations.Nullable;
@@ -49,7 +49,7 @@ public class ToolActionRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+    public void save(RecipeOutput pRecipeOutput, ResourceKey<Recipe<?>> pId) {
         var recipe = new ToolActionRecipe(tool, ingredient, damageToTool, result, sound);
         pRecipeOutput.accept(pId, recipe, null);
     }

@@ -5,6 +5,7 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 
 import javax.annotation.Nullable;
 
+@Deprecated
 public interface IColoredMaterialItem {
     @Nullable
     MaterialInstance getPrimarySubMaterial(ItemStack stack);

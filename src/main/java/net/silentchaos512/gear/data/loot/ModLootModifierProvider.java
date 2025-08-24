@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.data.loot;
 
+import com.google.common.collect.ImmutableList;
+import net.minecraft.Util;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -26,6 +28,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
         super(event.getGenerator().getPackOutput(), event.getLookupProvider(), SilentGear.MOD_ID);
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     protected void start() {
         add("bonus_drops_trait", new BonusDropsTraitLootModifier(
@@ -85,26 +88,13 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                 new AddTableLootModifier(
                         new LootItemCondition[]{
                                 anyOfLootTables(
-                                        List.of(
-                                                EntityType.COW.getDefaultLootTable(),
-                                                EntityType.PIG.getDefaultLootTable(),
-                                                BuiltInLootTables.SHEEP_BLACK,
-                                                BuiltInLootTables.SHEEP_BLUE,
-                                                BuiltInLootTables.SHEEP_BROWN,
-                                                BuiltInLootTables.SHEEP_CYAN,
-                                                BuiltInLootTables.SHEEP_GRAY,
-                                                BuiltInLootTables.SHEEP_GREEN,
-                                                BuiltInLootTables.SHEEP_LIGHT_BLUE,
-                                                BuiltInLootTables.SHEEP_LIGHT_GRAY,
-                                                BuiltInLootTables.SHEEP_LIME,
-                                                BuiltInLootTables.SHEEP_MAGENTA,
-                                                BuiltInLootTables.SHEEP_ORANGE,
-                                                BuiltInLootTables.SHEEP_PINK,
-                                                BuiltInLootTables.SHEEP_PURPLE,
-                                                BuiltInLootTables.SHEEP_RED,
-                                                BuiltInLootTables.SHEEP_WHITE,
-                                                BuiltInLootTables.SHEEP_YELLOW
-                                        )
+                                        Util.make(() -> {
+                                            var builder = ImmutableList.<ResourceKey<LootTable>>builder()
+                                                    .add(EntityType.COW.getDefaultLootTable().get())
+                                                    .add(EntityType.PIG.getDefaultLootTable().get());
+                                            BuiltInLootTables.SHEEP_BY_DYE.values().forEach(builder::add);
+                                            return builder.build();
+                                        })
                                 )
                         },
                         SgLoot.Tables.DROPS_SINEW
@@ -117,7 +107,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         new LootItemCondition[]{
                                 anyOfLootTables(
                                         List.of(
-                                                EntityType.SPIDER.getDefaultLootTable()
+                                                EntityType.SPIDER.getDefaultLootTable().get()
                                         )
                                 )
                         },
@@ -131,7 +121,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         new LootItemCondition[]{
                                 anyOfLootTables(
                                         List.of(
-                                                EntityType.CAVE_SPIDER.getDefaultLootTable()
+                                                EntityType.CAVE_SPIDER.getDefaultLootTable().get()
                                         )
                                 )
                         },
@@ -145,8 +135,8 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         new LootItemCondition[]{
                                 anyOfLootTables(
                                         List.of(
-                                                EntityType.HUSK.getDefaultLootTable(),
-                                                EntityType.ZOMBIE.getDefaultLootTable()
+                                                EntityType.HUSK.getDefaultLootTable().get(),
+                                                EntityType.ZOMBIE.getDefaultLootTable().get()
                                         )
                                 )
                         },
@@ -160,7 +150,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         new LootItemCondition[]{
                                 anyOfLootTables(
                                         List.of(
-                                                EntityType.ZOMBIE_VILLAGER.getDefaultLootTable()
+                                                EntityType.ZOMBIE_VILLAGER.getDefaultLootTable().get()
                                         )
                                 )
                         },

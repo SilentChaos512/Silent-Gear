@@ -6,12 +6,13 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
@@ -68,14 +69,6 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
         return addIngredient(Ingredient.of(item), count);
     }
 
-    public CompoundingRecipeBuilder<R> addIngredient(TagKey<Item> tag) {
-        return addIngredient(Ingredient.of(tag));
-    }
-
-    public CompoundingRecipeBuilder<R> addIngredient(TagKey<Item> tag, int count) {
-        return addIngredient(Ingredient.of(tag), count);
-    }
-
     public CompoundingRecipeBuilder<R> addIngredient(Ingredient ingredient) {
         return addIngredient(ingredient, 1);
     }
@@ -108,11 +101,11 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
         if (resultMaterial != null) {
             name = name + "." + resultMaterial.getId().getPath();
         }
-        save(pRecipeOutput, SilentGear.getId(name));
+        save(pRecipeOutput, ResourceKey.create(Registries.RECIPE, SilentGear.getId(name)));
     }
 
     @Override
-    public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+    public void save(RecipeOutput pRecipeOutput, ResourceKey<Recipe<?>> pId) {
         Advancement.Builder advancement$builder = null;
         if (!this.criteria.isEmpty()) {
             advancement$builder = pRecipeOutput.advancement()
@@ -127,7 +120,7 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
                 ingredients
         );
         var advancementHolder = advancement$builder != null
-                ? advancement$builder.build(pId.withPrefix("recipes/alloying/" + recipeFolder + "/"))
+                ? advancement$builder.build(pId.location().withPrefix("recipes/alloying/" + recipeFolder + "/"))
                 : null;
         pRecipeOutput.accept(pId, recipe, advancementHolder);
     }

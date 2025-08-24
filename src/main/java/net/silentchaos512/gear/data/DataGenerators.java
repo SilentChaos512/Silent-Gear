@@ -11,10 +11,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.data.client.CompoundModelsProvider;
-import net.silentchaos512.gear.data.client.ModBlockStateProvider;
 import net.silentchaos512.gear.data.client.ModEquipmentAssetsProvider;
-import net.silentchaos512.gear.data.client.ModItemModelProvider;
+import net.silentchaos512.gear.data.client.ModModelProvider;
 import net.silentchaos512.gear.data.loot.ModLootModifierProvider;
 import net.silentchaos512.gear.data.loot.ModLootTables;
 import net.silentchaos512.gear.data.recipes.ModRecipesProvider;
@@ -23,6 +21,7 @@ import net.silentchaos512.gear.data.tags.ModDamageTypeTagsProvider;
 import net.silentchaos512.gear.data.tags.ModEntityTypeTagsProvider;
 import net.silentchaos512.gear.data.tags.ModItemTagsProvider;
 import net.silentchaos512.gear.data.trait.TraitsProvider;
+import net.silentchaos512.lib.data.recipe.LibRecipeProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,29 +43,27 @@ public final class DataGenerators {
         generator.addProvider(true, new ModDataMapProvider(packOutput, lookupProvider));
 
         // Tags
-        ModBlockTagsProvider blocks = new ModBlockTagsProvider(event);
+        ModBlockTagsProvider blocks = new ModBlockTagsProvider(packOutput, lookupProvider);
         generator.addProvider(true, blocks);
         generator.addProvider(true, new ModItemTagsProvider(event, blocks));
-        generator.addProvider(true, new ModDamageTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
-        generator.addProvider(true, new ModEntityTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
+        generator.addProvider(true, new ModDamageTypeTagsProvider(packOutput, lookupProvider));
+        generator.addProvider(true, new ModEntityTypeTagsProvider(packOutput, lookupProvider));
 
         // Gear data
-        generator.addProvider(true, new TraitsProvider(generator));
+        generator.addProvider(true, new TraitsProvider(lookupProvider, generator));
         generator.addProvider(true, new MaterialsProvider(generator, SilentGear.MOD_ID));
         generator.addProvider(true, new PartsProvider(generator));
 
         // Others
         generator.addProvider(true, new ModLootTables(event));
         generator.addProvider(true, new ModLootModifierProvider(event));
-        generator.addProvider(true, new ModRecipesProvider(event));
-        generator.addProvider(true, new ModAdvancementProvider(event));
+        generator.addProvider(true, LibRecipeProvider.createRunner(packOutput, lookupProvider, "Silent Gear Recipes", ModRecipesProvider::new));
+        generator.addProvider(true, new ModAdvancementProvider(packOutput, lookupProvider));
 //        ModWorldGen.init(generator, existingFileHelper); //FIXME
 
         // Client
-        generator.addProvider(true, new ModBlockStateProvider(generator, existingFileHelper));
-        generator.addProvider(true, new ModItemModelProvider(generator, existingFileHelper));
-        generator.addProvider(true, new CompoundModelsProvider(generator, existingFileHelper));
-        generator.addProvider(true, new ModSoundDefinitionsProvider(packOutput, existingFileHelper));
+        generator.addProvider(true, new ModModelProvider(packOutput));
+        generator.addProvider(true, new ModSoundDefinitionsProvider(packOutput));
         generator.addProvider(true, new ModEquipmentAssetsProvider(packOutput));
     }
 
