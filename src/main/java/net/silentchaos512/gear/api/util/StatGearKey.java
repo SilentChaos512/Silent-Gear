@@ -13,9 +13,10 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class StatGearKey {
-    private static final Map<Pair<IItemStat, GearType>, StatGearKey> CACHE = new HashMap<>();
+    private static final Map<Pair<IItemStat, GearType>, StatGearKey> CACHE = new ConcurrentHashMap<>();
 
     private final String key;
     private final IItemStat stat;
