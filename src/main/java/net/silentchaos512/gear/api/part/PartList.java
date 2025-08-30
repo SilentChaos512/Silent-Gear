@@ -51,16 +51,12 @@ public class PartList extends AbstractList<PartInstance> {
         return ret;
     }
 
-    public static PartList.Immutable immutable(Collection<? extends PartInstance> c) {
-        PartList.Immutable ret = new Immutable();
-        ret.addAll(c);
-        return ret;
+    public static PartList.Immutable immutable(Collection<PartInstance> c) {
+        return new Immutable(c);
     }
 
     public static PartList.Immutable immutable(PartInstance... parts) {
-        PartList.Immutable ret = new Immutable();
-        Collections.addAll(ret, parts);
-        return ret;
+        return new Immutable(parts);
     }
 
     public List<PartInstance> toSortedList() {
@@ -245,6 +241,14 @@ public class PartList extends AbstractList<PartInstance> {
     }
 
     public static class Immutable extends PartList {
+        private Immutable(Collection<PartInstance> parts) {
+            this.list.addAll(parts);
+        }
+
+        private Immutable(PartInstance... parts) {
+            Collections.addAll(this.list, parts);
+        }
+
         @Override
         public boolean add(PartInstance arg0) {
             throw new UnsupportedOperationException();
