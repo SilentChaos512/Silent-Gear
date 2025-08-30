@@ -13,12 +13,13 @@ import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.CodecUtils;
+import org.apache.commons.lang3.Validate;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class PartList implements List<PartInstance> {
+public class PartList extends AbstractList<PartInstance> {
     public static final Codec<PartList> CODEC = Codec.list(PartInstance.CODEC)
             .xmap(
                     PartList::of,
@@ -40,25 +41,25 @@ public class PartList implements List<PartInstance> {
 
     public static PartList of(Collection<PartInstance> c) {
         PartList ret = new PartList();
-        ret.list.addAll(c);
+        ret.addAll(c);
         return ret;
     }
 
     public static PartList of(PartInstance... parts) {
         PartList ret = new PartList();
-        Collections.addAll(ret.list, parts);
+        Collections.addAll(ret, parts);
         return ret;
     }
 
     public static PartList.Immutable immutable(Collection<? extends PartInstance> c) {
         PartList.Immutable ret = new Immutable();
-        ret.list.addAll(c);
+        ret.addAll(c);
         return ret;
     }
 
     public static PartList.Immutable immutable(PartInstance... parts) {
         PartList.Immutable ret = new Immutable();
-        Collections.addAll(ret.list, parts);
+        Collections.addAll(ret, parts);
         return ret;
     }
 
@@ -129,26 +130,16 @@ public class PartList implements List<PartInstance> {
         return "PartList[" + listText + "]";
     }
 
+    private void validateNotNull(PartInstance part) {
+        Validate.notNull(part, "Gear part is null");
+    }
+
     //region List overrides
 
     @Override
-    public boolean add(PartInstance arg0) {
-        return this.list.add(arg0);
-    }
-
-    @Override
     public void add(int arg0, PartInstance arg1) {
+        validateNotNull(arg1);
         this.list.add(arg0, arg1);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends PartInstance> arg0) {
-        return this.list.addAll(arg0);
-    }
-
-    @Override
-    public boolean addAll(int arg0, Collection<? extends PartInstance> arg1) {
-        return this.list.addAll(arg0, arg1);
     }
 
     @Override
@@ -162,11 +153,6 @@ public class PartList implements List<PartInstance> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> arg0) {
-        return this.list.containsAll(arg0);
-    }
-
-    @Override
     public PartInstance get(int arg0) {
         return this.list.get(arg0);
     }
@@ -174,11 +160,6 @@ public class PartList implements List<PartInstance> {
     @Override
     public int indexOf(Object arg0) {
         return this.list.indexOf(arg0);
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.list.isEmpty();
     }
 
     @Override
@@ -212,17 +193,8 @@ public class PartList implements List<PartInstance> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> arg0) {
-        return this.list.removeAll(arg0);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> arg0) {
-        return this.list.retainAll(arg0);
-    }
-
-    @Override
     public PartInstance set(int arg0, PartInstance arg1) {
+        validateNotNull(arg1);
         return this.list.set(arg0, arg1);
     }
 
