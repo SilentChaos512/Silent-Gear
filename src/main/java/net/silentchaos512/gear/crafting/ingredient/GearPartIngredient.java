@@ -2,14 +2,15 @@ package net.silentchaos512.gear.crafting.ingredient;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
-import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgIngredientTypes;
@@ -18,7 +19,6 @@ import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -68,16 +68,9 @@ public final class GearPartIngredient implements ICustomIngredient, IGearIngredi
     }
 
     @Override
-    public Stream<ItemStack> getItems() {
-        // Although gear parts are not available when the ingredient is constructed,
-        // they are available later on
-        Collection<GearPart> parts = SgRegistries.PART.getPartsOfType(this.type);
-        if (!parts.isEmpty()) {
-            return parts.stream()
-                    .flatMap(part -> Stream.of(part.getIngredient().getItems()))
-                    .filter(stack -> !stack.isEmpty());
-        }
-        return Stream.empty();
+    public Stream<Holder<Item>> items() {
+        return SgRegistries.PART.getPartsOfType(this.type).stream()
+                .flatMap(part -> part.getIngredient().getValues().stream());
     }
 
     @Override

@@ -2,21 +2,16 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.*;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -31,7 +26,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     private final Result result;
     private final GearItem item;
 
-    public ConversionRecipe(String pGroup, CraftingBookCategory pCategory, Result pResult, NonNullList<Ingredient> pIngredients) {
+    public ConversionRecipe(String pGroup, CraftingBookCategory pCategory, Result pResult, List<Ingredient> pIngredients) {
         super(pGroup, pCategory, pResult.item.getDefaultInstance(), pIngredients);
         this.result = pResult;
 
@@ -42,7 +37,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends ConversionRecipe> getSerializer() {
         return SgRecipes.CONVERSION.get();
     }
 
@@ -70,7 +65,6 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
 
     private Collection<PartInstance> getParts() {
         PartList ret = PartList.of();
-        //noinspection OverlyLongLambda
         this.result.parts.forEach(part -> {
             if (part != null) {
                 ret.add(part);
@@ -93,7 +87,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         );
 
         public static Result fromNetwork(RegistryFriendlyByteBuf buf) {
-            var item = BuiltInRegistries.ITEM.get(buf.readResourceLocation());
+            var item = BuiltInRegistries.ITEM.get(buf.readResourceLocation()).orElseThrow().value();
             var parts = new ArrayList<PartInstance>();
             int partListSize = buf.readByte();
             for (int i = 0; i < partListSize; ++i) {
@@ -115,23 +109,9 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
                                 Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group),
                                 CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(recipe -> recipe.category),
                                 Result.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
-                                Ingredient.CODEC_NONEMPTY
-                                        .listOf()
+                                Codec.lazyInitialized(() -> Ingredient.CODEC.listOf(1, ShapedRecipePattern.getMaxHeight() * ShapedRecipePattern.getMaxWidth()))
                                         .fieldOf("ingredients")
-                                        .flatXmap(
-                                                recipe -> {
-                                                    Ingredient[] aingredient = recipe.toArray(Ingredient[]::new);
-                                                    if (aingredient.length == 0) {
-                                                        return DataResult.error(() -> "No ingredients for shapeless recipe");
-                                                    } else {
-                                                        return aingredient.length > 9
-                                                                ? DataResult.error(() -> "Too many ingredients for shapeless recipe. The maximum is: %s".formatted(9))
-                                                                : DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));
-                                                    }
-                                                },
-                                                DataResult::success
-                                        )
-                                        .forGetter(p_300975_ -> p_300975_.ingredients)
+                                        .forGetter(recipe -> recipe.ingredients)
                         )
                         .apply(instance, ConversionRecipe::new)
         );

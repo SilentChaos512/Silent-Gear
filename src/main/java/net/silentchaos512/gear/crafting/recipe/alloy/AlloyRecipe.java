@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -12,10 +11,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.Material;
@@ -24,6 +20,7 @@ import net.silentchaos512.gear.block.alloymaker.AlloyMakerInfo;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CustomMaterialItem;
+import net.silentchaos512.gear.setup.SgRecipeBookCategories;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -37,6 +34,7 @@ import java.util.function.BiFunction;
 public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
     final List<Ingredient> ingredients = new ArrayList<>();
     final Result result;
+    @Nullable private PlacementInfo placementInfo = null;
 
     public AlloyRecipe(Result result, List<Ingredient> ingredients) {
         this.result = result;
@@ -51,6 +49,10 @@ public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
             list.add(new Ingredient(partMaterialIngredient));
         }
         return recipeFactory.apply(new Result(info.getOutputItem(), count, Const.Materials.EXAMPLE), list);
+    }
+
+    public ItemStack getResultForRecipeDisplay() {
+        return this.result.getResult();
     }
 
     @Override
@@ -91,35 +93,31 @@ public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height <= this.ingredients.size();
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registryAccess) {
-        return this.result.getResult();
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        NonNullList<Ingredient> ret = NonNullList.create();
-        ret.addAll(ingredients);
-        return ret;
-    }
-
-    @Override
     public boolean isSpecial() {
         return true;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<AlloyRecipeInput>> getSerializer() {
         return SgRecipes.COMPOUNDING.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<AlloyRecipeInput>> getType() {
         return SgRecipes.COMPOUNDING_TYPE.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        if (this.placementInfo == null) {
+            this.placementInfo = PlacementInfo.create(this.ingredients);
+        }
+        return this.placementInfo;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return SgRecipeBookCategories.ALLOY_FORGE.get();
     }
 
     public record Result(
@@ -162,7 +160,7 @@ public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
             this.codec = RecordCodecBuilder.mapCodec(
                     instance -> instance.group(
                             Result.CODEC.fieldOf("result").forGetter(r -> r.result),
-                            Codec.list(Ingredient.CODEC_NONEMPTY).fieldOf("ingredients").forGetter(r -> r.ingredients)
+                            Codec.list(Ingredient.CODEC).fieldOf("ingredients").forGetter(r -> r.ingredients)
                     ).apply(instance, factory::create)
             );
             this.streamCodec = StreamCodec.of(

@@ -28,7 +28,7 @@ public class ItemMagnetTraitEffect extends TraitEffect {
             instance -> instance.group(
                     Codec.FLOAT.fieldOf("pull_strength").forGetter(e -> e.pullStrength),
                     Codec.FLOAT.fieldOf("effect_range").forGetter(e -> e.effectRange),
-                    Ingredient.CODEC.optionalFieldOf("affected_items", Ingredient.EMPTY).forGetter(e -> e.affectedItems),
+                    Ingredient.CODEC.optionalFieldOf("affected_items", Ingredient.of()).forGetter(e -> e.affectedItems),
                     Codec.STRING.optionalFieldOf("affected_items_text_for_wiki").forGetter(e ->
                             e.affectedItems.isEmpty() ? Optional.empty() : Optional.of(e.affectedItemsTextForWiki)
                     )
@@ -90,7 +90,7 @@ public class ItemMagnetTraitEffect extends TraitEffect {
 
     private boolean canMagneticPullItem(ItemEntity entity) {
         return !entity.hasPickUpDelay()
-                && !entity.getPersistentData().getBoolean("PreventRemoteMovement")
+                && !entity.getPersistentData().getBoolean("PreventRemoteMovement").orElse(false)
                 && canAffectItem(entity.getItem());
     }
 

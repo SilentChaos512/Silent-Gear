@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.util.GearGenerator;
 import net.silentchaos512.lib.util.NameUtils;
@@ -55,7 +56,7 @@ public final class RandomGearCommand {
     }
 
     private static int run(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, ResourceLocation itemId, int tier) throws CommandSyntaxException {
-        Item item = BuiltInRegistries.ITEM.get(itemId);
+        Item item = BuiltInRegistries.ITEM.get(itemId).orElseThrow().value();
         if (!(item instanceof GearItem)) {
             context.getSource().sendFailure(Component.translatable("command.silentgear.randomGear.invalidItem"));
             return 0;

@@ -101,7 +101,7 @@ public final class PropertiesCommand {
 
     private static int runRecalculate(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players) {
         for (ServerPlayer player : players) {
-            for (ItemStack stack : PlayerUtils.getNonEmptyStacks(player)) {
+            for (ItemStack stack : player.getInventory()) {
                 if (GearHelper.isGear(stack)) {
                     GearData.recalculateGearData(stack, player);
                 }

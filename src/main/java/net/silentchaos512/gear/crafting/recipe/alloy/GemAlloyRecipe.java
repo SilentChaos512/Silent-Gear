@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.crafting.recipe.alloy;
 
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.silentchaos512.gear.setup.SgRecipes;
@@ -13,12 +14,12 @@ public class GemAlloyRecipe extends AlloyRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<AlloyRecipeInput>> getSerializer() {
         return SgRecipes.ALLOY_MAKING_GEM.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<AlloyRecipeInput>> getType() {
         return SgRecipes.ALLOY_MAKING_GEM_TYPE.get();
     }
 }

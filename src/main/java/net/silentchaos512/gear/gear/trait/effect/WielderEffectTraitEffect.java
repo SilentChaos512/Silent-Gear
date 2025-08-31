@@ -17,6 +17,8 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
@@ -97,7 +99,8 @@ public class WielderEffectTraitEffect extends TraitEffect {
         if (!type.matches(GearTypes.ARMOR.get())) return 1;
 
         int count = 0;
-        for (ItemStack stack : player.getArmorSlots()) {
+        for (EquipmentSlot slot : EquipmentSlotGroup.ARMOR) {
+            ItemStack stack = player.getItemBySlot(slot);
             if (stack.getItem() instanceof GearArmor && TraitHelper.hasTrait(stack, context.trait())) {
                 ++count;
             }

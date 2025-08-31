@@ -169,6 +169,7 @@ public interface IAoeTool {
 
                 for (BlockPos extraPos : extraBlocks) {
                     BlockState extraState = level.getBlockState(extraPos);
+                    //noinspection deprecation
                     if (!level.hasChunkAt(extraPos) || !player.mayUseItemAt(extraPos, side, tool) || !(extraState.canHarvestBlock(level, extraPos, player)))
                         continue;
 

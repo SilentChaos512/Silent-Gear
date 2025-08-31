@@ -4,10 +4,12 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
@@ -195,20 +197,14 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
     }
 
     @Override
-    public Stream<ItemStack> getItems() {
-        Collection<Material> materials = SgRegistries.MATERIAL.getValues(true);
-        if (!materials.isEmpty()) {
-            return materials.stream()
-                    .map(MaterialInstance::of)
-                    .filter(mat -> mat.get().isCraftingAllowed(mat, partType, gearType))
-                    .filter(mat -> this.material == null || this.material.getId().equals(mat.getId()))
-                    .filter(mat -> this.categories.isEmpty() || mat.hasAnyCategory(this.categories))
-                    .filter(mat -> this.notCategories.isEmpty() || !mat.hasAnyCategory(this.notCategories))
-                    .flatMap(mat -> Stream.of(mat.get().getIngredient().getItems()))
-                    .filter(stack -> !stack.isEmpty())
-                    .map(stack -> this.minGrade != MaterialGrade.NONE ? this.minGrade.copyWithGrade(stack) : stack);
-        }
-        return Stream.empty();
+    public Stream<Holder<Item>> items() {
+        return SgRegistries.MATERIAL.getValues(true).stream()
+                .map(MaterialInstance::of)
+                .filter(mat -> mat.get().isCraftingAllowed(mat, partType, gearType))
+                .filter(mat -> this.material == null || this.material.getId().equals(mat.getId()))
+                .filter(mat -> this.categories.isEmpty() || mat.hasAnyCategory(this.categories))
+                .filter(mat -> this.notCategories.isEmpty() || !mat.hasAnyCategory(this.notCategories))
+                .flatMap(mat -> mat.get().getIngredient().getValues().stream());
     }
 
     @Override

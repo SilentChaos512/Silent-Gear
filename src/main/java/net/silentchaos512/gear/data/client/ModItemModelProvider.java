@@ -114,17 +114,17 @@ public class ModItemModelProvider extends ItemModelGenerators {
         tempGearStandardTool(GearItemSets.PAXEL);
         tempGearStandardTool(GearItemSets.HAMMER);
         tempGearStandardTool(GearItemSets.EXCAVATOR);
-        tempGearStandardTool(GearItemSets.SAW, getExistingFile(modLoc("item/saw_base")));
+//        tempGearStandardTool(GearItemSets.SAW, getExistingFile(modLoc("item/saw_base")));
         tempGearStandardTool(GearItemSets.PROSPECTOR_HAMMER);
         tempGearStandardTool(GearItemSets.HOE);
         tempGearStandardTool(GearItemSets.MATTOCK);
         tempGearStandardTool(GearItemSets.SICKLE);
         tempGearStandardTool(GearItemSets.SHEARS);
-        gearBowItem(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
+//        gearBowItem(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
         // tempGearBow(SgItems.BOW, itemHandheld);
         // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
         // tempGearBow(SgItems.SLINGSHOT, itemHandheld);
-        gearArrowItem(GearItemSets.ARROW, itemGenerated);
+//        gearArrowItem(GearItemSets.ARROW, itemGenerated);
         gearArmorItem(GearItemSets.HELMET);
         gearArmorItem(GearItemSets.CHESTPLATE);
         gearArmorItem(GearItemSets.LEGGINGS);

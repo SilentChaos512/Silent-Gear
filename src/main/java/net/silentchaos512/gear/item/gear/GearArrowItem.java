@@ -92,13 +92,6 @@ public class GearArrowItem extends ArrowItem implements GearItem {
     }
 
     @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
-        var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder, false);
-        return builder.build();
-    }
-
-    @Override
     public boolean isFoil(ItemStack stack) {
         return GearClientHelper.hasEffect(stack);
     }

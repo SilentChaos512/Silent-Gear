@@ -63,6 +63,7 @@ class SideProxy implements IProxy {
         SgMenuTypes.MENU_TYPES.register(modEventBus);
         SgVillages.POINTS_OF_INTEREST.register(modEventBus);
         SgVillages.PROFESSIONS.register(modEventBus);
+        SgRecipeBookCategories.RECIPE_BOOK_CATEGORIES.register(modEventBus);
         SgRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         SgRecipes.RECIPE_TYPES.register(modEventBus);
         SgSounds.REGISTRAR.register(modEventBus);

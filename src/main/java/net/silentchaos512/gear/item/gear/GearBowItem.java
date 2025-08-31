@@ -13,7 +13,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearRangedWeapon;
 import net.silentchaos512.gear.api.item.GearType;
@@ -82,13 +81,6 @@ public class GearBowItem extends BowItem implements GearRangedWeapon {
     //endregion
 
     //region Standard tool overrides
-
-    @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
-        var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder, false);
-        return builder.build();
-    }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {

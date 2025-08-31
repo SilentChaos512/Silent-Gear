@@ -37,7 +37,6 @@ public final class Const {
     public static final ResourceLocation ALLOY_MAKING_SUPER = modId("alloy_making/super");
     public static final ResourceLocation COMPOUND_PART = modId("compound_part");
     public static final ResourceLocation CONVERSION = modId("conversion");
-    public static final ResourceLocation CRAFTING_SPECIAL_REPAIRITEM = modId("crafting_special_repairitem");
     public static final ResourceLocation FILL_REPAIR_KIT = modId("fill_repair_kit");
     public static final ResourceLocation GRADING = modId("grading");
     public static final ResourceLocation MOD_KIT_REMOVE_PART = modId("mod_kit_remove_part");
@@ -270,7 +269,6 @@ public final class Const {
         // Misc constants
         public static final float ANCIENT_XP_BOOST = 0.25f;
         public static final float MOONWALKER_GRAVITY_MOD = -0.15f;
-        public static final float STELLAR_REPAIR_CHANCE = 0.02f;
         @Deprecated
         public static final float SYNERGY_BOOST_MULTI = 0.04f;
 

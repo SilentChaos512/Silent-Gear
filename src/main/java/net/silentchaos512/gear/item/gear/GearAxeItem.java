@@ -91,13 +91,6 @@ public class GearAxeItem extends AxeItem implements GearDiggerTool {
     }
 
     @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
-        var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder);
-        return builder.build();
-    }
-
-    @Override
     public void setDamage(ItemStack stack, int damage) {
         GearHelper.setDamage(stack, damage, super::setDamage);
     }

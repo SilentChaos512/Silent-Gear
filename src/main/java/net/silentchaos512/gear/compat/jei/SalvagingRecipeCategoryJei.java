@@ -8,18 +8,17 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.gear.util.IngredientUtils;
 import net.silentchaos512.gear.util.TextUtil;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     }
 
     @Override
-    public RecipeType<SalvagingRecipe> getRecipeType() {
+    public IRecipeType<SalvagingRecipe> getRecipeType() {
         return SGearJeiPlugin.SALVAGING_TYPE;
     }
 
@@ -70,7 +69,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SalvagingRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 9 - GUI_START_X, 35 - GUI_START_Y)
-                .addIngredients(VanillaTypes.ITEM_STACK, Arrays.asList(recipe.getIngredient().getItems()));
+                .addIngredients(VanillaTypes.ITEM_STACK, IngredientUtils.getItems(recipe.getIngredient()));
 
         List<ItemStack> results = recipe.getPossibleResultsForDisplay();
 

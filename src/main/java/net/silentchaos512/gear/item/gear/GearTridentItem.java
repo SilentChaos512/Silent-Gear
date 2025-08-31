@@ -32,6 +32,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.entity.projectile.GearThrownTrident;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
@@ -126,9 +127,10 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
     }
     
     public static float getProjectileAttackDamage(ItemStack stack) {
-    	float mult = GearData.getProperties(stack).getNumber(GearProperties.RANGED_DAMAGE);
+        var properties = GearData.getProperties(stack);
+        float mult = properties.getNumber(GearProperties.RANGED_DAMAGE);
     	mult = 1 + (mult-1)/4;
-    	return GearHelper.getAttackDamageModifier(stack) * mult;
+    	return properties.getNumber(GearProperties.ATTACK_DAMAGE) * mult;
     }
 
     @Override

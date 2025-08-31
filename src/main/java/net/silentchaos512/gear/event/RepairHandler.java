@@ -42,8 +42,7 @@ public final class RepairHandler {
         GearData.recalculateGearData(result, null);
 
         event.setOutput(result);
-        // TODO: Upgrade cost?
-        event.setCost(3);
+        event.setXpCost(3);
     }
 
     private static void handleGearRepair(AnvilUpdateEvent event, MaterialInstance material) {
@@ -68,7 +67,7 @@ public final class RepairHandler {
             result.setDamageValue(result.getDamageValue() - repairAmount);
             GearData.recalculateGearData(result, null);
             event.setOutput(result);
-            event.setCost(materialCount);
+            event.setXpCost(materialCount);
             event.setMaterialCost(materialCount);
         }
     }

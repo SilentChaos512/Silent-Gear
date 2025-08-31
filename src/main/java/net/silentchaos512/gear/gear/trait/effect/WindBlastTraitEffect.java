@@ -25,7 +25,7 @@ public class WindBlastTraitEffect extends TraitEffect {
     public static final MapCodec<WindBlastTraitEffect> CODEC = MapCodec.unit(INSTANCE);
     public static final StreamCodec<RegistryFriendlyByteBuf, WindBlastTraitEffect> STREAM_CODEC = StreamCodec.unit(INSTANCE);
     public static final SimpleExplosionDamageCalculator DAMAGE_CALCULATOR = new SimpleExplosionDamageCalculator(
-            true, false, Optional.of(1.22F), BuiltInRegistries.BLOCK.getTag(BlockTags.BLOCKS_WIND_CHARGE_EXPLOSIONS).map(Function.identity())
+            true, false, Optional.of(1.22F), BuiltInRegistries.BLOCK.get(BlockTags.BLOCKS_WIND_CHARGE_EXPLOSIONS).map(Function.identity())
     );
 
     @Override

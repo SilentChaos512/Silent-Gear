@@ -7,34 +7,36 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SmithingTransformRecipe;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.Objects;
+import java.util.Optional;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class CoatingSmithingRecipe extends GearSmithingRecipe {
-    public CoatingSmithingRecipe(ItemStack gearItem, Ingredient template, Ingredient addition) {
+    public CoatingSmithingRecipe(ItemStack gearItem, Optional<Ingredient> template, Optional<Ingredient> addition) {
         super(gearItem, template, addition);
     }
 
     @Override
-    protected ItemStack applyUpgrade(ItemStack gear, ItemStack upgradeItem) {
-        if (GearData.getPartOfType(gear, PartTypes.MAIN.get()) == null) {
-            return gear.copy();
+    protected void applyUpgrade(ItemStack stackToModify, ItemStack upgradeItem) {
+        if (GearData.getPartOfType(stackToModify, PartTypes.MAIN.get()) == null) {
+            return;
         }
 
         MaterialInstance material = MaterialInstance.from(upgradeItem);
         if (material != null) {
-            GearType gearType = GearHelper.getType(gear);
+            GearType gearType = GearHelper.getType(stackToModify);
             if (gearType.isGear()) {
-                ItemStack result = gear.copy();
+                ItemStack result = stackToModify.copy();
 
                 PartTypes.COATING.get().getCompoundPartItem(gearType).ifPresent(cpi -> {
                     ItemStack partItem = cpi.create(material, 1);
@@ -44,14 +46,12 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
 
                 result.setDamageValue(0);
                 GearData.recalculateGearData(result, CommonHooks.getCraftingPlayer()); // Crafting player is always null?
-                return result;
             }
         }
-        return ItemStack.EMPTY;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<CoatingSmithingRecipe> getSerializer() {
         return SgRecipes.SMITHING_COATING.get();
     }
 
@@ -59,14 +59,14 @@ public class CoatingSmithingRecipe extends GearSmithingRecipe {
         public static final MapCodec<CoatingSmithingRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
                         ItemStack.SINGLE_ITEM_CODEC.fieldOf("gear").forGetter(r -> r.gearItem),
-                        Ingredient.CODEC.fieldOf("template").forGetter(r -> r.template),
-                        Ingredient.CODEC.fieldOf("addition").forGetter(r -> r.addition)
+                        Ingredient.CODEC.optionalFieldOf("template").forGetter(r -> r.template),
+                        Ingredient.CODEC.optionalFieldOf("addition").forGetter(r -> r.addition)
                 ).apply(instance, CoatingSmithingRecipe::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, CoatingSmithingRecipe> STREAM_CODEC = StreamCodec.composite(
                 ItemStack.STREAM_CODEC, r -> r.gearItem,
-                Ingredient.CONTENTS_STREAM_CODEC, r -> r.template,
-                Ingredient.CONTENTS_STREAM_CODEC, r -> r.addition,
+                Ingredient.OPTIONAL_CONTENTS_STREAM_CODEC, r -> r.template,
+                Ingredient.OPTIONAL_CONTENTS_STREAM_CODEC, r -> r.addition,
                 CoatingSmithingRecipe::new
         );
 

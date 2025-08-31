@@ -67,11 +67,6 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
         ItemStack gear = StackList.from(inv).uniqueOfType(GearItem.class);
@@ -84,8 +79,8 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
 
             if (stack.getItem() instanceof GearItem) {
                 list.set(i, part != null ? part.getItem() : ItemStack.EMPTY);
-            } else if (stack.hasCraftingRemainingItem()) {
-                list.set(i, stack.getCraftingRemainingItem());
+            } else if (!stack.getCraftingRemainder().isEmpty()) {
+                list.set(i, stack.getCraftingRemainder());
             }
         }
 
@@ -93,7 +88,7 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return SgRecipes.MOD_KIT_REMOVE_PART.get();
     }
 }

@@ -1283,10 +1283,10 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Breeze Rod
         ret.add(MaterialBuilder.simple(modId("breeze_rod"))
                 .crafting(new MaterialCraftingData(
-                        Ingredient.EMPTY,
+                        Ingredient.of(),
                         List.of(MaterialCategories.METAL),
                         List.of(),
-                        Map.of(PartTypes.ROD.get(), Ingredient.of(Tags.Items.RODS_BREEZE)),
+                        Map.of(PartTypes.ROD.get(), taggedItems(Tags.Items.RODS_BREEZE)),
                         true
                 ))
                 .displayWithDefaultName(0x9398C1, TextureType.HIGH_CONTRAST)

@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -16,14 +18,17 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.setup.SgRecipeBookCategories;
 import net.silentchaos512.gear.setup.SgRecipes;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
     protected final Ingredient ingredient;
     private final List<ItemStack> results = new ArrayList<>();
+    @Nullable private PlacementInfo placementInfo = null;
 
     public SalvagingRecipe(Ingredient ingredient, List<ItemStack> results) {
         this.ingredient = ingredient;
@@ -51,29 +56,30 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
     @Override
     public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registryAccess) {
         // DO NOT USE
-        return getResultItem(registryAccess);
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Deprecated
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registryAccess) {
-        // DO NOT USE
         return !results.isEmpty() ? results.getFirst() : ItemStack.EMPTY;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<SingleRecipeInput>> getSerializer() {
         return SgRecipes.SALVAGING.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<SingleRecipeInput>> getType() {
         return SgRecipes.SALVAGING_TYPE.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        if (this.placementInfo == null) {
+            this.placementInfo = PlacementInfo.create(this.ingredient);
+        }
+        return this.placementInfo;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return SgRecipeBookCategories.SALVAGER.get();
     }
 
     @Override
@@ -118,13 +124,13 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
     public static class Serializer implements RecipeSerializer<SalvagingRecipe> {
         public static final MapCodec<SalvagingRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
-                        Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.ingredient),
+                        Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient),
                         Codec.list(ItemStack.CODEC).fieldOf("results").forGetter(r -> r.results)
                 ).apply(instance, SalvagingRecipe::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, SalvagingRecipe> STREAM_CODEC = StreamCodec.composite(
                 Ingredient.CONTENTS_STREAM_CODEC, r -> r.ingredient,
-                ItemStack.LIST_STREAM_CODEC, r -> r.results,
+                ItemStack.STREAM_CODEC.apply(ByteBufCodecs.collection(NonNullList::createWithCapacity)), r -> r.results,
                 SalvagingRecipe::new
         );
 

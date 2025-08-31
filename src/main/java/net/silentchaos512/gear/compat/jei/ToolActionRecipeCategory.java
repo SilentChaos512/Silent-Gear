@@ -7,8 +7,8 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -47,7 +47,7 @@ public class ToolActionRecipeCategory implements IRecipeCategory<ToolActionRecip
     }
 
     @Override
-    public RecipeType<ToolActionRecipe> getRecipeType() {
+    public IRecipeType<ToolActionRecipe> getRecipeType() {
         return SGearJeiPlugin.TOOL_ACTION_TYPE;
     }
 
@@ -64,13 +64,13 @@ public class ToolActionRecipeCategory implements IRecipeCategory<ToolActionRecip
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, ToolActionRecipe recipe, IFocusGroup focus) {
         builder.addSlot(RecipeIngredientRole.INPUT, 3, 3)
-                .addIngredients(recipe.getTool());
+                .add(recipe.getTool());
         builder.addSlot(RecipeIngredientRole.INPUT, 22, 3)
-                .addIngredients(recipe.getIngredient());
-        builder.addSlot(RecipeIngredientRole.CATALYST, 22, 22)
-                .addIngredients(Ingredient.of(SgBlocks.STONE_ANVIL.get()));
+                .add(recipe.getIngredient());
+        builder.addSlot(RecipeIngredientRole.CRAFTING_STATION, 22, 22)
+                .add(Ingredient.of(SgBlocks.STONE_ANVIL.get()));
         builder.addSlot(RecipeIngredientRole.OUTPUT, 76, 12)
-                .addIngredients(Ingredient.of(recipe.getResult()));
+                .add(recipe.getResult());
     }
 
     @Override

@@ -22,7 +22,7 @@ public final class BonusDropsTraitEffect extends TraitEffect {
             instance -> instance.group(
                     Codec.FLOAT.fieldOf("base_chance").forGetter(t -> t.baseChance),
                     Codec.FLOAT.fieldOf("bonus_multiplier").forGetter(t -> t.bonusMultiplier),
-                    Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(t -> t.ingredient),
+                    Ingredient.CODEC.fieldOf("ingredient").forGetter(t -> t.ingredient),
                     Codec.STRING.optionalFieldOf("matched_items_text_for_wiki", "some items").forGetter(t -> t.matchedItemsText)
             ).apply(instance, BonusDropsTraitEffect::new)
     );

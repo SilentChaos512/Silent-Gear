@@ -25,8 +25,10 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.item.gear.GearTridentItem;
 import net.silentchaos512.gear.setup.SgEntities;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.Nullable;
@@ -51,8 +53,8 @@ public class GearThrownTrident extends AbstractArrow {
         super(SgEntities.TRIDENT_PROJECTILE.get(), shooter, level, pickupItemStack, null);
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(pickupItemStack));
         this.entityData.set(ID_FOIL, pickupItemStack.hasFoil());
-        
-        attackDamage = GearTridentItem.getProjectileAttackDamage(pickupItemStack);
+
+        this.attackDamage = GearTridentItem.getProjectileAttackDamage(pickupItemStack);
         setColors(pickupItemStack);
     }
 
@@ -60,8 +62,8 @@ public class GearThrownTrident extends AbstractArrow {
         super(SgEntities.TRIDENT_PROJECTILE.get(), x, y, z, level, pickupItemStack, pickupItemStack);
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(pickupItemStack));
         this.entityData.set(ID_FOIL, pickupItemStack.hasFoil());
-        
-        attackDamage = GearHelper.getAttackDamageModifier(pickupItemStack);
+
+        this.attackDamage = GearTridentItem.getProjectileAttackDamage(pickupItemStack);
         setColors(pickupItemStack);
     }
 
@@ -75,7 +77,7 @@ public class GearThrownTrident extends AbstractArrow {
         builder.define(ID_COLOR_SPIKES, -1);
         builder.define(ID_COLOR_TIP, -1);
     }
-    
+
     public int getToolRodColor() {
     	return this.entityData.get(ID_COLOR_TOOLROD);
     }
@@ -88,7 +90,7 @@ public class GearThrownTrident extends AbstractArrow {
     public int getTipColor() {
     	return this.entityData.get(ID_COLOR_TIP);
     }
-    
+
     private void setColors(ItemStack pickupItemStack) {
         int toolRodColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.ROD.get());
         int gripColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.GRIP.get());
@@ -241,7 +243,7 @@ public class GearThrownTrident extends AbstractArrow {
         super.readAdditionalSaveData(compound);
         this.dealtDamage = compound.getBooleanOr("DealtDamage", false);
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(this.getPickupItemStackOrigin()));
-        
+
         setColors(this.getPickupItemStackOrigin());
     }
 

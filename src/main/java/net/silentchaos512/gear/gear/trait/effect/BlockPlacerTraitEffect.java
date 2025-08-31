@@ -87,7 +87,7 @@ public class BlockPlacerTraitEffect extends TraitEffect {
                     this.sound.playAt(world, pos, SoundSource.BLOCKS);
                 }
                 if (this.cooldown > 0 && context.getPlayer() != null) {
-                    context.getPlayer().getCooldowns().addCooldown(stack.getItem(), this.cooldown);
+                    context.getPlayer().getCooldowns().addCooldown(stack, this.cooldown);
                 }
             }
             return result;

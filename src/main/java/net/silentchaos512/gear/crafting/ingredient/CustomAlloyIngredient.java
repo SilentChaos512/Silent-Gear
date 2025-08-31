@@ -3,6 +3,7 @@ package net.silentchaos512.gear.crafting.ingredient;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -11,7 +12,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.material.Material;
@@ -21,14 +21,17 @@ import net.silentchaos512.gear.item.CustomMaterialItem;
 import net.silentchaos512.gear.setup.SgIngredientTypes;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * @deprecated can we just use DataComponentIngredient instead?
+ */
+@Deprecated
 public class CustomAlloyIngredient implements ICustomIngredient {
     public static final MapCodec<CustomAlloyIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.flatXmap(
-                    id -> Optional.of(BuiltInRegistries.ITEM.get(id))
+                    id -> Optional.of(BuiltInRegistries.ITEM.get(id).orElseThrow().value())
                             .filter(item -> item instanceof CustomMaterialItem)
                             .map(item -> DataResult.success((CustomMaterialItem) item))
                             .orElseGet(() -> DataResult.error(() -> "Item is not a CustomMaterialItem: " + id)),
@@ -73,17 +76,9 @@ public class CustomAlloyIngredient implements ICustomIngredient {
         return material != null && material.getId().equals(this.material.getId());
     }
 
-    private void dissolve() {
-        if (this.itemStacks == null) {
-            var itemValue = new Ingredient.ItemValue(item.create(MaterialInstance.of(this.material, ItemStack.EMPTY)));
-            this.itemStacks = itemValue.getItems().toArray(new ItemStack[0]);
-        }
-    }
-
     @Override
-    public Stream<ItemStack> getItems() {
-        this.dissolve();
-        return Arrays.stream(itemStacks);
+    public Stream<Holder<Item>> items() {
+        return Stream.of(Holder.direct(this.item));
     }
 
     @Override

@@ -115,7 +115,7 @@ public final class MaterialsCommand {
             e.printStackTrace();
         } finally {
             Component fileNameText = (Component.literal(output.getAbsolutePath())).withStyle(ChatFormatting.UNDERLINE).withStyle(style ->
-                    style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, output.getAbsolutePath())));
+                    style.withClickEvent(new ClickEvent.OpenFile(output.getAbsolutePath())));
             player.displayClientMessage(Component.literal("Wrote materials info to ").append(fileNameText), false);
         }
     }

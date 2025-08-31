@@ -2,6 +2,7 @@ package net.silentchaos512.gear.crafting.ingredient;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -20,8 +21,6 @@ import net.silentchaos512.gear.setup.SgIngredientTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -40,9 +39,6 @@ public final class BlueprintIngredient implements ICustomIngredient, IGearIngred
 
     private final PartType partType;
     private final GearType gearType;
-
-    @Nullable
-    private ItemStack[] itemStacks;
 
     private BlueprintIngredient(PartType partType, GearType gearType) {
         this.partType = partType;
@@ -63,14 +59,11 @@ public final class BlueprintIngredient implements ICustomIngredient, IGearIngred
         return SgIngredientTypes.BLUEPRINT.get();
     }
 
-    private void dissolve() {
-        if (this.itemStacks == null) {
-            this.itemStacks = BuiltInRegistries.ITEM.stream()
-                    .filter(item -> item instanceof IBlueprint)
-                    .map(ItemStack::new)
-                    .filter(this::testBlueprint)
-                    .toArray(ItemStack[]::new);
-        }
+    @Override
+    public Stream<Holder<Item>> items() {
+        return BuiltInRegistries.ITEM.stream()
+                .filter(item -> item instanceof IBlueprint)
+                .map(Holder::direct);
     }
 
     private boolean testBlueprint(ItemStack stack) {
@@ -81,18 +74,9 @@ public final class BlueprintIngredient implements ICustomIngredient, IGearIngred
     }
 
     @Override
-    public boolean test(@Nullable ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
+    public boolean test(ItemStack stack) {
+        return !stack.isEmpty() && this.testBlueprint(stack);
 
-        this.dissolve();
-        return this.testBlueprint(stack);
-    }
-
-    @Override
-    public Stream<ItemStack> getItems() {
-        this.dissolve();
-        //noinspection AssignmentOrReturnOfFieldWithMutableType,ConstantConditions
-        return Arrays.stream(this.itemStacks);
     }
 
     @Override

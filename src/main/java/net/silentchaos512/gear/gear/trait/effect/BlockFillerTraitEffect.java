@@ -114,7 +114,7 @@ public class BlockFillerTraitEffect extends TraitEffect {
                 sound.playAt(player.level(), context.getClickedPos(), SoundSource.BLOCKS);
             }
             if (useProperties.cooldown > 0) {
-                player.getCooldowns().addCooldown(stack.getItem(), useProperties.cooldown);
+                player.getCooldowns().addCooldown(stack, useProperties.cooldown);
             }
 
             return InteractionResult.SUCCESS;
@@ -223,7 +223,7 @@ public class BlockFillerTraitEffect extends TraitEffect {
                     Block block = null;
                     TagKey<Block> tag = null;
                     if (buf.readBoolean()) {
-                        block = BuiltInRegistries.BLOCK.get(buf.readResourceLocation());
+                        block = BuiltInRegistries.BLOCK.get(buf.readResourceLocation()).orElseThrow().value();
                     }
                     if (buf.readBoolean()) {
                         tag = BlockTags.create(buf.readResourceLocation());

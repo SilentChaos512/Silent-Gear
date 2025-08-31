@@ -12,7 +12,7 @@ import net.silentchaos512.gear.setup.SgRegistries;
 
 import java.util.function.Supplier;
 
-@EventBusSubscriber(bus = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class SgItemTintSources {
     @SubscribeEvent
     public static void onItemTintSources(RegisterColorHandlersEvent.ItemTintSources event) {

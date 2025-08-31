@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -13,7 +12,6 @@ import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.SgRecipes;
-import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
 
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ import java.util.List;
 public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     private final CompoundPartItem item;
 
-    public ShapelessCompoundPartRecipe(String pGroup, CraftingBookCategory pCategory, ItemStack pResult, NonNullList<Ingredient> pIngredients) {
+    public ShapelessCompoundPartRecipe(String pGroup, CraftingBookCategory pCategory, ItemStack pResult, List<Ingredient> pIngredients) {
         super(pGroup, pCategory, pResult, pIngredients);
 
         if (!(pResult.getItem() instanceof CompoundPartItem)) {
@@ -36,7 +34,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends ShapelessCompoundPartRecipe> getSerializer() {
         return SgRecipes.COMPOUND_PART.get();
     }
 
@@ -86,13 +84,6 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
         }
 
         return ret;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registryAccess) {
-        // Create an example item, so we're not just showing a broken item
-        int craftedCount = super.getResultItem(registryAccess).getCount();
-        return item.create(MaterialInstance.of(Const.Materials.EXAMPLE), craftedCount);
     }
 
     @Override

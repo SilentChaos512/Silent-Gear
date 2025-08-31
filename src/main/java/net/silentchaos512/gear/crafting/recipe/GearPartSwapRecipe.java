@@ -136,12 +136,7 @@ public class GearPartSwapRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return SgRecipes.SWAP_GEAR_PART.get();
     }
 }

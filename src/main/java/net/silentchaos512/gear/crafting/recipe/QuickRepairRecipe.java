@@ -141,8 +141,8 @@ public class QuickRepairRecipe extends CustomRecipe {
                 ItemStack copy = stack.copy();
                 item.removeRepairMaterials(copy, item.getRepairMaterials(gear, copy, RepairContext.Type.QUICK));
                 list.set(i, copy);
-            } else if (stack.hasCraftingRemainingItem()) {
-                list.set(i, stack.getCraftingRemainingItem());
+            } else if (!stack.getCraftingRemainder().isEmpty()) {
+                list.set(i, stack.getCraftingRemainder());
             }
         }
 
@@ -150,12 +150,7 @@ public class QuickRepairRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return SgRecipes.QUICK_REPAIR.get();
     }
 }

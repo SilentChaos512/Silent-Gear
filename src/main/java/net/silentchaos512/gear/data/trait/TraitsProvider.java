@@ -559,7 +559,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         new BonusDropsTraitEffect(
                                 0.15f,
                                 0.5f,
-                                itemTagIngredient(SgTags.Items.GOLD_DIGGER_DROPS),
+                                itemTagIngredient(items, SgTags.Items.GOLD_DIGGER_DROPS),
                                 "nuggets"
                         )
                 )
@@ -570,7 +570,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         new BonusDropsTraitEffect(
                                 0.15f,
                                 0.5f,
-                                itemTagIngredient(SgTags.Items.IMPERIAL_DROPS),
+                                itemTagIngredient(items, SgTags.Items.IMPERIAL_DROPS),
                                 "gems"
                         )
                 )
@@ -610,7 +610,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         new ItemMagnetTraitEffect(
                                 0.06f,
                                 2f,
-                                itemTagIngredient(SgTags.Items.GREEDY_MAGNET_ATTRACTED),
+                                itemTagIngredient(items, SgTags.Items.GREEDY_MAGNET_ATTRACTED),
                                 "ores and gems"
                         )
                 )

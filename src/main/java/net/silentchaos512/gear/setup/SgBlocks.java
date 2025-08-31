@@ -303,11 +303,11 @@ public final class SgBlocks {
                             .sound(SoundType.GRASS)
                             .noOcclusion()
                             .isValidSpawn(Blocks::ocelotOrParrot)
-                            .isSuffocating(Blocks::never)
-                            .isViewBlocking(Blocks::never)
+                            .isSuffocating(SgBlocks::never)
+                            .isViewBlocking(SgBlocks::never)
                             .ignitedByLava()
                             .pushReaction(PushReaction.DESTROY)
-                            .isRedstoneConductor(Blocks::never)
+                            .isRedstoneConductor(SgBlocks::never)
             )
     );
     public static final DeferredBlock<NetherwoodSapling> NETHERWOOD_SAPLING = register("netherwood_sapling", () ->
@@ -412,5 +412,9 @@ public final class SgBlocks {
                 block.get(),
                 new Item.Properties().useItemDescriptionPrefix()
         );
+    }
+
+    private static boolean never(BlockState state, BlockGetter level, BlockPos pos) {
+        return Blocks.never(state, level, pos, null);
     }
 }

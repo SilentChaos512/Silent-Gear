@@ -7,6 +7,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
@@ -63,14 +64,14 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<SingleRecipeInput>> getSerializer() {
         return SgRecipes.SALVAGING_GEAR.get();
     }
 
     public static class Serializer implements RecipeSerializer<GearSalvagingRecipe> {
         public static final MapCodec<GearSalvagingRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
-                        Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.ingredient)
+                        Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient)
                 ).apply(instance, GearSalvagingRecipe::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, GearSalvagingRecipe> STREAM_CODEC = StreamCodec.composite(

@@ -31,14 +31,14 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe implements IGea
 
         this.exampleOutput = Lazy.of(() -> {
             // Create an example item, so we're not just showing a broken item
-            ItemStack result = item.construct(GearHelper.getExamplePartsFromRecipe(this.item.getGearType(), getIngredients()));
+            ItemStack result = item.construct(GearHelper.getExamplePartsFromRecipe(this.item.getGearType(), this.getIngredientsForDisplay()));
             GearData.setExampleTag(result, true);
             return result;
         });
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends ShapedGearRecipe> getSerializer() {
         return SgRecipes.SHAPED_GEAR.get();
     }
 
@@ -66,7 +66,7 @@ public final class ShapedGearRecipe extends ExtendedShapedRecipe implements IGea
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider registryAccess) {
+    public ItemStack getResultForDisplay() {
         return exampleOutput.get();
     }
 

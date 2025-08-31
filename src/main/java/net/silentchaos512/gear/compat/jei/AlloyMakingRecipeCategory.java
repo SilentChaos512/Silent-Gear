@@ -8,22 +8,20 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.alloymaker.AlloyMakerInfo;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.IngredientUtils;
 import net.silentchaos512.gear.util.TextUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,7 +59,7 @@ public class AlloyMakingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
     }
 
     @Override
-    public RecipeType<AlloyRecipe> getRecipeType() {
+    public IRecipeType<AlloyRecipe> getRecipeType() {
         if (this.info == Const.FABRIC_ALLOY_MAKER_INFO) {
             return SGearJeiPlugin.ALLOY_MAKING_FABRIC_TYPE;
         } else if (this.info == Const.GEM_ALLOY_MAKER_INFO) {
@@ -87,20 +85,15 @@ public class AlloyMakingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, AlloyRecipe recipe, IFocusGroup focuses) {
-        for (int i = 0; i < info.getInputSlotCount() && i < recipe.getIngredients().size(); ++i) {
-            var ingredient = recipe.getIngredients().get(i);
-            List<ItemStack> items = getValidItemsFromIngredient(ingredient);
+        var ingredients = recipe.placementInfo().ingredients();
+        for (int i = 0; i < info.getInputSlotCount() && i < ingredients.size(); ++i) {
+            var ingredient = ingredients.get(i);
+            List<ItemStack> items = IngredientUtils.getValidItems(ingredient);
             builder.addSlot(RecipeIngredientRole.INPUT, 18 * i + 17 - GUI_START_X, 35 - GUI_START_Y)
                     .addIngredients(VanillaTypes.ITEM_STACK, shiftIngredients(items, 3 * i));
         }
         builder.addSlot(RecipeIngredientRole.OUTPUT, 126 - GUI_START_X, 35 - GUI_START_Y)
-                .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultItem(null)));
-    }
-
-    private static List<ItemStack> getValidItemsFromIngredient(Ingredient ingredient) {
-        return Arrays.stream(ingredient.getItems())
-                .filter(stack -> stack.getItem() != Items.BARRIER)
-                .toList();
+                .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultForRecipeDisplay()));
     }
 
     private static List<ItemStack> shiftIngredients(List<ItemStack> list, int amount) {

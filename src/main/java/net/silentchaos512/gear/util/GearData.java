@@ -560,6 +560,11 @@ public final class GearData {
         result.set(SgDataComponents.GEAR_IS_EXAMPLE, value);
     }
 
+    @Deprecated(forRemoval = true)
+    public static String getModelKey(ItemStack stack, int animationFrame) {
+        return String.format("%d.%d", stack.getComponents().hashCode(), animationFrame);
+    }
+
     @EventBusSubscriber(modid = SilentGear.MOD_ID)
     public static final class EventHandler {
         private EventHandler() {

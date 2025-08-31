@@ -189,13 +189,13 @@ public class AttributeTraitEffect extends TraitEffect {
                 return DataResult.error(() -> "Invalid key: " + str);
             }
             var gearTypeId = SilentGear.getIdWithDefaultNamespace(split[0]);
-            var gearType = SgRegistries.GEAR_TYPE.get(gearTypeId);
-            if (gearType == null || gearType == GearTypes.NONE.get()) {
+            var gearTypeOptional = SgRegistries.GEAR_TYPE.get(gearTypeId);
+            if (gearTypeOptional.isEmpty()) {
                 return DataResult.error(() -> "Unknown gear type: " + gearTypeId);
             }
             var nameLookup = StringRepresentable.createNameLookup(EquipmentSlotGroup.values(), s -> s);
             var group = nameLookup.apply(split[1]);
-            return DataResult.success(new Key(gearType, group));
+            return DataResult.success(new Key(gearTypeOptional.get().value(), group));
         }
     }
 

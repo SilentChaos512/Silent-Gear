@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearRangedWeapon;
@@ -90,13 +88,6 @@ public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
     //endregion
 
     //region Standard tool overrides
-
-    @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
-        var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder, false);
-        return builder.build();
-    }
 
     @Override
     public void setDamage(ItemStack stack, int damage) {

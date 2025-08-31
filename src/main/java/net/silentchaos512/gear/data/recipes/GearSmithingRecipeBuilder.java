@@ -29,16 +29,18 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements RecipeBuilder {
     private final GearSmithingRecipe.Factory<R> factory;
     private final String recipeFolder;
     private final Item gearItem;
-    private final Ingredient template;
-    private final Ingredient addition;
+    private final Optional<Ingredient> template;
+    private final Optional<Ingredient> addition;
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    public GearSmithingRecipeBuilder(GearSmithingRecipe.Factory<R> factory, String recipeFolder, Item gearItem, Ingredient template, Ingredient addition) {
+    public GearSmithingRecipeBuilder(GearSmithingRecipe.Factory<R> factory, String recipeFolder, Item gearItem, Optional<Ingredient> template, Optional<Ingredient> addition) {
         this.factory = factory;
         this.recipeFolder = recipeFolder;
         this.gearItem = gearItem;
@@ -50,8 +52,8 @@ public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements 
         return new GearSmithingRecipeBuilder<>(CoatingSmithingRecipe::new,
                 "coating",
                 gearItem.asItem(),
-                Ingredient.of(SgItems.COATING_SMITHING_TEMPLATE),
-                new Ingredient(PartMaterialIngredient.of(PartTypes.COATING.get()))
+                Optional.of(Ingredient.of(SgItems.COATING_SMITHING_TEMPLATE)),
+                Optional.of(new Ingredient(PartMaterialIngredient.of(PartTypes.COATING.get())))
         );
     }
 
@@ -59,8 +61,8 @@ public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements 
         return new GearSmithingRecipeBuilder<>(UpgradeSmithingRecipe::new,
                 "upgrade",
                 gearItem.asItem(),
-                Ingredient.of(Items.STICK),
-                new Ingredient(GearPartIngredient.of(partType))
+                Optional.<Ingredient>empty(),
+                Optional.of(new Ingredient(GearPartIngredient.of(partType)))
         );
     }
 

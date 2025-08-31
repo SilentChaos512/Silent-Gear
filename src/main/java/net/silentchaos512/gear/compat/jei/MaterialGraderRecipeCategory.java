@@ -7,8 +7,8 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -18,10 +18,10 @@ import net.silentchaos512.gear.block.grader.GraderScreen;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.SgTags;
+import net.silentchaos512.gear.util.IngredientUtils;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +52,7 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     }
 
     @Override
-    public RecipeType<GraderRecipe> getRecipeType() {
+    public IRecipeType<GraderRecipe> getRecipeType() {
         return SGearJeiPlugin.GRADING_TYPE;
     }
 
@@ -78,7 +78,7 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     public static List<ItemStack> getMaterials() {
         return SgRegistries.MATERIAL.getValues(true).stream()
                 .map(Material::getIngredient)
-                .flatMap(ing -> Arrays.stream(ing.getItems()))
+                .flatMap(ing -> IngredientUtils.getValidItems(ing).stream())
                 .collect(Collectors.toList());
     }
 

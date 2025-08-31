@@ -5,13 +5,16 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.core.SoundPlayback;
+import net.silentchaos512.gear.setup.SgRecipeBookCategories;
 import net.silentchaos512.gear.setup.SgRecipes;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
     private final Ingredient tool;
@@ -19,6 +22,7 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
     private final int damageToTool;
     private final ItemStack result;
     private final SoundPlayback sound;
+    @Nullable private PlacementInfo placementInfo;
 
     public ToolActionRecipe(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStack result, SoundPlayback sound) {
         this.tool = tool;
@@ -59,30 +63,33 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
     }
 
     @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider pRegistryAccess) {
-        return result.copy();
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends ToolActionRecipe> getSerializer() {
         return SgRecipes.TOOL_ACTION.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends ToolActionRecipe> getType() {
         return SgRecipes.TOOL_ACTION_TYPE.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        if (this.placementInfo == null) {
+            this.placementInfo = PlacementInfo.create(List.of(this.tool, this.ingredient));
+        }
+        return this.placementInfo;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return SgRecipeBookCategories.TOOL_ACTION.get();
     }
 
     public static class Serializer implements RecipeSerializer<ToolActionRecipe> {
         public static final MapCodec<ToolActionRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
-                        Ingredient.CODEC_NONEMPTY.fieldOf("tool").forGetter(r -> r.tool),
-                        Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.ingredient),
+                        Ingredient.CODEC.fieldOf("tool").forGetter(r -> r.tool),
+                        Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("damage_to_tool").forGetter(r -> r.damageToTool),
                         ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result),
                         SoundPlayback.CODEC.fieldOf("sound").forGetter(r -> r.sound)
