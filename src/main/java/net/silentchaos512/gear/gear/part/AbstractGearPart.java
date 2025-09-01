@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractGearPart implements GearPart {
     String packName = "UNKNOWN PACK";
@@ -38,7 +39,7 @@ public abstract class AbstractGearPart implements GearPart {
     }
 
     @Override
-    public Ingredient getIngredient() {
+    public Optional<Ingredient> getIngredient() {
         return crafting.craftingItem();
     }
 

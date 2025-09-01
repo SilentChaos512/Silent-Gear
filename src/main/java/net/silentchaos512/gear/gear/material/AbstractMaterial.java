@@ -62,7 +62,7 @@ public abstract class AbstractMaterial implements Material {
     }
 
     @Override
-    public Ingredient getIngredient() {
+    public Optional<Ingredient> getIngredient() {
         return crafting.craftingItem();
     }
 

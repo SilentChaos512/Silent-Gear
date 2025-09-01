@@ -5,11 +5,9 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.setup.gear.GearProperties;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
+import java.util.Optional;
 
 public interface GearComponent<D> extends PropertyProvider<D> {
     /**
@@ -17,7 +15,7 @@ public interface GearComponent<D> extends PropertyProvider<D> {
      *
      * @return The ingredient to match
      */
-    Ingredient getIngredient();
+    Optional<Ingredient> getIngredient();
 
     /**
      * Determine if this component can be used to craft parts of a given type and for a given gear

@@ -3,12 +3,14 @@ package net.silentchaos512.gear.crafting.ingredient;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.part.PartType;
@@ -70,7 +72,7 @@ public final class GearPartIngredient implements ICustomIngredient, IGearIngredi
     @Override
     public Stream<Holder<Item>> items() {
         return SgRegistries.PART.getPartsOfType(this.type).stream()
-                .flatMap(part -> part.getIngredient().getValues().stream());
+                .flatMap(part -> part.getIngredient().map(Ingredient::getValues).orElse(HolderSet.empty()).stream());
     }
 
     @Override

@@ -167,6 +167,7 @@ public final class GearData {
         }
 
         setGearAttributeModifiers(gear, finalProperties);
+        setGearDataComponentsFromProperties(gear, finalProperties);
 
         if (gear.is(ItemTags.DYEABLE)) {
             // Attach armor color
@@ -194,6 +195,12 @@ public final class GearData {
         gear.set(DataComponents.ATTRIBUTE_MODIFIERS, attributesBuilder.build());
     }
 
+    private static void setGearDataComponentsFromProperties(ItemStack gear, GearPropertiesData finalProperties) {
+        for (GearProperty<?, ? extends GearPropertyValue<?>> property : finalProperties.keySet()) {
+            addDataComponentsForProperty(gear, finalProperties, property);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> void addAttributesForProperty(
             ItemStack stack,
@@ -207,6 +214,21 @@ public final class GearData {
         if (valueInstance != null) {
             T value = valueInstance.value();
             property.addAttributes(stack, value, builder);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> void addDataComponentsForProperty(
+            ItemStack stack,
+            GearPropertiesData propertiesData,
+            GearProperty<?, ?> propertyIn
+    ) {
+        // Must cast the property into its true type to call the addDataComponents method
+        P property = (P) propertyIn;
+        V valueInstance = propertiesData.get(property);
+        if (valueInstance != null) {
+            T value = valueInstance.value();
+            property.addDataComponents(stack, value);
         }
     }
 

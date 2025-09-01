@@ -77,6 +77,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         add(SgBlocks.NETHERWOOD_SLAB.get(), this::createSlabItemTable);
         dropSelf(SgBlocks.NETHERWOOD_STAIRS.get());
         dropSelf(SgBlocks.STONE_TORCH.get());
+        dropOther(SgBlocks.WALL_STONE_TORCH.get(), SgBlocks.STONE_TORCH.get());
 
         add(SgBlocks.PHANTOM_LIGHT.get(), noDrop());
         dropPottedContents(SgBlocks.POTTED_NETHERWOOD_SAPLING.get());

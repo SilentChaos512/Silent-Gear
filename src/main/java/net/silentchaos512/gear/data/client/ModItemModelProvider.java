@@ -93,8 +93,8 @@ public class ModItemModelProvider extends ItemModelGenerators {
 
         // Misc
         flatItem(SgItems.BLUEPRINT_PACKAGE);
-        flatItem(SgItems.FLAX_SEEDS);
-        flatItem(SgItems.FLUFFY_SEEDS);
+//        flatItem(SgItems.FLAX_SEEDS);
+//        flatItem(SgItems.FLUFFY_SEEDS);
         flatItem(SgItems.GOLDEN_NETHER_BANANA);
         flatItem(SgItems.NETHER_BANANA);
         flatItem(SgItems.PEBBLE);
@@ -104,7 +104,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
         tempGearStandardTool(GearItemSets.KATANA);
         tempGearStandardTool(GearItemSets.MACHETE);
         tempGearStandardTool(GearItemSets.SPEAR);
-        tempGearStandardTool(GearItemSets.TRIDENT, false);
+//        tempGearStandardTool(GearItemSets.TRIDENT, false);
         tempGearStandardTool(GearItemSets.MACE);
         tempGearStandardTool(GearItemSets.KNIFE);
         tempGearStandardTool(GearItemSets.DAGGER);

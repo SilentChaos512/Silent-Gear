@@ -151,8 +151,13 @@ public interface Material extends GearComponent<MaterialInstance> {
      * @return An item matching the normal ingredient, or {@link ItemStack#EMPTY} if there are none
      */
     default ItemStack getDisplayItem(PartType type, int ticks) {
-        HolderSet<Item> items = getIngredient().getValues();
-        if (items.size() == 0) return ItemStack.EMPTY;
+        if (getIngredient().isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        HolderSet<Item> items = getIngredient().get().getValues();
+        if (items.size() == 0) {
+            return ItemStack.EMPTY;
+        }
         return new ItemStack(items.get((ticks / 20) % items.size()));
     }
 

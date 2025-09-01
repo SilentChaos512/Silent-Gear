@@ -51,7 +51,7 @@ public final class DataGenerators {
 
         // Gear data
         generator.addProvider(true, new TraitsProvider(lookupProvider, generator));
-        generator.addProvider(true, new MaterialsProvider(generator, SilentGear.MOD_ID));
+        generator.addProvider(true, new MaterialsProvider(lookupProvider, generator));
         generator.addProvider(true, new PartsProvider(generator));
 
         // Others

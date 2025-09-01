@@ -148,9 +148,9 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return mat != null ? mat.getCategories(this) : Collections.emptySet();
     }
 
-    public Ingredient getIngredient() {
+    public Optional<Ingredient> getIngredient() {
         var mat = getNullable();
-        return mat != null ? mat.getIngredient() : Ingredient.of();
+        return mat != null ? mat.getIngredient() : Optional.empty();
     }
 
     public boolean canRepair(ItemStack gear) {

@@ -3,11 +3,13 @@ package net.silentchaos512.gear.gear.part;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.event.GetPropertyModifiersEvent;
@@ -148,7 +150,7 @@ public class CoreGearPart extends AbstractGearPart {
 
     @Override
     public PartInstance randomizeData(GearType gearType, int tier) {
-        for (Holder<Item> item : this.getIngredient().getValues()) {
+        for (Holder<Item> item : this.getIngredient().map(Ingredient::getValues).orElse(HolderSet.empty())) {
             if (item.value() instanceof CompoundPartItem compoundPartItem) {
                 var material = getRandomMaterial(gearType);
                 ItemStack craftingItem = compoundPartItem.create(material);

@@ -1532,10 +1532,10 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void toolBlueprint(String group, GearItemSet<?> itemSet, String... pattern) {
-        toolBlueprint(group, itemSet, Ingredient.of(), pattern);
+        toolBlueprint(group, itemSet, null, pattern);
     }
 
-    private void toolBlueprint(String group, GearItemSet<?> itemSet, Ingredient extra, String... pattern) {
+    private void toolBlueprint(String group, GearItemSet<?> itemSet, @Nullable Ingredient extra, String... pattern) {
         ShapedRecipeBuilder builderBlueprint = shaped(RecipeCategory.MISC, itemSet.blueprint())
                 .group("silentgear:blueprints/" + group)
                 .define('#', SgTags.Items.BLUEPRINT_PAPER)
@@ -1548,7 +1548,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .define('/', Tags.Items.RODS_WOODEN)
                 .unlockedBy("has_item", has(SgTags.Items.TEMPLATE_BOARDS));
 
-        if (!extra.isEmpty()) {
+        if (extra != null) {
             builderBlueprint.define('@', extra);
             builderTemplate.define('@', extra);
         }

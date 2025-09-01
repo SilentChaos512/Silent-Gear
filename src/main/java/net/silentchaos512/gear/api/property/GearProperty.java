@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     protected final T baseValue;
@@ -38,6 +39,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     protected final boolean forMaterialsOnly;
     protected final boolean visible;
     @Nullable private final TriConsumer<ItemStack, T, ItemAttributeModifiers.Builder> attributeAdder;
+    @Nullable private final BiConsumer<ItemStack, T> dataComponentAdder;
 
     protected GearProperty(Builder<T> builder) {
         builder.validate();
@@ -52,6 +54,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         this.nameColor = builder.nameColor;
         this.visible = builder.visible;
         this.attributeAdder = builder.attributeAdder;
+        this.dataComponentAdder = builder.dataComponentAdder;
     }
 
     public abstract Codec<V> codec();
@@ -238,6 +241,12 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         }
     }
 
+    public void addDataComponents(ItemStack stack, T value) {
+        if (this.dataComponentAdder != null) {
+            this.dataComponentAdder.accept(stack, value);
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -274,6 +283,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         public boolean forMaterialsOnly;
         private boolean visible;
         @Nullable private TriConsumer<ItemStack, T, ItemAttributeModifiers.Builder> attributeAdder = null;
+        @Nullable private BiConsumer<ItemStack, T> dataComponentAdder = null;
 
         public Builder(T defaultValue) {
             this (defaultValue, defaultValue);
@@ -333,6 +343,11 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
 
         public Builder<T> onGetAttributes(TriConsumer<ItemStack, T, ItemAttributeModifiers.Builder> consumer) {
             this.attributeAdder = consumer;
+            return this;
+        }
+
+        public Builder<T> onAddDataComponents(BiConsumer<ItemStack, T> consumer) {
+            this.dataComponentAdder = consumer;
             return this;
         }
     }

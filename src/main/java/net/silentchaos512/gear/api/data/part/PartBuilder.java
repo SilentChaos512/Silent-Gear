@@ -26,6 +26,7 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
@@ -61,15 +62,15 @@ public class PartBuilder {
     }
 
     public PartBuilder crafting(Ingredient ingredient) {
-        return crafting(new PartCraftingData(ingredient, Collections.emptyList(), true));
+        return crafting(new PartCraftingData(Optional.of(ingredient), Collections.emptyList(), true));
     }
 
     public PartBuilder crafting(TagKey<Item> tag) {
-        return crafting(new PartCraftingData(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tag)), Collections.emptyList(), true));
+        return crafting(new PartCraftingData(Optional.of(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tag))), Collections.emptyList(), true));
     }
 
     public PartBuilder crafting(ItemLike item) {
-        return crafting(new PartCraftingData(Ingredient.of(item), Collections.emptyList(), true));
+        return crafting(new PartCraftingData(Optional.of(Ingredient.of(item)), Collections.emptyList(), true));
     }
 
     public PartBuilder display(PartDisplayData display) {

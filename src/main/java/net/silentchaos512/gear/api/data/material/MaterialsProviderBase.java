@@ -1,10 +1,14 @@
 package net.silentchaos512.gear.api.data.material;
 
 import com.google.common.collect.Sets;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.util.DataResource;
 import org.jetbrains.annotations.NotNull;
@@ -19,13 +23,16 @@ import java.util.concurrent.CompletableFuture;
 public abstract class MaterialsProviderBase implements DataProvider {
     protected final DataGenerator generator;
     protected final String modId;
+    private final CompletableFuture<HolderLookup.Provider> lookupProvider;
+    protected HolderGetter<Item> items;
 
-    public MaterialsProviderBase(DataGenerator generator, String modId) {
+    public MaterialsProviderBase(CompletableFuture<HolderLookup.Provider> lookupProvider, DataGenerator generator, String modId) {
         this.generator = generator;
+        this.lookupProvider = lookupProvider;
         this.modId = modId;
     }
 
-    protected abstract Collection<MaterialBuilder<?>> getMaterials();
+    protected abstract Collection<MaterialBuilder<?>> getMaterials(HolderLookup.Provider registries);
 
     protected DataResource<Material> modId(String path) {
         return DataResource.material(ResourceLocation.fromNamespaceAndPath(this.modId, path));
@@ -47,14 +54,17 @@ public abstract class MaterialsProviderBase implements DataProvider {
         Set<ResourceLocation> set = Sets.newHashSet();
         List<CompletableFuture<?>> list = new ArrayList<>();
 
-        this.getMaterials().forEach(builder -> {
-            if (!set.add(builder.getId())) {
-                throw new IllegalStateException("Duplicate material: " + builder.getId());
-            }
-            Path path = outputFolder.resolve(String.format("data/%s/silentgear_materials/%s.json", builder.getId().getNamespace(), builder.getId().getPath()));
-            list.add(DataProvider.saveStable(cache, builder.serialize(), path));
+        this.lookupProvider.thenAccept(registries -> {
+            this.items = registries.lookupOrThrow(Registries.ITEM);
+            this.getMaterials(registries).forEach(builder -> {
+                if (!set.add(builder.getId())) {
+                    throw new IllegalStateException("Duplicate material: " + builder.getId());
+                }
+                Path path = outputFolder.resolve(String.format("data/%s/silentgear_materials/%s.json", builder.getId().getNamespace(), builder.getId().getPath()));
+                list.add(DataProvider.saveStable(cache, builder.serialize(), path));
+            });
         });
 
-        return CompletableFuture.allOf(list.toArray(new CompletableFuture[0]));
+        return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
     }
 }

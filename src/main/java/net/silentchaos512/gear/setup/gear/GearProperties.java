@@ -1,7 +1,9 @@
 package net.silentchaos512.gear.setup.gear;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
@@ -101,6 +103,11 @@ public class GearProperties {
                             .group(GearPropertyGroups.GENERAL)
                             .affectedByGrades(true)
                             .affectedBySynergy(true)
+                            .onAddDataComponents((stack, value) -> {
+                                if (value.intValue() > 0 && Config.Common.isLoaded() && Config.Common.allowEnchanting.get()) {
+                                    stack.set(DataComponents.ENCHANTABLE, new Enchantable(value.intValue()));
+                                }
+                            })
             ) {
                 @Override
                 public boolean isHidden(NumberPropertyValue value, GearTooltipFlag flag) {
@@ -131,6 +138,9 @@ public class GearProperties {
                             .group(GearPropertyGroups.GENERAL)
                             .affectedByGrades(false)
                             .affectedBySynergy(false)
+                            .onAddDataComponents((stack, value) -> {
+                                stack.set(DataComponents.RARITY, GearHelper.getRarity(stack));
+                            })
             )
     );
     public static final Supplier<HarvestTierProperty> HARVEST_TIER = REGISTRAR.register(

@@ -53,14 +53,16 @@ public class GearArmorItem extends BasicGearItem implements GearArmor {
             // Set equippable data
             var construction = GearData.getConstruction(gear);
             var primaryMaterial = construction.getMainTextureMaterialOrPlaceholder();
-            var equippableInfo = primaryMaterial.get().getEquippableInfo();
-            gear.set(
-                    DataComponents.EQUIPPABLE,
-                    Equippable.builder(this.armorType.getSlot())
-                            .setEquipSound(equippableInfo.equipSound())
-                            .setAsset(equippableInfo.assetId())
-                            .build()
-            );
+            if (primaryMaterial.isValid()) {
+                var equippableInfo = primaryMaterial.get().getEquippableInfo();
+                gear.set(
+                        DataComponents.EQUIPPABLE,
+                        Equippable.builder(this.armorType.getSlot())
+                                .setEquipSound(equippableInfo.equipSound())
+                                .setAsset(equippableInfo.assetId())
+                                .build()
+                );
+            }
 
             // Attach armor color
             var primaryPart = construction.getCoatingOrMainPart();

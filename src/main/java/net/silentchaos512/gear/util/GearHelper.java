@@ -576,13 +576,6 @@ public final class GearHelper {
         return entity == null ? null : new EntityHitResult(entity, vector3d);
     }
 
-    public static int getEnchantmentValue(ItemStack stack) {
-        if (Config.Common.allowEnchanting.get()) {
-            return (int) GearData.getProperties(stack).getNumber(GearProperties.ENCHANTMENT_VALUE);
-        }
-        return 0;
-    }
-
     public static Rarity getRarity(ItemStack stack) {
         int rarity = (int) GearData.getProperties(stack).getNumber(GearProperties.RARITY);
         if (stack.isEnchanted())

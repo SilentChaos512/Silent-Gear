@@ -45,7 +45,6 @@ public class ModBlockModelGenerator extends BlockModelGenerators {
 
         // Netherwood
         createTrivialCube(SgBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
-        createTrivialCube(SgBlocks.NETHERWOOD_PLANKS.get());
         createTrivialCube(SgBlocks.NETHERWOOD_LEAVES.get());
         woodProvider(SgBlocks.NETHERWOOD_LOG.get()).logWithHorizontal(SgBlocks.NETHERWOOD_LOG.get()).wood(SgBlocks.NETHERWOOD_WOOD.get());
         woodProvider(SgBlocks.STRIPPED_NETHERWOOD_LOG.get()).logWithHorizontal(SgBlocks.STRIPPED_NETHERWOOD_LOG.get()).wood(SgBlocks.STRIPPED_NETHERWOOD_WOOD.get());

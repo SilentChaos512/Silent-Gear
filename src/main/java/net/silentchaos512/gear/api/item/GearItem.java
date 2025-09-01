@@ -2,12 +2,10 @@ package net.silentchaos512.gear.api.item;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.level.ItemLike;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
@@ -15,7 +13,6 @@ import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -72,8 +69,6 @@ public interface GearItem extends ItemLike {
     }
 
     default void onRecalculatePost(ItemStack gear, @Nullable Player player, GearPropertiesData finalProperties) {
-        var properties = GearData.getProperties(gear, player);
-        gear.set(DataComponents.ENCHANTABLE, new Enchantable(properties.getNumberInt(GearProperties.ENCHANTMENT_VALUE)));
     }
 
     default void buildAttributes(ItemStack gear, ItemAttributeModifiers.Builder builder) {

@@ -41,9 +41,8 @@ public final class PartManager extends DataResourceManager<GearPart> {
     public GearPart fromItem(ItemStack stack) {
         if (stack.isEmpty()) return null;
 
-        // We can't reliably keep an IItemProvider -> IGearPart map anymore
         for (GearPart part : this) {
-            if (part.getIngredient().test(stack)) {
+            if (part.getIngredient().isPresent() && part.getIngredient().get().test(stack)) {
                 return part;
             }
         }

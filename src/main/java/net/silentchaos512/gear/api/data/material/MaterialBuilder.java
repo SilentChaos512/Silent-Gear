@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -104,9 +104,9 @@ public class MaterialBuilder<M extends Material> {
         ));
     }
 
-    public MaterialBuilder<M> crafting(TagKey<Item> craftingItem, IMaterialCategory... categories) {
+    public MaterialBuilder<M> crafting(HolderGetter<Item> items, TagKey<Item> craftingItem, IMaterialCategory... categories) {
         return crafting(new MaterialCraftingData(
-                Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(craftingItem)),
+                Ingredient.of(items.getOrThrow(craftingItem)),
                 Lists.newArrayList(categories),
                 Collections.emptyList(),
                 Collections.emptyMap(),
@@ -129,17 +129,17 @@ public class MaterialBuilder<M extends Material> {
         return this;
     }
 
-    public MaterialBuilder<M> craftingWithCommonRod(TagKey<Item> craftingItem, IMaterialCategory... categories) {
+    public MaterialBuilder<M> craftingWithCommonRod(HolderGetter<Item> items, TagKey<Item> craftingItem, IMaterialCategory... categories) {
         if (this.builtinMaterial == null) {
             throw new IllegalStateException("Cannot use craftingWithCommonRod if builtinMaterial is null");
         }
         var rodTagLocation = ResourceLocation.fromNamespaceAndPath("c", "rods/" + this.builtinMaterial.name().toLowerCase(Locale.ROOT));
         var commonRodTag = TagKey.create(Registries.ITEM, rodTagLocation);
         return crafting(new MaterialCraftingData(
-                Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(craftingItem)),
+                Ingredient.of(items.getOrThrow(craftingItem)),
                 Lists.newArrayList(categories),
                 Collections.emptyList(),
-                Map.of(PartTypes.ROD.get(), Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(commonRodTag))),
+                Map.of(PartTypes.ROD.get(), Ingredient.of(items.getOrThrow(commonRodTag))),
                 true
         ));
     }

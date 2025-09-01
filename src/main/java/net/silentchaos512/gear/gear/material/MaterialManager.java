@@ -138,7 +138,7 @@ public class MaterialManager extends DataResourceManager<Material> {
         var matches = new ArrayList<Material>();
 
         for (Material material : this) {
-            if (material.getIngredient().test(stack)) {
+            if (material.getIngredient().isPresent() && material.getIngredient().get().test(stack)) {
                 matches.add(material);
             }
         }

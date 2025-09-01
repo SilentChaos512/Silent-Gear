@@ -60,7 +60,7 @@ public class CustomMaterialItem extends SingleMaterialItem implements IColoredMa
                 MaterialInstance mat = MaterialInstance.of(material);
                 ItemStack stack = create(mat);
 
-                if (mat.getIngredient().test(stack)) {
+                if (mat.getIngredient().isPresent() && mat.getIngredient().get().test(stack)) {
                     output.accept(stack);
                 }
             }

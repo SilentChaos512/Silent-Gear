@@ -9,6 +9,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.List;
+import java.util.Optional;
 
 public class IngredientUtils {
     private IngredientUtils() {
@@ -32,6 +33,17 @@ public class IngredientUtils {
     }
 
     /**
+     * Returns all items for the ingredient, excluding the barrier item. This is useful for hiding empty tags.
+     *
+     * @param ingredient The ingredient
+     * @return All items in the ingredient mapped to stacks
+     */
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public static List<ItemStack> getValidItems(Optional<Ingredient> ingredient) {
+        return ingredient.map(IngredientUtils::getValidItems).orElseGet(List::of);
+    }
+
+    /**
      * Returns all items for the ingredient, which may include a barrier item for empty tags.
      *
      * @param ingredient The ingredient
@@ -43,5 +55,16 @@ public class IngredientUtils {
             listBuilder.add(new ItemStack(item.value()));
         }
         return listBuilder.build();
+    }
+
+    /**
+     * Returns all items for the ingredient, which may include a barrier item for empty tags.
+     *
+     * @param ingredient The ingredient
+     * @return All items in the ingredient mapped to stacks, or possibly a barrier item stack for empty tags
+     */
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public static List<ItemStack> getItems(Optional<Ingredient> ingredient) {
+        return ingredient.map(IngredientUtils::getItems).orElseGet(List::of);
     }
 }
