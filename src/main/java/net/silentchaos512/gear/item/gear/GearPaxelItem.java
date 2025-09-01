@@ -2,6 +2,7 @@ package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
@@ -14,8 +15,8 @@ import net.silentchaos512.gear.util.GearHelper;
 import java.util.function.Supplier;
 
 public class GearPaxelItem extends GearPickaxeItem {
-    public GearPaxelItem(Supplier<GearType> gearType) {
-        super(gearType);
+    public GearPaxelItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(gearType, properties);
     }
 
     @Override

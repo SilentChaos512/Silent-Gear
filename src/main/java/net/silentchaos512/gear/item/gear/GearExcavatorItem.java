@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
@@ -11,8 +12,8 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class GearExcavatorItem extends GearShovelItem implements IAoeTool {
-    public GearExcavatorItem(Supplier<GearType> gearType) {
-        super(gearType);
+    public GearExcavatorItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(gearType, properties);
     }
 
     @Nullable

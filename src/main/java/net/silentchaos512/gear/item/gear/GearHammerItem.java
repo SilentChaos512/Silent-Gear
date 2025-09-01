@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class GearHammerItem extends GearPickaxeItem implements IAoeTool {
-    public GearHammerItem(Supplier<GearType> gearType) {
-        super(gearType);
+    public GearHammerItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(gearType, properties);
     }
 
     @Override

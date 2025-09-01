@@ -32,8 +32,8 @@ public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
 
     private final Supplier<GearType> gearType;
 
-    public GearCrossbowItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearCrossbowItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 

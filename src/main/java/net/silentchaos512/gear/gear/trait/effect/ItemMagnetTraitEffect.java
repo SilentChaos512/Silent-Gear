@@ -3,11 +3,14 @@ package net.silentchaos512.gear.gear.trait.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.phys.AABB;
@@ -28,9 +31,9 @@ public class ItemMagnetTraitEffect extends TraitEffect {
             instance -> instance.group(
                     Codec.FLOAT.fieldOf("pull_strength").forGetter(e -> e.pullStrength),
                     Codec.FLOAT.fieldOf("effect_range").forGetter(e -> e.effectRange),
-                    Ingredient.CODEC.optionalFieldOf("affected_items", Ingredient.of()).forGetter(e -> e.affectedItems),
+                    Ingredient.NON_AIR_HOLDER_SET_CODEC.fieldOf("affected_items").forGetter(e -> e.affectedItems),
                     Codec.STRING.optionalFieldOf("affected_items_text_for_wiki").forGetter(e ->
-                            e.affectedItems.isEmpty() ? Optional.empty() : Optional.of(e.affectedItemsTextForWiki)
+                            e.affectedItems.size() == 0 ? Optional.empty() : Optional.of(e.affectedItemsTextForWiki)
                     )
             ).apply(instance, (pullStrength, pullRange, affectedItems, wikiText) ->
                     wikiText.map(s -> new ItemMagnetTraitEffect(pullStrength, pullRange, affectedItems, s))
@@ -40,20 +43,20 @@ public class ItemMagnetTraitEffect extends TraitEffect {
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemMagnetTraitEffect> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.FLOAT, e -> e.pullStrength,
             ByteBufCodecs.FLOAT, e -> e.effectRange,
-            Ingredient.CONTENTS_STREAM_CODEC, e -> e.affectedItems,
+            ByteBufCodecs.holderSet(Registries.ITEM), e -> e.affectedItems,
             ItemMagnetTraitEffect::new
     );
 
     private final float pullStrength; // ORIGINAL: 0.06
     private final float effectRange; // ORIGINAL: 3.0
-    private final Ingredient affectedItems;
+    private final HolderSet<Item> affectedItems;
     private final String affectedItemsTextForWiki;
 
-    public ItemMagnetTraitEffect(float pullStrength, float effectRange, Ingredient affectedItems) {
-        this(pullStrength, effectRange, affectedItems, !affectedItems.isEmpty() ? "some items" : "all items");
+    public ItemMagnetTraitEffect(float pullStrength, float effectRange, HolderSet<Item> affectedItems) {
+        this(pullStrength, effectRange, affectedItems, affectedItems.size() > 0 ? "some items" : "all items");
     }
 
-    public ItemMagnetTraitEffect(float pullStrength, float effectRange, Ingredient affectedItems, String affectedItemsTextForWiki) {
+    public ItemMagnetTraitEffect(float pullStrength, float effectRange, HolderSet<Item> affectedItems, String affectedItemsTextForWiki) {
         this.pullStrength = pullStrength;
         this.effectRange = effectRange;
         this.affectedItems = affectedItems;
@@ -85,7 +88,7 @@ public class ItemMagnetTraitEffect extends TraitEffect {
     }
 
     private boolean canAffectItem(ItemStack stack) {
-        return affectedItems.isEmpty() || affectedItems.test(stack);
+        return this.affectedItems.size() == 0 || stack.is(this.affectedItems);
     }
 
     private boolean canMagneticPullItem(ItemEntity entity) {

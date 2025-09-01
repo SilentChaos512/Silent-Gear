@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.equipment.Equippable;
@@ -27,8 +28,8 @@ import java.util.function.Supplier;
 public class GearShieldItem extends BasicGearItem {
     private final Supplier<GearType> gearType;
 
-    public GearShieldItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearShieldItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 

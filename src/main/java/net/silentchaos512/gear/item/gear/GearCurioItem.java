@@ -4,6 +4,7 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -28,7 +29,7 @@ public class GearCurioItem extends BasicGearItem {
     private final Supplier<GearType> gearType;
     private final String slot;
 
-    public GearCurioItem(Supplier<GearType> gearType, String slot, Properties properties) {
+    public GearCurioItem(Supplier<GearType> gearType, String slot, Item.Properties properties) {
         super(properties);
         this.gearType = gearType;
         this.slot = slot;

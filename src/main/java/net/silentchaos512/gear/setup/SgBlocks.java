@@ -63,38 +63,38 @@ public final class SgBlocks {
 
     public static final DeferredBlock<DropExperienceBlock> BORT_ORE = register(
             "bort_ore",
-            () -> getOre(UniformInt.of(3, 7), SoundType.STONE),
+            properties -> getOre(UniformInt.of(3, 7), SoundType.STONE, properties),
             SgBlocks::oreBlockItem
     );
     public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_BORT_ORE = register(
             "deepslate_bort_ore",
-            () -> getOre(UniformInt.of(3, 7), SoundType.DEEPSLATE),
+            properties -> getOre(UniformInt.of(3, 7), SoundType.DEEPSLATE, properties),
             SgBlocks::oreBlockItem
     );
     public static final DeferredBlock<DropExperienceBlock> CRIMSON_IRON_ORE = register(
             "crimson_iron_ore",
-            () -> getOre(ConstantInt.of(0), SoundType.NETHER_GOLD_ORE),
+            properties -> getOre(ConstantInt.of(0), SoundType.NETHER_GOLD_ORE, properties),
             SgBlocks::oreBlockItem
     );
     public static final DeferredBlock<DropExperienceBlock> BLACKSTONE_CRIMSON_IRON_ORE = register(
             "blackstone_crimson_iron_ore",
-            () -> getOre(ConstantInt.of(0), SoundType.GILDED_BLACKSTONE),
+            properties -> getOre(ConstantInt.of(0), SoundType.GILDED_BLACKSTONE, properties),
             SgBlocks::oreBlockItem
     );
     public static final DeferredBlock<DropExperienceBlock> AZURE_SILVER_ORE = register(
             "azure_silver_ore",
-            () -> getOre(ConstantInt.of(0), SoundType.STONE),
+            properties -> getOre(ConstantInt.of(0), SoundType.STONE, properties),
             SgBlocks::oreBlockItem
     );
 
     public static final DeferredBlock<Block> RAW_CRIMSON_IRON_BLOCK = register(
             "raw_crimson_iron_block",
-            () -> getRawOreBlock(SoundType.NETHER_GOLD_ORE),
+            properties -> getRawOreBlock(SoundType.NETHER_GOLD_ORE, properties),
             SgBlocks::oreBlockItem
     );
     public static final DeferredBlock<Block> RAW_AZURE_SILVER_BLOCK = register(
             "raw_azure_silver_block",
-            () -> getRawOreBlock(SoundType.STONE),
+            properties -> getRawOreBlock(SoundType.STONE, properties),
             SgBlocks::oreBlockItem
     );
 
@@ -113,123 +113,130 @@ public final class SgBlocks {
     public static final DeferredBlock<Block> TYRIAN_STEEL_BLOCK = register("tyrian_steel_block",
             SgBlocks::getStorageBlock);
 
-    public static final DeferredBlock<Block> GEAR_SMITHING_TABLE = register("gear_smithing_table", () ->
-            new GearSmithingTableBlock(BlockBehaviour.Properties.of()
-                    .strength(2.5F)
-                    .sound(SoundType.WOOD)));
+    public static final DeferredBlock<Block> GEAR_SMITHING_TABLE = register(
+            "gear_smithing_table",
+            GearSmithingTableBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(2.5f)
+                    .sound(SoundType.WOOD)
+    );
 
     public static final DeferredBlock<StoneAnvilBlock> STONE_ANVIL = register(
             "stone_anvil",
-            () -> new StoneAnvilBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(3, 10)
-            ),
+            StoneAnvilBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(3, 10),
             SgBlocks::blockItemWithTooltip
     );
 
     public static final DeferredBlock<GraderBlock> MATERIAL_GRADER = register(
             "material_grader",
-            () -> new GraderBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(5, 30)
-            ),
+            GraderBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(5, 30),
             SgBlocks::blockItemWithTooltip
     );
 
     public static final DeferredBlock<SalvagerBlock> SALVAGER = register(
             "salvager",
-            () -> new SalvagerBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(5, 30)
-            ),
+            SalvagerBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(5, 30),
             SgBlocks::blockItemWithTooltip
     );
 
     public static final DeferredBlock<StarlightChargerBlock> STARLIGHT_CHARGER = register(
             "starlight_charger",
-            () -> new StarlightChargerBlock(
-                    ChargerBlockEntity::createStarlightCharger,
-                    BlockBehaviour.Properties.of()
-                            .strength(5, 30)
-            ),
+            properties -> new StarlightChargerBlock(ChargerBlockEntity::createStarlightCharger, properties),
+            BlockBehaviour.Properties.of()
+                    .strength(5, 30),
             SgBlocks::blockItemWithTooltip
     );
 
     public static final DeferredBlock<AlloyMakerBlock<MetalAlloyRecipe>> ALLOY_FORGE = register(
             "alloy_forge",
-            () -> new AlloyMakerBlock<>(Const.METAL_ALLOY_MAKER_INFO,
-                    BlockBehaviour.Properties.of()
-                            .strength(4, 20)
-                            .sound(SoundType.METAL)),
-            deferredBlock -> () -> new AlloyMakerBlockItem(deferredBlock.get(), new Item.Properties().useItemDescriptionPrefix())
+            properties -> new AlloyMakerBlock<>(Const.METAL_ALLOY_MAKER_INFO, properties),
+            BlockBehaviour.Properties.of()
+                    .strength(4, 20)
+                    .sound(SoundType.METAL),
+            deferredBlock -> itemProperties -> new AlloyMakerBlockItem(deferredBlock.get(), itemProperties)
     );
 
     public static final DeferredBlock<AlloyMakerBlock<GemAlloyRecipe>> RECRYSTALLIZER = register(
             "recrystallizer",
-            () -> new AlloyMakerBlock<>(Const.GEM_ALLOY_MAKER_INFO,
-                    BlockBehaviour.Properties.of()
-                            .strength(4, 20)
-                            .sound(SoundType.METAL)),
-            deferredBlock -> () -> new AlloyMakerBlockItem(deferredBlock.get(), new Item.Properties().useItemDescriptionPrefix())
+            properties -> new AlloyMakerBlock<>(Const.GEM_ALLOY_MAKER_INFO, properties),
+            BlockBehaviour.Properties.of()
+                    .strength(4, 20)
+                    .sound(SoundType.METAL),
+            deferredBlock -> itemProperties -> new AlloyMakerBlockItem(deferredBlock.get(), itemProperties)
     );
 
     public static final DeferredBlock<AlloyMakerBlock<FabricAlloyRecipe>> REFABRICATOR = register(
             "refabricator",
-            () -> new AlloyMakerBlock<>(Const.FABRIC_ALLOY_MAKER_INFO,
-                    BlockBehaviour.Properties.of()
-                            .strength(4, 20)
-                            .sound(SoundType.METAL)),
-            deferredBlock -> () -> new AlloyMakerBlockItem(deferredBlock.get(), new Item.Properties().useItemDescriptionPrefix())
+            properties -> new AlloyMakerBlock<>(Const.FABRIC_ALLOY_MAKER_INFO, properties),
+            BlockBehaviour.Properties.of()
+                    .strength(4, 20)
+                    .sound(SoundType.METAL),
+            deferredBlock -> itemProperties -> new AlloyMakerBlockItem(deferredBlock.get(), itemProperties)
     );
 
     public static final DeferredBlock<AlloyMakerBlock<SuperAlloyRecipe>> SUPER_MIXER = register(
             "super_mixer",
-            () -> new AlloyMakerBlock<>(
-                    Const.SUPER_MIXER_INFO,
-                    BlockBehaviour.Properties.of()
-                            .strength(4, 20)
-                            .sound(SoundType.METAL)
-            ) {
+            properties -> new AlloyMakerBlock<>(Const.SUPER_MIXER_INFO, properties) {
                 @Override
                 public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
                     return Shapes.block();
                 }
             },
-            deferredBlock -> () -> new AlloyMakerBlockItem(deferredBlock.get(), new Item.Properties().useItemDescriptionPrefix())
+            BlockBehaviour.Properties.of()
+                    .strength(4, 20)
+                    .sound(SoundType.METAL),
+            deferredBlock -> itemProperties -> new AlloyMakerBlockItem(deferredBlock.get(), itemProperties)
     );
 
     public static final DeferredBlock<MetalPressBlock> METAL_PRESS = register(
             "metal_press",
-            () -> new MetalPressBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(4, 20)
-                            .sound(SoundType.METAL)
-            ),
+            MetalPressBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(4, 20)
+                    .sound(SoundType.METAL),
             SgBlocks::blockItemWithTooltip
     );
 
-    public static final DeferredBlock<ModCropBlock> FLAX_PLANT = registerNoItem("flax_plant", () ->
-            new ModCropBlock(SgItems.FLAX_SEEDS::get, BlockBehaviour.Properties.of()
+    public static final DeferredBlock<ModCropBlock> FLAX_PLANT = registerNoItem(
+            "flax_plant",
+            properties -> new ModCropBlock(SgItems.FLAX_SEEDS::get, properties),
+            BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .randomTicks()
-                    .sound(SoundType.CROP)));
-    public static final DeferredBlock<WildCropBlock> WILD_FLAX_PLANT = registerNoItem("wild_flax_plant", () ->
-            new WildCropBlock(BlockBehaviour.Properties.of()
+                    .sound(SoundType.CROP)
+    );
+    public static final DeferredBlock<BushBlock> WILD_FLAX_PLANT = registerNoItem(
+            "wild_flax_plant",
+            BushBlock::new,
+            BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
-                    .sound(SoundType.CROP)));
-    public static final DeferredBlock<ModCropBlock> FLUFFY_PLANT = registerNoItem("fluffy_plant", () ->
-            new ModCropBlock(SgItems.FLUFFY_SEEDS::get, BlockBehaviour.Properties.of()
+                    .sound(SoundType.CROP)
+    );
+    public static final DeferredBlock<ModCropBlock> FLUFFY_PLANT = registerNoItem(
+            "fluffy_plant",
+            properties -> new ModCropBlock(SgItems.FLUFFY_SEEDS::get, properties),
+            BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .randomTicks()
-                    .sound(SoundType.CROP)));
-    public static final DeferredBlock<WildCropBlock> WILD_FLUFFY_PLANT = registerNoItem("wild_fluffy_plant", () ->
-            new WildCropBlock(BlockBehaviour.Properties.of()
+                    .sound(SoundType.CROP)
+    );
+    public static final DeferredBlock<BushBlock> WILD_FLUFFY_PLANT = registerNoItem(
+            "wild_fluffy_plant",
+            BushBlock::new,
+            BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
-                    .sound(SoundType.CROP)));
+                    .sound(SoundType.CROP)
+    );
 
     public static final DeferredBlock<FluffyBlock> WHITE_FLUFFY_BLOCK = registerFluffyBlock(DyeColor.WHITE);
     public static final DeferredBlock<FluffyBlock> ORANGE_FLUFFY_BLOCK = registerFluffyBlock(DyeColor.ORANGE);
@@ -248,79 +255,135 @@ public final class SgBlocks {
     public static final DeferredBlock<FluffyBlock> RED_FLUFFY_BLOCK = registerFluffyBlock(DyeColor.RED);
     public static final DeferredBlock<FluffyBlock> BLACK_FLUFFY_BLOCK = registerFluffyBlock(DyeColor.BLACK);
 
-    public static final DeferredBlock<TorchBlock> STONE_TORCH = register("stone_torch",
-            () -> new TorchBlock(ParticleTypes.FLAME,
-                    BlockBehaviour.Properties.of()
-                            .noCollission()
-                            .strength(0)
-                            .lightLevel(state -> 14)
-                            .sound(SoundType.STONE)),
-            bro -> getStoneTorchItem());
-    public static final DeferredBlock<WallTorchBlock> WALL_STONE_TORCH = registerNoItem("wall_stone_torch", () ->
-            new WallTorchBlock(ParticleTypes.FLAME,
-                    BlockBehaviour.Properties.of()
-                            .noCollission()
-                            .strength(0)
-                            .lightLevel(state -> 14)
-                            .sound(SoundType.STONE)));
+    public static final DeferredBlock<TorchBlock> STONE_TORCH = register(
+            "stone_torch",
+            properties -> new TorchBlock(ParticleTypes.FLAME, properties),
+            BlockBehaviour.Properties.of()
+                    .noCollission()
+                    .strength(0)
+                    .lightLevel(state -> 14)
+                    .sound(SoundType.STONE),
+            deferredBlock -> getStoneTorchItem()
+    );
+    public static final DeferredBlock<WallTorchBlock> WALL_STONE_TORCH = registerNoItem(
+            "wall_stone_torch",
+            properties -> new WallTorchBlock(ParticleTypes.FLAME, properties),
+            BlockBehaviour.Properties.of()
+                    .noCollission()
+                    .strength(0)
+                    .lightLevel(state -> 14)
+                    .sound(SoundType.STONE)
+    );
 
-    public static final DeferredBlock<Block> NETHERWOOD_CHARCOAL_BLOCK = register("netherwood_charcoal_block",
-            () -> new Block(BlockBehaviour.Properties.of()
+    public static final DeferredBlock<Block> NETHERWOOD_CHARCOAL_BLOCK = register(
+            "netherwood_charcoal_block",
+            Block::new,
+            BlockBehaviour.Properties.of()
                     .requiresCorrectToolForDrops()
-                    .strength(5, 6)));
+                    .strength(5, 6)
+    );
 
-    public static final DeferredBlock<WoodBlock> NETHERWOOD_LOG = register("netherwood_log", () ->
-            new WoodBlock(STRIPPED_WOOD::get, netherWoodProps(2f, 2f)));
-    public static final DeferredBlock<RotatedPillarBlock> STRIPPED_NETHERWOOD_LOG = register("stripped_netherwood_log", () ->
-            new RotatedPillarBlock(netherWoodProps(2f, 2f)));
-    public static final DeferredBlock<WoodBlock> NETHERWOOD_WOOD = register("netherwood_wood", () ->
-            new WoodBlock(STRIPPED_WOOD::get, netherWoodProps(2f, 2f)));
-    public static final DeferredBlock<RotatedPillarBlock> STRIPPED_NETHERWOOD_WOOD = register("stripped_netherwood_wood", () ->
-            new RotatedPillarBlock(netherWoodProps(2f, 2f)));
+    public static final DeferredBlock<WoodBlock> NETHERWOOD_LOG = register(
+            "netherwood_log",
+            properties -> new WoodBlock(STRIPPED_WOOD::get, properties),
+            netherWoodProps(2f, 2f)
+    );
+    public static final DeferredBlock<RotatedPillarBlock> STRIPPED_NETHERWOOD_LOG = register(
+            "stripped_netherwood_log",
+            RotatedPillarBlock::new,
+            netherWoodProps(2f, 2f)
+    );
+    public static final DeferredBlock<WoodBlock> NETHERWOOD_WOOD = register(
+            "netherwood_wood",
+            properties -> new WoodBlock(STRIPPED_WOOD::get, properties),
+            netherWoodProps(2f, 2f)
+    );
+    public static final DeferredBlock<RotatedPillarBlock> STRIPPED_NETHERWOOD_WOOD = register(
+            "stripped_netherwood_wood",
+            RotatedPillarBlock::new,
+            netherWoodProps(2f, 2f)
+    );
 
-    public static final DeferredBlock<Block> NETHERWOOD_PLANKS = register("netherwood_planks", () ->
-            new Block(netherWoodProps(2f, 3f)));
-    public static final DeferredBlock<SlabBlock> NETHERWOOD_SLAB = register("netherwood_slab", () ->
-            new SlabBlock(netherWoodProps(2f, 3f)));
-    public static final DeferredBlock<StairBlock> NETHERWOOD_STAIRS = register("netherwood_stairs", () ->
-            new StairBlock(NETHERWOOD_PLANKS.get().defaultBlockState(), netherWoodProps(2f, 3f)));
-    public static final DeferredBlock<FenceBlock> NETHERWOOD_FENCE = register("netherwood_fence", () ->
-            new FenceBlock(netherWoodProps(2f, 3f)));
-    public static final DeferredBlock<FenceGateBlock> NETHERWOOD_FENCE_GATE = register("netherwood_fence_gate", () ->
-            new FenceGateBlock(netherWoodProps(2f, 3f), SoundEvents.NETHER_WOOD_FENCE_GATE_CLOSE, SoundEvents.NETHER_WOOD_FENCE_GATE_OPEN));
-    public static final DeferredBlock<DoorBlock> NETHERWOOD_DOOR = register("netherwood_door", () ->
-            new DoorBlock(BlockSetType.CRIMSON, netherWoodProps(3f, 3f).noOcclusion()));
-    public static final DeferredBlock<TrapDoorBlock> NETHERWOOD_TRAPDOOR = register("netherwood_trapdoor", () ->
-            new TrapDoorBlock(BlockSetType.CRIMSON, netherWoodProps(3f, 3f).noOcclusion()));
-    public static final DeferredBlock<LeavesBlock> NETHERWOOD_LEAVES = register("netherwood_leaves", () ->
-            new UntintedParticleLeavesBlock(
+    public static final DeferredBlock<Block> NETHERWOOD_PLANKS = register(
+            "netherwood_planks",
+            Block::new,
+            netherWoodProps(2f, 3f)
+    );
+    public static final DeferredBlock<SlabBlock> NETHERWOOD_SLAB = register(
+            "netherwood_slab",
+            SlabBlock::new,
+            netherWoodProps(2f, 3f)
+    );
+    public static final DeferredBlock<StairBlock> NETHERWOOD_STAIRS = register(
+            "netherwood_stairs",
+            properties -> new StairBlock(NETHERWOOD_PLANKS.get().defaultBlockState(), properties),
+            netherWoodProps(2f, 3f)
+    );
+    public static final DeferredBlock<FenceBlock> NETHERWOOD_FENCE = register(
+            "netherwood_fence",
+            FenceBlock::new,
+            netherWoodProps(2f, 3f)
+    );
+    public static final DeferredBlock<FenceGateBlock> NETHERWOOD_FENCE_GATE = register(
+            "netherwood_fence_gate",
+            properties -> new FenceGateBlock(properties, SoundEvents.NETHER_WOOD_FENCE_GATE_CLOSE, SoundEvents.NETHER_WOOD_FENCE_GATE_OPEN),
+            netherWoodProps(2f, 3f)
+    );
+    public static final DeferredBlock<DoorBlock> NETHERWOOD_DOOR = register(
+            "netherwood_door",
+            properties -> new DoorBlock(BlockSetType.CRIMSON, properties),
+            netherWoodProps(3f, 3f)
+                    .noOcclusion()
+    );
+    public static final DeferredBlock<TrapDoorBlock> NETHERWOOD_TRAPDOOR = register(
+            "netherwood_trapdoor",
+            properties -> new TrapDoorBlock(BlockSetType.CRIMSON, properties),
+            netherWoodProps(3f, 3f)
+                    .noOcclusion()
+    );
+    public static final DeferredBlock<LeavesBlock> NETHERWOOD_LEAVES = register(
+            "netherwood_leaves",
+            properties -> new UntintedParticleLeavesBlock(
                     0.01f,
                     ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, 0x8F005F),
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.PLANT)
-                            .strength(0.2F)
-                            .randomTicks()
-                            .sound(SoundType.GRASS)
-                            .noOcclusion()
-                            .isValidSpawn(Blocks::ocelotOrParrot)
-                            .isSuffocating(SgBlocks::never)
-                            .isViewBlocking(SgBlocks::never)
-                            .ignitedByLava()
-                            .pushReaction(PushReaction.DESTROY)
-                            .isRedstoneConductor(SgBlocks::never)
-            )
+                    properties
+            ),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .strength(0.2F)
+                    .randomTicks()
+                    .sound(SoundType.GRASS)
+                    .noOcclusion()
+                    .isValidSpawn(Blocks::ocelotOrParrot)
+                    .isSuffocating(SgBlocks::never)
+                    .isViewBlocking(SgBlocks::never)
+                    .pushReaction(PushReaction.DESTROY)
+                    .isRedstoneConductor(SgBlocks::never)
     );
-    public static final DeferredBlock<NetherwoodSapling> NETHERWOOD_SAPLING = register("netherwood_sapling", () ->
-            new NetherwoodSapling(BlockBehaviour.Properties.of()
+    public static final DeferredBlock<NetherwoodSapling> NETHERWOOD_SAPLING = register(
+            "netherwood_sapling",
+            NetherwoodSapling::new,
+            BlockBehaviour.Properties.of()
                     .strength(0)
                     .noCollission()
                     .randomTicks()
-                    .sound(SoundType.GRASS)));
+                    .sound(SoundType.GRASS)
+    );
 
-    public static final DeferredBlock<FlowerPotBlock> POTTED_NETHERWOOD_SAPLING = registerNoItem("potted_netherwood_sapling", () ->
-            makePottedPlant(NETHERWOOD_SAPLING));
-    public static final DeferredBlock<PhantomLight> PHANTOM_LIGHT = register("phantom_light",
-            PhantomLight::new);
+    public static final DeferredBlock<FlowerPotBlock> POTTED_NETHERWOOD_SAPLING = registerNoItem(
+            "potted_netherwood_sapling",
+            properties -> makePottedPlant(NETHERWOOD_SAPLING, properties),
+            Block.Properties.of()
+                    .strength(0)
+    );
+    public static final DeferredBlock<PhantomLight> PHANTOM_LIGHT = register(
+            "phantom_light",
+            PhantomLight::new,
+            BlockBehaviour.Properties.of()
+                    .noCollission()
+                    .strength(0.5f, 6000000.0f)
+                    .lightLevel(state -> 15)
+    );
 
     private SgBlocks() {
     }
@@ -331,55 +394,108 @@ public final class SgBlocks {
         STRIPPED_WOOD.put(NETHERWOOD_WOOD.get(), STRIPPED_NETHERWOOD_WOOD.get());
     }
 
-    private static DropExperienceBlock getOre(IntProvider xpDrop, SoundType soundType) {
-        return new DropExperienceBlock(xpDrop, BlockBehaviour.Properties.of()
+    private static DropExperienceBlock getOre(IntProvider xpDrop, SoundType soundType, BlockBehaviour.Properties properties) {
+        return new DropExperienceBlock(xpDrop, properties
                 .strength(4, 10)
                 .requiresCorrectToolForDrops()
                 .sound(soundType));
     }
 
-    private static Block getRawOreBlock(SoundType soundType) {
-        return new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.of()
+    private static Block getRawOreBlock(SoundType soundType, BlockBehaviour.Properties properties) {
+        return new DropExperienceBlock(ConstantInt.of(0), properties
                 .strength(4, 20)
                 .requiresCorrectToolForDrops()
                 .sound(soundType));
     }
 
-    private static Block getStorageBlock() {
-        return new Block(BlockBehaviour.Properties.of()
+    private static Block getStorageBlock(BlockBehaviour.Properties properties) {
+        return new Block(properties
                 .strength(3, 6)
                 .sound(SoundType.METAL));
     }
 
-    private static <T extends Block> DeferredBlock<T> registerNoItem(String name, Supplier<T> block) {
-        return BLOCKS.register(name, block);
+    private static <T extends Block> DeferredBlock<T> registerNoItem(
+            String name,
+            Function<BlockBehaviour.Properties, T> block,
+            BlockBehaviour.Properties properties
+    ) {
+        return BLOCKS.registerBlock(name, block, properties);
     }
 
-    private static <T extends Block> DeferredBlock<T> register(String name, Supplier<T> block) {
-        return register(name, block, SgBlocks::defaultItem);
+    private static <T extends Block> DeferredBlock<T> register(
+            String name,
+            Function<BlockBehaviour.Properties, T> block
+    ) {
+        return register(name, block, BlockBehaviour.Properties.of(), SgBlocks::defaultItem, new Item.Properties().useBlockDescriptionPrefix());
     }
 
-    private static <T extends Block> DeferredBlock<T> register(String name, Supplier<T> block, Function<DeferredBlock<T>, Supplier<? extends BlockItem>> item) {
-        DeferredBlock<T> ret = registerNoItem(name, block);
-        SgItems.ITEMS.register(name, item.apply(ret));
+    private static <T extends Block> DeferredBlock<T> register(
+            String name,
+            Function<BlockBehaviour.Properties, T> block,
+            BlockBehaviour.Properties properties
+    ) {
+        return register(name, block, properties, SgBlocks::defaultItem, new Item.Properties().useBlockDescriptionPrefix());
+    }
+
+    private static <T extends Block> DeferredBlock<T> register(
+            String name,
+            Function<BlockBehaviour.Properties, T> block,
+            BlockBehaviour.Properties properties,
+            Function<DeferredBlock<T>, Function<Item.Properties, ? extends BlockItem>> item
+    ) {
+        return register(name, block, properties, item, new Item.Properties().useBlockDescriptionPrefix());
+    }
+
+    private static <T extends Block> DeferredBlock<T> register(
+            String name,
+            Function<BlockBehaviour.Properties, T> block,
+            Function<DeferredBlock<T>, Function<Item.Properties, ? extends BlockItem>> item
+    ) {
+        return register(name, block, BlockBehaviour.Properties.of(), item, new Item.Properties().useBlockDescriptionPrefix());
+    }
+
+    private static <T extends Block> DeferredBlock<T> register(
+            String name,
+            Function<BlockBehaviour.Properties, T> block,
+            Function<DeferredBlock<T>, Function<Item.Properties, ? extends BlockItem>> item,
+            Item.Properties itemProperties
+    ) {
+        return register(name, block, BlockBehaviour.Properties.of(), item, itemProperties);
+    }
+
+    private static <T extends Block> DeferredBlock<T> register(
+            String name,
+            Function<BlockBehaviour.Properties, T> block,
+            BlockBehaviour.Properties properties,
+            Function<DeferredBlock<T>, Function<Item.Properties, ? extends BlockItem>> item,
+            Item.Properties itemProperties
+    ) {
+        DeferredBlock<T> ret = registerNoItem(name, block, properties);
+        SgItems.register(name, item.apply(ret), itemProperties);
         return ret;
     }
 
     private static DeferredBlock<FluffyBlock> registerFluffyBlock(DyeColor color) {
-        return register(color.getName() + "_fluffy_block", () -> new FluffyBlock(color));
+        return register(
+                color.getName() + "_fluffy_block",
+                props -> new FluffyBlock(color, props),
+                BlockBehaviour.Properties.of()
+                        .strength(0.8f, 3)
+                        .sound(SoundType.WOOL)
+        );
     }
 
-    private static <T extends Block> Supplier<BlockItem> defaultItem(DeferredBlock<T> block) {
-        return () -> new BlockItem(block.get(), new Item.Properties());
+    private static <T extends Block> Function<Item.Properties, BlockItem> defaultItem(DeferredBlock<T> block) {
+        return p -> new BlockItem(block.get(), p);
     }
 
-    private static Supplier<BlockItem> getStoneTorchItem() {
-        return () -> new StandingAndWallBlockItem(STONE_TORCH.get(), WALL_STONE_TORCH.get(), Direction.DOWN, new Item.Properties());
+    private static Function<Item.Properties, BlockItem> getStoneTorchItem() {
+        return itemProperties -> new StandingAndWallBlockItem(STONE_TORCH.get(), WALL_STONE_TORCH.get(), Direction.DOWN, itemProperties);
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static FlowerPotBlock makePottedPlant(Supplier<? extends Block> flower) {
-        FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, Block.Properties.of().strength(0));
+    private static FlowerPotBlock makePottedPlant(Supplier<? extends Block> flower, BlockBehaviour.Properties properties) {
+        FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, properties);
         ResourceLocation flowerId = NameUtils.fromBlock(flower.get());
         ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(flowerId, () -> potted);
         return potted;
@@ -400,17 +516,17 @@ public final class SgBlocks {
                 .collect(Collectors.toList());
     }
 
-    private static Supplier<BlockItem> blockItemWithTooltip(DeferredBlock<?> block) {
-        return () -> new BlockItemWithTooltip(
+    private static Function<Item.Properties, BlockItem> blockItemWithTooltip(DeferredBlock<?> block) {
+        return properties -> new BlockItemWithTooltip(
                 block.get(),
-                new Item.Properties().useItemDescriptionPrefix()
+                properties.useItemDescriptionPrefix()
         );
     }
 
-    private static Supplier<BlockItem> oreBlockItem(DeferredBlock<?> block) {
-        return () -> new OreBlockItem(
+    private static Function<Item.Properties, BlockItem> oreBlockItem(DeferredBlock<?> block) {
+        return properties -> new OreBlockItem(
                 block.get(),
-                new Item.Properties().useItemDescriptionPrefix()
+                properties.useItemDescriptionPrefix()
         );
     }
 

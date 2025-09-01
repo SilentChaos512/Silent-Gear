@@ -8,11 +8,12 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.item.GearItemSet;
 import net.silentchaos512.gear.item.gear.*;
 import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 public class GearItemSets {
@@ -33,7 +34,7 @@ public class GearItemSets {
     public static final GearItemSet<GearCrossbowItem> CROSSBOW = set(GearTypes.CROSSBOW, "crossbow_limbs", GearCrossbowItem::new);
     public static final GearItemSet<GearSlingshotItem> SLINGSHOT = set(GearTypes.SLINGSHOT, "slingshot_limbs", GearSlingshotItem::new);
 
-    public static final GearItemSet<GearArrowItem> ARROW = set(GearTypes.ARROW, "arrow_heads", GearArrowItem::new);
+    public static final GearItemSet<GearArrowItem> ARROW = set(GearTypes.ARROW, "arrow_heads", GearArrowItem::new, new Item.Properties().stacksTo(64));
 
     public static final GearItemSet<GearPickaxeItem> PICKAXE = set(GearTypes.PICKAXE, "pickaxe_head", GearPickaxeItem::new);
     public static final GearItemSet<GearShovelItem> SHOVEL = set(GearTypes.SHOVEL, "shovel_head", GearShovelItem::new);
@@ -50,18 +51,22 @@ public class GearItemSets {
     public static final GearItemSet<GearShearsItem> SHEARS = set(GearTypes.SHEARS, "shear_blades", GearShearsItem::new);
     public static final GearItemSet<GearFishingRodItem> FISHING_ROD = set(GearTypes.FISHING_ROD, "fishing_reel_and_hook", GearFishingRodItem::new);
 
-    public static final GearItemSet<GearArmorItem> HELMET = set(GearTypes.HELMET, "helmet_plates", gt -> new GearArmorItem(gt, ArmorType.HELMET));
-    public static final GearItemSet<GearArmorItem> CHESTPLATE = set(GearTypes.CHESTPLATE, "chestplate_plates", gt -> new GearArmorItem(gt, ArmorType.CHESTPLATE));
-    public static final GearItemSet<GearArmorItem> LEGGINGS = set(GearTypes.LEGGINGS, "legging_plates", gt -> new GearArmorItem(gt, ArmorType.LEGGINGS));
-    public static final GearItemSet<GearArmorItem> BOOTS = set(GearTypes.BOOTS, "boot_plates", gt -> new GearArmorItem(gt, ArmorType.BOOTS));
+    public static final GearItemSet<GearArmorItem> HELMET = set(GearTypes.HELMET, "helmet_plates", (gt, props) -> new GearArmorItem(gt, ArmorType.HELMET, props));
+    public static final GearItemSet<GearArmorItem> CHESTPLATE = set(GearTypes.CHESTPLATE, "chestplate_plates", (gt, props) -> new GearArmorItem(gt, ArmorType.CHESTPLATE, props));
+    public static final GearItemSet<GearArmorItem> LEGGINGS = set(GearTypes.LEGGINGS, "legging_plates", (gt, props) -> new GearArmorItem(gt, ArmorType.LEGGINGS, props));
+    public static final GearItemSet<GearArmorItem> BOOTS = set(GearTypes.BOOTS, "boot_plates", (gt, props) -> new GearArmorItem(gt, ArmorType.BOOTS, props));
     public static final GearItemSet<GearElytraItem> ELYTRA = set(GearTypes.ELYTRA, "elytra_wings", GearElytraItem::new);
 
-    public static final GearItemSet<GearCurioItem> RING = set(GearTypes.RING, "ring_shank", gt -> new GearCurioItem(gt, "ring", SgItems.unstackableProps()));
-    public static final GearItemSet<GearCurioItem> BRACELET = set(GearTypes.BRACELET, "bracelet_band", gt -> new GearCurioItem(gt, "bracelet", SgItems.unstackableProps()));
-    public static final GearItemSet<GearCurioItem> NECKLACE = set(GearTypes.NECKLACE, "necklace_chain", gt -> new GearCurioItem(gt, "necklace", SgItems.unstackableProps()));
+    public static final GearItemSet<GearCurioItem> RING = set(GearTypes.RING, "ring_shank", (gt, props) -> new GearCurioItem(gt, "ring", props), SgItems.unstackableProps());
+    public static final GearItemSet<GearCurioItem> BRACELET = set(GearTypes.BRACELET, "bracelet_band", (gt, props) -> new GearCurioItem(gt, "bracelet", props), SgItems.unstackableProps());
+    public static final GearItemSet<GearCurioItem> NECKLACE = set(GearTypes.NECKLACE, "necklace_chain", (gt, props) -> new GearCurioItem(gt, "necklace", props), SgItems.unstackableProps());
 
-    private static <I extends Item & GearItem> GearItemSet<I> set(DeferredHolder<GearType, GearType> type, String partName, Function<Supplier<GearType>, I> itemFactory) {
-        return set(new GearItemSet<>(type, partName, itemFactory));
+    private static <I extends Item & GearItem> GearItemSet<I> set(DeferredHolder<GearType, GearType> type, String partName, BiFunction<Supplier<GearType>, Item.Properties, I> itemFactory) {
+        return set(type, partName, itemFactory, GearHelper.getBaseItemProperties());
+    }
+
+    private static <I extends Item & GearItem> GearItemSet<I> set(DeferredHolder<GearType, GearType> type, String partName, BiFunction<Supplier<GearType>, Item.Properties, I> itemFactory, Item.Properties gearItemProperties) {
+        return set(new GearItemSet<>(type, partName, itemFactory, gearItemProperties));
     }
 
     private static <I extends Item & GearItem> GearItemSet<I> set(GearItemSet<I> set) {

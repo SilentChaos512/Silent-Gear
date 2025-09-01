@@ -92,13 +92,13 @@ public enum CraftingItems implements ItemLike {
 
     public static void register(DeferredRegister.Items items) {
         for (CraftingItems item : values()) {
-            item.item = items.register(item.getName(), ItemInternal::new);
+            item.item = items.registerItem(item.getName(), ItemInternal::new);
         }
     }
 
     private static final class ItemInternal extends Item {
-        ItemInternal() {
-            super(new Properties());
+        ItemInternal(Item.Properties properties) {
+            super(properties);
         }
 
         @SuppressWarnings("deprecation")

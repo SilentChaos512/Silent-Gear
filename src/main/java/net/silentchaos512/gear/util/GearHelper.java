@@ -50,7 +50,6 @@ import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.core.component.GearConstructionData;
-import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -366,14 +365,11 @@ public final class GearHelper {
 
     //endregion
 
-    @Deprecated
     public static Item.Properties getBaseItemProperties() {
         return new Item.Properties()
                 .stacksTo(1)
                 .durability(100)
-                .setNoCombineRepair()
-                .component(SgDataComponents.GEAR_CONSTRUCTION, new GearConstructionData(PartList.empty(), true, 0, 0))
-                .component(SgDataComponents.GEAR_PROPERTIES, new GearPropertiesData(Map.of()));
+                .setNoCombineRepair();
     }
 
     public static GearType getType(ItemStack gear) {

@@ -11,7 +11,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -32,8 +31,8 @@ import java.util.function.Supplier;
 public class GearAxeItem extends AxeItem implements GearDiggerTool {
     private final Supplier<GearType> gearType;
 
-    public GearAxeItem(Supplier<GearType> gearType) {
-        super(ToolMaterial.NETHERITE, 0f, -3f, GearHelper.getBaseItemProperties());
+    public GearAxeItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(ToolMaterial.NETHERITE, 0f, -3f, properties);
         this.gearType = gearType;
     }
 

@@ -11,7 +11,7 @@ import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
@@ -25,10 +25,8 @@ public class FluffyBlock extends Block {
 
     private final DyeColor dyeColor;
 
-    public FluffyBlock(DyeColor color) {
-        super(Properties.of()
-                .strength(0.8f, 3)
-                .sound(SoundType.WOOL));
+    public FluffyBlock(DyeColor color, BlockBehaviour.Properties properties) {
+        super(properties);
         this.dyeColor = color;
     }
 

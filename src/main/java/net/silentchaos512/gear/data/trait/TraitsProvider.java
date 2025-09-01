@@ -2,6 +2,7 @@ package net.silentchaos512.gear.data.trait;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -91,7 +92,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         new ItemMagnetTraitEffect(
                                 0.06f,
                                 3f,
-                                Ingredient.of()
+                                HolderSet.empty()
                         )
                 )
                 .extraWikiLines("Higher levels increase range"));
@@ -610,7 +611,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         new ItemMagnetTraitEffect(
                                 0.06f,
                                 2f,
-                                itemTagIngredient(items, SgTags.Items.GREEDY_MAGNET_ATTRACTED),
+                                items.getOrThrow(SgTags.Items.GREEDY_MAGNET_ATTRACTED),
                                 "ores and gems"
                         )
                 )

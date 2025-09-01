@@ -10,6 +10,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -25,12 +26,8 @@ public class PhantomLight extends Block implements SimpleWaterloggedBlock {
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape VOXEL_SHAPE = Block.box(5, 5, 5, 11, 11, 11);
 
-    public PhantomLight() {
-        super(Properties.of()
-                .noCollission()
-                .strength(0.5f, 6000000.0f)
-                .lightLevel(state -> 15)
-        );
+    public PhantomLight(BlockBehaviour.Properties properties) {
+        super(properties);
         registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
     }
 

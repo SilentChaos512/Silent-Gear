@@ -45,8 +45,8 @@ public class GearFishingRodItem extends FishingRodItem implements GearItem {
 
     private final Supplier<GearType> gearType;
 
-    public GearFishingRodItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearFishingRodItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 

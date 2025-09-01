@@ -23,8 +23,8 @@ import java.util.function.Supplier;
 public class GearMaceItem extends MaceItem implements GearWeapon {
     private final Supplier<GearType> gearType;
 
-    public GearMaceItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearMaceItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 

@@ -35,7 +35,7 @@ public final class DataGenerators {
     private DataGenerators() {}
 
     @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
+    public static void gatherData(GatherDataEvent.Client event) {
         var generator = event.getGenerator();
         var packOutput = generator.getPackOutput();
         var lookupProvider = event.getLookupProvider();

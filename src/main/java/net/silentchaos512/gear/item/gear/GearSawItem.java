@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.BlockGetter;
@@ -24,8 +25,8 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class GearSawItem extends GearAxeItem implements BreakEventHandler {
-    public GearSawItem(Supplier<GearType> gearType) {
-        super(gearType);
+    public GearSawItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(gearType, properties);
     }
 
     @Override

@@ -30,8 +30,8 @@ import java.util.function.Supplier;
 public class GearHoeItem extends HoeItem implements GearDiggerTool {
     private final Supplier<GearType> gearType;
 
-    public GearHoeItem(Supplier<GearType> gearType) {
-        super(ToolMaterial.NETHERITE, -4f, 0f, GearHelper.getBaseItemProperties());
+    public GearHoeItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(ToolMaterial.NETHERITE, -4f, 0f, properties);
         this.gearType = gearType;
     }
 

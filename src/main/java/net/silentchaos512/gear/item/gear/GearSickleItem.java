@@ -25,7 +25,6 @@ import net.silentchaos512.gear.api.item.BreakEventHandler;
 import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.setup.SgTags;
-import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.function.Supplier;
@@ -35,13 +34,16 @@ public class GearSickleItem extends BasicGearItem implements GearDiggerTool, Bre
     private static final int BREAK_RANGE = 4;
     private static final int HARVEST_RANGE = 2;
 
-    public GearSickleItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    private final Supplier<GearType> gearType;
+
+    public GearSickleItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
+        this.gearType = gearType;
     }
 
     @Override
     public GearType getGearType() {
-        return GearTypes.SICKLE.get();
+        return this.gearType.get();
     }
 
     @Override

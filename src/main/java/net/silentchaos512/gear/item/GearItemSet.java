@@ -20,6 +20,7 @@ import net.silentchaos512.gear.util.Const;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -32,40 +33,54 @@ public final class GearItemSet<I extends Item & GearItem> {
     private DeferredItem<GearBlueprintItem> blueprint;
     private DeferredItem<GearBlueprintItem> template;
 
-    private Supplier<I> gearItemSupplier;
-    private Supplier<MainPartItem> mainPartSupplier;
-    private Supplier<GearBlueprintItem> blueprintSupplier;
-    private Supplier<GearBlueprintItem> templateSupplier;
+    private Function<Item.Properties, I> gearItemFactory;
+    private final Item.Properties gearItemProperties;
+    private Function<Item.Properties, MainPartItem> mainPartFactory;
+    private Function<Item.Properties, GearBlueprintItem> blueprintFactory;
+    private Function<Item.Properties, GearBlueprintItem> templateFactory;
 
-    public GearItemSet(DeferredHolder<GearType, GearType> type, String partName, Function<Supplier<GearType>, I> gearItem) {
-        this(type, partName, () -> gearItem.apply(type::value));
+    public GearItemSet(
+            DeferredHolder<GearType, GearType> type,
+            String partName,
+            BiFunction<Supplier<GearType>, Item.Properties, I> gearItem,
+            Item.Properties gearItemProperties
+    ) {
+        this(type, partName, properties -> gearItem.apply(type::value, properties), gearItemProperties);
     }
 
-    public GearItemSet(DeferredHolder<GearType, GearType> type, String partName, Supplier<I> gearItem) {
+    public GearItemSet(
+            DeferredHolder<GearType, GearType> type,
+            String partName,
+            Function<Item.Properties, I> gearItem,
+            Item.Properties gearItemProperties
+    ) {
         this(
                 type,
                 partName,
                 gearItem,
-                () -> new MainPartItem(type::value, new Item.Properties().stacksTo(1).setNoCombineRepair()),
-                () -> new GearBlueprintItem(type::value, BlueprintType.BLUEPRINT, new Item.Properties()),
-                () -> new GearBlueprintItem(type::value, BlueprintType.TEMPLATE, new Item.Properties())
+                gearItemProperties,
+                properties -> new MainPartItem(type::value, properties),
+                properties -> new GearBlueprintItem(type::value, BlueprintType.BLUEPRINT, properties),
+                properties -> new GearBlueprintItem(type::value, BlueprintType.TEMPLATE, properties)
         );
     }
 
     public GearItemSet(
             DeferredHolder<GearType, GearType> type,
             String partName,
-            Supplier<I> gearItem,
-            Supplier<MainPartItem> mainPart,
-            Supplier<GearBlueprintItem> blueprint,
-            Supplier<GearBlueprintItem> template
+            Function<Item.Properties, I> gearItem,
+            Item.Properties gearItemProperties,
+            Function<Item.Properties, MainPartItem> mainPart,
+            Function<Item.Properties, GearBlueprintItem> blueprint,
+            Function<Item.Properties, GearBlueprintItem> template
     ) {
         this.type = type;
         this.partName = partName;
-        this.gearItemSupplier = gearItem;
-        this.mainPartSupplier = mainPart;
-        this.blueprintSupplier = blueprint;
-        this.templateSupplier = template;
+        this.gearItemFactory = gearItem;
+        this.gearItemProperties = gearItemProperties;
+        this.mainPartFactory = mainPart;
+        this.blueprintFactory = blueprint;
+        this.templateFactory = template;
     }
 
     public GearType type() {
@@ -97,31 +112,31 @@ public final class GearItemSet<I extends Item & GearItem> {
     }
 
     public void registerGearItem(DeferredRegister.Items registrar) {
-        checkNotRegistered(this.gearItemSupplier, "gear item");
-        this.gearItem = registrar.register(name(), this.gearItemSupplier);
-        this.gearItemSupplier = null;
+        checkNotRegistered(this.gearItemFactory, "gear item");
+        this.gearItem = registrar.registerItem(name(), this.gearItemFactory, this.gearItemProperties);
+        this.gearItemFactory = null;
     }
 
     public void registerMainPartItem(DeferredRegister.Items registrar) {
-        checkNotRegistered(this.mainPartSupplier, "main part");
-        this.mainPart = registrar.register(this.partName, mainPartSupplier);
-        this.mainPartSupplier = null;
+        checkNotRegistered(this.mainPartFactory, "main part");
+        this.mainPart = registrar.registerItem(this.partName, mainPartFactory, new Item.Properties().stacksTo(1).setNoCombineRepair());
+        this.mainPartFactory = null;
     }
 
     public void registerBlueprintItem(DeferredRegister.Items registrar) {
-        checkNotRegistered(this.blueprintSupplier, "blueprint");
-        this.blueprint = registrar.register(name() + "_blueprint", blueprintSupplier);
-        this.blueprintSupplier = null;
+        checkNotRegistered(this.blueprintFactory, "blueprint");
+        this.blueprint = registrar.registerItem(name() + "_blueprint", blueprintFactory);
+        this.blueprintFactory = null;
     }
 
     public void registerTemplateItem(DeferredRegister.Items registrar) {
-        checkNotRegistered(this.templateSupplier, "template");
-        this.template = registrar.register(name() + "_template", templateSupplier);
-        this.templateSupplier = null;
+        checkNotRegistered(this.templateFactory, "template");
+        this.template = registrar.registerItem(name() + "_template", templateFactory);
+        this.templateFactory = null;
     }
 
-    private void checkNotRegistered(@Nullable Supplier<?> supplier, String itemTypeName) {
-        if (supplier == null) {
+    private void checkNotRegistered(@Nullable Function<Item.Properties, ?> constructor, String itemTypeName) {
+        if (constructor == null) {
             var gearTypeName = SgRegistries.GEAR_TYPE.getKey(this.type.get());
             throw new IllegalStateException(itemTypeName + " for " + gearTypeName + " has already been registered!");
         }

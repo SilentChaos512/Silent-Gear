@@ -26,8 +26,8 @@ import java.util.function.Supplier;
 public class GearShovelItem extends ShovelItem implements GearDiggerTool {
     private final Supplier<GearType> gearType;
 
-    public GearShovelItem(Supplier<GearType> gearType) {
-        super(ToolMaterial.NETHERITE, 1f, -3f, GearHelper.getBaseItemProperties());
+    public GearShovelItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(ToolMaterial.NETHERITE, 1f, -3f, properties);
         this.gearType = gearType;
     }
 

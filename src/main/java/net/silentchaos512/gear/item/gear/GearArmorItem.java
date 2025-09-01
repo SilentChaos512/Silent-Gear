@@ -35,8 +35,8 @@ public class GearArmorItem extends BasicGearItem implements GearArmor {
     private final Supplier<GearType> gearType;
     private final ArmorType armorType;
 
-    public GearArmorItem(Supplier<GearType> gearType, ArmorType armorType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearArmorItem(Supplier<GearType> gearType, ArmorType armorType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
         this.armorType = armorType;
     }

@@ -32,7 +32,6 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.client.util.GearClientHelper;
-import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.entity.projectile.GearThrownTrident;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
@@ -45,8 +44,8 @@ import java.util.function.Supplier;
 public class GearTridentItem extends TridentItem implements GearWeapon {
     private final Supplier<GearType> gearType;
 
-    public GearTridentItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearTridentItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 

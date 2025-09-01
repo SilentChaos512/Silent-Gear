@@ -3,13 +3,13 @@ package net.silentchaos512.gear.item.gear;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.block.Blocks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
-import net.silentchaos512.gear.util.GearHelper;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -17,8 +17,8 @@ import java.util.function.Supplier;
 public class GearSwordItem extends BasicGearItem implements GearWeapon {
     private final Supplier<GearType> gearType;
 
-    public GearSwordItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearSwordItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 

@@ -35,8 +35,8 @@ import java.util.function.Supplier;
 public class GearShearsItem extends ShearsItem implements GearTool {
     private final Supplier<GearType> gearType;
 
-    public GearShearsItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearShearsItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 

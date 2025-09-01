@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
@@ -18,8 +19,8 @@ import java.util.function.Supplier;
 public class GearPickaxeItem extends BasicGearItem implements GearDiggerTool {
     private final Supplier<GearType> gearType;
 
-    public GearPickaxeItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearPickaxeItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 

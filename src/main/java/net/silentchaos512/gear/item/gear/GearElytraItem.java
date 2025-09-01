@@ -45,8 +45,8 @@ public class GearElytraItem extends BasicGearItem implements GearArmor {
 
     private final Supplier<GearType> gearType;
 
-    public GearElytraItem(Supplier<GearType> gearType) {
-        super(new Properties().stacksTo(1));
+    public GearElytraItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 

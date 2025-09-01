@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,8 +23,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public class GearProspectorHammerItem extends GearPickaxeItem {
-    public GearProspectorHammerItem(Supplier<GearType> gearType) {
-        super(gearType);
+    public GearProspectorHammerItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(gearType, properties);
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
@@ -29,8 +30,8 @@ import java.util.function.Supplier;
 public class GearMacheteItem extends GearSwordItem implements BreakEventHandler, GearDiggerTool {
     private static final int BREAK_RANGE = 2;
 
-    public GearMacheteItem(Supplier<GearType> gearType) {
-        super(gearType);
+    public GearMacheteItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(gearType, properties);
     }
 
     @Override
