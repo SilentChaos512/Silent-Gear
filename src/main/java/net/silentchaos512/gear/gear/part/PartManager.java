@@ -14,7 +14,9 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.network.NetworkEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.IGearPart;
@@ -33,7 +35,6 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("deprecation")
 public final class PartManager implements ResourceManagerReloadListener {
     public static final PartManager INSTANCE = new PartManager();
 
@@ -41,6 +42,7 @@ public final class PartManager implements ResourceManagerReloadListener {
 
     private static final String DATA_PATH = "silentgear_parts";
     private static final Map<ResourceLocation, IGearPart> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
+    private static final Map<Item, IGearPart> LOOKUP_MAP = Collections.synchronizedMap(new IdentityHashMap<>());
     private static int highestMainPartTier = 0;
     private static final Collection<String> ERROR_LIST = new ArrayList<>();
 
@@ -58,6 +60,7 @@ public final class PartManager implements ResourceManagerReloadListener {
 
         synchronized (MAP) {
             MAP.clear();
+            LOOKUP_MAP.clear();
             ERROR_LIST.clear();
             SilentGear.LOGGER.info(MARKER, "Reloading part files");
 
@@ -114,6 +117,20 @@ public final class PartManager implements ResourceManagerReloadListener {
             throw new IllegalStateException("Duplicate gear part " + part.getId());
         } else {
             MAP.put(part.getId(), part);
+            for (ItemStack itemStack : part.getIngredient().getItems()) {
+                Item item = itemStack.getItem();
+                if (Blocks.BARRIER.asItem().equals(item)) {
+                    // When a material has no valid ingredients for it (e.g. no items with the tag
+                    // `forge:ingots/bismuth_brass` exist for bismuth_brass material), Ingredient.getItems() returns
+                    // a single Barrier item. Just ignore it because it means the material isn't obtainable anyway.
+                    continue;
+                }
+
+                IGearPart prevPart = LOOKUP_MAP.put(item, part);
+                if (prevPart != null) {
+                    SilentGear.LOGGER.error("Registered more than one part ({}, {}) for the same item ({})!", part, prevPart, item);
+                }
+            }
         }
     }
 
@@ -156,11 +173,9 @@ public final class PartManager implements ResourceManagerReloadListener {
     public static IGearPart from(ItemStack stack) {
         if (stack.isEmpty()) return null;
 
-        // We can't reliable keep an IItemProvider -> IGearPart map anymore
-        for (IGearPart part : getValues()) {
-            if (part.getIngredient().test(stack)) {
-                return part;
-            }
+        IGearPart lookup = LOOKUP_MAP.get(stack.getItem());
+        if (lookup != null && lookup.getIngredient().test(stack)) {
+            return lookup;
         }
 
         return null;
