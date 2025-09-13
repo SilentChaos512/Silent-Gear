@@ -8,13 +8,17 @@
       "endgame"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:ingots/netherite"
-    },
+    "ingredient": "#c:ingots/netherite",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FF867B86",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.netherite"

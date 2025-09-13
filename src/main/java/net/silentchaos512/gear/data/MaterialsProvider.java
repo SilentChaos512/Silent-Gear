@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.data;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
@@ -51,12 +52,15 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class MaterialsProvider extends MaterialsProviderBase {
+    private HolderGetter<Item> items;
+
     public MaterialsProvider(CompletableFuture<HolderLookup.Provider> lookupProvider, DataGenerator generator) {
         super(lookupProvider, generator, SilentGear.MOD_ID);
     }
 
     @Override
     protected Collection<MaterialBuilder<?>> getMaterials(HolderLookup.Provider registries) {
+        this.items = registries.lookupOrThrow(Registries.ITEM);
         Collection<MaterialBuilder<?>> ret = new ArrayList<>();
 
         addCraftedMaterials(ret, registries);

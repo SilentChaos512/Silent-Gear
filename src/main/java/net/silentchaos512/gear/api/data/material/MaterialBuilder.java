@@ -346,8 +346,7 @@ public class MaterialBuilder<M extends Material> {
     }
 
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
-    public JsonObject serialize() {
-        SilentGear.LOGGER.info("Trying to serialize material \"{}\"", this.id);
+    public M build() {
         validate();
 
         this.traits.forEach(((partType, traitInstances) -> {
@@ -355,24 +354,12 @@ public class MaterialBuilder<M extends Material> {
             gearPropertyMap.put(GearProperties.TRAITS.get(), GearTypes.ALL.get(), new TraitListPropertyValue(traitInstances));
         }));
 
-        M material = this.factory.create(
+        return this.factory.create(
                 this.parent,
                 this.crafting,
                 this.display,
                 this.properties
         );
-
-        //noinspection unchecked
-        var codec = (MapCodec<M>) material.getSerializer().codec();
-        var jsonElementDataResult = codec.codec().encodeStart(JsonOps.INSTANCE, material);
-        if (jsonElementDataResult.isError()) {
-            SilentGear.LOGGER.error("Something went wrong when serializing material \"{}\"", this.id);
-        }
-
-        var json = jsonElementDataResult.getOrThrow().getAsJsonObject();
-        var serializerId = Objects.requireNonNull(SgRegistries.MATERIAL_SERIALIZER.getKey(material.getSerializer()));
-        json.addProperty("type", serializerId.toString());
-        return json;
     }
 
     public interface MaterialFactory<M extends Material> {

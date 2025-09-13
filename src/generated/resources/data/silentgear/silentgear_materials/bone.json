@@ -8,17 +8,19 @@
       "basic"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "minecraft:bone_block"
-    },
+    "ingredient": "minecraft:bone_block",
     "part_substitutes": {
-      "silentgear:rod": {
-        "item": "minecraft:bone"
-      }
+      "silentgear:rod": "minecraft:bone"
     }
   },
   "display": {
     "color": "#FFFCFBED",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.bone"

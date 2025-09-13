@@ -9,13 +9,17 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:gems/prismarine"
-    },
+    "ingredient": "#c:gems/prismarine",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FF91C5B7",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.prismarine"

@@ -8,17 +8,19 @@
       "wood"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:netherwood_planks"
-    },
+    "ingredient": "silentgear:netherwood_planks",
     "part_substitutes": {
-      "silentgear:rod": {
-        "tag": "silentgear:rods/netherwood"
-      }
+      "silentgear:rod": "#silentgear:rods/netherwood"
     }
   },
   "display": {
     "color": "#FF7D272D",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.netherwood"

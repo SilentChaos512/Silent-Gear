@@ -9,13 +9,17 @@
       "intermediate"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "minecraft:phantom_membrane"
-    },
+    "ingredient": "minecraft:phantom_membrane",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FFC3B9A1",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.phantom_membrane"

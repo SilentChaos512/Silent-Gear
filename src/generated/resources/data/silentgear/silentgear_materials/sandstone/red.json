@@ -5,13 +5,17 @@
     "can_salvage": true,
     "categories": [],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:sandstone/red_blocks"
-    },
+    "ingredient": "#c:sandstone/red_blocks",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FFD97B30",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.sandstone.red"

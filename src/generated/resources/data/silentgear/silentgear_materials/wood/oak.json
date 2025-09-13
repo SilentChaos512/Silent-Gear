@@ -5,13 +5,17 @@
     "can_salvage": true,
     "categories": [],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "minecraft:oak_planks"
-    },
+    "ingredient": "minecraft:oak_planks",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FFB8945F",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.wood.oak"

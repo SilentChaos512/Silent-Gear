@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "silentgear:item/chestplate",
+    "tints": [
+      {
+        "type": "silentgear:gear_part",
+        "part_type": "silentgear:main"
+      },
+      {
+        "type": "minecraft:constant",
+        "value": -1
+      }
+    ]
+  }
+}

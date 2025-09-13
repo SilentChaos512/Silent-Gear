@@ -8,17 +8,19 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:ingots/crimson_iron"
-    },
+    "ingredient": "#c:ingots/crimson_iron",
     "part_substitutes": {
-      "silentgear:rod": {
-        "tag": "c:rods/crimson_iron"
-      }
+      "silentgear:rod": "#c:rods/crimson_iron"
     }
   },
   "display": {
     "color": "#FFFF6189",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.crimson_iron"

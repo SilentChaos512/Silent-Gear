@@ -8,17 +8,19 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:ingots/platinum"
-    },
+    "ingredient": "#c:ingots/platinum",
     "part_substitutes": {
-      "silentgear:rod": {
-        "tag": "c:rods/platinum"
-      }
+      "silentgear:rod": "#c:rods/platinum"
     }
   },
   "display": {
     "color": "#FFB3B3FF",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.platinum"

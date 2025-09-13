@@ -8,13 +8,17 @@
       "basic"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:end_stones"
-    },
+    "ingredient": "#c:end_stones",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FFFFFFCC",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.end_stone"

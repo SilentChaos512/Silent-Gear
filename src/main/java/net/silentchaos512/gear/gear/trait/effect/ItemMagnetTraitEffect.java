@@ -32,18 +32,14 @@ public class ItemMagnetTraitEffect extends TraitEffect {
                     Codec.FLOAT.fieldOf("pull_strength").forGetter(e -> e.pullStrength),
                     Codec.FLOAT.fieldOf("effect_range").forGetter(e -> e.effectRange),
                     Ingredient.NON_AIR_HOLDER_SET_CODEC.fieldOf("affected_items").forGetter(e -> e.affectedItems),
-                    Codec.STRING.optionalFieldOf("affected_items_text_for_wiki").forGetter(e ->
-                            e.affectedItems.size() == 0 ? Optional.empty() : Optional.of(e.affectedItemsTextForWiki)
-                    )
-            ).apply(instance, (pullStrength, pullRange, affectedItems, wikiText) ->
-                    wikiText.map(s -> new ItemMagnetTraitEffect(pullStrength, pullRange, affectedItems, s))
-                            .orElseGet(() -> new ItemMagnetTraitEffect(pullStrength, pullRange, affectedItems))
-            )
+                    Codec.STRING.fieldOf("affected_items_text_for_wiki").forGetter(e -> e.affectedItemsTextForWiki)
+            ).apply(instance, ItemMagnetTraitEffect::new)
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemMagnetTraitEffect> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.FLOAT, e -> e.pullStrength,
             ByteBufCodecs.FLOAT, e -> e.effectRange,
             ByteBufCodecs.holderSet(Registries.ITEM), e -> e.affectedItems,
+            ByteBufCodecs.STRING_UTF8, e -> e.affectedItemsTextForWiki,
             ItemMagnetTraitEffect::new
     );
 
@@ -52,15 +48,28 @@ public class ItemMagnetTraitEffect extends TraitEffect {
     private final HolderSet<Item> affectedItems;
     private final String affectedItemsTextForWiki;
 
-    public ItemMagnetTraitEffect(float pullStrength, float effectRange, HolderSet<Item> affectedItems) {
-        this(pullStrength, effectRange, affectedItems, affectedItems.size() > 0 ? "some items" : "all items");
-    }
-
     public ItemMagnetTraitEffect(float pullStrength, float effectRange, HolderSet<Item> affectedItems, String affectedItemsTextForWiki) {
         this.pullStrength = pullStrength;
         this.effectRange = effectRange;
         this.affectedItems = affectedItems;
         this.affectedItemsTextForWiki = affectedItemsTextForWiki;
+    }
+
+    public static ItemMagnetTraitEffect attractAll() {
+        // Default pull strength and range from the old magnetic trait
+        return attractAll(0.06f, 3.0f);
+    }
+
+    public static ItemMagnetTraitEffect attractAll(float pullStrength, float effectRange) {
+        return new ItemMagnetTraitEffect(pullStrength, effectRange, HolderSet.empty(), "all items");
+    }
+
+    public static ItemMagnetTraitEffect attractSome(HolderSet<Item> affectedItems, String affectedItemsDescription) {
+        return attractSome(0.06f, 3.0f, affectedItems, affectedItemsDescription);
+    }
+
+    public static ItemMagnetTraitEffect attractSome(float pullStrength, float effectRange, HolderSet<Item> affectedItems, String affectedItemsDescription) {
+        return new ItemMagnetTraitEffect(pullStrength, effectRange, affectedItems, affectedItemsDescription);
     }
 
     @Override

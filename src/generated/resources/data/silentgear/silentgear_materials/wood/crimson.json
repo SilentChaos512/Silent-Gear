@@ -5,13 +5,17 @@
     "can_salvage": true,
     "categories": [],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "minecraft:crimson_planks"
-    },
+    "ingredient": "minecraft:crimson_planks",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FF7E3A56",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.wood.crimson"

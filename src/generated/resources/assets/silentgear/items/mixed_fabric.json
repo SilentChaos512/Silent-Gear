@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "silentgear:item/mixed_fabric",
+    "tints": [
+      {
+        "type": "silentgear:material"
+      }
+    ]
+  }
+}

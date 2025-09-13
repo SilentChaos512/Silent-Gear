@@ -8,17 +8,19 @@
       "basic"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:cobblestones"
-    },
+    "ingredient": "#c:cobblestones",
     "part_substitutes": {
-      "silentgear:rod": {
-        "tag": "c:rods/stone"
-      }
+      "silentgear:rod": "#c:rods/stone"
     }
   },
   "display": {
     "color": "#FF9A9A9A",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.stone"

@@ -8,17 +8,19 @@
       "intermediate"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:ingots/lead"
-    },
+    "ingredient": "#c:ingots/lead",
     "part_substitutes": {
-      "silentgear:rod": {
-        "tag": "c:rods/lead"
-      }
+      "silentgear:rod": "#c:rods/lead"
     }
   },
   "display": {
     "color": "#FFC2CBB8",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.lead"

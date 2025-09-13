@@ -8,17 +8,19 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:ingots/compressed_iron"
-    },
+    "ingredient": "#c:ingots/compressed_iron",
     "part_substitutes": {
-      "silentgear:rod": {
-        "tag": "c:rods/compressed_iron"
-      }
+      "silentgear:rod": "#c:rods/compressed_iron"
     }
   },
   "display": {
     "color": "#FFA6A6A6",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.compressed_iron"

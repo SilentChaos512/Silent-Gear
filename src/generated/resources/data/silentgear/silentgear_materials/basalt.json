@@ -8,13 +8,17 @@
       "basic"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "minecraft:basalt"
-    },
+    "ingredient": "minecraft:basalt",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FF4F4B4F",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.basalt"

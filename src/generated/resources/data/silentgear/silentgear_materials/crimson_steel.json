@@ -8,17 +8,19 @@
       "endgame"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:ingots/crimson_steel"
-    },
+    "ingredient": "#c:ingots/crimson_steel",
     "part_substitutes": {
-      "silentgear:rod": {
-        "tag": "c:rods/crimson_steel"
-      }
+      "silentgear:rod": "#c:rods/crimson_steel"
     }
   },
   "display": {
     "color": "#FFDC143C",
+    "equippable": {
+      "always_use_tint": false,
+      "asset_id": "silentgear:crimson_steel",
+      "compound_asset_id": "silentgear:generic_netherite",
+      "equip_sound": "minecraft:item.armor.equip_netherite"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.crimson_steel"

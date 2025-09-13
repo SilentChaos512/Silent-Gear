@@ -9,13 +9,17 @@
       "endgame"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:crushed_shulker_shell"
-    },
+    "ingredient": "silentgear:crushed_shulker_shell",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FFE08BDF",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.crushed_shulker_shell"

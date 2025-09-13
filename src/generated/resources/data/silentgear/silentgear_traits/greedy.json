@@ -11,9 +11,7 @@
     },
     {
       "type": "silentgear:item_magnet",
-      "affected_items": {
-        "tag": "silentgear:greedy_magnet_attracted"
-      },
+      "affected_items": "#silentgear:greedy_magnet_attracted",
       "affected_items_text_for_wiki": "ores and gems",
       "effect_range": 2.0,
       "pull_strength": 0.06

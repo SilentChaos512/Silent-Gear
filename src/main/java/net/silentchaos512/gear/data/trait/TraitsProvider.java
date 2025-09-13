@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.data.trait;
 
+import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
@@ -89,11 +91,7 @@ public class TraitsProvider extends TraitsProviderBase {
                 .extraWikiLines("  - Smelted drops are not affected by fortune to prevent item duplication"));
         ret.add(TraitBuilder.of(Const.Traits.MAGNETIC, 5)
                 .effects(
-                        new ItemMagnetTraitEffect(
-                                0.06f,
-                                3f,
-                                HolderSet.empty()
-                        )
+                        ItemMagnetTraitEffect.attractAll()
                 )
                 .extraWikiLines("Higher levels increase range"));
         ret.add(TraitBuilder.of(Const.Traits.MULTI_BREAK, 5)
@@ -608,7 +606,7 @@ public class TraitsProvider extends TraitsProviderBase {
                                 Tags.Blocks.ORES,
                                 0.2f
                         ),
-                        new ItemMagnetTraitEffect(
+                        ItemMagnetTraitEffect.attractSome(
                                 0.06f,
                                 2f,
                                 items.getOrThrow(SgTags.Items.GREEDY_MAGNET_ATTRACTED),
@@ -660,7 +658,7 @@ public class TraitsProvider extends TraitsProviderBase {
         return ret;
     }
 
-    private Ingredient itemTagIngredient(HolderGetter<Item> item, TagKey<Item> tag) {
-        return Ingredient.of(item.getOrThrow(tag));
+    private Ingredient itemTagIngredient(HolderGetter<Item> items, TagKey<Item> tag) {
+        return Ingredient.of(items.getOrThrow(tag));
     }
 }

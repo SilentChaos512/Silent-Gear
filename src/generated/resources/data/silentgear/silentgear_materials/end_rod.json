@@ -7,15 +7,18 @@
       "metal"
     ],
     "gear_type_blacklist": [],
-    "ingredient": [],
     "part_substitutes": {
-      "silentgear:rod": {
-        "item": "minecraft:end_rod"
-      }
+      "silentgear:rod": "minecraft:end_rod"
     }
   },
   "display": {
     "color": "#FFF6E2CD",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.end_rod"

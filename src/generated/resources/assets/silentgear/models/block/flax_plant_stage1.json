@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "silentgear:block/flax_plant_stage1"
+  }
+}

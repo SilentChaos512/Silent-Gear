@@ -13,9 +13,7 @@
       "type": "silentgear:bonus_drops",
       "base_chance": 0.15,
       "bonus_multiplier": 0.5,
-      "ingredient": {
-        "tag": "silentgear:gold_digger_drops"
-      },
+      "ingredient": "#silentgear:gold_digger_drops",
       "matched_items_text_for_wiki": "nuggets"
     }
   ],

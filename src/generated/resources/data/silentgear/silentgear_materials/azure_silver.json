@@ -8,17 +8,19 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:ingots/azure_silver"
-    },
+    "ingredient": "#c:ingots/azure_silver",
     "part_substitutes": {
-      "silentgear:rod": {
-        "tag": "c:rods/azure_silver"
-      }
+      "silentgear:rod": "#c:rods/azure_silver"
     }
   },
   "display": {
     "color": "#FFCBBAFF",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.azure_silver"

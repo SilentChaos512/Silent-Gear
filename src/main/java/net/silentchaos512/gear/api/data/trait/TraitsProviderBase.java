@@ -6,6 +6,8 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.gear.trait.Trait;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -40,17 +42,18 @@ public abstract class TraitsProviderBase implements DataProvider {
         Set<ResourceLocation> set = Sets.newHashSet();
         List<CompletableFuture<?>> list = new ArrayList<>();
 
-        this.lookupProvider.thenAccept(provider -> {
+        return this.lookupProvider.thenCompose(provider -> {
             this.getTraits(provider).forEach(builder -> {
-                ResourceLocation id = builder.getTrait().getId();
+                ResourceLocation id = builder.getTraitHolder().getId();
                 if (!set.add(id)) {
                     throw new IllegalStateException("Duplicate trait: " + id);
                 }
                 Path path = outputFolder.resolve(String.format("data/%s/silentgear_traits/%s.json", id.getNamespace(), id.getPath()));
-                list.add(DataProvider.saveStable(cache, builder.serialize(), path));
+                SilentGear.LOGGER.info("Serializing trait \"{}\"", id);
+                list.add(DataProvider.saveStable(cache, provider, Trait.CODEC, builder.build(), path));
             });
-        });
 
-        return CompletableFuture.allOf(list.toArray(new CompletableFuture[0]));
+            return CompletableFuture.allOf(list.toArray(new CompletableFuture[0]));
+        });
     }
 }

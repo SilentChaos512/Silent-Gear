@@ -6,6 +6,8 @@
   "effects": [
     {
       "type": "silentgear:item_magnet",
+      "affected_items": [],
+      "affected_items_text_for_wiki": "all items",
       "effect_range": 3.0,
       "pull_strength": 0.06
     }

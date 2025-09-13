@@ -5,13 +5,17 @@
     "can_salvage": true,
     "categories": [],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "minecraft:magenta_wool"
-    },
+    "ingredient": "minecraft:magenta_wool",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FFBD44B3",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "LOW_CONTRAST",
     "name": {
       "translate": "material.silentgear.wool.magenta"

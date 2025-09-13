@@ -1,11 +1,8 @@
 package net.silentchaos512.gear.api.data.trait;
 
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitEffect;
@@ -40,7 +37,7 @@ public class TraitBuilder {
         return new TraitBuilder(trait, maxLevel);
     }
 
-    public DataResource<Trait> getTrait() {
+    public DataResource<Trait> getTraitHolder() {
         return trait;
     }
 
@@ -116,9 +113,8 @@ public class TraitBuilder {
         return this;
     }
 
-    public JsonObject serialize() {
-        SilentGear.LOGGER.info("Trying to serialize trait \"{}\"", this.trait.getId());
-        var traitObj = new Trait(
+    public Trait build() {
+        return new Trait(
                 this.maxLevel,
                 this.name,
                 this.description,
@@ -126,11 +122,5 @@ public class TraitBuilder {
                 this.conditions,
                 this.extraWikiLines
         );
-
-        var jsonElementDataResult = Trait.CODEC.encodeStart(JsonOps.INSTANCE, traitObj);
-        if (jsonElementDataResult.isError()) {
-            SilentGear.LOGGER.error("Something went wrong when serializing trait \"{}\"", this.trait.getId());
-        }
-        return jsonElementDataResult.getOrThrow().getAsJsonObject();
     }
 }

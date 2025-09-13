@@ -8,17 +8,19 @@
       "intermediate"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "tag": "c:ingots/electrum"
-    },
+    "ingredient": "#c:ingots/electrum",
     "part_substitutes": {
-      "silentgear:rod": {
-        "tag": "c:rods/electrum"
-      }
+      "silentgear:rod": "#c:rods/electrum"
     }
   },
   "display": {
     "color": "#FFD6E037",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.electrum"
