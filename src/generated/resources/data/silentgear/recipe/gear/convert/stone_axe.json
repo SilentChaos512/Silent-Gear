@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:stone_axe"
-    }
+    "minecraft:stone_axe"
   ],
   "result": {
     "item": "silentgear:axe",

@@ -3,15 +3,13 @@
   "category": "misc",
   "ingredients": [
     {
-      "type": "silentgear:blueprint",
+      "neoforge:ingredient_type": "silentgear:blueprint",
       "gear_type": "silentgear:none",
       "part_type": "silentgear:coating"
     },
+    "minecraft:glass_bottle",
     {
-      "item": "minecraft:glass_bottle"
-    },
-    {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "gear_type": "silentgear:tool",
       "part_type": "silentgear:coating"
     }

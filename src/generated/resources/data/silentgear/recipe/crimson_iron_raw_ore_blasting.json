@@ -3,9 +3,7 @@
   "category": "misc",
   "cookingtime": 100,
   "experience": 1.0,
-  "ingredient": {
-    "item": "silentgear:raw_crimson_iron"
-  },
+  "ingredient": "silentgear:raw_crimson_iron",
   "result": {
     "count": 1,
     "id": "silentgear:crimson_iron_ingot"

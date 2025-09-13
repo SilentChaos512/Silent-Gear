@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:ingots/azure_silver"
-    },
-    "/": {
-      "tag": "c:ingots/gold"
-    },
-    "o": {
-      "tag": "c:ender_pearls"
-    }
+    "#": "#c:ingots/azure_silver",
+    "/": "#c:ingots/gold",
+    "o": "#c:ender_pearls"
   },
   "pattern": [
     "/ /",

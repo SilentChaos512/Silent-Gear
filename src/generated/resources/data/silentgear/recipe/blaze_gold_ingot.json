@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:ingots/gold"
-    },
-    {
-      "item": "minecraft:blaze_powder"
-    },
-    {
-      "item": "minecraft:blaze_powder"
-    },
-    {
-      "item": "minecraft:blaze_powder"
-    },
-    {
-      "item": "minecraft:blaze_powder"
-    }
+    "#c:ingots/gold",
+    "minecraft:blaze_powder",
+    "minecraft:blaze_powder",
+    "minecraft:blaze_powder",
+    "minecraft:blaze_powder"
   ],
   "result": {
     "count": 1,

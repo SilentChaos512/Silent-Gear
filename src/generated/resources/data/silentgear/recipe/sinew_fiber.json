@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:dried_sinew"
-    }
+    "silentgear:dried_sinew"
   ],
   "result": {
     "count": 3,

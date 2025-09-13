@@ -3,9 +3,7 @@
   "crafting": {
     "can_salvage": true,
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:hammer_head"
-    }
+    "ingredient": "silentgear:hammer_head"
   },
   "display": {
     "name": {

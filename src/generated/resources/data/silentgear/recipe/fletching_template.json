@@ -3,15 +3,9 @@
   "category": "equipment",
   "group": "silentgear:blueprints/fletching",
   "ingredients": [
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "c:feathers"
-    }
+    "#silentgear:template_boards",
+    "#silentgear:template_boards",
+    "#c:feathers"
   ],
   "result": {
     "count": 1,

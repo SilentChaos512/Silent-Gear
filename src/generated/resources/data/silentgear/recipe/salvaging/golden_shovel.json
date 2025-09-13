@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:golden_shovel"
-  },
+  "ingredient": "minecraft:golden_shovel",
   "results": [
     {
       "count": 1,

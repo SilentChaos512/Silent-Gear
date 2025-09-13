@@ -9,7 +9,7 @@
       "attribute_modifiers": {
         "armor/chest": [
           {
-            "attribute": "minecraft:generic.safe_fall_distance",
+            "attribute": "minecraft:safe_fall_distance",
             "operation": "add_value",
             "values": [
               0.25,
@@ -22,7 +22,7 @@
         ],
         "armor/feet": [
           {
-            "attribute": "minecraft:generic.safe_fall_distance",
+            "attribute": "minecraft:safe_fall_distance",
             "operation": "add_value",
             "values": [
               0.25,
@@ -35,7 +35,7 @@
         ],
         "armor/head": [
           {
-            "attribute": "minecraft:generic.safe_fall_distance",
+            "attribute": "minecraft:safe_fall_distance",
             "operation": "add_value",
             "values": [
               0.25,
@@ -48,7 +48,7 @@
         ],
         "armor/legs": [
           {
-            "attribute": "minecraft:generic.safe_fall_distance",
+            "attribute": "minecraft:safe_fall_distance",
             "operation": "add_value",
             "values": [
               0.25,

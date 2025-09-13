@@ -2,11 +2,9 @@
   "type": "silentgear:gear_crafting",
   "category": "equipment",
   "ingredients": [
+    "silentgear:axe_head",
     {
-      "item": "silentgear:axe_head"
-    },
-    {
-      "type": "silentgear:part_type",
+      "neoforge:ingredient_type": "silentgear:part_type",
       "part_type": "silentgear:rod"
     }
   ],

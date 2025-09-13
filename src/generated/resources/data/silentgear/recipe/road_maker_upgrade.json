@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:advanced_upgrade_base"
-    },
-    {
-      "item": "minecraft:iron_shovel"
-    },
-    {
-      "tag": "c:dyes/orange"
-    }
+    "silentgear:advanced_upgrade_base",
+    "minecraft:iron_shovel",
+    "#c:dyes/orange"
   ],
   "result": {
     "count": 1,

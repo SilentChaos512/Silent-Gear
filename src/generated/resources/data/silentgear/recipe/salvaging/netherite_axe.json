@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:netherite_axe"
-  },
+  "ingredient": "minecraft:netherite_axe",
   "results": [
     {
       "count": 3,

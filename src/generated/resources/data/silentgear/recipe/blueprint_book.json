@@ -2,24 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:book"
-    },
-    {
-      "tag": "minecraft:wool"
-    },
-    {
-      "tag": "c:ingots/gold"
-    },
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "silentgear:template_boards"
-    }
+    "minecraft:book",
+    "#minecraft:wool",
+    "#c:ingots/gold",
+    "#silentgear:template_boards",
+    "#silentgear:template_boards",
+    "#silentgear:template_boards"
   ],
   "result": {
     "count": 1,

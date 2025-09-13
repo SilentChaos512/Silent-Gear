@@ -3,9 +3,7 @@
   "crafting": {
     "can_salvage": true,
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:ring_shank"
-    }
+    "ingredient": "silentgear:ring_shank"
   },
   "display": {
     "name": {

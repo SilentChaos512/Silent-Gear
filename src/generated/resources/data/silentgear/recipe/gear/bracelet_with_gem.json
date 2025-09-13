@@ -3,15 +3,13 @@
   "category": "misc",
   "ingredients": [
     {
-      "type": "silentgear:blueprint",
+      "neoforge:ingredient_type": "silentgear:blueprint",
       "gear_type": "silentgear:none",
       "part_type": "silentgear:setting"
     },
+    "silentgear:bracelet_band",
     {
-      "item": "silentgear:bracelet_band"
-    },
-    {
-      "type": "silentgear:part_type",
+      "neoforge:ingredient_type": "silentgear:part_type",
       "part_type": "silentgear:setting"
     }
   ],

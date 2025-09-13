@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "silentgear:template_boards"
-    },
-    "/": {
-      "tag": "c:rods/wooden"
-    },
-    "o": {
-      "tag": "c:ingots/iron"
-    }
+    "#": "#silentgear:template_boards",
+    "/": "#c:rods/wooden",
+    "o": "#c:ingots/iron"
   },
   "pattern": [
     " / ",

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:very_crude_repair_kit"
-    },
-    {
-      "tag": "c:rods/wooden"
-    }
+    "silentgear:very_crude_repair_kit",
+    "#c:rods/wooden"
   ],
   "result": {
     "count": 1,

@@ -3,15 +3,9 @@
   "category": "misc",
   "group": "silentgear:blueprints/arrow",
   "key": {
-    "#": {
-      "tag": "silentgear:blueprint_paper"
-    },
-    "/": {
-      "tag": "c:rods/wooden"
-    },
-    "@": {
-      "tag": "c:feathers"
-    }
+    "#": "#silentgear:blueprint_paper",
+    "/": "#c:rods/wooden",
+    "@": "#c:feathers"
   },
   "pattern": [
     "#",

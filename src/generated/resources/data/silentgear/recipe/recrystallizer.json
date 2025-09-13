@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "minecraft:purpur_block"
-    },
-    "/": {
-      "tag": "c:ingots/azure_electrum"
-    },
-    "d": {
-      "tag": "c:gems/diamond"
-    },
-    "e": {
-      "tag": "c:gems/emerald"
-    },
-    "g": {
-      "tag": "c:storage_blocks/gold"
-    }
+    "#": "minecraft:purpur_block",
+    "/": "#c:ingots/azure_electrum",
+    "d": "#c:gems/diamond",
+    "e": "#c:gems/emerald",
+    "g": "#c:storage_blocks/gold"
   },
   "pattern": [
     "/e/",

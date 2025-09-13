@@ -3,15 +3,9 @@
   "category": "equipment",
   "group": "silentgear:blueprints/grip",
   "ingredients": [
-    {
-      "tag": "silentgear:blueprint_paper"
-    },
-    {
-      "tag": "silentgear:blueprint_paper"
-    },
-    {
-      "tag": "minecraft:wool"
-    }
+    "#silentgear:blueprint_paper",
+    "#silentgear:blueprint_paper",
+    "#minecraft:wool"
   ],
   "result": {
     "count": 1,

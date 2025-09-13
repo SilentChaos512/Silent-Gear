@@ -2,11 +2,9 @@
   "type": "silentgear:gear_crafting",
   "category": "equipment",
   "ingredients": [
+    "silentgear:elytra_wings",
     {
-      "item": "silentgear:elytra_wings"
-    },
-    {
-      "type": "silentgear:part_type",
+      "neoforge:ingredient_type": "silentgear:part_type",
       "part_type": "silentgear:binding"
     }
   ],

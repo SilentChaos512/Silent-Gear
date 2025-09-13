@@ -3,14 +3,10 @@
   "category": "equipment",
   "group": "silentgear:blueprints/grip",
   "ingredients": [
+    "#silentgear:template_boards",
+    "#silentgear:template_boards",
     {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "gear_type": "silentgear:tool",
       "part_type": "silentgear:grip"
     }

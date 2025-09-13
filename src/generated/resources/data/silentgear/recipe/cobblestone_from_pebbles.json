@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:pebble"
-    },
-    {
-      "item": "silentgear:pebble"
-    },
-    {
-      "item": "silentgear:pebble"
-    },
-    {
-      "item": "silentgear:pebble"
-    },
-    {
-      "item": "silentgear:pebble"
-    },
-    {
-      "item": "silentgear:pebble"
-    },
-    {
-      "item": "silentgear:pebble"
-    },
-    {
-      "item": "silentgear:pebble"
-    },
-    {
-      "item": "silentgear:pebble"
-    }
+    "silentgear:pebble",
+    "silentgear:pebble",
+    "silentgear:pebble",
+    "silentgear:pebble",
+    "silentgear:pebble",
+    "silentgear:pebble",
+    "silentgear:pebble",
+    "silentgear:pebble",
+    "silentgear:pebble"
   ],
   "result": {
     "count": 1,

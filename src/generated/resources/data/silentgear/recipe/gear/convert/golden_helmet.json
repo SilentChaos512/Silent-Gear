@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:golden_helmet"
-    }
+    "minecraft:golden_helmet"
   ],
   "result": {
     "item": "silentgear:helmet",

@@ -1,6 +1,4 @@
 {
   "type": "silentgear:salvaging/gear",
-  "ingredient": {
-    "item": "silentgear:shield"
-  }
+  "ingredient": "silentgear:shield"
 }

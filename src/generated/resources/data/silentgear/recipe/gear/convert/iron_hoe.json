@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:iron_hoe"
-    }
+    "minecraft:iron_hoe"
   ],
   "result": {
     "item": "silentgear:hoe",

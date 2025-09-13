@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:diamond_sword"
-    }
+    "minecraft:diamond_sword"
   ],
   "result": {
     "item": "silentgear:sword",

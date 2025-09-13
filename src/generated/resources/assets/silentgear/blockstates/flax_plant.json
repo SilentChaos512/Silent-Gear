@@ -1,28 +1,28 @@
 {
   "variants": {
     "age=0": {
-      "model": "silentgear:block/flax_plant0"
+      "model": "silentgear:block/flax_plant_stage0"
     },
     "age=1": {
-      "model": "silentgear:block/flax_plant0"
+      "model": "silentgear:block/flax_plant_stage0"
     },
     "age=2": {
-      "model": "silentgear:block/flax_plant1"
+      "model": "silentgear:block/flax_plant_stage1"
     },
     "age=3": {
-      "model": "silentgear:block/flax_plant1"
+      "model": "silentgear:block/flax_plant_stage1"
     },
     "age=4": {
-      "model": "silentgear:block/flax_plant2"
+      "model": "silentgear:block/flax_plant_stage2"
     },
     "age=5": {
-      "model": "silentgear:block/flax_plant2"
+      "model": "silentgear:block/flax_plant_stage2"
     },
     "age=6": {
-      "model": "silentgear:block/flax_plant2"
+      "model": "silentgear:block/flax_plant_stage2"
     },
     "age=7": {
-      "model": "silentgear:block/flax_plant3"
+      "model": "silentgear:block/flax_plant_stage3"
     }
   }
 }

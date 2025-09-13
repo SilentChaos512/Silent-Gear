@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "silentgear:block/netherwood_log"
+    "end": "silentgear:block/netherwood_log",
+    "side": "silentgear:block/netherwood_log"
   }
 }

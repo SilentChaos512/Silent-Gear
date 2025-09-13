@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:dusts/azure_electrum"
-    },
-    {
-      "tag": "c:dusts/azure_silver"
-    },
-    {
-      "tag": "c:dusts/azure_silver"
-    },
-    {
-      "tag": "c:dusts/blaze_gold"
-    },
-    {
-      "item": "silentgear:nether_star_fragment"
-    }
+    "#c:dusts/azure_electrum",
+    "#c:dusts/azure_silver",
+    "#c:dusts/azure_silver",
+    "#c:dusts/blaze_gold",
+    "silentgear:nether_star_fragment"
   ],
   "result": {
     "count": 3,

@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:diamond_helmet"
-    }
+    "minecraft:diamond_helmet"
   ],
   "result": {
     "item": "silentgear:helmet",

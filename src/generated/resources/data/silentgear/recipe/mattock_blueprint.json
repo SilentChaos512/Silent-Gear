@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "silentgear:blueprints/mattock",
   "key": {
-    "#": {
-      "tag": "silentgear:blueprint_paper"
-    },
-    "/": {
-      "tag": "c:rods/wooden"
-    }
+    "#": "#silentgear:blueprint_paper",
+    "/": "#c:rods/wooden"
   },
   "pattern": [
     "## ",

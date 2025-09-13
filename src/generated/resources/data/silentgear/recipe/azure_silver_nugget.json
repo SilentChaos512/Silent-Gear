@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:azure_silver_ingot"
-    }
+    "silentgear:azure_silver_ingot"
   ],
   "result": {
     "count": 9,

@@ -3,24 +3,12 @@
   "category": "equipment",
   "group": "silentgear:blueprints/coating",
   "ingredients": [
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "c:gems/diamond"
-    },
-    {
-      "tag": "c:gems/emerald"
-    }
+    "#silentgear:template_boards",
+    "#silentgear:template_boards",
+    "#silentgear:template_boards",
+    "#silentgear:template_boards",
+    "#c:gems/diamond",
+    "#c:gems/emerald"
   ],
   "result": {
     "count": 1,

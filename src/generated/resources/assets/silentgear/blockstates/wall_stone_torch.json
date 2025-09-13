@@ -1,8 +1,7 @@
 {
   "variants": {
     "facing=east": {
-      "model": "silentgear:block/wall_stone_torch",
-      "y": 360
+      "model": "silentgear:block/wall_stone_torch"
     },
     "facing=north": {
       "model": "silentgear:block/wall_stone_torch",

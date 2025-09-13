@@ -2,9 +2,7 @@
   "type": "silentgear:gear_crafting",
   "category": "equipment",
   "ingredients": [
-    {
-      "item": "silentgear:boot_plates"
-    }
+    "silentgear:boot_plates"
   ],
   "result": {
     "count": 1,

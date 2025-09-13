@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:ingots/crimson_iron"
-    },
-    "/": {
-      "tag": "c:rods/blaze"
-    },
-    "C": {
-      "item": "minecraft:magma_cream"
-    }
+    "#": "#c:ingots/crimson_iron",
+    "/": "#c:rods/blaze",
+    "C": "minecraft:magma_cream"
   },
   "pattern": [
     "/ /",

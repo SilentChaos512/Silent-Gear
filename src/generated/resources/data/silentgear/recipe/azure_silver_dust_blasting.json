@@ -3,9 +3,7 @@
   "category": "misc",
   "cookingtime": 100,
   "experience": 1.5,
-  "ingredient": {
-    "tag": "c:dusts/azure_silver"
-  },
+  "ingredient": "#c:dusts/azure_silver",
   "result": {
     "count": 1,
     "id": "silentgear:azure_silver_ingot"

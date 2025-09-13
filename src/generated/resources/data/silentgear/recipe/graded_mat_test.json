@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "#": {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "gear_type": "silentgear:tool",
       "material": "silentgear:copper",
       "min_grade": "A",

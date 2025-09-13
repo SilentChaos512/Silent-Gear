@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:diamond_pickaxe"
-  },
+  "ingredient": "minecraft:diamond_pickaxe",
   "results": [
     {
       "count": 3,

@@ -5,9 +5,7 @@
     "gear_type_blacklist": [
       "silentgear:elytra"
     ],
-    "ingredient": {
-      "item": "silentgear:coating"
-    }
+    "ingredient": "silentgear:coating"
   },
   "display": {
     "name": {

@@ -1,6 +1,4 @@
 {
   "type": "silentgear:salvaging/gear",
-  "ingredient": {
-    "item": "silentgear:prospector_hammer"
-  }
+  "ingredient": "silentgear:prospector_hammer"
 }

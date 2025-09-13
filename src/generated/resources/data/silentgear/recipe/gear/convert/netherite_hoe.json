@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:netherite_hoe"
-    }
+    "minecraft:netherite_hoe"
   ],
   "result": {
     "item": "silentgear:hoe",

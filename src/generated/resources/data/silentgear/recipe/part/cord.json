@@ -3,22 +3,22 @@
   "category": "misc",
   "ingredients": [
     {
-      "type": "silentgear:blueprint",
+      "neoforge:ingredient_type": "silentgear:blueprint",
       "gear_type": "silentgear:none",
       "part_type": "silentgear:cord"
     },
     {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "gear_type": "silentgear:tool",
       "part_type": "silentgear:cord"
     },
     {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "gear_type": "silentgear:tool",
       "part_type": "silentgear:cord"
     },
     {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "gear_type": "silentgear:tool",
       "part_type": "silentgear:cord"
     }

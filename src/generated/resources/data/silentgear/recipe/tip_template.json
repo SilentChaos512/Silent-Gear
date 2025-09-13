@@ -3,18 +3,10 @@
   "category": "equipment",
   "group": "silentgear:blueprints/tip",
   "ingredients": [
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "silentgear:template_boards"
-    },
-    {
-      "tag": "c:paper"
-    },
-    {
-      "tag": "c:stones"
-    }
+    "#silentgear:template_boards",
+    "#silentgear:template_boards",
+    "#c:paper",
+    "#c:stones"
   ],
   "result": {
     "count": 1,

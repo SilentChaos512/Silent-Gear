@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:upgrade_base"
-    },
-    {
-      "tag": "c:dyes/red"
-    }
+    "silentgear:upgrade_base",
+    "#c:dyes/red"
   ],
   "result": {
     "count": 4,

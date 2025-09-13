@@ -3,11 +3,9 @@
   "category": "misc",
   "group": "silentgear:blueprints/necklace",
   "key": {
-    "#": {
-      "tag": "silentgear:template_boards"
-    },
+    "#": "#silentgear:template_boards",
     "/": {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "categories": [
         "metal"
       ],

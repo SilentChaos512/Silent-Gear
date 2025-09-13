@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:golden_sword"
-    }
+    "minecraft:golden_sword"
   ],
   "result": {
     "item": "silentgear:sword",

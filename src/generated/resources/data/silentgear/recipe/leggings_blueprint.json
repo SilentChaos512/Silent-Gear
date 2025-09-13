@@ -3,9 +3,7 @@
   "category": "misc",
   "group": "silentgear:blueprints/leggings",
   "key": {
-    "#": {
-      "tag": "silentgear:blueprint_paper"
-    }
+    "#": "#silentgear:blueprint_paper"
   },
   "pattern": [
     "###",

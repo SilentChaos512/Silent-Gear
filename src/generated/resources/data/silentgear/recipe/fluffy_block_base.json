@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "silentgear:fluffy_fabric"
-    }
+    "#": "silentgear:fluffy_fabric"
   },
   "pattern": [
     "##",

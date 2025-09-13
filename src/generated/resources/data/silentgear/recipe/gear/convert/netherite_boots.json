@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:netherite_boots"
-    }
+    "minecraft:netherite_boots"
   ],
   "result": {
     "item": "silentgear:boots",

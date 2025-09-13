@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:leather_helmet"
-    }
+    "minecraft:leather_helmet"
   ],
   "result": {
     "item": "silentgear:helmet",

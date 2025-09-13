@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:paper"
-    },
-    {
-      "tag": "c:paper"
-    },
-    {
-      "tag": "minecraft:planks"
-    },
-    {
-      "tag": "c:stones"
-    }
+    "#c:paper",
+    "#c:paper",
+    "#minecraft:planks",
+    "#c:stones"
   ],
   "result": {
     "count": 4,

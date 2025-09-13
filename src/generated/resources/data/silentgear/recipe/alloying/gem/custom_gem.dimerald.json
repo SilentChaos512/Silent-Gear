@@ -1,12 +1,8 @@
 {
   "type": "silentgear:alloy_making/gem",
   "ingredients": [
-    {
-      "tag": "c:gems/diamond"
-    },
-    {
-      "tag": "c:gems/emerald"
-    }
+    "#c:gems/diamond",
+    "#c:gems/emerald"
   ],
   "result": {
     "item": "silentgear:custom_gem",

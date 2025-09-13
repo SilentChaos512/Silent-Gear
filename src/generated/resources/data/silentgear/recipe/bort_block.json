@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:bort_block"
-    }
+    "silentgear:bort_block"
   ],
   "result": {
     "count": 9,

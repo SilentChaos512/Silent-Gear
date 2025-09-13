@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:netherite_pickaxe"
-  },
+  "ingredient": "minecraft:netherite_pickaxe",
   "results": [
     {
       "count": 3,

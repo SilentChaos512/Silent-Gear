@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "silentgear:crimson_steel_ingot"
-    }
+    "#": "silentgear:crimson_steel_ingot"
   },
   "pattern": [
     "###",

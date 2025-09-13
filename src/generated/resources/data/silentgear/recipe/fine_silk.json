@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:fine_silk_cloth"
-    }
+    "silentgear:fine_silk_cloth"
   ],
   "result": {
     "count": 4,

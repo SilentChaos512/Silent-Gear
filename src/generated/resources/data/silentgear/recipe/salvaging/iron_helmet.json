@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:iron_helmet"
-  },
+  "ingredient": "minecraft:iron_helmet",
   "results": [
     {
       "count": 5,

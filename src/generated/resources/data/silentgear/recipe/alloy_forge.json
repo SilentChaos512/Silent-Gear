@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "minecraft:blackstone"
-    },
-    "/": {
-      "tag": "c:ingots/crimson_steel"
-    },
-    "i": {
-      "tag": "c:storage_blocks/iron"
-    }
+    "#": "minecraft:blackstone",
+    "/": "#c:ingots/crimson_steel",
+    "i": "#c:storage_blocks/iron"
   },
   "pattern": [
     "/#/",

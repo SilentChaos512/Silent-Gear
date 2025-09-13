@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "silentgear:blaze_gold_ingot"
-    }
+    "#": "silentgear:blaze_gold_ingot"
   },
   "pattern": [
     "###",

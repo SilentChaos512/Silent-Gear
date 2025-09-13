@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:paper"
-    },
-    {
-      "tag": "c:paper"
-    },
-    {
-      "tag": "c:paper"
-    },
-    {
-      "tag": "c:paper"
-    },
-    {
-      "tag": "c:dyes/blue"
-    }
+    "#c:paper",
+    "#c:paper",
+    "#c:paper",
+    "#c:paper",
+    "#c:dyes/blue"
   ],
   "result": {
     "count": 4,

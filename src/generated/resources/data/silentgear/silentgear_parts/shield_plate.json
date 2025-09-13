@@ -3,9 +3,7 @@
   "crafting": {
     "can_salvage": true,
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:shield_plate"
-    }
+    "ingredient": "silentgear:shield_plate"
   },
   "display": {
     "name": {

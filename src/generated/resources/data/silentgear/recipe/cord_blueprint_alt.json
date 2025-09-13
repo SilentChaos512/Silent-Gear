@@ -3,12 +3,8 @@
   "category": "equipment",
   "group": "silentgear:blueprints/cord",
   "key": {
-    "#": {
-      "tag": "silentgear:blueprint_paper"
-    },
-    "/": {
-      "tag": "c:strings"
-    }
+    "#": "#silentgear:blueprint_paper",
+    "/": "#c:strings"
   },
   "pattern": [
     "#/",

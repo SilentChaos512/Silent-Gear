@@ -1,14 +1,12 @@
 {
   "type": "silentgear:smithing/coating",
   "addition": {
-    "type": "silentgear:material",
+    "neoforge:ingredient_type": "silentgear:material",
     "gear_type": "silentgear:tool",
     "part_type": "silentgear:coating"
   },
   "gear": {
     "id": "silentgear:shears"
   },
-  "template": {
-    "item": "silentgear:coating_smithing_template"
-  }
+  "template": "silentgear:coating_smithing_template"
 }

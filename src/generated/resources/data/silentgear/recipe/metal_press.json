@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:obsidians"
-    },
-    "/": {
-      "tag": "c:rods/iron"
-    },
-    "t": {
-      "tag": "c:ingots/tyrian_steel"
-    }
+    "#": "#c:obsidians",
+    "/": "#c:rods/iron",
+    "t": "#c:ingots/tyrian_steel"
   },
   "pattern": [
     "#t#",

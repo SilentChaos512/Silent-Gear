@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:diamond_leggings"
-    }
+    "minecraft:diamond_leggings"
   ],
   "result": {
     "item": "silentgear:leggings",

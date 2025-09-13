@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:netherite_sword"
-    }
+    "minecraft:netherite_sword"
   ],
   "result": {
     "item": "silentgear:sword",

@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:diamond_leggings"
-  },
+  "ingredient": "minecraft:diamond_leggings",
   "results": [
     {
       "count": 7,

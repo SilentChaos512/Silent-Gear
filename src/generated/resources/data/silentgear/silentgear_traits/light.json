@@ -14,7 +14,7 @@
       "attribute_modifiers": {
         "armor/chest": [
           {
-            "attribute": "minecraft:generic.movement_speed",
+            "attribute": "minecraft:movement_speed",
             "operation": "add_multiplied_base",
             "values": [
               0.01,
@@ -27,7 +27,7 @@
         ],
         "armor/feet": [
           {
-            "attribute": "minecraft:generic.movement_speed",
+            "attribute": "minecraft:movement_speed",
             "operation": "add_multiplied_base",
             "values": [
               0.01,
@@ -40,7 +40,7 @@
         ],
         "armor/head": [
           {
-            "attribute": "minecraft:generic.movement_speed",
+            "attribute": "minecraft:movement_speed",
             "operation": "add_multiplied_base",
             "values": [
               0.01,
@@ -53,7 +53,7 @@
         ],
         "armor/legs": [
           {
-            "attribute": "minecraft:generic.movement_speed",
+            "attribute": "minecraft:movement_speed",
             "operation": "add_multiplied_base",
             "values": [
               0.01,

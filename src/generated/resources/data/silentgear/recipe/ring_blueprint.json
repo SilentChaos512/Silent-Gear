@@ -3,11 +3,9 @@
   "category": "misc",
   "group": "silentgear:blueprints/ring",
   "key": {
-    "#": {
-      "tag": "silentgear:blueprint_paper"
-    },
+    "#": "#silentgear:blueprint_paper",
     "/": {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "categories": [
         "metal"
       ],

@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "minecraft:planks"
-    },
-    "/": {
-      "tag": "c:ingots/iron"
-    },
-    "b": {
-      "tag": "c:gems/bort"
-    },
-    "d": {
-      "tag": "c:gems/diamond"
-    },
-    "i": {
-      "tag": "c:storage_blocks/iron"
-    }
+    "#": "#minecraft:planks",
+    "/": "#c:ingots/iron",
+    "b": "#c:gems/bort",
+    "d": "#c:gems/diamond",
+    "i": "#c:storage_blocks/iron"
   },
   "pattern": [
     "/ /",

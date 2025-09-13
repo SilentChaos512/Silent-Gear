@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:crossbow"
-  },
+  "ingredient": "minecraft:crossbow",
   "results": [
     {
       "count": 3,

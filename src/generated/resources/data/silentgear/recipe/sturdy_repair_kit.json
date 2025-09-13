@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:ingots/iron"
-    },
-    "/": {
-      "tag": "c:rods/iron"
-    },
-    "o": {
-      "tag": "c:gems/diamond"
-    }
+    "#": "#c:ingots/iron",
+    "/": "#c:rods/iron",
+    "o": "#c:gems/diamond"
   },
   "pattern": [
     " / ",

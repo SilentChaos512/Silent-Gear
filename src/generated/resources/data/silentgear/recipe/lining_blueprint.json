@@ -3,27 +3,13 @@
   "category": "equipment",
   "group": "silentgear:blueprints/lining",
   "ingredients": [
-    {
-      "tag": "silentgear:blueprint_paper"
-    },
-    {
-      "tag": "silentgear:blueprint_paper"
-    },
-    {
-      "tag": "silentgear:blueprint_paper"
-    },
-    {
-      "tag": "minecraft:wool"
-    },
-    {
-      "tag": "minecraft:wool"
-    },
-    {
-      "tag": "c:strings"
-    },
-    {
-      "tag": "c:strings"
-    }
+    "#silentgear:blueprint_paper",
+    "#silentgear:blueprint_paper",
+    "#silentgear:blueprint_paper",
+    "#minecraft:wool",
+    "#minecraft:wool",
+    "#c:strings",
+    "#c:strings"
   ],
   "result": {
     "count": 1,

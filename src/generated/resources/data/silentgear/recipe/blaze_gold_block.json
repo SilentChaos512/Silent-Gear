@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:blaze_gold_block"
-    }
+    "silentgear:blaze_gold_block"
   ],
   "result": {
     "count": 9,

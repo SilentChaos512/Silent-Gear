@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "silentgear:blueprints/ring",
   "key": {
-    "#": {
-      "tag": "silentgear:blueprint_paper"
-    },
-    "/": {
-      "tag": "c:ingots/gold"
-    }
+    "#": "#silentgear:blueprint_paper",
+    "/": "#c:ingots/gold"
   },
   "pattern": [
     " #/",

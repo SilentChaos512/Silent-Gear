@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:golden_axe"
-    }
+    "minecraft:golden_axe"
   ],
   "result": {
     "item": "silentgear:axe",

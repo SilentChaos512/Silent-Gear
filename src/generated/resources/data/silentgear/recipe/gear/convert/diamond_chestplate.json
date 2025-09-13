@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:diamond_chestplate"
-    }
+    "minecraft:diamond_chestplate"
   ],
   "result": {
     "item": "silentgear:chestplate",

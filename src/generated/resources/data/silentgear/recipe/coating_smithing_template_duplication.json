@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "d": {
-      "tag": "c:gems/diamond"
-    },
-    "n": {
-      "tag": "c:netherracks"
-    },
-    "t": {
-      "item": "silentgear:coating_smithing_template"
-    }
+    "d": "#c:gems/diamond",
+    "n": "#c:netherracks",
+    "t": "silentgear:coating_smithing_template"
   },
   "pattern": [
     "dtd",

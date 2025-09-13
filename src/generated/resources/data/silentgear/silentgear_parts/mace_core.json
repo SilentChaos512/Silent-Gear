@@ -3,9 +3,7 @@
   "crafting": {
     "can_salvage": true,
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:mace_core"
-    }
+    "ingredient": "silentgear:mace_core"
   },
   "display": {
     "name": {

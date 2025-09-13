@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:diamond_axe"
-    }
+    "minecraft:diamond_axe"
   ],
   "result": {
     "item": "silentgear:axe",

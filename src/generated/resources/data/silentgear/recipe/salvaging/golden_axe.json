@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:golden_axe"
-  },
+  "ingredient": "minecraft:golden_axe",
   "results": [
     {
       "count": 3,

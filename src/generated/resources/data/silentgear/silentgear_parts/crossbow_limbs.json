@@ -3,9 +3,7 @@
   "crafting": {
     "can_salvage": true,
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:crossbow_limbs"
-    }
+    "ingredient": "silentgear:crossbow_limbs"
   },
   "display": {
     "name": {

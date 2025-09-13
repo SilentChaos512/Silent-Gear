@@ -3,9 +3,7 @@
   "crafting": {
     "can_salvage": true,
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:dagger_blade"
-    }
+    "ingredient": "silentgear:dagger_blade"
   },
   "display": {
     "name": {

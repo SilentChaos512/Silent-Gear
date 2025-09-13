@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:gems/emerald"
-    }
+    "#c:gems/emerald"
   ],
   "result": {
     "count": 9,

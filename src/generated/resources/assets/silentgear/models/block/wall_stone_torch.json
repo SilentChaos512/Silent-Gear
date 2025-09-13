@@ -1,6 +1,5 @@
 {
-  "parent": "minecraft:block/wall_torch",
-  "render_type": "minecraft:cutout",
+  "parent": "minecraft:block/template_torch_wall",
   "textures": {
     "torch": "silentgear:block/stone_torch"
   }

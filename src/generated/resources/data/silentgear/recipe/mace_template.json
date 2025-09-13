@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "silentgear:template_boards"
-    },
-    "/": {
-      "tag": "c:rods/breeze"
-    }
+    "#": "#silentgear:template_boards",
+    "/": "#c:rods/breeze"
   },
   "pattern": [
     " # ",

@@ -23,7 +23,7 @@
       "attribute_modifiers": {
         "all/any": [
           {
-            "attribute": "minecraft:generic.gravity",
+            "attribute": "minecraft:gravity",
             "operation": "add_multiplied_base",
             "values": [
               -0.15,

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:advanced_upgrade_base"
-    },
-    {
-      "item": "minecraft:diamond_shovel"
-    }
+    "silentgear:advanced_upgrade_base",
+    "minecraft:diamond_shovel"
   ],
   "result": {
     "count": 1,

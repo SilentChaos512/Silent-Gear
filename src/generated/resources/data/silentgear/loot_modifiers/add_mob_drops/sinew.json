@@ -14,7 +14,47 @@
         },
         {
           "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/black"
+          "loot_table_id": "minecraft:entities/sheep/white"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/orange"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/magenta"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/light_blue"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/yellow"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/lime"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/pink"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/gray"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/light_gray"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/cyan"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:entities/sheep/purple"
         },
         {
           "condition": "neoforge:loot_table_id",
@@ -26,43 +66,7 @@
         },
         {
           "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/cyan"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/gray"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/sheep/green"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/light_blue"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/light_gray"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/lime"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/magenta"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/orange"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/pink"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/purple"
         },
         {
           "condition": "neoforge:loot_table_id",
@@ -70,11 +74,7 @@
         },
         {
           "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/white"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:entities/sheep/yellow"
+          "loot_table_id": "minecraft:entities/sheep/black"
         }
       ]
     }

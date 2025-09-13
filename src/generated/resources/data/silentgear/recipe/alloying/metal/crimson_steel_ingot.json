@@ -1,18 +1,10 @@
 {
   "type": "silentgear:alloy_making/metal",
   "ingredients": [
-    {
-      "tag": "c:storage_blocks/crimson_iron"
-    },
-    {
-      "tag": "c:rods/blaze"
-    },
-    {
-      "tag": "c:rods/blaze"
-    },
-    {
-      "item": "minecraft:magma_cream"
-    }
+    "#c:storage_blocks/crimson_iron",
+    "#c:rods/blaze",
+    "#c:rods/blaze",
+    "minecraft:magma_cream"
   ],
   "result": {
     "count": 3,

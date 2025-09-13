@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "b": {
-      "item": "silentgear:nether_banana"
-    },
-    "g": {
-      "tag": "c:ingots/gold"
-    }
+    "b": "silentgear:nether_banana",
+    "g": "#c:ingots/gold"
   },
   "pattern": [
     "ggg",

@@ -2,11 +2,9 @@
   "type": "silentgear:gear_crafting",
   "category": "equipment",
   "ingredients": [
+    "silentgear:chestplate_plates",
     {
-      "item": "silentgear:chestplate_plates"
-    },
-    {
-      "type": "silentgear:part_type",
+      "neoforge:ingredient_type": "silentgear:part_type",
       "part_type": "silentgear:lining"
     }
   ],

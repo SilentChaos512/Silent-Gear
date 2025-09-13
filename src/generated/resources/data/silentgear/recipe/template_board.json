@@ -1,9 +1,7 @@
 {
   "type": "silentgear:tool_action",
   "damage_to_tool": 1,
-  "ingredient": {
-    "tag": "minecraft:logs"
-  },
+  "ingredient": "#minecraft:logs",
   "result": {
     "count": 6,
     "id": "silentgear:template_board"
@@ -14,7 +12,5 @@
     "sound": "silentgear:block.silentgear.stone_anvil.knife",
     "volume": 1.0
   },
-  "tool": {
-    "tag": "c:tools/knife"
-  }
+  "tool": "#c:tools/knife"
 }

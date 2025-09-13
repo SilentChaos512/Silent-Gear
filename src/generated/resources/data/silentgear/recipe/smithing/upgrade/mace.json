@@ -1,13 +1,10 @@
 {
   "type": "silentgear:smithing/upgrade",
   "addition": {
-    "type": "silentgear:part_type",
+    "neoforge:ingredient_type": "silentgear:part_type",
     "part_type": "silentgear:misc_upgrade"
   },
   "gear": {
     "id": "silentgear:mace"
-  },
-  "template": {
-    "item": "minecraft:stick"
   }
 }

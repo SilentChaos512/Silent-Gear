@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "tag": "silentgear:fluffy_blocks"
-    },
-    "d": {
-      "tag": "c:dyes/orange"
-    }
+    "#": "#silentgear:fluffy_blocks",
+    "d": "#c:dyes/orange"
   },
   "pattern": [
     "###",

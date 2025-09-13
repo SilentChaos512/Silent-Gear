@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:leather_horse_armor"
-  },
+  "ingredient": "minecraft:leather_horse_armor",
   "results": [
     {
       "count": 7,

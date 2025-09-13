@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:ingots/crimson_steel"
-    },
-    "/": {
-      "tag": "c:rods/blaze"
-    },
-    "o": {
-      "tag": "c:ingots/blaze_gold"
-    }
+    "#": "#c:ingots/crimson_steel",
+    "/": "#c:rods/blaze",
+    "o": "#c:ingots/blaze_gold"
   },
   "pattern": [
     " / ",

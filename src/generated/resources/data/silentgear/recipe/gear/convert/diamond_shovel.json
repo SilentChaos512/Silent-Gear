@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:diamond_shovel"
-    }
+    "minecraft:diamond_shovel"
   ],
   "result": {
     "item": "silentgear:shovel",

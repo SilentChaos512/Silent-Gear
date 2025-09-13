@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:leather_helmet"
-  },
+  "ingredient": "minecraft:leather_helmet",
   "results": [
     {
       "count": 5,

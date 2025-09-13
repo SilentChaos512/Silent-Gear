@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "silentgear:blueprints/spear",
   "key": {
-    "#": {
-      "tag": "silentgear:template_boards"
-    },
-    "/": {
-      "tag": "c:rods/wooden"
-    }
+    "#": "#silentgear:template_boards",
+    "/": "#c:rods/wooden"
   },
   "pattern": [
     "#  ",

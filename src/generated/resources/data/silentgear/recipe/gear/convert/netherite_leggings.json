@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:netherite_leggings"
-    }
+    "minecraft:netherite_leggings"
   ],
   "result": {
     "item": "silentgear:leggings",

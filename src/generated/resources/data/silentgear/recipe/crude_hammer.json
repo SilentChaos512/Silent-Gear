@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": {
-      "tag": "c:cobblestones"
-    },
-    "/": {
-      "item": "silentgear:crude_tool_parts"
-    }
+    "#": "#c:cobblestones",
+    "/": "silentgear:crude_tool_parts"
   },
   "pattern": [
     "##",

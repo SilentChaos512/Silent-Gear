@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:wooden_sword"
-    }
+    "minecraft:wooden_sword"
   ],
   "result": {
     "item": "silentgear:sword",

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "minecraft:coals"
-    },
-    "/": {
-      "tag": "c:rods/stone"
-    }
+    "#": "#minecraft:coals",
+    "/": "#c:rods/stone"
   },
   "pattern": [
     "#",

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:crimson_iron_ingot"
-    }
+    "silentgear:crimson_iron_ingot"
   ],
   "result": {
     "count": 9,

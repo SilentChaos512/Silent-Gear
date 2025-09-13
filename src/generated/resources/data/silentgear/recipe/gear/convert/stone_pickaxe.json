@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:stone_pickaxe"
-    }
+    "minecraft:stone_pickaxe"
   ],
   "result": {
     "item": "silentgear:pickaxe",

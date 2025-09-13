@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "silentgear:blueprint_paper"
-    },
-    "d": {
-      "tag": "c:gems/diamond"
-    },
-    "i": {
-      "tag": "c:ingots/iron"
-    },
-    "p": {
-      "tag": "minecraft:planks"
-    },
-    "s": {
-      "tag": "c:rods/wooden"
-    }
+    "#": "#silentgear:blueprint_paper",
+    "d": "#c:gems/diamond",
+    "i": "#c:ingots/iron",
+    "p": "#minecraft:planks",
+    "s": "#c:rods/wooden"
   },
   "pattern": [
     "  p",

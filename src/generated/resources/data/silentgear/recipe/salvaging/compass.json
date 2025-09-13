@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:compass"
-  },
+  "ingredient": "minecraft:compass",
   "results": [
     {
       "count": 4,

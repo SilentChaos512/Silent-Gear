@@ -6,13 +6,17 @@
       "sheet"
     ],
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:sheet_metal"
-    },
+    "ingredient": "silentgear:sheet_metal",
     "part_substitutes": {}
   },
   "display": {
     "color": "#FFFFFFFF",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
     "main_texture_type": "HIGH_CONTRAST",
     "name": {
       "translate": "material.silentgear.sheet_metal"

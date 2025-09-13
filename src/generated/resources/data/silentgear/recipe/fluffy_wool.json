@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "silentgear:fluffy_puff"
-    },
-    "~": {
-      "tag": "c:strings"
-    }
+    "#": "silentgear:fluffy_puff",
+    "~": "#c:strings"
   },
   "pattern": [
     "###",

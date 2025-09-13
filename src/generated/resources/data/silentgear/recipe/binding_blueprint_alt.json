@@ -3,15 +3,9 @@
   "category": "misc",
   "group": "silentgear:blueprints/binding",
   "ingredients": [
-    {
-      "tag": "silentgear:blueprint_paper"
-    },
-    {
-      "tag": "c:strings"
-    },
-    {
-      "tag": "c:strings"
-    }
+    "#silentgear:blueprint_paper",
+    "#c:strings",
+    "#c:strings"
   ],
   "result": {
     "count": 1,

@@ -1,7 +1,7 @@
 {
   "type": "silentgear:pressing/material",
   "ingredient": {
-    "type": "silentgear:material",
+    "neoforge:ingredient_type": "silentgear:material",
     "categories": [
       "metal"
     ],

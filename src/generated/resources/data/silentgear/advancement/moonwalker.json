@@ -11,7 +11,22 @@
     },
     "icon": {
       "components": {
-        "!minecraft:attribute_modifiers": {},
+        "minecraft:attribute_modifiers": [
+          {
+            "type": "minecraft:block_interaction_range",
+            "amount": 0.0,
+            "id": "silentgear:reach_modifier",
+            "operation": "add_value",
+            "slot": "mainhand"
+          },
+          {
+            "type": "minecraft:attack_damage",
+            "amount": 0.0,
+            "id": "minecraft:base_attack_damage",
+            "operation": "add_value",
+            "slot": "mainhand"
+          }
+        ],
         "silentgear:construction": {
           "broken_count": 0,
           "example": false,
@@ -33,8 +48,6 @@
           ],
           "repairedCount": 0
         },
-        "silentgear:model_index": -1,
-        "silentgear:model_key": "boots:null,",
         "silentgear:properties": {
           "silentgear:armor": 0.0,
           "silentgear:armor_durability": 0.0,

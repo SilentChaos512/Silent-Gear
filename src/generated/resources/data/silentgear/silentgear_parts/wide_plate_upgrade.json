@@ -3,9 +3,7 @@
   "crafting": {
     "can_salvage": true,
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:wide_plate_upgrade"
-    }
+    "ingredient": "silentgear:wide_plate_upgrade"
   },
   "display": {
     "name": {

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:leather"
-    }
+    "minecraft:leather"
   ],
   "result": {
     "count": 9,

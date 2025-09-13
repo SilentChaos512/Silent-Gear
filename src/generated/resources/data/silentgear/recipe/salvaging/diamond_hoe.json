@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:diamond_hoe"
-  },
+  "ingredient": "minecraft:diamond_hoe",
   "results": [
     {
       "count": 2,

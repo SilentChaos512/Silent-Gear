@@ -3,17 +3,17 @@
   "category": "equipment",
   "ingredients": [
     {
-      "type": "silentgear:blueprint",
+      "neoforge:ingredient_type": "silentgear:blueprint",
       "gear_type": "silentgear:knife",
       "part_type": "silentgear:main"
     },
     {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "gear_type": "silentgear:knife",
       "part_type": "silentgear:main"
     },
     {
-      "type": "silentgear:part_type",
+      "neoforge:ingredient_type": "silentgear:part_type",
       "part_type": "silentgear:rod"
     }
   ],

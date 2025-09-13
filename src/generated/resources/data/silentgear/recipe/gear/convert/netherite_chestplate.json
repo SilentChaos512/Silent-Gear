@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:netherite_chestplate"
-    }
+    "minecraft:netherite_chestplate"
   ],
   "result": {
     "item": "silentgear:chestplate",

@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:netherite_pickaxe"
-    }
+    "minecraft:netherite_pickaxe"
   ],
   "result": {
     "item": "silentgear:pickaxe",

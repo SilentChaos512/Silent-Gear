@@ -23,7 +23,7 @@
       "attribute_modifiers": {
         "all/any": [
           {
-            "attribute": "minecraft:generic.armor",
+            "attribute": "minecraft:armor",
             "operation": "add_value",
             "values": [
               1.0,

@@ -3,9 +3,7 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.5,
-  "ingredient": {
-    "tag": "c:dusts/blaze_gold"
-  },
+  "ingredient": "#c:dusts/blaze_gold",
   "result": {
     "count": 1,
     "id": "silentgear:blaze_gold_ingot"

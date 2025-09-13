@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:fluffy_fabric"
-    }
+    "silentgear:fluffy_fabric"
   ],
   "result": {
     "count": 4,

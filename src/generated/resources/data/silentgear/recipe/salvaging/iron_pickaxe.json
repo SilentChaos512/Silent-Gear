@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:iron_pickaxe"
-  },
+  "ingredient": "minecraft:iron_pickaxe",
   "results": [
     {
       "count": 3,

@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:golden_boots"
-  },
+  "ingredient": "minecraft:golden_boots",
   "results": [
     {
       "count": 4,

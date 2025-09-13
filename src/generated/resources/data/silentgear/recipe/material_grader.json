@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "silentgear:advanced_upgrade_base"
-    },
-    "G": {
-      "tag": "c:ingots/blaze_gold"
-    },
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "Q": {
-      "tag": "c:gems/quartz"
-    }
+    "#": "silentgear:advanced_upgrade_base",
+    "G": "#c:ingots/blaze_gold",
+    "I": "#c:ingots/iron",
+    "Q": "#c:gems/quartz"
   },
   "pattern": [
     "QIQ",

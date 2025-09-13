@@ -3,15 +3,9 @@
   "category": "misc",
   "group": "silentgear:blueprints/prospector_hammer",
   "key": {
-    "#": {
-      "tag": "silentgear:blueprint_paper"
-    },
-    "/": {
-      "tag": "c:rods/wooden"
-    },
-    "@": {
-      "tag": "c:ingots/iron"
-    }
+    "#": "#silentgear:blueprint_paper",
+    "/": "#c:rods/wooden",
+    "@": "#c:ingots/iron"
   },
   "pattern": [
     "##",

@@ -2,9 +2,7 @@
   "type": "silentgear:conversion",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:netherite_helmet"
-    }
+    "minecraft:netherite_helmet"
   ],
   "result": {
     "item": "silentgear:helmet",

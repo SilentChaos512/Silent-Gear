@@ -9,7 +9,7 @@
       "attribute_modifiers": {
         "all/any": [
           {
-            "attribute": "minecraft:generic.luck",
+            "attribute": "minecraft:luck",
             "operation": "add_value",
             "values": [
               -0.5,

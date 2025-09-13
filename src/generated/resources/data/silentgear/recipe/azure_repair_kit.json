@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:ingots/azure_electrum"
-    },
-    "/": {
-      "item": "minecraft:end_rod"
-    },
-    "o": {
-      "tag": "c:gems/emerald"
-    }
+    "#": "#c:ingots/azure_electrum",
+    "/": "minecraft:end_rod",
+    "o": "#c:gems/emerald"
   },
   "pattern": [
     " / ",

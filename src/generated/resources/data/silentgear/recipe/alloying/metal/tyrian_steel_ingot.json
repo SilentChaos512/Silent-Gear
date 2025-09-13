@@ -1,18 +1,10 @@
 {
   "type": "silentgear:alloy_making/metal",
   "ingredients": [
-    {
-      "tag": "c:ingots/crimson_steel"
-    },
-    {
-      "tag": "c:ingots/azure_electrum"
-    },
-    {
-      "item": "silentgear:crushed_shulker_shell"
-    },
-    {
-      "item": "minecraft:netherite_scrap"
-    }
+    "#c:ingots/crimson_steel",
+    "#c:ingots/azure_electrum",
+    "silentgear:crushed_shulker_shell",
+    "minecraft:netherite_scrap"
   ],
   "result": {
     "count": 4,

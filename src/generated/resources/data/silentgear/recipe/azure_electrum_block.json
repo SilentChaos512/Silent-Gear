@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "silentgear:azure_electrum_block"
-    }
+    "silentgear:azure_electrum_block"
   ],
   "result": {
     "count": 9,

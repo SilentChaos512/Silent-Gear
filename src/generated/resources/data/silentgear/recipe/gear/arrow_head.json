@@ -3,12 +3,12 @@
   "category": "equipment",
   "ingredients": [
     {
-      "type": "silentgear:blueprint",
+      "neoforge:ingredient_type": "silentgear:blueprint",
       "gear_type": "silentgear:arrow",
       "part_type": "silentgear:main"
     },
     {
-      "type": "silentgear:material",
+      "neoforge:ingredient_type": "silentgear:material",
       "gear_type": "silentgear:arrow",
       "part_type": "silentgear:main"
     }

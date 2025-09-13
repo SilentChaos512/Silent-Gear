@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:bow"
-  },
+  "ingredient": "minecraft:bow",
   "results": [
     {
       "count": 3,

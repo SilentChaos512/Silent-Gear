@@ -1,8 +1,6 @@
 {
   "type": "silentgear:salvaging",
-  "ingredient": {
-    "item": "minecraft:stone_shovel"
-  },
+  "ingredient": "minecraft:stone_shovel",
   "results": [
     {
       "count": 1,

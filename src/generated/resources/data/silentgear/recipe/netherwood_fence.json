@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "silentgear:netherwood_planks"
-    },
-    "/": {
-      "tag": "c:rods/wooden"
-    }
+    "#": "silentgear:netherwood_planks",
+    "/": "#c:rods/wooden"
   },
   "pattern": [
     "#/#",

@@ -3,9 +3,7 @@
   "crafting": {
     "can_salvage": true,
     "gear_type_blacklist": [],
-    "ingredient": {
-      "item": "silentgear:machete_blade"
-    }
+    "ingredient": "silentgear:machete_blade"
   },
   "display": {
     "name": {

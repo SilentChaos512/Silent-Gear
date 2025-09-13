@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:cobblestones"
-    },
-    {
-      "tag": "minecraft:dirt"
-    },
-    {
-      "tag": "c:rods/wooden"
-    }
+    "#c:cobblestones",
+    "#minecraft:dirt",
+    "#c:rods/wooden"
   ],
   "result": {
     "count": 4,
