@@ -18,7 +18,6 @@ import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
-import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
@@ -173,7 +172,6 @@ class SideProxy implements IProxy {
             modEventBus.addListener(Client::clientSetup);
             modEventBus.addListener(Client::postSetup);
 
-            NeoForge.EVENT_BUS.register(new GearHudOverlay());
             NeoForge.EVENT_BUS.register(TooltipHandler.INSTANCE);
             NeoForge.EVENT_BUS.addListener(this::onPlayerLoggedIn);
 
