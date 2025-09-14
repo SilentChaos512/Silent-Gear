@@ -8,9 +8,15 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/uranium",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/uranium"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/uranium"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/uranium"
+      }
     }
   },
   "display": {

@@ -1,9 +1,6 @@
 package net.silentchaos512.gear.api.material;
 
-import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -12,7 +9,6 @@ import net.silentchaos512.gear.api.util.GearComponent;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
-import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -138,27 +134,6 @@ public interface Material extends GearComponent<MaterialInstance> {
     @Deprecated(forRemoval = true)
     default String getModelKey(MaterialInstance material) {
         return SilentGear.shortenId(SgRegistries.MATERIAL.getKey(this));
-    }
-
-    /**
-     * Get an {@code ItemStack} which matches the normal ingredient. The {@code ticks} parameter can
-     * be used to cycle between possible matches.
-     *
-     * @param type  The part type
-     * @param ticks Used to index into matching stacks. If on the client, {@link
-     *              ClientTicks#totalTicks()} can be used. Zero will consistently return the first
-     *              item in the matching stacks array.
-     * @return An item matching the normal ingredient, or {@link ItemStack#EMPTY} if there are none
-     */
-    default ItemStack getDisplayItem(PartType type, int ticks) {
-        if (getIngredient().isEmpty()) {
-            return ItemStack.EMPTY;
-        }
-        HolderSet<Item> items = getIngredient().get().getValues();
-        if (items.size() == 0) {
-            return ItemStack.EMPTY;
-        }
-        return new ItemStack(items.get((ticks / 20) % items.size()));
     }
 
     MaterialEquippableInfo getEquippableInfo();

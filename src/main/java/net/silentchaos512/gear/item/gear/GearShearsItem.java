@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.silentchaos512.gear.api.item.GearTool;
@@ -46,15 +48,14 @@ public class GearShearsItem extends ShearsItem implements GearTool {
     }
 
     @Override
-    public Tool createToolProperties(ItemStack gear, GearPropertiesData properties) {
+    public Tool createToolProperties(ItemStack gear, GearPropertiesData properties, HolderGetter<Block> blocks) {
         // Mimic ShearsItem. Adjust speed so that iron shears are identical to vanilla (iron = 6 / 6 = 1)
         final float adjustedSpeed = properties.getNumber(GearProperties.HARVEST_SPEED) / 6f;
-        var holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
         return new Tool(
                 List.of(
                         Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15f * adjustedSpeed),
-                        Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.LEAVES), 15f * adjustedSpeed),
-                        Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.WOOL), 5f * adjustedSpeed),
+                        Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.LEAVES), 15f * adjustedSpeed),
+                        Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.WOOL), 5f * adjustedSpeed),
                         Tool.Rule.overrideSpeed(HolderSet.direct(Blocks.VINE.builtInRegistryHolder(), Blocks.GLOW_LICHEN.builtInRegistryHolder()), 2f * adjustedSpeed)
                 ),
                 1.0f,

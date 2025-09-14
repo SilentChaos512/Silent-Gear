@@ -57,7 +57,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     private final List<IMaterialModifier> modifiers;
 
     private MaterialInstance(DataResource<Material> material) {
-        this(material, material.isPresent() ? material.get().getDisplayItem(PartTypes.MAIN.get(), 0) : ItemStack.EMPTY);
+        this(material, ItemStack.EMPTY);
     }
 
     private MaterialInstance(DataResource<Material> material, ItemStack craftingItem) {

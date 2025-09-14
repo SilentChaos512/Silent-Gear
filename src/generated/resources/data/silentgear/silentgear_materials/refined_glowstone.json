@@ -8,9 +8,15 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/refined_glowstone",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/refined_glowstone"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/refined_glowstone"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/refined_glowstone"
+      }
     }
   },
   "display": {

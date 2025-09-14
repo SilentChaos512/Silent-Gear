@@ -8,9 +8,15 @@
       "endgame"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/refined_obsidian",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/refined_obsidian"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/refined_obsidian"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/refined_obsidian"
+      }
     }
   },
   "display": {

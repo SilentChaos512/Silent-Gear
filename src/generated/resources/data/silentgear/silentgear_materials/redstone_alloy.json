@@ -8,9 +8,15 @@
       "intermediate"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/redstone_alloy",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/redstone_alloy"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/redstone_alloy"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/redstone_alloy"
+      }
     }
   },
   "display": {

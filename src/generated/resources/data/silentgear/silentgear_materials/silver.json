@@ -8,9 +8,15 @@
       "intermediate"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/silver",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/silver"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/silver"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/silver"
+      }
     }
   },
   "display": {

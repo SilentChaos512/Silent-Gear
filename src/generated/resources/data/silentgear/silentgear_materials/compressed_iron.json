@@ -8,9 +8,15 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/compressed_iron",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/compressed_iron"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/compressed_iron"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/compressed_iron"
+      }
     }
   },
   "display": {

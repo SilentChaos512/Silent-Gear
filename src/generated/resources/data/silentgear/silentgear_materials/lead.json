@@ -8,9 +8,15 @@
       "intermediate"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/lead",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/lead"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/lead"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/lead"
+      }
     }
   },
   "display": {

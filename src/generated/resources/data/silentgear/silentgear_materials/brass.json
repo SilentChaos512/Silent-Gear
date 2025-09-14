@@ -8,9 +8,15 @@
       "intermediate"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/brass",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/brass"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/brass"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/brass"
+      }
     }
   },
   "display": {

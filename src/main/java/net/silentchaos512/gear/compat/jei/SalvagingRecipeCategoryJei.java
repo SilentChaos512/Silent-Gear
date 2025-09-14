@@ -69,7 +69,7 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SalvagingRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 9 - GUI_START_X, 35 - GUI_START_Y)
-                .addIngredients(VanillaTypes.ITEM_STACK, IngredientUtils.getItems(recipe.getIngredient()));
+                .addIngredients(VanillaTypes.ITEM_STACK, IngredientUtils.getItemList(recipe.getIngredient()));
 
         List<ItemStack> results = recipe.getPossibleResultsForDisplay();
 

@@ -9,7 +9,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.*;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -96,7 +95,7 @@ public class SGearJeiPlugin implements IModPlugin {
                     new ShapelessRecipe("",
                             CraftingBookCategory.MISC,
                             new ItemStack(item),
-                            NonNullList.of(Ingredient.of(),
+                            List.of(
                                     Ingredient.of(item),
                                     new Ingredient(PartMaterialIngredient.of(PartTypes.MAIN.get())),
                                     new Ingredient(PartMaterialIngredient.of(PartTypes.MAIN.get())),
@@ -206,7 +205,7 @@ public class SGearJeiPlugin implements IModPlugin {
     @Override
     public void registerIngredientAliases(IIngredientAliasRegistration registration) {
         for (Material material : SgRegistries.MATERIAL.getValues(true)) {
-            List<ItemStack> itemStacks = IngredientUtils.getItems(material.getIngredient());
+            List<ItemStack> itemStacks = IngredientUtils.getItemList(material.getIngredient());
             List<String> aliases = new ArrayList<>(List.of("materials"));
             for (IMaterialCategory category : material.getCategories(MaterialInstance.of(material))) {
                 aliases.add("materials/" + category.getName());

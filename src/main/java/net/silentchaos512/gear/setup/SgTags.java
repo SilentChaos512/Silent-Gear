@@ -140,6 +140,19 @@ public final class SgTags {
         public static final TagKey<Item> RODS_STONE = common("rods/stone");
         @Deprecated(forRemoval = true)
         public static final TagKey<Item> RODS_ROUGH = mod("rods/rough");
+        // Rods without items
+        public static final TagKey<Item> RODS_AZURE_ELECTRUM = common("rods/azure_electrum");
+        public static final TagKey<Item> RODS_AZURE_SILVER = common("rods/azure_silver");
+        public static final TagKey<Item> RODS_BLAZE_GOLD = common("rods/blaze_gold");
+        public static final TagKey<Item> RODS_BRONZE = common("rods/bronze");
+        public static final TagKey<Item> RODS_CRIMSON_IRON = common("rods/crimson_iron");
+        public static final TagKey<Item> RODS_CRIMSON_STEEL = common("rods/crimson_steel");
+        public static final TagKey<Item> RODS_TYRIAN_STEEL = common("rods/tyrian_steel");
+        public static final TagKey<Item> RODS_COPPER = common("rods/copper");
+        public static final TagKey<Item> RODS_GOLD = common("rods/gold");
+        public static final TagKey<Item> RODS_DIAMOND = common("rods/diamond");
+        public static final TagKey<Item> RODS_EMERALD = common("rods/emerald");
+        public static final TagKey<Item> RODS_QUARTZ = common("rods/quartz");
 
         public static final TagKey<Item> FRUITS = common("fruits");
         public static final TagKey<Item> SEEDS_FLAX = common("seeds/flax");

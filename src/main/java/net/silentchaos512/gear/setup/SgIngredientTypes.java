@@ -18,6 +18,7 @@ public class SgIngredientTypes {
     public static final DeferredHolder<IngredientType<?>, IngredientType<CustomAlloyIngredient>> CUSTOM_ALLOY = register("custom_compound", CustomAlloyIngredient.CODEC, CustomAlloyIngredient.STREAM_CODEC);
     public static final DeferredHolder<IngredientType<?>, IngredientType<GearTypeIngredient>> GEAR_TYPE = register("gear_type", GearTypeIngredient.CODEC, GearTypeIngredient.STREAM_CODEC);
     public static final DeferredHolder<IngredientType<?>, IngredientType<PartMaterialIngredient>> MATERIAL = register("material", PartMaterialIngredient.CODEC, PartMaterialIngredient.STREAM_CODEC);
+    public static final DeferredHolder<IngredientType<?>, IngredientType<OptionalTagIngredient>> OPTIONAL_TAG = register("optional_tag", OptionalTagIngredient.CODEC, OptionalTagIngredient.STREAM_CODEC);
     public static final DeferredHolder<IngredientType<?>, IngredientType<GearPartIngredient>> PART = register("part_type", GearPartIngredient.CODEC, GearPartIngredient.STREAM_CODEC);
 
     private static <T extends ICustomIngredient> DeferredHolder<IngredientType<?>, IngredientType<T>> register(

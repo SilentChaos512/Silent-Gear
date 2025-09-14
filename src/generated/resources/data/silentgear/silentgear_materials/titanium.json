@@ -8,9 +8,15 @@
       "endgame"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/titanium",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/titanium"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/titanium"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/titanium"
+      }
     }
   },
   "display": {

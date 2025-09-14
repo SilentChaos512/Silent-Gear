@@ -126,10 +126,36 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         builder(SgTags.Items.RODS_NETHERWOOD, CraftingItems.NETHERWOOD_STICK);
         builder(SgTags.Items.RODS_STONE, CraftingItems.STONE_ROD);
         builder(Tags.Items.RODS_WOODEN, CraftingItems.NETHERWOOD_STICK);
+        // Rods without items
+        tag(SgTags.Items.RODS_AZURE_ELECTRUM);
+        tag(SgTags.Items.RODS_AZURE_SILVER);
+        tag(SgTags.Items.RODS_BLAZE_GOLD);
+        tag(SgTags.Items.RODS_BRONZE);
+        tag(SgTags.Items.RODS_CRIMSON_IRON);
+        tag(SgTags.Items.RODS_CRIMSON_STEEL);
+        tag(SgTags.Items.RODS_TYRIAN_STEEL);
+        tag(SgTags.Items.RODS_COPPER);
+        tag(SgTags.Items.RODS_GOLD);
+        tag(SgTags.Items.RODS_DIAMOND);
+        tag(SgTags.Items.RODS_EMERALD);
+        tag(SgTags.Items.RODS_QUARTZ);
+        // All rods
         tag(Tags.Items.RODS)
                 .addTag(SgTags.Items.RODS_IRON)
                 .addTag(SgTags.Items.RODS_NETHERWOOD)
-                .addTag(SgTags.Items.RODS_STONE);
+                .addTag(SgTags.Items.RODS_STONE)
+                .addTag(SgTags.Items.RODS_AZURE_ELECTRUM)
+                .addTag(SgTags.Items.RODS_AZURE_SILVER)
+                .addTag(SgTags.Items.RODS_BLAZE_GOLD)
+                .addTag(SgTags.Items.RODS_BRONZE)
+                .addTag(SgTags.Items.RODS_CRIMSON_IRON)
+                .addTag(SgTags.Items.RODS_CRIMSON_STEEL)
+                .addTag(SgTags.Items.RODS_TYRIAN_STEEL)
+                .addTag(SgTags.Items.RODS_COPPER)
+                .addTag(SgTags.Items.RODS_GOLD)
+                .addTag(SgTags.Items.RODS_DIAMOND)
+                .addTag(SgTags.Items.RODS_EMERALD)
+                .addTag(SgTags.Items.RODS_QUARTZ);
 
         builder(SgTags.Items.PAPER, Items.PAPER);
         builder(SgTags.Items.BLUEPRINT_PAPER, CraftingItems.BLUEPRINT_PAPER);

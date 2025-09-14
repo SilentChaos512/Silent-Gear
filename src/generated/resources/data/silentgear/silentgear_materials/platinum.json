@@ -8,9 +8,15 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/platinum",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/platinum"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/platinum"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/platinum"
+      }
     }
   },
   "display": {

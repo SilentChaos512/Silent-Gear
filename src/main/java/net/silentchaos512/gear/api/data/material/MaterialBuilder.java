@@ -1,11 +1,7 @@
 package net.silentchaos512.gear.api.data.material;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +9,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.*;
@@ -28,7 +23,6 @@ import net.silentchaos512.gear.gear.material.CustomCompoundMaterial;
 import net.silentchaos512.gear.gear.material.ProcessedMaterial;
 import net.silentchaos512.gear.gear.material.SimpleMaterial;
 import net.silentchaos512.gear.gear.trait.Trait;
-import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -129,17 +123,15 @@ public class MaterialBuilder<M extends Material> {
         return this;
     }
 
-    public MaterialBuilder<M> craftingWithCommonRod(HolderGetter<Item> items, TagKey<Item> craftingItem, IMaterialCategory... categories) {
+    public MaterialBuilder<M> craftingWithRodSubstitute(HolderGetter<Item> items, TagKey<Item> craftingItem, TagKey<Item> rod, IMaterialCategory... categories) {
         if (this.builtinMaterial == null) {
             throw new IllegalStateException("Cannot use craftingWithCommonRod if builtinMaterial is null");
         }
-        var rodTagLocation = ResourceLocation.fromNamespaceAndPath("c", "rods/" + this.builtinMaterial.name().toLowerCase(Locale.ROOT));
-        var commonRodTag = TagKey.create(Registries.ITEM, rodTagLocation);
         return crafting(new MaterialCraftingData(
                 Ingredient.of(items.getOrThrow(craftingItem)),
                 Lists.newArrayList(categories),
                 Collections.emptyList(),
-                Map.of(PartTypes.ROD.get(), Ingredient.of(items.getOrThrow(commonRodTag))),
+                Map.of(PartTypes.ROD.get(), Ingredient.of(items.getOrThrow(rod))),
                 true
         ));
     }

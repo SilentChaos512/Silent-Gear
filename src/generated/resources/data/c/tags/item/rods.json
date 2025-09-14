@@ -2,6 +2,18 @@
   "values": [
     "#c:rods/iron",
     "#silentgear:rods/netherwood",
-    "#c:rods/stone"
+    "#c:rods/stone",
+    "#c:rods/azure_electrum",
+    "#c:rods/azure_silver",
+    "#c:rods/blaze_gold",
+    "#c:rods/bronze",
+    "#c:rods/crimson_iron",
+    "#c:rods/crimson_steel",
+    "#c:rods/tyrian_steel",
+    "#c:rods/copper",
+    "#c:rods/gold",
+    "#c:rods/diamond",
+    "#c:rods/emerald",
+    "#c:rods/quartz"
   ]
 }

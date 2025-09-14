@@ -8,9 +8,15 @@
       "basic"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/tin",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/tin"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/tin"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/tin"
+      }
     }
   },
   "display": {

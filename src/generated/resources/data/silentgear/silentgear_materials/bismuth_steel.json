@@ -8,9 +8,15 @@
       "advanced"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/bismuth_steel",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/bismuth_steel"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/bismuth_steel"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/bismuth_steel"
+      }
     }
   },
   "display": {

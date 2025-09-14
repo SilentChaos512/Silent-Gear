@@ -8,9 +8,15 @@
       "intermediate"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/aluminum",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/aluminum"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/aluminum"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/aluminum"
+      }
     }
   },
   "display": {

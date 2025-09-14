@@ -31,6 +31,7 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.material.SgEquippableInfo;
 import net.silentchaos512.gear.core.BuiltinMaterials;
 import net.silentchaos512.gear.crafting.ingredient.CustomAlloyIngredient;
+import net.silentchaos512.gear.crafting.ingredient.OptionalTagIngredient;
 import net.silentchaos512.gear.gear.material.CompoundMaterial;
 import net.silentchaos512.gear.gear.material.CustomCompoundMaterial;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
@@ -148,7 +149,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
     private void addModMetals(Collection<MaterialBuilder<?>> ret, HolderLookup.Provider registries) {
         // Azure Electrum
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.AZURE_ELECTRUM)
-                .craftingWithCommonRod(this.items, SgTags.Items.INGOTS_AZURE_ELECTRUM, MaterialCategories.METAL, MaterialCategories.ENDGAME)
+                .craftingWithRodSubstitute(this.items, SgTags.Items.INGOTS_AZURE_ELECTRUM, SgTags.Items.RODS_AZURE_ELECTRUM, MaterialCategories.METAL, MaterialCategories.ENDGAME)
                 .displayWithDefaultName(0x4575E3, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(1259, 61, 37, 109, 1.5f)
@@ -175,7 +176,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Azure Silver
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.AZURE_SILVER)
-                .craftingWithCommonRod(this.items, SgTags.Items.INGOTS_AZURE_SILVER, MaterialCategories.METAL, MaterialCategories.ADVANCED)
+                .craftingWithRodSubstitute(this.items, SgTags.Items.INGOTS_AZURE_SILVER, SgTags.Items.RODS_AZURE_SILVER, MaterialCategories.METAL, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0xCBBAFF, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(197, 17, 29, 83, 1.4f)
@@ -205,7 +206,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Blaze Gold
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.BLAZE_GOLD)
-                .craftingWithCommonRod(this.items, SgTags.Items.INGOTS_BLAZE_GOLD, MaterialCategories.METAL, MaterialCategories.ADVANCED)
+                .craftingWithRodSubstitute(this.items, SgTags.Items.INGOTS_BLAZE_GOLD, SgTags.Items.RODS_BLAZE_GOLD, MaterialCategories.METAL, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0xDD8500)
                 //main
                 .mainStatsCommon(69, 9, 24, 45, 1.2f)
@@ -239,7 +240,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Bronze
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.BRONZE)
-                .craftingWithCommonRod(this.items, SgTags.Items.INGOTS_BRONZE, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
+                .craftingWithRodSubstitute(this.items, SgTags.Items.INGOTS_BRONZE, SgTags.Items.RODS_BRONZE, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xD6903B, TextureType.HIGH_CONTRAST)
                 .mainStatsCommon(300, 13, 12, 15, 1.1f)
                 .stat(PartTypes.MAIN, GearProperties.REPAIR_VALUE, 0.15f)
@@ -263,7 +264,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Crimson Iron
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.CRIMSON_IRON)
-                .craftingWithCommonRod(this.items, SgTags.Items.INGOTS_CRIMSON_IRON, MaterialCategories.METAL, MaterialCategories.ADVANCED)
+                .craftingWithRodSubstitute(this.items, SgTags.Items.INGOTS_CRIMSON_IRON, SgTags.Items.RODS_CRIMSON_IRON, MaterialCategories.METAL, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0xFF6189, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(420, 27, 14, 31, 0.7f)
@@ -290,7 +291,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Crimson Steel
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.CRIMSON_STEEL)
-                .craftingWithCommonRod(this.items, SgTags.Items.INGOTS_CRIMSON_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
+                .craftingWithRodSubstitute(this.items, SgTags.Items.INGOTS_CRIMSON_STEEL, SgTags.Items.RODS_CRIMSON_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
                 .displayWithDefaultName(0xDC143C, TextureType.HIGH_CONTRAST, SgEquippableInfo.CRIMSON_STEEL)
                 //main
                 .mainStatsCommon(2400, 42, 19, 83, 0.9f)
@@ -317,7 +318,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Tyrian Steel
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.TYRIAN_STEEL)
-                .craftingWithCommonRod(this.items, SgTags.Items.INGOTS_TYRIAN_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
+                .craftingWithRodSubstitute(this.items, SgTags.Items.INGOTS_TYRIAN_STEEL, SgTags.Items.RODS_TYRIAN_STEEL, MaterialCategories.METAL, MaterialCategories.ENDGAME)
                 .displayWithDefaultName(0xB01080, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(3652, 81, 16, 100, 1.1f)
@@ -343,7 +344,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
     private void addVanillaMetals(Collection<MaterialBuilder<?>> ret, HolderLookup.Provider registries) {
         // Copper
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.COPPER)
-                .craftingWithCommonRod(this.items, Tags.Items.INGOTS_COPPER, MaterialCategories.METAL, MaterialCategories.BASIC)
+                .craftingWithRodSubstitute(this.items, Tags.Items.INGOTS_COPPER, SgTags.Items.RODS_COPPER, MaterialCategories.METAL, MaterialCategories.BASIC)
                 .displayWithDefaultName(0xFD804C, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(151, 12, 15, 12, 1.3f)
@@ -369,7 +370,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Gold
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.GOLD)
-                .craftingWithCommonRod(this.items, Tags.Items.INGOTS_GOLD, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
+                .craftingWithRodSubstitute(this.items, Tags.Items.INGOTS_GOLD, SgTags.Items.RODS_GOLD, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xFDFF70, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(32, 7, 22, 50, 1.2f)
@@ -403,7 +404,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Iron
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.IRON)
-                .craftingWithCommonRod(this.items, Tags.Items.INGOTS_IRON, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
+                .craftingWithRodSubstitute(this.items, Tags.Items.INGOTS_IRON, SgTags.Items.RODS_IRON, MaterialCategories.METAL, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(Color.VALUE_WHITE, TextureType.HIGH_CONTRAST)
                 //main
                 .mainStatsCommon(250, 15, 14, 20, 0.7f)
@@ -460,7 +461,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
     private void addGems(Collection<MaterialBuilder<?>> ret, HolderLookup.Provider registries) {
         // Diamond
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.DIAMOND)
-                .craftingWithCommonRod(this.items, Tags.Items.GEMS_DIAMOND, MaterialCategories.GEM, MaterialCategories.ADVANCED)
+                .craftingWithRodSubstitute(this.items, Tags.Items.GEMS_DIAMOND, SgTags.Items.RODS_DIAMOND, MaterialCategories.GEM, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0x33EBCB, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(1561, 33, 10, 70, 0.8f)
@@ -492,7 +493,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Emerald
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.EMERALD)
-                .craftingWithCommonRod(this.items, Tags.Items.GEMS_EMERALD, MaterialCategories.GEM, MaterialCategories.ADVANCED)
+                .craftingWithRodSubstitute(this.items, Tags.Items.GEMS_EMERALD, SgTags.Items.RODS_EMERALD, MaterialCategories.GEM, MaterialCategories.ADVANCED)
                 .displayWithDefaultName(0x00B038, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(1080, 24, 16, 40, 1.0f)
@@ -559,7 +560,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         );
         // Quartz
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.QUARTZ)
-                .craftingWithCommonRod(this.items, Tags.Items.GEMS_QUARTZ, MaterialCategories.GEM, MaterialCategories.INTERMEDIATE)
+                .craftingWithRodSubstitute(this.items, Tags.Items.GEMS_QUARTZ, SgTags.Items.RODS_QUARTZ, MaterialCategories.GEM, MaterialCategories.INTERMEDIATE)
                 .displayWithDefaultName(0xD4CABA, TextureType.HIGH_CONTRAST)
                 // main
                 .mainStatsCommon(330, 13, 10, 40, 1.2f)
@@ -915,21 +916,6 @@ public class MaterialsProvider extends MaterialsProviderBase {
         ret.add(wood("warped", Items.WARPED_PLANKS, 0x398382)
                 .trait(PartTypes.MAIN, Const.Traits.JAGGED, 1)
                 .trait(PartTypes.ROD, Const.Traits.FLEXIBLE, 2)
-        );
-
-        // TODO: Remove me
-        // Rough wood
-        ret.add(MaterialBuilder.simple(modId("wood/rough"))
-                .crafting(new MaterialCraftingData(
-                        Optional.empty(),
-                        List.of(MaterialCategories.ORGANIC, MaterialCategories.WOOD),
-                        List.of(),
-                        Map.of(PartTypes.ROD.get(), taggedItems(SgTags.Items.RODS_ROUGH)),
-                        false
-                ))
-                .displayWithDefaultName(TextUtil.misc("crude"), 0x6B4909, TextureType.LOW_CONTRAST)
-                .trait(PartTypes.ROD, Const.Traits.CRUDE, 3)
-                .trait(PartTypes.ROD, Const.Traits.BENDING, 5)
         );
 
         // Netherwood
@@ -1322,7 +1308,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private void addExtraMetals(Collection<MaterialBuilder<?>> ret, HolderLookup.Provider registries) {
         // Aluminum
-        ret.add(extraMetal("aluminum", 2, commonId("ingots/aluminum"))
+        ret.add(extraMetal(ExtraMetals.ALUMINUM, 2)
                 .displayWithDefaultName(0xBFD4DE, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 365)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 15)
@@ -1347,7 +1333,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.SYNERGISTIC, 2)
         );
         // Aluminum Steel
-        ret.add(extraMetal("aluminum_steel", 3, commonId("ingots/aluminum_steel"))
+        ret.add(extraMetal(ExtraMetals.ALUMINUM_STEEL, 3)
                 .displayWithDefaultName(0x98D9DA, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 660)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 18)
@@ -1372,7 +1358,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.SYNERGISTIC, 3)
         );
         // Bismuth
-        ret.add(extraMetal("bismuth", 2, commonId("ingots/bismuth"))
+        ret.add(extraMetal(ExtraMetals.BISMUTH, 2)
                 .displayWithDefaultName(0xD1C2D5, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 330)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 10)
@@ -1395,7 +1381,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 2)
         );
         // Bismuth Brass
-        ret.add(extraMetal("bismuth_brass", 2, commonId("ingots/bismuth_brass"))
+        ret.add(extraMetal(ExtraMetals.BISMUTH_BRASS, 2)
                 .displayWithDefaultName(0xE9C1B4, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 580)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 15)
@@ -1418,8 +1404,8 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.MAIN, Const.Traits.LUSTROUS, 2, new MaterialRatioTraitCondition(0.5f))
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 2)
         );
-        // Bismuth Brass
-        ret.add(extraMetal("bismuth_steel", 3, commonId("ingots/bismuth_steel"))
+        // Bismuth Steel
+        ret.add(extraMetal(ExtraMetals.BISMUTH_STEEL, 3)
                 .displayWithDefaultName(0xDC9FE7, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 1050)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 25)
@@ -1443,7 +1429,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 3)
         );
         // Brass
-        ret.add(extraMetal("brass", 2, commonId("ingots/brass"))
+        ret.add(extraMetal(ExtraMetals.BRASS, 2)
                 .displayWithDefaultName(0xF2D458, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 240)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 8)
@@ -1467,7 +1453,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 2)
         );
         // Compressed Iron
-        ret.add(extraMetal("compressed_iron", 3, commonId("ingots/compressed_iron"))
+        ret.add(extraMetal(ExtraMetals.COMPRESSED_IRON, 3)
                 .displayWithDefaultName(0xA6A6A6, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 1024)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 24)
@@ -1490,7 +1476,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 2)
         );
         // Electrum
-        ret.add(extraMetal("electrum", 2, commonId("ingots/electrum"))
+        ret.add(extraMetal(ExtraMetals.ELECTRUM, 2)
                 .displayWithDefaultName(0xD6E037, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 96)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 10)
@@ -1513,7 +1499,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.LUSTROUS, 3, new MaterialRatioTraitCondition(0.5f))
         );
         // Enderium
-        ret.add(extraMetal("enderium", 4, commonId("ingots/enderium"))
+        ret.add(extraMetal(ExtraMetals.ENDERIUM, 4)
                 .displayWithDefaultName(0x468C75, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 1200)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 34)
@@ -1536,7 +1522,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 2)
         );
         // Invar
-        ret.add(extraMetal("invar", 2, commonId("ingots/invar"))
+        ret.add(extraMetal(ExtraMetals.INVAR, 2)
                 .displayWithDefaultName(0xC2CBB8, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 640)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
@@ -1560,7 +1546,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 3)
         );
         // Lead
-        ret.add(extraMetal("lead", 2, commonId("ingots/lead"))
+        ret.add(extraMetal(ExtraMetals.LEAD, 2)
                 .displayWithDefaultName(0xC2CBB8, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 260)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 14)
@@ -1583,7 +1569,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.SOFT, 4)
         );
         // Lumium
-        ret.add(extraMetal("lumium", 3, commonId("ingots/lumium"))
+        ret.add(extraMetal(ExtraMetals.LUMIUM, 3)
                 .displayWithDefaultName(0xFFD789, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 920)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
@@ -1608,7 +1594,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.REFRACTIVE, 1, new MaterialRatioTraitCondition(0.5f))
         );
         // Nickel
-        ret.add(extraMetal("nickel", 2, commonId("ingots/nickel"))
+        ret.add(extraMetal(ExtraMetals.NICKEL, 2)
                 .displayWithDefaultName(0xEFE87B, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 380)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 17)
@@ -1631,7 +1617,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 3)
         );
         // Osmium
-        ret.add(extraMetal("osmium", 2, commonId("ingots/osmium"))
+        ret.add(extraMetal(ExtraMetals.OSMIUM, 2)
                 .displayWithDefaultName(0x92A6B8, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 500)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 30)
@@ -1653,7 +1639,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 2)
         );
         // Platinum
-        ret.add(extraMetal("platinum", 3, commonId("ingots/platinum"))
+        ret.add(extraMetal(ExtraMetals.PLATINUM, 3)
                 .displayWithDefaultName(0xB3B3FF, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 900)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 21)
@@ -1677,7 +1663,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.SOFT, 4)
         );
         // Redstone Alloy
-        ret.add(extraMetal("redstone_alloy", 2, commonId("ingots/redstone_alloy"))
+        ret.add(extraMetal(ExtraMetals.REDSTONE_ALLOY, 2)
                 .displayWithDefaultName(0xE60006, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 840)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
@@ -1700,7 +1686,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 3)
         );
         // Refined glowstone
-        ret.add(extraMetal("refined_glowstone", 3, commonId("ingots/refined_glowstone"))
+        ret.add(extraMetal(ExtraMetals.REFINED_GLOWSTONE, 3)
                 .displayWithDefaultName(0xFDE054, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 300)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 18)
@@ -1727,7 +1713,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.TIP, Const.Traits.REFRACTIVE, 1)
         );
         // Refined Iron
-        ret.add(extraMetal("refined_iron", 2, commonId("ingots/refined_iron"))
+        ret.add(extraMetal(ExtraMetals.REFINED_IRON, 2)
                 .displayWithDefaultName(0xD7D7D7, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 512)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
@@ -1751,7 +1737,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 4)
         );
         // Refined obsidian
-        ret.add(extraMetal("refined_obsidian", 4, commonId("ingots/refined_obsidian"))
+        ret.add(extraMetal(ExtraMetals.REFINED_OBSIDIAN, 4)
                 .displayWithDefaultName(0x665482, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 2500)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 50)
@@ -1777,7 +1763,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.TIP, Const.Traits.VULCAN, 1)
         );
         // Signalum
-        ret.add(extraMetal("signalum", 4, commonId("ingots/signalum"))
+        ret.add(extraMetal(ExtraMetals.SIGNALUM, 4)
                 .displayWithDefaultName(0xFF5E28, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 800)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 25)
@@ -1802,7 +1788,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.LUSTROUS, 2)
         );
         // Silver
-        ret.add(extraMetal("silver", 2, commonId("ingots/silver"))
+        ret.add(extraMetal(ExtraMetals.SILVER, 2)
                 .displayWithDefaultName(0xCBCCEA, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 64)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 9)
@@ -1826,7 +1812,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.SOFT, 2)
         );
         // Steel
-        ret.add(extraMetal("steel", 2, commonId("ingots/steel"))
+        ret.add(extraMetal(ExtraMetals.STEEL, 2)
                 .displayWithDefaultName(0x929292, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 500)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
@@ -1848,7 +1834,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 5)
         );
         // Tin
-        ret.add(extraMetal("tin", 1, commonId("ingots/tin"))
+        ret.add(extraMetal(ExtraMetals.TIN, 1)
                 .displayWithDefaultName(0x89A5B4, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 192)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 13)
@@ -1871,7 +1857,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.SOFT, 1)
         );
         // Titanium
-        ret.add(extraMetal("titanium", 4, commonId("ingots/titanium"))
+        ret.add(extraMetal(ExtraMetals.TITANIUM, 4)
                 .displayWithDefaultName(0x2E4CE6, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 1600)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 37)
@@ -1896,7 +1882,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.HARD, 4)
         );
         // Uranium
-        ret.add(extraMetal("uranium", 3, commonId("ingots/uranium"))
+        ret.add(extraMetal(ExtraMetals.URANIUM, 3)
                 .displayWithDefaultName(0x21FF0F, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 800)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 20)
@@ -1919,7 +1905,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.MALLEABLE, 2)
         );
         // Zinc
-        ret.add(extraMetal("zinc", 1, commonId("ingots/zinc"))
+        ret.add(extraMetal(ExtraMetals.ZINC, 1)
                 .displayWithDefaultName(0xC9D3CE, TextureType.HIGH_CONTRAST)
                 .stat(PartTypes.MAIN, GearProperties.DURABILITY, 192)
                 .stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, 10)
@@ -1958,29 +1944,20 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .crafting(new Ingredient(CustomAlloyIngredient.of(item, material)), categories);
     }
 
-    private MaterialBuilder<SimpleMaterial> extraMetal(String name, int tier, ResourceLocation tag) {
+    private MaterialBuilder<SimpleMaterial> extraMetal(ExtraMetals metal, int tier) {
+        var name = metal.getName();
         var tierCategory = List.of(MaterialCategories.BASIC, MaterialCategories.BASIC, MaterialCategories.INTERMEDIATE, MaterialCategories.ADVANCED, MaterialCategories.ENDGAME)
                 .get(tier);
+        TagKey<Item> materialTag = metal.getMainTag();
+        TagKey<Item> rodTag = metal.getRodTag();
         return MaterialBuilder.simple(DataResource.material(SilentGear.getId(name)))
-                .crafting(craftingMetalWithDefaultRod(tag, tierCategory, commonRodTag(name)));
-    }
-
-    private MaterialCraftingData craftingMetalWithDefaultRod(ResourceLocation materialTag, MaterialCategories tierCategory, TagKey<Item> rodTag) {
-        return craftingMetalWithDefaultRod(TagKey.create(Registries.ITEM, materialTag), tierCategory, rodTag);
-    }
-
-    private MaterialCraftingData craftingMetalWithDefaultRod(TagKey<Item> materialTag, MaterialCategories tierCategory, TagKey<Item> rodTag) {
-        return new MaterialCraftingData(
-                taggedItems(materialTag),
-                List.of(MaterialCategories.METAL, tierCategory),
-                List.of(),
-                Map.of(PartTypes.ROD.get(), taggedItems(rodTag)),
-                true
-        );
-    }
-
-    private static TagKey<Item> commonRodTag(String name) {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "rods/" + name));
+                .crafting(new MaterialCraftingData(
+                        OptionalTagIngredient.create(this.items, materialTag),
+                        List.of(MaterialCategories.METAL, tierCategory),
+                        List.of(),
+                        Map.of(PartTypes.ROD.get(), OptionalTagIngredient.create(this.items, rodTag)),
+                        true
+                ));
     }
 
     private static MaterialBuilder<SimpleMaterial> terracotta(DataResource<Material> parent, String suffix, ItemLike item, int color) {

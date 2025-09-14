@@ -124,7 +124,7 @@ public class MaterialManager extends DataResourceManager<Material> {
     public Optional<Material> getRandomObtainable(RandomSource randomSource) {
         synchronized (this) {
             var list = this.stream()
-                    .filter(material -> !material.getIngredient().isEmpty())
+                    .filter(material -> material.getIngredient().isPresent())
                     .filter(material -> !material.isInCategory(MaterialCategories.INTANGIBLE))
                     .toList();
             return Util.getRandomSafe(list, randomSource);
@@ -138,7 +138,8 @@ public class MaterialManager extends DataResourceManager<Material> {
         var matches = new ArrayList<Material>();
 
         for (Material material : this) {
-            if (material.getIngredient().isPresent() && material.getIngredient().get().test(stack)) {
+            var ingredient = material.getIngredient();
+            if (ingredient.isPresent() && ingredient.get().test(stack)) {
                 matches.add(material);
             }
         }

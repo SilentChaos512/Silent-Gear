@@ -8,9 +8,15 @@
       "endgame"
     ],
     "gear_type_blacklist": [],
-    "ingredient": "#c:ingots/signalum",
+    "ingredient": {
+      "neoforge:ingredient_type": "silentgear:optional_tag",
+      "tag": "#c:ingots/signalum"
+    },
     "part_substitutes": {
-      "silentgear:rod": "#c:rods/signalum"
+      "silentgear:rod": {
+        "neoforge:ingredient_type": "silentgear:optional_tag",
+        "tag": "#c:rods/signalum"
+      }
     }
   },
   "display": {

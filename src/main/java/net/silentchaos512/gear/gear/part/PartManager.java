@@ -42,7 +42,8 @@ public final class PartManager extends DataResourceManager<GearPart> {
         if (stack.isEmpty()) return null;
 
         for (GearPart part : this) {
-            if (part.getIngredient().isPresent() && part.getIngredient().get().test(stack)) {
+            var ingredient = part.getIngredient();
+            if (ingredient.isPresent() && ingredient.get().test(stack)) {
                 return part;
             }
         }

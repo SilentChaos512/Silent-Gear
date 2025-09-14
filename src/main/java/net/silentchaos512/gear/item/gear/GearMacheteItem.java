@@ -1,8 +1,9 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
@@ -58,18 +59,17 @@ public class GearMacheteItem extends GearSwordItem implements BreakEventHandler,
     }
 
     @Override
-    public Tool createToolProperties(ItemStack gear, GearPropertiesData properties) {
+    public Tool createToolProperties(ItemStack gear, GearPropertiesData properties, HolderGetter<Block> blocks) {
         // Works like both a sword and an axe
         var harvestSpeed = properties.getNumber(GearProperties.HARVEST_SPEED);
         var harvestTier = properties.getOrDefault(GearProperties.HARVEST_TIER, new HarvestTierPropertyValue(HarvestTier.ZERO));
-        var holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
         return new Tool(
                 List.of(
-                        Tool.Rule.deniesDrops(holderGetter.getOrThrow(harvestTier.value().incorrectForTool())),
-                        Tool.Rule.minesAndDrops(holderGetter.getOrThrow(getToolBlockSet(gear)), harvestSpeed),
-                        Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F),
-                        Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
-                        Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f)
+                        Tool.Rule.deniesDrops(blocks.getOrThrow(harvestTier.value().incorrectForTool())),
+                        Tool.Rule.minesAndDrops(blocks.getOrThrow(getToolBlockSet(gear)), harvestSpeed),
+                        Tool.Rule.minesAndDrops(HolderSet.direct(Holder.direct(Blocks.COBWEB)), 15.0F),
+                        Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
+                        Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f)
                 ),
                 1.0F,
                 2,
