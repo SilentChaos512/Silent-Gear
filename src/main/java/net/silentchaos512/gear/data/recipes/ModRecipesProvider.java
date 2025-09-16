@@ -773,6 +773,12 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .addIngredient(Tags.Items.RODS_BLAZE, 2)
                 .addIngredient(Items.MAGMA_CREAM)
                 .save(consumer);
+
+        CompoundingRecipeBuilder.metalBuilder(CraftingItems.AZURE_ELECTRUM_INGOT, 3)
+                .addIngredient(SgTags.Items.STORAGE_BLOCKS_AZURE_SILVER)
+                .addIngredient(Tags.Items.INGOTS_GOLD, 2)
+                .addIngredient(Tags.Items.ENDER_PEARLS)
+                .save(consumer);
     }
 
     private void registerPressing(RecipeOutput consumer) {
