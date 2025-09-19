@@ -103,7 +103,7 @@ public abstract class AbstractMaterial implements Material {
 
     @Override
     public boolean isValid() {
-        return getIngredient().isEmpty();
+        return getIngredient().isPresent();
     }
 
     @Override

@@ -121,12 +121,10 @@ public final class GearData {
         // All of these are stored for tooltip purposes
         // First, calculate base properties (first pass, creates the traits list and everything)
         var baseProperties = calculateBaseProperties(gear, player, gearType, gearConstructionData);
-        gear.set(SgDataComponents.GEAR_BASE_PROPERTIES, baseProperties);
         // Second, calculate bonus modifiers provided by traits
-        var bonusValues = calculateBonusProperties(gear, player, gearType);
-        gear.set(SgDataComponents.GEAR_BONUS_PROPERTIES, bonusValues);
+        var bonusValues = calculateBonusProperties(gear, player, gearType, baseProperties);
         // Finally, combine the base and bonus modifiers into the final property values
-        var finalProperties = calculateFinalProperties(gear, player, gearType);
+        var finalProperties = calculateFinalProperties(gear, player, gearType, baseProperties, bonusValues);
         gear.set(SgDataComponents.GEAR_PROPERTIES, finalProperties);
 
         printStatsForDebugging(gear, oldProperties, baseProperties, bonusValues, finalProperties);
@@ -169,11 +167,13 @@ public final class GearData {
         setGearAttributeModifiers(gear, finalProperties);
         setGearDataComponentsFromProperties(gear, finalProperties);
 
-        if (gear.is(ItemTags.DYEABLE)) {
+        /*if (gear.is(ItemTags.DYEABLE)) {
             // Attach armor color
             var color = GearArmorItem.getArmorColor(gear);
             gear.set(DataComponents.DYED_COLOR, new DyedItemColor(color));
-        }
+        }*/
+        // temp
+        gear.remove(DataComponents.DYED_COLOR);
 
         // TODO: Add trait-added enchantments
 
@@ -256,8 +256,7 @@ public final class GearData {
         return new GearPropertiesData(finalBaseValues);
     }
 
-    private static GearPropertyMap calculateBonusProperties(ItemStack gear, @Nullable Player player, GearType gearType) {
-        var baseProperties = gear.getOrDefault(SgDataComponents.GEAR_BASE_PROPERTIES, GearPropertiesData.EMPTY);
+    private static GearPropertyMap calculateBonusProperties(ItemStack gear, @Nullable Player player, GearType gearType, GearPropertiesData baseProperties) {
         var bonusProperties = new GearPropertyMap();
 
         List<TraitInstance> traits = baseProperties.getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty()).value();
@@ -288,10 +287,7 @@ public final class GearData {
         return bonusProperties;
     }
 
-    private static GearPropertiesData calculateFinalProperties(ItemStack gear, @Nullable Player player, GearType gearType) {
-        var baseProperties = gear.getOrDefault(SgDataComponents.GEAR_BASE_PROPERTIES, GearPropertiesData.EMPTY);
-        var bonusProperties = gear.getOrDefault(SgDataComponents.GEAR_BONUS_PROPERTIES, GearPropertyMap.EMPTY);
-
+    private static GearPropertiesData calculateFinalProperties(ItemStack gear, @Nullable Player player, GearType gearType, GearPropertiesData baseProperties, GearPropertyMap bonusProperties) {
         GearPropertyMap combinedMods = new GearPropertyMap();
         Map<GearProperty<?, ?>, GearPropertyValue<?>> finalValues = new LinkedHashMap<>();
 

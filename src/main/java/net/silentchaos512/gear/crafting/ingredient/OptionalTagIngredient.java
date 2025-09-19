@@ -49,7 +49,16 @@ public class OptionalTagIngredient implements ICustomIngredient {
 
     public OptionalTagIngredient(HolderGetter<Item> items, TagKey<Item> tag) {
         this.tag = tag;
-        this.values = items.getOrThrow(tag);
+        var tagContents = items.getOrThrow(this.tag);
+        HolderSet<Item> valuesToSet = HolderSet.empty();
+        try {
+            if (tagContents.size() > 0) {
+                valuesToSet = tagContents;
+            }
+        } catch (UnsupportedOperationException ex) {
+            // Ignore empty tag
+        }
+        this.values = valuesToSet;
     }
 
     public static Ingredient create(HolderGetter<Item> items, TagKey<Item> tag) {

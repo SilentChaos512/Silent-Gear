@@ -261,7 +261,6 @@ public class ModItemModelProvider extends ItemModelGenerators {
                 .tintedLayer(PartTypes.ROD, "rod_generic_lc")
                 .tintedLayer(PartTypes.MAIN, "main_generic_hc")
                 .simpleLayer(PartTypes.NONE, "_highlight")
-                .tintedLayer(PartTypes.FLETCHING, "bowstring_string")
                 .generateModel(this.itemModelOutput, this.modelOutput);
     }
 

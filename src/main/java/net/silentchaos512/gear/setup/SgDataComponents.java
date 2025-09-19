@@ -49,16 +49,6 @@ public class SgDataComponents {
                     .persistent(GearPropertiesData.CODEC)
                     .networkSynchronized(GearPropertiesData.STREAM_CODEC)
     );
-    public static final Supplier<DataComponentType<GearPropertiesData>> GEAR_BASE_PROPERTIES = REGISTRAR.registerComponentType(
-            "base_properties",
-            builder -> builder
-                    .networkSynchronized(GearPropertiesData.STREAM_CODEC)
-    );
-    public static final Supplier<DataComponentType<GearPropertyMap>> GEAR_BONUS_PROPERTIES = REGISTRAR.registerComponentType(
-            "bonus_properties",
-            builder -> builder
-                    .networkSynchronized(GearPropertyMap.STREAM_CODEC)
-    );
     public static final Supplier<DataComponentType<Boolean>> GEAR_IS_EXAMPLE = REGISTRAR.registerComponentType(
             "is_example",
             builder -> builder

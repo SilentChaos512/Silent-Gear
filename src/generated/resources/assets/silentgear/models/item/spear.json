@@ -3,7 +3,6 @@
   "textures": {
     "layer0": "silentgear:item/spear/rod_generic_lc",
     "layer1": "silentgear:item/spear/main_generic_hc",
-    "layer2": "silentgear:item/spear/_highlight",
-    "layer3": "silentgear:item/spear/bowstring_string"
+    "layer2": "silentgear:item/spear/_highlight"
   }
 }

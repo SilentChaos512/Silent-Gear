@@ -10,8 +10,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.display.DisplayContentsFactory;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
@@ -200,13 +204,13 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
 
     @Override
     public Stream<Holder<Item>> items() {
-        return SgRegistries.MATERIAL.getValues(true).stream()
-                .map(MaterialInstance::of)
-                .filter(mat -> mat.get().isCraftingAllowed(mat, partType, gearType))
-                .filter(mat -> this.material == null || this.material.getId().equals(mat.getId()))
-                .filter(mat -> this.categories.isEmpty() || mat.hasAnyCategory(this.categories))
-                .filter(mat -> this.notCategories.isEmpty() || !mat.hasAnyCategory(this.notCategories))
-                .flatMap(mat -> mat.get().getIngredient().map(IngredientUtils::getItems).orElse(HolderSet.empty()).stream());
+        // FIXME: Remove this silliness
+        return Stream.of(Items.APPLE.builtInRegistryHolder());
+    }
+
+    @Override
+    public SlotDisplay display() {
+        return new PartMaterialSlotDisplay(this);
     }
 
     @Override
@@ -255,6 +259,103 @@ public final class PartMaterialIngredient implements ICustomIngredient, IGearIng
 
         public PartMaterialIngredient build() {
             return new PartMaterialIngredient(partType, gearType, minGrade, maxGrade, material, categories, notCategories);
+        }
+    }
+
+    public static class PartMaterialSlotDisplay implements SlotDisplay {
+        public static final MapCodec<PartMaterialSlotDisplay> CODEC = RecordCodecBuilder.mapCodec(
+                instance -> instance.group(
+                        PartType.CODEC.fieldOf("part_type").forGetter(d -> d.partType),
+                        GearType.CODEC.optionalFieldOf("gear_type").forGetter(d -> Optional.of(d.gearType)),
+                        MaterialGrade.CODEC.optionalFieldOf("min_grade", MaterialGrade.NONE).forGetter(d -> d.minGrade),
+                        MaterialGrade.CODEC.optionalFieldOf("max_grade", MaterialGrade.NONE).forGetter(d -> d.maxGrade),
+                        DataResource.MATERIAL_CODEC.optionalFieldOf("material").forGetter(d -> Optional.ofNullable(d.material)),
+                        MaterialCategories.CODEC.listOf().optionalFieldOf("categories", Collections.emptyList()).forGetter(d -> ImmutableList.copyOf(d.categories)),
+                        MaterialCategories.CODEC.listOf().optionalFieldOf("not_categories", Collections.emptyList()).forGetter(d -> ImmutableList.copyOf(d.notCategories))
+                ).apply(instance, (pt, gt, minGrade, maxGrade, material, categories, notCategories) -> {
+                    return new PartMaterialSlotDisplay(pt, gt.orElse(GearTypes.NONE.get()), minGrade, maxGrade, material.orElse(null), categories, notCategories);
+                })
+        );
+        public static final StreamCodec<RegistryFriendlyByteBuf, PartMaterialSlotDisplay> STREAM_CODEC = StreamCodec.of(
+                (buf, display) -> {
+                    PartType.STREAM_CODEC.encode(buf, display.partType);
+                    GearType.STREAM_CODEC.encode(buf, display.gearType);
+                    MaterialGrade.STREAM_CODEC.encode(buf, display.minGrade);
+                    MaterialGrade.STREAM_CODEC.encode(buf, display.maxGrade);
+                    buf.writeBoolean(display.material != null);
+                    if (display.material != null) {
+                        DataResource.MATERIAL_STREAM_CODEC.encode(buf, display.material);
+                    }
+                    CodecUtils.encodeList(buf, display.categories, MaterialCategories.STREAM_CODEC);
+                    CodecUtils.encodeList(buf, display.notCategories, MaterialCategories.STREAM_CODEC);
+                },
+                buf -> {
+                    var partType = PartType.STREAM_CODEC.decode(buf);
+                    var gearType = GearType.STREAM_CODEC.decode(buf);
+                    var minGrade = MaterialGrade.STREAM_CODEC.decode(buf);
+                    var maxGrade = MaterialGrade.STREAM_CODEC.decode(buf);
+                    var material = buf.readBoolean() ? DataResource.MATERIAL_STREAM_CODEC.decode(buf) : null;
+                    List<IMaterialCategory> categories = CodecUtils.decodeList(buf, MaterialCategories.STREAM_CODEC);
+                    List<IMaterialCategory> notCategories = CodecUtils.decodeList(buf, MaterialCategories.STREAM_CODEC);
+                    return new PartMaterialSlotDisplay(partType, gearType, minGrade, maxGrade, material, categories, notCategories);
+                }
+        );
+        public static final SlotDisplay.Type<PartMaterialSlotDisplay> TYPE = new SlotDisplay.Type<>(CODEC, STREAM_CODEC);
+
+        private final PartType partType;
+        private final GearType gearType;
+        private final MaterialGrade minGrade;
+        private final MaterialGrade maxGrade;
+        @Nullable
+        private final DataResource<Material> material;
+        private final Set<IMaterialCategory> categories = new LinkedHashSet<>();
+        private final Set<IMaterialCategory> notCategories = new LinkedHashSet<>();
+
+        public PartMaterialSlotDisplay(PartType partType, GearType gearType,
+                                       MaterialGrade minGrade, MaterialGrade maxGrade,
+                                       @Nullable DataResource<Material> material,
+                                       Collection<IMaterialCategory> categories,
+                                       Collection<IMaterialCategory> notCategories
+        ) {
+            this.partType = partType;
+            this.gearType = gearType;
+            this.minGrade = minGrade;
+            this.maxGrade = maxGrade;
+            this.material = material;
+            this.categories.addAll(categories);
+            this.notCategories.addAll(notCategories);
+        }
+
+        public PartMaterialSlotDisplay(PartMaterialIngredient ingredient) {
+            this(
+                    ingredient.partType,
+                    ingredient.gearType,
+                    ingredient.minGrade,
+                    ingredient.maxGrade,
+                    ingredient.material,
+                    ingredient.categories,
+                    ingredient.notCategories
+            );
+        }
+
+        @Override
+        public <T> Stream<T> resolve(ContextMap context, DisplayContentsFactory<T> output) {
+            if (output instanceof DisplayContentsFactory.ForStacks<T> forStacks) {
+                return SgRegistries.MATERIAL.getValues(true).stream()
+                        .map(MaterialInstance::of)
+                        .filter(mat -> mat.get().isCraftingAllowed(mat, partType, gearType))
+                        .filter(mat -> this.material == null || this.material.getId().equals(mat.getId()))
+                        .filter(mat -> this.categories.isEmpty() || mat.hasAnyCategory(this.categories))
+                        .filter(mat -> this.notCategories.isEmpty() || !mat.hasAnyCategory(this.notCategories))
+                        .flatMap(mat -> mat.get().getIngredient().map(IngredientUtils::getItems).orElse(HolderSet.empty()).stream())
+                        .map(forStacks::forStack);
+            }
+            return Stream.of();
+        }
+
+        @Override
+        public Type<? extends PartMaterialSlotDisplay> type() {
+            return TYPE;
         }
     }
 }

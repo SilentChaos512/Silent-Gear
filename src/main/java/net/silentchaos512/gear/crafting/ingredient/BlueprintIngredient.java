@@ -62,7 +62,7 @@ public final class BlueprintIngredient implements ICustomIngredient, IGearIngred
     @Override
     public Stream<Holder<Item>> items() {
         return BuiltInRegistries.ITEM.stream()
-                .filter(item -> item instanceof IBlueprint)
+                .filter(item -> testBlueprint(new ItemStack(item)))
                 .map(Holder::direct);
     }
 
