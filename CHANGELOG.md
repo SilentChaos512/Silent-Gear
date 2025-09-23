@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Items with the Fireproof trait burning up in fire/lava [#832]
+
 ## [1.21.1-4.0.28.1] - 2025-08-30
 ### Added
 - Check for null elements in `PartList` in order to create a more useful error message for [#834]
