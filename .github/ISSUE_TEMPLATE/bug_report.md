@@ -8,11 +8,9 @@ labels: bug
 <!-- Include versions affected by the issue (actual version number, do not use "latest"). -->
 
 - **Silent Gear**: x.x.x
-- **Silent's Gems**: x.x.x <!-- if installed or N/A -->
 - **Silent Lib**: x.x.x
-- **Forge**: x.x.x
+- **NeoForge**: x.x.x
 - **Modpack**: N/A <!-- if publicly available -->
-- **Optifine Installed**: No <!-- enter Yes or No -->
 
 ## Expected Behavior
 <!-- What do you expect to happen in this case? -->
