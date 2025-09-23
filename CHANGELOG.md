@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Glowstone attack speed modifier not working correctly [#836]
 - Items with the Fireproof trait burning up in fire/lava [#832]
 
 ## [1.21.1-4.0.28.1] - 2025-08-30
