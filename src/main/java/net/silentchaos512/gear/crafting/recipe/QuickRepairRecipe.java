@@ -40,7 +40,7 @@ public class QuickRepairRecipe extends CustomRecipe {
             ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 //noinspection ChainOfInstanceofChecks
-                if (stack.getItem() instanceof GearItem) {
+                if (stack.getItem() instanceof GearItem gearItem && gearItem.getRepairModifier(stack) > 0f) {
                     if (!gear.isEmpty()) {
                         return false;
                     }

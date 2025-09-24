@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Alloy Forge recipe for Azure Electrum [#839]
 ### Fixed
 - Remove unused data components ("base_properties" and "bonus_properties") to hopefully fix some compatibility issues [#842, #800, #777, #773]
+- Arrow duplication with repair kit [#841]
 - Glowstone attack speed modifier not working correctly [#836]
 - Items with the Fireproof trait burning up in fire/lava [#832]
 
