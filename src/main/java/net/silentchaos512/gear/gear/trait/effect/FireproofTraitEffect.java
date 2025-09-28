@@ -36,6 +36,11 @@ public class FireproofTraitEffect extends TraitEffect {
     }
 
     @Override
+    public void onRecalculatePre(ItemStack gear, int traitLevel) {
+        gear.remove(DataComponents.DAMAGE_RESISTANT);
+    }
+
+    @Override
     public void onRecalculatePost(ItemStack gear, int traitLevel) {
         gear.set(DataComponents.DAMAGE_RESISTANT, new DamageResistant(DamageTypeTags.IS_FIRE));
     }

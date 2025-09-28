@@ -814,10 +814,10 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .save(this.output);
 
         CompoundingRecipeBuilder.metalBuilder(CraftingItems.AZURE_ELECTRUM_INGOT, 3)
-                .addIngredient(SgTags.Items.STORAGE_BLOCKS_AZURE_SILVER)
-                .addIngredient(Tags.Items.INGOTS_GOLD, 2)
-                .addIngredient(Tags.Items.ENDER_PEARLS)
-                .save(consumer);
+                .addIngredient(tag(SgTags.Items.STORAGE_BLOCKS_AZURE_SILVER))
+                .addIngredient(tag(Tags.Items.INGOTS_GOLD), 2)
+                .addIngredient(tag(Tags.Items.ENDER_PEARLS))
+                .save(this.output);
     }
 
     private void registerPressing() {
