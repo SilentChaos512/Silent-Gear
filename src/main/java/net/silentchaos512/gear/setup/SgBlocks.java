@@ -519,14 +519,14 @@ public final class SgBlocks {
     private static Function<Item.Properties, BlockItem> blockItemWithTooltip(DeferredBlock<?> block) {
         return properties -> new BlockItemWithTooltip(
                 block.get(),
-                properties.useItemDescriptionPrefix()
+                properties.useBlockDescriptionPrefix()
         );
     }
 
     private static Function<Item.Properties, BlockItem> oreBlockItem(DeferredBlock<?> block) {
         return properties -> new OreBlockItem(
                 block.get(),
-                properties.useItemDescriptionPrefix()
+                properties.useBlockDescriptionPrefix()
         );
     }
 

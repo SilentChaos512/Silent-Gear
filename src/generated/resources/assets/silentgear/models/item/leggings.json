@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "silentgear:item/leggings/main_generic_hc",
     "layer1": "silentgear:item/leggings/_highlight"

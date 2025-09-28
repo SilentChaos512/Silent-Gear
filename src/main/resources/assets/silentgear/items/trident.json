@@ -1,0 +1,20 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "silentgear:item/trident",
+    "tints": [
+      {
+        "type": "silentgear:gear_part",
+        "part_type": "silentgear:rod"
+      },
+      {
+        "type": "silentgear:gear_part",
+        "part_type": "silentgear:main"
+      },
+      {
+        "type": "minecraft:constant",
+        "value": -1
+      }
+    ]
+  }
+}

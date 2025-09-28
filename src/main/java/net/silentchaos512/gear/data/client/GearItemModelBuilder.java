@@ -10,9 +10,11 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.setup.SgItemTintSources;
 import net.silentchaos512.gear.item.GearItemSet;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.lib.util.MathUtils;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class GearItemModelBuilder {
@@ -25,22 +27,44 @@ public class GearItemModelBuilder {
             ModItemModelProvider.ExtraSlots.LAYER5
     );
     private static final List<ModelTemplate> MODEL_TEMPLATES = List.of(
-            ModelTemplates.FLAT_ITEM,
-            ModelTemplates.TWO_LAYERED_ITEM,
-            ModelTemplates.THREE_LAYERED_ITEM,
-            ModItemModelProvider.ExtraModelTemplates.FOUR_LAYERED_ITEM,
-            ModItemModelProvider.ExtraModelTemplates.FIVE_LAYERED_ITEM,
-            ModItemModelProvider.ExtraModelTemplates.SIX_LAYERED_ITEM
+            ModelTemplates.FLAT_HANDHELD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.TWO_LAYERED_HANDHELD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.THREE_LAYERED_HANDHELD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.FOUR_LAYERED_HANDHELD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.FIVE_LAYERED_HANDHELD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.SIX_LAYERED_HANDHELD_ITEM
+    );
+    private static final List<ModelTemplate> ROD_MODEL_TEMPLATES = List.of(
+            ModelTemplates.FLAT_HANDHELD_ROD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.TWO_LAYERED_HANDHELD_ROD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.THREE_LAYERED_HANDHELD_ROD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.FOUR_LAYERED_HANDHELD_ROD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.FIVE_LAYERED_HANDHELD_ROD_ITEM,
+            ModItemModelProvider.ExtraModelTemplates.SIX_LAYERED_HANDHELD_ROD_ITEM
     );
 
     private final GearItemSet<? extends GearItem> itemSet;
     private final ResourceLocation typeKey;
     private final Map<PartType, ResourceLocation> layers = new LinkedHashMap<>();
     private final Map<PartType, ItemTintSource> tints = new HashMap<>();
+    private final Function<Integer, ModelTemplate> modelTemplateGetter;
 
-    public GearItemModelBuilder(GearItemSet<? extends GearItem> itemSet) {
+    public GearItemModelBuilder(GearItemSet<? extends GearItem> itemSet, Function<Integer, ModelTemplate> modelTemplateGetter) {
         this.itemSet = itemSet;
         this.typeKey = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(this.itemSet.type()));
+        this.modelTemplateGetter = modelTemplateGetter;
+    }
+
+    public static GearItemModelBuilder handheldItem(GearItemSet<? extends GearItem> itemSet) {
+        return new GearItemModelBuilder(itemSet, MODEL_TEMPLATES::get);
+    }
+
+    public static GearItemModelBuilder handheldRodItem(GearItemSet<? extends GearItem> itemSet) {
+        return new GearItemModelBuilder(itemSet, ROD_MODEL_TEMPLATES::get);
+    }
+
+    public static GearItemModelBuilder unique(GearItemSet<? extends GearItem> itemSet, Function<Integer, ModelTemplate> layerCountToModelTemplate) {
+        return new GearItemModelBuilder(itemSet, layerCountToModelTemplate);
     }
 
     public GearItemModelBuilder simpleLayer(Supplier<PartType> partType, String texturePath) {
@@ -68,7 +92,7 @@ public class GearItemModelBuilder {
                 throw new IllegalStateException("Too many layers for gear model");
             }
         }
-        var modelTemplate = MODEL_TEMPLATES.get(this.layers.size() - 1);
+        var modelTemplate = this.modelTemplateGetter.apply(this.layers.size() - 1);
         ResourceLocation modelKey = modelTemplate.create(
                 this.itemSet.gearItem(),
                 textureMapping,

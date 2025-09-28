@@ -104,7 +104,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
         tempGearStandardTool(GearItemSets.KATANA);
         tempGearStandardTool(GearItemSets.MACHETE);
         tempGearStandardTool(GearItemSets.SPEAR);
-//        tempGearStandardTool(GearItemSets.TRIDENT, false);
+        // Trident model created manually
         tempGearStandardTool(GearItemSets.MACE);
         tempGearStandardTool(GearItemSets.KNIFE);
         tempGearStandardTool(GearItemSets.DAGGER);
@@ -114,17 +114,15 @@ public class ModItemModelProvider extends ItemModelGenerators {
         tempGearStandardTool(GearItemSets.PAXEL);
         tempGearStandardTool(GearItemSets.HAMMER);
         tempGearStandardTool(GearItemSets.EXCAVATOR);
-//        tempGearStandardTool(GearItemSets.SAW, getExistingFile(modLoc("item/saw_base")));
+        gearSawItem(GearItemSets.SAW);
         tempGearStandardTool(GearItemSets.PROSPECTOR_HAMMER);
         tempGearStandardTool(GearItemSets.HOE);
         tempGearStandardTool(GearItemSets.MATTOCK);
         tempGearStandardTool(GearItemSets.SICKLE);
         tempGearStandardTool(GearItemSets.SHEARS);
-//        gearBowItem(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
-        // tempGearBow(SgItems.BOW, itemHandheld);
-        // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
-        // tempGearBow(SgItems.SLINGSHOT, itemHandheld);
-//        gearArrowItem(GearItemSets.ARROW, itemGenerated);
+        gearFishingRodItem(GearItemSets.FISHING_ROD);
+        // Bow, crossbow, and slingshot are manually created right now
+        gearArrowItem(GearItemSets.ARROW);
         gearArmorItem(GearItemSets.HELMET);
         gearArmorItem(GearItemSets.CHESTPLATE);
         gearArmorItem(GearItemSets.LEGGINGS);
@@ -207,15 +205,17 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void layeredItem(ItemLike item, String texture0, String texture1) {
-        generateLayeredItem(item.asItem(), SilentGear.getId(texture0), SilentGear.getId(texture1));
+        var model = generateLayeredItem(item.asItem(), SilentGear.getId(texture0), SilentGear.getId(texture1));
+        this.itemModelOutput.accept(item.asItem(), ItemModelUtils.plainModel(model));
     }
 
     private void layeredItem(ItemLike item, String texture0, String texture1, String texture2) {
-        ModelTemplates.THREE_LAYERED_ITEM.create(
+        var model = ModelTemplates.THREE_LAYERED_ITEM.create(
                 item.asItem(),
                 TextureMapping.layered(SilentGear.getId(texture0), SilentGear.getId(texture1), SilentGear.getId(texture2)),
                 this.modelOutput
         );
+        this.itemModelOutput.accept(item.asItem(), ItemModelUtils.plainModel(model));
     }
 
     private void generateMaterialColoredItemWithOverlay(ItemLike item, String texturePath, String overlayTexture) {
@@ -257,7 +257,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void tempGearStandardTool(GearItemSet<? extends GearItem> itemSet, boolean buildMainModel) {
-        new GearItemModelBuilder(itemSet)
+        GearItemModelBuilder.handheldItem(itemSet)
                 .tintedLayer(PartTypes.ROD, "rod_generic_lc")
                 .tintedLayer(PartTypes.MAIN, "main_generic_hc")
                 .simpleLayer(PartTypes.NONE, "_highlight")
@@ -265,16 +265,33 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void gearBowItem(GearItemSet<? extends GearItem> itemSet) {
-        new GearItemModelBuilder(itemSet)
+        GearItemModelBuilder.handheldItem(itemSet)
                 .tintedLayer(PartTypes.ROD, "rod_generic_lc")
                 .tintedLayer(PartTypes.MAIN, "main_generic_hc")
                 .simpleLayer(PartTypes.NONE, "_highlight")
-                .tintedLayer(PartTypes.FLETCHING, "bowstring_string")
+                .tintedLayer(PartTypes.CORD, "bowstring_string")
+                .generateModel(this.itemModelOutput, this.modelOutput);
+    }
+
+    private void gearFishingRodItem(GearItemSet<? extends GearItem> itemSet) {
+        GearItemModelBuilder.handheldRodItem(itemSet)
+                .tintedLayer(PartTypes.ROD, "rod_generic_lc")
+                .tintedLayer(PartTypes.MAIN, "main_generic_hc")
+                .simpleLayer(PartTypes.NONE, "_highlight")
+                .tintedLayer(PartTypes.CORD, "bowstring_string")
+                .generateModel(this.itemModelOutput, this.modelOutput);
+    }
+
+    private void gearSawItem(GearItemSet<? extends GearItem> itemSet) {
+        GearItemModelBuilder.unique(itemSet, layers -> ExtraModelTemplates.THREE_LAYER_SAW_BASE)
+                .tintedLayer(PartTypes.ROD, "rod_generic_lc")
+                .tintedLayer(PartTypes.MAIN, "main_generic_hc")
+                .simpleLayer(PartTypes.NONE, "_highlight")
                 .generateModel(this.itemModelOutput, this.modelOutput);
     }
 
     private void gearCurioItem(GearItemSet<? extends GearItem> itemSet) {
-        new GearItemModelBuilder(itemSet)
+        GearItemModelBuilder.handheldItem(itemSet)
                 .tintedLayer(PartTypes.MAIN, "main_generic_hc")
                 .tintedLayer(PartTypes.SETTING, "adornment_generic")
                 .simpleLayer(PartTypes.NONE, "_highlight")
@@ -282,14 +299,14 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void gearArmorItem(GearItemSet<? extends GearItem> itemSet) {
-        new GearItemModelBuilder(itemSet)
+        GearItemModelBuilder.handheldItem(itemSet)
                 .tintedLayer(PartTypes.MAIN, "main_generic_hc")
                 .simpleLayer(PartTypes.NONE, "_highlight")
                 .generateModel(this.itemModelOutput, this.modelOutput);
     }
 
     private void gearElytraItem(GearItemSet<? extends GearItem> itemSet) {
-        new GearItemModelBuilder(itemSet)
+        GearItemModelBuilder.handheldItem(itemSet)
                 .tintedLayer(PartTypes.MAIN, "main_generic_hc")
                 .simpleLayer(PartTypes.NONE, "_highlight")
                 .tintedLayer(PartTypes.BINDING, "binding_generic")
@@ -297,7 +314,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void gearArrowItem(GearItemSet<? extends GearItem> itemSet) {
-        new GearItemModelBuilder(itemSet)
+        GearItemModelBuilder.handheldItem(itemSet)
                 .tintedLayer(PartTypes.ROD, "rod_generic_lc")
                 .tintedLayer(PartTypes.MAIN, "main_generic_hc")
                 .simpleLayer(PartTypes.NONE, "_highlight")
@@ -352,5 +369,19 @@ public class ModItemModelProvider extends ItemModelGenerators {
         static final ModelTemplate FOUR_LAYERED_ITEM = ModelTemplates.createItem("generated", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3);
         static final ModelTemplate FIVE_LAYERED_ITEM = ModelTemplates.createItem("generated", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3, ExtraSlots.LAYER4);
         static final ModelTemplate SIX_LAYERED_ITEM = ModelTemplates.createItem("generated", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3, ExtraSlots.LAYER4, ExtraSlots.LAYER5);
+
+        static final ModelTemplate TWO_LAYERED_HANDHELD_ITEM = ModelTemplates.createItem("handheld", TextureSlot.LAYER0, TextureSlot.LAYER1);
+        static final ModelTemplate THREE_LAYERED_HANDHELD_ITEM = ModelTemplates.createItem("handheld", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2);
+        static final ModelTemplate FOUR_LAYERED_HANDHELD_ITEM = ModelTemplates.createItem("handheld", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3);
+        static final ModelTemplate FIVE_LAYERED_HANDHELD_ITEM = ModelTemplates.createItem("handheld", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3, ExtraSlots.LAYER4);
+        static final ModelTemplate SIX_LAYERED_HANDHELD_ITEM = ModelTemplates.createItem("handheld", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3, ExtraSlots.LAYER4, ExtraSlots.LAYER5);
+
+        static final ModelTemplate TWO_LAYERED_HANDHELD_ROD_ITEM = ModelTemplates.createItem("handheld_rod", TextureSlot.LAYER0, TextureSlot.LAYER1);
+        static final ModelTemplate THREE_LAYERED_HANDHELD_ROD_ITEM = ModelTemplates.createItem("handheld_rod", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2);
+        static final ModelTemplate FOUR_LAYERED_HANDHELD_ROD_ITEM = ModelTemplates.createItem("handheld_rod", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3);
+        static final ModelTemplate FIVE_LAYERED_HANDHELD_ROD_ITEM = ModelTemplates.createItem("handheld_rod", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3, ExtraSlots.LAYER4);
+        static final ModelTemplate SIX_LAYERED_HANDHELD_ROD_ITEM = ModelTemplates.createItem("handheld_rod", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2, ExtraSlots.LAYER3, ExtraSlots.LAYER4, ExtraSlots.LAYER5);
+
+        static final ModelTemplate THREE_LAYER_SAW_BASE = ModelTemplates.createItem("silentgear:saw_base", TextureSlot.LAYER0, TextureSlot.LAYER1, TextureSlot.LAYER2);
     }
 }
