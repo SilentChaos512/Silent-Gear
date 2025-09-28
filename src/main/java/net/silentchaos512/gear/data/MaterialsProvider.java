@@ -632,7 +632,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.MAIN, GearProperties.RARITY, 40)
                 .stat(PartTypes.MAIN, GearProperties.HARVEST_SPEED, 15)
                 .stat(PartTypes.MAIN, GearProperties.ATTACK_DAMAGE, 3)
-                .stat(PartTypes.MAIN, GearProperties.ATTACK_SPEED, 0.4f, NumberProperty.Operation.ADD)
+                .stat(PartTypes.MAIN, GearProperties.ATTACK_SPEED, 0.4f)
                 .stat(PartTypes.MAIN, GearProperties.RANGED_DAMAGE, 3)
                 .trait(PartTypes.MAIN, Const.Traits.RENEW, 3)
                 //tip

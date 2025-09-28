@@ -3,6 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-4.0.29] - 2025-09-23
+### Added
+- Alloy Forge recipe for Azure Electrum [#839]
+### Fixed
+- Remove unused data components ("base_properties" and "bonus_properties") to hopefully fix some compatibility issues [#842, #800, #777, #773]
+- Arrow duplication with repair kit [#841]
+- Glowstone attack speed modifier not working correctly [#836]
+- Items with the Fireproof trait burning up in fire/lava [#832]
+
 ## [1.21.1-4.0.28.1] - 2025-08-30
 ### Added
 - Check for null elements in `PartList` in order to create a more useful error message for [#834]
