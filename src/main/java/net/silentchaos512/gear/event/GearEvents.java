@@ -60,6 +60,7 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.event.ServerTicks;
+import net.minecraft.world.entity.animal.armadillo.Armadillo;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -109,7 +110,9 @@ public final class GearEvents {
         }
         event.setAmount(newIncomingDamage);
         if (newIncomingDamage < 0.0001f) {
-            event.setCanceled(true);
+            if (!(target instanceof Armadillo)) {
+                event.setCanceled(true);
+            }
         }
     }
 
