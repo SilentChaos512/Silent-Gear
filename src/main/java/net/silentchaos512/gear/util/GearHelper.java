@@ -76,6 +76,7 @@ public final class GearHelper {
     public static Tiers DEFAULT_DUMMY_TIER = Tiers.WOOD;
 
     private static final ResourceLocation REACH_MODIFIER_ID = SilentGear.getId("reach_modifier");
+    private static final ResourceLocation ATTACK_REACH_MODIFIER_ID = SilentGear.getId("attack_reach_modifier");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
     private static final float BROKEN_DESTROY_SPEED = 0.25f;
 
@@ -177,6 +178,14 @@ public final class GearHelper {
                             new AttributeModifier(
                                     REACH_MODIFIER_ID,
                                     GearData.getProperties(stack).getNumber(GearProperties.BLOCK_REACH),
+                                    AttributeModifier.Operation.ADD_VALUE
+                            ),
+                            EquipmentSlotGroup.MAINHAND
+                    ).add(
+                            Attributes.ENTITY_INTERACTION_RANGE,
+                            new AttributeModifier(
+                            		ATTACK_REACH_MODIFIER_ID,
+                                    GearData.getProperties(stack).getNumber(GearProperties.ATTACK_REACH),
                                     AttributeModifier.Operation.ADD_VALUE
                             ),
                             EquipmentSlotGroup.MAINHAND
@@ -510,12 +519,12 @@ public final class GearHelper {
     }
 
     public static void onItemSwing(ItemStack stack, LivingEntity wielder) {
-        if (wielder instanceof Player
-                && getType(stack).matches(GearTypes.MELEE_WEAPON.get())
-                && tryAttackWithExtraReach((Player) wielder, false) != null) {
+        //if (wielder instanceof Player
+        //         && getType(stack).matches(GearTypes.MELEE_WEAPON.get())
+        //        && tryAttackWithExtraReach((Player) wielder, false) != null) {
             // Player attacked something, ignore traits
-            return;
-        }
+        //    return;
+        //}
 
         for (var traitInstance : TraitHelper.getTraits(stack)) {
             traitInstance.getTrait().onItemSwing(stack, wielder, traitInstance.getLevel());
