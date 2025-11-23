@@ -20,6 +20,8 @@
     "silentgear:recrystallizer",
     "silentgear:refabricator",
     "silentgear:metal_press",
+    "silentgear:crude_mixer",
+    "silentgear:super_mixer",
     "silentgear:netherwood_charcoal_block"
   ]
 }

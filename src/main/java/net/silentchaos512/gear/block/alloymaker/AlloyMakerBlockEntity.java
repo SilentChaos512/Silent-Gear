@@ -96,7 +96,13 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
         if (recipe != null) {
             return recipe.assemble(AlloyRecipeInput.of(this), registryAccess);
         }
-        return getOutputItem(materials).create(materials);
+        var result = getOutputItem(materials).create(materials);
+        applyModifiers(result);
+        return result;
+    }
+
+    protected void applyModifiers(ItemStack result) {
+        // Apply data components for material modifiers here, if necessary
     }
 
     public int getInputSlotCount() {

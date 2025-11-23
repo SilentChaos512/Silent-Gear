@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.setup;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -20,10 +21,8 @@ import net.silentchaos512.gear.block.press.MetalPressBlockEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerBlockEntity;
 import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlockEntity;
 import net.silentchaos512.gear.client.renderer.blockentity.StoneAnvilRenderer;
-import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.SuperAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.*;
+import net.silentchaos512.gear.gear.material.modifier.CrudeMaterialModifier;
 import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifier;
 import net.silentchaos512.gear.util.Const;
 
@@ -60,6 +59,17 @@ public final class SgBlockEntities {
             "refabricator",
             (pos, state) -> new AlloyMakerBlockEntity<>(Const.FABRIC_ALLOY_MAKER_INFO, pos, state),
             SgBlocks.REFABRICATOR
+    );
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<CrudeAlloyRecipe>>> CRUDE_MIXER = register(
+            "crude_mixer",
+            (pos, state) -> new AlloyMakerBlockEntity<>(Const.CRUDE_MIXER_INFO, pos, state) {
+                @Override
+                protected void applyModifiers(ItemStack result) {
+                    CrudeMaterialModifier.setOn(result);
+                }
+            },
+            SgBlocks.CRUDE_MIXER
     );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<SuperAlloyRecipe>>> SUPER_MIXER = register(

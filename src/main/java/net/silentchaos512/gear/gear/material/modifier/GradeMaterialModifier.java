@@ -13,8 +13,6 @@ import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.property.NumberProperty;
-import net.silentchaos512.gear.api.property.NumberPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -23,7 +21,6 @@ import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -46,24 +43,13 @@ public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialMod
     }
 
     @Override
-    public <T, V extends GearPropertyValue<T>> Collection<V> modifyStats(MaterialInstance material, PartType partType, PropertyKey<T, V> key, Collection<V> statMods) {
-        if (key.property().isAffectedByGrades() && grade != null && key.property() instanceof NumberProperty) {
-            float bonus = grade.bonusPercent / 100f;
-            List<V> ret = new ArrayList<>();
-
-            // Apply grade bonus to all modifiers. Makes it easier to see the effect on rods and such.
-            for (var mod : statMods) {
-                var numberValue = (NumberPropertyValue) mod;
-                float value = numberValue.value();
-                // Taking the abs of value times bonus makes negative mods become less negative
-                //noinspection unchecked
-                ret.add((V) new NumberPropertyValue(value + Math.abs(value) * bonus, numberValue.operation()));
-            }
-
-            return ret;
+    public <T, V extends GearPropertyValue<T>> Collection<V> modifyProperties(MaterialInstance material, PartType partType, PropertyKey<T, V> key, Collection<V> mods) {
+        if (key.property().isAffectedByGrades() && grade != null) {
+            final float bonus = grade.bonusPercent / 100f;
+            return IMaterialModifier.Helper.modifyNumberValuesWithBonusOrPenalty(key, mods, bonus);
         }
 
-        return statMods;
+        return mods;
     }
 
     @Override

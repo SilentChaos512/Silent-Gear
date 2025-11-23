@@ -108,7 +108,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         orientableMachineBlock(SgBlocks.ALLOY_FORGE, "alloy_forge");
         orientableMachineBlock(SgBlocks.RECRYSTALLIZER, "recrystallizer");
         orientableMachineBlock(SgBlocks.REFABRICATOR, "refabricator");
-        simpleBlock(SgBlocks.SUPER_MIXER.get());
+        orientableMachineBlockWithoutLitState(SgBlocks.CRUDE_MIXER, "crude_mixer");
+        orientableMachineBlockWithoutLitState(SgBlocks.SUPER_MIXER, "super_mixer");
 
         // Plants
         getVariantBuilder(SgBlocks.FLAX_PLANT.get()).forAllStates(state -> {
@@ -140,6 +141,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
             boolean lit = state.getValue(BlockStateProperties.LIT);
             return ConfiguredModel.builder()
                     .modelFile(lit ? onModel : offModel)
+                    .rotationY((int) facing.getOpposite().toYRot())
+                    .build();
+        });
+    }
+
+    private void orientableMachineBlockWithoutLitState(DeferredBlock<? extends Block> block, String name) {
+        ModelFile.ExistingModelFile model = getExistingModel(name);
+        getVariantBuilder(block.value()).forAllStates(state -> {
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            return ConfiguredModel.builder()
+                    .modelFile(model)
                     .rotationY((int) facing.getOpposite().toYRot())
                     .build();
         });

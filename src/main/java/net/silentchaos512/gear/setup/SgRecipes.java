@@ -29,6 +29,7 @@ public final class SgRecipes {
 
     // Types
     public static final DeferredHolder<RecipeType<?>, RecipeType<AlloyRecipe>> COMPOUNDING_TYPE = registerType(Const.ALLOY_MAKING);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrudeAlloyRecipe>> ALLOY_MAKING_CRUDE_TYPE = registerType(Const.ALLOY_MAKING_CRUDE);
     public static final DeferredHolder<RecipeType<?>, RecipeType<FabricAlloyRecipe>> ALLOY_MAKING_FABRIC_TYPE = registerType(Const.ALLOY_MAKING_FABRIC);
     public static final DeferredHolder<RecipeType<?>, RecipeType<GemAlloyRecipe>> ALLOY_MAKING_GEM_TYPE = registerType(Const.ALLOY_MAKING_GEM);
     public static final DeferredHolder<RecipeType<?>, RecipeType<MetalAlloyRecipe>> ALLOY_MAKING_METAL_TYPE = registerType(Const.ALLOY_MAKING_METAL);
@@ -42,6 +43,8 @@ public final class SgRecipes {
             new ExtendedShapelessRecipe.BasicSerializer<>(ShapelessCompoundPartRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AlloyRecipe>> COMPOUNDING = register(Const.ALLOY_MAKING, () ->
             new AlloyRecipe.Serializer<>(AlloyRecipe::new));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CrudeAlloyRecipe>> ALLOY_MAKING_CRUDE = register(Const.ALLOY_MAKING_CRUDE, () ->
+            new AlloyRecipe.Serializer<>(CrudeAlloyRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FabricAlloyRecipe>> ALLOY_MAKING_FABRIC = register(Const.ALLOY_MAKING_FABRIC, () ->
             new AlloyRecipe.Serializer<>(FabricAlloyRecipe::new));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GemAlloyRecipe>> ALLOY_MAKING_GEM = register(Const.ALLOY_MAKING_GEM, () ->

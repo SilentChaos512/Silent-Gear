@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "c:stones"
+    },
+    "/": {
+      "tag": "minecraft:planks"
+    },
+    "F": {
+      "item": "silentgear:flax_string"
+    }
+  },
+  "pattern": [
+    "#F#",
+    "#/#",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:crude_mixer"
+  }
+}

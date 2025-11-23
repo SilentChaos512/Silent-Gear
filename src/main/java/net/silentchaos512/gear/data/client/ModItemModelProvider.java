@@ -74,6 +74,10 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer0", "item/hybrid_gem")
                 .texture("layer1", "item/hybrid_gem_highlight");
         builder(SgItems.MIXED_FABRIC, itemGenerated, "item/mixed_fabric");
+        builder(SgItems.CRUDE_ALLOY)
+                .parent(itemGenerated)
+                .texture("layer0", "item/crude_alloy")
+                .texture("layer1", "item/crude_alloy_highlight");
         builder(SgItems.SUPER_ALLOY)
                 .parent(itemGenerated)
                 .texture("layer0", "item/super_alloy")
@@ -243,9 +247,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModelFile mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path));
 
         if (item == GearItemSets.TRIDENT) { // "item/trident" points to the special renderer
-        	mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path + "_icon"));
+            mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path + "_icon"));
         }
-        
+
         ItemModelBuilder model_lc = getBuilder(path + "_lc")
                 .parent(mainModelFile)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")

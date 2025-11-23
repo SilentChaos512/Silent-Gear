@@ -24,6 +24,7 @@ import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.core.SoundPlayback;
 import net.silentchaos512.gear.crafting.ingredient.BlueprintIngredient;
+import net.silentchaos512.gear.crafting.ingredient.CustomAlloyIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
@@ -728,6 +729,26 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#t#")
                 .pattern("/ /")
                 .pattern("#t#")
+                .unlockedBy("has_item", has(SgTags.Items.INGOTS_TYRIAN_STEEL))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.CRUDE_MIXER)
+                .define('#', Tags.Items.STONES)
+                .define('/', ItemTags.PLANKS)
+                .define('F', CraftingItems.FLAX_STRING)
+                .pattern("#F#")
+                .pattern("#/#")
+                .pattern(" # ")
+                .unlockedBy("has_item", has(Tags.Items.STONES))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.SUPER_MIXER)
+                .define('#', SgTags.Items.STORAGE_BLOCKS_TYRIAN_STEEL)
+                .define('B', Items.BEACON)
+                .define('D', new Ingredient(CustomAlloyIngredient.of(SgItems.CUSTOM_GEM.get(), Const.Materials.DIMERALD)))
+                .pattern("#D#")
+                .pattern("#B#")
+                .pattern(" # ")
                 .unlockedBy("has_item", has(SgTags.Items.INGOTS_TYRIAN_STEEL))
                 .save(consumer);
 

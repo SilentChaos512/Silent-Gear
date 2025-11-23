@@ -40,7 +40,7 @@
           "silentgear:armor_durability": 0.0,
           "silentgear:armor_toughness": 0.0,
           "silentgear:attack_damage": 0.0,
-          "silentgear:attack_reach": 6.0,
+          "silentgear:attack_reach": 0.0,
           "silentgear:attack_speed": 0.0,
           "silentgear:block_reach": 0.0,
           "silentgear:charging_value": 0.0,

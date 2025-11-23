@@ -25,6 +25,8 @@ public final class Config {
         // Blueprints
         public static final ModConfigSpec.EnumValue<BlueprintType.ConfigOption> blueprintTypes;
         public static final ModConfigSpec.BooleanValue spawnWithStarterBlueprints;
+        // Compounds
+        public static final ModConfigSpec.DoubleValue crudeMixerPropertyMultiplier;
         // Nerfed gear
         public static final ModConfigSpec.BooleanValue nerfedItemsEnabled;
         public static final ModConfigSpec.DoubleValue nerfedItemDurabilityMulti;
@@ -147,6 +149,19 @@ public final class Config {
                 nerfedItems = builder
                         .comment("These items will have reduced durability")
                         .defineList("items", NerfedGear.DEFAULT_ITEMS, Config::isResourceLocation);
+                builder.pop();
+            }
+            {
+                builder.comment("Settings for compound materials and compound makers");
+                builder.push("compounds");
+
+                crudeMixerPropertyMultiplier = builder
+                        .comment(
+                                "A multiplier applied to some numerical properties for compounds (crude alloys) made in the crude mixer.",
+                                "A value less than 1 will reduce property values, a value greater than 1 will increase property values."
+                        )
+                        .defineInRange("crude_mixer.property_multiplier", 0.8, 0.0, 2.0);
+
                 builder.pop();
             }
             {

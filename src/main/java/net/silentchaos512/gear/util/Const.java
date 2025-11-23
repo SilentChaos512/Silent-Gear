@@ -10,10 +10,7 @@ import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.block.alloymaker.AlloyMakerInfo;
-import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.SuperAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.*;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.*;
@@ -31,13 +28,13 @@ public final class Const {
 
     // Recipe types and categories
     public static final ResourceLocation ALLOY_MAKING = modId("alloy_making");
+    public static final ResourceLocation ALLOY_MAKING_CRUDE = modId("alloy_making_crude");
     public static final ResourceLocation ALLOY_MAKING_FABRIC = modId("alloy_making/fabric");
     public static final ResourceLocation ALLOY_MAKING_GEM = modId("alloy_making/gem");
     public static final ResourceLocation ALLOY_MAKING_METAL = modId("alloy_making/metal");
     public static final ResourceLocation ALLOY_MAKING_SUPER = modId("alloy_making/super");
     public static final ResourceLocation COMPOUND_PART = modId("compound_part");
     public static final ResourceLocation CONVERSION = modId("conversion");
-    public static final ResourceLocation CRAFTING_SPECIAL_REPAIRITEM = modId("crafting_special_repairitem");
     public static final ResourceLocation FILL_REPAIR_KIT = modId("fill_repair_kit");
     public static final ResourceLocation GRADING = modId("grading");
     public static final ResourceLocation MOD_KIT_REMOVE_PART = modId("mod_kit_remove_part");
@@ -62,6 +59,7 @@ public final class Const {
     public static final ResourceLocation NULL_ID = ResourceLocation.withDefaultNamespace("null");
 
     // Material Modifiers
+    public static final ResourceLocation CRUDE = SilentGear.getId("crude");
     public static final ResourceLocation GRADE = SilentGear.getId("grade");
     public static final ResourceLocation STARCHARGED = SilentGear.getId("starcharged");
 
@@ -113,6 +111,19 @@ public final class Const {
             () -> SgRecipes.ALLOY_MAKING_FABRIC.get(),
             () -> SgRecipes.ALLOY_MAKING_FABRIC_TYPE.get(),
             FabricAlloyRecipe.class
+    );
+
+    @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
+    public static final AlloyMakerInfo<CrudeAlloyRecipe> CRUDE_MIXER_INFO = new AlloyMakerInfo<>(
+            List.of(),
+            4,
+            () -> SgItems.CRUDE_ALLOY.get(),
+            () -> SgBlocks.CRUDE_MIXER.get(),
+            () -> SgBlockEntities.CRUDE_MIXER.get(),
+            () -> SgMenuTypes.CRUDE_MIXER.get(),
+            () -> SgRecipes.ALLOY_MAKING_CRUDE.get(),
+            () -> SgRecipes.ALLOY_MAKING_CRUDE_TYPE.get(),
+            CrudeAlloyRecipe.class
     );
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})

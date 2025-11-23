@@ -131,6 +131,8 @@ public final class SgItems {
     // Compound materials
     public static final DeferredItem<CompoundMaterialItem> ALLOY_INGOT = register("alloy_ingot", () ->
             new CompoundMaterialItem(baseProps()));
+    public static final DeferredItem<CompoundMaterialItem> CRUDE_ALLOY = register("crude_alloy", () ->
+            new CompoundMaterialItem(baseProps()));
     public static final DeferredItem<CompoundMaterialItem> HYBRID_GEM = register("hybrid_gem", () ->
             new CompoundMaterialItem(baseProps()));
     public static final DeferredItem<CompoundMaterialItem> MIXED_FABRIC = register("mixed_fabric", () ->

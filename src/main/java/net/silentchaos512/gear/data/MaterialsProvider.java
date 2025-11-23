@@ -1194,6 +1194,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
     }
 
     private void addCompounds(Collection<MaterialBuilder<?>> ret) {
+        ret.add(compoundBuilder(modId("crude_alloy"), SgItems.CRUDE_ALLOY));
         ret.add(compoundBuilder(modId("hybrid_gem"), SgItems.HYBRID_GEM));
         ret.add(compoundBuilder(modId("metal_alloy"), SgItems.ALLOY_INGOT));
         ret.add(compoundBuilder(modId("mixed_fabric"), SgItems.MIXED_FABRIC));

@@ -123,6 +123,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(SgBlocks.RECRYSTALLIZER.get())
                 .add(SgBlocks.REFABRICATOR.get())
                 .add(SgBlocks.METAL_PRESS.get())
+                .add(SgBlocks.CRUDE_MIXER.get())
+                .add(SgBlocks.SUPER_MIXER.get())
                 .add(SgBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
 
         for (BuiltinMaterials material : BuiltinMaterials.values()) {

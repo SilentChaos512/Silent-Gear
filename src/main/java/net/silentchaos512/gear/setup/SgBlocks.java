@@ -35,10 +35,7 @@ import net.silentchaos512.gear.block.grader.GraderBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlock;
-import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
-import net.silentchaos512.gear.crafting.recipe.alloy.SuperAlloyRecipe;
+import net.silentchaos512.gear.crafting.recipe.alloy.*;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -125,6 +122,21 @@ public final class SgBlocks {
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
+
+    public static final DeferredBlock<AlloyMakerBlock<CrudeAlloyRecipe>> CRUDE_MIXER = register(
+            "crude_mixer",
+            () -> new AlloyMakerBlock<>(
+                    Const.CRUDE_MIXER_INFO,
+                    BlockBehaviour.Properties.of()
+                            .strength(4, 20)
+                            .sound(SoundType.STONE)
+            ) {
+                @Override
+                public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+                    return Shapes.block();
+                }
+            }
+    );
 
     public static final DeferredBlock<AlloyMakerBlock<SuperAlloyRecipe>> SUPER_MIXER = register(
             "super_mixer",

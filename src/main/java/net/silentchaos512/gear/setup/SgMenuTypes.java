@@ -14,10 +14,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.alloymaker.AlloyMakerContainer;
-import net.silentchaos512.gear.block.alloymaker.screen.AlloyForgeScreen;
-import net.silentchaos512.gear.block.alloymaker.screen.RecrystallizerScreen;
-import net.silentchaos512.gear.block.alloymaker.screen.RefabricatorScreen;
-import net.silentchaos512.gear.block.alloymaker.screen.SuperMixerScreen;
+import net.silentchaos512.gear.block.alloymaker.screen.*;
 import net.silentchaos512.gear.block.charger.ChargerContainerMenu;
 import net.silentchaos512.gear.block.charger.ChargerContainerScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
@@ -60,6 +57,17 @@ public final class SgMenuTypes {
                     playerInventory,
                     buffer,
                     SgBlocks.REFABRICATOR.get().getCategories()));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> CRUDE_MIXER = register(
+            "crude_mixer",
+            (id, playerInventory, buf) -> new AlloyMakerContainer(
+                    getSuperMixer(),
+                    id,
+                    playerInventory,
+                    buf,
+                    List.of()
+            )
+    );
 
     public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> SUPER_MIXER = register(
             "super_mixer",
@@ -109,6 +117,7 @@ public final class SgMenuTypes {
     public static class ClientEvents {
         @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {
+            event.register(CRUDE_MIXER.get(), CrudeMixerScreen::new);
             event.register(MATERIAL_GRADER.get(), GraderScreen::new);
             event.register(METAL_ALLOYER.get(), AlloyForgeScreen::new);
             event.register(METAL_PRESS.get(), MetalPressScreen::new);

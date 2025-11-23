@@ -31,14 +31,14 @@ public class StarchargedMaterialModifier extends ChargedMaterialModifier {
     }
 
     @Override
-    public <T, V extends GearPropertyValue<T>> Collection<V> modifyStats(MaterialInstance material, PartType partType, PropertyKey<T, V> key, Collection<V> modifiers) {
+    public <T, V extends GearPropertyValue<T>> Collection<V> modifyProperties(MaterialInstance material, PartType partType, PropertyKey<T, V> key, Collection<V> mods) {
         List<V> ret = new ArrayList<>();
 
         if (key.property() == GearProperties.CHARGING_VALUE.get()) {
             return ret;
         }
 
-        for (V mod : modifiers) {
+        for (V mod : mods) {
             GearPropertyValue<?> newMod = modifyStat(key, mod, getChargedProperties(material));
             //noinspection unchecked
             ret.add(newMod != null ? (V) newMod : mod);
