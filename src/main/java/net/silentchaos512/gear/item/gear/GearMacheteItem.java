@@ -44,13 +44,13 @@ public class GearMacheteItem extends GearSwordItem implements BreakEventHandler,
         float axeSpeed = GearHelper.getDestroySpeed(stack, state);
         float speed = Math.max(axeSpeed, super.getDestroySpeed(stack, state));
         // Slower on materials normally harvested with axes
-        if (GearHelper.isCorrectToolForDrops(stack, state, getToolBlockSet()))
+        if (GearHelper.isCorrectToolForDrops(stack, state, getToolBlockSet(stack)))
             return speed * 0.4f;
         return speed;
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet() {
+    public TagKey<Block> getToolBlockSet(GearPropertiesData properties) {
         return SgTags.Blocks.MINEABLE_WITH_MACHETE;
     }
 
@@ -62,7 +62,7 @@ public class GearMacheteItem extends GearSwordItem implements BreakEventHandler,
         return new Tool(
                 List.of(
                         Tool.Rule.deniesDrops(harvestTier.value().incorrectForTool()),
-                        Tool.Rule.minesAndDrops(getToolBlockSet(), harvestSpeed),
+                        Tool.Rule.minesAndDrops(getToolBlockSet(properties), harvestSpeed),
                         Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 15.0F),
                         Tool.Rule.overrideSpeed(BlockTags.SWORD_EFFICIENT, 1.5F)
                 ),

@@ -37,6 +37,9 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(BlockTags.MINEABLE_WITH_AXE)
                 .addTag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .addTag(BlockTags.MINEABLE_WITH_SHOVEL);
+        tag(SgTags.Blocks.MINEABLE_WITH_PICKAXE_WITH_SPOON)
+                .addTag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .addTag(BlockTags.MINEABLE_WITH_SHOVEL);
         tag(SgTags.Blocks.MINEABLE_WITH_SICKLE)
                 .addTag(BlockTags.CROPS)
                 .addTag(BlockTags.FLOWERS)

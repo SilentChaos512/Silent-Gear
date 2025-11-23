@@ -19,6 +19,7 @@ import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -44,7 +45,7 @@ public class GearDiggerItem extends DiggerItem implements GearDiggerTool {
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet() {
+    public TagKey<Block> getToolBlockSet(GearPropertiesData properties) {
         return this.blocks;
     }
 

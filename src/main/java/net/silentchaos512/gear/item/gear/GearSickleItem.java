@@ -137,7 +137,7 @@ public class GearSickleItem extends GearDiggerItem implements BreakEventHandler 
         Level world = player.level();
         BlockState state = world.getBlockState(pos);
 
-        if (!state.is(getToolBlockSet())) return;
+        if (!state.is(getToolBlockSet(sickle))) return;
 
         int blocksBroken = 1;
 

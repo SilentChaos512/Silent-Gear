@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Spoon upgrade not working [#858]
+
 ## [1.21.1-4.0.29] - 2025-09-23
 ### Added
 - Alloy Forge recipe for Azure Electrum [#839]

@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.property.TraitListPropertyValue;
 import net.silentchaos512.gear.api.traits.*;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 
@@ -87,12 +88,7 @@ public final class TraitHelper {
      */
     public static boolean hasTrait(ItemStack gear, DataResource<Trait> trait) {
         if (GearHelper.isGear(gear)) {
-            var list = GearData.getProperties(gear).getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
-            for (var traitInstance : list.value()) {
-                if (traitInstance.getTrait() == trait.get()) {
-                    return true;
-                }
-            }
+            return hasTrait(GearData.getProperties(gear), trait);
         }
 
         return false;
@@ -107,14 +103,29 @@ public final class TraitHelper {
      */
     public static boolean hasTrait(ItemStack gear, Trait trait) {
         if (GearHelper.isGear(gear)) {
-            var list = GearData.getProperties(gear).getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
-            for (var traitInstance : list.value()) {
-                if (traitInstance.getTrait() == trait) {
-                    return true;
-                }
-            }
+            return hasTrait(GearData.getProperties(gear), trait);
         }
 
+        return false;
+    }
+
+    public static boolean hasTrait(GearPropertiesData properties, DataResource<Trait> trait) {
+        var list = properties.getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
+        for (var traitInstance : list.value()) {
+            if (traitInstance.getTrait() == trait.get()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasTrait(GearPropertiesData properties, Trait trait) {
+        var list = properties.getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
+        for (var traitInstance : list.value()) {
+            if (traitInstance.getTrait() == trait) {
+                return true;
+            }
+        }
         return false;
     }
 

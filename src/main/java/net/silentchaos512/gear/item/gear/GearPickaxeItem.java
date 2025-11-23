@@ -21,7 +21,9 @@ import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.GearItemSets;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -52,9 +54,8 @@ public class GearPickaxeItem extends PickaxeItem implements GearDiggerTool {
             return false;
         }
 
-        // TODO: Make a ItemAbilityTrait trait effect?
         if (TraitHelper.hasTrait(stack, Const.Traits.SPOON)) {
-            // Pickaxe with spoon upgrade can dig dirt and stuff
+            // Pickaxe with spoon upgrade can dig dirt and stuff (doesn't really do anything?)
             return ACTIONS_WITH_SPOON.contains(itemAbility);
         }
 
@@ -68,7 +69,10 @@ public class GearPickaxeItem extends PickaxeItem implements GearDiggerTool {
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet() {
+    public TagKey<Block> getToolBlockSet(GearPropertiesData properties) {
+        if (TraitHelper.hasTrait(properties, Const.Traits.SPOON)) {
+            return SgTags.Blocks.MINEABLE_WITH_PICKAXE_WITH_SPOON;
+        }
         return BlockTags.MINEABLE_WITH_PICKAXE;
     }
 
@@ -83,14 +87,6 @@ public class GearPickaxeItem extends PickaxeItem implements GearDiggerTool {
         if (result == InteractionResult.PASS)
             return GearHelper.useAndCheckBroken(context, super::useOn);
         return result;
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        if (TraitHelper.hasTrait(stack, Const.Traits.SPOON) && GearItemSets.SHOVEL.gearItem().isCorrectToolForDrops(stack, state)) {
-            return true;
-        }
-        return super.isCorrectToolForDrops(stack, state);
     }
 
     @Override
