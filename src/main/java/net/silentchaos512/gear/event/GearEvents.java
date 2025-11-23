@@ -109,10 +109,8 @@ public final class GearEvents {
             }
         }
         event.setAmount(newIncomingDamage);
-        if (newIncomingDamage < 0.0001f) {
-            if (!(target instanceof Armadillo)) {
-                event.setCanceled(true);
-            }
+        if (newIncomingDamage < 0.0001f && event.getOriginalAmount() > 0f) {
+            event.setCanceled(true);
         }
     }
 

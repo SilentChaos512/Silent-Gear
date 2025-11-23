@@ -4,8 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Updated pt_br localization (PrincessStelllar) [#829]
 ### Fixed
+- Snow golems not "damaging"/aggro-ing mobs  [#852]
+- Armadillos not being damaged correctly (sigmusdewn) [#846, #847, #857]
 - Spoon upgrade not working [#858]
+- Correct entity interaction range for weapons (Electroely) [#845]
 
 ## [1.21.1-4.0.29] - 2025-09-23
 ### Added
