@@ -254,6 +254,7 @@ public final class GearData {
         return new GearPropertiesData(finalValues);
     }
 
+    @SuppressWarnings("unused")
     private static void modifyEnchantmentData(ItemStack gear, @Nullable Player player) {
         final var playersItemText = getPlayersItemNameText(gear, player);
 

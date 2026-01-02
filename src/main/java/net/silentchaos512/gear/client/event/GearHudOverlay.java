@@ -69,6 +69,7 @@ public class GearHudOverlay {
         }*/
     }
 
+    @SuppressWarnings("unused")
     private static boolean isEntityTargeted(@Nullable HitResult rayTraceIn) {
         return rayTraceIn != null && rayTraceIn.getType() == HitResult.Type.ENTITY;
     }

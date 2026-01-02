@@ -691,6 +691,7 @@ public final class GearHelper {
         items.add(createSampleItem(item, Const.Materials.TYRIAN_STEEL));
     }
 
+    @SuppressWarnings("unused")
     private static ItemStack createSampleItem(GearItem item, int tier) {
         ItemStack result = GearGenerator.create(item);
         if (result.isEmpty()) {

@@ -91,6 +91,7 @@ public class GearArmorItem extends ArmorItem implements GearArmor {
         return 0;
     }
 
+    @SuppressWarnings("unused")
     private static int getPlayerTotalArmorValue(LivingEntity player) {
         float total = 0;
         for (ItemStack armor : player.getArmorSlots()) {

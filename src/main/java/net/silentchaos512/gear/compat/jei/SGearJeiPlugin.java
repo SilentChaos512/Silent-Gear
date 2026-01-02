@@ -147,6 +147,7 @@ public class SGearJeiPlugin implements IModPlugin {
         return getRecipes(recipeManager, r -> r.value().getType() == recipeType, recipeClass);
     }
 
+    @SuppressWarnings("unused")
     private static <R extends Recipe<?>> List<R> getRecipes(RecipeManager recipeManager, RecipeSerializer<?> recipeSerializer, Class<R> recipeClass) {
         return getRecipes(recipeManager, r -> r.value().getSerializer() == recipeSerializer, recipeClass);
     }
@@ -210,12 +211,14 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addIngredientInfo(stack, VanillaTypes.ITEM_STACK, Component.translatable(key));
     }
 
+    @SuppressWarnings("unused")
     private static void addInfoPage(IRecipeRegistration reg, String name, Collection<ItemLike> items) {
         String key = getDescKey(SilentGear.getId(name));
         List<ItemStack> stacks = items.stream().map(ItemStack::new).collect(Collectors.toList());
         reg.addIngredientInfo(stacks, VanillaTypes.ITEM_STACK, Component.translatable(key));
     }
 
+    @SuppressWarnings("unused")
     private static void addInfoPage(IRecipeRegistration reg, ItemLike item, Stream<ItemStack> variants) {
         String key = getDescKey(NameUtils.fromItem(item));
         reg.addIngredientInfo(variants.collect(Collectors.toList()), VanillaTypes.ITEM_STACK, Component.translatable(key));

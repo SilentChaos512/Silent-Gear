@@ -64,6 +64,7 @@ public class RepairKitItem extends Item {
         return efficiency.get().floatValue() + repairType.getBonusEfficiency();
     }
 
+    @SuppressWarnings("unused")
     private static float getStoredAmount(ItemStack stack, MaterialInstance material) {
         var materialStorage = stack.get(SgDataComponents.MATERIAL_STORAGE);
         return materialStorage != null ? materialStorage.getOrDefault(material, 0f) : 0f;

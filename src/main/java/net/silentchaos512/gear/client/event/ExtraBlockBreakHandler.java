@@ -54,6 +54,7 @@ public final class ExtraBlockBreakHandler extends SimpleJsonResourceReloadListen
         this.extraDamagedBlocks.clear();
     }
 
+    @SuppressWarnings("unused")
     private static void preRenderDamagedBlocks() {
 /*        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         RenderSystem.enableBlend();
@@ -65,6 +66,7 @@ public final class ExtraBlockBreakHandler extends SimpleJsonResourceReloadListen
         RenderSystem.pushMatrix();*/
     }
 
+    @SuppressWarnings("unused")
     private static void postRenderDamagedBlocks() {
 /*        RenderSystem.alpha();
         RenderSystem.polygonOffset(0.0F, 0.0F);
@@ -74,6 +76,7 @@ public final class ExtraBlockBreakHandler extends SimpleJsonResourceReloadListen
         RenderSystem.popMatrix();*/
     }
 
+    @SuppressWarnings("unused")
     private void drawBlockDamageTexture(Tesselator tessellatorIn, BufferBuilder bufferBuilderIn, Entity entityIn, float partialTicks) {
 /*        double d3 = entityIn.lastTickPosX + (entityIn.getX() - entityIn.lastTickPosX) * (double) partialTicks;
         double d4 = entityIn.lastTickPosY + (entityIn.getY() - entityIn.lastTickPosY) * (double) partialTicks;
@@ -127,6 +130,7 @@ public final class ExtraBlockBreakHandler extends SimpleJsonResourceReloadListen
         }*/
     }
 
+    @SuppressWarnings("unused")
     private void cleanupExtraDamagedBlocks() {
         for (Entry<Integer, DestroyExtraBlocksProgress> entry : this.extraDamagedBlocks.entrySet()) {
             DestroyExtraBlocksProgress destroyblockprogress = entry.getValue();
@@ -178,6 +182,7 @@ public final class ExtraBlockBreakHandler extends SimpleJsonResourceReloadListen
             this.positions = positionsIn;
         }
 
+        @SuppressWarnings("unused")
         public BlockPos[] getPositions() {
             return this.positions;
         }
@@ -190,6 +195,7 @@ public final class ExtraBlockBreakHandler extends SimpleJsonResourceReloadListen
             this.partialBlockProgress = damage;
         }
 
+        @SuppressWarnings("unused")
         public int getPartialBlockDamage() {
             return this.partialBlockProgress;
         }

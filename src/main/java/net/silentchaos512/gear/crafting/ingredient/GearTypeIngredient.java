@@ -53,6 +53,7 @@ public final class GearTypeIngredient implements ICustomIngredient {
         return stack.getItem() instanceof GearItem && ((GearItem) stack.getItem()).getGearType().matches(this.type);
     }
 
+    @SuppressWarnings("unused")
     private void dissolve() {
         if (this.itemStacks == null) {
             // FIXME
