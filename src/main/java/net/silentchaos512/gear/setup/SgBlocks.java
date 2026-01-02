@@ -46,7 +46,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-@EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class SgBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(SilentGear.MOD_ID);
 

@@ -58,7 +58,7 @@ public final class SgEntities {
                 .build(SilentGear.getId(name).toString()));
     }
 
-    @EventBusSubscriber(value = Dist.CLIENT, modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(value = Dist.CLIENT, modid = SilentGear.MOD_ID)
     public static class Events {
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
