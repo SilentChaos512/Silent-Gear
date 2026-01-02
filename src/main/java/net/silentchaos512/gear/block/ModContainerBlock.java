@@ -53,7 +53,6 @@ public abstract class ModContainerBlock<T extends BlockEntity> extends BaseEntit
         return InteractionResult.SUCCESS;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;

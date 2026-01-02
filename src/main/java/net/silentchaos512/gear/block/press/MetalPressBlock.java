@@ -80,7 +80,6 @@ public class MetalPressBlock extends ModContainerBlock<MetalPressBlockEntity> {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
@@ -97,7 +96,6 @@ public class MetalPressBlock extends ModContainerBlock<MetalPressBlockEntity> {
         builder.add(FACING, LIT);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return SHAPE;

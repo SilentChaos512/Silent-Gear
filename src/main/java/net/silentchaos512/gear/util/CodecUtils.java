@@ -88,7 +88,7 @@ public class CodecUtils {
         );
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings("unchecked")
     private static <T> DataResult<Holder.Reference<T>> safeCastToReference(Registry<T> registry, Holder<T> p_326365_) {
         return p_326365_.getDelegate() instanceof Holder.Reference reference
                 ? DataResult.success(reference)
