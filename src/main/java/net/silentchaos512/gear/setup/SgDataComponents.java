@@ -2,6 +2,7 @@ package net.silentchaos512.gear.setup;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Unit;
@@ -22,7 +23,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class SgDataComponents {
-    public static final DeferredRegister.DataComponents REGISTRAR = DeferredRegister.createDataComponents(SilentGear.MOD_ID);
+    public static final DeferredRegister.DataComponents REGISTRAR = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, SilentGear.MOD_ID);
 
     public static final Supplier<DataComponentType<ItemContainerContents>> CONTAINED_ITEMS = REGISTRAR.registerComponentType(
             "contained_items",
