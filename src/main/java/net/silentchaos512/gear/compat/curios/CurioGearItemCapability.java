@@ -62,6 +62,7 @@ public class CurioGearItemCapability {
 
     public static class GearCurio implements ICurio {
         private final ItemStack stack;
+        @SuppressWarnings("unused")
         private final Consumer<ItemAttributeModifiers.Builder> extraAttributes;
 
         private GearCurio() {

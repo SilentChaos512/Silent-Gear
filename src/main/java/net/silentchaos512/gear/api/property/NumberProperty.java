@@ -50,6 +50,7 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
             NumberPropertyValue::new
     );
 
+    @SuppressWarnings("unused")
     private final Operation defaultOperation;
     private final DisplayFormat displayFormat;
     private final boolean displayAsInt;

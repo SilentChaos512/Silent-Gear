@@ -19,6 +19,7 @@ public class GearSlingshotItem extends GearBowItem {
     /**
      * Extra damage added by "power" enchantment. Bows are 0.5.
      */
+    @SuppressWarnings("unused")
     private static final float POWER_SCALE = 0.35f;
 
     public GearSlingshotItem(Supplier<GearType> gearType) {

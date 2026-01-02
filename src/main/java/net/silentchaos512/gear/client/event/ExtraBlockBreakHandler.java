@@ -161,6 +161,7 @@ public final class ExtraBlockBreakHandler extends SimpleJsonResourceReloadListen
     }
 
     private static class DestroyExtraBlocksProgress {
+        @SuppressWarnings("unused")
         private final int miningPlayerEntId;
         private final BlockPos[] positions;
         /**

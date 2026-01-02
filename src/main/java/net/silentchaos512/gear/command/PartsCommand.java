@@ -29,8 +29,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class PartsCommand {
+    @SuppressWarnings("unused")
     private static final SuggestionProvider<CommandSourceStack> partIdSuggestions = (ctx, builder) ->
             SharedSuggestionProvider.suggestResource(SgRegistries.PART.keySet(), builder);
+    @SuppressWarnings("unused")
     private static final SuggestionProvider<CommandSourceStack> partInGearSuggestions = (ctx, builder) -> {
         PartList parts = GearData.getConstruction(getGear(ctx)).parts();
         return SharedSuggestionProvider.suggestResource(

@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class MaterialsCommand {
+    @SuppressWarnings("unused")
     private static final SuggestionProvider<CommandSourceStack> MATERIAL_ID_SUGGESTIONS = (ctx, builder) ->
             SharedSuggestionProvider.suggestResource(SgRegistries.MATERIAL.keySet(), builder);
 

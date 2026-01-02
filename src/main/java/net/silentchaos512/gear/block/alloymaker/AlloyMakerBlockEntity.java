@@ -46,6 +46,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     private final AlloyMakerInfo<R> info;
     private final RecipeManager.CachedCheck<AlloyRecipeInput, R> quickCheck;
 
+    @SuppressWarnings("unused")
     private ItemStack outputItemHint = ItemStack.EMPTY;
     private int progress = 0;
     private boolean workEnabled = true;

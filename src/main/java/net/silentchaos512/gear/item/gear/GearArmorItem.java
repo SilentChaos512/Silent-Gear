@@ -37,6 +37,7 @@ import java.util.function.Supplier;
 
 public class GearArmorItem extends ArmorItem implements GearArmor {
     // Caches armor colors by model key to speed up armor rendering
+    @SuppressWarnings("unused")
     private static final Cache<String, Integer> ARMOR_COLORS = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(5, TimeUnit.MINUTES)
