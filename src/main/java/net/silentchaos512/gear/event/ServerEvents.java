@@ -9,8 +9,6 @@ import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.gear.material.MaterialManager;
-import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.network.payload.server.SyncMaterialsPayload;
 import net.silentchaos512.gear.network.payload.server.SyncPartsPayload;
 import net.silentchaos512.gear.network.payload.server.SyncTraitsPayload;

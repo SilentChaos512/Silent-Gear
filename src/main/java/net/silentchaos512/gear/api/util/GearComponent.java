@@ -5,11 +5,8 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.setup.gear.GearProperties;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 
 public interface GearComponent<D> extends PropertyProvider<D> {
     /**

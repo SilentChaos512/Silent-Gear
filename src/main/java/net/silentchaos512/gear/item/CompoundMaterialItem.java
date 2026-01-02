@@ -6,7 +6,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
@@ -19,7 +18,6 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;

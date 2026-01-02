@@ -22,7 +22,6 @@ import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
-import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;

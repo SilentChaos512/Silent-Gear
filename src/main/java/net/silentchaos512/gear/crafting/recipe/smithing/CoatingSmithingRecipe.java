@@ -11,7 +11,6 @@ import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
