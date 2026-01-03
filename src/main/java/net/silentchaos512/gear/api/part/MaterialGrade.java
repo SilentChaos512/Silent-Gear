@@ -107,7 +107,11 @@ public enum MaterialGrade {
 
     public void setGradeOnStack(@Nonnull ItemStack stack) {
         if (!stack.isEmpty()) {
-            stack.set(SgDataComponents.MATERIAL_GRADE, this);
+            if (this == NONE) {
+                stack.remove(SgDataComponents.MATERIAL_GRADE);
+            } else {
+                stack.set(SgDataComponents.MATERIAL_GRADE, this);
+            }
         }
     }
 
