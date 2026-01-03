@@ -46,7 +46,9 @@ public class GearShearsItem extends ShearsItem implements GearTool {
     @Override
     public Tool createToolProperties(GearPropertiesData properties) {
         // Mimic ShearsItem. Adjust speed so that iron shears are identical to vanilla.
-        final float adjustedSpeed = properties.getNumber(GearProperties.HARVEST_SPEED) / 6f;
+        var rawSpeed = properties.getNumber(GearProperties.HARVEST_SPEED);
+        var harvestSpeed = Float.isNaN(rawSpeed) || rawSpeed < 0.1f ? 0.1f : rawSpeed;
+        final float adjustedSpeed = harvestSpeed / 6f;
         return new Tool(
                 List.of(
                         Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 15f * adjustedSpeed),
