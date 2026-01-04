@@ -1,15 +1,11 @@
 package net.silentchaos512.gear.api.data.material;
 
 import com.google.common.collect.Sets;
-import com.google.gson.JsonObject;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.util.DataResource;
@@ -37,12 +33,12 @@ public abstract class MaterialsProviderBase implements DataProvider {
     protected abstract Collection<MaterialBuilder<?>> getMaterials(HolderLookup.Provider registries);
 
     protected DataResource<Material> modId(String path) {
-        return DataResource.material(ResourceLocation.fromNamespaceAndPath(this.modId, path));
+        return DataResource.material(Identifier.fromNamespaceAndPath(this.modId, path));
     }
 
     @SuppressWarnings("WeakerAccess")
-    protected static ResourceLocation commonId(String path) {
-        return ResourceLocation.fromNamespaceAndPath("c", path);
+    protected static Identifier commonId(String path) {
+        return Identifier.fromNamespaceAndPath("c", path);
     }
 
     @Override
@@ -53,7 +49,7 @@ public abstract class MaterialsProviderBase implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         Path outputFolder = this.generator.getPackOutput().getOutputFolder();
-        Set<ResourceLocation> set = Sets.newHashSet();
+        Set<Identifier> set = Sets.newHashSet();
         List<CompletableFuture<?>> list = new ArrayList<>();
 
         return this.lookupProvider.thenCompose(provider -> {

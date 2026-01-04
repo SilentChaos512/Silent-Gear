@@ -28,11 +28,11 @@ public abstract class TraitEffect {
             );
     public static final StreamCodec<RegistryFriendlyByteBuf, TraitEffect> STREAM_CODEC = StreamCodec.of(
             (buf, effect) -> {
-                buf.writeResourceLocation(Objects.requireNonNull(SgRegistries.TRAIT_EFFECT_TYPE.getKey(effect.type())));
+                buf.writeIdentifier(Objects.requireNonNull(SgRegistries.TRAIT_EFFECT_TYPE.getKey(effect.type())));
                 effect.type().rawStreamCodec().encode(buf, effect);
             },
             buf -> {
-                var type = SgRegistries.TRAIT_EFFECT_TYPE.get(buf.readResourceLocation());
+                var type = SgRegistries.TRAIT_EFFECT_TYPE.get(buf.readIdentifier());
                 return type.orElseThrow().value().streamCodec().decode(buf);
             }
     );

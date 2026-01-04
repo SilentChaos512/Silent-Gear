@@ -9,7 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -60,7 +60,7 @@ public record HarvestTier(
         return create(name, levelHint, SilentGear.getId("incorrect_for_" + name + "_tools"));
     }
 
-    public static HarvestTier create(String name, String levelHint, ResourceLocation incorrectForToolTagLocation) {
+    public static HarvestTier create(String name, String levelHint, Identifier incorrectForToolTagLocation) {
         return create(name, levelHint, TagKey.create(Registries.BLOCK, incorrectForToolTagLocation));
     }
 

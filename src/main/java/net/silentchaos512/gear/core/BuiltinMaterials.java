@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.core;
 
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ToolMaterial;
@@ -67,7 +68,7 @@ public enum BuiltinMaterials {
             TYRIAN_STEEL
     );
 
-    private final ResourceLocation id;
+    private final Identifier id;
     private final DataResource<Material> material;
     private final HarvestTier harvestTier;
     private final TagKey<Block> equivalentIncorrectForToolTag;

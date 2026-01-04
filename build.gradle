@@ -3,9 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.173'
-    id "com.matthewprenger.cursegradle" version "1.4.0"
-    id "com.modrinth.minotaur" version "2.+"
+    id 'net.neoforged.gradle.userdev' version '7.1.20'
 }
 
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')
@@ -142,8 +140,11 @@ dependencies {
     }
 
     // Curios
-    dependencies {
+    if (project.hasProperty("curios_version")) {
         implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
+    } else {
+        // Fallback on older version until Curios updates
+        compileOnly "top.theillusivec4.curios:curios-neoforge:11.0.1+1.21.5"
     }
 }
 
@@ -153,12 +154,18 @@ dependencies {
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
-            minecraft_version      : minecraft_version, minecraft_version_range: minecraft_version_range,
-            neo_version            : neo_version, neo_version_range: neo_version_range,
-            loader_version_range   : loader_version_range,
-            mod_id                 : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-            mod_authors            : mod_authors, mod_description: mod_description,
-            issue_tracker_url      : issue_tracker_url, display_url: display_url,
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+            issue_tracker_url      : issue_tracker_url,
+            display_url            : display_url,
             silentlib_version_range: silentlib_version_range
     ]
     inputs.properties replaceProperties
@@ -181,36 +188,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
-}
-
-if (project.hasProperty('curseforge.apiKey')) {
-    curseforge {
-        apiKey = property('curseforge.apiKey')
-        project {
-            id = project.cf_project_id
-            changelog = file(project.cf_changelog_filename)
-            releaseType = project.release_type
-            addGameVersion(project.minecraft_version)
-            mainArtifact(jar) {
-            }
-        }
-    }
-}
-
-if (project.hasProperty('modrinth_token')) {
-    modrinth {
-        token = property('modrinth.token')
-        projectId = project.mr_project_id
-        versionNumber = project.mod_version
-        versionType = project.release_type
-        uploadFile = jar
-        gameVersions = [project.minecraft_version]
-        loaders = ["neoforge"]
-        changelog = new File("CHANGELOG.md").text
-        dependencies = {
-            required.project "silent-lib"
-        }
-    }
 }
 
 // GPR/Maven publishing

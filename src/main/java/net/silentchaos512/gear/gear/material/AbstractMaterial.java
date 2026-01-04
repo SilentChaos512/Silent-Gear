@@ -93,9 +93,8 @@ public abstract class AbstractMaterial implements Material {
         }
         stack.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
 
-        Material iMaterial = material.get();
-        if (iMaterial != null) {
-            return MaterialInstance.of(iMaterial, stack);
+        if (material.isValid()) {
+            return MaterialInstance.of(material.get(), stack);
         } else {
             return material;
         }

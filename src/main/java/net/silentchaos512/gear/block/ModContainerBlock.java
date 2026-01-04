@@ -30,7 +30,7 @@ public abstract class ModContainerBlock<T extends BlockEntity> extends BaseEntit
 
     @Override
     public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!worldIn.isClientSide) {
+        if (!worldIn.isClientSide()) {
             BlockEntity tile = worldIn.getBlockEntity(pos);
             if (tile instanceof INamedContainerExtraData te && player instanceof ServerPlayer) {
                 player.openMenu(te, te::encodeExtraData);

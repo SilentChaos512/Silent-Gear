@@ -1,28 +1,25 @@
 package net.silentchaos512.gear.api.util;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.property.TraitListProperty;
-import net.silentchaos512.gear.api.property.TraitListPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Properties;
 import java.util.function.Supplier;
 
 public interface GearComponentInstance<A extends GearComponent<?>> {
     @Nullable
     A get();
 
-    ResourceLocation getId();
+    Identifier getId();
 
     ItemStack getItem();
 

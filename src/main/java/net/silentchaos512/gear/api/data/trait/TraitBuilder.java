@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.api.data.trait;
 
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitEffect;
@@ -21,8 +21,8 @@ public class TraitBuilder {
     private Component description;
     private final List<TraitEffect> effects = new ArrayList<>();
     private final List<ITraitCondition> conditions = new ArrayList<>();
-    private final List<ResourceLocation> cancelsList = new ArrayList<>();
-    private final List<ResourceLocation> overridesList = new ArrayList<>();
+    private final List<Identifier> cancelsList = new ArrayList<>();
+    private final List<Identifier> overridesList = new ArrayList<>();
     private final List<Component> extraWikiLines = new ArrayList<>();
 
     public TraitBuilder(DataResource<Trait> trait, int maxLevel) {
@@ -87,7 +87,7 @@ public class TraitBuilder {
         return cancelsWith(trait.getId());
     }
 
-    public TraitBuilder cancelsWith(ResourceLocation trait) {
+    public TraitBuilder cancelsWith(Identifier trait) {
         this.cancelsList.add(trait);
         return this;
     }
@@ -96,7 +96,7 @@ public class TraitBuilder {
         return overridesTrait(trait.getId());
     }
 
-    public TraitBuilder overridesTrait(ResourceLocation trait) {
+    public TraitBuilder overridesTrait(Identifier trait) {
         this.overridesList.add(trait);
         return this;
     }

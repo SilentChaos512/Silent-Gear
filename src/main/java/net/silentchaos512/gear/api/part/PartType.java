@@ -1,14 +1,12 @@
 package net.silentchaos512.gear.api.part;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -18,7 +16,6 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.lib.util.NameUtils;
@@ -59,7 +56,7 @@ public record PartType(
     }
 
     @SuppressWarnings("WeakerAccess")
-    public ResourceLocation getCompoundPartId(GearType gearType) {
+    public Identifier getCompoundPartId(GearType gearType) {
         return getCompoundPartItem(gearType)
                 .map(NameUtils::fromItem)
                 .orElseGet(() -> SilentGear.getId("invalid"));

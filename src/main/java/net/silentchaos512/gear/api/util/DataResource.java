@@ -3,7 +3,7 @@ package net.silentchaos512.gear.api.util;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.GearPart;
@@ -20,10 +20,10 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class DataResource<T> implements Supplier<T> {
-    private final ResourceLocation objectId;
-    private final Function<ResourceLocation, T> getter;
+    private final Identifier objectId;
+    private final Function<Identifier, T> getter;
 
-    public DataResource(ResourceLocation id, Function<ResourceLocation, T> getter) {
+    public DataResource(Identifier id, Function<Identifier, T> getter) {
         this.objectId = id;
         this.getter = getter;
     }
@@ -36,7 +36,7 @@ public class DataResource<T> implements Supplier<T> {
         return material(SilentGear.getId(modPath));
     }
 
-    public static DataResource<Material> material(ResourceLocation id) {
+    public static DataResource<Material> material(Identifier id) {
         return new DataResource<>(id, SgRegistries.MATERIAL::get);
     }
 
@@ -52,7 +52,7 @@ public class DataResource<T> implements Supplier<T> {
         return part(SilentGear.getId(modPath));
     }
 
-    public static DataResource<GearPart> part(ResourceLocation id) {
+    public static DataResource<GearPart> part(Identifier id) {
         return new DataResource<>(id, SgRegistries.PART::get);
     }
 
@@ -60,7 +60,7 @@ public class DataResource<T> implements Supplier<T> {
         return trait(SilentGear.getId(modPath));
     }
 
-    public static DataResource<Trait> trait(ResourceLocation id) {
+    public static DataResource<Trait> trait(Identifier id) {
         return new DataResource<>(id, SgRegistries.TRAIT::get);
     }
 
@@ -83,7 +83,7 @@ public class DataResource<T> implements Supplier<T> {
         return ret;
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return this.objectId;
     }
 
@@ -125,29 +125,29 @@ public class DataResource<T> implements Supplier<T> {
         return this.getId().hashCode();
     }
 
-    public static final Codec<DataResource<Material>> MATERIAL_CODEC = ResourceLocation.CODEC.xmap(
+    public static final Codec<DataResource<Material>> MATERIAL_CODEC = Identifier.CODEC.xmap(
             DataResource::material,
             DataResource::getId
     );
-    public static final Codec<DataResource<GearPart>> PART_CODEC = ResourceLocation.CODEC.xmap(
+    public static final Codec<DataResource<GearPart>> PART_CODEC = Identifier.CODEC.xmap(
             DataResource::part,
             DataResource::getId
     );
-    public static final Codec<DataResource<Trait>> TRAIT_CODEC = ResourceLocation.CODEC.xmap(
+    public static final Codec<DataResource<Trait>> TRAIT_CODEC = Identifier.CODEC.xmap(
             DataResource::trait,
             DataResource::getId
     );
 
     public static final StreamCodec<FriendlyByteBuf, DataResource<Material>> MATERIAL_STREAM_CODEC = StreamCodec.of(
-            (buf, d) -> buf.writeResourceLocation(d.getId()),
-            buf -> DataResource.material(buf.readResourceLocation())
+            (buf, d) -> buf.writeIdentifier(d.getId()),
+            buf -> DataResource.material(buf.readIdentifier())
     );
     public static final StreamCodec<FriendlyByteBuf, DataResource<GearPart>> PART_STREAM_CODEC = StreamCodec.of(
-            (buf, d) -> buf.writeResourceLocation(d.getId()),
-            buf -> DataResource.part(buf.readResourceLocation())
+            (buf, d) -> buf.writeIdentifier(d.getId()),
+            buf -> DataResource.part(buf.readIdentifier())
     );
     public static final StreamCodec<FriendlyByteBuf, DataResource<Trait>> TRAIT_STREAM_CODEC = StreamCodec.of(
-            (buf, d) -> buf.writeResourceLocation(d.getId()),
-            buf -> DataResource.trait(buf.readResourceLocation())
+            (buf, d) -> buf.writeIdentifier(d.getId()),
+            buf -> DataResource.trait(buf.readIdentifier())
     );
 }

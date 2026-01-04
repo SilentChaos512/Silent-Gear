@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.block.press;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -152,7 +153,7 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
     }
 
     @Override
-    public ItemStackHandler createItemHandler() {
+    public NonNullList<ItemStack> createInternalItemList() {
         return new ItemStackHandler(2) {
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {

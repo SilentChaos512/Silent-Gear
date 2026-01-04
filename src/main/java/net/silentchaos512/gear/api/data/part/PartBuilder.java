@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -31,14 +31,14 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
 public class PartBuilder {
-    protected final ResourceLocation id;
+    protected final Identifier id;
     protected final GearType gearType;
     protected final PartType partType;
     protected PartCraftingData crafting;
     protected PartDisplayData display;
     protected final GearPropertyMap properties = new GearPropertyMap();
 
-    public PartBuilder(ResourceLocation id, Supplier<GearType> gearType, Supplier<PartType> partType) {
+    public PartBuilder(Identifier id, Supplier<GearType> gearType, Supplier<PartType> partType) {
         this.id = id;
         this.gearType = gearType.get();
         this.partType = partType.get();
@@ -48,7 +48,7 @@ public class PartBuilder {
         }
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 

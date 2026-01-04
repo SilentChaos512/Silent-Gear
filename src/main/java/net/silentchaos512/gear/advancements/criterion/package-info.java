@@ -1,4 +1,4 @@
 @NullMarked
-package net.silentchaos512.gear.data.tags;
+package net.silentchaos512.gear.advancements.criterion;
 
 import org.jspecify.annotations.NullMarked;

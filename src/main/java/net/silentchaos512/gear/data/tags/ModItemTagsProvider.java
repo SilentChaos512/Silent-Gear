@@ -1,12 +1,10 @@
 package net.silentchaos512.gear.data.tags;
 
-import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -15,6 +13,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -31,7 +30,7 @@ import java.util.Comparator;
 
 public class ModItemTagsProvider extends ItemTagsProvider {
     public ModItemTagsProvider(GatherDataEvent event, BlockTagsProvider blocks) {
-        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), blocks.contentsGetter(), SilentGear.MOD_ID);
+        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), SilentGear.MOD_ID);
     }
 
     @Override
@@ -425,7 +424,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     }
 
     private TagKey<Item> makeWrapper(String namespace, String path) {
-        return ItemTags.create(ResourceLocation.fromNamespaceAndPath(namespace, path));
+        return ItemTags.create(Identifier.fromNamespaceAndPath(namespace, path));
     }
 
     private void builder(TagKey<Item> tag, ItemLike... items) {

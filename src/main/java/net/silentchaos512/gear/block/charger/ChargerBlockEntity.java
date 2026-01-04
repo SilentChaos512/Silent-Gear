@@ -3,6 +3,7 @@ package net.silentchaos512.gear.block.charger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -14,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.Config;
@@ -347,7 +350,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
     }
 
     @Override
-    public ItemStackHandler createItemHandler() {
+    public NonNullList<ItemStack> createInternalItemList() {
         return new ItemStackHandler(INVENTORY_SIZE) {
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
@@ -373,8 +376,8 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tags, HolderLookup.Provider provider) {
-        super.loadAdditional(tags, provider);
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
         this.progress = tags.getInt("Progress").orElse(0);
         this.workTime = tags.getInt("WorkTime").orElse(0);
         this.charge = tags.getInt("Charge").orElse(0);
@@ -382,8 +385,8 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
     }
 
     @Override
-    public void saveAdditional(CompoundTag tags, HolderLookup.Provider provider) {
-        super.saveAdditional(tags, provider);
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
         tags.putInt("Progress", this.progress);
         tags.putInt("WorkTime", this.workTime);
         tags.putInt("Charge", this.charge);

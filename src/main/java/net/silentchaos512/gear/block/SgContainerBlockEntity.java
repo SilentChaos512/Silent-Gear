@@ -1,33 +1,36 @@
 package net.silentchaos512.gear.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
-    protected final ItemStackHandler items;
+    protected final NonNullList<ItemStack> items;
 
     protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
-        this.items = createItemHandler();
+        this.items = createInternalItemList();
     }
 
     /**
      * This constructor is provided for cases where additional parameters in the block entity's constructor are required
-     * to create the item handler. In such cases, {@link #createItemHandler()} will not work.
+     * to create the item handler. In such cases, {@link #createInternalItemList()} will not work.
      */
-    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, Supplier<ItemStackHandler> itemHandlerFactory) {
+    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, Supplier<NonNullList<ItemStack>> itemListFactory) {
         super(pType, pPos, pBlockState);
-        this.items = itemHandlerFactory.get();
+        this.items = itemListFactory.get();
     }
 
     /**
@@ -37,23 +40,23 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
      *
      * @return The newly created item handler, which is stored in {@link #items}
      */
-    public abstract ItemStackHandler createItemHandler();
+    public abstract NonNullList<ItemStack> createInternalItemList();
 
     /**
      * Returns an item handler to be used for capabilities.
      *
      * @return The item handler
      */
-    public IItemHandler getItemHandler() {
-        return this.items;
+    public ResourceHandler<@NotNull ItemResource> getItemHandler() {
+        return new ItemStacksResourceHandler(this.items);
     }
 
     @Deprecated
     @Override
     protected NonNullList<ItemStack> getItems() {
-        NonNullList<ItemStack> result = NonNullList.withSize(this.items.getSlots(), ItemStack.EMPTY);
-        for (int i = 0; i < this.items.getSlots(); ++i) {
-            result.set(i, this.items.getStackInSlot(i));
+        NonNullList<ItemStack> result = NonNullList.withSize(this.items.size(), ItemStack.EMPTY);
+        for (int i = 0; i < this.items.size(); ++i) {
+            result.set(i, this.items.get(i));
         }
         return result;
     }
@@ -61,42 +64,40 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     @Deprecated
     @Override
     protected void setItems(NonNullList<ItemStack> pItems) {
-        for (int i = 0; i < this.items.getSlots() && i < pItems.size(); ++i) {
-            this.items.setStackInSlot(i, pItems.get(i));
+        for (int i = 0; i < this.items.size() && i < pItems.size(); ++i) {
+            this.items.set(i, pItems.get(i));
         }
     }
 
     @Override
     public void clearContent() {
-        for (int i = 0; i < this.items.getSlots(); ++i) {
-            this.items.setStackInSlot(i, ItemStack.EMPTY);
-        }
+        this.items.clear();
     }
 
     @Override
     public ItemStack getItem(int pSlot) {
-        return this.items.getStackInSlot(pSlot);
+        return this.items.get(pSlot);
     }
 
     @Override
     public void setItem(int pSlot, ItemStack pStack) {
-        ItemStack itemstack = this.items.getStackInSlot(pSlot);
-        boolean flag = !pStack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, pStack);
-        this.items.setStackInSlot(pSlot, pStack);
+        ItemStack itemstack = this.items.get(pSlot);
+        boolean itemsIdentical = !pStack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, pStack);
+        this.items.set(pSlot, pStack);
         if (pStack.getCount() > this.getMaxStackSize()) {
             pStack.setCount(this.getMaxStackSize());
         }
 
-        if (pSlot < getContainerSize() - 1 && !flag) {
+        if (pSlot < getContainerSize() - 1 && !itemsIdentical) {
             this.setChanged();
         }
     }
 
     @Override
     public ItemStack removeItem(int pSlot, int pAmount) {
-        if (pSlot >= 0 && pSlot < this.items.getSlots() && !this.items.getStackInSlot(pSlot).isEmpty() && pAmount > 0) {
-            var stackInSlot = this.items.getStackInSlot(pSlot);
-            this.items.setStackInSlot(pSlot, stackInSlot.copyWithCount(stackInSlot.getCount() - pAmount));
+        if (pSlot >= 0 && pSlot < this.items.size() && !this.items.get(pSlot).isEmpty() && pAmount > 0) {
+            var stackInSlot = this.items.get(pSlot);
+            this.items.set(pSlot, stackInSlot.copyWithCount(stackInSlot.getCount() - pAmount));
             return stackInSlot.copyWithCount(pAmount);
         }
         return ItemStack.EMPTY;
@@ -104,9 +105,9 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     public ItemStack removeItemNoUpdate(int pSlot) {
-        if (pSlot >= 0 && pSlot < this.items.getSlots()) {
-            ItemStack stack = this.items.getStackInSlot(pSlot);
-            this.items.setStackInSlot(pSlot, ItemStack.EMPTY);
+        if (pSlot >= 0 && pSlot < this.items.size()) {
+            ItemStack stack = this.items.get(pSlot);
+            this.items.set(pSlot, ItemStack.EMPTY);
             return stack;
         }
         return ItemStack.EMPTY;
@@ -114,13 +115,12 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     public int getContainerSize() {
-        return this.items.getSlots();
+        return this.items.size();
     }
 
     @Override
     public boolean isEmpty() {
-        for (int i = 0; i < this.items.getSlots(); ++i) {
-            var stack = this.items.getStackInSlot(i);
+        for (ItemStack stack : this.items) {
             if (!stack.isEmpty()) {
                 return false;
             }
@@ -134,14 +134,15 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+    protected void loadAdditional(ValueInput input) {
         super.loadAdditional(tag, registries);
         this.items.deserializeNBT(registries, tag.getCompound("items").orElse(new CompoundTag()));
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
         tag.put("items", this.items.serializeNBT(registries));
+        output.put
     }
 }

@@ -107,7 +107,7 @@ public record GearPropertiesData(
         data.properties.forEach((property, value) -> {
             var key = SgRegistries.GEAR_PROPERTY.getKey(property);
             assert key != null;
-            buf.writeResourceLocation(key);
+            buf.writeIdentifier(key);
             property.rawStreamCodec().encode(buf, value);
         });
     }
@@ -116,7 +116,7 @@ public record GearPropertiesData(
         Map<GearProperty<?, ?>, GearPropertyValue<?>> map = new LinkedHashMap<>();
         int count = buf.readVarInt();
         for (int i = 0; i < count; ++i) {
-            var optionalReference = SgRegistries.GEAR_PROPERTY.get(buf.readResourceLocation());
+            var optionalReference = SgRegistries.GEAR_PROPERTY.get(buf.readIdentifier());
             if (optionalReference.isPresent()) {
                 GearProperty<?, ? extends GearPropertyValue<?>> property = optionalReference.get().value();
                 GearPropertyValue<?> value = property.rawStreamCodec().decode(buf);

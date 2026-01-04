@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
@@ -50,7 +50,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
             MaterialInstance::new
     );
 
-    private static final Map<ResourceLocation, MaterialInstance> QUICK_CACHE = new HashMap<>();
+    private static final Map<Identifier, MaterialInstance> QUICK_CACHE = new HashMap<>();
 
     private final DataResource<Material> material;
     private final ItemStack item;
@@ -105,7 +105,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return List.copyOf(list);
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return material.getId();
     }
 

@@ -6,7 +6,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.silentchaos512.gear.api.item.GearType;
@@ -230,7 +230,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     }
 
     public MutableComponent getDisplayName() {
-        ResourceLocation name = SgRegistries.GEAR_PROPERTY.getKey(this);
+        Identifier name = SgRegistries.GEAR_PROPERTY.getKey(this);
         if (name == null) return Component.literal("ERROR");
         return Component.translatable("property." + name.getNamespace() + "." + name.getPath());
     }

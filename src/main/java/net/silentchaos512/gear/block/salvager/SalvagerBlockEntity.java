@@ -3,6 +3,7 @@ package net.silentchaos512.gear.block.salvager;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -64,7 +65,7 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
     }
 
     @Override
-    public ItemStackHandler createItemHandler() {
+    public NonNullList<ItemStack> createInternalItemList() {
         return new ItemStackHandler(INVENTORY_SIZE) {
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {

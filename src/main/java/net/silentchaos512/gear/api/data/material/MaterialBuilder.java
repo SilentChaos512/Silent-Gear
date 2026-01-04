@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -35,7 +35,7 @@ import java.util.function.Supplier;
 @SuppressWarnings({"WeakerAccess", "OverlyComplexClass"})
 public class MaterialBuilder<M extends Material> {
     @Nullable BuiltinMaterials builtinMaterial;
-    private final ResourceLocation id;
+    private final Identifier id;
     private final MaterialFactory<M> factory;
     private DataResource<Material> parent = DataResource.empty();
     private MaterialCraftingData crafting = null;
@@ -43,7 +43,7 @@ public class MaterialBuilder<M extends Material> {
     private final Map<PartType, GearPropertyMap> properties = new LinkedHashMap<>();
     private final Map<PartType, List<TraitInstance>> traits = new LinkedHashMap<>();
 
-    public MaterialBuilder(ResourceLocation id, MaterialFactory<M> factory) {
+    public MaterialBuilder(Identifier id, MaterialFactory<M> factory) {
         this.id = id;
         this.factory = factory;
         this.display = new MaterialDisplayData(
@@ -79,7 +79,7 @@ public class MaterialBuilder<M extends Material> {
         return new MaterialBuilder<>(material.getId(), ProcessedMaterial::new);
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 

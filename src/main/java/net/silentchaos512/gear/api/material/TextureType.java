@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 
 import javax.annotation.Nullable;
@@ -14,8 +14,8 @@ public enum TextureType {
     LOW_CONTRAST("lc");
 
     private final String alias;
-    private final ResourceLocation armorTexture1;
-    private final ResourceLocation armorTexture2;
+    private final Identifier armorTexture1;
+    private final Identifier armorTexture2;
 
     TextureType(String alias) {
         this.alias = alias;
@@ -23,7 +23,7 @@ public enum TextureType {
         this.armorTexture2 = SilentGear.getId("textures/models/armor/main_generic_" + this.alias + "_layer_2.png");
     }
 
-    public ResourceLocation getArmorTexture(boolean innerModel) {
+    public Identifier getArmorTexture(boolean innerModel) {
         return innerModel ? this.armorTexture2 : this.armorTexture1;
     }
 

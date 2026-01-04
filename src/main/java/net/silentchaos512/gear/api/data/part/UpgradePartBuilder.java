@@ -2,7 +2,7 @@ package net.silentchaos512.gear.api.data.part;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTypeMatcher;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class UpgradePartBuilder extends PartBuilder {
     private GearTypeMatcher upgradeGearTypes = GearTypeMatcher.ALL;
 
-    public UpgradePartBuilder(ResourceLocation id, Supplier<GearType> gearType, Supplier<PartType> partType) {
+    public UpgradePartBuilder(Identifier id, Supplier<GearType> gearType, Supplier<PartType> partType) {
         super(id, gearType, partType);
     }
 

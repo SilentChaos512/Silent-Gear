@@ -5,7 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.trait.Trait;
 import org.jetbrains.annotations.NotNull;
@@ -39,12 +39,12 @@ public abstract class TraitsProviderBase implements DataProvider {
     @Override
     public CompletableFuture<?> run(@NotNull CachedOutput cache) {
         Path outputFolder = this.generator.getPackOutput().getOutputFolder();
-        Set<ResourceLocation> set = Sets.newHashSet();
+        Set<Identifier> set = Sets.newHashSet();
         List<CompletableFuture<?>> list = new ArrayList<>();
 
         return this.lookupProvider.thenCompose(provider -> {
             this.getTraits(provider).forEach(builder -> {
-                ResourceLocation id = builder.getTraitHolder().getId();
+                Identifier id = builder.getTraitHolder().getId();
                 if (!set.add(id)) {
                     throw new IllegalStateException("Duplicate trait: " + id);
                 }

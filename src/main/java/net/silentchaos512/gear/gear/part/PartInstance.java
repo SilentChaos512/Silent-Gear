@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -45,8 +45,6 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
             ItemStack.OPTIONAL_STREAM_CODEC, p -> p.craftingItem,
             PartInstance::new
     );
-
-    private static final Map<ResourceLocation, PartInstance> CACHE_UNGRADED_PARTS = new HashMap<>();
 
     private final DataResource<GearPart> part;
     private final ItemStack craftingItem;
@@ -134,7 +132,7 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return part.getId();
     }
 

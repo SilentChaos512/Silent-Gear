@@ -2,6 +2,7 @@ package net.silentchaos512.gear.block.grader;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -12,6 +13,8 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.Config;
@@ -255,14 +258,14 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
-        super.loadAdditional(pTag, pRegistries);
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
         this.progress = pTag.getInt("Progress").orElse(0);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
-        super.saveAdditional(pTag, pRegistries);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
         pTag.putInt("Progress", this.progress);
     }
 
@@ -324,7 +327,7 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     }
 
     @Override
-    public ItemStackHandler createItemHandler() {
+    public NonNullList<ItemStack> createInternalItemList() {
         return new ItemStackHandler(INVENTORY_SIZE) {
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {

@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.TooltipFlag;
 import net.silentchaos512.gear.api.property.GearProperty;
@@ -83,7 +83,7 @@ public record TraitInstance(
         return trait.isPresent() && level > 0;
     }
 
-    public ResourceLocation getTraitId() {
+    public Identifier getTraitId() {
         return trait.getId();
     }
 

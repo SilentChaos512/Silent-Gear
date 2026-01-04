@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +31,7 @@ import java.util.stream.Stream;
 @Deprecated
 public class CustomAlloyIngredient implements ICustomIngredient {
     public static final MapCodec<CustomAlloyIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.flatXmap(
+            Identifier.CODEC.flatXmap(
                     id -> Optional.of(BuiltInRegistries.ITEM.get(id).orElseThrow().value())
                             .filter(item -> item instanceof CustomMaterialItem)
                             .map(item -> DataResult.success((CustomMaterialItem) item))

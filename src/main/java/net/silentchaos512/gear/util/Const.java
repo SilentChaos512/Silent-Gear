@@ -3,7 +3,7 @@ package net.silentchaos512.gear.util;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
@@ -19,49 +19,49 @@ import java.util.List;
 
 public final class Const {
     // Model loaders
-    public static final ResourceLocation COMPOUND_PART_MODEL_LOADER = modId("compound_part_model");
-    public static final ResourceLocation GEAR_MODEL_LOADER = modId("gear_model");
+    public static final Identifier COMPOUND_PART_MODEL_LOADER = modId("compound_part_model");
+    public static final Identifier GEAR_MODEL_LOADER = modId("gear_model");
 
     // Model properties
-    public static final ResourceLocation BROKEN_PROPERTY = modId("broken");
-    public static final ResourceLocation MODEL = SilentGear.getId("model");
+    public static final Identifier BROKEN_PROPERTY = modId("broken");
+    public static final Identifier MODEL = SilentGear.getId("model");
 
     // Recipe types and categories
-    public static final ResourceLocation ALLOY_MAKING = modId("alloy_making");
-    public static final ResourceLocation ALLOY_MAKING_CRUDE = modId("alloy_making_crude");
-    public static final ResourceLocation ALLOY_MAKING_FABRIC = modId("alloy_making/fabric");
-    public static final ResourceLocation ALLOY_MAKING_GEM = modId("alloy_making/gem");
-    public static final ResourceLocation ALLOY_MAKING_METAL = modId("alloy_making/metal");
-    public static final ResourceLocation ALLOY_MAKING_SUPER = modId("alloy_making/super");
-    public static final ResourceLocation COMPOUND_PART = modId("compound_part");
-    public static final ResourceLocation CONVERSION = modId("conversion");
-    public static final ResourceLocation FILL_REPAIR_KIT = modId("fill_repair_kit");
-    public static final ResourceLocation GRADING = modId("grading");
-    public static final ResourceLocation MOD_KIT_REMOVE_PART = modId("mod_kit_remove_part");
-    public static final ResourceLocation PRESSING = modId("pressing");
-    public static final ResourceLocation PRESSING_MATERIAL = modId("pressing/material");
-    public static final ResourceLocation QUICK_REPAIR = modId("quick_repair");
-    public static final ResourceLocation SALVAGING = modId("salvaging");
-    public static final ResourceLocation SALVAGING_COMPOUND_PART = modId("salvaging/compound_part");
-    public static final ResourceLocation SALVAGING_GEAR = modId("salvaging/gear");
-    public static final ResourceLocation SHAPED_GEAR_CRAFTING = modId("shaped_gear_crafting");
-    public static final ResourceLocation SHAPELESS_GEAR_CRAFTING = modId("gear_crafting");
-    public static final ResourceLocation SMITHING_COATING = modId("smithing/coating");
-    public static final ResourceLocation SMITHING_UPGRADE = modId("smithing/upgrade");
-    public static final ResourceLocation SWAP_GEAR_PART = modId("swap_gear_part");
-    public static final ResourceLocation TOOL_ACTION = modId("tool_action");
+    public static final Identifier ALLOY_MAKING = modId("alloy_making");
+    public static final Identifier ALLOY_MAKING_CRUDE = modId("alloy_making_crude");
+    public static final Identifier ALLOY_MAKING_FABRIC = modId("alloy_making/fabric");
+    public static final Identifier ALLOY_MAKING_GEM = modId("alloy_making/gem");
+    public static final Identifier ALLOY_MAKING_METAL = modId("alloy_making/metal");
+    public static final Identifier ALLOY_MAKING_SUPER = modId("alloy_making/super");
+    public static final Identifier COMPOUND_PART = modId("compound_part");
+    public static final Identifier CONVERSION = modId("conversion");
+    public static final Identifier FILL_REPAIR_KIT = modId("fill_repair_kit");
+    public static final Identifier GRADING = modId("grading");
+    public static final Identifier MOD_KIT_REMOVE_PART = modId("mod_kit_remove_part");
+    public static final Identifier PRESSING = modId("pressing");
+    public static final Identifier PRESSING_MATERIAL = modId("pressing/material");
+    public static final Identifier QUICK_REPAIR = modId("quick_repair");
+    public static final Identifier SALVAGING = modId("salvaging");
+    public static final Identifier SALVAGING_COMPOUND_PART = modId("salvaging/compound_part");
+    public static final Identifier SALVAGING_GEAR = modId("salvaging/gear");
+    public static final Identifier SHAPED_GEAR_CRAFTING = modId("shaped_gear_crafting");
+    public static final Identifier SHAPELESS_GEAR_CRAFTING = modId("gear_crafting");
+    public static final Identifier SMITHING_COATING = modId("smithing/coating");
+    public static final Identifier SMITHING_UPGRADE = modId("smithing/upgrade");
+    public static final Identifier SWAP_GEAR_PART = modId("swap_gear_part");
+    public static final Identifier TOOL_ACTION = modId("tool_action");
 
     // Mod IDs
     public static final String CAELUS = "caelus";
     public static final String CURIOS = "curios";
 
     // Random
-    public static final ResourceLocation NULL_ID = ResourceLocation.withDefaultNamespace("null");
+    public static final Identifier NULL_ID = Identifier.withDefaultNamespace("null");
 
     // Material Modifiers
-    public static final ResourceLocation CRUDE = SilentGear.getId("crude");
-    public static final ResourceLocation GRADE = SilentGear.getId("grade");
-    public static final ResourceLocation STARCHARGED = SilentGear.getId("starcharged");
+    public static final Identifier CRUDE = SilentGear.getId("crude");
+    public static final Identifier GRADE = SilentGear.getId("grade");
+    public static final Identifier STARCHARGED = SilentGear.getId("starcharged");
 
     // Compound-crafting block info
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
@@ -287,7 +287,7 @@ public final class Const {
         private Traits() {}
     }
 
-    private static ResourceLocation modId(String path) {
-        return ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, path);
+    private static Identifier modId(String path) {
+        return Identifier.fromNamespaceAndPath(SilentGear.MOD_ID, path);
     }
 }

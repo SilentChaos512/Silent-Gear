@@ -5,7 +5,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
@@ -22,13 +22,13 @@ public abstract class UnitMaterialModifier implements IMaterialModifier {
     }
 
     public static class Type<M extends UnitMaterialModifier> implements IMaterialModifierType<M> {
-        private final ResourceLocation id;
+        private final Identifier id;
         private final M instance;
         private final Supplier<DataComponentType<Unit>> dataComponent;
         private final MapCodec<M> codec;
         private final StreamCodec<RegistryFriendlyByteBuf, M> streamCodec;
 
-        public Type(ResourceLocation id, M instance, Supplier<DataComponentType<Unit>> dataComponent, MapCodec<M> codec, StreamCodec<RegistryFriendlyByteBuf, M> streamCodec) {
+        public Type(Identifier id, M instance, Supplier<DataComponentType<Unit>> dataComponent, MapCodec<M> codec, StreamCodec<RegistryFriendlyByteBuf, M> streamCodec) {
             this.id = id;
             this.instance = instance;
             this.dataComponent = dataComponent;
@@ -37,7 +37,7 @@ public abstract class UnitMaterialModifier implements IMaterialModifier {
         }
 
         @Override
-        public ResourceLocation getId() {
+        public Identifier getId() {
             return this.id;
         }
 

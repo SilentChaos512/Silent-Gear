@@ -55,7 +55,7 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
 
     @Override
     public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
-        if (worldIn.isClientSide) {
+        if (worldIn.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         this.interactWith(worldIn, pos, player);
@@ -111,7 +111,7 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, info.getBlockEntityType(), info.getServerBlockEntityTicker());
+        return level.isClientSide() ? null : createTickerHelper(blockEntityType, info.getBlockEntityType(), info.getServerBlockEntityTicker());
     }
 
     @Override

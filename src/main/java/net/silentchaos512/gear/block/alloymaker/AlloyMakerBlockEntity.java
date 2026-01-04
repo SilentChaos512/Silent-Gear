@@ -11,8 +11,10 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -21,6 +23,8 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
@@ -80,7 +84,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     };
 
     public AlloyMakerBlockEntity(AlloyMakerInfo<R> info, BlockPos pos, BlockState state) {
-        super(info.getBlockEntityType(), pos, state, () -> createItemHandler(info));
+        super(info.getBlockEntityType(), pos, state, () -> createInternalItemList(info));
         this.info = info;
         this.quickCheck = RecipeManager.createCheck(info.getRecipeType());
     }
@@ -123,7 +127,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     }
 
     public void encodeExtraData(FriendlyByteBuf buffer) {
-        buffer.writeByte(this.getItemHandler().getSlots());
+        buffer.writeByte(this.getItemHandler().size());
         buffer.writeByte(this.fields.getCount());
     }
 
@@ -184,7 +188,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
                 ++progress;
             }
 
-            if (progress >= WORK_TIME && !level.isClientSide) {
+            if (progress >= WORK_TIME && !level.isClientSide()) {
                 finishWork(recipe, registryAccess, materials, current);
             }
         } else {
@@ -311,13 +315,17 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
 
     @Override
     protected Component getDefaultName() {
-        ResourceLocation key = BuiltInRegistries.BLOCK.getKey(this.info.getBlock());
+        Identifier key = BuiltInRegistries.BLOCK.getKey(this.info.getBlock());
         return Component.translatable(Util.makeDescriptionId("container", key));
     }
 
     @Override
-    public ItemStackHandler createItemHandler() {
+    public NonNullList<ItemStack> createInternalItemList() {
         throw new NotImplementedException("Please use the secondary SgContainerBlockEntity constructor for AlloyMakerBlockEntity");
+    }
+
+    public static NonNullList<ItemStack> createInternalItemList(AlloyMakerInfo<?> info) {
+        return NonNullList.withSize(info.getInputSlotCount() + 2, ItemStack.EMPTY);
     }
 
     public static ItemStackHandler createItemHandler(AlloyMakerInfo<?> info) {
@@ -355,15 +363,15 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     }
 
     @Override
-    public void loadAdditional(CompoundTag tags, HolderLookup.Provider provider) {
-        super.loadAdditional(tags, provider);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
         this.progress = tags.getInt("Progress").orElse(0);
         this.workEnabled = tags.getBoolean("WorkEnabled").orElse(false);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tags, HolderLookup.Provider provider) {
-        super.saveAdditional(tags, provider);
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
         tags.putInt("Progress", this.progress);
         tags.putBoolean("WorkEnabled", this.workEnabled);
     }

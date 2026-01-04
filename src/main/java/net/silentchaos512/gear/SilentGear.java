@@ -1,6 +1,6 @@
 package net.silentchaos512.gear;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -9,7 +9,6 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.fml.loading.FMLLoader;
 import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +33,7 @@ public final class SilentGear {
 
     public SilentGear(IEventBus modEventBus, ModContainer modContainer) {
         INSTANCE = this;
-        PROXY = FMLEnvironment.dist == Dist.CLIENT
+        PROXY = FMLEnvironment.getDist() == Dist.CLIENT
                 ? new SideProxy.Client(modEventBus, modContainer)
                 : new SideProxy.Server(modEventBus, modContainer);
 
@@ -60,28 +59,28 @@ public final class SilentGear {
     }
 
     public static boolean isDevBuild() {
-        return "NONE".equals(getVersion()) || !FMLLoader.isProduction();
+        return "NONE".equals(getVersion()) || !FMLEnvironment.isProduction();
     }
 
-    public static ResourceLocation getId(String path) {
+    public static Identifier getId(String path) {
         if (path.contains(":")) {
             if (path.startsWith(SilentGear.MOD_ID)) {
-                return ResourceLocation.tryParse(path);
+                return Identifier.tryParse(path);
             } else {
                 throw new IllegalArgumentException("path contains namespace other than " + SilentGear.MOD_ID);
             }
         }
-        return ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, path);
+        return Identifier.fromNamespaceAndPath(SilentGear.MOD_ID, path);
     }
 
     @Nullable
-    public static ResourceLocation getIdWithDefaultNamespace(String name) {
+    public static Identifier getIdWithDefaultNamespace(String name) {
         if (name.contains(":"))
-            return ResourceLocation.tryParse(name);
-        return ResourceLocation.tryParse(RESOURCE_PREFIX + name);
+            return Identifier.tryParse(name);
+        return Identifier.tryParse(RESOURCE_PREFIX + name);
     }
 
-    public static String shortenId(@Nullable ResourceLocation id) {
+    public static String shortenId(@Nullable Identifier id) {
         if (id == null)
             return "null";
         if (MOD_ID.equals(id.getNamespace()))

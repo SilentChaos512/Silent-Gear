@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -32,7 +32,7 @@ public abstract class PartsProviderBase implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         Path outputFolder = this.generator.getPackOutput().getOutputFolder();
-        Set<ResourceLocation> set = Sets.newHashSet();
+        Set<Identifier> set = Sets.newHashSet();
         List<CompletableFuture<?>> list = new ArrayList<>();
 
         this.getParts().forEach(builder -> {
