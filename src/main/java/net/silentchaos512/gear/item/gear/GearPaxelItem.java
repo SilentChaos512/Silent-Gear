@@ -9,6 +9,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -20,7 +21,7 @@ public class GearPaxelItem extends GearPickaxeItem {
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet(ItemStack gear) {
+    public TagKey<Block> getToolBlockSet(GearPropertiesData properties) {
         return SgTags.Blocks.MINEABLE_WITH_PAXEL;
     }
 

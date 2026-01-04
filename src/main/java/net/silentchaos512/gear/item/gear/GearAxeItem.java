@@ -64,7 +64,7 @@ public class GearAxeItem extends AxeItem implements GearDiggerTool {
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet(ItemStack gear) {
+    public TagKey<Block> getToolBlockSet(GearPropertiesData properties) {
         return BlockTags.MINEABLE_WITH_AXE;
     }
 

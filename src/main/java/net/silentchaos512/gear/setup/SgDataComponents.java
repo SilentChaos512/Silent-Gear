@@ -5,6 +5,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
@@ -54,6 +55,12 @@ public class SgDataComponents {
             builder -> builder
                     .persistent(Codec.BOOL)
                     .networkSynchronized(ByteBufCodecs.BOOL)
+    );
+    public static final Supplier<DataComponentType<Unit>> CRUDE = REGISTRAR.registerComponentType(
+            "crude",
+            builder -> builder
+                    .persistent(Unit.CODEC)
+                    .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
     );
     public static final Supplier<DataComponentType<MaterialGrade>> MATERIAL_GRADE = REGISTRAR.registerComponentType(
             "grade",

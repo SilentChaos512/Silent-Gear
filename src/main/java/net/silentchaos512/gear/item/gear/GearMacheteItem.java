@@ -54,7 +54,7 @@ public class GearMacheteItem extends GearSwordItem implements BreakEventHandler,
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet(ItemStack gear) {
+    public TagKey<Block> getToolBlockSet(GearPropertiesData properties) {
         return SgTags.Blocks.MINEABLE_WITH_MACHETE;
     }
 

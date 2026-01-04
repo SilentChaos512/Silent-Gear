@@ -209,7 +209,7 @@ public class GearProperties {
                     NumberProperty.Operation.AVERAGE,
                     NumberProperty.DisplayFormat.UNIT,
                     false,
-                    new GearProperty.Builder<>(3f, 3f, 0f, 100f)
+                    new GearProperty.Builder<>(0f, 0f, -100f, 100f)
                             .group(GearPropertyGroups.ATTACK)
                             .affectedByGrades(false)
                             .affectedBySynergy(false)

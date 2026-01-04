@@ -3,6 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-4.0.30] - 2025-11-23
+### Added
+- The crude mixer, an early game alternative to the super mixer. It does that same thing (makes an alloy out of any two to four materials) but produces a weaker result.
+  - The "Crude" penalty can be changed in the config (compounds.crude_mixer.property_multiplier). The default value of 0.8 gives a 20% penalty (affects all properties that synergy affects).
+  - Has a recipe requiring stone, planks, and flax string
+- A default super mixer recipe, which requires blocks of tyrian steel, a beacon, and a dimerald
+- Models for crude mixer and super mixer by giok3r
+### Changed
+- Updated pt_br localization (PrincessStelllar) [#829]
+- AOE tools (hammer, etc.) now mine 50% faster when targeting a single block by crouching
+- Spears no longer perform a sweeping attack and Sweeping Edge does nothing for them
+### Fixed
+- AOE tools (hammer, etc.) mining blocks instantly while sneaking [#856]
+- Snow golems not "damaging"/aggro-ing mobs  [#852]
+- Armadillos not being damaged correctly (sigmusdewn) [#846, #847, #857]
+- Spoon upgrade not working [#858]
+- Correct entity interaction range for weapons (Electroely) [#845]
+
 ## [1.21.1-4.0.29] - 2025-09-23
 ### Added
 - Alloy Forge recipe for Azure Electrum [#839]

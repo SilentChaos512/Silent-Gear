@@ -275,7 +275,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         }
         Collection<V> propertyModifiers = material.getPropertyModifiers(this, partType, key);
         for (var modifier : this.modifiers) {
-            propertyModifiers = modifier.modifyStats(this, partType, key, propertyModifiers);
+            propertyModifiers = modifier.modifyProperties(this, partType, key, propertyModifiers);
         }
         return propertyModifiers;
     }

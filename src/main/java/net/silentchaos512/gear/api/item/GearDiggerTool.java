@@ -10,11 +10,16 @@ import net.silentchaos512.gear.api.property.HarvestTier;
 import net.silentchaos512.gear.api.property.HarvestTierPropertyValue;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.util.GearData;
 
 import java.util.List;
 
 public interface GearDiggerTool extends GearTool {
-    TagKey<Block> getToolBlockSet(ItemStack gear);
+    TagKey<Block> getToolBlockSet(GearPropertiesData properties);
+
+    default TagKey<Block> getToolBlockSet(ItemStack stack) {
+        return getToolBlockSet(GearData.getProperties(stack));
+    }
 
     @Override
     default Tool createToolProperties(ItemStack gear, GearPropertiesData properties, HolderGetter<Block> blocks) {
@@ -22,8 +27,8 @@ public interface GearDiggerTool extends GearTool {
         var harvestTier = properties.getOrDefault(GearProperties.HARVEST_TIER, new HarvestTierPropertyValue(HarvestTier.ZERO));
         return new Tool(
                 List.of(
-                        Tool.Rule.deniesDrops(blocks.getOrThrow(harvestTier.value().incorrectForTool())),
-                        Tool.Rule.minesAndDrops(blocks.getOrThrow(getToolBlockSet(gear)), harvestSpeed)
+                        Tool.Rule.deniesDrops(harvestTier.value().incorrectForTool()),
+                        Tool.Rule.minesAndDrops(getToolBlockSet(properties), harvestSpeed)
                 ),
                 1.0F,
                 1,

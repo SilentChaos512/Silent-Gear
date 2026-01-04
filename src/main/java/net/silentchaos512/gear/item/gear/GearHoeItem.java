@@ -20,6 +20,7 @@ import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +42,7 @@ public class GearHoeItem extends HoeItem implements GearDiggerTool {
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet(ItemStack gear) {
+    public TagKey<Block> getToolBlockSet(GearPropertiesData properties) {
         return BlockTags.MINEABLE_WITH_HOE;
     }
 

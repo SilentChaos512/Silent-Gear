@@ -129,8 +129,14 @@ public interface IAoeTool {
 
             BlockHitResult blockHitResult = (BlockHitResult) hitResult;
             List<BlockPos> extraBlocks = aoeToolItem.getExtraBlocks(level, blockHitResult, player, tool);
+            if (extraBlocks.isEmpty()) {
+                // Single block breaking, give it a speed boost
+                event.setNewSpeed(event.getNewSpeed() * 1.5f);
+                return;
+            }
 
-            float maxHardness = 0;
+            float targetBlockHardness = state.getDestroySpeed(level, pos);
+            float maxHardness = targetBlockHardness;
             for (BlockPos otherPos : extraBlocks) {
                 BlockState otherState = level.getBlockState(otherPos);
                 float hardness = otherState.getDestroySpeed(level, otherPos);
@@ -139,7 +145,6 @@ public interface IAoeTool {
                 }
             }
 
-            float targetBlockHardness = state.getDestroySpeed(level, pos);
             if (!MathUtils.floatsEqual(targetBlockHardness, maxHardness)) {
                 event.setNewSpeed(event.getNewSpeed() * targetBlockHardness / maxHardness);
             }

@@ -84,6 +84,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
         dropSelf(SgBlocks.GEAR_SMITHING_TABLE.get());
         dropSelf(SgBlocks.ALLOY_FORGE.get());
+        dropSelf(SgBlocks.CRUDE_MIXER.get());
         dropSelf(SgBlocks.METAL_PRESS.get());
         dropSelf(SgBlocks.RECRYSTALLIZER.get());
         dropSelf(SgBlocks.REFABRICATOR.get());
