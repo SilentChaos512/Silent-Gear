@@ -19,7 +19,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.chicken.Chicken;
+import net.minecraft.world.entity.animal.feline.Cat;
+import net.minecraft.world.entity.animal.fish.Cod;
+import net.minecraft.world.entity.animal.fish.Pufferfish;
+import net.minecraft.world.entity.animal.fish.Salmon;
+import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -61,7 +66,6 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.event.ServerTicks;
-import net.minecraft.world.entity.animal.armadillo.Armadillo;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -80,7 +84,7 @@ public final class GearEvents {
     @SubscribeEvent
     public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
         LivingEntity target = event.getEntity();
-        if (target.level().isClientSide) return;
+        if (target.level().isClientSide()) return;
 
         DamageSource source = event.getSource();
         @Nullable Entity attacker = source.getEntity();
@@ -257,7 +261,7 @@ public final class GearEvents {
         }
 
         if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().is(Tags.Blocks.ORES_DIAMOND) && !hasSilkTouch(event.getLevel(), tool)) {
-            Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getBreaker().getCommandSenderWorld());
+            Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getBreaker().level());
             entity.teleportTo(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);
             event.getLevel().addFreshEntity(entity);
         }
@@ -306,7 +310,7 @@ public final class GearEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingDeath(LivingDeathEvent event) {
         Entity killer = event.getSource().getEntity();
-        if (killer instanceof Player player && !killer.level().isClientSide) {
+        if (killer instanceof Player player && !killer.level().isClientSide()) {
             if (TraitHelper.hasTraitEitherHand(player, Const.Traits.CONFETTI)) {
                 for (int i = 0; i < 3; ++i) {
                     FireworkRocketEntity rocket = new FireworkRocketEntity(player.level(), event.getEntity().getX(), event.getEntity().getEyeY(), event.getEntity().getZ(), createRandomFirework());
@@ -336,7 +340,7 @@ public final class GearEvents {
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
         var player = event.getEntity();
         var level = player.level();
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
             if (!player.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {

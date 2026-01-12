@@ -2,7 +2,7 @@ package net.silentchaos512.gear.setup;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -52,7 +52,7 @@ public final class SgTags {
         private Blocks() {}
 
         private static TagKey<Block> common(String path) {
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", path));
+            return BlockTags.create(Identifier.fromNamespaceAndPath("c", path));
         }
 
         private static TagKey<Block> mod(String path) {
@@ -72,7 +72,7 @@ public final class SgTags {
         public static final TagKey<EntityType<?>> TRIDENTS = common("tridents");
 
         private static TagKey<EntityType<?>> common(String path) {
-            return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("c", path));
+            return TagKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("c", path));
         }
     }
 
@@ -188,7 +188,7 @@ public final class SgTags {
         private Items() {}
 
         private static TagKey<Item> common(String path) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", path));
+            return ItemTags.create(Identifier.fromNamespaceAndPath("c", path));
         }
 
         private static TagKey<Item> mod(String path) {
@@ -196,7 +196,7 @@ public final class SgTags {
         }
 
         private static TagKey<Item> silentsMechanisms(String path) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("silents_mechanisms", path));
+            return ItemTags.create(Identifier.fromNamespaceAndPath("silents_mechanisms", path));
         }
     }
 

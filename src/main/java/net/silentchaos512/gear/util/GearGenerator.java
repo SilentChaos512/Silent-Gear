@@ -13,6 +13,7 @@ import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ public final class GearGenerator {
                 .map(GearGenerator::createRandom);
     }
 
+    @Nullable
     private static PartInstance createRandom(CompoundPartItem item) {
         var material = SgRegistries.MATERIAL.getRandomObtainable(SilentGear.RANDOM_SOURCE)
                         .orElse(SgRegistries.MATERIAL.get(Const.Materials.EXAMPLE.getId()));

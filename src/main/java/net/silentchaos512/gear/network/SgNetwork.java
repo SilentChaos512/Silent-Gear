@@ -8,7 +8,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.network.payload.client.*;
 import net.silentchaos512.gear.network.payload.server.*;
 
-@EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class SgNetwork {
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {

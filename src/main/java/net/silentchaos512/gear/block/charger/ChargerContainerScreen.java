@@ -3,9 +3,9 @@ package net.silentchaos512.gear.block.charger;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.util.TextUtil;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ChargerContainerScreen extends AbstractContainerScreen<ChargerContainerMenu> {
-    public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/charger.png");
+    public static final Identifier TEXTURE = SilentGear.getId("textures/gui/charger.png");
 
     public ChargerContainerScreen(ChargerContainerMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
@@ -35,10 +35,10 @@ public class ChargerContainerScreen extends AbstractContainerScreen<ChargerConta
                             String.format("%,d", menu.getMaxCharge())),
                     TextUtil.translate("container", "material_charger.charge.hint")
             );
-            graphics.renderTooltip(this.font, text, Optional.empty(), x, y);
+            graphics.setTooltipForNextFrame(this.font, text, Optional.empty(), x, y);
         } else if (isHovering(8, 70, 100, 8, x, y)) {
             var text = TextUtil.translate("container", "material_charger.structure_level.hint");
-            graphics.renderTooltip(this.font, List.of(text), Optional.empty(), x, y);
+            graphics.setTooltipForNextFrame(this.font, List.of(text), Optional.empty(), x, y);
         }
         super.renderTooltip(graphics, x, y);
     }
@@ -58,15 +58,15 @@ public class ChargerContainerScreen extends AbstractContainerScreen<ChargerConta
 
         int posX = (this.width - this.imageWidth) / 2;
         int posY = (this.height - this.imageHeight) / 2;
-        graphics.blit(RenderType::guiTextured, TEXTURE, posX, posY, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, posX, posY, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
         // Progress arrow
-        graphics.blit(RenderType::guiTextured, TEXTURE, posX + 79, posY + 35, 176, 14, menu.getProgressArrowScale() + 1, 16, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, posX + 79, posY + 35, 176, 14, menu.getProgressArrowScale() + 1, 16, 256, 256);
 
         // Charge meter
         int chargeMeterHeight = menu.getChargeMeterHeight();
         if (chargeMeterHeight > 0) {
-            graphics.blit(RenderType::guiTextured, TEXTURE, posX + 154, posY + 68 - chargeMeterHeight, 176, 31, 12, chargeMeterHeight, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, posX + 154, posY + 68 - chargeMeterHeight, 176, 31, 12, chargeMeterHeight, 256, 256);
         }
     }
 }

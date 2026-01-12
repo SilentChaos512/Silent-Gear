@@ -70,10 +70,10 @@ public class GearFishingRodItem extends FishingRodItem implements GearItem {
 
         // Rewrite of super to spawn custom fishing hook entity
         if (player.fishing != null) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 int i = player.fishing.retrieve(stack);
                 ItemStack original = stack.copy();
-                stack.hurtAndBreak(i, player, LivingEntity.getSlotForHand(hand));
+                stack.hurtAndBreak(i, player, hand.asEquipmentSlot());
                 if(stack.isEmpty()) {
                     net.neoforged.neoforge.event.EventHooks.onPlayerDestroyItem(player, original, hand);
                 }

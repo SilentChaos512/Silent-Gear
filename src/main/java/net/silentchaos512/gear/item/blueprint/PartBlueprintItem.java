@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.item.blueprint;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -24,7 +24,7 @@ public class PartBlueprintItem extends AbstractBlueprintItem {
         this.partType = partType;
         this.itemTag = Lazy.of(() -> {
             var id = Objects.requireNonNull(SgRegistries.PART_TYPE.getKey(this.partType.get()));
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "blueprints/" + id.getPath()));
+            return ItemTags.create(Identifier.fromNamespaceAndPath(id.getNamespace(), "blueprints/" + id.getPath()));
         });
     }
 

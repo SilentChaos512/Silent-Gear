@@ -2,7 +2,7 @@ package net.silentchaos512.gear.data;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -10,7 +10,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -57,7 +57,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
                     PartInstance.create(Const.Parts.BINDING, SgItems.BINDING.get(), Const.Materials.STRING)
             ));
             AdvancementHolder root = Advancement.Builder.advancement()
-                    .display(rootIcon, title("root"), description("root"), ResourceLocation.withDefaultNamespace("textures/gui/advancements/backgrounds/adventure.png"), AdvancementType.TASK, false, false, false)
+                    .display(rootIcon, title("root"), description("root"), Identifier.withDefaultNamespace("textures/gui/advancements/backgrounds/adventure.png"), AdvancementType.TASK, false, false, false)
                     .addCriterion("get_item", getItem(Items.CRAFTING_TABLE))
                     .save(saver, id("root"));
 

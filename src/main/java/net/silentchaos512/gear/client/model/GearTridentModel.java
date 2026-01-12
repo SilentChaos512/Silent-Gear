@@ -10,12 +10,9 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.SimpleModelWrapper;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Unit;
 import net.silentchaos512.gear.SilentGear;
 
 import java.util.ArrayList;
@@ -23,16 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@OnlyIn(Dist.CLIENT)
-public class GearTridentModel extends Model {
-    public static final StandaloneModelKey<SimpleModelWrapper> TRIDENT_ICON = new StandaloneModelKey<>(
-            ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, "item/trident_icon")
-    );
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, "textures/item/trident/model.png");
+public class GearTridentModel extends Model<Unit> {
+    public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(SilentGear.MOD_ID, "textures/item/trident/model.png");
     private final ModelPart root;
 
     public GearTridentModel(ModelPart root) {
-        super(root, RenderType::entitySolid);
+        super(root, RenderTypes::entitySolid);
         this.root = root;
     }
 

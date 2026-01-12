@@ -41,7 +41,7 @@ public class CurioGearItemCapability {
                 (stack, context) -> new GearCurio(stack, builder -> {}) {
                     @Override
                     public void curioTick(SlotContext context) {
-                        if (context.entity().level().isClientSide || !canGlideWith(stack)) {
+                        if (context.entity().level().isClientSide() || !canGlideWith(stack)) {
                             return;
                         }
                         int ticksFlying = context.entity().getFallFlyingTicks();

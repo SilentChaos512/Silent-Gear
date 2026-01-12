@@ -4,7 +4,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
@@ -92,7 +92,7 @@ public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements 
 
         var recipe = factory.apply(ingredient, results);
         var advancementHolder = advancement$builder != null
-                ? advancement$builder.build(pId.location().withPrefix("recipes/" + recipeFolder + "/"))
+                ? advancement$builder.build(pId.identifier().withPrefix("recipes/" + recipeFolder + "/"))
                 : null;
         pRecipeOutput.accept(pId, recipe, advancementHolder);
     }

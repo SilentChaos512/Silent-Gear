@@ -9,7 +9,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearItem;
@@ -64,7 +64,7 @@ public final class PartsCommand {
 
     private static int runList(CommandContext<CommandSourceStack> context) {
         String listStr = SgRegistries.PART.keySet().stream()
-                .map(ResourceLocation::toString)
+                .map(Identifier::toString)
                 .collect(Collectors.joining(", "));
         context.getSource().sendSuccess(() -> Component.literal(listStr), true);
 

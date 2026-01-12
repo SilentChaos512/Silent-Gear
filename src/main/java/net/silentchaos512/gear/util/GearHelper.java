@@ -1,16 +1,16 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.Sets;
-import net.minecraft.Util;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.PlainTextContents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +21,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -76,8 +75,8 @@ import java.util.stream.Stream;
  * Also see {@link GearData}, which focuses on getting/updating item data and NBT.
  */
 public final class GearHelper {
-    private static final ResourceLocation REACH_MODIFIER_ID = SilentGear.getId("reach_modifier");
-    private static final ResourceLocation ATTACK_REACH_MODIFIER_ID = SilentGear.getId("attack_reach_modifier");
+    private static final Identifier REACH_MODIFIER_ID = SilentGear.getId("reach_modifier");
+    private static final Identifier ATTACK_REACH_MODIFIER_ID = SilentGear.getId("attack_reach_modifier");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
     private static final float BROKEN_DESTROY_SPEED = 0.25f;
 
@@ -592,35 +591,6 @@ public final class GearHelper {
         if (rarity < 120)
             return Rarity.RARE;
         return Rarity.EPIC;
-    }
-
-    public static void fillItemGroup(GearItem item, CreativeModeTab group, Collection<ItemStack> items) {
-        boolean inTab = false;
-        // FIXME?
-        /*for (CreativeModeTab tabInList : item.asItem().getCreativeTabs()) {
-            if (tabInList == group) {
-                inTab = true;
-                break;
-            }
-        }*/
-        if (!inTab) return;
-
-        /*Collection<ItemStack> list = new ArrayList<>();
-        // Create a few samples of each tool type, because rendering performance is a problem on many machines.
-        for (int i = 3; i <= Math.max(4, PartManager.getHighestMainPartTier()); ++i) {
-            ItemStack stack = createSampleItem(item, i);
-            if (!stack.isEmpty()) {
-                list.add(stack);
-            }
-        }
-        items.addAll(list);*/
-
-        // Add some standard materials instead of randoms
-        items.add(createSampleItem(item, Const.Materials.IRON));
-        items.add(createSampleItem(item, Const.Materials.DIAMOND));
-        items.add(createSampleItem(item, Const.Materials.CRIMSON_STEEL));
-        items.add(createSampleItem(item, Const.Materials.AZURE_ELECTRUM));
-        items.add(createSampleItem(item, Const.Materials.TYRIAN_STEEL));
     }
 
     private static ItemStack createSampleItem(GearItem item, int tier) {

@@ -16,8 +16,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TridentItem;
@@ -68,7 +68,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
 
     @Override
     public boolean isFoil(ItemStack stack) {
-    	if (FMLEnvironment.dist == Dist.CLIENT) {
+    	if (FMLEnvironment.getDist() == Dist.CLIENT) {
     		return GearClientHelper.hasEffect(stack);
     	}
         return super.isFoil(stack); //client config will be applied in the renderer
@@ -151,7 +151,7 @@ public class GearTridentItem extends TridentItem implements GearWeapon {
                             .orElse(SoundEvents.TRIDENT_THROW);
                         player.awardStat(Stats.ITEM_USED.get(this));
                         if (level instanceof ServerLevel serverLevels) {
-                            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(entityLiving.getUsedItemHand()));
+                            stack.hurtAndBreak(1, player, entityLiving.getUsedItemHand());
                             if (f == 0.0F) {
                                 GearThrownTrident throwntrident = new GearThrownTrident(level, player, stack);
                                 float vel = Mth.clamp(2.5F*getProjectileSpeedMultiplier(stack), 0.0F, 4.0F); //capped speed due to client sync issue

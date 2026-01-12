@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.setup;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -88,11 +88,11 @@ public final class SgRecipes {
     private SgRecipes() {
     }
 
-    private static <T extends Recipe<?>> DeferredHolder<RecipeSerializer<?>, RecipeSerializer<T>> register(ResourceLocation id, Supplier<RecipeSerializer<T>> serializer) {
+    private static <T extends Recipe<?>> DeferredHolder<RecipeSerializer<?>, RecipeSerializer<T>> register(Identifier id, Supplier<RecipeSerializer<T>> serializer) {
         return RECIPE_SERIALIZERS.register(id.getPath(), serializer);
     }
 
-    public static <T extends Recipe<?>> DeferredHolder<RecipeType<?>, RecipeType<T>> registerType(ResourceLocation name) {
+    public static <T extends Recipe<?>> DeferredHolder<RecipeType<?>, RecipeType<T>> registerType(Identifier name) {
         return RECIPE_TYPES.register(name.getPath(), () -> RecipeType.simple(name));
     }
 

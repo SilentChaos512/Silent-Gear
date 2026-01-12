@@ -4,7 +4,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -120,7 +120,7 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
                 ingredients
         );
         var advancementHolder = advancement$builder != null
-                ? advancement$builder.build(pId.location().withPrefix("recipes/alloying/" + recipeFolder + "/"))
+                ? advancement$builder.build(pId.identifier().withPrefix("recipes/alloying/" + recipeFolder + "/"))
                 : null;
         pRecipeOutput.accept(pId, recipe, advancementHolder);
     }

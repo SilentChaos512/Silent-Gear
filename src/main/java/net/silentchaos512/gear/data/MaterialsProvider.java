@@ -5,7 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -1962,7 +1962,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
     }
 
     private static MaterialBuilder<SimpleMaterial> terracotta(DataResource<Material> parent, String suffix, ItemLike item, int color) {
-        var id = ResourceLocation.fromNamespaceAndPath(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
+        var id = Identifier.fromNamespaceAndPath(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
         return MaterialBuilder.simple(DataResource.material(id))
                 .parent(parent)
                 .crafting(item)
@@ -1971,7 +1971,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private static MaterialBuilder<SimpleMaterial> wood(String suffix, ItemLike item, int color) {
         var parent = Const.Materials.WOOD;
-        var id = ResourceLocation.fromNamespaceAndPath(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
+        var id = Identifier.fromNamespaceAndPath(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
         return MaterialBuilder.simple(DataResource.material(id))
                 .parent(parent)
                 .crafting(item)
@@ -1980,7 +1980,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
 
     private static MaterialBuilder<SimpleMaterial> wool(String suffix, ItemLike item, int color) {
         var parent = Const.Materials.WOOL;
-        var id = ResourceLocation.fromNamespaceAndPath(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
+        var id = Identifier.fromNamespaceAndPath(parent.getId().getNamespace(), parent.getId().getPath() + "/" + suffix);
         return MaterialBuilder.simple(DataResource.material(id))
                 .parent(parent)
                 .crafting(item)

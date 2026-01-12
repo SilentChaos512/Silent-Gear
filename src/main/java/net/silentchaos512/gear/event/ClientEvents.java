@@ -8,7 +8,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.network.payload.client.SwingGearPayload;
 import net.silentchaos512.gear.util.GearHelper;
@@ -28,7 +28,7 @@ public final class ClientEvents {
                 ItemStack stack = player.getMainHandItem();
 
                 if (GearHelper.isGear(stack)) {
-                    PacketDistributor.sendToServer(new SwingGearPayload());
+                    ClientPacketDistributor.sendToServer(new SwingGearPayload());
                 }
             }
         }

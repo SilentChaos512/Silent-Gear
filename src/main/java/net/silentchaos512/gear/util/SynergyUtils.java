@@ -2,7 +2,7 @@ package net.silentchaos512.gear.util;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.part.PartType;
@@ -91,7 +91,7 @@ public final class SynergyUtils {
     }
 
     public static Collection<MaterialInstance> getUniques(Collection<? extends MaterialInstance> materials) {
-        Map<ResourceLocation, MaterialInstance> ret = new LinkedHashMap<>();
+        Map<Identifier, MaterialInstance> ret = new LinkedHashMap<>();
         for (MaterialInstance material : materials) {
             ret.put(material.getId(), material);
         }

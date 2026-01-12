@@ -14,18 +14,11 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
 
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class CustomMaterialItem extends SingleMaterialItem implements IColoredMaterialItem, ItemWithSubItems {
     public CustomMaterialItem(Properties properties) {
         super(properties);
-    }
-
-    @Nullable
-    @Override
-    public MaterialInstance getPrimarySubMaterial(ItemStack stack) {
-        return getMaterial(stack);
     }
 
     @Override

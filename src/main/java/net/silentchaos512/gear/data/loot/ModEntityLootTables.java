@@ -2,8 +2,8 @@ package net.silentchaos512.gear.data.loot;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.EntityLootSubProvider;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -35,19 +35,6 @@ public class ModEntityLootTables extends EntityLootSubProvider {
         consumer.accept(SgLoot.Tables.DROPS_FINE_SILK_LOW, addFineSilk(0.02f, 0.005f));
         consumer.accept(SgLoot.Tables.DROPS_LEATHER_SCRAPS_HIGH, addLeatherScraps());
         consumer.accept(SgLoot.Tables.DROPS_LEATHER_SCRAPS_LOW, addLeatherScrapsLow());
-
-        /*heroOfTheVillage(consumer,
-                GearVillages.HOTV_GEAR_SMITH,
-                ModItems.ARROW_BLUEPRINT,
-                ModItems.EXCAVATOR_BLUEPRINT,
-                ModItems.HAMMER_BLUEPRINT,
-                ModItems.PAXEL_BLUEPRINT,
-                ModItems.PROSPECTOR_HAMMER_BLUEPRINT,
-                ModItems.TIP_BLUEPRINT,
-                CraftingItems.ADVANCED_UPGRADE_BASE,
-                CraftingItems.ROAD_MAKER_UPGRADE,
-                CraftingItems.SPOON_UPGRADE
-        );*/
     }
 
     private LootTable.Builder addSinew() {
@@ -95,7 +82,7 @@ public class ModEntityLootTables extends EntityLootSubProvider {
                 );
     }
 
-    private static void heroOfTheVillage(BiConsumer<ResourceLocation, LootTable.Builder> consumer, ResourceLocation tableName, ItemLike... items) {
+    private static void heroOfTheVillage(BiConsumer<Identifier, LootTable.Builder> consumer, Identifier tableName, ItemLike... items) {
         LootPool.Builder pool = LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(1));
         for (ItemLike item : items) {

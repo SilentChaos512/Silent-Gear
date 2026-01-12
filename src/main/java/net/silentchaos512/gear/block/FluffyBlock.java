@@ -36,7 +36,7 @@ public class FluffyBlock extends Block {
 
     @Override
     public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
-        if (fallDistance < 2 || level.isClientSide) return;
+        if (fallDistance < 2 || level.isClientSide()) return;
 
         // Count the number of fluffy blocks that are stacked up.
         int stackedBlocks = 0;

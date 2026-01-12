@@ -16,11 +16,11 @@ public record RecalculateStatsPayload(int slot, Supplier<GearProperty<?, ?>> tri
     public static final StreamCodec<FriendlyByteBuf, RecalculateStatsPayload> STREAM_CODEC = StreamCodec.of(
             (buf, data) -> {
                 buf.writeVarInt(data.slot);
-                buf.writeResourceLocation(Objects.requireNonNull(SgRegistries.GEAR_PROPERTY.getKey(data.triggerStat.get())));
+                buf.writeIdentifier(Objects.requireNonNull(SgRegistries.GEAR_PROPERTY.getKey(data.triggerStat.get())));
             },
             buf -> {
                 var slot = buf.readVarInt();
-                var id = buf.readResourceLocation();
+                var id = buf.readIdentifier();
                 return new RecalculateStatsPayload(slot, () -> SgRegistries.GEAR_PROPERTY.get(id).orElseThrow().value());
             }
     );

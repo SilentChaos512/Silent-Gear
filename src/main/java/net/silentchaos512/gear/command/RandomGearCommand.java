@@ -9,14 +9,13 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.util.GearGenerator;
 import net.silentchaos512.lib.util.NameUtils;
@@ -32,21 +31,21 @@ public final class RandomGearCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_random_gear")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.argument("players", EntityArgument.players())
-                        .then(Commands.argument("item", ResourceLocationArgument.id())
+                        .then(Commands.argument("item", IdentifierArgument.id())
                                 .suggests(itemIdSuggestions)
                                 .executes(context -> run(
                                         context,
                                         EntityArgument.getPlayers(context, "players"),
-                                        ResourceLocationArgument.getId(context, "item"),
+                                        IdentifierArgument.getId(context, "item"),
                                         3
                                 ))
                                 .then(Commands.argument("tier", IntegerArgumentType.integer())
                                         .executes(context -> run(
                                                 context,
                                                 EntityArgument.getPlayers(context, "players"),
-                                                ResourceLocationArgument.getId(context, "item"),
+                                                IdentifierArgument.getId(context, "item"),
                                                 IntegerArgumentType.getInteger(context, "tier")
                                         ))
                                 )
@@ -55,7 +54,7 @@ public final class RandomGearCommand {
         );
     }
 
-    private static int run(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, ResourceLocation itemId, int tier) throws CommandSyntaxException {
+    private static int run(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, Identifier itemId, int tier) throws CommandSyntaxException {
         Item item = BuiltInRegistries.ITEM.get(itemId).orElseThrow().value();
         if (!(item instanceof GearItem)) {
             context.getSource().sendFailure(Component.translatable("command.silentgear.randomGear.invalidItem"));

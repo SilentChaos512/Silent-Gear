@@ -1,7 +1,5 @@
 package net.silentchaos512.gear;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -11,14 +9,11 @@ import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.item.blueprint.BlueprintType;
-import net.silentchaos512.gear.setup.NerfedGear;
 import net.silentchaos512.gear.util.IAoeTool;
-import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
-@EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class Config {
     public static final class Common {
         static final ModConfigSpec SPEC;
@@ -27,11 +22,6 @@ public final class Config {
         public static final ModConfigSpec.BooleanValue spawnWithStarterBlueprints;
         // Compounds
         public static final ModConfigSpec.DoubleValue crudeMixerPropertyMultiplier;
-        // Nerfed gear
-        public static final ModConfigSpec.BooleanValue nerfedItemsEnabled;
-        public static final ModConfigSpec.DoubleValue nerfedItemDurabilityMulti;
-        public static final ModConfigSpec.DoubleValue nerfedItemHarvestSpeedMulti;
-        static final ModConfigSpec.ConfigValue<List<? extends String>> nerfedItems;
         // Gear
         public static final ModConfigSpec.BooleanValue allowConversionRecipes;
         public static final ModConfigSpec.BooleanValue allowEnchanting;
@@ -130,25 +120,6 @@ public final class Config {
                     builder.pop();
                 }
 
-                builder.pop();
-            }
-            {
-                builder.comment("Settings for nerfed items.",
-                        "You can give items reduced durability to encourage use of Silent Gear tools.",
-                        "Changes require a restart!");
-                builder.push("nerfed_items");
-                nerfedItemsEnabled = builder
-                        .comment("Enable this feature. If false, the other settings in this group are ignored.")
-                        .define("enabled", false);
-                nerfedItemDurabilityMulti = builder
-                        .comment("Multiplies max durability by this value. If the result would be zero, a value of 1 is assigned.")
-                        .defineInRange("durability_multiplier", 0.05, 0, 1);
-                nerfedItemHarvestSpeedMulti = builder
-                        .comment("Multiplies harvest speed by this value.")
-                        .defineInRange("harvest_speed_multiplier", 0.5, 0, 1);
-                nerfedItems = builder
-                        .comment("These items will have reduced durability")
-                        .defineList("items", NerfedGear.DEFAULT_ITEMS, Config::isResourceLocation);
                 builder.pop();
             }
             {
@@ -355,26 +326,6 @@ public final class Config {
             // TODO: Make a special "_global_properties.json" file for materials to handle stat multipliers
             return null;
         }
-
-        @Deprecated
-        @SuppressWarnings("TypeMayBeWeakened")
-        public static boolean isNerfedItem(Item item) {
-            return nerfedItemsEnabled.get() && isThingInList(NameUtils.fromItem(item), nerfedItems);
-        }
-
-        private static boolean isThingInList(ResourceLocation name, ModConfigSpec.ConfigValue<List<? extends String>> list) {
-            for (String str : list.get()) {
-                ResourceLocation fromList = ResourceLocation.tryParse(str);
-                if (fromList != null && fromList.equals(name)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    private static boolean isResourceLocation(Object o) {
-        return o instanceof String && ResourceLocation.tryParse((String) o) != null;
     }
 
     public static final class Client {

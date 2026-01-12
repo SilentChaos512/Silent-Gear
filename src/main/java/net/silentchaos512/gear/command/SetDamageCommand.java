@@ -20,7 +20,7 @@ public final class SetDamageCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("set_damage")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(
                         Commands.argument("amount", IntegerArgumentType.integer())
                                 .executes(context ->

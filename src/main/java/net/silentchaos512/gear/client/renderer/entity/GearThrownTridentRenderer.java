@@ -1,21 +1,14 @@
 package net.silentchaos512.gear.client.renderer.entity;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.silentchaos512.gear.Config;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.client.model.GearTridentModel;
 import net.silentchaos512.gear.client.renderer.entity.state.GearTridentRenderState;
 import net.silentchaos512.gear.entity.projectile.GearThrownTrident;
 
 public class GearThrownTridentRenderer extends EntityRenderer<GearThrownTrident, GearTridentRenderState> {
-    public static final ResourceLocation TRIDENT_LOCATION = GearTridentModel.TEXTURE;
+    public static final Identifier TRIDENT_LOCATION = GearTridentModel.TEXTURE;
     private final GearTridentModel model;
 
     public GearThrownTridentRenderer(EntityRendererProvider.Context context) {
@@ -40,7 +33,7 @@ public class GearThrownTridentRenderer extends EntityRenderer<GearThrownTrident,
         reusedState.isFoil = entity.isFoil();
     }
 
-    @Override
+    /*@Override
     public void render(GearTridentRenderState renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(renderState.yRot - 90.0F));
@@ -52,9 +45,9 @@ public class GearThrownTridentRenderer extends EntityRenderer<GearThrownTrident,
 	    		renderState.rodColor, renderState.gripColor, renderState.spikesColor, renderState.tipColor);
         poseStack.popPose();
         //super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
-    }
+    }*/
 
-    public ResourceLocation getTextureLocation(GearThrownTrident entity) {
+    public Identifier getTextureLocation(GearThrownTrident entity) {
         return TRIDENT_LOCATION;
     }
 }

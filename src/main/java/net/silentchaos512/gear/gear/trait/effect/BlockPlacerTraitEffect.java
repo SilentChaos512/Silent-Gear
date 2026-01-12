@@ -75,7 +75,7 @@ public class BlockPlacerTraitEffect extends TraitEffect {
 
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        if (!world.isClientSide && (damageOnUse < 1 || stack.getDamageValue() < stack.getMaxDamage() - damageOnUse - 1)) {
+        if (!world.isClientSide() && (damageOnUse < 1 || stack.getDamageValue() < stack.getMaxDamage() - damageOnUse - 1)) {
             // Try place block, damage tool if successful
             ItemStack fakeBlockStack = new ItemStack(blockState.getBlock());
             InteractionResult result = fakeBlockStack.useOn(new FakeItemUseContext(context, fakeBlockStack));

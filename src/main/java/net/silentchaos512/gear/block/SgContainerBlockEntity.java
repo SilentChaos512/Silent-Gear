@@ -2,7 +2,7 @@ package net.silentchaos512.gear.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -41,6 +41,13 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
      * @return The newly created item handler, which is stored in {@link #items}
      */
     public abstract NonNullList<ItemStack> createInternalItemList();
+
+    @Override
+    public abstract boolean canPlaceItem(int slot, ItemStack stack);
+
+    public boolean canExtractItem(int slot) {
+        return true;
+    }
 
     /**
      * Returns an item handler to be used for capabilities.
@@ -129,20 +136,14 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    public boolean canPlaceItem(int pSlot, ItemStack pStack) {
-        return this.items.isItemValid(pSlot, pStack);
-    }
-
-    @Override
     protected void loadAdditional(ValueInput input) {
-        super.loadAdditional(tag, registries);
-        this.items.deserializeNBT(registries, tag.getCompound("items").orElse(new CompoundTag()));
+        super.loadAdditional(input);
+        ContainerHelper.loadAllItems(input, this.items);
     }
 
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        tag.put("items", this.items.serializeNBT(registries));
-        output.put
+        ContainerHelper.saveAllItems(output, this.items);
     }
 }

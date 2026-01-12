@@ -82,15 +82,8 @@ public final class TooltipHandler {
         }
 
         PartInstance part = PartInstance.from(stack);
-        if (part != null /*&& !part.isBlacklisted(stack)*/) {
+        if (part != null) {
             onPartTooltip(event, part);
-            return;
-        }
-
-        // Nerfed gear?
-        if (Config.Common.isNerfedItem(stack.getItem())) {
-            List<Component> toolTip = event.getToolTip();
-            toolTip.add(Math.min(1, toolTip.size()), Component.translatable("misc.silentgear.poorlyMade").withStyle(ChatFormatting.RED));
         }
     }
 

@@ -1,14 +1,14 @@
 package net.silentchaos512.gear.setup;
 
 import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.advancements.critereon.PlayerTrigger;
+import net.minecraft.advancements.criterion.PlayerTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.advancements.criterion.GearPropertyTrigger;
 import net.silentchaos512.gear.advancements.criterion.GearRepairedTrigger;
 import net.silentchaos512.gear.advancements.criterion.HasPartTrigger;
-import net.silentchaos512.gear.advancements.criterion.GearPropertyTrigger;
 
 import java.util.function.Supplier;
 

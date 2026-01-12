@@ -2,20 +2,16 @@ package net.silentchaos512.gear.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.renderer.entity.state.GearArrowRenderState;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
 
 public class GearArrowRenderer extends ArrowRenderer<GearArrowEntity, GearArrowRenderState> {
-    public static final ResourceLocation GEAR_ARROW_LOCATION = SilentGear.getId("textures/entity/arrow.png");
+    public static final Identifier GEAR_ARROW_LOCATION = SilentGear.getId("textures/entity/arrow.png");
 
     public GearArrowRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -34,7 +30,7 @@ public class GearArrowRenderer extends ArrowRenderer<GearArrowEntity, GearArrowR
         reusedState.fletchingColor = entity.getFletchingColor();
     }
 
-    @Override
+    /*@Override
     public void render(GearArrowRenderState renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(renderState.yRot - 90.0F));
@@ -93,10 +89,10 @@ public class GearArrowRenderer extends ArrowRenderer<GearArrowEntity, GearArrowR
 
         poseStack.popPose();
         super.render(renderState, poseStack, bufferSource, packedLight);
-    }
+    }*/
 
     @Override
-    protected ResourceLocation getTextureLocation(GearArrowRenderState renderState) {
+    protected Identifier getTextureLocation(GearArrowRenderState renderState) {
         return GEAR_ARROW_LOCATION;
     }
 

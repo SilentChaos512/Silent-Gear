@@ -47,7 +47,7 @@ public class MetalPressBlock extends ModContainerBlock<MetalPressBlockEntity> {
 
     @Override
     public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
-        if (worldIn.isClientSide) {
+        if (worldIn.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         this.interactWith(worldIn, pos, player);
@@ -91,6 +91,6 @@ public class MetalPressBlock extends ModContainerBlock<MetalPressBlockEntity> {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.METAL_PRESS.get(), MetalPressBlockEntity::tick);
+        return level.isClientSide() ? null : createTickerHelper(blockEntityType, SgBlockEntities.METAL_PRESS.get(), MetalPressBlockEntity::tick);
     }
 }

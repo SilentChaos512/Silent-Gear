@@ -12,8 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.SgContainerBlockEntity;
 import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
@@ -108,7 +108,7 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
             ++progress;
         }
 
-        if (progress >= WORK_TIME && !level.isClientSide) {
+        if (progress >= WORK_TIME && !level.isClientSide()) {
             finishWork(recipe, registryAccess, current);
         }
 
@@ -136,8 +136,8 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
         if (level == null) return;
         BlockState oldState = level.getBlockState(worldPosition);
         if (oldState != newState) {
-            level.setBlock(worldPosition, newState, 3);
-            level.sendBlockUpdated(worldPosition, oldState, newState, 3);
+            level.setBlock(worldPosition, newState, Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS);
+            level.sendBlockUpdated(worldPosition, oldState, newState, Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS);
         }
     }
 
@@ -154,18 +154,17 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
 
     @Override
     public NonNullList<ItemStack> createInternalItemList() {
-        return new ItemStackHandler(2) {
-            @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                return slot == 0 && getRecipe(stack) != null;
-            }
+        return NonNullList.withSize(2, ItemStack.EMPTY);
+    }
 
-            @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                if (slot == 0) return ItemStack.EMPTY;
-                return super.extractItem(slot, amount, simulate);
-            }
-        };
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return slot == 0 && getRecipe(stack) != null;
+    }
+
+    @Override
+    public boolean canExtractItem(int slot) {
+        return slot == 1;
     }
 
     @Override

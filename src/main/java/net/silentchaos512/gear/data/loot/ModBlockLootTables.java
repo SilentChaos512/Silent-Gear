@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -24,9 +24,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
-import net.silentchaos512.gear.item.CraftingItems;
 import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.Collections;

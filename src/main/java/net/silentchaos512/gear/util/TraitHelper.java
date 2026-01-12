@@ -67,7 +67,7 @@ public final class TraitHelper {
 
     /**
      * Gets the level of the trait on the gear, or zero if it does not have the trait. Similar to
-     * {@link #activateTraits(ItemStack, float, TraitFunction)}, this pulls the traits straight from
+     * {@link #activateTraits(ItemStack, Object, TraitFunction)}, this pulls the traits straight from
      * NBT to minimize object creation.
      *
      * @param gear  The {@link GearItem}

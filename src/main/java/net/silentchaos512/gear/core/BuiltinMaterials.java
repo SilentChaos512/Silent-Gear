@@ -1,8 +1,7 @@
 package net.silentchaos512.gear.core;
 
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
@@ -103,7 +102,7 @@ public enum BuiltinMaterials {
     }
 
     // Used by data generators
-    public void generateTag(Function<TagKey<Block>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tagProvider) {
+    public void generateTag(Function<TagKey<Block>, TagAppender<Block, Block>> tagProvider) {
         var intrinsicTagAppender = tagProvider.apply(this.harvestTier.incorrectForTool());
         intrinsicTagAppender.addTag(this.equivalentIncorrectForToolTag);
         if (this.additionalBlocksForTool != null) {

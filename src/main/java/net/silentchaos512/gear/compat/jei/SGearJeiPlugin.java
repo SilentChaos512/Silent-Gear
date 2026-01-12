@@ -11,8 +11,8 @@ import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -56,7 +56,7 @@ import java.util.stream.Stream;
 
 @JeiPlugin
 public class SGearJeiPlugin implements IModPlugin {
-    private static final ResourceLocation PLUGIN_UID = SilentGear.getId("plugin/main");
+    private static final Identifier PLUGIN_UID = SilentGear.getId("plugin/main");
 
     public static final IRecipeType<AlloyRecipe> ALLOY_MAKING_FABRIC_TYPE = IRecipeType.create(SilentGear.MOD_ID, "alloy_making/fabric", AlloyRecipe.class);
     public static final IRecipeType<AlloyRecipe> ALLOY_MAKING_GEM_TYPE = IRecipeType.create(SilentGear.MOD_ID, "alloy_making/gem", AlloyRecipe.class);
@@ -68,7 +68,7 @@ public class SGearJeiPlugin implements IModPlugin {
     static final IRecipeType<ToolActionRecipe> TOOL_ACTION_TYPE = IRecipeType.create(SilentGear.MOD_ID, "tool_action", ToolActionRecipe.class);
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return PLUGIN_UID;
     }
 
@@ -198,7 +198,7 @@ public class SGearJeiPlugin implements IModPlugin {
         reg.addIngredientInfo(variants.collect(Collectors.toList()), VanillaTypes.ITEM_STACK, Component.translatable(key));
     }
 
-    private static String getDescKey(ResourceLocation name) {
+    private static String getDescKey(Identifier name) {
         return "jei." + name.getNamespace() + "." + name.getPath() + ".desc";
     }
 

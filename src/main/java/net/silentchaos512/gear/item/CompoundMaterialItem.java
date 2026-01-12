@@ -56,12 +56,6 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
         return materialList != null ? materialList.getFirst() : null;
     }
 
-    @Nullable
-    @Override
-    public MaterialInstance getPrimarySubMaterial(ItemStack stack) {
-        return getPrimaryMaterial(stack);
-    }
-
     public static String getModelKey(ItemStack stack) {
         return SilentGear.shortenId(NameUtils.fromItem(stack)) + "#" +
                 getSubMaterials(stack).stream()

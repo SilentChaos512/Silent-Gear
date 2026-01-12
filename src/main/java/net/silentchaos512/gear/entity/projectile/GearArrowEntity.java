@@ -6,7 +6,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
@@ -80,7 +80,8 @@ public class GearArrowEntity extends AbstractArrow {
 
     @Override
     protected ItemStack getDefaultPickupItem() {
-        return new ItemStack(GearType.getItem(GearTypes.ARROW.get()));
+        @Nullable var item = GearType.getItem(GearTypes.ARROW.get());
+        return item != null ? new ItemStack(item) : ItemStack.EMPTY;
     }
 
     public void setArrowStack(ItemStack stack) {

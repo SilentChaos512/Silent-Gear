@@ -12,7 +12,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.alloymaker.AlloyMakerInfo;
@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class AlloyMakingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
-    public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/alloy_maker.png");
+    public static final Identifier TEXTURE = SilentGear.getId("textures/gui/alloy_maker.png");
 
     private static final int GUI_START_X = 15;
     private static final int GUI_START_Y = 29;

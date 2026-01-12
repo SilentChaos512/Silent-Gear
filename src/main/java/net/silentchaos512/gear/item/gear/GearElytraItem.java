@@ -3,7 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
@@ -73,7 +73,7 @@ public class GearElytraItem extends BasicGearItem implements GearArmor {
         if (armor > 0) {
             var armorType = ArmorType.CHESTPLATE;
             var equipmentSlotGroup = EquipmentSlotGroup.bySlot(armorType.getSlot());
-            var id = ResourceLocation.withDefaultNamespace("armor." + armorType.getName());
+            var id = Identifier.withDefaultNamespace("armor." + armorType.getName());
             builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
         }
         this.buildAttributes(gear, builder);
@@ -125,7 +125,8 @@ public class GearElytraItem extends BasicGearItem implements GearArmor {
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, item -> {
-            GearHelper.onBroken(stack, entity instanceof Player ? (Player) entity : null, this.getEquipmentSlot(stack));
+            var player = entity instanceof Player ? (Player) entity : null;
+            GearHelper.onBroken(stack, player, this.getEquipmentSlot(stack));
             onBroken.accept(item);
         });
     }

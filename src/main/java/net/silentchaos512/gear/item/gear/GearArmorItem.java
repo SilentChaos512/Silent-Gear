@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -78,7 +78,7 @@ public class GearArmorItem extends BasicGearItem implements GearArmor {
             float magicArmor = properties.getNumber(GearProperties.MAGIC_ARMOR);
             ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
             EquipmentSlotGroup equipmentSlotGroup = EquipmentSlotGroup.bySlot(this.armorType.getSlot());
-            ResourceLocation id = ResourceLocation.withDefaultNamespace("armor." + this.armorType.getName());
+            Identifier id = Identifier.withDefaultNamespace("armor." + this.armorType.getName());
             builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
             builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id, toughness, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
             if (knockbackResistance > 0f) {

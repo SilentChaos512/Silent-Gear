@@ -4,22 +4,21 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
-import net.silentchaos512.gear.api.material.MaterialSerializer;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.setup.SgRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public record SyncMaterialsPayload(Map<ResourceLocation, Material> materials) implements CustomPacketPayload, DataResourcesPayload<Material> {
+public record SyncMaterialsPayload(Map<Identifier, Material> materials) implements CustomPacketPayload, DataResourcesPayload<Material> {
     public static final Type<SyncMaterialsPayload> TYPE = new Type<>(SilentGear.getId("sync_materials"));
 
-    private static final StreamCodec<RegistryFriendlyByteBuf, HashMap<ResourceLocation, Material>> MAP_STREAM_CODEC = ByteBufCodecs.map(
+    private static final StreamCodec<RegistryFriendlyByteBuf, HashMap<Identifier, Material>> MAP_STREAM_CODEC = ByteBufCodecs.map(
             HashMap::new,
-            ResourceLocation.STREAM_CODEC,
+            Identifier.STREAM_CODEC,
             MaterialSerializers.DISPATCH_STREAM_CODEC
     );
 
@@ -38,7 +37,7 @@ public record SyncMaterialsPayload(Map<ResourceLocation, Material> materials) im
     }
 
     @Override
-    public Map<ResourceLocation, Material> values() {
+    public Map<Identifier, Material> values() {
         return materials;
     }
 }

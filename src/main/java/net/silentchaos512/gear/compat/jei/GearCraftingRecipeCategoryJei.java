@@ -14,13 +14,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.crafting.recipe.CraftingRecipeExtension;
+import org.joml.Matrix3x2fStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +35,7 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
     private final Component localizedName;
 
     public GearCraftingRecipeCategoryJei(IGuiHelper guiHelper) {
-        ResourceLocation location = SilentGear.getId("textures/gui/gear_crafting_jei.png");
+        Identifier location = SilentGear.getId("textures/gui/gear_crafting_jei.png");
         this.background = guiHelper.createDrawable(location, 0, 0, WIDTH, HEIGHT);
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, SgItems.BLUEPRINT_PACKAGE.toStack());
         this.localizedName = TextUtil.translate("jei", "group.gearCrafting");
@@ -100,9 +101,10 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
             }
         }
 
-        guiGraphics.pose().pushPose();
+        Matrix3x2fStack matrix = guiGraphics.pose();
+        matrix.pushMatrix();
         float scale = lines.size() > 5 ? 0.75f : 1f;
-        guiGraphics.pose().scale(scale, scale, 1f);
+        matrix.scale(scale, scale, matrix);
 
         Font font = Minecraft.getInstance().font;
         int y = (int) (56 / scale);
@@ -112,6 +114,6 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
             y += 10;
         }
 
-        guiGraphics.pose().popPose();
+        matrix.popMatrix();
     }
 }

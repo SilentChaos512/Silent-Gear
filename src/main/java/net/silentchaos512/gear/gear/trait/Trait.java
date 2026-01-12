@@ -55,7 +55,7 @@ public final class Trait {
             (buf, t) -> {
                 var traitId = SgRegistries.TRAIT.getKey(t);
                 SilentGear.LOGGER.debug("trait encode {}", traitId);
-                buf.writeResourceLocation(traitId);
+                buf.writeIdentifier(traitId);
 
                 ByteBufCodecs.VAR_INT.encode(buf, t.maxLevel);
                 ComponentSerialization.STREAM_CODEC.encode(buf, t.displayName);
@@ -65,7 +65,7 @@ public final class Trait {
                 CodecUtils.encodeList(buf, t.wikiLines, ComponentSerialization.STREAM_CODEC);
             },
             buf -> {
-                var traitId = buf.readResourceLocation();
+                var traitId = buf.readIdentifier();
                 SilentGear.LOGGER.debug("trait decode {}", traitId);
 
                 var maxLevel = ByteBufCodecs.VAR_INT.decode(buf);

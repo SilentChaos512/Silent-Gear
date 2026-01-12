@@ -24,7 +24,6 @@ import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 public class ItemMagnetTraitEffect extends TraitEffect {
     public static final MapCodec<ItemMagnetTraitEffect> CODEC = RecordCodecBuilder.mapCodec(
@@ -87,7 +86,7 @@ public class ItemMagnetTraitEffect extends TraitEffect {
     @Override
     public void onUpdate(TraitActionContext context, boolean isEquipped) {
         var player = context.player();
-        if (!isEquipped || player == null || player.level().isClientSide) return;
+        if (!isEquipped || player == null || player.level().isClientSide()) return;
 
         tickMagnet(player, context.traitLevel());
     }

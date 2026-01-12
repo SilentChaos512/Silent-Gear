@@ -8,10 +8,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.ModContainer;
@@ -53,9 +53,9 @@ public final class TraitsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_traits")
                 .then(Commands.literal("describe")
-                        .then(Commands.argument("traitID", ResourceLocationArgument.id())
+                        .then(Commands.argument("traitID", IdentifierArgument.id())
                                 .suggests(TRAIT_ID_SUGGESTIONS)
-                                .executes(context -> runDescribe(context, ResourceLocationArgument.getId(context, "traitID")))
+                                .executes(context -> runDescribe(context, IdentifierArgument.getId(context, "traitID")))
                         )
                 )
                 .then(Commands.literal("dump_md")
@@ -66,7 +66,7 @@ public final class TraitsCommand {
                 ));
     }
 
-    private static int runDescribe(CommandContext<CommandSourceStack> context, ResourceLocation traitId) {
+    private static int runDescribe(CommandContext<CommandSourceStack> context, Identifier traitId) {
         Trait trait = SgRegistries.TRAIT.get(traitId);
         if (trait == null) {
             context.getSource().sendFailure(Component.translatable("command.silentgear.traits.traitNotFound"));
@@ -144,10 +144,10 @@ public final class TraitsCommand {
 
             writer.write("\n## List of Traits");
 
-            List<ResourceLocation> ids = new ArrayList<>(SgRegistries.TRAIT.keySet());
+            List<Identifier> ids = new ArrayList<>(SgRegistries.TRAIT.keySet());
             ids.sort(Comparator.comparing(id -> Objects.requireNonNull(SgRegistries.TRAIT.get(id)).getDisplayName(0).getString()));
 
-            for (ResourceLocation id : ids) {
+            for (Identifier id : ids) {
                 Trait trait = SgRegistries.TRAIT.get(id);
                 assert trait != null;
 
@@ -207,7 +207,7 @@ public final class TraitsCommand {
         return formatter.format(now);
     }
 
-    private static String getLinkToBuiltinTraitJson(ResourceLocation traitId, String text) {
+    private static String getLinkToBuiltinTraitJson(Identifier traitId, String text) {
         if (SilentGear.MOD_ID.equals(traitId.getNamespace())) {
             return String.format("[%s](%s)", text, TRAITS_DATA_PATH + traitId.getPath() + ".json");
         }

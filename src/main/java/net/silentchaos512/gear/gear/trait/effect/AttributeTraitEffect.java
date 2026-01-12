@@ -11,7 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -136,14 +136,14 @@ public class AttributeTraitEffect extends TraitEffect {
             return new ModifierData(attribute, Arrays.stream(values).toList(), operation);
         }
 
-        public ResourceLocation getModId(Key key, TraitActionContext context) {
+        public Identifier getModId(Key key, TraitActionContext context) {
             var itemId = BuiltInRegistries.ITEM.getKey(context.gear().getItem());
             var primaryPart = GearData.getConstruction(context.gear()).getPrimaryPart();
             var primaryMaterial = primaryPart != null ? primaryPart.getPrimaryMaterial() : null;
             var primaryMaterialIdDotted = primaryMaterial != null
                     ? primaryMaterial.getId().getNamespace() + "." + primaryMaterial.getId().getPath()
                     : "";
-            return ResourceLocation.fromNamespaceAndPath(
+            return Identifier.fromNamespaceAndPath(
                     itemId.getNamespace(),
                     itemId.getPath()
                             + "/" + key.group.getSerializedName()
@@ -193,7 +193,7 @@ public class AttributeTraitEffect extends TraitEffect {
             if (gearTypeOptional.isEmpty()) {
                 return DataResult.error(() -> "Unknown gear type: " + gearTypeId);
             }
-            var nameLookup = StringRepresentable.createNameLookup(EquipmentSlotGroup.values(), s -> s);
+            var nameLookup = StringRepresentable.createNameLookup(EquipmentSlotGroup.values(), Enum::name);
             var group = nameLookup.apply(split[1]);
             return DataResult.success(new Key(gearTypeOptional.get().value(), group));
         }

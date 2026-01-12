@@ -6,7 +6,7 @@ import net.minecraft.client.data.models.ItemModelOutput;
 import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
 import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.lib.data.client.LibModelProvider;
 import org.jetbrains.annotations.Nullable;
@@ -21,13 +21,13 @@ public class ModModelProvider extends LibModelProvider {
 
     @Nullable
     @Override
-    protected BlockModelGenerators createBlockModelGenerators(Consumer<BlockModelDefinitionGenerator> blockStateOutput, ItemModelOutput itemModelOutput, BiConsumer<ResourceLocation, ModelInstance> modelOutput) {
+    protected BlockModelGenerators createBlockModelGenerators(Consumer<BlockModelDefinitionGenerator> blockStateOutput, ItemModelOutput itemModelOutput, BiConsumer<Identifier, ModelInstance> modelOutput) {
         return new ModBlockModelGenerator(blockStateOutput, itemModelOutput, modelOutput);
     }
 
     @Nullable
     @Override
-    protected ItemModelGenerators createItemModelGenerators(ItemModelOutput itemModelOutput, BiConsumer<ResourceLocation, ModelInstance> modelOutput) {
+    protected ItemModelGenerators createItemModelGenerators(ItemModelOutput itemModelOutput, BiConsumer<Identifier, ModelInstance> modelOutput) {
         return new ModItemModelProvider(itemModelOutput, modelOutput);
     }
 }

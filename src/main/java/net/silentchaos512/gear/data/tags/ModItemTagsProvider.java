@@ -1,19 +1,19 @@
 package net.silentchaos512.gear.data.tags;
 
+import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.Identifier;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -24,32 +24,35 @@ import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.lib.data.tag.LibItemTagsProvider;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class ModItemTagsProvider extends ItemTagsProvider {
+public class ModItemTagsProvider extends LibItemTagsProvider {
     public ModItemTagsProvider(GatherDataEvent event, BlockTagsProvider blocks) {
         super(event.getGenerator().getPackOutput(), event.getLookupProvider(), SilentGear.MOD_ID);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        // Common
-        copy(SgTags.Blocks.ORES_BORT, SgTags.Items.ORES_BORT);
-        copy(SgTags.Blocks.ORES_CRIMSON_IRON, SgTags.Items.ORES_CRIMSON_IRON);
-        copy(SgTags.Blocks.ORES_AZURE_SILVER, SgTags.Items.ORES_AZURE_SILVER);
-        copy(Tags.Blocks.ORES, Tags.Items.ORES);
+        (new ModBlockItemTagsProvider() {
+            @Override
+            protected TagAppender<Block, Block> tag(TagKey<Block> blockTag, TagKey<Item> itemTag) {
+                return new LibItemTagsProvider.BlockToItemConverter(ModItemTagsProvider.this.tag(itemTag));
+            }
+        }).run();
 
-        copy(SgTags.Blocks.STORAGE_BLOCKS_NETHERWOOD_CHARCOAL, SgTags.Items.STORAGE_BLOCKS_NETHERWOOD_CHARCOAL);
-        copy(SgTags.Blocks.STORAGE_BLOCKS_BORT, SgTags.Items.STORAGE_BLOCKS_BORT);
-        copy(SgTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, SgTags.Items.STORAGE_BLOCKS_BLAZE_GOLD);
-        copy(SgTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, SgTags.Items.STORAGE_BLOCKS_CRIMSON_IRON);
-        copy(SgTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, SgTags.Items.STORAGE_BLOCKS_CRIMSON_STEEL);
-        copy(SgTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, SgTags.Items.STORAGE_BLOCKS_AZURE_SILVER);
-        copy(SgTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, SgTags.Items.STORAGE_BLOCKS_AZURE_ELECTRUM);
-        copy(SgTags.Blocks.STORAGE_BLOCKS_TYRIAN_STEEL, SgTags.Items.STORAGE_BLOCKS_TYRIAN_STEEL);
-        copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
+        // Common
+//        copy(SgTags.Blocks.STORAGE_BLOCKS_NETHERWOOD_CHARCOAL, SgTags.Items.STORAGE_BLOCKS_NETHERWOOD_CHARCOAL);
+//        copy(SgTags.Blocks.STORAGE_BLOCKS_BORT, SgTags.Items.STORAGE_BLOCKS_BORT);
+//        copy(SgTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, SgTags.Items.STORAGE_BLOCKS_BLAZE_GOLD);
+//        copy(SgTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, SgTags.Items.STORAGE_BLOCKS_CRIMSON_IRON);
+//        copy(SgTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, SgTags.Items.STORAGE_BLOCKS_CRIMSON_STEEL);
+//        copy(SgTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, SgTags.Items.STORAGE_BLOCKS_AZURE_SILVER);
+//        copy(SgTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, SgTags.Items.STORAGE_BLOCKS_AZURE_ELECTRUM);
+//        copy(SgTags.Blocks.STORAGE_BLOCKS_TYRIAN_STEEL, SgTags.Items.STORAGE_BLOCKS_TYRIAN_STEEL);
+//        copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
 
         builder(SgTags.Items.STORAGE_BLOCKS_RAW_CRIMSON_IRON, SgBlocks.RAW_CRIMSON_IRON_BLOCK);
         builder(SgTags.Items.STORAGE_BLOCKS_RAW_AZURE_SILVER, SgBlocks.RAW_AZURE_SILVER_BLOCK);
@@ -233,17 +236,17 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.PROSPECTOR_HAMMER.gearItem());
 
         // Minecraft
-        copy(BlockTags.LEAVES, ItemTags.LEAVES);
-        copy(BlockTags.LOGS, ItemTags.LOGS);
-        copy(BlockTags.PLANKS, ItemTags.PLANKS);
-        copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
-        copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
-        copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
-        copy(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES);
-        copy(Tags.Blocks.FENCE_GATES_WOODEN, Tags.Items.FENCE_GATES_WOODEN);
-        copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
-        copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
-        copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
+//        copy(BlockTags.LEAVES, ItemTags.LEAVES);
+//        copy(BlockTags.LOGS, ItemTags.LOGS);
+//        copy(BlockTags.PLANKS, ItemTags.PLANKS);
+//        copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
+//        copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
+//        copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
+//        copy(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES);
+//        copy(Tags.Blocks.FENCE_GATES_WOODEN, Tags.Items.FENCE_GATES_WOODEN);
+//        copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
+//        copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
+//        copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
 
         tag(ItemTags.FOOT_ARMOR_ENCHANTABLE).add(GearItemSets.BOOTS.gearItem());
         tag(ItemTags.LEG_ARMOR_ENCHANTABLE).add(GearItemSets.LEGGINGS.gearItem());
@@ -254,10 +257,16 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .add(GearItemSets.CHESTPLATE.gearItem())
                 .add(GearItemSets.LEGGINGS.gearItem())
                 .add(GearItemSets.BOOTS.gearItem());
-        tag(ItemTags.SWORD_ENCHANTABLE)
+        tag(ItemTags.MELEE_WEAPON_ENCHANTABLE)
                 .add(GearItemSets.SWORD.gearItem())
                 .add(GearItemSets.KATANA.gearItem())
                 .add(GearItemSets.MACHETE.gearItem())
+                .add(GearItemSets.SPEAR.gearItem());
+        tag(ItemTags.SWEEPING_ENCHANTABLE)
+                .add(GearItemSets.SWORD.gearItem())
+                .add(GearItemSets.KATANA.gearItem())
+                .add(GearItemSets.MACHETE.gearItem());
+        tag(ItemTags.LUNGE_ENCHANTABLE)
                 .add(GearItemSets.SPEAR.gearItem());
         tag(ItemTags.FIRE_ASPECT_ENCHANTABLE)
                 .add(GearItemSets.MACE.gearItem());
@@ -362,9 +371,6 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         // Silent Gear
 
-        copy(SgTags.Blocks.FLUFFY_BLOCKS, SgTags.Items.FLUFFY_BLOCKS);
-        copy(SgTags.Blocks.NETHERWOOD_LOGS, SgTags.Items.NETHERWOOD_LOGS);
-
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_1).add(CraftingItems.GLOWING_DUST.asItem());
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_2).add(CraftingItems.BLAZING_DUST.asItem());
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_3).add(CraftingItems.GLITTERY_DUST.asItem());
@@ -403,13 +409,13 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .add(Items.NETHERITE_SCRAP);
 
         // Blueprints
-        Multimap<ResourceLocation, AbstractBlueprintItem> blueprints = MultimapBuilder.linkedHashKeys().arrayListValues().build();
+        Multimap<Identifier, AbstractBlueprintItem> blueprints = MultimapBuilder.linkedHashKeys().arrayListValues().build();
         BuiltInRegistries.ITEM.stream()
                 .filter(item -> item instanceof AbstractBlueprintItem)
                 .map(item -> (AbstractBlueprintItem) item)
                 .sorted(Comparator.comparing(blueprint -> blueprint.getItemTag().location()))
                 .forEach(item -> blueprints.put(item.getItemTag().location(), item));
-        TagsProvider.TagAppender<Item> blueprintsBuilder = tag(SgTags.Items.BLUEPRINTS);
+        TagAppender<Item, Item> blueprintsBuilder = tag(SgTags.Items.BLUEPRINTS);
         blueprints.keySet().forEach(tagId -> {
             TagKey<Item> tag = ItemTags.create(tagId);
             tag(tag).add(blueprints.get(tagId).toArray(new Item[0]));

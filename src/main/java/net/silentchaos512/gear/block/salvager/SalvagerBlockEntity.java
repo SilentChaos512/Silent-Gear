@@ -15,7 +15,6 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.SgContainerBlockEntity;
@@ -25,6 +24,7 @@ import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.lib.util.MathUtils;
 import net.silentchaos512.lib.util.TimeUtils;
+import org.lwjgl.system.windows.INPUT;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -66,18 +66,7 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
 
     @Override
     public NonNullList<ItemStack> createInternalItemList() {
-        return new ItemStackHandler(INVENTORY_SIZE) {
-            @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                return slot == INPUT_SLOT && !stack.isEmpty();
-            }
-
-            @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                if (slot == INPUT_SLOT) return ItemStack.EMPTY;
-                return super.extractItem(slot, amount, simulate);
-            }
-        };
+        return NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     }
 
     @Nullable
@@ -91,9 +80,10 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
     }
 
     public ItemStack getInputItem() {
-        return this.items.getStackInSlot(INPUT_SLOT);
+        return this.items.get(INPUT_SLOT);
     }
 
+    @SuppressWarnings("unused")
     public static void tick(Level level, BlockPos pos, BlockState state, SalvagerBlockEntity blockEntity) {
         ItemStack input = blockEntity.getItem(0);
         SalvagingRecipe recipe = blockEntity.getRecipe(input);
@@ -185,17 +175,22 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
     }
 
     @Override
-    public boolean canPlaceItem(int index, ItemStack stack) {
-        if (stack.isEmpty() || isOutputSlot(index)) {
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        if (stack.isEmpty() || isOutputSlot(slot)) {
             return false;
         }
 
-        ItemStack current = getItem(index);
+        ItemStack current = getItem(slot);
         if (!current.isEmpty() && !ItemStack.isSameItemSameComponents(stack, current)) {
             return false;
         }
 
-        return isInputSlot(index) || super.canPlaceItem(index, stack);
+        return isInputSlot(slot);
+    }
+
+    @Override
+    public boolean canExtractItem(int slot) {
+        return slot != INPUT_SLOT;
     }
 
     private static boolean isInputSlot(int index) {

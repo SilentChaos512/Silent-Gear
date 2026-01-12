@@ -1,10 +1,10 @@
 package net.silentchaos512.gear.data.recipes;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.critereon.ImpossibleTrigger;
+import net.minecraft.advancements.criterion.ImpossibleTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
@@ -771,7 +771,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(SgTags.Items.INGOTS_TYRIAN_STEEL))
                 .save(this.output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.CRUDE_MIXER)
+        shaped(RecipeCategory.DECORATIONS, SgBlocks.CRUDE_MIXER)
                 .define('#', Tags.Items.STONES)
                 .define('/', ItemTags.PLANKS)
                 .define('F', CraftingItems.FLAX_STRING)
@@ -779,9 +779,9 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#/#")
                 .pattern(" # ")
                 .unlockedBy("has_item", has(Tags.Items.STONES))
-                .save(consumer);
+                .save(this.output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.SUPER_MIXER)
+        shaped(RecipeCategory.DECORATIONS, SgBlocks.SUPER_MIXER)
                 .define('#', SgTags.Items.STORAGE_BLOCKS_TYRIAN_STEEL)
                 .define('B', Items.BEACON)
                 .define('D', new Ingredient(CustomAlloyIngredient.of(SgItems.CUSTOM_GEM.get(), Const.Materials.DIMERALD)))
@@ -789,7 +789,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("#B#")
                 .pattern(" # ")
                 .unlockedBy("has_item", has(SgTags.Items.INGOTS_TYRIAN_STEEL))
-                .save(consumer);
+                .save(this.output);
 
         shaped(RecipeCategory.DECORATIONS, SgBlocks.STARLIGHT_CHARGER)
                 .define('#', Blocks.POLISHED_BLACKSTONE)
@@ -1672,7 +1672,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         if (rodCount > 0) {
             builder.addResult(Items.STICK, rodCount);
         }
-        ResourceLocation inputId = NameUtils.fromItem(gear);
+        Identifier inputId = NameUtils.fromItem(gear);
         builder.save(this.output, modId("salvaging/" + inputId.getPath()));
     }
 

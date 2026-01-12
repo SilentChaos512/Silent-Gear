@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.block.alloymaker;
 
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -10,9 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +22,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
@@ -309,8 +305,15 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     }
 
     @Override
-    public boolean canPlaceItem(int index, ItemStack stack) {
-        return index < getInputSlotCount();
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        if (slot >= getInputSlotCount()) return false;
+        var material = MaterialInstance.from(stack);
+        return material != null && this.info.acceptsMaterial(material);
+    }
+
+    @Override
+    public boolean canExtractItem(int slot) {
+        return slot == getOutputSlotIndex();
     }
 
     @Override
@@ -328,30 +331,6 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
         return NonNullList.withSize(info.getInputSlotCount() + 2, ItemStack.EMPTY);
     }
 
-    public static ItemStackHandler createItemHandler(AlloyMakerInfo<?> info) {
-        var inputSlotCount = info.getInputSlotCount();
-        var totalSlots = inputSlotCount + 2;
-
-        return new ItemStackHandler(totalSlots) {
-            @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                // Only materials in the correct categories are accepted
-                if (slot >= 0 && slot < inputSlotCount) {
-                    var material = MaterialInstance.from(stack);
-                    return material != null && info.acceptsMaterial(material);
-                }
-                return false;
-            }
-
-            @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                // Can only extra from the true output slot
-                if (slot != inputSlotCount) return ItemStack.EMPTY;
-                return super.extractItem(slot, amount, simulate);
-            }
-        };
-    }
-
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new AlloyMakerContainer(this.info.getContainerType(),
@@ -365,15 +344,15 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     @Override
     public void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        this.progress = tags.getInt("Progress").orElse(0);
-        this.workEnabled = tags.getBoolean("WorkEnabled").orElse(false);
+        this.progress = input.getIntOr("Progress", 0);
+        this.workEnabled = input.getBooleanOr("WorkEnabled", false);
     }
 
     @Override
     public void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        tags.putInt("Progress", this.progress);
-        tags.putBoolean("WorkEnabled", this.workEnabled);
+        output.putInt("Progress", this.progress);
+        output.putBoolean("WorkEnabled", this.workEnabled);
     }
 
     @Override
@@ -385,12 +364,9 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider provider) {
-        super.onDataPacket(net, packet, provider);
-        CompoundTag tags = packet.getTag();
-        if (tags != null) {
-            this.progress = tags.getInt("Progress").orElse(0);
-            this.workEnabled = tags.getBoolean("WorkEnabled").orElse(false);
-        }
+    public void onDataPacket(Connection net, ValueInput input) {
+        super.onDataPacket(net, input);
+        this.progress = input.getIntOr("Progress", 0);
+        this.workEnabled = input.getBooleanOr("WorkEnabled", false);
     }
 }

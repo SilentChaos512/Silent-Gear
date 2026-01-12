@@ -4,13 +4,12 @@ import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
 import net.minecraft.client.data.models.model.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.setup.SgItemTintSources;
 import net.silentchaos512.gear.item.GearItemSet;
 import net.silentchaos512.gear.setup.SgRegistries;
-import net.silentchaos512.lib.util.MathUtils;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -44,8 +43,8 @@ public class GearItemModelBuilder {
     );
 
     private final GearItemSet<? extends GearItem> itemSet;
-    private final ResourceLocation typeKey;
-    private final Map<PartType, ResourceLocation> layers = new LinkedHashMap<>();
+    private final Identifier typeKey;
+    private final Map<PartType, Identifier> layers = new LinkedHashMap<>();
     private final Map<PartType, ItemTintSource> tints = new HashMap<>();
     private final Function<Integer, ModelTemplate> modelTemplateGetter;
 
@@ -68,19 +67,19 @@ public class GearItemModelBuilder {
     }
 
     public GearItemModelBuilder simpleLayer(Supplier<PartType> partType, String texturePath) {
-        var texture = ResourceLocation.fromNamespaceAndPath(this.typeKey.getNamespace(), "item/" + this.typeKey.getPath() + "/" + texturePath);
+        var texture = Identifier.fromNamespaceAndPath(this.typeKey.getNamespace(), "item/" + this.typeKey.getPath() + "/" + texturePath);
         this.layers.put(partType.get(), texture);
         return this;
     }
 
     public GearItemModelBuilder tintedLayer(Supplier<PartType> partType, String texturePath) {
-        var texture = ResourceLocation.fromNamespaceAndPath(this.typeKey.getNamespace(), "item/" + this.typeKey.getPath() + "/" + texturePath);
+        var texture = Identifier.fromNamespaceAndPath(this.typeKey.getNamespace(), "item/" + this.typeKey.getPath() + "/" + texturePath);
         this.layers.put(partType.get(), texture);
         this.tints.put(partType.get(), SgItemTintSources.gearPartColor(partType));
         return this;
     }
 
-    public void generateModel(ItemModelOutput itemModelOutput, BiConsumer<ResourceLocation, ModelInstance> modelOutput) {
+    public void generateModel(ItemModelOutput itemModelOutput, BiConsumer<Identifier, ModelInstance> modelOutput) {
         var textureMapping = new TextureMapping();
         List<ItemTintSource> tintSourceList = new ArrayList<>();
         int i = 0;
@@ -93,7 +92,7 @@ public class GearItemModelBuilder {
             }
         }
         var modelTemplate = this.modelTemplateGetter.apply(this.layers.size() - 1);
-        ResourceLocation modelKey = modelTemplate.create(
+        Identifier modelKey = modelTemplate.create(
                 this.itemSet.gearItem(),
                 textureMapping,
                 modelOutput

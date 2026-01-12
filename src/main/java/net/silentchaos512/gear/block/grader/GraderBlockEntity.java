@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.grader;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -7,16 +8,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.part.MaterialGrade;
@@ -30,12 +32,14 @@ import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.lib.util.EnumUtils;
 import net.silentchaos512.lib.util.InventoryUtils;
 import net.silentchaos512.lib.util.TimeUtils;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class GraderBlockEntity extends SgContainerBlockEntity {
+    private static final Logger LOGGER = LogUtils.getLogger();
     static final int BASE_ANALYZE_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 1 : 5);
 
     static final int INPUT_SLOT = 0;
@@ -97,7 +101,7 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
                 ++blockEntity.progress;
             }
 
-            if (blockEntity.progress >= BASE_ANALYZE_TIME && !level.isClientSide) {
+            if (blockEntity.progress >= BASE_ANALYZE_TIME && !level.isClientSide()) {
                 blockEntity.progress = 0;
                 catalyst.shrink(1);
                 blockEntity.tryGradeItem(input, catalystTier);
@@ -260,13 +264,13 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        this.progress = pTag.getInt("Progress").orElse(0);
+        this.progress = input.getIntOr("Progress", 0);
     }
 
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        pTag.putInt("Progress", this.progress);
+        output.putInt("Progress", this.progress);
     }
 
     @Override
@@ -275,46 +279,44 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries) {
-        CompoundTag tags = super.getUpdateTag(pRegistries);
-        tags.putInt("Progress", this.progress);
-
-        ItemStack input = getInputStack();
-        if (!input.isEmpty()) {
-            tags.put("input_item", input.save(pRegistries, new CompoundTag()));
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag tags;
+        try (ProblemReporter.ScopedCollector scopedCollector = new ProblemReporter.ScopedCollector(this.problemPath(), LOGGER)) {
+            TagValueOutput output = TagValueOutput.createWithContext(scopedCollector, provider);
+            output.putInt("Progress", this.progress);
+            ItemStack inputItem = getInputStack();
+            if (!inputItem.isEmpty()) {
+                output.store("Item", ItemStack.CODEC, inputItem);
+            }
+            tags = output.buildResult();
         }
         return tags;
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
-        super.onDataPacket(net, pkt, lookupProvider);
-
-        CompoundTag tags = pkt.getTag();
-        if (tags == null) return;
-
-        this.progress = tags.getInt("Progress").orElse(0);
-
-        if (tags.contains("input_item")) {
-            var inputItem = ItemStack.parse(lookupProvider, tags.getCompound("input_item").orElse(new CompoundTag())).orElse(ItemStack.EMPTY);
-            setItem(INPUT_SLOT, inputItem);
-        } else {
-            setItem(INPUT_SLOT, ItemStack.EMPTY);
-        }
+    public void onDataPacket(Connection net, ValueInput input) {
+        super.onDataPacket(net, input);
+        this.progress = input.getInt("Progress").orElse(0);
+        this.items.set(INPUT_SLOT, input.read("Item", ItemStack.CODEC).orElse(ItemStack.EMPTY));
     }
 
     @Override
-    public boolean canPlaceItem(int index, ItemStack stack) {
-        if (index != INPUT_SLOT && index != CATALYST_SLOT) {
+    public NonNullList<ItemStack> createInternalItemList() {
+        return NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        if (slot != INPUT_SLOT && slot != CATALYST_SLOT) {
             return false;
         }
 
-        ItemStack stackInSlot = getItem(index);
+        ItemStack stackInSlot = getItem(slot);
         if (stack.isEmpty() || (!stackInSlot.isEmpty() && !ItemStack.isSameItemSameComponents(stackInSlot, stack))) {
             return false;
         }
 
-        if (index == INPUT_SLOT) {
+        if (slot == INPUT_SLOT) {
             return canGrade(stack);
         } else {
             return getCatalystTier(stack) > 0;
@@ -322,25 +324,13 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     }
 
     @Override
-    protected Component getDefaultName() {
-        return Component.translatable("container.silentgear.material_grader");
+    public boolean canExtractItem(int slot) {
+        return slot != INPUT_SLOT && slot != CATALYST_SLOT;
     }
 
     @Override
-    public NonNullList<ItemStack> createInternalItemList() {
-        return new ItemStackHandler(INVENTORY_SIZE) {
-            @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                return (slot == INPUT_SLOT && canGrade(stack)) ||
-                        (slot == CATALYST_SLOT && getCatalystTier(stack) > 0);
-            }
-
-            @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                if (slot == INPUT_SLOT || slot == CATALYST_SLOT) return ItemStack.EMPTY;
-                return super.extractItem(slot, amount, simulate);
-            }
-        };
+    protected Component getDefaultName() {
+        return Component.translatable("container.silentgear.material_grader");
     }
 
     @Override

@@ -87,7 +87,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         );
 
         public static Result fromNetwork(RegistryFriendlyByteBuf buf) {
-            var item = BuiltInRegistries.ITEM.get(buf.readResourceLocation()).orElseThrow().value();
+            var item = BuiltInRegistries.ITEM.get(buf.readIdentifier()).orElseThrow().value();
             var parts = new ArrayList<PartInstance>();
             int partListSize = buf.readByte();
             for (int i = 0; i < partListSize; ++i) {
@@ -97,7 +97,7 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
         }
 
         public void toNetwork(RegistryFriendlyByteBuf buf) {
-            buf.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item));
+            buf.writeIdentifier(BuiltInRegistries.ITEM.getKey(item));
             buf.writeByte(parts.size());
             parts.forEach(part -> PartInstance.STREAM_CODEC.encode(buf, part));
         }

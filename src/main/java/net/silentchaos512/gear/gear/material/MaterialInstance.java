@@ -311,4 +311,9 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public boolean is(DataResource<Material> material) {
         return this.material == material;
     }
+
+    public boolean parentIs(DataResource<Material> material) {
+         @Nullable var parent = get().getParent();
+        return parent == material;
+    }
 }

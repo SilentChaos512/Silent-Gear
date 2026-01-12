@@ -57,9 +57,9 @@ public class GearItemSets {
     public static final GearItemSet<GearArmorItem> BOOTS = set(GearTypes.BOOTS, "boot_plates", (gt, props) -> new GearArmorItem(gt, ArmorType.BOOTS, props));
     public static final GearItemSet<GearElytraItem> ELYTRA = set(GearTypes.ELYTRA, "elytra_wings", GearElytraItem::new);
 
-    public static final GearItemSet<GearCurioItem> RING = set(GearTypes.RING, "ring_shank", (gt, props) -> new GearCurioItem(gt, "ring", props), SgItems.unstackableProps());
-    public static final GearItemSet<GearCurioItem> BRACELET = set(GearTypes.BRACELET, "bracelet_band", (gt, props) -> new GearCurioItem(gt, "bracelet", props), SgItems.unstackableProps());
-    public static final GearItemSet<GearCurioItem> NECKLACE = set(GearTypes.NECKLACE, "necklace_chain", (gt, props) -> new GearCurioItem(gt, "necklace", props), SgItems.unstackableProps());
+    public static final GearItemSet<GearCurioItem> RING = set(GearTypes.RING, "ring_shank", (gt, props) -> new GearCurioItem(gt, "ring", props), unstackableItemProperties());
+    public static final GearItemSet<GearCurioItem> BRACELET = set(GearTypes.BRACELET, "bracelet_band", (gt, props) -> new GearCurioItem(gt, "bracelet", props), unstackableItemProperties());
+    public static final GearItemSet<GearCurioItem> NECKLACE = set(GearTypes.NECKLACE, "necklace_chain", (gt, props) -> new GearCurioItem(gt, "necklace", props), unstackableItemProperties());
 
     private static <I extends Item & GearItem> GearItemSet<I> set(DeferredHolder<GearType, GearType> type, String partName, BiFunction<Supplier<GearType>, Item.Properties, I> itemFactory) {
         return set(type, partName, itemFactory, GearHelper.getBaseItemProperties());
@@ -92,5 +92,9 @@ public class GearItemSets {
 
     public static Iterator<GearItemSet<?>> getIterator() {
         return LIST.iterator();
+    }
+
+    private static Item.Properties unstackableItemProperties() {
+        return new Item.Properties().stacksTo(1);
     }
 }

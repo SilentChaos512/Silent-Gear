@@ -41,7 +41,7 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
             return GearHelper.useOn(context);
         }
 
-        if (context.getLevel().isClientSide || !(player instanceof ServerPlayer)) {
+        if (context.getLevel().isClientSide() || !(player instanceof ServerPlayer)) {
             return InteractionResult.SUCCESS;
         }
 

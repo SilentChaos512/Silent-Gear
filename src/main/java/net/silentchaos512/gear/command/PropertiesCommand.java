@@ -20,7 +20,6 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.lib.util.PlayerUtils;
 
 import java.util.Collection;
 
@@ -30,7 +29,7 @@ public final class PropertiesCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_properties")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("info")
                         .then(Commands.argument("player", EntityArgument.player())
                                 .executes(ctx -> runInfo(ctx, EntityArgument.getPlayer(ctx, "player")))

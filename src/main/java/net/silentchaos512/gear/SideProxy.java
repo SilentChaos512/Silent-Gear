@@ -9,7 +9,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.*;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -89,8 +88,6 @@ class SideProxy implements IProxy {
             return Collections.emptyList();
         });
 
-        NerfedGear.init();
-
         Greetings.addMessage(SideProxy::detectDataLoadingFailure);
     }
 
@@ -99,14 +96,14 @@ class SideProxy implements IProxy {
             event.register(CurioGearItemCapability.class);
         }*/
 
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.ALLOY_FORGE.get(), (be, side) -> be.getItemHandler());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.MATERIAL_GRADER.get(), (be, side) -> be.getItemHandler());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.METAL_PRESS.get(), (be, side) -> be.getItemHandler());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.RECRYSTALLIZER.get(), (be, side) -> be.getItemHandler());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.REFABRICATOR.get(), (be, side) -> be.getItemHandler());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.SALVAGER.get(), (be, side) -> be.getItemHandler());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.STARLIGHT_CHARGER.get(), (be, side) -> be.getItemHandler());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.SUPER_MIXER.get(), (be, side) -> be.getItemHandler());
+//        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.ALLOY_FORGE.get(), (be, side) -> be.getItemHandler());
+//        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.MATERIAL_GRADER.get(), (be, side) -> be.getItemHandler());
+//        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.METAL_PRESS.get(), (be, side) -> be.getItemHandler());
+//        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.RECRYSTALLIZER.get(), (be, side) -> be.getItemHandler());
+//        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.REFABRICATOR.get(), (be, side) -> be.getItemHandler());
+//        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.SALVAGER.get(), (be, side) -> be.getItemHandler());
+//        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.STARLIGHT_CHARGER.get(), (be, side) -> be.getItemHandler());
+//        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.SUPER_MIXER.get(), (be, side) -> be.getItemHandler());
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {

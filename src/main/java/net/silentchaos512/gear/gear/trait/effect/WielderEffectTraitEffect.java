@@ -12,7 +12,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
@@ -21,9 +21,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearArmor;
 import net.silentchaos512.gear.api.item.GearItem;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.api.traits.TraitEffectType;
@@ -161,7 +161,7 @@ public class WielderEffectTraitEffect extends TraitEffect {
 
         private static float getDefaultDuration(Holder<MobEffect> effect) {
             // Duration in seconds. The .9 should prevent flickering.
-            var nightVision = ResourceLocation.withDefaultNamespace("night_vision");
+            var nightVision = Identifier.withDefaultNamespace("night_vision");
             return effect.is(nightVision) ? 15.9f : 1.9f;
         }
 

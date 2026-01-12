@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.item.blueprint;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -24,6 +24,7 @@ import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.MathUtils;
 import net.silentchaos512.lib.util.NameUtils;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -31,7 +32,7 @@ import java.util.function.Supplier;
 
 public class GearBlueprintItem extends AbstractBlueprintItem {
     private final Supplier<GearType> gearType;
-    private TagKey<Item> itemTag;
+    @Nullable private TagKey<Item> itemTag;
 
     public GearBlueprintItem(Supplier<GearType> gearType, BlueprintType type, Properties properties) {
         super(properties, type);
@@ -55,18 +56,18 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     @Override
     public TagKey<Item> getItemTag() {
         if (itemTag == null) {
-            ResourceLocation id = NameUtils.fromItem(this);
+            Identifier id = NameUtils.fromItem(this);
             String itemClass = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(gearType())).getPath();
-            itemTag = ItemTags.create(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "blueprints/" + itemClass));
+            itemTag = ItemTags.create(Identifier.fromNamespaceAndPath(id.getNamespace(), "blueprints/" + itemClass));
         }
         return itemTag;
     }
 
     @Override
     protected Component getCraftedName(ItemStack stack) {
-        ResourceLocation id = NameUtils.fromItem(this);
+        Identifier id = NameUtils.fromItem(this);
         String itemClass = Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(gearType())).getPath();
-        return Component.translatable(Util.makeDescriptionId("item", ResourceLocation.fromNamespaceAndPath(id.getNamespace(), itemClass)));
+        return Component.translatable(Util.makeDescriptionId("item", Identifier.fromNamespaceAndPath(id.getNamespace(), itemClass)));
     }
 
     @Override

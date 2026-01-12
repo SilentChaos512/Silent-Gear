@@ -12,7 +12,6 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
@@ -92,12 +91,6 @@ public class SgDataComponents {
                     .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.INT)
     );
-    /*public static final Supplier<DataComponentType<TraitAddedEnchantments>> TRAIT_ADDED_ENCHANTMENTS = REGISTRAR.registerComponentType(
-            "trait_added_enchantments",
-            builder -> builder
-                    .persistent(TraitAddedEnchantments.CODEC)
-                    .networkSynchronized(TraitAddedEnchantments.STREAM_CODEC)
-    );*/
     /**
      * A map of MaterialInstance to Float, encoded as a map of DataResource<Material> to Float.
      * Used by repair kits.

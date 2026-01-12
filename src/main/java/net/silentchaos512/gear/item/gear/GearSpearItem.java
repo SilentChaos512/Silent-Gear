@@ -1,34 +1,30 @@
 package net.silentchaos512.gear.item.gear;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.component.AttackRange;
+import net.minecraft.world.item.component.PiercingWeapon;
+import net.minecraft.world.item.component.UseEffects;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
-import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
+import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
-import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.function.Supplier;
 
-public class GearSpearItem extends Item implements GearWeapon {
+public class GearSpearItem extends BasicGearItem implements GearWeapon {
     private final Supplier<GearType> gearType;
 
-    public GearSpearItem(Supplier<GearType> gearType) {
-        super(GearHelper.getBaseItemProperties());
+    public GearSpearItem(Supplier<GearType> gearType, Item.Properties properties) {
+        super(properties);
         this.gearType = gearType;
     }
 
@@ -38,93 +34,40 @@ public class GearSpearItem extends Item implements GearWeapon {
     }
 
     @Override
-    public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
-        return !player.isCreative();
+    public void onRecalculatePost(ItemStack gear, @Nullable Player player, GearPropertiesData finalProperties) {
+        GearWeapon.super.onRecalculatePost(gear, player, finalProperties);
+
+        var primaryPart = GearData.getConstruction(gear).getPrimaryPart();
+        var primaryMaterial = primaryPart != null ? primaryPart.getPrimaryMaterial() : null;
+        var isWood = primaryMaterial != null && (primaryMaterial.is(Const.Materials.WOOD) || primaryMaterial.parentIs(Const.Materials.WOOD));
+
+        gear.set(DataComponents.DAMAGE_TYPE, new EitherHolder<>(DamageTypes.SPEAR));
+        /*gear.set(
+                DataComponents.KINETIC_WEAPON,
+                new KineticWeapon(
+                        10,
+                        (int) (delay * 20F),
+                        KineticWeapon.Condition.ofAttackerSpeed((int)(dismountMaxDuration * 20.0F), dismountMinSpeed),
+                        KineticWeapon.Condition.ofAttackerSpeed((int)(knockbackMaxDuration * 20.0F), knockbackMinSpeed),
+                        KineticWeapon.Condition.ofRelativeSpeed((int)(damageMaxDuration * 20.0F), damageMinSpeed),
+                        0.38F,
+                        damageMultiplier,
+                        Optional.of(isWood ? SoundEvents.SPEAR_WOOD_USE : SoundEvents.SPEAR_USE),
+                        Optional.of(isWood ? SoundEvents.SPEAR_WOOD_HIT : SoundEvents.SPEAR_HIT)
+                )
+        );*/
+        gear.set(
+                DataComponents.PIERCING_WEAPON,
+                new PiercingWeapon(
+                        true,
+                        false,
+                        Optional.of(isWood ? SoundEvents.SPEAR_WOOD_ATTACK : SoundEvents.SPEAR_ATTACK),
+                        Optional.of(isWood ? SoundEvents.SPEAR_WOOD_HIT : SoundEvents.SPEAR_HIT)
+                )
+        );
+        gear.set(DataComponents.ATTACK_RANGE, new AttackRange(2.0F, 4.5F, 2.0F, 6.5F, 0.125F, 0.5F));
+        gear.set(DataComponents.MINIMUM_ATTACK_CHARGE, 1.0F);
+//        gear.set(DataComponents.SWING_ANIMATION, new SwingAnimation(SwingAnimationType.STAB, (int) (swingDuration * 20.0F)));
+        gear.set(DataComponents.USE_EFFECTS, new UseEffects(true, false, 1.0F));
     }
-
-    //region Standard tool overrides
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
-        GearClientHelper.addInformation(stack, tooltipContext, tooltip, flagIn);
-    }
-
-    @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
-        var builder = ItemAttributeModifiers.builder();
-        GearHelper.addAttributeModifiers(stack, builder);
-        return builder.build();
-    }
-
-    @Override
-    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return GearHelper.getIsRepairable(toRepair, repair);
-    }
-
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return GearHelper.getEnchantmentValue(stack);
-    }
-
-    @Override
-    public void setDamage(ItemStack stack, int damage) {
-        GearHelper.setDamage(stack, damage, super::setDamage);
-    }
-
-    @Override
-    public int getMaxDamage(ItemStack stack) {
-        return GearData.getProperties(stack).getNumberInt(getDurabilityStat());
-    }
-
-    @Override
-    public boolean isFoil(ItemStack stack) {
-        return GearClientHelper.hasEffect(stack);
-    }
-
-    @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return GearHelper.hurtEnemy(stack, target, attacker);
-    }
-
-    @Override
-    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        GearHelper.postHurtEnemy(stack, target, attacker);
-    }
-
-    @Override
-    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        return GearHelper.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        GearHelper.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-    }
-
-    @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return GearClientHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
-    }
-
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        return GearHelper.onItemUse(context);
-    }
-
-    @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        return GearHelper.damageItem(stack, amount, entity, onBroken);
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return GearHelper.getBarWidth(stack);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return GearHelper.getBarColor(stack);
-    }
-
-    //endregion
 }

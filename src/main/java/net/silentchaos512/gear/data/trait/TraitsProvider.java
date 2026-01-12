@@ -1,10 +1,7 @@
 package net.silentchaos512.gear.data.trait;
 
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -260,20 +257,9 @@ public class TraitsProvider extends TraitsProviderBase {
 
         // Enchantment
 
-        // FIXME: Bring back enchantment trait
         ret.add(new TraitBuilder(Const.Traits.FIERY, 2));
         ret.add(new TraitBuilder(Const.Traits.SILKY, 1));
         ret.add(new TraitBuilder(Const.Traits.FORTUNATE, 3));
-
-        /*ret.add(new EnchantmentTraitBuilder(Const.Traits.FIERY, 2)
-                .addEnchantments(GearTypes.MELEE_WEAPON, Enchantments.FIRE_ASPECT, 1, 2)
-                .addEnchantments(GearTypes.RANGED_WEAPON, Enchantments.FLAMING_ARROWS, 1)
-                .withGearTypeCondition(GearTypes.WEAPON)
-        );
-        ret.add(new EnchantmentTraitBuilder(Const.Traits.SILKY, 1)
-                .addEnchantments(GearTypes.HARVEST_TOOL, Enchantments.SILK_TOUCH, 1)
-                .withGearTypeCondition(GearTypes.HARVEST_TOOL)
-        );*/
 
         // Wielder Effect (Potion)
 

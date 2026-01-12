@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
@@ -44,6 +43,12 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgContainerBlockEntity implements INamedContainerExtraData {
+    /**
+     * Slots:
+     * 0 = Input (chargeable material)
+     * 1 = Charging catalyst
+     * 2 = Output
+     */
     static final int INVENTORY_SIZE = 3;
     private static final int UPDATE_FREQUENCY = TimeUtils.ticksFromSeconds(15);
 
@@ -351,22 +356,21 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
 
     @Override
     public NonNullList<ItemStack> createInternalItemList() {
-        return new ItemStackHandler(INVENTORY_SIZE) {
-            @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                return switch (slot) {
-                    case 0 -> canCharge(stack);
-                    case 1 -> stack.is(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS);
-                    default -> false;
-                };
-            }
+        return NonNullList.withSize(3, ItemStack.EMPTY);
+    }
 
-            @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                if (slot != 2) return ItemStack.EMPTY;
-                return super.extractItem(slot, amount, simulate);
-            }
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return switch (slot) {
+            case 0 -> canCharge(stack);
+            case 1 -> stack.is(SgTags.Items.STARLIGHT_CHARGER_CATALYSTS);
+            default -> false;
         };
+    }
+
+    @Override
+    public boolean canExtractItem(int slot) {
+        return slot == 2;
     }
 
     @Override
@@ -378,19 +382,19 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        this.progress = tags.getInt("Progress").orElse(0);
-        this.workTime = tags.getInt("WorkTime").orElse(0);
-        this.charge = tags.getInt("Charge").orElse(0);
-        this.structureLevel = tags.getInt("StructureLevel").orElse(0);
+        this.progress = input.getInt("Progress").orElse(0);
+        this.workTime = input.getInt("WorkTime").orElse(0);
+        this.charge = input.getInt("Charge").orElse(0);
+        this.structureLevel = input.getInt("StructureLevel").orElse(0);
     }
 
     @Override
     public void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        tags.putInt("Progress", this.progress);
-        tags.putInt("WorkTime", this.workTime);
-        tags.putInt("Charge", this.charge);
-        tags.putInt("StructureLevel", this.structureLevel);
+        output.putInt("Progress", this.progress);
+        output.putInt("WorkTime", this.workTime);
+        output.putInt("Charge", this.charge);
+        output.putInt("StructureLevel", this.structureLevel);
     }
 
     @Override
@@ -405,7 +409,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
 
     public enum WorkTime {
         DAYTIME(Level::isBrightOutside),
-        NIGHTTIME(Level::isMoonVisible), // or Level::isDarkOutside? Not sure how it behaves in different dimensions.
+        NIGHTTIME(Level::isDarkOutside),
         ANYTIME(level -> true);
 
         private final Function<Level, Boolean> canWork;

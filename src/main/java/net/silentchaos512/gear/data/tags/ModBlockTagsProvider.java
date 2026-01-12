@@ -1,9 +1,9 @@
 package net.silentchaos512.gear.data.tags;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -86,7 +86,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                         Blocks.REDSTONE_ORE,
                         Blocks.DEEPSLATE_REDSTONE_ORE
                 )
-                .addOptionalTag(ResourceLocation.fromNamespaceAndPath("c", "ores/silver"));
+                .addOptionalTag(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "ores/silver")));
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(SgBlocks.RAW_AZURE_SILVER_BLOCK.get())
                 .add(SgBlocks.RAW_CRIMSON_IRON_BLOCK.get());
@@ -152,7 +152,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(SgTags.Blocks.ORES_BORT, SgBlocks.BORT_ORE, SgBlocks.DEEPSLATE_BORT_ORE);
         builder(SgTags.Blocks.ORES_CRIMSON_IRON, SgBlocks.CRIMSON_IRON_ORE, SgBlocks.BLACKSTONE_CRIMSON_IRON_ORE);
         builder(SgTags.Blocks.ORES_AZURE_SILVER, SgBlocks.AZURE_SILVER_ORE);
-        getBuilder(Tags.Blocks.ORES)
+        tag(Tags.Blocks.ORES)
                 .addTag(SgTags.Blocks.ORES_BORT)
                 .addTag(SgTags.Blocks.ORES_CRIMSON_IRON)
                 .addTag(SgTags.Blocks.ORES_AZURE_SILVER);
@@ -168,7 +168,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(SgTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, SgBlocks.AZURE_SILVER_BLOCK);
         builder(SgTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, SgBlocks.AZURE_ELECTRUM_BLOCK);
         builder(SgTags.Blocks.STORAGE_BLOCKS_TYRIAN_STEEL, SgBlocks.TYRIAN_STEEL_BLOCK);
-        getBuilder(Tags.Blocks.STORAGE_BLOCKS)
+        tag(Tags.Blocks.STORAGE_BLOCKS)
                 .addTag(SgTags.Blocks.STORAGE_BLOCKS_NETHERWOOD_CHARCOAL)
                 .addTag(SgTags.Blocks.STORAGE_BLOCKS_BORT)
                 .addTag(SgTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD)
@@ -187,7 +187,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         // Minecraft
         builder(BlockTags.CROPS, SgBlocks.FLAX_PLANT, SgBlocks.FLUFFY_PLANT);
         builder(BlockTags.LEAVES, SgBlocks.NETHERWOOD_LEAVES);
-        getBuilder(BlockTags.LOGS).addTag(SgTags.Blocks.NETHERWOOD_LOGS);
+        tag(BlockTags.LOGS).addTag(SgTags.Blocks.NETHERWOOD_LOGS);
         builder(BlockTags.PLANKS, SgBlocks.NETHERWOOD_PLANKS);
         builder(BlockTags.SAPLINGS, SgBlocks.NETHERWOOD_SAPLING);
         builder(BlockTags.WOODEN_DOORS, SgBlocks.NETHERWOOD_DOOR);
@@ -202,9 +202,5 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 
     private void builder(TagKey<Block> tag, DeferredBlock<?>... items) {
         tag(tag).add(Arrays.stream(items).map(DeferredBlock::value).toArray(Block[]::new));
-    }
-
-    protected TagsProvider.TagAppender<Block> getBuilder(TagKey<Block> tag) {
-        return tag(tag);
     }
 }

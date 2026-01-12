@@ -43,7 +43,7 @@ public class StarlightChargerBlock extends ModContainerBlock<ChargerBlockEntity<
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.STARLIGHT_CHARGER.get(), ChargerBlockEntity::tick);
+        return level.isClientSide() ? null : createTickerHelper(blockEntityType, SgBlockEntities.STARLIGHT_CHARGER.get(), ChargerBlockEntity::tick);
     }
 
     @Override

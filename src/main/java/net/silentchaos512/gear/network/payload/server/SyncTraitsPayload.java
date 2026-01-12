@@ -4,7 +4,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -12,12 +12,12 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import java.util.HashMap;
 import java.util.Map;
 
-public record SyncTraitsPayload(Map<ResourceLocation, Trait> traits) implements CustomPacketPayload, DataResourcesPayload<Trait> {
+public record SyncTraitsPayload(Map<Identifier, Trait> traits) implements CustomPacketPayload, DataResourcesPayload<Trait> {
     public static final Type<SyncTraitsPayload> TYPE = new Type<>(SilentGear.getId("sync_traits"));
 
-    private static final StreamCodec<RegistryFriendlyByteBuf, HashMap<ResourceLocation, Trait>> MAP_STREAM_CODEC = ByteBufCodecs.map(
+    private static final StreamCodec<RegistryFriendlyByteBuf, HashMap<Identifier, Trait>> MAP_STREAM_CODEC = ByteBufCodecs.map(
             HashMap::new,
-            ResourceLocation.STREAM_CODEC,
+            Identifier.STREAM_CODEC,
             Trait.STREAM_CODEC
     );
 
@@ -36,7 +36,7 @@ public record SyncTraitsPayload(Map<ResourceLocation, Trait> traits) implements 
     }
 
     @Override
-    public Map<ResourceLocation, Trait> values() {
+    public Map<Identifier, Trait> values() {
         return traits;
     }
 }

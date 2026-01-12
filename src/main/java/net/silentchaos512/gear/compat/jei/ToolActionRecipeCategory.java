@@ -11,7 +11,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
@@ -20,7 +20,7 @@ import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.util.TextUtil;
 
 public class ToolActionRecipeCategory implements IRecipeCategory<ToolActionRecipe> {
-    private static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/tool_action_jei.png");
+    private static final Identifier TEXTURE = SilentGear.getId("textures/gui/tool_action_jei.png");
     private static final int GUI_START_X = 0;
     private static final int GUI_START_Y = 0;
     private static final int GUI_WIDTH = 100 - GUI_START_X;

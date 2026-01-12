@@ -2,8 +2,8 @@ package net.silentchaos512.gear.setup;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -84,21 +84,21 @@ public final class SgLoot {
     @EventBusSubscriber
     public static final class Injector {
         public static final class Tables {
-            private static final Map<ResourceLocation, ResourceKey<LootTable>> MAP = new HashMap<>();
+            private static final Map<Identifier, ResourceKey<LootTable>> MAP = new HashMap<>();
 
             // Chests
-            public static final ResourceLocation NETHER_BRIDGE = inject(BuiltInLootTables.NETHER_BRIDGE);
-            public static final ResourceLocation BASTION_TREASURE = inject(BuiltInLootTables.BASTION_TREASURE);
-            public static final ResourceLocation BASTION_OTHER = inject(BuiltInLootTables.BASTION_OTHER);
-            public static final ResourceLocation BASTION_BRIDGE = inject(BuiltInLootTables.BASTION_BRIDGE);
-            public static final ResourceLocation RUINED_PORTAL = inject(BuiltInLootTables.RUINED_PORTAL);
+            public static final Identifier NETHER_BRIDGE = inject(BuiltInLootTables.NETHER_BRIDGE);
+            public static final Identifier BASTION_TREASURE = inject(BuiltInLootTables.BASTION_TREASURE);
+            public static final Identifier BASTION_OTHER = inject(BuiltInLootTables.BASTION_OTHER);
+            public static final Identifier BASTION_BRIDGE = inject(BuiltInLootTables.BASTION_BRIDGE);
+            public static final Identifier RUINED_PORTAL = inject(BuiltInLootTables.RUINED_PORTAL);
 
-            public static Optional<ResourceKey<LootTable>> get(ResourceLocation lootTable) {
+            public static Optional<ResourceKey<LootTable>> get(Identifier lootTable) {
                 return Optional.ofNullable(MAP.get(lootTable));
             }
 
-            private static ResourceLocation inject(ResourceKey<LootTable> lootTable) {
-                var originalId = lootTable.location();
+            private static Identifier inject(ResourceKey<LootTable> lootTable) {
+                var originalId = lootTable.identifier();
                 var newId = SilentGear.getId("inject/" + originalId.getNamespace() + "/" + originalId.getPath());
                 MAP.put(originalId, ResourceKey.create(Registries.LOOT_TABLE, newId));
                 return newId;

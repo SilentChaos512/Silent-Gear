@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.data;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
@@ -40,10 +40,10 @@ public enum ExtraMetals {
     }
 
     public TagKey<Item> getMainTag() {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/" + getName()));
+        return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "ingots/" + getName()));
     }
 
     public TagKey<Item> getRodTag() {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "rods/" + getName()));
+        return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "rods/" + getName()));
     }
 }

@@ -82,6 +82,6 @@ public class GraderBlock extends ModContainerBlock<GraderBlockEntity> implements
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, SgBlockEntities.MATERIAL_GRADER.get(), GraderBlockEntity::tick);
+        return level.isClientSide() ? null : createTickerHelper(blockEntityType, SgBlockEntities.MATERIAL_GRADER.get(), GraderBlockEntity::tick);
     }
 }

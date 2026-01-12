@@ -13,12 +13,12 @@ public class CrudeAlloyRecipe extends AlloyRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<CrudeAlloyRecipe> getSerializer() {
         return SgRecipes.ALLOY_MAKING_CRUDE.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<CrudeAlloyRecipe> getType() {
         return SgRecipes.ALLOY_MAKING_CRUDE_TYPE.get();
     }
 }

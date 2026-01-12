@@ -43,8 +43,8 @@ public final class NumberPropertyModifierTraitEffect extends TraitEffect {
     );
 
     private static final StreamCodec<RegistryFriendlyByteBuf, NumberProperty> KEY_STREAM_CODEC = StreamCodec.of(
-            (buf, val) -> buf.writeResourceLocation(Objects.requireNonNull(SgRegistries.GEAR_PROPERTY.getKey(val))),
-            buf -> (NumberProperty) SgRegistries.GEAR_PROPERTY.get(buf.readResourceLocation()).orElseThrow().value()
+            (buf, val) -> buf.writeIdentifier(Objects.requireNonNull(SgRegistries.GEAR_PROPERTY.getKey(val))),
+            buf -> (NumberProperty) SgRegistries.GEAR_PROPERTY.get(buf.readIdentifier()).orElseThrow().value()
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, NumberPropertyModifierTraitEffect> STREAM_CODEC = StreamCodec.composite(

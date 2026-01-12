@@ -7,6 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SimpleExplosionDamageCalculator;
@@ -53,6 +54,7 @@ public class WindBlastTraitEffect extends TraitEffect {
                         Level.ExplosionInteraction.TRIGGER,
                         ParticleTypes.GUST_EMITTER_SMALL,
                         ParticleTypes.GUST_EMITTER_LARGE,
+                        WeightedList.of(),
                         SoundEvents.WIND_CHARGE_BURST
                 );
         return super.onAttackEntity(context, target, baseValue);

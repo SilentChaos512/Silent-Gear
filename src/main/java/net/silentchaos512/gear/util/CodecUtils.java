@@ -11,8 +11,8 @@ import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -30,8 +30,8 @@ public class CodecUtils {
 
     public static <T> StreamCodec<FriendlyByteBuf, TagKey<T>> tagStreamCodec(ResourceKey<? extends Registry<T>> registryKey) {
         return StreamCodec.of(
-                (buf, val) -> buf.writeResourceLocation(val.location()),
-                buf -> TagKey.create(registryKey, buf.readResourceLocation())
+                (buf, val) -> buf.writeIdentifier(val.location()),
+                buf -> TagKey.create(registryKey, buf.readIdentifier())
         );
     }
 
@@ -76,12 +76,12 @@ public class CodecUtils {
     }
 
     private static <T> Codec<Holder.Reference<T>> referenceHolderWithLifecycle(Registry<T> registry) {
-        Codec<Holder.Reference<T>> codec = ResourceLocation.CODEC
+        Codec<Holder.Reference<T>> codec = Identifier.CODEC
                 .comapFlatMap(
                         p_315852_ -> registry.get(p_315852_)
                                 .map(DataResult::success)
                                 .orElseGet(() -> DataResult.error(() -> "Unknown registry key in " + registry.key() + ": " + p_315852_)),
-                        p_325513_ -> SilentGear.getId(p_325513_.key().location().toString())
+                        p_325513_ -> SilentGear.getId(p_325513_.key().identifier().toString())
                 );
         return ExtraCodecs.overrideLifecycle(
                 codec, p_325514_ -> registry.registrationInfo(p_325514_.key()).map(RegistrationInfo::lifecycle).orElse(Lifecycle.experimental())

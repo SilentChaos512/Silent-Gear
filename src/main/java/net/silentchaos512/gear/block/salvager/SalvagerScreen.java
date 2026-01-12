@@ -2,16 +2,16 @@ package net.silentchaos512.gear.block.salvager;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.setup.SgBlocks;
 
 public class SalvagerScreen extends AbstractContainerScreen<SalvagerContainer> {
-    public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/salvager.png");
+    public static final Identifier TEXTURE = SilentGear.getId("textures/gui/salvager.png");
 
     public SalvagerScreen(SalvagerContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
@@ -35,9 +35,9 @@ public class SalvagerScreen extends AbstractContainerScreen<SalvagerContainer> {
 
         int posX = (this.width - this.imageWidth) / 2;
         int posY = (this.height - this.imageHeight) / 2;
-        graphics.blit(RenderType::guiTextured, TEXTURE, posX, posY, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, posX, posY, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
         // Progress arrow
-        graphics.blit(RenderType::guiTextured, TEXTURE, posX + 32, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, posX + 32, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16, 256, 256);
     }
 }

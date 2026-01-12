@@ -10,7 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +27,7 @@ public class OptionalTagIngredient implements ICustomIngredient {
                     Codec.STRING.xmap(
                                     str -> {
                                         String trim = str.replace("#", "");
-                                        ResourceLocation location = ResourceLocation.parse(trim);
+                                        Identifier location = Identifier.parse(trim);
                                         return TagKey.create(Registries.ITEM, location);
                                     },
                                     tag -> {

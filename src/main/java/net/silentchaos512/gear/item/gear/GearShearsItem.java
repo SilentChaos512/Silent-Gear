@@ -3,7 +3,6 @@ package net.silentchaos512.gear.item.gear;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -47,6 +46,7 @@ public class GearShearsItem extends ShearsItem implements GearTool {
         return this.gearType.get();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public Tool createToolProperties(ItemStack gear, GearPropertiesData properties, HolderGetter<Block> blocks) {
         // Mimic ShearsItem. Adjust speed so that iron shears are identical to vanilla (iron = 6 / 6 = 1)

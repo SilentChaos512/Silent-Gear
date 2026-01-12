@@ -1,8 +1,8 @@
 package net.silentchaos512.gear.data.loot;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.Util;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -161,7 +161,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
 
     private static LootItemCondition anyOfLootTables(List<ResourceKey<LootTable>> lootTables) {
         var array = lootTables.stream()
-                .map(ResourceKey::location)
+                .map(ResourceKey::identifier)
                 .map(LootTableIdCondition::builder)
                 .toArray(LootTableIdCondition.Builder[]::new);
         return AnyOfCondition.anyOf(array).build();

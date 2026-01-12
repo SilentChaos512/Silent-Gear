@@ -95,7 +95,7 @@ public class BlockFillerTraitEffect extends TraitEffect {
         int durabilityCost = Math.round(useProperties.damagePerBlock * replaceCount);
         boolean hasEnoughDurability = durabilityCost < 1 || stack.getDamageValue() < stack.getMaxDamage() - durabilityCost;
 
-        if (player != null && player.level().isClientSide) {
+        if (player != null && player.level().isClientSide()) {
             // Bale out here on client
             return replaceCount > 0 && hasEnoughDurability ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
@@ -212,21 +212,21 @@ public class BlockFillerTraitEffect extends TraitEffect {
                 (buf, val) -> {
                     buf.writeBoolean(val.block != null);
                     if (val.block != null) {
-                        buf.writeResourceLocation(BuiltInRegistries.BLOCK.getKey(val.block));
+                        buf.writeIdentifier(BuiltInRegistries.BLOCK.getKey(val.block));
                     }
                     buf.writeBoolean(val.tag != null);
                     if (val.tag != null) {
-                        buf.writeResourceLocation(val.tag.location());
+                        buf.writeIdentifier(val.tag.location());
                     }
                 },
                 buf -> {
                     Block block = null;
                     TagKey<Block> tag = null;
                     if (buf.readBoolean()) {
-                        block = BuiltInRegistries.BLOCK.get(buf.readResourceLocation()).orElseThrow().value();
+                        block = BuiltInRegistries.BLOCK.get(buf.readIdentifier()).orElseThrow().value();
                     }
                     if (buf.readBoolean()) {
-                        tag = BlockTags.create(buf.readResourceLocation());
+                        tag = BlockTags.create(buf.readIdentifier());
                     }
                     return new TargetBlock(block, tag);
                 }

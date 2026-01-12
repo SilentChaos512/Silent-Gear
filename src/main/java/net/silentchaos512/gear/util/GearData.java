@@ -5,11 +5,9 @@ import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
@@ -34,7 +32,6 @@ import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.item.gear.GearArmorItem;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
@@ -166,14 +163,7 @@ public final class GearData {
 
         setGearAttributeModifiers(gear, finalProperties);
         setGearDataComponentsFromProperties(gear, finalProperties);
-
-        /*if (gear.is(ItemTags.DYEABLE)) {
-            // Attach armor color
-            var color = GearArmorItem.getArmorColor(gear);
-            gear.set(DataComponents.DYED_COLOR, new DyedItemColor(color));
-        }*/
-        // temp
-        gear.remove(DataComponents.DYED_COLOR);
+        modifyEnchantmentData(gear, player);
 
         // TODO: Add trait-added enchantments
 
@@ -210,7 +200,7 @@ public final class GearData {
     ) {
         // Must cast the property into its true type to call the addAttributes method
         P property = (P) propertyIn;
-        V valueInstance = propertiesData.get(property);
+        @Nullable V valueInstance = propertiesData.get(property);
         if (valueInstance != null) {
             T value = valueInstance.value();
             property.addAttributes(stack, value, builder);
@@ -225,7 +215,7 @@ public final class GearData {
     ) {
         // Must cast the property into its true type to call the addDataComponents method
         P property = (P) propertyIn;
-        V valueInstance = propertiesData.get(property);
+        @Nullable V valueInstance = propertiesData.get(property);
         if (valueInstance != null) {
             T value = valueInstance.value();
             property.addDataComponents(stack, value);
@@ -310,9 +300,6 @@ public final class GearData {
             SilentGear.LOGGER.debug("Forcibly removing all enchantments from {} as per config settings", playersItemText);
             gear.set(DataComponents.ENCHANTMENTS, null);
         }
-
-        // TODO: Remove enchantments added by enchantment traits, and let the traits re-add them later
-        //EnchantmentTrait.removeTraitEnchantments(gear);
     }
 
     private static String getPlayersItemNameText(ItemStack gear, @org.jetbrains.annotations.Nullable Player player) {
@@ -561,7 +548,7 @@ public final class GearData {
     public static void incrementRepairedCount(ItemStack stack, int amount) {
         var data = stack.get(SgDataComponents.GEAR_CONSTRUCTION);
         if (data != null) {
-            var newData = new GearConstructionData(data.parts(), data.isExample(), data.brokenCount(), data.repairedCount() + 1);
+            var newData = new GearConstructionData(data.parts(), data.isExample(), data.brokenCount(), data.repairedCount() + amount);
             stack.set(SgDataComponents.GEAR_CONSTRUCTION, newData);
         }
     }

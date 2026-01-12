@@ -24,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import net.silentchaos512.gear.api.item.BreakEventHandler;
 import net.silentchaos512.gear.api.item.GearDiggerTool;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -47,7 +48,7 @@ public class GearSickleItem extends BasicGearItem implements GearDiggerTool, Bre
     }
 
     @Override
-    public TagKey<Block> getToolBlockSet(ItemStack gear) {
+    public TagKey<Block> getToolBlockSet(GearPropertiesData properties) {
         return SgTags.Blocks.MINEABLE_WITH_SICKLE;
     }
 
@@ -71,7 +72,7 @@ public class GearSickleItem extends BasicGearItem implements GearDiggerTool, Bre
             }
 
             // Reset state
-            level.setBlock(pos, getHarvestedBlockState(state), 2);
+            level.setBlock(pos, getHarvestedBlockState(state), Block.UPDATE_CLIENTS);
             return true;
         }
 
@@ -181,19 +182,19 @@ public class GearSickleItem extends BasicGearItem implements GearDiggerTool, Bre
 
         if (serverPlayer.getAbilities().instabuild) {
             block.playerWillDestroy(level, pos, state, player);
-            if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, false, state.getFluidState())) {
+            if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, sickle, false, state.getFluidState())) {
                 block.destroy(level, pos, state);
             }
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 serverPlayer.connection.send(new ClientboundBlockUpdatePacket(level, pos));
             }
             return true;
         }
 
-        if (!level.isClientSide && level instanceof ServerLevel) {
+        if (!level.isClientSide() && level instanceof ServerLevel) {
             block.playerWillDestroy(level, pos, state, serverPlayer);
 
-            if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, true, state.getFluidState())) {
+            if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, sickle, true, state.getFluidState())) {
                 block.destroy(level, pos, state);
                 var blockEntity = level.getBlockEntity(pos);
                 block.playerDestroy(level, player, pos, state, blockEntity, sickle);
@@ -203,7 +204,7 @@ public class GearSickleItem extends BasicGearItem implements GearDiggerTool, Bre
             serverPlayer.connection.send(new ClientboundBlockUpdatePacket(level, pos));
         } else {
             level.levelEvent(2001, pos, Block.getId(state));
-            if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, true, state.getFluidState())) {
+            if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, sickle, true, state.getFluidState())) {
                 block.destroy(level, pos, state);
             }
 

@@ -4,8 +4,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.CraftingInput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponent;
@@ -110,7 +108,6 @@ public interface GearPart extends GearComponent<PartInstance> {
         return SilentGear.shortenId(SgRegistries.PART.getKey(this));
     }
 
-    @OnlyIn(Dist.CLIENT)
     void addInformation(PartInstance part, ItemStack gear, List<Component> tooltip, TooltipFlag flag);
 
     /**

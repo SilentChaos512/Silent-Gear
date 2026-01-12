@@ -122,7 +122,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     @Override
     public InteractionResult use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack stack = playerIn.getItemInHand(handIn);
-        if (!worldIn.isClientSide) {
+        if (!worldIn.isClientSide()) {
             openContainer((ServerPlayer) playerIn, stack);
         }
         return InteractionResult.SUCCESS;

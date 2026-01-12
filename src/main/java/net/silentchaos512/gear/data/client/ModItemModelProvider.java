@@ -5,13 +5,13 @@ import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearItem;
+import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.client.setup.SgItemTintSources;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public class ModItemModelProvider extends ItemModelGenerators {
-    public ModItemModelProvider(ItemModelOutput itemModelOutput, BiConsumer<ResourceLocation, ModelInstance> modelOutput) {
+    public ModItemModelProvider(ItemModelOutput itemModelOutput, BiConsumer<Identifier, ModelInstance> modelOutput) {
         super(itemModelOutput, modelOutput);
     }
 
@@ -182,7 +182,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void generateWithTintedBaseLayer(ItemLike item, String overlaySuffix, ItemTintSource tintSource) {
-        ResourceLocation key = this.generateLayeredItem(
+        Identifier key = this.generateLayeredItem(
                 item.asItem(),
                 TextureMapping.getItemTexture(item.asItem()),
                 TextureMapping.getItemTexture(item.asItem(), overlaySuffix)
@@ -191,7 +191,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void generateWithTintedBaseLayer(ItemLike item, String texturePath, String overlaySuffix, ItemTintSource tintSource) {
-        ResourceLocation key = this.generateLayeredItem(
+        Identifier key = this.generateLayeredItem(
                 item.asItem(),
                 SilentGear.getId(texturePath),
                 SilentGear.getId(texturePath + overlaySuffix)
@@ -200,7 +200,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void generateTintedSingleLayer(ItemLike item, ItemTintSource tintSource) {
-        ResourceLocation key = createFlatItemModel(item.asItem(), ModelTemplates.FLAT_ITEM);
+        Identifier key = createFlatItemModel(item.asItem(), ModelTemplates.FLAT_ITEM);
         this.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(key, tintSource));
     }
 
@@ -219,7 +219,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void generateMaterialColoredItemWithOverlay(ItemLike item, String texturePath, String overlayTexture) {
-        ResourceLocation key = this.generateLayeredItem(
+        Identifier key = this.generateLayeredItem(
                 item.asItem(),
                 SilentGear.getId(texturePath),
                 SilentGear.getId(overlayTexture)
@@ -228,7 +228,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void generateMaterialColoredItemWithOverlay(ItemLike item, String texturePath, String overlayTexture1, String overlayTexture2) {
-        ResourceLocation key = ModelTemplates.THREE_LAYERED_ITEM.create(
+        Identifier key = ModelTemplates.THREE_LAYERED_ITEM.create(
                 item.asItem(),
                 TextureMapping.layered(
                         SilentGear.getId(texturePath),

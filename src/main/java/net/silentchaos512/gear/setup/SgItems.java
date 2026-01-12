@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"unused", "OverlyCoupledClass"})
@@ -41,7 +42,7 @@ public final class SgItems {
     public static final DeferredItem<Item> MOD_KIT = register(
             "mod_kit",
             ModKitItem::new,
-            unstackableProps().rarity(Rarity.UNCOMMON)
+            properties -> properties.stacksTo(1).rarity(Rarity.UNCOMMON)
     );
 
     // Repair Kits
@@ -52,7 +53,7 @@ public final class SgItems {
                     Config.Common.repairKitVeryCrudeEfficiency::get,
                     p
             ),
-            unstackableProps().rarity(Rarity.COMMON)
+            properties -> properties.stacksTo(1).rarity(Rarity.COMMON)
     );
     public static final DeferredItem<Item> CRUDE_REPAIR_KIT = register(
             "crude_repair_kit",
@@ -61,7 +62,7 @@ public final class SgItems {
                     Config.Common.repairKitCrudeEfficiency::get,
                     p
             ),
-            unstackableProps().rarity(Rarity.COMMON)
+            properties -> properties.stacksTo(1).rarity(Rarity.COMMON)
     );
     public static final DeferredItem<Item> STURDY_REPAIR_KIT = register(
             "sturdy_repair_kit",
@@ -70,7 +71,7 @@ public final class SgItems {
                     Config.Common.repairKitSturdyEfficiency::get,
                     p
             ),
-            unstackableProps().rarity(Rarity.UNCOMMON)
+            properties -> properties.stacksTo(1).rarity(Rarity.UNCOMMON)
     );
     public static final DeferredItem<Item> CRIMSON_REPAIR_KIT = register(
             "crimson_repair_kit",
@@ -79,7 +80,7 @@ public final class SgItems {
                     Config.Common.repairKitCrimsonEfficiency::get,
                     p
             ),
-            unstackableProps().rarity(Rarity.RARE)
+            properties -> properties.stacksTo(1).rarity(Rarity.RARE)
     );
     public static final DeferredItem<Item> AZURE_REPAIR_KIT = register(
             "azure_repair_kit",
@@ -88,7 +89,7 @@ public final class SgItems {
                     Config.Common.repairKitAzureEfficiency::get,
                     p
             ),
-            unstackableProps().rarity(Rarity.EPIC)
+            properties -> properties.stacksTo(1).rarity(Rarity.EPIC)
     );
 
     public static final DeferredItem<Item> COATING_SMITHING_TEMPLATE = register(
@@ -99,19 +100,19 @@ public final class SgItems {
     public static final DeferredItem<Item> CRUDE_KNIFE = register(
             "crude_knife",
             Item::new,
-            baseProps().durability(32)
+            properties -> properties.durability(32)
     );
     public static final DeferredItem<Item> CRUDE_HAMMER = register(
             "crude_hammer",
             Item::new,
-            baseProps().durability(32)
+            properties -> properties.durability(32)
     );
 
     //region Blueprints and templates
     public static final DeferredItem<BlueprintBookItem> BLUEPRINT_BOOK = register(
             "blueprint_book",
             BlueprintBookItem::new,
-            unstackableProps().rarity(Rarity.UNCOMMON)
+            properties -> properties.stacksTo(1).rarity(Rarity.UNCOMMON)
     );
     // Blueprints
     public static final DeferredItem<PartBlueprintItem> JEWELER_TOOLS = register(
@@ -170,8 +171,7 @@ public final class SgItems {
 
     // Compound materials
     public static final DeferredItem<CompoundMaterialItem> ALLOY_INGOT = register("alloy_ingot", CompoundMaterialItem::new);
-    public static final DeferredItem<CompoundMaterialItem> CRUDE_ALLOY = register("crude_alloy", () ->
-            new CompoundMaterialItem(baseProps()));
+    public static final DeferredItem<CompoundMaterialItem> CRUDE_ALLOY = register("crude_alloy", CompoundMaterialItem::new);
     public static final DeferredItem<CompoundMaterialItem> HYBRID_GEM = register("hybrid_gem", CompoundMaterialItem::new);
     public static final DeferredItem<CompoundMaterialItem> MIXED_FABRIC = register("mixed_fabric", CompoundMaterialItem::new);
     public static final DeferredItem<CompoundMaterialItem> SUPER_ALLOY = register("super_alloy", CompoundMaterialItem::new);
@@ -231,19 +231,19 @@ public final class SgItems {
     private SgItems() {
     }
 
-    private static Item.Properties baseProps() {
-        return new Item.Properties();
+    private static UnaryOperator<Item.Properties> baseProps() {
+        return UnaryOperator.identity();
     }
 
-    public static Item.Properties unstackableProps() {
-        return baseProps().stacksTo(1);
+    public static UnaryOperator<Item.Properties> unstackableProps() {
+        return properties -> properties.stacksTo(1);
     }
 
-    protected static <T extends Item> DeferredItem<T> register(String name, Function<Item.Properties, T> item) {
+    static <T extends Item> DeferredItem<T> register(String name, Function<Item.Properties, T> item) {
         return ITEMS.registerItem(name, item);
     }
 
-    protected static <T extends Item> DeferredItem<T> register(String name, Function<Item.Properties, T> item, Item.Properties properties) {
+    static <T extends Item> DeferredItem<T> register(String name, Function<Item.Properties, T> item, UnaryOperator<Item.Properties> properties) {
         return ITEMS.registerItem(name, item, properties);
     }
 

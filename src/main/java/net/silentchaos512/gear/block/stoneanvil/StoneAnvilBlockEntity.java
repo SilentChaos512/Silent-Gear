@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.block.stoneanvil;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -10,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -20,15 +22,21 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.silentchaos512.gear.crafting.recipe.ToolActionRecipe;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.Optional;
 
 public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     private ItemStack item = ItemStack.EMPTY;
     private final RecipeManager.CachedCheck<ToolActionRecipe.Input, ToolActionRecipe> quickCheck =
             RecipeManager.createCheck(SgRecipes.TOOL_ACTION_TYPE.get());
@@ -92,7 +100,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
             this.item.shrink(1);
             var serverPlayer = entity instanceof ServerPlayer ? (ServerPlayer) entity : null;
             if (serverPlayer == null || !serverPlayer.getAbilities().instabuild) {
-                tool.hurtAndBreak(damage, entity, LivingEntity.getSlotForHand(hand));
+                tool.hurtAndBreak(damage, entity, hand);
             }
             recipe.getSound().playAt(level, getBlockPos(), SoundSource.PLAYERS);
             level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
@@ -123,21 +131,16 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        this.item = ItemStack.EMPTY;
-        if (tag.contains("Item")) {
-            this.item = ItemStack.parse(provider, tag.getCompound("Item").orElse(new CompoundTag())).orElse(null);
-        } else {
-            this.item = ItemStack.EMPTY;
-        }
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        this.item = input.read("Item", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
         if (!this.item.isEmpty()) {
-            tag.put("Item", this.item.save(provider));
+            output.store("Item", ItemStack.CODEC, this.item);
         }
     }
 
@@ -149,21 +152,20 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
-        CompoundTag tag = new CompoundTag();
-        if (!this.item.isEmpty()) {
-            tag.put("Item", this.item.save(provider));
+        CompoundTag tag;
+        try (ProblemReporter.ScopedCollector scopedCollector = new ProblemReporter.ScopedCollector(this.problemPath(), LOGGER)) {
+            TagValueOutput output = TagValueOutput.createWithContext(scopedCollector, provider);
+            if (!this.item.isEmpty()) {
+                output.store("Item", ItemStack.CODEC, this.item);
+            }
+            tag = output.buildResult();
         }
         return tag;
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
-        super.onDataPacket(net, pkt, lookupProvider);
-        var tag = pkt.getTag();
-        if (tag.contains("Item")) {
-            this.item = ItemStack.parse(lookupProvider, tag.getCompound("Item").orElse(new CompoundTag())).orElse(null);
-        } else {
-            this.item = ItemStack.EMPTY;
-        }
+    public void onDataPacket(Connection net, ValueInput input) {
+        super.onDataPacket(net, input);
+        this.item = input.read("Item", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 }

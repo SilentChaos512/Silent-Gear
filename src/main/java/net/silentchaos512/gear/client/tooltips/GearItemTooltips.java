@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public class GearItemTooltips {
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {

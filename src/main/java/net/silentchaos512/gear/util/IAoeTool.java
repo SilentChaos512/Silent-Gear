@@ -159,8 +159,8 @@ public interface IAoeTool {
             var tool = player.getMainHandItem();
             if (!(tool.getItem() instanceof IAoeTool aoeToolItem)) return;
 
-            var level = player.getCommandSenderWorld();
-            if (level.isClientSide || !(level instanceof ServerLevel)) return;
+            var level = player.level();
+            if (level.isClientSide()) return;
 
             var pos = event.getPos();
 
@@ -180,14 +180,14 @@ public interface IAoeTool {
 
                     var extraBlock = extraState.getBlock();
                     if (player.getAbilities().instabuild) {
-                        if (extraState.onDestroyedByPlayer(level, extraPos, player, true, extraState.getFluidState()))
+                        if (extraState.onDestroyedByPlayer(level, extraPos, player, tool, true, extraState.getFluidState()))
                             extraBlock.destroy(level, extraPos, extraState);
                     } else {
                         BlockEntity blockEntity = level.getBlockEntity(extraPos);
                         int xp = extraState.getExpDrop(level, extraPos, blockEntity, player, tool);
                         tool.getItem().mineBlock(tool, level, extraState, extraPos, player);
 
-                        if (extraState.onDestroyedByPlayer(level, extraPos, player, true, extraState.getFluidState())) {
+                        if (extraState.onDestroyedByPlayer(level, extraPos, player, tool, true, extraState.getFluidState())) {
                             extraBlock.destroy(level, extraPos, extraState);
                             extraBlock.playerDestroy(level, player, extraPos, extraState, blockEntity, tool);
                             extraBlock.popExperience((ServerLevel) level, extraPos, xp);

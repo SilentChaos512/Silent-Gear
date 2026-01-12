@@ -2,22 +2,23 @@ package net.silentchaos512.gear.item.blueprint.book;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.network.payload.client.SelectBlueprintInBookPayload;
 import net.silentchaos512.lib.util.Color;
 
 public class BlueprintBookContainerScreen extends AbstractContainerScreen<BlueprintBookContainerMenu> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
+    private static final Identifier TEXTURE = Identifier.withDefaultNamespace("textures/gui/container/generic_54.png");
 
     private final Inventory playerInventory;
     private final int inventoryRows;
@@ -34,12 +35,12 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int p_mouseClicked_5_) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean p_432883_) {
         if (KeyTracker.isControlDown()) {
             Slot slot = getSlotUnderMouse();
             if (slot != null && !slot.getItem().isEmpty()) {
                 this.selected = slot.index;
-                PacketDistributor.sendToServer(new SelectBlueprintInBookPayload(this.menu.bookSlot, this.selected));
+                ClientPacketDistributor.sendToServer(new SelectBlueprintInBookPayload(this.menu.bookSlot, this.selected));
 
                 if (this.minecraft != null) {
                     this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
@@ -49,7 +50,7 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
             }
         }
 
-        return super.mouseClicked(mouseX, mouseY, p_mouseClicked_5_);
+        return super.mouseClicked(event, p_432883_);
     }
 
     @Override
@@ -69,8 +70,8 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
         if (minecraft == null) return;
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        graphics.blit(RenderType::guiTextured, TEXTURE, i, j, 0, 0, this.imageWidth, this.inventoryRows * 18 + 17, 256, 256);
-        graphics.blit(RenderType::guiTextured, TEXTURE, i, j + this.inventoryRows * 18 + 17, 0, 126, this.imageWidth, 96, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0, 0, this.imageWidth, this.inventoryRows * 18 + 17, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j + this.inventoryRows * 18 + 17, 0, 126, this.imageWidth, 96, 256, 256);
 
         int left = leftPos + 8 + 18 * (this.selected % 9);
         int top = topPos + 18 + 18 * (this.selected / 9);

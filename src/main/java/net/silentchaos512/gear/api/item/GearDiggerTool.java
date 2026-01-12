@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.api.item;
 
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Tool;
@@ -27,8 +26,8 @@ public interface GearDiggerTool extends GearTool {
         var harvestTier = properties.getOrDefault(GearProperties.HARVEST_TIER, new HarvestTierPropertyValue(HarvestTier.ZERO));
         return new Tool(
                 List.of(
-                        Tool.Rule.deniesDrops(harvestTier.value().incorrectForTool()),
-                        Tool.Rule.minesAndDrops(getToolBlockSet(properties), harvestSpeed)
+                        Tool.Rule.deniesDrops(blocks.getOrThrow(harvestTier.value().incorrectForTool())),
+                        Tool.Rule.minesAndDrops(blocks.getOrThrow(getToolBlockSet(properties)), harvestSpeed)
                 ),
                 1.0F,
                 1,

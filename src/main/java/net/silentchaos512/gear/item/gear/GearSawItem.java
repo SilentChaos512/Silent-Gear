@@ -39,7 +39,7 @@ public class GearSawItem extends GearAxeItem implements BreakEventHandler {
 
     @Override
     public void onBlockBreakEvent(ItemStack stack, Player player, Level level, BlockPos pos, BlockState state) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (isLog(state) && detectTree(level, pos.getX(), pos.getY(), pos.getZ(), state.getBlock())) {
                 // Don't allow in creative mode.
                 if (player.getAbilities().instabuild) {
@@ -107,7 +107,6 @@ public class GearSawItem extends GearAxeItem implements BreakEventHandler {
         if (result != null && result.firstLog != null) {
             return state.getBlock() == result.firstLog;
         }
-        // TODO: Add a tag to allow more things to be recognized as trees, like crimson/warped fungus
         return state.is(BlockTags.LOGS);
     }
 
@@ -188,8 +187,8 @@ public class GearSawItem extends GearAxeItem implements BreakEventHandler {
 
         int blocksBroken;
         int maxDepth;
-        Block firstLog;
-        Block firstFoliage;
+        @Nullable Block firstLog;
+        @Nullable Block firstFoliage;
 
         private TreeBreakResult(ItemStack tool, Player player) {
             this.tool = tool;
