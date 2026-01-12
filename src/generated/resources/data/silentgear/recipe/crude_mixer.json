@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:stones"
-    },
-    "/": {
-      "tag": "minecraft:planks"
-    },
-    "F": {
-      "item": "silentgear:flax_string"
-    }
+    "#": "#c:stones",
+    "/": "#minecraft:planks",
+    "F": "silentgear:flax_string"
   },
   "pattern": [
     "#F#",

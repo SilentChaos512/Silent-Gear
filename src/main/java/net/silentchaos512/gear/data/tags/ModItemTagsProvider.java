@@ -44,15 +44,6 @@ public class ModItemTagsProvider extends LibItemTagsProvider {
         }).run();
 
         // Common
-//        copy(SgTags.Blocks.STORAGE_BLOCKS_NETHERWOOD_CHARCOAL, SgTags.Items.STORAGE_BLOCKS_NETHERWOOD_CHARCOAL);
-//        copy(SgTags.Blocks.STORAGE_BLOCKS_BORT, SgTags.Items.STORAGE_BLOCKS_BORT);
-//        copy(SgTags.Blocks.STORAGE_BLOCKS_BLAZE_GOLD, SgTags.Items.STORAGE_BLOCKS_BLAZE_GOLD);
-//        copy(SgTags.Blocks.STORAGE_BLOCKS_CRIMSON_IRON, SgTags.Items.STORAGE_BLOCKS_CRIMSON_IRON);
-//        copy(SgTags.Blocks.STORAGE_BLOCKS_CRIMSON_STEEL, SgTags.Items.STORAGE_BLOCKS_CRIMSON_STEEL);
-//        copy(SgTags.Blocks.STORAGE_BLOCKS_AZURE_SILVER, SgTags.Items.STORAGE_BLOCKS_AZURE_SILVER);
-//        copy(SgTags.Blocks.STORAGE_BLOCKS_AZURE_ELECTRUM, SgTags.Items.STORAGE_BLOCKS_AZURE_ELECTRUM);
-//        copy(SgTags.Blocks.STORAGE_BLOCKS_TYRIAN_STEEL, SgTags.Items.STORAGE_BLOCKS_TYRIAN_STEEL);
-//        copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
 
         builder(SgTags.Items.STORAGE_BLOCKS_RAW_CRIMSON_IRON, SgBlocks.RAW_CRIMSON_IRON_BLOCK);
         builder(SgTags.Items.STORAGE_BLOCKS_RAW_AZURE_SILVER, SgBlocks.RAW_AZURE_SILVER_BLOCK);
@@ -236,17 +227,6 @@ public class ModItemTagsProvider extends LibItemTagsProvider {
                 GearItemSets.PROSPECTOR_HAMMER.gearItem());
 
         // Minecraft
-//        copy(BlockTags.LEAVES, ItemTags.LEAVES);
-//        copy(BlockTags.LOGS, ItemTags.LOGS);
-//        copy(BlockTags.PLANKS, ItemTags.PLANKS);
-//        copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
-//        copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
-//        copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
-//        copy(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES);
-//        copy(Tags.Blocks.FENCE_GATES_WOODEN, Tags.Items.FENCE_GATES_WOODEN);
-//        copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
-//        copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
-//        copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
 
         tag(ItemTags.FOOT_ARMOR_ENCHANTABLE).add(GearItemSets.BOOTS.gearItem());
         tag(ItemTags.LEG_ARMOR_ENCHANTABLE).add(GearItemSets.LEGGINGS.gearItem());

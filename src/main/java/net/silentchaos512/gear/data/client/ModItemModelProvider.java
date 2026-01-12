@@ -46,6 +46,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
         generateWithTintedBaseLayer(SgItems.ALLOY_INGOT, "_highlight", SgItemTintSources.blendedMaterialColor());
         generateWithTintedBaseLayer(SgItems.HYBRID_GEM, "_highlight", SgItemTintSources.blendedMaterialColor());
         generateTintedSingleLayer(SgItems.MIXED_FABRIC, SgItemTintSources.blendedMaterialColor());
+        generateWithTintedBaseLayer(SgItems.CRUDE_ALLOY, "_highlight", SgItemTintSources.blendedMaterialColor());
         generateWithTintedBaseLayer(SgItems.SUPER_ALLOY, "_highlight", SgItemTintSources.blendedMaterialColor());
 
         // Custom materials

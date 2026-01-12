@@ -85,7 +85,8 @@ public class ModBlockModelGenerator extends BlockModelGenerators {
         orientableMachineBlock(SgBlocks.ALLOY_FORGE, "alloy_forge");
         orientableMachineBlock(SgBlocks.RECRYSTALLIZER, "recrystallizer");
         orientableMachineBlock(SgBlocks.REFABRICATOR, "refabricator");
-        createTrivialCube(SgBlocks.SUPER_MIXER.get());
+        orientableMachineBlockWithoutLitState(SgBlocks.CRUDE_MIXER, "crude_mixer");
+        orientableMachineBlockWithoutLitState(SgBlocks.SUPER_MIXER, "super_mixer");
 
         // Plants
         createCropBlock(SgBlocks.FLAX_PLANT.get(), ModCropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
@@ -124,6 +125,14 @@ public class ModBlockModelGenerator extends BlockModelGenerators {
         this.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(block.get())
                         .with(createBooleanModelDispatch(BlockStateProperties.LIT, onModel, offModel))
+                        .with(ROTATION_HORIZONTAL_FACING)
+        );
+    }
+
+    private void orientableMachineBlockWithoutLitState(DeferredBlock<? extends Block> block, String name) {
+        var model = plainVariant(SilentGear.getId("block/" + name));
+        this.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(block.get(), model)
                         .with(ROTATION_HORIZONTAL_FACING)
         );
     }
