@@ -2,7 +2,7 @@
   "type": "silentgear:gear_crafting",
   "category": "equipment",
   "ingredients": [
-    "silentgear:spear_tip",
+    "silentgear:spearhead",
     {
       "neoforge:ingredient_type": "silentgear:part_type",
       "part_type": "silentgear:rod"

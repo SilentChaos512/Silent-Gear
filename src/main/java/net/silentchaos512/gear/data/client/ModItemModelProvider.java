@@ -104,7 +104,6 @@ public class ModItemModelProvider extends ItemModelGenerators {
         tempGearStandardTool(GearItemSets.SWORD);
         tempGearStandardTool(GearItemSets.KATANA);
         tempGearStandardTool(GearItemSets.MACHETE);
-        tempGearStandardTool(GearItemSets.SPEAR);
         // Trident model created manually
         tempGearStandardTool(GearItemSets.MACE);
         tempGearStandardTool(GearItemSets.KNIFE);
@@ -136,7 +135,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
         mainPartItem(GearItemSets.SWORD);
         mainPartItem(GearItemSets.KATANA);
         mainPartItem(GearItemSets.MACHETE);
-        mainPartItem(GearItemSets.SPEAR);
+        mainPartItemNewTextureNames(GearItemSets.SPEAR);
         mainPartItem(GearItemSets.TRIDENT);
         mainPartItem(GearItemSets.MACE);
         mainPartItem(GearItemSets.KNIFE);
@@ -329,6 +328,16 @@ public class ModItemModelProvider extends ItemModelGenerators {
                 item.mainPart(),
                 "item/" + name + "/main_generic_hc",
                 "item/" + name + "/_highlight",
+                "item/part_marker"
+        );
+    }
+
+    private void mainPartItemNewTextureNames(GearItemSet<? extends GearItem> item) {
+        String name = gearTypeName(item.type());
+        generateMaterialColoredItemWithOverlay(
+                item.mainPart(),
+                "item/" + name + "/main_hc",
+                "item/" + name + "/icon_highlight",
                 "item/part_marker"
         );
     }

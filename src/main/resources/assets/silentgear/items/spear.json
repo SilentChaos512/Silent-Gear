@@ -1,0 +1,53 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "silentgear:item/spear",
+          "tints": [
+            {
+              "type": "silentgear:gear_part",
+              "part_type": "silentgear:rod"
+            },
+            {
+              "type": "silentgear:gear_part",
+              "part_type": "silentgear:main"
+            },
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            }
+          ]
+        },
+        "when": [
+          "gui",
+          "ground",
+          "fixed",
+          "on_shelf"
+        ]
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "silentgear:item/spear_in_hand",
+      "tints": [
+        {
+          "type": "silentgear:gear_part",
+          "part_type": "silentgear:rod"
+        },
+        {
+          "type": "silentgear:gear_part",
+          "part_type": "silentgear:main"
+        },
+        {
+          "type": "minecraft:constant",
+          "value": -1
+        }
+      ]
+    },
+    "property": "minecraft:display_context"
+  },
+  "swap_animation_scale": 1.95
+}

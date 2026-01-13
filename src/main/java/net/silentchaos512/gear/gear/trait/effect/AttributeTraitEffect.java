@@ -13,7 +13,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -193,9 +192,17 @@ public class AttributeTraitEffect extends TraitEffect {
             if (gearTypeOptional.isEmpty()) {
                 return DataResult.error(() -> "Unknown gear type: " + gearTypeId);
             }
-            var nameLookup = StringRepresentable.createNameLookup(EquipmentSlotGroup.values(), Enum::name);
-            var group = nameLookup.apply(split[1]);
+            var group = readGroup(split[1]);
             return DataResult.success(new Key(gearTypeOptional.get().value(), group));
+        }
+
+        private static EquipmentSlotGroup readGroup(String groupName) {
+            for (EquipmentSlotGroup group : EquipmentSlotGroup.values()) {
+                if (group.getSerializedName().equalsIgnoreCase(groupName)) {
+                    return group;
+                }
+            }
+            return EquipmentSlotGroup.ANY;
         }
     }
 

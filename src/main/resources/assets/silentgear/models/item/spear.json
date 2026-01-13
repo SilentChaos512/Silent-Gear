@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "silentgear:item/spear/rod_lc",
+    "layer1": "silentgear:item/spear/main_hc",
+    "layer2": "silentgear:item/spear/overlay_hc"
+  }
+}

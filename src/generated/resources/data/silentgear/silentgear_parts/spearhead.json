@@ -3,11 +3,11 @@
   "crafting": {
     "can_salvage": true,
     "gear_type_blacklist": [],
-    "ingredient": "silentgear:spear_tip"
+    "ingredient": "silentgear:spearhead"
   },
   "display": {
     "name": {
-      "translate": "item.silentgear.spear_tip"
+      "translate": "item.silentgear.spearhead"
     },
     "name_prefix": ""
   },
