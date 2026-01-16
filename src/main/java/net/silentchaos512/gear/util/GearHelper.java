@@ -7,6 +7,7 @@ import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -21,10 +22,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.KineticWeapon;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -49,6 +50,7 @@ import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.core.component.GearConstructionData;
+import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -717,5 +719,92 @@ public final class GearHelper {
     public static int getBarColor(ItemStack stack) {
         float f = Math.max(0f, (float) (stack.getMaxDamage() - stack.getDamageValue()) / stack.getMaxDamage());
         return Mth.hsvToRgb(f / 3f, 1f, 1f);
+    }
+
+    public static class Spear {
+        public static KineticWeapon createKineticWeapon(ItemStack gear, GearPropertiesData properties) {
+            var harvestTier = properties.get(GearProperties.HARVEST_TIER);
+            var rarity = properties.getNumber(GearProperties.RARITY);
+            float estimatedTier;
+            if (harvestTier != null && harvestTier.value().levelHint().isPresent()) {
+                try {
+                    estimatedTier = Float.parseFloat(harvestTier.value().levelHint().get());
+                } catch (NumberFormatException ex) {
+                    estimatedTier = estimateTierByRarity(rarity);
+                }
+            } else {
+                estimatedTier = estimateTierByRarity(rarity);
+            }
+
+            return new KineticWeapon(
+                    10,
+                    delayTicks(estimatedTier),
+                    KineticWeapon.Condition.ofAttackerSpeed((int) (maxDismountDuration(rarity) * 20f), dismountMinSpeed(estimatedTier)),
+                    KineticWeapon.Condition.ofAttackerSpeed((int) (maxKnockbackDuration(rarity) * 20f), 5.1f),
+                    KineticWeapon.Condition.ofRelativeSpeed((int) (maxDamageDuration(estimatedTier) * 20f), 4.6f),
+                    0.38f,
+                    damageMultiplier(properties.getNumber(GearProperties.ATTACK_DAMAGE)),
+                    Optional.of(estimatedTier < 1f ? SoundEvents.SPEAR_WOOD_USE : SoundEvents.SPEAR_USE),
+                    Optional.of(estimatedTier < 1f ? SoundEvents.SPEAR_WOOD_HIT : SoundEvents.SPEAR_HIT)
+            );
+        }
+
+        public static SwingAnimation createSwingAnimation(ItemStack gear, GearPropertiesData properties) {
+            int duration = swingDuration(properties.getNumber(GearProperties.RARITY, 0f));
+            return new SwingAnimation(SwingAnimationType.STAB, duration);
+        }
+
+        private static float estimateTierByRarity(float rarity) {
+            double result = 0.434248 * Math.pow(rarity, 0.469146);
+            return Math.round(2 * result) / 2.0f;
+        }
+
+        private static int swingDuration(float rarity) {
+            double result = 0.631132 + 0.104594 * Math.log(rarity);
+            double rounded = Math.round(20 * result) / 20f;
+            return (int) (20 * rounded);
+        }
+
+        public static int delayTicks(float tier) {
+            double result = 0.777915 * Math.pow(0.861644, tier);
+            double rounded = Math.round(20 * result) / 20f;
+            return (int) (20 * rounded);
+        }
+
+        public static float dismountMinSpeed(float tier) {
+            double result = tier > 4
+                    ? 14.0 * Math.pow(0.84, tier)
+                    : -0.166667 * tier * tier * tier + 1.60714 * tier * tier - 5.5119 * tier + 14.01429;
+            return Math.round(2 * result) / 2f;
+        }
+
+        public static float damageMultiplier(float attackDamage) {
+            float multi = 0.125f * attackDamage + 0.7f;
+            return (int) (multi * 100) / 100f;
+        }
+
+        public static float maxDismountDuration(float rarity) {
+            if (rarity < 1) {
+                return 5;
+            }
+            // a very loose approximation of vanilla material rarity to max dismount duration
+            double result = 4.97761 - 0.543271 * Math.log(rarity);
+            return Math.round(4 * result) / 4.0f;
+        }
+
+        public static float maxKnockbackDuration(float rarity) {
+            if (rarity < 1) {
+                return 10;
+            }
+            // a very loose approximation of vanilla material rarity to max knockback duration
+            double result = 10.24271 - 0.949249 * Math.log(rarity);
+            return Math.round(4 * result) / 4.0f;
+        }
+
+        public static float maxDamageDuration(float tier) {
+            // roughly, wood = 0, stone = 1, copper = 1.5, iron = 2, diamond = 3, netherite = 4
+            double result = 15.24935 * Math.pow(0.87033, tier);
+            return Math.round(4 * result) / 4.0f;
+        }
     }
 }

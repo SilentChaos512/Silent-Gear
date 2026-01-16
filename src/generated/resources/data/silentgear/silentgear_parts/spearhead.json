@@ -14,22 +14,9 @@
   "gear_type": "silentgear:spear",
   "part_type": "silentgear:main",
   "properties": {
-    "attack_damage": {
-      "operation": "ADD",
-      "value": 3.0
-    },
-    "attack_reach": {
-      "operation": "ADD",
-      "value": 1.0
-    },
     "attack_speed": {
       "operation": "ADD",
       "value": 1.3
-    },
-    "durability": {
-      "operation": "MULTIPLY_BASE",
-      "value": -0.2
-    },
-    "repair_efficiency": 1.25
+    }
   }
 }

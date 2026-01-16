@@ -3,6 +3,8 @@ package net.silentchaos512.gear.setup.gear;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.KineticWeapon;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.enchantment.Enchantable;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.Config;
@@ -213,6 +215,26 @@ public class GearProperties {
                             .group(GearPropertyGroups.ATTACK)
                             .affectedByGrades(false)
                             .affectedBySynergy(false)
+            )
+    );
+    public static final Supplier<SwingAnimationProperty> SWING_ANIMATION = REGISTRAR.register(
+            "swing_animation",
+            () -> new SwingAnimationProperty(
+                    new GearProperty.Builder<>(SwingAnimation.DEFAULT)
+                            .group(GearPropertyGroups.ATTACK)
+                            .affectedByGrades(false)
+                            .affectedBySynergy(false)
+                            .visible(false)
+            )
+    );
+    public static final Supplier<KineticWeaponProperty> KINETIC_WEAPON = REGISTRAR.register(
+            "kinetic_weapon",
+            () -> new KineticWeaponProperty(
+                    new GearProperty.Builder<>(KineticWeaponProperty.ZERO)
+                            .group(GearPropertyGroups.ATTACK)
+                            .affectedByGrades(false)
+                            .affectedBySynergy(false)
+                            .visible(false)
             )
     );
     public static final Supplier<NumberProperty> MAGIC_DAMAGE = REGISTRAR.register(

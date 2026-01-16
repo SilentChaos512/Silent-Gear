@@ -66,6 +66,10 @@
             "level_hint": "0",
             "name": "wood"
           },
+          "silentgear:kinetic_weapon": {
+            "contact_cooldown_ticks": 0,
+            "damage_multiplier": 0.0
+          },
           "silentgear:knockback_resistance": 0.0,
           "silentgear:magic_armor": 0.0,
           "silentgear:magic_damage": 0.0,
@@ -75,6 +79,7 @@
           "silentgear:rarity": 0.0,
           "silentgear:repair_efficiency": 0.0,
           "silentgear:repair_value": 0.0,
+          "silentgear:swing_animation": {},
           "silentgear:traits": []
         }
       },

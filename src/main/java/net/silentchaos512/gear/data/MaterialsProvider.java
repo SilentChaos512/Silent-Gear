@@ -440,6 +440,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.COATING, GearProperties.DURABILITY, 0.3f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .stat(PartTypes.COATING, GearProperties.DURABILITY, 2, NumberProperty.Operation.ADD)
                 .stat(PartTypes.COATING, GearProperties.ARMOR_DURABILITY, 37f / 33f - 1f, NumberProperty.Operation.MULTIPLY_TOTAL)
+                .stat(PartTypes.COATING, GearProperties.RARITY, 40, NumberProperty.Operation.ADD)
                 .stat(PartTypes.COATING, GearProperties.HARVEST_TIER, new HarvestTierPropertyValue(
                         HarvestTier.create(
                                 "netherite",

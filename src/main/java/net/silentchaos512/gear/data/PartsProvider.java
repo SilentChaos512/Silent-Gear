@@ -281,11 +281,7 @@ public final class PartsProvider extends PartsProviderBase {
                     .numberProperty(GearProperties.RANGED_DAMAGE, -0.75f, NumberProperty.Operation.MULTIPLY_BASE)
             )
             .put(GearTypes.SPEAR.get(), b -> b
-                    .numberProperty(GearProperties.ATTACK_DAMAGE, 3, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.ATTACK_SPEED, 1.3f, NumberProperty.Operation.ADD)
-                    .numberProperty(GearProperties.REPAIR_EFFICIENCY, 1.25f)
-                    .numberProperty(GearProperties.DURABILITY, -0.2f, NumberProperty.Operation.MULTIPLY_BASE)
-                    .numberProperty(GearProperties.ATTACK_REACH, 1, NumberProperty.Operation.ADD)
             )
             .put(GearTypes.SWORD.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 3, NumberProperty.Operation.ADD)

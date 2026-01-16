@@ -7,14 +7,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.AttackRange;
-import net.minecraft.world.item.component.PiercingWeapon;
-import net.minecraft.world.item.component.UseEffects;
+import net.minecraft.world.item.component.*;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -42,20 +42,7 @@ public class GearSpearItem extends BasicGearItem implements GearWeapon {
         var isWood = primaryMaterial != null && (primaryMaterial.is(Const.Materials.WOOD) || primaryMaterial.parentIs(Const.Materials.WOOD));
 
         gear.set(DataComponents.DAMAGE_TYPE, new EitherHolder<>(DamageTypes.SPEAR));
-        /*gear.set(
-                DataComponents.KINETIC_WEAPON,
-                new KineticWeapon(
-                        10,
-                        (int) (delay * 20F),
-                        KineticWeapon.Condition.ofAttackerSpeed((int)(dismountMaxDuration * 20.0F), dismountMinSpeed),
-                        KineticWeapon.Condition.ofAttackerSpeed((int)(knockbackMaxDuration * 20.0F), knockbackMinSpeed),
-                        KineticWeapon.Condition.ofRelativeSpeed((int)(damageMaxDuration * 20.0F), damageMinSpeed),
-                        0.38F,
-                        damageMultiplier,
-                        Optional.of(isWood ? SoundEvents.SPEAR_WOOD_USE : SoundEvents.SPEAR_USE),
-                        Optional.of(isWood ? SoundEvents.SPEAR_WOOD_HIT : SoundEvents.SPEAR_HIT)
-                )
-        );*/
+        gear.set(DataComponents.KINETIC_WEAPON, getKineticWeaponComponent(gear, finalProperties));
         gear.set(
                 DataComponents.PIERCING_WEAPON,
                 new PiercingWeapon(
@@ -67,7 +54,33 @@ public class GearSpearItem extends BasicGearItem implements GearWeapon {
         );
         gear.set(DataComponents.ATTACK_RANGE, new AttackRange(2.0F, 4.5F, 2.0F, 6.5F, 0.125F, 0.5F));
         gear.set(DataComponents.MINIMUM_ATTACK_CHARGE, 1.0F);
-//        gear.set(DataComponents.SWING_ANIMATION, new SwingAnimation(SwingAnimationType.STAB, (int) (swingDuration * 20.0F)));
+        gear.set(DataComponents.SWING_ANIMATION, getSwingAnimationComponent(gear, finalProperties));
         gear.set(DataComponents.USE_EFFECTS, new UseEffects(true, false, 1.0F));
+    }
+
+    protected KineticWeapon getKineticWeaponComponent(ItemStack gear, GearPropertiesData properties) {
+        // Try to get property from item
+        if (properties.contains(GearProperties.KINETIC_WEAPON)) {
+            var kineticWeapon = properties.get(GearProperties.KINETIC_WEAPON);
+            // Property is present, but make sure it's valid
+            if (kineticWeapon != null && !GearProperties.KINETIC_WEAPON.get().isZero(kineticWeapon.value())) {
+                return kineticWeapon.value();
+            }
+        }
+        // Property missing or invalid. Make up one based on other properties.
+        return GearHelper.Spear.createKineticWeapon(gear, properties);
+    }
+
+    protected SwingAnimation getSwingAnimationComponent(ItemStack gear, GearPropertiesData properties) {
+        // Try to get property from item
+        if (properties.contains(GearProperties.SWING_ANIMATION)) {
+            var swingAnimation = properties.get(GearProperties.SWING_ANIMATION);
+            // Property is present, but make sure it's valid
+            if (swingAnimation != null && !GearProperties.SWING_ANIMATION.get().isZero(swingAnimation.value())) {
+                return swingAnimation.value();
+            }
+        }
+        // Property missing or invalid. Make up one based on other properties.
+        return GearHelper.Spear.createSwingAnimation(gear, properties);
     }
 }

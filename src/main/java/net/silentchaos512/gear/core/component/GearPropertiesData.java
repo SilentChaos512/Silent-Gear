@@ -98,6 +98,10 @@ public record GearPropertiesData(
         return this.properties.containsKey(property);
     }
 
+    public boolean contains(Supplier<? extends GearProperty<?, ?>> property) {
+        return contains(property.get());
+    }
+
     public Set<GearProperty<?, ? extends GearPropertyValue<?>>> keySet() {
         return this.properties.keySet();
     }

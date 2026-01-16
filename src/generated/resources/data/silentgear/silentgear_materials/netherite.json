@@ -76,6 +76,10 @@
         "operation": "MULTIPLY_TOTAL",
         "value": 0.33333334
       },
+      "rarity": {
+        "operation": "ADD",
+        "value": 40.0
+      },
       "traits": [
         {
           "conditions": [],

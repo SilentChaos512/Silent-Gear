@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.api.property;
 
 import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
@@ -27,7 +28,7 @@ public abstract class GearPropertyValue<T> {
         );
     }
 
-    public static <T, V extends GearPropertyValue<T>, B extends FriendlyByteBuf> StreamCodec<B, V> createSimpleStreamCodec(
+    public static <T, V extends GearPropertyValue<T>, B extends ByteBuf> StreamCodec<B, V> createSimpleStreamCodec(
             StreamCodec<B, T> streamCodec,
             Function<T, V> constructor
     ) {
