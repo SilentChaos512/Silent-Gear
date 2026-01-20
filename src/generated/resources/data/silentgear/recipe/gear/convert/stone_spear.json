@@ -1,0 +1,40 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:stone_spear"
+  ],
+  "result": {
+    "item": "silentgear:spear",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:stone"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:spearhead"
+        },
+        "part": "silentgear:spearhead"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:wood"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:rod"
+        },
+        "part": "silentgear:rod"
+      }
+    ]
+  }
+}

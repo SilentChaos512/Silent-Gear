@@ -1,0 +1,40 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:copper_shovel"
+  ],
+  "result": {
+    "item": "silentgear:shovel",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:copper"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:shovel_head"
+        },
+        "part": "silentgear:shovel_head"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:wood"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:rod"
+        },
+        "part": "silentgear:rod"
+      }
+    ]
+  }
+}

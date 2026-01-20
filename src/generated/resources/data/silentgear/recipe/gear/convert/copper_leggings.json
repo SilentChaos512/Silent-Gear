@@ -1,0 +1,44 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:copper_leggings"
+  ],
+  "result": {
+    "item": "silentgear:leggings",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:legging_plates"
+        },
+        "part": "silentgear:legging_plates"
+      }
+    ]
+  }
+}

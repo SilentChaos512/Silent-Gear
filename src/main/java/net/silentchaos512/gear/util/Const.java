@@ -153,6 +153,7 @@ public final class Const {
         public static final DataResource<Material> AZURE_ELECTRUM = DataResource.material("azure_electrum");
         public static final DataResource<Material> AZURE_SILVER = DataResource.material("azure_silver");
         public static final DataResource<Material> BLAZE_GOLD = DataResource.material("blaze_gold");
+        public static final DataResource<Material> COPPER = DataResource.material("copper");
         public static final DataResource<Material> CRIMSON_STEEL = DataResource.material("crimson_steel");
         public static final DataResource<Material> DIAMOND = DataResource.material("diamond");
         public static final DataResource<Material> DIMERALD = DataResource.material("dimerald");

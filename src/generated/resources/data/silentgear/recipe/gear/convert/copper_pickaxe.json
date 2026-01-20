@@ -1,0 +1,46 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:copper_pickaxe"
+  ],
+  "result": {
+    "item": "silentgear:pickaxe",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:pickaxe_head"
+        },
+        "part": "silentgear:pickaxe_head"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:wood"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:rod"
+        },
+        "part": "silentgear:rod"
+      }
+    ]
+  }
+}

@@ -598,51 +598,67 @@ public class ModRecipesProvider extends LibRecipeProvider {
         // Conversion recipes
         gearConversionRecipe(GearItemSets.SWORD, Items.WOODEN_SWORD, 2, Const.Materials.WOOD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SWORD, Items.STONE_SWORD, 2, Const.Materials.STONE, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.SWORD, Items.COPPER_SWORD, 2, Const.Materials.COPPER, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SWORD, Items.IRON_SWORD, 2, Const.Materials.IRON, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SWORD, Items.GOLDEN_SWORD, 2, Const.Materials.GOLD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SWORD, Items.DIAMOND_SWORD, 2, Const.Materials.DIAMOND, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SWORD, Items.NETHERITE_SWORD, 2, Const.Materials.DIAMOND, Const.Materials.WOOD, Const.Materials.NETHERITE);
         gearConversionRecipe(GearItemSets.PICKAXE, Items.WOODEN_PICKAXE, 3, Const.Materials.WOOD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.PICKAXE, Items.STONE_PICKAXE, 3, Const.Materials.STONE, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.PICKAXE, Items.COPPER_PICKAXE, 3, Const.Materials.COPPER, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.PICKAXE, Items.IRON_PICKAXE, 3, Const.Materials.IRON, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.PICKAXE, Items.GOLDEN_PICKAXE, 3, Const.Materials.GOLD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.PICKAXE, Items.DIAMOND_PICKAXE, 3, Const.Materials.DIAMOND, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.PICKAXE, Items.NETHERITE_PICKAXE, 3, Const.Materials.DIAMOND, Const.Materials.WOOD, Const.Materials.NETHERITE);
         gearConversionRecipe(GearItemSets.SHOVEL, Items.WOODEN_SHOVEL, 1, Const.Materials.WOOD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SHOVEL, Items.STONE_SHOVEL, 1, Const.Materials.STONE, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.SHOVEL, Items.COPPER_SHOVEL, 1, Const.Materials.COPPER, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SHOVEL, Items.IRON_SHOVEL, 1, Const.Materials.IRON, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SHOVEL, Items.GOLDEN_SHOVEL, 1, Const.Materials.GOLD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SHOVEL, Items.DIAMOND_SHOVEL, 1, Const.Materials.DIAMOND, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.SHOVEL, Items.NETHERITE_SHOVEL, 1, Const.Materials.DIAMOND, Const.Materials.WOOD, Const.Materials.NETHERITE);
         gearConversionRecipe(GearItemSets.AXE, Items.WOODEN_AXE, 3, Const.Materials.WOOD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.AXE, Items.STONE_AXE, 3, Const.Materials.STONE, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.AXE, Items.COPPER_AXE, 3, Const.Materials.COPPER, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.AXE, Items.IRON_AXE, 3, Const.Materials.IRON, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.AXE, Items.GOLDEN_AXE, 3, Const.Materials.GOLD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.AXE, Items.DIAMOND_AXE, 3, Const.Materials.DIAMOND, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.AXE, Items.NETHERITE_AXE, 3, Const.Materials.DIAMOND, Const.Materials.WOOD, Const.Materials.NETHERITE);
         gearConversionRecipe(GearItemSets.HOE, Items.WOODEN_HOE, 2, Const.Materials.WOOD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.HOE, Items.STONE_HOE, 2, Const.Materials.STONE, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.HOE, Items.COPPER_HOE, 2, Const.Materials.COPPER, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.HOE, Items.IRON_HOE, 2, Const.Materials.IRON, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.HOE, Items.GOLDEN_HOE, 2, Const.Materials.GOLD, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.HOE, Items.DIAMOND_HOE, 2, Const.Materials.DIAMOND, Const.Materials.WOOD);
         gearConversionRecipe(GearItemSets.HOE, Items.NETHERITE_HOE, 2, Const.Materials.DIAMOND, Const.Materials.WOOD, Const.Materials.NETHERITE);
+        gearConversionRecipe(GearItemSets.SPEAR, Items.WOODEN_SPEAR, 1, Const.Materials.WOOD, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.SPEAR, Items.STONE_SPEAR, 1, Const.Materials.STONE, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.SPEAR, Items.COPPER_SPEAR, 1, Const.Materials.COPPER, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.SPEAR, Items.IRON_SPEAR, 1, Const.Materials.IRON, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.SPEAR, Items.GOLDEN_SPEAR, 1, Const.Materials.GOLD, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.SPEAR, Items.DIAMOND_SPEAR, 1, Const.Materials.DIAMOND, Const.Materials.WOOD);
+        gearConversionRecipe(GearItemSets.SPEAR, Items.NETHERITE_SPEAR, 1, Const.Materials.DIAMOND, Const.Materials.WOOD, Const.Materials.NETHERITE);
         gearConversionRecipe(GearItemSets.HELMET, Items.LEATHER_HELMET, 5, Const.Materials.LEATHER);
+        gearConversionRecipe(GearItemSets.HELMET, Items.COPPER_HELMET, 5, Const.Materials.COPPER);
         gearConversionRecipe(GearItemSets.HELMET, Items.IRON_HELMET, 5, Const.Materials.IRON);
         gearConversionRecipe(GearItemSets.HELMET, Items.GOLDEN_HELMET, 5, Const.Materials.GOLD);
         gearConversionRecipe(GearItemSets.HELMET, Items.DIAMOND_HELMET, 5, Const.Materials.DIAMOND);
         gearConversionRecipe(GearItemSets.HELMET, Items.NETHERITE_HELMET, 5, Const.Materials.DIAMOND, null, Const.Materials.NETHERITE);
         gearConversionRecipe(GearItemSets.HELMET, Items.TURTLE_HELMET, 5, Const.Materials.TURTLE);
         gearConversionRecipe(GearItemSets.CHESTPLATE, Items.LEATHER_CHESTPLATE, 8, Const.Materials.LEATHER);
+        gearConversionRecipe(GearItemSets.CHESTPLATE, Items.COPPER_CHESTPLATE, 8, Const.Materials.COPPER);
         gearConversionRecipe(GearItemSets.CHESTPLATE, Items.IRON_CHESTPLATE, 8, Const.Materials.IRON);
         gearConversionRecipe(GearItemSets.CHESTPLATE, Items.GOLDEN_CHESTPLATE, 8, Const.Materials.GOLD);
         gearConversionRecipe(GearItemSets.CHESTPLATE, Items.DIAMOND_CHESTPLATE, 8, Const.Materials.DIAMOND);
         gearConversionRecipe(GearItemSets.CHESTPLATE, Items.NETHERITE_CHESTPLATE, 8, Const.Materials.DIAMOND, null, Const.Materials.NETHERITE);
         gearConversionRecipe(GearItemSets.LEGGINGS, Items.LEATHER_LEGGINGS, 7, Const.Materials.LEATHER);
+        gearConversionRecipe(GearItemSets.LEGGINGS, Items.COPPER_LEGGINGS, 7, Const.Materials.COPPER);
         gearConversionRecipe(GearItemSets.LEGGINGS, Items.IRON_LEGGINGS, 7, Const.Materials.IRON);
         gearConversionRecipe(GearItemSets.LEGGINGS, Items.GOLDEN_LEGGINGS, 7, Const.Materials.GOLD);
         gearConversionRecipe(GearItemSets.LEGGINGS, Items.DIAMOND_LEGGINGS, 7, Const.Materials.DIAMOND);
         gearConversionRecipe(GearItemSets.LEGGINGS, Items.NETHERITE_LEGGINGS, 7, Const.Materials.DIAMOND, null, Const.Materials.NETHERITE);
         gearConversionRecipe(GearItemSets.BOOTS, Items.LEATHER_BOOTS, 4, Const.Materials.LEATHER);
+        gearConversionRecipe(GearItemSets.BOOTS, Items.COPPER_BOOTS, 4, Const.Materials.COPPER);
         gearConversionRecipe(GearItemSets.BOOTS, Items.IRON_BOOTS, 4, Const.Materials.IRON);
         gearConversionRecipe(GearItemSets.BOOTS, Items.GOLDEN_BOOTS, 4, Const.Materials.GOLD);
         gearConversionRecipe(GearItemSets.BOOTS, Items.DIAMOND_BOOTS, 4, Const.Materials.DIAMOND);
@@ -1722,7 +1738,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private void metals(float smeltingXp, Metals metal) {
-        if (metal.ore != null) {
+        if (metal.ore != null && metal.oreTag != null) {
             var oreTagIngredient = tag(metal.oreTag);
             SimpleCookingRecipeBuilder.blasting(oreTagIngredient, RecipeCategory.MISC, metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", has(metal.oreTag))
@@ -1740,7 +1756,9 @@ public class ModRecipesProvider extends LibRecipeProvider {
                     .unlockedBy("has_item", has(metal.rawOre))
                     .save(this.output, modId(metal.name + "_raw_ore_smelting"));
 
-            compressionRecipes(this.output, metal.rawOreBlock, metal.rawOre, null);
+            if (metal.rawOreBlock != null) {
+                compressionRecipes(this.output, metal.rawOreBlock, metal.rawOre, null);
+            }
         }
 
         var hasIngot = has(metal.ingotTag);
@@ -1767,18 +1785,18 @@ public class ModRecipesProvider extends LibRecipeProvider {
     @SuppressWarnings("WeakerAccess")
     private static class Metals {
         private final String name;
-        private ItemLike ore;
-        private TagKey<Item> oreTag;
-        private ItemLike rawOre;
-        private ItemLike rawOreBlock;
-        private ItemLike block;
-        private TagKey<Item> blockTag;
+        @Nullable private ItemLike ore;
+        @Nullable private TagKey<Item> oreTag;
+        @Nullable private ItemLike rawOre;
+        @Nullable private ItemLike rawOreBlock;
+        @Nullable private ItemLike block;
+        @Nullable private TagKey<Item> blockTag;
         private final ItemLike ingot;
         private final TagKey<Item> ingotTag;
-        private ItemLike nugget;
-        private TagKey<Item> nuggetTag;
-        private ItemLike dust;
-        private TagKey<Item> dustTag;
+        @Nullable private ItemLike nugget;
+        @Nullable private TagKey<Item> nuggetTag;
+        @Nullable private ItemLike dust;
+        @Nullable private TagKey<Item> dustTag;
 
         public Metals(String name, ItemLike ingot, TagKey<Item> ingotTag) {
             this.name = name;

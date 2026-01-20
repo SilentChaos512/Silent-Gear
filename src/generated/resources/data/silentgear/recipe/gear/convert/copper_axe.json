@@ -1,0 +1,46 @@
+{
+  "type": "silentgear:conversion",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:copper_axe"
+  ],
+  "result": {
+    "item": "silentgear:axe",
+    "parts": [
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              },
+              {
+                "material": "silentgear:copper"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:axe_head"
+        },
+        "part": "silentgear:axe_head"
+      },
+      {
+        "item": {
+          "components": {
+            "silentgear:material_list": [
+              {
+                "material": "silentgear:wood"
+              }
+            ]
+          },
+          "count": 1,
+          "id": "silentgear:rod"
+        },
+        "part": "silentgear:rod"
+      }
+    ]
+  }
+}
