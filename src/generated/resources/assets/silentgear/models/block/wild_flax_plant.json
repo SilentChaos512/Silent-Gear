@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "silentgear:block/flax_plant3"
+    "cross": "silentgear:block/flax_plant_stage3"
   }
 }

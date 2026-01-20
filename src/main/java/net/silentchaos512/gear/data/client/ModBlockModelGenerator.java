@@ -91,8 +91,8 @@ public class ModBlockModelGenerator extends BlockModelGenerators {
         // Plants
         createCropBlock(SgBlocks.FLAX_PLANT.get(), ModCropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
         createCropBlock(SgBlocks.FLUFFY_PLANT.get(), ModCropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
-        createWildCrop(SgBlocks.WILD_FLAX_PLANT, "block/flax_plant3");
-        createWildCrop(SgBlocks.WILD_FLUFFY_PLANT, "block/fluffy_plant3");
+        createWildCrop(SgBlocks.WILD_FLAX_PLANT, "block/flax_plant_stage3");
+        createWildCrop(SgBlocks.WILD_FLUFFY_PLANT, "block/fluffy_plant_stage3");
     }
 
     private void createSimpleCustomModel(DeferredBlock<?> block, String modelPath) {
