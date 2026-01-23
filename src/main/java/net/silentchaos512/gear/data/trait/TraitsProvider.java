@@ -641,6 +641,30 @@ public class TraitsProvider extends TraitsProviderBase {
                 )
         );
 
+        ret.add(TraitBuilder.of(Const.Traits.POLISHED, 1)
+                .effects(
+                        OxidationTraitEffect.create(
+                                Const.Traits.OXIDIZED,
+                                1200
+                        )
+                )
+                .extraWikiLines("Becomes Oxidized if not used for some time")
+        );
+
+        ret.add(TraitBuilder.of(Const.Traits.OXIDIZED, 3)
+                .effects(
+                        OxidationTraitEffect.create(
+                                null,
+                                600, 600, 600
+                        ),
+                        NumberPropertyModifierTraitEffect.builder()
+                                .add(GearProperties.HARVEST_SPEED, -0.2f, false, true)
+                                .add(GearProperties.ATTACK_DAMAGE, -0.2f, false, true)
+                                .build()
+                )
+                .extraWikiLines("Oxidation level decreases and eventually reverts to Polished with use")
+        );
+
         return ret;
     }
 

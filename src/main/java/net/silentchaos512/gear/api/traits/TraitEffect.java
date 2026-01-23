@@ -5,20 +5,25 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.SgRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class TraitEffect {
     public static final Codec<TraitEffect> DISPATCH_CODEC = SgRegistries.TRAIT_EFFECT_TYPE.byNameCodec()
@@ -43,6 +48,13 @@ public abstract class TraitEffect {
 
     public double onCalculateSynergy(double synergy, int traitLevel) {
         return synergy;
+    }
+
+    public Optional<TraitInstance> transformTrait(ItemStack gear, Trait trait, int traitLevel) {
+        return Optional.empty();
+    }
+
+    public void onBlockBreak(TraitActionContext context, BlockEvent.BreakEvent event) {
     }
 
     public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
@@ -103,7 +115,7 @@ public abstract class TraitEffect {
         return 0f;
     }
 
-    public void onUpdate(TraitActionContext context, boolean isEquipped) {
+    public void inventoryTick(TraitActionContext context, Level level, Entity entity, boolean isEquipped) {
         // Nothing
     }
 

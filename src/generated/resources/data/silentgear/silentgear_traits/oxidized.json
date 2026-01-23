@@ -1,0 +1,38 @@
+{
+  "conditions": [],
+  "description": {
+    "translate": "trait.silentgear.oxidized.desc"
+  },
+  "effects": [
+    {
+      "type": "silentgear:oxidation",
+      "counter_times_per_stage": [
+        600,
+        600,
+        600
+      ]
+    },
+    {
+      "type": "silentgear:number_property_modifier",
+      "property_modifiers": {
+        "silentgear:attack_damage": {
+          "base_multiplier": -0.2,
+          "multiply_damage_ratio": false,
+          "multiply_original_value": true
+        },
+        "silentgear:harvest_speed": {
+          "base_multiplier": -0.2,
+          "multiply_damage_ratio": false,
+          "multiply_original_value": true
+        }
+      }
+    }
+  ],
+  "extra_wiki_lines": [
+    "Oxidation level decreases and eventually reverts to Polished with use"
+  ],
+  "max_level": 3,
+  "name": {
+    "translate": "trait.silentgear.oxidized"
+  }
+}

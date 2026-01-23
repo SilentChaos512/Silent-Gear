@@ -6,9 +6,10 @@ import net.silentchaos512.gear.gear.part.PartInstance;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class GearNamePrefixesEvent extends GearItemEvent {
-    private final Collection<Component> prefixes = new ArrayList<>();
+    private final List<Component> prefixes = new ArrayList<>();
 
     public GearNamePrefixesEvent(ItemStack gear, Collection<PartInstance> parts) {
         super(gear, parts);
@@ -20,7 +21,7 @@ public class GearNamePrefixesEvent extends GearItemEvent {
         });
     }
 
-    public Collection<Component> getPrefixes() {
+    public List<Component> getPrefixes() {
         return prefixes;
     }
 }

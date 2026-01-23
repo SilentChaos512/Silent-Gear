@@ -1,4 +1,4 @@
-package net.silentchaos512.gear.core;
+package net.silentchaos512.gear.gear.util;
 
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.phys.Vec3;

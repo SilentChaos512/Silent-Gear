@@ -93,6 +93,12 @@ public class TraitEffectTypes {
             NumberPropertyModifierTraitEffect.STREAM_CODEC,
             "Applies modifiers to numerical properties based as durability lost"
     );
+    public static final Supplier<TraitEffectType<OxidationTraitEffect>> OXIDATION = register(
+            "oxidation",
+            OxidationTraitEffect.CODEC,
+            OxidationTraitEffect.STREAM_CODEC,
+            "Gradually changes items that go unused in the player's inventory"
+    );
     public static final Supplier<TraitEffectType<SelfRepairTraitEffect>> SELF_REPAIR = register(
             "self_repair",
             SelfRepairTraitEffect.CODEC,

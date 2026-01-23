@@ -34,15 +34,15 @@
       "armor/chestplate": 4.0,
       "armor/helmet": 2.0,
       "armor/leggings": 3.0,
-      "armor_durability": 12.0,
-      "attack_damage": 1.5,
-      "attack_speed": 0.1,
+      "armor_durability": 11.0,
+      "attack_damage": 1.0,
+      "attack_speed": 0.0,
       "attack_speed/axe": -0.1,
       "attack_speed/hoe": 0.0,
       "charging_value": 1.3,
       "draw_speed": 0.0,
-      "durability": 151.0,
-      "enchantment_value": 15.0,
+      "durability": 190.0,
+      "enchantment_value": 13.0,
       "harvest_speed": 5.0,
       "harvest_tier": {
         "incorrect_blocks_for_tool": "silentgear:incorrect_for_copper_tools",
@@ -58,11 +58,11 @@
           "conditions": [
             {
               "type": "silentgear:material_ratio",
-              "ratio": 0.5
+              "ratio": 1.0
             }
           ],
           "level": 1,
-          "trait": "silentgear:soft"
+          "trait": "silentgear:polished"
         }
       ]
     },

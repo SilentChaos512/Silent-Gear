@@ -59,10 +59,13 @@ import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.NumberPropertyValue;
+import net.silentchaos512.gear.api.property.TraitListPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.setup.SgAttributes;
 import net.silentchaos512.gear.setup.SgCriteriaTriggers;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.*;
 import net.silentchaos512.lib.event.ServerTicks;
@@ -423,6 +426,11 @@ public final class GearEvents {
         ItemStack tool = player.getMainHandItem();
         if (tool.getItem() instanceof BreakEventHandler breakEventHandler) {
             breakEventHandler.onBlockBreakEvent(tool, player, player.level(), event.getPos(), event.getState());
+        }
+
+        var traits = GearData.getProperties(tool, player).getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty()).value();
+        for (TraitInstance traitInstance : traits) {
+            traitInstance.getTrait().onBlockBreak(new TraitActionContext(player, traitInstance, tool), event);
         }
     }
 }

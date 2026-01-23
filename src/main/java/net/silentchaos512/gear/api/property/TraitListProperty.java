@@ -57,11 +57,11 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
 
     @Override
     public List<TraitInstance> compute(List<TraitInstance> baseValue, boolean filterConditions, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers) {
-        return computeForGear(baseValue, filterConditions, itemType, statType, modifiers, List.of());
+        return computeForGear(baseValue, filterConditions, itemType, statType, modifiers, List.of(), ItemStack.EMPTY);
     }
 
     @Override
-    public List<TraitInstance> computeForGear(List<TraitInstance> baseValue, boolean filterConditions, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers, List<PartInstance> parts) {
+    public List<TraitInstance> computeForGear(List<TraitInstance> baseValue, boolean filterConditions, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers, List<PartInstance> parts, ItemStack gear) {
         if (modifiers.isEmpty()) {
             return baseValue;
         }
@@ -70,10 +70,10 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
         for (var mod : modifiers) {
             list.addAll(mod.value);
         }
-        return computeTraits(filterConditions, itemType, baseValue, list, parts);
+        return computeTraits(filterConditions, itemType, baseValue, list, parts, gear);
     }
 
-    public List<TraitInstance> computeTraits(boolean filterConditions, GearType itemType, List<TraitInstance> baseValue, Collection<TraitInstance> traits, List<PartInstance> parts) {
+    public List<TraitInstance> computeTraits(boolean filterConditions, GearType itemType, List<TraitInstance> baseValue, Collection<TraitInstance> traits, List<PartInstance> parts, ItemStack gear) {
         if (traits.isEmpty()) {
             return baseValue;
         }
@@ -98,7 +98,11 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
         // TODO: Trait cancelling? Events?
 
         List<TraitInstance> ret = new ArrayList<>();
-        map.forEach((trait, level) -> ret.add(TraitInstance.of(trait, level)));
+        map.forEach((trait, level) -> {
+            var instance = TraitInstance.of(trait, level);
+            var transformed = instance.getTrait().transformTrait(gear, level).orElse(instance);
+            ret.add(transformed);
+        });
         if (filterConditions) {
             // Remove if the conditions don't match the gear
             ret.removeIf(trait -> !trait.conditionsMatch(PartGearKey.of(itemType, PartTypes.NONE.get()), parts));

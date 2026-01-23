@@ -17,10 +17,12 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearArmor;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
@@ -69,7 +71,7 @@ public class WielderEffectTraitEffect extends TraitEffect {
     }
 
     @Override
-    public void onUpdate(TraitActionContext context, boolean isEquipped) {
+    public void inventoryTick(TraitActionContext context, Level level, Entity entity, boolean isEquipped) {
         if (!isEquipped || context.player() == null || context.player().tickCount % 10 != 0) return;
 
         GearType gearType = ((GearItem) context.gear().getItem()).getGearType();
@@ -80,7 +82,7 @@ public class WielderEffectTraitEffect extends TraitEffect {
 
     private void applyEffects(TraitActionContext context, GearType gearType, GearType entryType, Iterable<PotionData> effects) {
         Player player = context.player();
-        assert player != null; // checked in onUpdate
+        assert player != null; // checked in inventoryTick
 
         if (gearType.matches(entryType, true)) {
             int setPieceCount = getSetPieceCount(context, entryType, player);

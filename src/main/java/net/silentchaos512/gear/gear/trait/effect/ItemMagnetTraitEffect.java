@@ -8,18 +8,20 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.api.traits.TraitEffectType;
-import net.silentchaos512.gear.core.MagnetPullTracker;
+import net.silentchaos512.gear.gear.util.MagnetPullTracker;
 import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
 
 import java.util.Collection;
@@ -84,7 +86,7 @@ public class ItemMagnetTraitEffect extends TraitEffect {
     }
 
     @Override
-    public void onUpdate(TraitActionContext context, boolean isEquipped) {
+    public void inventoryTick(TraitActionContext context, Level level, Entity entity, boolean isEquipped) {
         var player = context.player();
         if (!isEquipped || player == null || player.level().isClientSide()) return;
 

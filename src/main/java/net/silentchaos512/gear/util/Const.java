@@ -254,6 +254,8 @@ public final class Const {
         public static final DataResource<Trait> MOONWALKER = DataResource.trait("moonwalker");
         public static final DataResource<Trait> MULTI_BREAK = DataResource.trait("multi_break");
         public static final DataResource<Trait> ORGANIC = DataResource.trait("organic");
+        public static final DataResource<Trait> OXIDIZED = DataResource.trait("oxidized");
+        public static final DataResource<Trait> POLISHED = DataResource.trait("polished");
         public static final DataResource<Trait> RACKER = DataResource.trait("racker");
         public static final DataResource<Trait> REACH = DataResource.trait("reach");
         public static final DataResource<Trait> RED_CARD = DataResource.trait("red_card");

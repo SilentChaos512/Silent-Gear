@@ -89,7 +89,25 @@ public class SgDataComponents {
             "starcharged_level",
             builder -> builder
                     .persistent(Codec.INT)
-                    .networkSynchronized(ByteBufCodecs.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+    );
+    public static final Supplier<DataComponentType<Byte>> OXIDATION_STAGE = REGISTRAR.registerComponentType(
+            "oxidation_stage",
+            builder -> builder
+                    .persistent(Codec.BYTE)
+                    .networkSynchronized(ByteBufCodecs.BYTE)
+    );
+    public static final Supplier<DataComponentType<Integer>> OXIDATION_COUNTER = REGISTRAR.registerComponentType(
+            "oxidation_counter",
+            builder -> builder
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+    );
+    public static final Supplier<DataComponentType<Unit>> RECALCULATE_FLAG = REGISTRAR.registerComponentType(
+            "recalculate_flag",
+            builder -> builder
+                    .persistent(Unit.CODEC)
+                    .networkSynchronized(Unit.STREAM_CODEC)
     );
     /**
      * A map of MaterialInstance to Float, encoded as a map of DataResource<Material> to Float.

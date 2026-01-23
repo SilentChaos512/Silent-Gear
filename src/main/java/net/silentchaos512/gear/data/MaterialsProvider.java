@@ -347,14 +347,14 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .craftingWithRodSubstitute(this.items, Tags.Items.INGOTS_COPPER, SgTags.Items.RODS_COPPER, MaterialCategories.METAL, MaterialCategories.BASIC)
                 .displayWithDefaultName(0xFD804C, TextureType.HIGH_CONTRAST)
                 //main
-                .mainStatsCommon(151, 12, 15, 12, 1.3f)
+                .mainStatsCommon(190, 11, 13, 12, 1.3f)
                 .mainStatsHarvest(5)
-                .mainStatsMelee(1.5f, 1.0f, 0.1f)
+                .mainStatsMelee(1.0f, 1.0f, 0.0f)
                 .stat(PartGearKey.ofMain(GearTypes.AXE), GearProperties.ATTACK_SPEED, -0.1f)
                 .stat(PartGearKey.ofMain(GearTypes.HOE), GearProperties.ATTACK_SPEED, 0f)
                 .mainStatsRanged(0.1f, 0.0f)
                 .mainStatsArmor(2, 4, 3, 1, 0, 8) //10
-                .trait(PartTypes.MAIN, Const.Traits.SOFT, 1, new MaterialRatioTraitCondition(0.5f))
+                .trait(PartTypes.MAIN, Const.Traits.POLISHED, 1, new MaterialRatioTraitCondition(1f))
                 //rod
                 .stat(PartTypes.ROD, GearProperties.HARVEST_SPEED, 0.2f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .trait(PartTypes.ROD, Const.Traits.BENDING, 3)

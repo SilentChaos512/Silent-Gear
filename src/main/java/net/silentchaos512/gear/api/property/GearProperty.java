@@ -82,7 +82,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
 
     public abstract T compute(T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers);
 
-    public T computeForGear(T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers, List<PartInstance> parts) {
+    public T computeForGear(T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers, List<PartInstance> parts, ItemStack gear) {
         return compute(baseValue, clampResult, itemType, statType, modifiers);
     }
 
@@ -92,8 +92,8 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     }
 
     @SuppressWarnings("unchecked")
-    public V computeUncheckedForGear(GearType itemType, GearType statType, Collection<GearPropertyValue<?>> modifiers, List<PartInstance> parts) {
-        return valueOf(computeForGear(getBaseValue(), true, itemType, statType, (Collection<V>) modifiers, parts));
+    public V computeUncheckedForGear(GearType itemType, GearType statType, Collection<GearPropertyValue<?>> modifiers, List<PartInstance> parts, ItemStack gear) {
+        return valueOf(computeForGear(getBaseValue(), true, itemType, statType, (Collection<V>) modifiers, parts, gear));
     }
 
     public T getDefaultValue() {

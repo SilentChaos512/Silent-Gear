@@ -442,8 +442,11 @@ public final class GearHelper {
     }
 
     public static void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, boolean isEquipped) {
-        @Nullable Player player = entity instanceof Player ? (Player) entity : null;
-        TraitHelper.tickTraits(level, player, stack, isEquipped);
+        if (stack.has(SgDataComponents.RECALCULATE_FLAG)) {
+            GearData.recalculateGearData(stack, entity instanceof Player ? (Player) entity : null);
+            stack.remove(SgDataComponents.RECALCULATE_FLAG);
+        }
+        TraitHelper.tickTraits(level, entity, stack, isEquipped);
     }
 
     public static InteractionResult useOn(UseOnContext context) {

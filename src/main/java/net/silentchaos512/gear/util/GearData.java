@@ -239,7 +239,7 @@ public final class GearData {
             Collection<GearPropertyValue<?>> modifiers = propertyMods.get(key);
             GearType statGearType = propertyMods.getMostSpecificKey(key).gearType();
 
-            final GearPropertyValue<?> value = property.computeUncheckedForGear(gearType, statGearType, modifiers, parts);
+            final GearPropertyValue<?> value = property.computeUncheckedForGear(gearType, statGearType, modifiers, parts, gear);
             finalBaseValues.put(property, value);
         }
 

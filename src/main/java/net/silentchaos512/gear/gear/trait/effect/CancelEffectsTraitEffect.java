@@ -11,7 +11,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.api.traits.TraitEffectType;
@@ -47,7 +49,7 @@ public class CancelEffectsTraitEffect extends TraitEffect {
     }
 
     @Override
-    public void onUpdate(TraitActionContext context, boolean isEquipped) {
+    public void inventoryTick(TraitActionContext context, Level level, Entity entity, boolean isEquipped) {
         if (isEquipped) {
             Player player = context.player();
             if (player != null) {

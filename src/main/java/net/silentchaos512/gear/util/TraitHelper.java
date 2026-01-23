@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.util;
 
 import net.minecraft.core.Holder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -44,7 +45,10 @@ public final class TraitHelper {
      *                   value) -> modifiedInputValue}, where 'value' is the currently calculated
      *                   result.
      * @return The {@code inputValue} modified by traits.
+     * @deprecated Likely not as useful anymore since items no longer use NBT and data components are held in memory.
+     *   While the syntax is neat, the TraitFunction adds extra complication for debugging.
      */
+    @Deprecated
     public static <T> T activateTraits(ItemStack gear, final T inputValue, TraitFunction<T> action) {
         if (!GearHelper.isGear(gear)) {
             SilentGear.LOGGER.error("Called activateTraits on non-gear item, {}", gear);
@@ -249,12 +253,13 @@ public final class TraitHelper {
         }*/
     }
 
-    static void tickTraits(Level world, @Nullable Player player, ItemStack gear, boolean isEquipped) {
+    static void tickTraits(Level level, Entity entity, ItemStack gear, boolean isEquipped) {
+        @Nullable var player = entity instanceof Player ? (Player) entity : null;
         var traits = GearData.getProperties(gear, player).get(GearProperties.TRAITS);
         if (traits == null) return;
 
         for (var trait : traits.value()) {
-            trait.getTrait().onUpdate(new TraitActionContext(player, trait, gear), isEquipped);
+            trait.getTrait().inventoryTick(new TraitActionContext(player, trait, gear), level, entity, isEquipped);
         }
     }
 }

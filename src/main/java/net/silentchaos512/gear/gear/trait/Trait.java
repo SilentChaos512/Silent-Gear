@@ -13,13 +13,16 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.property.GearProperty;
@@ -27,16 +30,14 @@ import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -123,6 +124,22 @@ public final class Trait {
 
     public MutableComponent getDescription(int level) {
         return description.copy();
+    }
+
+    public Optional<TraitInstance> transformTrait(ItemStack gear, int traitLevel) {
+        for (TraitEffect effect : this.effects) {
+            var inst = effect.transformTrait(gear, this, traitLevel);;
+            if (inst.isPresent()) {
+                return inst;
+            }
+        }
+        return Optional.empty();
+    }
+
+    public void onBlockBreak(TraitActionContext context, BlockEvent.BreakEvent event) {
+        for (TraitEffect effect : this.effects) {
+            effect.onBlockBreak(context, event);
+        }
     }
 
     public float onAttackEntity(TraitActionContext context, LivingEntity target, float baseValue) {
@@ -219,9 +236,9 @@ public final class Trait {
         return total;
     }
 
-    public void onUpdate(TraitActionContext context, boolean isEquipped) {
+    public void inventoryTick(TraitActionContext context, Level level, Entity entity, boolean isEquipped) {
         for (TraitEffect effect : this.effects) {
-            effect.onUpdate(context, isEquipped);
+            effect.inventoryTick(context, level, entity, isEquipped);
         }
     }
 

@@ -1,0 +1,22 @@
+{
+  "conditions": [],
+  "description": {
+    "translate": "trait.silentgear.polished.desc"
+  },
+  "effects": [
+    {
+      "type": "silentgear:oxidation",
+      "counter_times_per_stage": [
+        1200
+      ],
+      "next_oxidation_trait": "silentgear:oxidized"
+    }
+  ],
+  "extra_wiki_lines": [
+    "Becomes Oxidized if not used for some time"
+  ],
+  "max_level": 1,
+  "name": {
+    "translate": "trait.silentgear.polished"
+  }
+}
