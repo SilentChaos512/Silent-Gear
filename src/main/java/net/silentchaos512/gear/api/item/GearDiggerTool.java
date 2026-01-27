@@ -22,7 +22,8 @@ public interface GearDiggerTool extends GearTool {
 
     @Override
     default Tool createToolProperties(ItemStack gear, GearPropertiesData properties, HolderGetter<Block> blocks) {
-        var harvestSpeed = properties.getNumber(GearProperties.HARVEST_SPEED);
+        var rawSpeed = properties.getNumber(GearProperties.HARVEST_SPEED);
+        var harvestSpeed = Float.isNaN(rawSpeed) || rawSpeed < 0.1f ? 0.1f : rawSpeed;
         var harvestTier = properties.getOrDefault(GearProperties.HARVEST_TIER, new HarvestTierPropertyValue(HarvestTier.ZERO));
         return new Tool(
                 List.of(

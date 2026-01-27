@@ -61,7 +61,8 @@ public class GearMacheteItem extends GearSwordItem implements BreakEventHandler,
     @Override
     public Tool createToolProperties(ItemStack gear, GearPropertiesData properties, HolderGetter<Block> blocks) {
         // Works like both a sword and an axe
-        var harvestSpeed = properties.getNumber(GearProperties.HARVEST_SPEED);
+        var rawSpeed = properties.getNumber(GearProperties.HARVEST_SPEED);
+        var harvestSpeed = Float.isNaN(rawSpeed) || rawSpeed < 0.1f ? 0.1f : rawSpeed;
         var harvestTier = properties.getOrDefault(GearProperties.HARVEST_TIER, new HarvestTierPropertyValue(HarvestTier.ZERO));
         return new Tool(
                 List.of(

@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class ModRecipesProvider extends LibRecipeProvider {
-    private static final boolean ADD_TEST_RECIPES = true;
+    private static final boolean ADD_TEST_RECIPES = false;
     private static final SoundPlayback HAMMER_SOUND = new SoundPlayback(SgSounds.STONE_ANVIL_HAMMER.get(), 1f, 1f, 0.1f);
     private static final SoundPlayback KNIFE_SOUND = new SoundPlayback(SgSounds.STONE_ANVIL_KNIFE.get(), 1f, 1f, 0.1f);
 
