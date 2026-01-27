@@ -16,7 +16,9 @@ public class GearHudOverlay {
     protected static final ResourceLocation GUI_ICONS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/icons.png");
 
     private final Minecraft mc;
+    @SuppressWarnings("unused")
     private int scaledWidth;
+    @SuppressWarnings("unused")
     private int scaledHeight;
 
     public GearHudOverlay() {
@@ -67,6 +69,7 @@ public class GearHudOverlay {
         }*/
     }
 
+    @SuppressWarnings("unused")
     private static boolean isEntityTargeted(@Nullable HitResult rayTraceIn) {
         return rayTraceIn != null && rayTraceIn.getType() == HitResult.Type.ENTITY;
     }

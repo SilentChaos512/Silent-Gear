@@ -95,7 +95,8 @@ public class ModEntityLootTables extends EntityLootSubProvider {
                 );
     }
 
-    private static void heroOfTheVillage(BiConsumer<ResourceLocation, LootTable.Builder> consumer, ResourceLocation tableName, ItemLike... items) {
+    @SuppressWarnings("unused")
+private static void heroOfTheVillage(BiConsumer<ResourceLocation, LootTable.Builder> consumer, ResourceLocation tableName, ItemLike... items) {
         LootPool.Builder pool = LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(1));
         for (ItemLike item : items) {

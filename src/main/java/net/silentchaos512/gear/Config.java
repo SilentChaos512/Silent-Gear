@@ -18,7 +18,7 @@ import net.silentchaos512.lib.util.NameUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class Config {
     public static final class Common {
         static final ModConfigSpec SPEC;

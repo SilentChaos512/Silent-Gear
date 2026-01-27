@@ -102,7 +102,6 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));

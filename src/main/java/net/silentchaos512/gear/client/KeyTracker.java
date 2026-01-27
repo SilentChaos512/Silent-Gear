@@ -31,7 +31,7 @@ public class KeyTracker {
 
     private static int materialCycleCount = 0;
 
-    @EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
     static final class Registration {
         @SubscribeEvent
         public static void registerKeyMappings(RegisterKeyMappingsEvent event) {

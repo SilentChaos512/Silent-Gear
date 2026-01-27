@@ -40,7 +40,6 @@ import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.Material;
-import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
@@ -692,6 +691,7 @@ public final class GearHelper {
         items.add(createSampleItem(item, Const.Materials.TYRIAN_STEEL));
     }
 
+    @SuppressWarnings("unused")
     private static ItemStack createSampleItem(GearItem item, int tier) {
         ItemStack result = GearGenerator.create(item);
         if (result.isEmpty()) {

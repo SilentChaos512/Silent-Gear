@@ -108,7 +108,7 @@ public final class SgBlockEntities {
     }
 
     @OnlyIn(Dist.CLIENT)
-    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(value = Dist.CLIENT)
     public static class ClientEvents {
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

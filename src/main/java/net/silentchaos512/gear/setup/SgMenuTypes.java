@@ -113,7 +113,7 @@ public final class SgMenuTypes {
     }
 
     @OnlyIn(Dist.CLIENT)
-    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(value = Dist.CLIENT)
     public static class ClientEvents {
         @SubscribeEvent
         public static void registerScreens(RegisterMenuScreensEvent event) {

@@ -32,7 +32,9 @@ public class GearCrossbowItem extends CrossbowItem implements GearRangedWeapon {
     private static final int MIN_CHARGE_TIME = 5;
     private static final int MAX_CHARGE_TIME = 50;
 
+    @SuppressWarnings("unused")
     private boolean startSoundPlayed = false;
+    @SuppressWarnings("unused")
     private boolean midLoadSoundPlayed = false;
 
     private final Supplier<GearType> gearType;

@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class MaterialsCommand {
+    @SuppressWarnings("unused")
     private static final SuggestionProvider<CommandSourceStack> MATERIAL_ID_SUGGESTIONS = (ctx, builder) ->
             SharedSuggestionProvider.suggestResource(SgRegistries.MATERIAL.keySet(), builder);
 
@@ -152,6 +153,7 @@ public final class MaterialsCommand {
         builder.append(value).append("\t");
     }
 
+    @SuppressWarnings("unused")
     private static Component text(String key, Object... args) {
         return Component.translatable("command.silentgear.parts." + key, args);
     }

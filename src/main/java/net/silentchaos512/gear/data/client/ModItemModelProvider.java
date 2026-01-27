@@ -316,6 +316,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
     }
 
+    @SuppressWarnings("unused")
     private ItemModelBuilder tempGear(DeferredItem<? extends GearItem> item, ModelFile parent) {
         String name = gearTypeName(item.get().getGearType());
         return getBuilder(item.getId().getPath())

@@ -109,7 +109,6 @@ public class StoneAnvilBlock extends BaseEntityBlock implements SimpleWaterlogge
         return SHAPE;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public RenderShape getRenderShape(BlockState pState) {
         return RenderShape.MODEL;

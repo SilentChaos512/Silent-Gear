@@ -105,13 +105,13 @@ public enum MaterialGrade {
         return values()[val];
     }
 
-    public void setGradeOnStack(@Nonnull ItemStack stack) {
+    public void setGradeOnStack(ItemStack stack) {
         if (!stack.isEmpty()) {
             stack.set(SgDataComponents.MATERIAL_GRADE, this);
         }
     }
 
-    public ItemStack copyWithGrade(@Nonnull ItemStack stack) {
+    public ItemStack copyWithGrade(ItemStack stack) {
         ItemStack ret = stack.copy();
         setGradeOnStack(ret);
         return ret;

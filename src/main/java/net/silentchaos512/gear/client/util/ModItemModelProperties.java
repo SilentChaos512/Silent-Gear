@@ -8,7 +8,6 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.setup.SgItems;

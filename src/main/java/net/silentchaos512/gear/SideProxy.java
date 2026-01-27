@@ -38,6 +38,7 @@ import java.util.Collections;
 class SideProxy implements IProxy {
     @Nullable
     private static MinecraftServer server;
+    @SuppressWarnings("unused")
     @Nullable
     private static CreativeModeTab creativeModeTab;
 

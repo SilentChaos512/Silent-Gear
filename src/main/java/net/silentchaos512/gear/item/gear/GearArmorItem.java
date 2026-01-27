@@ -37,6 +37,7 @@ import java.util.function.Supplier;
 
 public class GearArmorItem extends ArmorItem implements GearArmor {
     // Caches armor colors by model key to speed up armor rendering
+    @SuppressWarnings("unused")
     private static final Cache<String, Integer> ARMOR_COLORS = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(5, TimeUnit.MINUTES)
@@ -90,6 +91,7 @@ public class GearArmorItem extends ArmorItem implements GearArmor {
         return 0;
     }
 
+    @SuppressWarnings("unused")
     private static int getPlayerTotalArmorValue(LivingEntity player) {
         float total = 0;
         for (ItemStack armor : player.getArmorSlots()) {

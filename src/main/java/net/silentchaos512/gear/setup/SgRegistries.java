@@ -21,7 +21,7 @@ import net.silentchaos512.gear.gear.part.PartManager;
 import net.silentchaos512.gear.gear.trait.TraitManager;
 import org.jetbrains.annotations.NotNull;
 
-@EventBusSubscriber(modid = SilentGear.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SilentGear.MOD_ID)
 public class SgRegistries {
     public static final ResourceKey<Registry<GearType>> GEAR_TYPE_KEY = createRegistryKey("gear_type");
     public static final ResourceKey<Registry<PartType>> PART_TYPE_KEY = createRegistryKey("part_type");

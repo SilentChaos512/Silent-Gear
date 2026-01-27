@@ -46,6 +46,7 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
             PartInstance::new
     );
 
+    @SuppressWarnings("unused")
     private static final Map<ResourceLocation, PartInstance> CACHE_UNGRADED_PARTS = new HashMap<>();
 
     private final DataResource<GearPart> part;

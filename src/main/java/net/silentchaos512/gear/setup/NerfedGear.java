@@ -30,7 +30,12 @@ public final class NerfedGear {
     private NerfedGear() {}
 
     public static void init() {
-        /*Field maxDamageField;
+        // _nerfDurabilityTest();
+    }
+
+    @SuppressWarnings("unused")
+    private static void _nerfDurabilityTest() {
+        Field maxDamageField;
         try {
             maxDamageField = ObfuscationReflectionHelper.findField(Item.class, "f_41371_");
             maxDamageField.setAccessible(true);
@@ -51,7 +56,7 @@ public final class NerfedGear {
                     e.printStackTrace();
                 }
             }
-        }*/
+        }
     }
 
     private static boolean isNerfedItem(Item item) {

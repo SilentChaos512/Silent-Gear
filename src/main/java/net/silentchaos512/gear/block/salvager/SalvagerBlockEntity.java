@@ -33,6 +33,7 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
     private static final int INPUT_SLOT = 0;
     private static final int[] SLOTS_INPUT = {INPUT_SLOT};
     private static final int[] SLOTS_OUTPUT = IntStream.rangeClosed(1, 18).toArray();
+    @SuppressWarnings("unused")
     private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, 18).toArray();
     public static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
 

@@ -40,6 +40,7 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     private static final int[] SLOTS_INPUT = {INPUT_SLOT, CATALYST_SLOT};
     private static final int[] SLOTS_OUTPUT = {2, 3, 4, 5};
     static final int INVENTORY_SIZE = SLOTS_INPUT.length + SLOTS_OUTPUT.length;
+    @SuppressWarnings("unused")
     private static final int[] SLOTS_ALL = IntStream.rangeClosed(0, INVENTORY_SIZE - 1).toArray();
 
     private int progress = 0;

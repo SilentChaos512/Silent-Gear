@@ -7,7 +7,6 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
-import net.silentchaos512.gear.api.material.MaterialSerializer;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.setup.SgRegistries;
 

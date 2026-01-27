@@ -126,6 +126,7 @@ public final class GearClientHelper {
         return Component.translatable("misc.silentgear." + key, formatArgs);
     }
 
+    @SuppressWarnings("unused")
     private static MutableComponent propertyText(String key, Object... formatArgs) {
         return Component.translatable("property.silentgear." + key, formatArgs);
     }

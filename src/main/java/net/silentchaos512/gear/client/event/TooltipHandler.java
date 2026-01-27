@@ -261,6 +261,7 @@ public final class TooltipHandler {
         }
     }
 
+    @SuppressWarnings("unused")
     private static int getTraitDisplayIndex(int numTraits) {
         if (!TRAIT_DISPLAY_CYCLE || KeyTracker.isControlDown() || numTraits == 0)
             return -1;
