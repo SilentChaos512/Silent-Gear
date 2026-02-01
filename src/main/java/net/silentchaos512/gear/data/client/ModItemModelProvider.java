@@ -137,6 +137,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         // Misc
         builder(SgItems.GUIDE_BOOK, itemGenerated);
+        builder(SgItems.MATERIAL_BOOK, itemGenerated);
         builder(SgItems.BLUEPRINT_PACKAGE, itemGenerated);
         builder(SgItems.FLAX_SEEDS, itemGenerated);
         builder(SgItems.FLUFFY_SEEDS, itemGenerated);

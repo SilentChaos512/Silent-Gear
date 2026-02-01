@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.client.gui.book;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.gui.book.page.Page;
+import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
 import net.silentchaos512.gear.client.gui.component.TexturedButton;
 
 import javax.annotation.Nullable;
@@ -32,7 +34,11 @@ public class AbstractMaterialBookScreen extends Screen {
     public AbstractMaterialBookScreen(@Nullable Screen previousScreen, List<Page> pages) {
         super(GameNarrator.NO_TITLE);
         this.previousScreen = previousScreen;
-        this.pages = pages;
+        this.pages = ImmutableList.copyOf(pages);
+    }
+
+    public AbstractMaterialBookScreen(@Nullable Screen previousScreen, SectionBuilder pagesBuilder) {
+        this(previousScreen, pagesBuilder.build());
     }
 
     @Nullable
@@ -123,13 +129,7 @@ public class AbstractMaterialBookScreen extends Screen {
         }
     }
 
-    public static class ComponentAccess {
-        private final AbstractMaterialBookScreen screen;
-
-        ComponentAccess(AbstractMaterialBookScreen screen) {
-            this.screen = screen;
-        }
-
+    public record ComponentAccess(AbstractMaterialBookScreen screen) {
         public <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T widget) {
             return this.screen.addRenderableWidget(widget);
         }

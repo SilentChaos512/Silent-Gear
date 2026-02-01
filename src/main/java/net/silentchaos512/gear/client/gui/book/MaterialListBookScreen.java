@@ -1,40 +1,44 @@
 package net.silentchaos512.gear.client.gui.book;
 
+import net.minecraft.client.Minecraft;
 import net.silentchaos512.gear.api.material.Material;
-import net.silentchaos512.gear.client.gui.book.page.Page;
-import net.silentchaos512.gear.client.gui.component.IngredientLabelButton;
+import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
+import net.silentchaos512.gear.client.gui.book.page.element.MaterialEntryPageElement;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
 public class MaterialListBookScreen extends AbstractMaterialBookScreen {
-    private final List<Material> materials;
+    public static final Comparator<Material> MATERIAL_SORT_BY_DISPLAY_NAME = (m1, m2) -> {
+        var partType = PartTypes.MAIN.get();
+        var name1 = m1.getDisplayName(MaterialInstance.of(m1), partType).getString().toLowerCase(Locale.ROOT);
+        var name2 = m2.getDisplayName(MaterialInstance.of(m2), partType).getString().toLowerCase(Locale.ROOT);
+        return name1.compareTo(name2);
+    };
+    public static final Comparator<Material> MATERIAL_SORT_BY_ID = (m1, m2) -> {
+        var name1 = SgRegistries.MATERIAL.getKey(m1).toString();
+        var name2 = SgRegistries.MATERIAL.getKey(m2).toString();
+        return name1.compareTo(name2);
+    };
 
     public MaterialListBookScreen(@Nullable MaterialBookScreen previousScreen, List<Material> materials) {
-        super(previousScreen, List.of(new Page(), new Page(), new Page()));
-        this.materials = new ArrayList<>(materials);
-        this.materials.sort((m1, m2) -> {
-            var partType = PartTypes.MAIN.get();
-            var name1 = m1.getDisplayName(MaterialInstance.of(m1), partType).getString().toLowerCase(Locale.ROOT);
-            var name2 = m2.getDisplayName(MaterialInstance.of(m2), partType).getString().toLowerCase(Locale.ROOT);
-            return name1.compareTo(name2);
-        });
+        super(previousScreen, createPages(materials, MATERIAL_SORT_BY_DISPLAY_NAME));
     }
 
-    @Override
-    protected void init() {
-        super.init();
-//        this.materialsInitTest();
-    }
+    private static SectionBuilder createPages(List<Material> materials, Comparator<Material> sortingMethod) {
+        var sortedList = new ArrayList<>(materials);
+        sortedList.sort(sortingMethod);
 
-    private void materialsInitTest() {
-        for (int i = 0; i < 10; ++i) {
-            var material = this.materials.get(i);
-            this.addRenderableWidget(new IngredientLabelButton(this.width / 2 - 125, 40 + i * (this.font.lineHeight + 2), 100, this.font.lineHeight, material.getIngredient(), material.getDisplayName(MaterialInstance.of(material), PartTypes.MAIN.get()), this.font, button -> {}));
+        SectionBuilder builder = new SectionBuilder(Minecraft.getInstance().font);
+        for (Material material : sortedList) {
+            builder.add(new MaterialEntryPageElement(material));
         }
+        return builder;
     }
 }
