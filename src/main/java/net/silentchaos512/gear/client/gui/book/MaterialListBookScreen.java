@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.client.gui.book;
 
-import net.minecraft.client.Minecraft;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
 import net.silentchaos512.gear.client.gui.book.page.element.MaterialEntryPageElement;
@@ -27,15 +26,15 @@ public class MaterialListBookScreen extends AbstractMaterialBookScreen {
         return name1.compareTo(name2);
     };
 
-    public MaterialListBookScreen(@Nullable MaterialBookScreen previousScreen, List<Material> materials) {
-        super(previousScreen, createPages(materials, MATERIAL_SORT_BY_DISPLAY_NAME));
+    public MaterialListBookScreen(@Nullable MaterialBookScreen previousScreen, List<Material> materials, Comparator<Material> materialSortMethod) {
+        super(previousScreen, createPages(materials, materialSortMethod));
     }
 
     private static SectionBuilder createPages(List<Material> materials, Comparator<Material> sortingMethod) {
         var sortedList = new ArrayList<>(materials);
         sortedList.sort(sortingMethod);
 
-        SectionBuilder builder = new SectionBuilder(Minecraft.getInstance().font);
+        SectionBuilder builder = new SectionBuilder();
         for (Material material : sortedList) {
             builder.add(new MaterialEntryPageElement(material));
         }

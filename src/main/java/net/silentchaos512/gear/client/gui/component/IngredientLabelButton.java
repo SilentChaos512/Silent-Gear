@@ -26,10 +26,20 @@ public class IngredientLabelButton extends LabelButton {
         this.ingredient = ingredient;
     }
 
+    public static int getWidth(Component text, Font font) {
+        var iconSpace = getIconSpace(font);
+        var textWidth = font.width(text.getVisualOrderText());
+        return iconSpace + textWidth;
+    }
+
+    private static int getIconSpace(Font font) {
+        return font.lineHeight + 1;
+    }
+
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Font font = this.getFont();
-        var textXOffset = font.lineHeight + 1;
+        int textXOffset = getIconSpace(font);
         // Render label with offset to leave room for icon
         renderWithHorizontalOffset(guiGraphics, textXOffset);
 

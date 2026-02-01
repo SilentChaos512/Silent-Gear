@@ -16,6 +16,7 @@ import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
 import net.silentchaos512.gear.client.gui.component.TexturedButton;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 
 public class AbstractMaterialBookScreen extends Screen {
@@ -28,8 +29,12 @@ public class AbstractMaterialBookScreen extends Screen {
     public static final ResourceLocation PAGE_RETURN_HIGHLIGHTED = SilentGear.getId("textures/gui/sprites/widget/page_return_highlighted.png");
 
     @Nullable private final Screen previousScreen;
-    private final List<Page> pages;
+    private List<Page> pages;
     private int leftPageIndex = 0;
+
+    public AbstractMaterialBookScreen(@Nullable Screen previousScreen) {
+        this(previousScreen, Collections.emptyList());
+    }
 
     public AbstractMaterialBookScreen(@Nullable Screen previousScreen, List<Page> pages) {
         super(GameNarrator.NO_TITLE);
@@ -39,6 +44,17 @@ public class AbstractMaterialBookScreen extends Screen {
 
     public AbstractMaterialBookScreen(@Nullable Screen previousScreen, SectionBuilder pagesBuilder) {
         this(previousScreen, pagesBuilder.build());
+    }
+
+    protected void setPages(List<Page> pages) {
+        // Ideally, this should only be called in the constructor
+        this.pages = pages;
+        this.leftPageIndex = 0;
+    }
+
+    protected void setPages(SectionBuilder builder) {
+        // Ideally, this should only be called in the constructor
+        setPages(builder.build());
     }
 
     @Nullable
@@ -105,7 +121,6 @@ public class AbstractMaterialBookScreen extends Screen {
     }
 
     protected  void onPageBackward() {
-        SilentGear.LOGGER.debug("onPageBackward");
         if (this.leftPageIndex > 1) {
             this.leftPageIndex -= 2;
             this.rebuildWidgets();
@@ -113,7 +128,6 @@ public class AbstractMaterialBookScreen extends Screen {
     }
 
     protected void onPageForward() {
-        SilentGear.LOGGER.debug("onPageForward");
         if (this.leftPageIndex < this.pages.size() - 2) {
             this.leftPageIndex += 2;
             this.rebuildWidgets();
@@ -121,7 +135,6 @@ public class AbstractMaterialBookScreen extends Screen {
     }
 
     protected void onPageReturn() {
-        SilentGear.LOGGER.debug("onPageReturn");
         if (this.previousScreen != null) {
             Minecraft.getInstance().setScreen(this.previousScreen);
         } else {
