@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "tag": "silentgear:blueprint_paper"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "silentgear:material_book"
+  }
+}
