@@ -30,6 +30,8 @@ public final class SgItems {
 
     public static final DeferredItem<GuideBookItem> GUIDE_BOOK = register("guide_book", () ->
             new GuideBookItem(unstackableProps()));
+    public static final DeferredItem<MaterialBookItem> MATERIAL_BOOK = register("material_book", () ->
+            new MaterialBookItem(unstackableProps()));
 
     public static final DeferredItem<BlueprintPackageItem> BLUEPRINT_PACKAGE = register("blueprint_package", () ->
             new BlueprintPackageItem(SilentGear.getId("starter_blueprints")));
