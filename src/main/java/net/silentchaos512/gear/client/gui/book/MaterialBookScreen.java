@@ -26,6 +26,8 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
         builder.add(new LabelPageElement(Component.translatable("gui.silentgear.material_book.title")));
         builder.add(new EmptyPageElement(2 * labelHeight));
         builder.add(new LabelPageElement(Component.translatable("gui.silentgear.material_book.title2"), 0.7f));
+        builder.add(new EmptyPageElement(labelHeight));
+        builder.add(new LabelPageElement(Component.literal("This book is a work in progress. Some elements may change.")));
         builder.addPageBreak();
         // Sort and display options
         builder.add(new ClickableLabelPageElement(Component.translatable("misc.silentgear.allMaterials.byName"), this::onPressAllMaterialsByName));

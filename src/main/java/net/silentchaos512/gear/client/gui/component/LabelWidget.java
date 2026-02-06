@@ -13,6 +13,7 @@ import net.silentchaos512.lib.util.MathUtils;
 
 public class LabelWidget extends StringWidget {
     protected float alignX = 0.0F;
+    // FIXME: scaling does not work correctly when text is centered
     protected float scale = 1.0F;
 
     public LabelWidget(Component message, Font font) {

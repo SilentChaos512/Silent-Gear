@@ -3,7 +3,6 @@ package net.silentchaos512.gear.client.gui.book;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
 import net.silentchaos512.gear.client.gui.book.page.element.MaterialEntryPageElement;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
@@ -16,8 +15,8 @@ import java.util.Locale;
 public class MaterialListBookScreen extends AbstractMaterialBookScreen {
     public static final Comparator<Material> MATERIAL_SORT_BY_DISPLAY_NAME = (m1, m2) -> {
         var partType = PartTypes.MAIN.get();
-        var name1 = m1.getDisplayName(MaterialInstance.of(m1), partType).getString().toLowerCase(Locale.ROOT);
-        var name2 = m2.getDisplayName(MaterialInstance.of(m2), partType).getString().toLowerCase(Locale.ROOT);
+        var name1 = m1.getSimpleName().getString().toLowerCase(Locale.ROOT);
+        var name2 = m2.getSimpleName().getString().toLowerCase(Locale.ROOT);
         return name1.compareTo(name2);
     };
     public static final Comparator<Material> MATERIAL_SORT_BY_ID = (m1, m2) -> {

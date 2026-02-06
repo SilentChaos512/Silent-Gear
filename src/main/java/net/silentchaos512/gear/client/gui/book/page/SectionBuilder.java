@@ -2,7 +2,9 @@ package net.silentchaos512.gear.client.gui.book.page;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.client.gui.book.page.element.EmptyPageElement;
+import net.silentchaos512.gear.client.gui.book.page.element.LabelPageElement;
 import net.silentchaos512.gear.client.gui.book.page.element.PageElement;
 
 import java.util.ArrayList;
@@ -22,6 +24,10 @@ public class SectionBuilder {
         this.font = font;
     }
 
+    public int getCurrentPageCount() {
+        return output.size() + (currentPageElements.isEmpty() ? 0 : 1);
+    }
+
     public void add(PageElement element) {
         var elementHeight = element.getHeight(this.font);
         if (!this.currentPageElements.isEmpty() && this.currentPageHeight + elementHeight >= Page.PAGE_HEIGHT) {
@@ -35,6 +41,26 @@ public class SectionBuilder {
             add(new EmptyPageElement(Page.PAGE_HEIGHT));
         }
         finishCurrentPage();
+    }
+
+    public void addPageBreakIfNotEmpty() {
+        finishCurrentPage();
+    }
+
+    public void addEmpty(int height) {
+        add(new EmptyPageElement(height));
+    }
+
+    public void addEmptyLines(int lines) {
+        addEmpty(lines * (font.lineHeight + PageElement.VERTICAL_PADDING));
+    }
+
+    public void addLabel(Component text) {
+        add(new LabelPageElement(text, LabelPageElement.Alignment.LEFT));
+    }
+
+    public void addLabel(Component text, LabelPageElement.Alignment alignment) {
+        add(new LabelPageElement(text, alignment));
     }
 
     public List<Page> build() {

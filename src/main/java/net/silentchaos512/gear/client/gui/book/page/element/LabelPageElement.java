@@ -6,9 +6,21 @@ import net.silentchaos512.gear.client.gui.book.AbstractMaterialBookScreen;
 import net.silentchaos512.gear.client.gui.book.page.Page;
 import net.silentchaos512.gear.client.gui.component.LabelWidget;
 
-public record LabelPageElement(Component text, float scale) implements PageElement {
+public record LabelPageElement(Component text, float scale, Alignment alignment) implements PageElement {
+    public enum Alignment {
+        LEFT, CENTER, RIGHT
+    }
+
     public LabelPageElement(Component text) {
-        this(text, 1.0f);
+        this(text, 1.0f, Alignment.CENTER);
+    }
+
+    public LabelPageElement(Component text, float scale) {
+        this(text, scale, Alignment.CENTER);
+    }
+
+    public LabelPageElement(Component text, Alignment alignment) {
+        this(text, 1.0f, alignment);
     }
 
     @Override
@@ -21,7 +33,11 @@ public record LabelPageElement(Component text, float scale) implements PageEleme
                 )
         );
         widget.setScale(this.scale);
-        widget.alignCenter();
+        switch (alignment) {
+            case LEFT -> widget.alignLeft();
+            case CENTER -> widget.alignCenter();
+            case RIGHT -> widget.alignRight();
+        }
         widget.setColor(0x0);
     }
 
