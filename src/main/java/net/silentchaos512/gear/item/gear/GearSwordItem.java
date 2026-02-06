@@ -13,6 +13,7 @@ import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearWeapon;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
+import net.silentchaos512.gear.setup.SgTags;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -34,7 +35,8 @@ public class GearSwordItem extends BasicGearItem implements GearWeapon {
     public Tool createToolProperties(ItemStack gear, GearPropertiesData properties, HolderGetter<Block> blocks) {
         return new Tool(
                 List.of(
-                        Tool.Rule.minesAndDrops(HolderSet.direct(Holder.direct(Blocks.COBWEB)), 15.0F),
+//                        Tool.Rule.minesAndDrops(HolderSet.direct(Holder.direct(Blocks.COBWEB)), 15.0F),
+                        Tool.Rule.minesAndDrops(blocks.getOrThrow(SgTags.Blocks.SWORD_HIGH_EFFICIENT), 15.0f),
                         Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
                         Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f)
                 ),

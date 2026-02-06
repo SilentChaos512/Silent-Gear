@@ -21,6 +21,7 @@ public final class SgTags {
         public static final TagKey<Block> MINEABLE_WITH_PAXEL = mod("mineable/paxel");
         public static final TagKey<Block> MINEABLE_WITH_PICKAXE_WITH_SPOON = mod("mineable/pickaxe_with_spoon");
         public static final TagKey<Block> MINEABLE_WITH_SICKLE = mod("mineable/sickle");
+        public static final TagKey<Block> SWORD_HIGH_EFFICIENT = mod("sword_high_efficient");
 
         public static final TagKey<Block> NEEDS_COPPER_TOOL = mod("needs_copper_tool");
         public static final TagKey<Block> INCORRECT_FOR_COPPER_TOOL = mod("incorrect_for_copper_tool");

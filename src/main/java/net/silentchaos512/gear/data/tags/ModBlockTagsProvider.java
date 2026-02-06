@@ -69,8 +69,9 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                         Blocks.WARPED_ROOTS,
                         SgBlocks.WILD_FLAX_PLANT.get(),
                         SgBlocks.WILD_FLUFFY_PLANT.get()
-                )
-        ;
+                );
+        tag(SgTags.Blocks.SWORD_HIGH_EFFICIENT)
+                .add(Blocks.COBWEB);
 
         tag(Tags.Blocks.NEEDS_NETHERITE_TOOL)
                 .addTag(SgTags.Blocks.ORES_AZURE_SILVER);
