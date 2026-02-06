@@ -10,6 +10,7 @@ import net.silentchaos512.gear.api.util.GearComponent;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
@@ -123,6 +124,17 @@ public interface Material extends GearComponent<MaterialInstance> {
 
     default Component getBaseMaterialName(@Nullable MaterialInstance material, PartType partType) {
         return getDisplayName(material, partType);
+    }
+
+    /**
+     * Gets a simple name for the material, which may differ from the name that ends up being display in the final gear
+     * item name. The returned value should make sense when displayed by itself, not necessarily when appended to other
+     * text. For example, "gold" instead of "golden" or "wood" instead of "wooden".
+     *
+     * @return A simple name for the material
+     */
+    default Component getSimpleName() {
+        return getDisplayName(MaterialInstance.of(this), PartTypes.MAIN.get());
     }
 
     Component getDisplayNamePrefix(PartType partType);
