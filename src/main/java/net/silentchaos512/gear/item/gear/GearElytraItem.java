@@ -58,7 +58,10 @@ public class GearElytraItem extends BasicGearItem implements GearArmor {
     @Override
     public void onRecalculatePost(ItemStack gear, @Nullable Player player, GearPropertiesData finalProperties) {
         super.onRecalculatePost(gear, player, finalProperties);
-        gear.set(DataComponents.GLIDER, Unit.INSTANCE);
+        if (!GearHelper.isBroken(gear)) {
+            gear.set(DataComponents.GLIDER, Unit.INSTANCE);
+        }
+
         gear.set(
                 DataComponents.EQUIPPABLE,
                 Equippable.builder(EquipmentSlot.CHEST)
@@ -67,8 +70,10 @@ public class GearElytraItem extends BasicGearItem implements GearArmor {
                         .setDamageOnHurt(false)
                         .build()
         );
+    }
 
-        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+    @Override
+    public void buildAttributes(ItemStack gear, ItemAttributeModifiers.Builder builder) {
         float armor = GearData.getProperties(gear).getNumber(GearProperties.ARMOR);
         if (armor > 0) {
             var armorType = ArmorType.CHESTPLATE;
@@ -76,8 +81,8 @@ public class GearElytraItem extends BasicGearItem implements GearArmor {
             var id = Identifier.withDefaultNamespace("armor." + armorType.getName());
             builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
         }
-        this.buildAttributes(gear, builder);
-        gear.set(DataComponents.ATTRIBUTE_MODIFIERS, builder.build());
+
+        super.buildAttributes(gear, builder);
     }
 
     @Override

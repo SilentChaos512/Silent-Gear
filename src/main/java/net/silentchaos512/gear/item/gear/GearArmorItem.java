@@ -49,46 +49,40 @@ public class GearArmorItem extends BasicGearItem implements GearArmor {
     @Override
     public void onRecalculatePost(ItemStack gear, @Nullable Player player, GearPropertiesData finalProperties) {
         super.onRecalculatePost(gear, player, finalProperties);
-        if (!GearHelper.isBroken(gear)) {
-            // Set equippable data
-            var construction = GearData.getConstruction(gear);
-            var primaryMaterial = construction.getMainTextureMaterialOrPlaceholder();
-            if (primaryMaterial.isValid()) {
-                var equippableInfo = primaryMaterial.get().getEquippableInfo();
-                gear.set(
-                        DataComponents.EQUIPPABLE,
-                        Equippable.builder(this.armorType.getSlot())
-                                .setEquipSound(equippableInfo.equipSound())
-                                .setAsset(equippableInfo.assetId())
-                                .build()
-                );
-            }
-
-            // Attach armor color
-            var primaryPart = construction.getCoatingOrMainPart();
-            if (primaryPart != null) {
-                gear.set(DataComponents.DYED_COLOR, new DyedItemColor(primaryPart.getColor(gear)));
-            }
-
-            // Set attribute modifiers for armor
-            var properties = GearData.getProperties(gear);
-            float armor = properties.getNumber(GearProperties.ARMOR);
-            float toughness = properties.getNumber(GearProperties.ARMOR_TOUGHNESS);
-            float knockbackResistance = properties.getNumber(GearProperties.KNOCKBACK_RESISTANCE) / 10f;
-            float magicArmor = properties.getNumber(GearProperties.MAGIC_ARMOR);
-            ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
-            EquipmentSlotGroup equipmentSlotGroup = EquipmentSlotGroup.bySlot(this.armorType.getSlot());
-            Identifier id = Identifier.withDefaultNamespace("armor." + this.armorType.getName());
-            builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
-            builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id, toughness, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
-            if (knockbackResistance > 0f) {
-                builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(id, knockbackResistance, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
-            }
-            if (magicArmor > 0f) {
-                builder.add(SgAttributes.MAGIC_ARMOR, new AttributeModifier(id, magicArmor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
-            }
-            gear.set(DataComponents.ATTRIBUTE_MODIFIERS, builder.build());
+        // Set equippable data
+        var construction = GearData.getConstruction(gear);
+        var primaryMaterial = construction.getMainTextureMaterialOrPlaceholder();
+        if (primaryMaterial.isValid()) {
+            var equippableInfo = primaryMaterial.get().getEquippableInfo();
+            gear.set(
+                    DataComponents.EQUIPPABLE,
+                    Equippable.builder(this.armorType.getSlot())
+                            .setEquipSound(equippableInfo.equipSound())
+                            .setAsset(equippableInfo.assetId())
+                            .build()
+            );
         }
+    }
+
+    @Override
+    public void buildAttributes(ItemStack gear, ItemAttributeModifiers.Builder builder) {
+        var properties = GearData.getProperties(gear);
+        float armor = properties.getNumber(GearProperties.ARMOR);
+        float toughness = properties.getNumber(GearProperties.ARMOR_TOUGHNESS);
+        float knockbackResistance = properties.getNumber(GearProperties.KNOCKBACK_RESISTANCE) / 10f;
+        float magicArmor = properties.getNumber(GearProperties.MAGIC_ARMOR);
+        EquipmentSlotGroup equipmentSlotGroup = EquipmentSlotGroup.bySlot(this.armorType.getSlot());
+        Identifier id = Identifier.withDefaultNamespace("armor." + this.armorType.getName());
+        builder.add(Attributes.ARMOR, new AttributeModifier(id, armor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+        builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id, toughness, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+        if (knockbackResistance > 0f) {
+            builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(id, knockbackResistance, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+        }
+        if (magicArmor > 0f) {
+            builder.add(SgAttributes.MAGIC_ARMOR, new AttributeModifier(id, magicArmor, AttributeModifier.Operation.ADD_VALUE), equipmentSlotGroup);
+        }
+
+        super.buildAttributes(gear, builder);
     }
 
     //region Stats and attributes

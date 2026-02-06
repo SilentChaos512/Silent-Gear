@@ -123,9 +123,18 @@ public final class GearHelper {
         return true;
     }
 
+    public static boolean isAttackingItem(ItemStack gear) {
+        var type = getType(gear);
+        return type.matches(GearTypes.MELEE_WEAPON.get(), false) || type.matches(GearTypes.HARVEST_TOOL.get());
+    }
+
     //region Attribute modifiers
 
     public static void onAddAttackDamageModifier(ItemStack stack, float value, ItemAttributeModifiers.Builder builder) {
+        if (!isAttackingItem(stack)) {
+            return;
+        }
+
         float adjustedValue = isBroken(stack) ? 1f : Math.max(value, 0f);
         builder.add(
                 Attributes.ATTACK_DAMAGE,
@@ -139,9 +148,10 @@ public final class GearHelper {
     }
 
     public static void onAddAttackSpeedModifier(ItemStack stack, float value, ItemAttributeModifiers.Builder builder) {
-        if (!(stack.getItem() instanceof GearTool)) {
+        if (!isAttackingItem(stack)) {
             return;
         }
+
         float speed = value - 4.0f;
         if (isBroken(stack)) {
             speed += BROKEN_ATTACK_SPEED_CHANGE;

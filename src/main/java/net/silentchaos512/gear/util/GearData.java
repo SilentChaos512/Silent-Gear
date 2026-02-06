@@ -175,9 +175,15 @@ public final class GearData {
 
     private static void setGearAttributeModifiers(ItemStack gear, GearPropertiesData finalProperties) {
         ItemAttributeModifiers.Builder attributesBuilder = ItemAttributeModifiers.builder();
+        // Let items handle base modifiers
+        if (gear.getItem() instanceof GearItem gearItem) {
+            gearItem.buildAttributes(gear, attributesBuilder);
+        }
+        // Some properties append their own attribute modifiers
         for (GearProperty<?, ? extends GearPropertyValue<?>> property : finalProperties.keySet()) {
             addAttributesForProperty(gear, attributesBuilder, finalProperties, property);
         }
+        // Let traits add modifiers
         for (TraitInstance inst : TraitHelper.getTraits(gear)) {
             var context = new TraitActionContext(null, inst, gear);
             inst.getTrait().onGetAttributeModifiers(context, attributesBuilder);
