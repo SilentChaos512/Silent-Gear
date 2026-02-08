@@ -2,25 +2,21 @@ package net.silentchaos512.gear.client.event;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyGroups;
-import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.client.tooltip.MaterialTooltips;
+import net.silentchaos512.gear.client.tooltip.PartTooltips;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
@@ -34,8 +30,9 @@ import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.event.ClientTicks;
 import net.silentchaos512.lib.util.Color;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public final class TooltipHandler {
     public static final TooltipHandler INSTANCE = new TooltipHandler();
@@ -105,42 +102,34 @@ public final class TooltipHandler {
     }
 
     private static void onMaterialTooltip(ItemTooltipEvent event, ItemStack stack, MaterialInstance material) {
-        boolean keyHeld = KeyTracker.isDisplayPropertiesDown();
+        boolean propertiesKeyHeld = KeyTracker.isDisplayPropertiesDown();
 
         if (event.getFlags().isAdvanced()) {
-            event.getToolTip().add(Component.literal("Material ID: " + material.getId()).withStyle(ChatFormatting.DARK_GRAY));
-            var packName = SgRegistries.MATERIAL.getPackName(material.get());
-            event.getToolTip().add(Component.literal("Material data pack: " + packName).withStyle(ChatFormatting.DARK_GRAY));
+            MaterialTooltips.advancedInfo(event.getToolTip(), material);
         }
 
         if (!Config.Client.showMaterialTooltips.get()) {
             return;
         }
 
-        if (keyHeld) {
-            event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tooltip.material"), Color.GOLD));
-        } else {
-            event.getToolTip().add(TextUtil.withColor(TextUtil.misc("tooltip.material"), Color.GOLD)
-                    .append(Component.literal(" ")
-                            .append(TextUtil.withColor(TextUtil.keyBinding(KeyTracker.DISPLAY_PROPERTIES), ChatFormatting.GRAY))));
-        }
+        MaterialTooltips.materialHeader(event.getToolTip(), material, propertiesKeyHeld);
 
-        getMaterialModifierLines(event, material);
+        MaterialTooltips.materialModifierLines(event.getToolTip(), material);
 
-        if (keyHeld) {
-            getMaterialCategoriesLine(material).ifPresent(t -> event.getToolTip().add(t));
+        if (propertiesKeyHeld) {
+            MaterialTooltips.materialCategories(event.getToolTip(), material);
 
             List<PartType> partTypes = getSortedPartTypes(material.getPartTypes());
             if (!partTypes.isEmpty()) {
                 int index = KeyTracker.getMaterialCycleIndex(partTypes.size());
-                PartType partType = partTypes.get(index);
-                event.getToolTip().add(buildPartTypeHeader(partTypes, partType));
+                PartType selectedPartType = partTypes.get(index);
+                MaterialTooltips.partTypesPagesHeader(event.getToolTip(), partTypes, selectedPartType);
 
-                event.getToolTip().add(Component.translatable("misc.silentgear.tooltip.properties").withStyle(ChatFormatting.GOLD));
-                getMaterialStatLines(event, partType, material);
+                MaterialTooltips.propertiesHeader(event.getToolTip(), material);
+                MaterialTooltips.propertiesLines(event.getToolTip(), event.getFlags().isAdvanced(), selectedPartType, material);
             }
         } else if (event.getFlags().isAdvanced()) {
-            addJeiSearchTerms(event, material);
+            MaterialTooltips.addJeiSearchTerms(event.getToolTip(), material);
         }
     }
 
@@ -152,56 +141,6 @@ public final class TooltipHandler {
             }
         }
         return result;
-    }
-
-    private static void addJeiSearchTerms(ItemTooltipEvent event, MaterialInstance material) {
-        // Add search terms to allow advanced filtering in JEI (requires the
-        // `SearchAdvancedTooltips` JEI config to be set)
-
-        StringBuilder b = new StringBuilder();
-
-        for (IMaterialCategory category : material.getCategories()) {
-            b.append(category.getName()).append(" ");
-        }
-
-        Collection<String> traits = new HashSet<>();
-
-        for (PartType partType : material.getPartTypes()) {
-            b.append(partType.getDisplayName().getString()).append(" ");
-            for (TraitInstance trait : material.getTraits(PartGearKey.ofAll(partType))) {
-                traits.add(trait.getTrait().getDisplayName(0).getString());
-            }
-        }
-
-        for (String str : traits) {
-            b.append(str).append(" ");
-        }
-
-        event.getToolTip().add(Component.literal(b.toString().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC));
-    }
-
-    private static Optional<Component> getMaterialCategoriesLine(MaterialInstance material) {
-        Collection<IMaterialCategory> categories = material.getCategories();
-        if (!categories.isEmpty()) {
-            Component text = TextUtil.separatedList(categories.stream().map(IMaterialCategory::getDisplayName).collect(Collectors.toList()))
-                    .withStyle(ChatFormatting.ITALIC);
-            return Optional.of(TextUtil.misc("materialCategories", text));
-        }
-        return Optional.empty();
-    }
-
-    private static Component buildPartTypeHeader(Collection<PartType> types, PartType selectedType) {
-        MutableComponent ret = Component.literal("| ").withStyle(ChatFormatting.GRAY);
-        for (PartType type : types) {
-            Color color = type == selectedType ? Color.AQUAMARINE : MC_DARK_GRAY;
-            Component text = TextUtil.withColor(type.getDisplayName(), color);
-            ret.append(text).append(" | ");
-        }
-
-        Component keyHint = TextUtil.misc("tooltip.material.keyHint",
-                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
-                TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE));
-        return ret.append(keyHint);
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, PartInstance part) {
@@ -267,20 +206,13 @@ public final class TooltipHandler {
         return ClientTicks.ticksInGame() / 20 % numTraits;
     }
 
-    private static void getMaterialModifierLines(ItemTooltipEvent event, MaterialInstance material) {
-        for (IMaterialModifier modifier : material.getModifiers()) {
-            modifier.appendTooltip(event.getToolTip());
-        }
-    }
-
     private static void getPartStatLines(ItemTooltipEvent event, PartInstance part) {
         GearType gearType = getPartGearType(part);
         TextListBuilder builder = new TextListBuilder();
 
         for (GearProperty<?, ?> property : getPartRelevantProperties(part, gearType)) {
-            var temp_propertyKey = SgRegistries.GEAR_PROPERTY.getKey(property);
             var modifiers = new ArrayList<GearPropertyValue<?>>(part.getPropertyModifiers(part.getType(), PropertyKey.of(property, gearType)));
-            getStatTooltipLine(event, part.getGearType(), property, modifiers).ifPresent(builder::add);
+            PartTooltips.getStatTooltipLine(event.getToolTip(), event.getFlags().isAdvanced(), part.getGearType(), property, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
     }
@@ -302,131 +234,5 @@ public final class TooltipHandler {
             }
         }
         return GearTypes.ALL.get();
-    }
-
-    private static void getMaterialStatLines(ItemTooltipEvent event, PartType partType, MaterialInstance material) {
-        TextListBuilder builder = new TextListBuilder();
-
-        for (GearProperty<?, ?> property : SgRegistries.GEAR_PROPERTY) {
-            var temp_propertyKey = SgRegistries.GEAR_PROPERTY.getKey(property);
-            getMaterialStatModLines(event, partType, material, builder, property);
-        }
-
-        event.getToolTip().addAll(builder.build());
-    }
-
-    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> void getMaterialStatModLines(
-            ItemTooltipEvent event,
-            PartType partType,
-            MaterialInstance material,
-            TextListBuilder builder,
-            P property
-    ) {
-        Collection<V> modsAll = material.getPropertyModifiers(partType, PropertyKey.of(property, GearTypes.ALL.get()));
-        //noinspection unchecked
-        Optional<MutableComponent> head = getStatTooltipLine(event, GearTypes.ALL.get(), property, (Collection<GearPropertyValue<?>>) modsAll);
-        builder.add(head.orElseGet(() -> TextUtil.withColor(property.getDisplayName(), property.getGroup().getColor())));
-
-        builder.indent();
-
-        int subCount = 0;
-        List<PropertyKey<?, ?>> keysForStat = material.get().getPropertyKeys(material, partType).stream()
-                .filter(key -> key.property().equals(property))
-                .toList();
-
-        for (var key : keysForStat) {
-            if (key.gearType() != GearTypes.ALL.get()) {
-                //noinspection unchecked
-                var castedKey = (PropertyKey<T, V>) key;
-                Collection<V> mods = material.getPropertyModifiers(partType, castedKey);
-                Optional<MutableComponent> line = getSubStatTooltipLine(event, partType, castedKey.property(), key.gearType(), mods);
-
-                if (line.isPresent()) {
-                    builder.add(line.get());
-                    ++subCount;
-                }
-            }
-        }
-
-        if (subCount == 0 && head.isEmpty()) {
-            builder.removeLast();
-        }
-
-        builder.unindent();
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> getStatTooltipLine(
-            ItemTooltipEvent event,
-            GearType gearType,
-            GearProperty<?, ?> propertyIn,
-            Collection<GearPropertyValue<?>> modifiersIn
-    ) {
-        if (!modifiersIn.isEmpty()) {
-            // Cast to true types
-            var property = (P) propertyIn;
-            var modifiers = (Collection<V>) modifiersIn;
-            T value = property.compute(property.getZeroValue(), false, gearType, modifiers);
-            boolean isZero = isTrueZeroValue(property, value, modifiers);
-            if (event.getFlags().isAdvanced() || !isZero) {
-                Color nameColor = isZero ? MC_DARK_GRAY : property.getGroup().getColor();
-                Color statColor = isZero ? MC_DARK_GRAY : Color.WHITE;
-
-                MutableComponent nameStr = TextUtil.withColor(property.getDisplayName(), nameColor);
-                var uncoloredFormattedText = GearPropertyMap.formatText(
-                        modifiers,
-                        property,
-                        property.getPreferredDecimalPlaces(property.valueOf(value))
-                );
-                MutableComponent statListText = TextUtil.withColor(uncoloredFormattedText, statColor);
-
-                return Optional.of(Component.translatable("property.silentgear.displayFormat", nameStr, statListText));
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> getSubStatTooltipLine(
-            ItemTooltipEvent event,
-            PartType partType,
-            P property,
-            GearType gearType,
-            Collection<V> modifiers
-    ) {
-        if (!modifiers.isEmpty()) {
-            T value = property.compute(property.getZeroValue(), modifiers);
-            boolean isZero = isTrueZeroValue(property, value, modifiers);
-            if (event.getFlags().isAdvanced() || !isZero) {
-                Color color = isZero ? MC_DARK_GRAY : Color.WHITE;
-
-                MutableComponent nameStr = TextUtil.withColor(gearType.getDisplayName().copy(), color);
-                var uncoloredFormattedText = GearPropertyMap.formatText(
-                        modifiers,
-                        property,
-                        property.getPreferredDecimalPlaces(property.valueOf(value))
-                );
-                MutableComponent statListText = TextUtil.withColor(uncoloredFormattedText, color);
-
-                return Optional.of(Component.translatable("property.silentgear.displayFormat", nameStr, statListText));
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    private static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> boolean isTrueZeroValue(P property, T value, Collection<V> modifiers) {
-        if (!property.isZero(value)) {
-            // The computed value is not zero
-            return false;
-        }
-        for (V modifier : modifiers) {
-            if (!property.isZero(modifier.value())) {
-                // The modifier value is not zero (multiplier, etc.)
-                return false;
-            }
-        }
-        // The computed value and all modifiers are zero
-        return true;
     }
 }
