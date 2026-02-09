@@ -126,7 +126,7 @@ public final class TooltipHandler {
                 MaterialTooltips.partTypesPagesHeader(event.getToolTip(), partTypes, selectedPartType);
 
                 MaterialTooltips.propertiesHeader(event.getToolTip(), material);
-                MaterialTooltips.propertiesLines(event.getToolTip(), event.getFlags().isAdvanced(), selectedPartType, material);
+                MaterialTooltips.propertiesLines(event.getToolTip(), event.getFlags().isAdvanced(), true, selectedPartType, material);
             }
         } else if (event.getFlags().isAdvanced()) {
             MaterialTooltips.addJeiSearchTerms(event.getToolTip(), material);
@@ -212,7 +212,7 @@ public final class TooltipHandler {
 
         for (GearProperty<?, ?> property : getPartRelevantProperties(part, gearType)) {
             var modifiers = new ArrayList<GearPropertyValue<?>>(part.getPropertyModifiers(part.getType(), PropertyKey.of(property, gearType)));
-            PartTooltips.getStatTooltipLine(event.getToolTip(), event.getFlags().isAdvanced(), part.getGearType(), property, modifiers).ifPresent(builder::add);
+            PartTooltips.propertyLine(event.getFlags().isAdvanced(), true, part.getGearType(), property, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
     }

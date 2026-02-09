@@ -74,19 +74,19 @@ public class MaterialTooltips extends GearComponentTooltips {
         tooltip.add(Component.translatable("misc.silentgear.tooltip.properties").withStyle(ChatFormatting.GOLD));
     }
 
-    public static void propertiesLines(List<Component> tooltip, boolean showHiddenValues, PartType partType, MaterialInstance material) {
+    public static void propertiesLines(List<Component> tooltip, boolean showHiddenValues, boolean addColors, PartType partType, MaterialInstance material) {
         TextListBuilder builder = new TextListBuilder();
 
         for (GearProperty<?, ?> property : SgRegistries.GEAR_PROPERTY) {
-            propertyModifierLinesForProperty(tooltip, showHiddenValues, partType, material, builder, property);
+            propertyModifierLinesForProperty(showHiddenValues, addColors, partType, material, builder, property);
         }
 
         tooltip.addAll(builder.build());
     }
 
     public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> void propertyModifierLinesForProperty(
-            List<Component> tooltip,
             boolean showHiddenValues,
+            boolean addColors,
             PartType partType,
             MaterialInstance material,
             TextListBuilder builder,
@@ -94,8 +94,8 @@ public class MaterialTooltips extends GearComponentTooltips {
     ) {
         Collection<V> modsAll = material.getPropertyModifiers(partType, PropertyKey.of(property, GearTypes.ALL.get()));
         //noinspection unchecked
-        Optional<MutableComponent> head = getStatTooltipLine(tooltip, showHiddenValues, GearTypes.ALL.get(), property, (Collection<GearPropertyValue<?>>) modsAll);
-        builder.add(head.orElseGet(() -> TextUtil.withColor(property.getDisplayName(), property.getGroup().getColor())));
+        Optional<MutableComponent> head = propertyLine(showHiddenValues, addColors, GearTypes.ALL.get(), property, (Collection<GearPropertyValue<?>>) modsAll);
+        builder.add(head.orElseGet(() -> withOptionalColor(property.getDisplayName(), property.getGroup().getColor(), addColors)));
 
         builder.indent();
 
@@ -109,7 +109,7 @@ public class MaterialTooltips extends GearComponentTooltips {
                 //noinspection unchecked
                 var castedKey = (PropertyKey<T, V>) key;
                 Collection<V> mods = material.getPropertyModifiers(partType, castedKey);
-                Optional<MutableComponent> line = subPropertyLine(tooltip, showHiddenValues, castedKey.property(), key.gearType(), mods);
+                Optional<MutableComponent> line = subPropertyLine(showHiddenValues, addColors, castedKey.property(), key.gearType(), mods);
 
                 if (line.isPresent()) {
                     builder.add(line.get());

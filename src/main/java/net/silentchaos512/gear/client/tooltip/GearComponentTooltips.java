@@ -11,14 +11,13 @@ import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public class GearComponentTooltips {
     @SuppressWarnings("unchecked")
-    public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> getStatTooltipLine(
-            List<Component> tooltip,
+    public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> propertyLine(
             boolean showHiddenValues,
+            boolean addColors,
             GearType gearType,
             GearProperty<?, ?> propertyIn,
             Collection<GearPropertyValue<?>> modifiersIn
@@ -33,13 +32,13 @@ public class GearComponentTooltips {
                 Color nameColor = isZero ? TooltipHandler.MC_DARK_GRAY : property.getGroup().getColor();
                 Color statColor = isZero ? TooltipHandler.MC_DARK_GRAY : Color.WHITE;
 
-                MutableComponent nameStr = TextUtil.withColor(property.getDisplayName(), nameColor);
+                MutableComponent nameStr = withOptionalColor(property.getDisplayName(), nameColor, addColors);
                 var uncoloredFormattedText = GearPropertyMap.formatText(
                         modifiers,
                         property,
                         property.getPreferredDecimalPlaces(property.valueOf(value))
                 );
-                MutableComponent statListText = TextUtil.withColor(uncoloredFormattedText, statColor);
+                MutableComponent statListText = withOptionalColor(uncoloredFormattedText, statColor, addColors);
 
                 return Optional.of(Component.translatable("property.silentgear.displayFormat", nameStr, statListText));
             }
@@ -49,8 +48,8 @@ public class GearComponentTooltips {
     }
 
     protected static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> subPropertyLine(
-            List<Component> tooltip,
             boolean showHiddenValues,
+            boolean addColors,
             P property,
             GearType gearType,
             Collection<V> modifiers
@@ -61,13 +60,13 @@ public class GearComponentTooltips {
             if (showHiddenValues || !isZero) {
                 Color color = isZero ? TooltipHandler.MC_DARK_GRAY : Color.WHITE;
 
-                MutableComponent nameStr = TextUtil.withColor(gearType.getDisplayName().copy(), color);
+                MutableComponent nameStr = withOptionalColor(gearType.getDisplayName().copy(), color, addColors);
                 var uncoloredFormattedText = GearPropertyMap.formatText(
                         modifiers,
                         property,
                         property.getPreferredDecimalPlaces(property.valueOf(value))
                 );
-                MutableComponent statListText = TextUtil.withColor(uncoloredFormattedText, color);
+                MutableComponent statListText = withOptionalColor(uncoloredFormattedText, color, addColors);
 
                 return Optional.of(Component.translatable("property.silentgear.displayFormat", nameStr, statListText));
             }
@@ -93,5 +92,12 @@ public class GearComponentTooltips {
         }
         // The computed value and all modifiers are zero
         return true;
+    }
+
+    public static MutableComponent withOptionalColor(MutableComponent text, Color color, boolean addColors) {
+        if (addColors) {
+            return TextUtil.withColor(text, color);
+        }
+        return text;
     }
 }

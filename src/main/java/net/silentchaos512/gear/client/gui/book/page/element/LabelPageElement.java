@@ -25,9 +25,11 @@ public record LabelPageElement(Component text, float scale, Alignment alignment)
 
     @Override
     public void init(AbstractMaterialBookScreen.ComponentAccess componentAccess, Font font, int pageX, int pageY, int pageIndex) {
+        int scaledHeight = Math.round((font.lineHeight + VERTICAL_PADDING) * this.scale);
+        int scaledWidth = Math.round(Page.PAGE_WIDTH / this.scale);
         var widget = componentAccess.addRenderableOnly(
                 new LabelWidget(
-                        pageX, pageY, Page.PAGE_WIDTH, Math.round((font.lineHeight + VERTICAL_PADDING) / this.scale),
+                        pageX, pageY, scaledWidth, scaledHeight,
                         this.text,
                         font
                 )
@@ -43,6 +45,6 @@ public record LabelPageElement(Component text, float scale, Alignment alignment)
 
     @Override
     public int getHeight(Font font) {
-        return Math.round((font.lineHeight + VERTICAL_PADDING) / this.scale);
+        return Math.round((font.lineHeight + VERTICAL_PADDING) * this.scale);
     }
 }
