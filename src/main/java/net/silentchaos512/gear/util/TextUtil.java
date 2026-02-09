@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.lib.util.Color;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 public final class TextUtil {
@@ -39,6 +40,17 @@ public final class TextUtil {
     public static MutableComponent withColor(MutableComponent text, ChatFormatting color) {
         int colorCode = color.getColor() != null ? color.getColor() : Color.VALUE_WHITE;
         return withColor(text, colorCode);
+    }
+
+    public static MutableComponent withOptionalColor(MutableComponent text, @Nullable Color color) {
+        return color == null ? text : withColor(text, color);
+    }
+
+    public static MutableComponent withOptionalColor(MutableComponent text, Color color, boolean addColors) {
+        if (addColors) {
+            return TextUtil.withColor(text, color);
+        }
+        return text;
     }
 
     public static MutableComponent separatedList(Collection<Component> list) {

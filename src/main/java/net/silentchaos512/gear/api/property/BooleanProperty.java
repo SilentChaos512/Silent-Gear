@@ -10,6 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 
 import java.util.Collection;
@@ -71,15 +72,15 @@ public class BooleanProperty extends GearProperty<Boolean, BooleanPropertyValue>
     }
 
     @Override
-    public Component formatValue(BooleanPropertyValue value, FormatContext formatContext) {
+    public Component formatValue(BooleanPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
         return value.value
                 ? Component.translatable("property.silentgear.boolean_true")
                 : Component.translatable("property.silentgear.boolean_false");
     }
 
     @Override
-    public MutableComponent formatValueWithColor(BooleanPropertyValue value, boolean addColor, FormatContext formatContext) {
-        return formatValue(value, formatContext).plainCopy();
+    public MutableComponent formatValueWithColor(BooleanPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
+        return formatValue(value, formatContext, FormatColorScheme.NO_COLORS).plainCopy();
     }
 
     @Override

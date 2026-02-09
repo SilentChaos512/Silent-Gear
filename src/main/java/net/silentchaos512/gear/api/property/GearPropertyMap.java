@@ -10,6 +10,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.PropertyKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.CodecUtils;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class GearPropertyMap implements Multimap<PropertyKey<?, ?>, GearPropertyValue<?>> {
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static final Codec<GearPropertyMap> CODEC = Codec.dispatchedMap(
             PropertyKey.CODEC,
             key -> CodecUtils.singleOrListCodec(key.property().codec())
@@ -63,29 +65,21 @@ public class GearPropertyMap implements Multimap<PropertyKey<?, ?>, GearProperty
     public static Component formatTextUnchecked(
             Collection<? extends GearPropertyValue<?>> mods,
             GearProperty<?, ?> property,
-            boolean addModColors
+            FormatColorScheme colorScheme
     ) {
-        return property.formatModifiersUnchecked(mods, addModColors, GearProperty.FormatContext.ANY);
-    }
-
-    public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> MutableComponent formatText(
-            Collection<V> mods,
-            P property,
-            int maxDecimalPlaces
-    ) {
-        return formatText(mods, property, maxDecimalPlaces, false);
+        return property.formatModifiersUnchecked(mods, GearProperty.FormatContext.ANY, colorScheme);
     }
 
     public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> MutableComponent formatText(
             Collection<V> mods,
             P property,
             int maxDecimalPlaces,
-            boolean addModColors
+            FormatColorScheme colorScheme
     ) {
         if (mods.size() == 1) {
             V inst = mods.iterator().next();
             int decimalPlaces = property.getPreferredDecimalPlaces(inst);
-            return property.formatValueWithColor(inst, addModColors, GearProperty.FormatContext.ANY);
+            return property.formatValueWithColor(inst, GearProperty.FormatContext.ANY, colorScheme);
         }
 
         // Sort modifiers by operation
@@ -96,7 +90,7 @@ public class GearPropertyMap implements Multimap<PropertyKey<?, ?>, GearProperty
             if (!result.getSiblings().isEmpty()) {
                 result.append(", ");
             }
-            result.append(property.formatValueWithColor(inst, addModColors, GearProperty.FormatContext.ANY));
+            result.append(property.formatValueWithColor(inst, GearProperty.FormatContext.ANY, colorScheme));
         }
 
         return result;

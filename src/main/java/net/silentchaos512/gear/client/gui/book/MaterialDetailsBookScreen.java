@@ -6,6 +6,7 @@ import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
 import net.silentchaos512.gear.client.gui.book.page.element.LabelPageElement;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.client.tooltip.MaterialTooltips;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import org.jetbrains.annotations.Nullable;
@@ -27,8 +28,11 @@ public class MaterialDetailsBookScreen extends AbstractMaterialBookScreen {
             builder.addLabel(Component.translatable("part.silentgear.type", partType.getDisplayName()));
             builder.addEmptyLines(1);
 
+            // TODO: Add a special note if the material is an additive, like "This material is an additive and can only
+            //  be combined with other materials."
+
             List<Component> propertiesLines = new ArrayList<>();
-            MaterialTooltips.propertiesLines(propertiesLines, false, false, partType, materialInstance);
+            MaterialTooltips.propertiesLines(propertiesLines, false, false, FormatColorScheme.DARK_GREY_ZERO_OR_NO_COLOR, partType, materialInstance);
             for (Component line : propertiesLines) {
                 builder.add(new LabelPageElement(line, 0.6f, LabelPageElement.Alignment.LEFT));
             }
