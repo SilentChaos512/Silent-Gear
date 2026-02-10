@@ -34,7 +34,7 @@ public class MaterialDetailsBookScreen extends AbstractMaterialBookScreen {
             List<Component> propertiesLines = new ArrayList<>();
             MaterialTooltips.propertiesLines(propertiesLines, false, false, FormatColorScheme.DARK_GREY_ZERO_OR_NO_COLOR, partType, materialInstance);
             for (Component line : propertiesLines) {
-                builder.add(new LabelPageElement(line, 0.6f, LabelPageElement.Alignment.LEFT));
+                builder.add(new LabelPageElement(line, 0.6f, LabelPageElement.Alignment.LEFT, true, true));
             }
 
             builder.addPageBreakIfNotEmpty();

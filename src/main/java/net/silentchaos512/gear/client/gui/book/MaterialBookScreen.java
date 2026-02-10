@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.client.gui.book;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.client.gui.book.page.Page;
 import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
 import net.silentchaos512.gear.client.gui.book.page.element.ClickableLabelPageElement;
-import net.silentchaos512.gear.client.gui.book.page.element.EmptyPageElement;
 import net.silentchaos512.gear.client.gui.book.page.element.LabelPageElement;
 import net.silentchaos512.gear.client.gui.book.page.element.PageElement;
 import net.silentchaos512.gear.client.gui.component.LabelButton;
@@ -22,12 +22,12 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
         SectionBuilder builder = new SectionBuilder();
         // Title page
         var labelHeight = font.lineHeight + PageElement.VERTICAL_PADDING;
-        builder.add(new EmptyPageElement(Page.PAGE_HEIGHT / 4));
-        builder.add(new LabelPageElement(Component.translatable("gui.silentgear.material_book.title")));
-        builder.add(new EmptyPageElement(2 * labelHeight));
-        builder.add(new LabelPageElement(Component.translatable("gui.silentgear.material_book.title2"), 0.7f));
-        builder.add(new EmptyPageElement(labelHeight));
-        builder.add(new LabelPageElement(Component.literal("This book is a work in progress. Some elements may change.")));
+        builder.addEmpty(Page.PAGE_HEIGHT / 4);
+        builder.add(new LabelPageElement(Component.translatable("gui.silentgear.material_book.title"), 1.25f, LabelPageElement.Alignment.LEFT));
+        builder.addEmptyLines(1);
+        builder.add(new LabelPageElement(Component.translatable("gui.silentgear.material_book.title2"), 0.7f, LabelPageElement.Alignment.LEFT));
+        builder.addEmptyLines(1);
+        builder.addLabel(Component.literal("This book is a work in progress. Some elements may change.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.ITALIC));
         builder.addPageBreak();
         // Sort and display options
         builder.add(new ClickableLabelPageElement(Component.translatable("misc.silentgear.allMaterials.byName"), this::onPressAllMaterialsByName));
