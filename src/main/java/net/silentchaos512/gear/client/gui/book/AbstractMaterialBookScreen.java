@@ -5,14 +5,17 @@ import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.gui.book.page.Page;
 import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
+import net.silentchaos512.gear.client.gui.book.page.element.PageElement;
 import net.silentchaos512.gear.client.gui.component.TexturedButton;
 
 import javax.annotation.Nullable;
@@ -91,22 +94,41 @@ public class AbstractMaterialBookScreen extends Screen {
 
         var leftPage = this.getLeftPage();
         if (leftPage != null) {
-            leftPage.init(componentAccess, font, this.width / 2 - 130, 30, this.leftPageIndex);
+            int pageX = this.width / 2 - 130;
+            int pageY = 30;
+            leftPage.init(componentAccess, font, pageX, pageY, this.leftPageIndex);
+            addPageNumberLabel(pageX, pageY, this.leftPageIndex + 1);
         }
 
         var rightPage = this.getRightPage();
         if (rightPage != null) {
-            rightPage.init(componentAccess, font, this.width / 2 + 10, 30, this.leftPageIndex + 1);
+            int pageX = this.width / 2 + 10;
+            int pageY = 30;
+            rightPage.init(componentAccess, font, pageX, pageY, this.leftPageIndex + 1);
+            addPageNumberLabel(pageX, pageY, this.leftPageIndex + 2);
         }
+    }
+
+    private void addPageNumberLabel(int pageX, int pageY, int pageNumber) {
+        String pageNumberFormat = String.format("%d / %d", pageNumber, this.pages.size());
+        var width = font.width(pageNumberFormat);
+        var height = font.lineHeight + PageElement.VERTICAL_PADDING;
+        int x = pageX + Page.PAGE_WIDTH / 2 - width / 2;
+        int y = pageY + Page.PAGE_HEIGHT;
+        this.addRenderableOnly(new StringWidget(x, y, width, height, Component.literal(pageNumberFormat), this.font));
     }
 
     private void initCommonControls() {
         // Page Back
-        var pageBackwardSprites = new WidgetSprites(PAGE_BACKWARD, PAGE_BACKWARD, PAGE_BACKWARD_HIGHLIGHTED);
-        this.addRenderableWidget(new TexturedButton(true, this.width / 2 - 140, 199, 23, 13, pageBackwardSprites, button -> this.onPageBackward()));
+        if (this.leftPageIndex > 0) {
+            var pageBackwardSprites = new WidgetSprites(PAGE_BACKWARD, PAGE_BACKWARD, PAGE_BACKWARD_HIGHLIGHTED);
+            this.addRenderableWidget(new TexturedButton(true, this.width / 2 - 140, 199, 23, 13, pageBackwardSprites, button -> this.onPageBackward()));
+        }
         // Page Forward
-        var pageForwardSprites = new WidgetSprites(PAGE_FORWARD, PAGE_FORWARD, PAGE_FORWARD_HIGHLIGHTED);
-        this.addRenderableWidget(new TexturedButton(true, this.width / 2 + 117, 199, 23, 13, pageForwardSprites, button -> this.onPageForward()));
+        if (this.leftPageIndex < this.pages.size() - 2) {
+            var pageForwardSprites = new WidgetSprites(PAGE_FORWARD, PAGE_FORWARD, PAGE_FORWARD_HIGHLIGHTED);
+            this.addRenderableWidget(new TexturedButton(true, this.width / 2 + 117, 199, 23, 13, pageForwardSprites, button -> this.onPageForward()));
+        }
         // Page Return
         var pageReturnSprites = new WidgetSprites(PAGE_RETURN, PAGE_RETURN, PAGE_RETURN_HIGHLIGHTED);
         this.addRenderableWidget(new TexturedButton(false, this.width / 2 - 140, 7, 23, 13, pageReturnSprites, button -> this.onPageReturn()));
@@ -142,6 +164,7 @@ public class AbstractMaterialBookScreen extends Screen {
         }
     }
 
+    @SuppressWarnings({"UnusedReturnValue", "unused"})
     public record ComponentAccess(AbstractMaterialBookScreen screen) {
         public <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T widget) {
             return this.screen.addRenderableWidget(widget);
