@@ -1,9 +1,15 @@
 package net.silentchaos512.gear.client.gui.book;
 
+import net.minecraft.network.chat.Component;
 import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.property.GearProperty;
+import net.silentchaos512.gear.api.property.NumberPropertyValue;
+import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
 import net.silentchaos512.gear.client.gui.book.page.element.MaterialEntryPageElement;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import javax.annotation.Nullable;
@@ -25,8 +31,8 @@ public class MaterialListBookScreen extends AbstractMaterialBookScreen {
         return name1.compareTo(name2);
     };
 
-    public MaterialListBookScreen(@Nullable MaterialBookScreen previousScreen, List<Material> materials, Comparator<Material> materialSortMethod) {
-        super(previousScreen, createPages(materials, materialSortMethod));
+    public MaterialListBookScreen(@Nullable MaterialBookScreen previousScreen, Component title, List<Material> materials, Comparator<Material> materialSortMethod) {
+        super(previousScreen, title, createPages(materials, materialSortMethod));
     }
 
     private static SectionBuilder createPages(List<Material> materials, Comparator<Material> sortingMethod) {
@@ -38,5 +44,13 @@ public class MaterialListBookScreen extends AbstractMaterialBookScreen {
             builder.add(new MaterialEntryPageElement(material));
         }
         return builder;
+    }
+
+    public static Comparator<Material> compareByProperty(GearProperty<Float, NumberPropertyValue> property) {
+        return (m1, m2) -> {
+            float val1 = m1.getProperty(MaterialInstance.of(m1), PartTypes.MAIN, PropertyKey.of(property, GearTypes.ALL.get()));
+            float val2 = m2.getProperty(MaterialInstance.of(m2), PartTypes.MAIN, PropertyKey.of(property, GearTypes.ALL.get()));
+            return Float.compare(val2, val1);
+        };
     }
 }

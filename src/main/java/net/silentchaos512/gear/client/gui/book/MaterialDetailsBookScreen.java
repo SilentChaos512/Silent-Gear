@@ -1,14 +1,21 @@
 package net.silentchaos512.gear.client.gui.book;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
 import net.silentchaos512.gear.client.gui.book.page.element.LabelPageElement;
 import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
+import net.silentchaos512.gear.client.tooltip.GearComponentTooltips;
 import net.silentchaos512.gear.client.tooltip.MaterialTooltips;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -16,20 +23,37 @@ import java.util.List;
 
 public class MaterialDetailsBookScreen extends AbstractMaterialBookScreen {
     public MaterialDetailsBookScreen(@Nullable Screen previousScreen, Material material) {
-        super(previousScreen);
+        super(previousScreen, createScreenTitle(material));
         setPages(materialSection(material));
+    }
+
+    private static MutableComponent createScreenTitle(Material material) {
+        Component packName = Component.literal(String.format(" (%s)", SgRegistries.MATERIAL.getPackName(material)))
+                .withStyle(ChatFormatting.GRAY);
+        return material.getSimpleName().copy().withStyle(ChatFormatting.WHITE).append(packName);
     }
 
     private SectionBuilder materialSection(Material material) {
         SectionBuilder builder = new SectionBuilder();
         MaterialInstance materialInstance = MaterialInstance.of(material);
 
-        for (PartType partType : materialInstance.getPartTypes()) {
+        addDescriptionPageIfAvailable(builder, material);
+
+        for (PartType partType : GearComponentTooltips.getSortedPartTypes(materialInstance.getPartTypes())) {
             builder.addLabel(Component.translatable("part.silentgear.type", partType.getDisplayName()));
             builder.addEmptyLines(1);
 
-            // TODO: Add a special note if the material is an additive, like "This material is an additive and can only
-            //  be combined with other materials."
+            // No properties?
+            if (material.getPropertyKeys(materialInstance, partType).isEmpty()) {
+                builder.addLabel(Component.translatable("gui.silentgear.material_book.noProperties"), 0.8f);
+            }
+
+            // Additive material warning
+            if (materialInstance.getProperty(partType, GearProperties.ADDITIVE.get())) {
+                var labelText = Component.translatable("property.silentgear.additive.warning").withStyle(ChatFormatting.DARK_RED, ChatFormatting.ITALIC);
+                builder.addLabel(labelText, 0.6f);
+                builder.addEmptyLines(1);
+            }
 
             List<Component> propertiesLines = new ArrayList<>();
             MaterialTooltips.propertiesLines(propertiesLines, false, false, FormatColorScheme.DARK_GREY_ZERO_OR_NO_COLOR, partType, materialInstance);
@@ -41,5 +65,15 @@ public class MaterialDetailsBookScreen extends AbstractMaterialBookScreen {
         }
 
         return builder;
+    }
+
+    private void addDescriptionPageIfAvailable(SectionBuilder builder, Material material) {
+        ResourceLocation id = SgRegistries.MATERIAL.getKey(material);
+        String key = String.format("material.%s.%s.book_desc", id.getNamespace(), id.getPath());
+        if (I18n.exists(key)) {
+            Component text = Component.translatable(key);
+            builder.addLabel(text);
+            builder.addPageBreak();
+        }
     }
 }

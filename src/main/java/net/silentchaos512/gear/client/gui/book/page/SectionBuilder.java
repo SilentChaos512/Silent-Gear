@@ -56,11 +56,19 @@ public class SectionBuilder {
     }
 
     public void addLabel(Component text) {
-        add(new LabelPageElement(text, LabelPageElement.Alignment.LEFT));
+        addLabel(text, 1f, LabelPageElement.Alignment.LEFT);
+    }
+
+    public void addLabel(Component text, float scale) {
+        addLabel(text, scale, LabelPageElement.Alignment.LEFT);
     }
 
     public void addLabel(Component text, LabelPageElement.Alignment alignment) {
-        add(new LabelPageElement(text, alignment));
+        addLabel(text, 1f, alignment);
+    }
+
+    public void addLabel(Component text, float scale, LabelPageElement.Alignment alignment) {
+        add(new LabelPageElement(text, scale, alignment));
     }
 
     public List<Page> build() {

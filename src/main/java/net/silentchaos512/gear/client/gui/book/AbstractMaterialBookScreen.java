@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.client.gui.book;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
@@ -35,18 +34,18 @@ public class AbstractMaterialBookScreen extends Screen {
     private List<Page> pages;
     private int leftPageIndex = 0;
 
-    public AbstractMaterialBookScreen(@Nullable Screen previousScreen) {
-        this(previousScreen, Collections.emptyList());
+    public AbstractMaterialBookScreen(@Nullable Screen previousScreen, Component title) {
+        this(previousScreen, title, Collections.emptyList());
     }
 
-    public AbstractMaterialBookScreen(@Nullable Screen previousScreen, List<Page> pages) {
-        super(GameNarrator.NO_TITLE);
+    public AbstractMaterialBookScreen(@Nullable Screen previousScreen, Component title, List<Page> pages) {
+        super(title);
         this.previousScreen = previousScreen;
         this.pages = ImmutableList.copyOf(pages);
     }
 
-    public AbstractMaterialBookScreen(@Nullable Screen previousScreen, SectionBuilder pagesBuilder) {
-        this(previousScreen, pagesBuilder.build());
+    public AbstractMaterialBookScreen(@Nullable Screen previousScreen, Component title, SectionBuilder pagesBuilder) {
+        this(previousScreen, title, pagesBuilder.build());
     }
 
     protected void setPages(List<Page> pages) {
@@ -85,8 +84,17 @@ public class AbstractMaterialBookScreen extends Screen {
 
     @Override
     protected void init() {
+        this.initTitleLabel();
         this.initCommonControls();
         this.initPageComponents();
+    }
+
+    private void initTitleLabel() {
+        int width = this.font.width(this.title.getString());
+        int height = this.font.lineHeight + PageElement.VERTICAL_PADDING;
+        int x = this.width / 2 - width / 2;
+        int y = 10;
+        this.addRenderableOnly(new StringWidget(x, y, width, height, this.title, this.font));
     }
 
     private void initPageComponents() {

@@ -3,15 +3,16 @@ package net.silentchaos512.gear.client.tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.client.event.TooltipHandler;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 public class GearComponentTooltips {
     @SuppressWarnings("unchecked")
@@ -93,5 +94,15 @@ public class GearComponentTooltips {
         }
         // The computed value and all modifiers are zero
         return true;
+    }
+
+    public static List<PartType> getSortedPartTypes(Set<PartType> set) {
+        var result = new ArrayList<PartType>();
+        for (var partType : SgRegistries.PART_TYPE) {
+            if (set.contains(partType)) {
+                result.add(partType);
+            }
+        }
+        return result;
     }
 }

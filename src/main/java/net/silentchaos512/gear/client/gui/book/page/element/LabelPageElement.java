@@ -75,6 +75,7 @@ public record LabelPageElement(
         }
 
         List<Component> result = new ArrayList<>();
+        // TODO: Split hyphenated words too?
         String[] words = fullText.getString().replaceAll("(§.)+", "").split("\\s+");
         String lineBuilder = "";
         String line;

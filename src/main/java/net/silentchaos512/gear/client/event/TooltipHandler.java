@@ -16,6 +16,7 @@ import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
+import net.silentchaos512.gear.client.tooltip.GearComponentTooltips;
 import net.silentchaos512.gear.client.tooltip.MaterialTooltips;
 import net.silentchaos512.gear.client.tooltip.PartTooltips;
 import net.silentchaos512.gear.client.util.TextListBuilder;
@@ -33,7 +34,6 @@ import net.silentchaos512.lib.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public final class TooltipHandler {
     public static final TooltipHandler INSTANCE = new TooltipHandler();
@@ -120,7 +120,7 @@ public final class TooltipHandler {
         if (propertiesKeyHeld) {
             MaterialTooltips.materialCategories(event.getToolTip(), material);
 
-            List<PartType> partTypes = getSortedPartTypes(material.getPartTypes());
+            List<PartType> partTypes = GearComponentTooltips.getSortedPartTypes(material.getPartTypes());
             if (!partTypes.isEmpty()) {
                 int index = KeyTracker.getMaterialCycleIndex(partTypes.size());
                 PartType selectedPartType = partTypes.get(index);
@@ -132,16 +132,6 @@ public final class TooltipHandler {
         } else if (event.getFlags().isAdvanced()) {
             MaterialTooltips.addJeiSearchTerms(event.getToolTip(), material);
         }
-    }
-
-    private static List<PartType> getSortedPartTypes(Set<PartType> set) {
-        var result = new ArrayList<PartType>();
-        for (var partType : SgRegistries.PART_TYPE) {
-            if (set.contains(partType)) {
-                result.add(partType);
-            }
-        }
-        return result;
     }
 
     private static void onPartTooltip(ItemTooltipEvent event, PartInstance part) {
