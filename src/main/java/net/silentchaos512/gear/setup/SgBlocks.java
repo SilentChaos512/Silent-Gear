@@ -133,7 +133,7 @@ public final class SgBlocks {
             ) {
                 @Override
                 public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-                    return Shapes.block();
+                    return AlloyMakerBlock.MIXING_BOWL;
                 }
             }
     );
@@ -148,7 +148,7 @@ public final class SgBlocks {
             ) {
                 @Override
                 public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-                    return Shapes.block();
+                    return AlloyMakerBlock.MIXING_BOWL;
                 }
             }
     );

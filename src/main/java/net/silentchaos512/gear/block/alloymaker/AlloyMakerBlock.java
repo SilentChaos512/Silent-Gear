@@ -24,7 +24,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.block.IDroppableInventory;
@@ -39,9 +41,20 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<AlloyMakerBlockEntity<R>> {
+    private static final VoxelShape BOWL_RIM = Block.box(0, 9, 0, 16, 11, 16);
+    private static final VoxelShape BOWL_RIM_INSIDE = Block.box(1, 10, 1, 15, 10, 15);
+    private static final VoxelShape BOWL_MIDDLE = Block.box(1, 3, 1, 15, 10, 15);
+    private static final VoxelShape BOWL_MIDDLE_INSIDE = Block.box(2, 3, 2, 14, 10, 14);
+    private static final VoxelShape BOWL_BOTTOM_1 = Block.box(1, 2, 1, 15, 3, 15);
+    private static final VoxelShape BOWL_BOTTOM_2 = Block.box(2, 1, 2, 14, 2, 14);
+    private static final VoxelShape BOWL_BOTTOM_3 = Block.box(3, 0, 3, 13, 1, 13);
+    private static final VoxelShape BOWL_INSIDE = Shapes.or(BOWL_RIM_INSIDE, BOWL_MIDDLE_INSIDE);
+    private static final VoxelShape BOWL_CONVEX_BASE = Shapes.or(BOWL_RIM, BOWL_MIDDLE, BOWL_BOTTOM_1, BOWL_BOTTOM_2, BOWL_BOTTOM_3);
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 27, 15);
+    public static final VoxelShape TALL_MACHINE = Block.box(1, 0, 1, 15, 27, 15);
+    public static final VoxelShape MIXING_BOWL = Shapes.join(BOWL_CONVEX_BASE, BOWL_INSIDE, BooleanOp.ONLY_FIRST);
 
     private final AlloyMakerInfo<R> info;
     private final MapCodec<AlloyMakerBlock<R>> codec;
@@ -121,7 +134,7 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return TALL_MACHINE;
     }
 
     @Nullable

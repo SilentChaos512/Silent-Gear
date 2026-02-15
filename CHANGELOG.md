@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - This may eventually change into a full guide book if time allows me to do so, but I consider this sufficient for now
 ### Changed
 - (Internal) large refactoring of material tooltip code; should have no visible effects in-game
+### Fixed
+- Crude/Super Mixers causing an X-ray effect (added an appropriate collision shape to fix the issue) [#866]
 
 ## [1.21.1-4.0.30] - 2025-11-23
 ### Added
