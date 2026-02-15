@@ -39,13 +39,15 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
         builder.addPageBreak();
 
         // Sort and display options
-        var byNameTitle = Component.translatable("misc.silentgear.allMaterials.byName");
+        builder.addLabel(Component.literal("• ").append(Component.translatable("gui.silentgear.material_book.allMaterials")));
+        var byNameTitle = Component.literal("  ◦ ").append(Component.translatable("gui.silentgear.material_book.byName"));
         builder.add(new ClickableLabelPageElement(byNameTitle, button -> onPressAllMaterialsByName(byNameTitle)));
-        var byIdTitle = Component.translatable("misc.silentgear.allMaterials.byId");
+        var byIdTitle = Component.literal("  ◦ ").append(Component.translatable("gui.silentgear.material_book.byId"));
         builder.add(new ClickableLabelPageElement(byIdTitle, button -> onPressAllMaterialsById(byIdTitle)));
+        builder.addLabel(Component.literal("• ").append(Component.translatable("gui.silentgear.material_book.byProperty")));
         for (GearProperty<?, ? extends GearPropertyValue<?>> property : SgRegistries.GEAR_PROPERTY) {
             if (property instanceof NumberProperty numberProperty) {
-                var title = Component.translatable("misc.silentgear.allMaterials.byProperty", property.getDisplayName());
+                var title = Component.literal("  ◦ ").append(property.getDisplayName());
                 builder.add(new ClickableLabelPageElement(title, button -> onPressAllMaterialsByProperty(title, numberProperty)));
             }
         }
