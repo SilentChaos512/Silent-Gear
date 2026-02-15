@@ -51,7 +51,9 @@ public final class TraitHelper {
         T value = inputValue;
 
         for (TraitInstance trait : traits) {
-            value = action.apply(trait, value);
+            if (trait.isValid()) {
+                value = action.apply(trait, value);
+            }
         }
 
         return value;
@@ -70,7 +72,7 @@ public final class TraitHelper {
         if (GearHelper.isGear(gear)) {
             var list = GearData.getProperties(gear).getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
             for (var traitInstance : list.value()) {
-                if (traitInstance.getTrait() == trait.get()) {
+                if (traitInstance.isValid() && trait.isPresent() && traitInstance.getTrait() == trait.get()) {
                     return traitInstance.getLevel();
                 }
             }
@@ -112,7 +114,7 @@ public final class TraitHelper {
     public static boolean hasTrait(GearPropertiesData properties, DataResource<Trait> trait) {
         var list = properties.getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
         for (var traitInstance : list.value()) {
-            if (traitInstance.getTrait() == trait.get()) {
+            if (traitInstance.isValid() && trait.isPresent() && traitInstance.getTrait() == trait.get()) {
                 return true;
             }
         }
@@ -122,7 +124,7 @@ public final class TraitHelper {
     public static boolean hasTrait(GearPropertiesData properties, Trait trait) {
         var list = properties.getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
         for (var traitInstance : list.value()) {
-            if (traitInstance.getTrait() == trait) {
+            if (traitInstance.isValid() && traitInstance.getTrait() == trait) {
                 return true;
             }
         }
@@ -136,9 +138,11 @@ public final class TraitHelper {
                 .getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty())
                 .value();
         for (TraitInstance traitInstance : traitList) {
-            for (TraitEffect effect : traitInstance.getTrait().getEffects()) {
-                if (effect.type() == traitEffectType) {
-                    return true;
+            if (traitInstance.isValid()) {
+                for (TraitEffect effect : traitInstance.getTrait().getEffects()) {
+                    if (effect.type() == traitEffectType) {
+                        return true;
+                    }
                 }
             }
         }
@@ -233,7 +237,9 @@ public final class TraitHelper {
         if (traits == null) return;
 
         for (var trait : traits.value()) {
-            trait.getTrait().onUpdate(new TraitActionContext(player, trait, gear), isEquipped);
+            if (trait.isValid()) {
+                trait.getTrait().onUpdate(new TraitActionContext(player, trait, gear), isEquipped);
+            }
         }
     }
 }

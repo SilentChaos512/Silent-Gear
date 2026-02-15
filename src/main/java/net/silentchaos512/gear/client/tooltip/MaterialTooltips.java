@@ -141,7 +141,9 @@ public class MaterialTooltips extends GearComponentTooltips {
         for (PartType partType : material.getPartTypes()) {
             b.append(partType.getDisplayName().getString()).append(" ");
             for (TraitInstance trait : material.getTraits(PartGearKey.ofAll(partType))) {
-                traits.add(trait.getTrait().getDisplayName(0).getString());
+                if (trait.isValid()) {
+                    traits.add(trait.getTrait().getDisplayName(0).getString());
+                }
             }
         }
 

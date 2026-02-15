@@ -39,7 +39,7 @@ public record MaterialCountTraitCondition(int requiredCount) implements ITraitCo
         int count = 0;
         for (GearComponentInstance<?> comp : components) {
             for (TraitInstance inst : comp.getTraits(key)) {
-                if (inst.getTrait() == trait) {
+                if (inst.isValid() && inst.getTrait() == trait) {
                     count++;
                     break;
                 }

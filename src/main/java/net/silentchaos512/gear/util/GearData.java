@@ -179,7 +179,9 @@ public final class GearData {
 
         // Let traits do their thing
         for (var trait : finalProperties.getTraits()) {
-            trait.getTrait().onRecalculatePost(gear, trait.getLevel());
+            if (trait.isValid()) {
+                trait.getTrait().onRecalculatePost(gear, trait.getLevel());
+            }
         }
     }
 
@@ -222,9 +224,11 @@ public final class GearData {
 
                 // Trait configBonus modifiers
                 for (TraitInstance trait : traits) {
-                    GearPropertyValue<?> baseValue = baseProperties.get(property);
-                    assert baseValue != null;
-                    bonusProperties.putAll(key, trait.getTrait().getBonusProperties(trait.getLevel(), player, property, baseValue, damageRatio));
+                    if (trait.isValid()) {
+                        GearPropertyValue<?> baseValue = baseProperties.get(property);
+                        assert baseValue != null;
+                        bonusProperties.putAll(key, trait.getTrait().getBonusProperties(trait.getLevel(), player, property, baseValue, damageRatio));
+                    }
                 }
 
                 // Config global property modifiers

@@ -259,7 +259,7 @@ public final class TraitsCommand {
         for (GearPart part : SgRegistries.PART) {
             PartInstance partData = PartInstance.of(part);
             for (TraitInstance inst : partData.getTraits(PartGearKey.of(GearTypes.ALL, PartTypes.MAIN))) {
-                if (inst.getTrait().equals(trait) && part.isVisible()) {
+                if (inst.isValid() && inst.getTrait().equals(trait) && part.isVisible()) {
                     if (foundAny) {
                         str.append(", ");
                     }

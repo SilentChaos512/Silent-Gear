@@ -41,7 +41,7 @@ public record MaterialRatioTraitCondition(float requiredRatio) implements ITrait
         for (GearComponentInstance<?> comp : components) {
             Collection<TraitInstance> traits = comp.getTraits(key);
             for (TraitInstance inst : traits) {
-                if (inst.getTrait() == trait) {
+                if (inst.isValid() && inst.getTrait() == trait) {
                     ++count;
                     break;
                 }

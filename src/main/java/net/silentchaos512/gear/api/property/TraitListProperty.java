@@ -83,8 +83,10 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
         Map<Trait, Integer> count = new HashMap<>();
 
         for (var traitInstance : traits) {
-            map.merge(traitInstance.getTrait(), traitInstance.getLevel(), Integer::sum);
-            count.merge(traitInstance.getTrait(), 1, Integer::sum);
+            if (traitInstance.isValid()) {
+                map.merge(traitInstance.getTrait(), traitInstance.getLevel(), Integer::sum);
+                count.merge(traitInstance.getTrait(), 1, Integer::sum);
+            }
         }
 
         Trait[] keys = map.keySet().toArray(new Trait[0]);

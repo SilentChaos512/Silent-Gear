@@ -105,6 +105,9 @@ public record TraitInstance(
     }
 
     public MutableComponent getDisplayName(GearProperty.FormatContext formatContext) {
+        if (!isValid()) {
+            return Component.literal("INVALID (" + this.trait.getId() + ")");
+        }
         MutableComponent text = this.trait.get().getDisplayName(this.level).copy();
         if (formatContext != GearProperty.FormatContext.GEAR && !conditions.isEmpty()) {
             text.append("*");
@@ -131,6 +134,10 @@ public record TraitInstance(
     }
 
     public boolean conditionsMatch(PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+        if (!isValid()) {
+            return false;
+        }
+
         Trait trait = getTrait();
 
         for (ITraitCondition condition : getConditions()) {
