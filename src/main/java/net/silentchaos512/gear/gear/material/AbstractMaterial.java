@@ -1,8 +1,10 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.Sets;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -174,6 +176,19 @@ public abstract class AbstractMaterial implements Material {
     @Override
     public Component getDisplayName(@Nullable MaterialInstance material, PartType type) {
         return display.name().copy();
+    }
+
+    @Override
+    public Component getSimpleName() {
+        var name = display.name();
+        if (name.getContents() instanceof TranslatableContents translatableContents) {
+            var key = translatableContents.getKey();
+            var simpleNameKey = key + ".simple";
+            if (I18n.exists(simpleNameKey)) {
+                return Component.translatable(simpleNameKey);
+            }
+        }
+        return name;
     }
 
     @Override

@@ -18,6 +18,7 @@ import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.util.PropertyKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -114,7 +115,7 @@ public final class PartsCommand {
         // Properties
         for (var property : SgRegistries.GEAR_PROPERTY) {
             var mods = part.getPropertyModifiers(PartInstance.of(part), part.getType(), PropertyKey.of(property, GearTypes.ALL.get()));
-            var formattedText = GearPropertyMap.formatTextUnchecked(mods, property, false);
+            var formattedText = GearPropertyMap.formatTextUnchecked(mods, property, FormatColorScheme.NO_COLORS);
             appendTsv(builder, FORMAT_CODES.matcher(formattedText.getString()).replaceAll(""));
         }
 

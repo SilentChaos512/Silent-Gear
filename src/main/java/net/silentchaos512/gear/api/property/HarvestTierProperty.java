@@ -9,6 +9,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 
 import java.util.Collection;
 import java.util.List;
@@ -73,12 +74,12 @@ public class HarvestTierProperty extends GearProperty<HarvestTier, HarvestTierPr
     }
 
     @Override
-    public Component formatValue(HarvestTierPropertyValue value, FormatContext formatContext) {
+    public Component formatValue(HarvestTierPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
         return value.value.getFormattedName();
     }
 
     @Override
-    public MutableComponent formatValueWithColor(HarvestTierPropertyValue value, boolean addColor, FormatContext formatContext) {
+    public MutableComponent formatValueWithColor(HarvestTierPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
         return value.value.getFormattedName().plainCopy();
     }
 }

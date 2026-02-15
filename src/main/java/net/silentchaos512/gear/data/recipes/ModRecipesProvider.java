@@ -93,6 +93,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .block(SgBlocks.BORT_BLOCK, SgTags.Items.STORAGE_BLOCKS_BORT));
 
         registerSpecialRecipes(consumer);
+        registerBooks(consumer);
         registerCraftingItems(consumer);
         registerCrudeTools(consumer);
         registerBlueprints(consumer);
@@ -127,6 +128,14 @@ public class ModRecipesProvider extends LibRecipeProvider {
         special(consumer, SgRecipes.SWAP_GEAR_PART.get(), GearPartSwapRecipe::new);
         special(consumer, SgRecipes.QUICK_REPAIR.get(), QuickRepairRecipe::new);
         special(consumer, SgRecipes.MOD_KIT_REMOVE_PART.get(), ModKitRemovePartRecipe::new);
+    }
+
+    private void registerBooks(RecipeOutput output) {
+        shapeless(RecipeCategory.MISC, SgItems.MATERIAL_BOOK)
+                .requires(Items.BOOK)
+                .requires(SgTags.Items.BLUEPRINT_PAPER)
+                .unlockedBy("has_item", has(SgTags.Items.BLUEPRINT_PAPER))
+                .save(output);
     }
 
     private void registerBlueprints(RecipeOutput consumer) {

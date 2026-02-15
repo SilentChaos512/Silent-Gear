@@ -15,6 +15,7 @@ import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.GearData;
@@ -69,9 +70,9 @@ public final class PropertiesCommand {
 
             if (!mods.isEmpty()) {
                 Component name = TextUtil.withColor(property.getDisplayName(), property.getGroup().getColor());
-                Component modsText = GearPropertyMap.formatTextUnchecked(mods, property, true);
+                Component modsText = GearPropertyMap.formatTextUnchecked(mods, property, FormatColorScheme.NO_COLORS);
                 Component valueText = TextUtil.withColor(
-                        property.formatModifiersWithColorUnchecked(mods, true, GearProperty.FormatContext.GEAR),
+                        property.formatModifiersWithColorUnchecked(mods, GearProperty.FormatContext.GEAR, FormatColorScheme.NO_COLORS),
                         ChatFormatting.YELLOW
                 );
 
@@ -85,7 +86,7 @@ public final class PropertiesCommand {
                     if (!partMods.isEmpty()) {
                         Component partName = part.getDisplayName(part.getType());
                         //noinspection unchecked
-                        Component partModsText = GearPropertyMap.formatTextUnchecked(partMods, property, true);
+                        Component partModsText = GearPropertyMap.formatTextUnchecked(partMods, property, FormatColorScheme.NO_COLORS);
 
                         context.getSource().sendSuccess(
                                 () -> TextUtil.translate("command", "stats.info.formatPart", partName, partModsText),

@@ -21,6 +21,7 @@ import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.util.PropertyKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.network.payload.server.CommandOutputPayload;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -132,7 +133,7 @@ public final class MaterialsCommand {
         // Properties
         for (var property : SgRegistries.GEAR_PROPERTY) {
             var mods = material.getPropertyModifiers(partType, PropertyKey.of(property, GearTypes.ALL.get()));
-            var formattedText = GearPropertyMap.formatTextUnchecked(mods, property, false);
+            var formattedText = GearPropertyMap.formatTextUnchecked(mods, property, FormatColorScheme.NO_COLORS);
             appendTsv(builder, FORMAT_CODES.matcher(formattedText.getString()).replaceAll(""));
         }
 

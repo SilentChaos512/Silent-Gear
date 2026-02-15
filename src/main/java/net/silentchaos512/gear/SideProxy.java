@@ -90,6 +90,12 @@ class SideProxy implements IProxy {
                 return Collections.singleton(SgItems.BLUEPRINT_PACKAGE.get().getStack());
             return Collections.emptyList();
         });
+        InitialSpawnItems.add(SilentGear.getId("material_book"), p -> {
+            /*ServerTicks.scheduleAction(() -> {
+                p.sendSystemMessage(Component.literal("A new Silent Gear material book has been added. Enjoy!"));
+            });*/
+            return Collections.singleton(SgItems.MATERIAL_BOOK.toStack());
+        });
 
         NerfedGear.init();
 
