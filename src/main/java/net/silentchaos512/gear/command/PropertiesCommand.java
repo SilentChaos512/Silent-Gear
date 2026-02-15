@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -29,21 +31,52 @@ public final class PropertiesCommand {
     private PropertiesCommand() {
     }
 
+    /**
+     * Creates the subcommand for use with the unified /sgear command.
+     */
+    public static ArgumentBuilder<CommandSourceStack, ?> createSubcommand() {
+        return Commands.literal("properties")
+                .requires(source -> source.hasPermission(2))
+                .executes(ctx -> showHelp(ctx.getSource()))
+                .then(Commands.literal("help")
+                        .executes(ctx -> showHelp(ctx.getSource())))
+                .then(buildInfoArgument())
+                .then(buildRecalculateArgument());
+    }
+
+    private static int showHelp(CommandSourceStack source) {
+        source.sendSuccess(() -> TextUtil.translate("command", "help.properties.title")
+                .withStyle(ChatFormatting.GOLD), false);
+        source.sendSuccess(() -> Component.literal("  /sgear properties info [player]").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(SGearCommand.HELP_INDENT).withStyle(ChatFormatting.GRAY))
+                .append(TextUtil.translate("command", "help.properties.info").withStyle(ChatFormatting.GRAY)), false);
+        source.sendSuccess(() -> Component.literal("  /sgear properties recalculate <players>").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(SGearCommand.HELP_INDENT).withStyle(ChatFormatting.GRAY))
+                .append(TextUtil.translate("command", "help.properties.recalculate").withStyle(ChatFormatting.GRAY)), false);
+        return 1;
+    }
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_properties")
                 .requires(source -> source.hasPermission(2))
-                .then(Commands.literal("info")
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .executes(ctx -> runInfo(ctx, EntityArgument.getPlayer(ctx, "player")))
-                        )
-                        .executes(ctx -> runInfo(ctx, ctx.getSource().getPlayerOrException()))
-                )
-                .then(Commands.literal("recalculate")
-                        .then(Commands.argument("players", EntityArgument.players())
-                                .executes(ctx -> runRecalculate(ctx, EntityArgument.getPlayers(ctx, "players")))
-                        )
-                )
+                .then(buildInfoArgument())
+                .then(buildRecalculateArgument())
         );
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> buildInfoArgument() {
+        return Commands.literal("info")
+                .then(Commands.argument("player", EntityArgument.player())
+                        .executes(ctx -> runInfo(ctx, EntityArgument.getPlayer(ctx, "player")))
+                )
+                .executes(ctx -> runInfo(ctx, ctx.getSource().getPlayerOrException()));
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> buildRecalculateArgument() {
+        return Commands.literal("recalculate")
+                .then(Commands.argument("players", EntityArgument.players())
+                        .executes(ctx -> runRecalculate(ctx, EntityArgument.getPlayers(ctx, "players")))
+                );
     }
 
     private static int runInfo(CommandContext<CommandSourceStack> context, ServerPlayer player) {

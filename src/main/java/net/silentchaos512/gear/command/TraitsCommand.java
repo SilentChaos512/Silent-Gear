@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -34,6 +36,7 @@ import net.silentchaos512.gear.network.payload.server.CommandOutputPayload;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -50,50 +53,130 @@ public final class TraitsCommand {
     private TraitsCommand() {
     }
 
+    /**
+     * Creates the subcommand for use with the unified /sgear command.
+     */
+    public static ArgumentBuilder<CommandSourceStack, ?> createSubcommand() {
+        return Commands.literal("traits")
+                .executes(ctx -> showHelp(ctx.getSource()))
+                .then(Commands.literal("help")
+                        .executes(ctx -> showHelp(ctx.getSource())))
+                .then(buildDescribeArgument())
+                .then(buildDumpMdArgument())
+                .then(buildListArgument());
+    }
+
+    private static int showHelp(CommandSourceStack source) {
+        source.sendSuccess(() -> TextUtil.translate("command", "help.traits.title")
+                .withStyle(ChatFormatting.GOLD), false);
+        source.sendSuccess(() -> Component.literal("  /sgear traits list").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(SGearCommand.HELP_INDENT).withStyle(ChatFormatting.GRAY))
+                .append(TextUtil.translate("command", "help.traits.list").withStyle(ChatFormatting.GRAY)), false);
+        source.sendSuccess(() -> Component.literal("  /sgear traits describe <traitID>").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(SGearCommand.HELP_INDENT).withStyle(ChatFormatting.GRAY))
+                .append(TextUtil.translate("command", "help.traits.describe").withStyle(ChatFormatting.GRAY)), false);
+        source.sendSuccess(() -> Component.literal("  /sgear traits dump_md").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(SGearCommand.HELP_INDENT).withStyle(ChatFormatting.GRAY))
+                .append(TextUtil.translate("command", "help.traits.dump_md").withStyle(ChatFormatting.GRAY)), false);
+        return 1;
+    }
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_traits")
-                .then(Commands.literal("describe")
-                        .then(Commands.argument("traitID", ResourceLocationArgument.id())
-                                .suggests(TRAIT_ID_SUGGESTIONS)
-                                .executes(context -> runDescribe(context, ResourceLocationArgument.getId(context, "traitID")))
-                        )
-                )
-                .then(Commands.literal("dump_md")
-                        .executes(TraitsCommand::runDumpMd)
-                )
-                .then(Commands.literal("list")
-                        .executes(TraitsCommand::runList)
-                ));
+                .then(buildDescribeArgument())
+                .then(buildDumpMdArgument())
+                .then(buildListArgument())
+        );
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> buildDescribeArgument() {
+        return Commands.literal("describe")
+                .then(Commands.argument("traitID", ResourceLocationArgument.id())
+                        .suggests(TRAIT_ID_SUGGESTIONS)
+                        .executes(context -> runDescribe(context, ResourceLocationArgument.getId(context, "traitID")))
+                );
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> buildDumpMdArgument() {
+        return Commands.literal("dump_md")
+                .executes(TraitsCommand::runDumpMd);
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> buildListArgument() {
+        return Commands.literal("list")
+                .executes(TraitsCommand::runList);
     }
 
     private static int runDescribe(CommandContext<CommandSourceStack> context, ResourceLocation traitId) {
         Trait trait = SgRegistries.TRAIT.get(traitId);
         if (trait == null) {
-            context.getSource().sendFailure(Component.translatable("command.silentgear.traits.traitNotFound"));
+            context.getSource().sendFailure(TextUtil.translate("command", "traits.traitNotFound"));
             return 0;
         }
 
-        context.getSource().sendSuccess(() -> trait.getDisplayName(0), true);
-        context.getSource().sendSuccess(() -> trait.getDescription(1), true);
-        context.getSource().sendSuccess(() -> Component.translatable("command.silentgear.traits.maxLevel", trait.getMaxLevel()), true);
-        context.getSource().sendSuccess(() -> Component.literal("Object: " + trait), true);
-        // Effects
-        if (!trait.getEffects().isEmpty()) {
-            context.getSource().sendSuccess(() -> Component.literal("Effects:"), true);
+        CommandSourceStack source = context.getSource();
+
+        // Display name as title
+        source.sendSuccess(() -> trait.getDisplayName(0)
+                .copy().withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), true);
+
+        // Table separator
+        source.sendSuccess(() -> Component.literal("─────────────────────────────────")
+                .withStyle(ChatFormatting.DARK_GRAY), true);
+
+        // ID row
+        source.sendSuccess(() -> tableRow("traits.describe.id", traitId.toString()), true);
+
+        // Max Level row
+        source.sendSuccess(() -> tableRow("traits.describe.maxLevel", String.valueOf(trait.getMaxLevel())), true);
+
+        // Description row
+        String description = trait.getDescription(0).getString();
+        if (!description.isEmpty()) {
+            source.sendSuccess(() -> tableRow("traits.describe.description", description), true);
         }
-        for (var effect : trait.getEffects()) {
-            context.getSource().sendSuccess(() -> Component.literal("- " + SgRegistries.TRAIT_EFFECT_TYPE.getKey(effect.type())), true);
+
+        // Effects section
+        if (!trait.getEffects().isEmpty()) {
+            source.sendSuccess(() -> Component.literal("─────────────────────────────────")
+                    .withStyle(ChatFormatting.DARK_GRAY), true);
+            source.sendSuccess(() -> TextUtil.translate("command", "traits.describe.effectsHeader")
+                    .withStyle(ChatFormatting.AQUA, ChatFormatting.UNDERLINE), true);
+
+            for (var effect : trait.getEffects()) {
+                String effectDesc = effect.type().getWikiDescription();
+                source.sendSuccess(() -> Component.literal("  " + effectDesc)
+                        .withStyle(ChatFormatting.WHITE), true);
+            }
         }
 
         return 1;
     }
 
+    private static Component tableRow(String labelKey, String value) {
+        return TextUtil.translate("command", labelKey)
+                .withStyle(ChatFormatting.AQUA)
+                .append(Component.literal(value)
+                        .withStyle(ChatFormatting.WHITE));
+    }
+
     private static int runList(CommandContext<CommandSourceStack> context) {
-        String listStr = SgRegistries.TRAIT.stream()
-                .map(trait -> SgRegistries.TRAIT.getKey(trait).toString())
+        CommandSourceStack source = context.getSource();
+        var traits = SgRegistries.TRAIT.keySet();
+
+        // Header
+        source.sendSuccess(() -> TextUtil.translate("command", "traits.list.header")
+                .withStyle(ChatFormatting.GOLD), true);
+
+        // List
+        String listStr = traits.stream()
+                .map(ResourceLocation::toString)
                 .collect(Collectors.joining(", "));
-        context.getSource().sendSuccess(() -> Component.literal(listStr), true);
-        context.getSource().sendSuccess(() -> Component.literal("Total: " + SgRegistries.TRAIT.keySet().size()), true);
+        source.sendSuccess(() -> Component.literal(listStr), true);
+
+        // Total
+        source.sendSuccess(() -> TextUtil.translate("command", "traits.list.total", traits.size())
+                .withStyle(ChatFormatting.GRAY), true);
 
         return 1;
     }
