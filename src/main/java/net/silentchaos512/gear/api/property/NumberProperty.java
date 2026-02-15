@@ -14,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.MathUtils;
@@ -215,8 +216,8 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
     }
 
     @Override
-    public MutableComponent formatValueWithColor(NumberPropertyValue value, boolean addColor, FormatContext formatContext) {
-        return value.operation().formatNumberValue(this, value.value, getPreferredDecimalPlaces(value), addColor);
+    public MutableComponent formatValueWithColor(NumberPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
+        return value.operation().formatNumberValue(this, value.value, getPreferredDecimalPlaces(value), colorScheme);
     }
 
     @Override
@@ -233,8 +234,8 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
     }
 
     @Override
-    public Component formatValue(NumberPropertyValue value, FormatContext formatContext) {
-        return value.operation().formatNumberValue(this, value.value, getPreferredDecimalPlaces(value), false);
+    public Component formatValue(NumberPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
+        return value.operation().formatNumberValue(this, value.value, getPreferredDecimalPlaces(value), colorScheme);
     }
 
     public enum Operation {
@@ -266,23 +267,23 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
             this.alias = alias;
         }
 
-        public MutableComponent formatNumberValue(NumberProperty property, float value, @Nonnegative int decimalPlaces, boolean addColor) {
+        public MutableComponent formatNumberValue(NumberProperty property, float value, @Nonnegative int decimalPlaces, FormatColorScheme colorScheme) {
             return switch (this) {
                 case ADD ->
                     // +/-v
-                        formatAdd(property, value, decimalPlaces, addColor);
+                        formatAdd(property, value, decimalPlaces, colorScheme);
                 case AVERAGE ->
                     // v or vx
-                        formatAvg(property, value, decimalPlaces, addColor);
+                        formatAvg(property, value, decimalPlaces, colorScheme);
                 case MAX ->
                     // ^v
-                        formatMax(property, value, decimalPlaces, addColor);
+                        formatMax(property, value, decimalPlaces, colorScheme);
                 case MULTIPLY_BASE ->
                     // +/-v%
-                        formatMul1(property, value, decimalPlaces, addColor);
+                        formatMul1(property, value, decimalPlaces, colorScheme);
                 case MULTIPLY_TOTAL ->
                     // vx
-                        formatMul2(property, value, decimalPlaces, addColor);
+                        formatMul2(property, value, decimalPlaces, colorScheme);
             };
         }
 
@@ -291,15 +292,15 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
         private static final Pattern REGEX_TRIM_TO_INT = Pattern.compile("\\.0+$");
         private static final Pattern REGEX_REMOVE_TRAILING_ZEROS = Pattern.compile("0+$");
 
-        private MutableComponent formatAdd(NumberProperty property, float value, @Nonnegative int decimalPlaces, boolean addColor) {
+        private MutableComponent formatAdd(NumberProperty property, float value, @Nonnegative int decimalPlaces, FormatColorScheme colorScheme) {
             String format = "%s" + ("%." + decimalPlaces + "f");
-            Color color = getFormattedColor(value, 0f, addColor);
+            Color color = colorScheme.getColor(value, 0f);
             String text = trimNumber(String.format(format, value < 0 ? "" : "+", value));
-            return TextUtil.withColor(Component.literal(text), color);
+            return TextUtil.withOptionalColor(Component.literal(text), color);
         }
 
-        private MutableComponent formatAvg(NumberProperty property, float value, @Nonnegative int decimalPlaces, boolean addColor) {
-            Color color = getFormattedColor(value, 0f, addColor);
+        private MutableComponent formatAvg(NumberProperty property, float value, @Nonnegative int decimalPlaces, FormatColorScheme colorScheme) {
+            Color color = colorScheme.getColor(value, value);
             String text;
             if (property.getDisplayFormat() == DisplayFormat.PERCENTAGE) {
                 text = Math.round(value * 100) + "%";
@@ -309,28 +310,28 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
                 String ret = trimNumber(String.format(format, "", value, ""));
                 text = property.getDisplayFormat() == DisplayFormat.MULTIPLIER ? ret + "x" : ret;
             }
-            return TextUtil.withColor(Component.literal(text), color);
+            return TextUtil.withOptionalColor(Component.literal(text), color);
         }
 
-        private MutableComponent formatMax(NumberProperty property, float value, @Nonnegative int decimalPlaces, boolean addColor) {
+        private MutableComponent formatMax(NumberProperty property, float value, @Nonnegative int decimalPlaces, FormatColorScheme colorScheme) {
             String format = "%s" + ("%." + decimalPlaces + "f");
             String text = trimNumber(String.format(format, "↑", value)); //u2191
-            return TextUtil.withColor(Component.literal(text), Color.WHITE);
+            return TextUtil.withOptionalColor(Component.literal(text), colorScheme.getColor(value, value));
         }
 
-        private MutableComponent formatMul1(NumberProperty property, float value, @Nonnegative int decimalPlaces, boolean addColor) {
+        private MutableComponent formatMul1(NumberProperty property, float value, @Nonnegative int decimalPlaces, FormatColorScheme colorScheme) {
             int percent = Math.round(100 * value);
-            Color color = getFormattedColor(percent, 0f, addColor);
+            Color color = colorScheme.getColor(percent, 0f);
             String text = trimNumber(String.format("%s%d%%", percent < 0 ? "" : "+", percent));
-            return TextUtil.withColor(Component.literal(text), color);
+            return TextUtil.withOptionalColor(Component.literal(text), color);
         }
 
-        private MutableComponent formatMul2(NumberProperty property, float value, @Nonnegative int decimalPlaces, boolean addColor) {
+        private MutableComponent formatMul2(NumberProperty property, float value, @Nonnegative int decimalPlaces, FormatColorScheme colorScheme) {
             String format = "%s" + ("%." + decimalPlaces + "f");
             float val = 1f + value;
-            Color color = getFormattedColor(val, 1f, addColor);
+            Color color = colorScheme.getColor(val, 1f);
             String text = trimNumber(String.format(format, "x", val));
-            return TextUtil.withColor(Component.literal(text), color);
+            return TextUtil.withOptionalColor(Component.literal(text), color);
         }
 
         private static String trimNumber(CharSequence str) {
@@ -339,11 +340,6 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
             if (trimToInt.contains("."))
                 return REGEX_REMOVE_TRAILING_ZEROS.matcher(trimToInt).replaceFirst("");
             return trimToInt;
-        }
-
-        private static Color getFormattedColor(float val, float whiteVal, boolean addColor) {
-            if (!addColor) return Color.WHITE;
-            return val < whiteVal ? Color.INDIANRED : MathUtils.floatsEqual(val, whiteVal) ? Color.WHITE : Color.LIGHTGREEN;
         }
 
         //endregion

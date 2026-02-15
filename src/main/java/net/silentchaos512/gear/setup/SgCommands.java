@@ -10,7 +10,9 @@ public final class SgCommands {
 
     public static void registerAll(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        SGearCommand.register(dispatcher);
         GradeCommand.register(dispatcher);
+        StarchargeCommand.register(dispatcher);
         SetDamageCommand.register(dispatcher);
         MaterialsCommand.register(dispatcher);
         PartsCommand.register(dispatcher);

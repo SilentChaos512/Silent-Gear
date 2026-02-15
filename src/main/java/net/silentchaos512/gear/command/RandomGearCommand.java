@@ -2,6 +2,9 @@ package net.silentchaos512.gear.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.minecraft.ChatFormatting;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -18,6 +21,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.util.GearGenerator;
+import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.lib.util.PlayerUtils;
 
@@ -29,29 +33,53 @@ public final class RandomGearCommand {
 
     private RandomGearCommand() {}
 
+    /**
+     * Creates the subcommand for use with the unified /sgear command.
+     */
+    public static ArgumentBuilder<CommandSourceStack, ?> createSubcommand() {
+        return Commands.literal("random")
+                .requires(source -> source.hasPermission(2))
+                .executes(ctx -> showHelp(ctx.getSource()))
+                .then(Commands.literal("help")
+                        .executes(ctx -> showHelp(ctx.getSource())))
+                .then(buildPlayersArgument());
+    }
+
+    private static int showHelp(CommandSourceStack source) {
+        source.sendSuccess(() -> TextUtil.translate("command", "help.random.title")
+                .withStyle(ChatFormatting.GOLD), false);
+        source.sendSuccess(() -> Component.literal("  /sgear random <players> <item> [tier]").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(SGearCommand.HELP_INDENT).withStyle(ChatFormatting.GRAY))
+                .append(TextUtil.translate("command", "help.random.give").withStyle(ChatFormatting.GRAY)), false);
+        return 1;
+    }
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_random_gear")
-                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                .then(Commands.argument("players", EntityArgument.players())
-                        .then(Commands.argument("item", IdentifierArgument.id())
-                                .suggests(itemIdSuggestions)
+                .requires(source -> source.hasPermission(2))
+                .then(buildPlayersArgument())
+        );
+    }
+
+    private static ArgumentBuilder<CommandSourceStack, ?> buildPlayersArgument() {
+        return Commands.argument("players", EntityArgument.players())
+                .then(Commands.argument("item", ResourceLocationArgument.id())
+                        .suggests(itemIdSuggestions)
+                        .executes(context -> run(
+                                context,
+                                EntityArgument.getPlayers(context, "players"),
+                                ResourceLocationArgument.getId(context, "item"),
+                                3
+                        ))
+                        .then(Commands.argument("tier", IntegerArgumentType.integer())
                                 .executes(context -> run(
                                         context,
                                         EntityArgument.getPlayers(context, "players"),
-                                        IdentifierArgument.getId(context, "item"),
-                                        3
+                                        ResourceLocationArgument.getId(context, "item"),
+                                        IntegerArgumentType.getInteger(context, "tier")
                                 ))
-                                .then(Commands.argument("tier", IntegerArgumentType.integer())
-                                        .executes(context -> run(
-                                                context,
-                                                EntityArgument.getPlayers(context, "players"),
-                                                IdentifierArgument.getId(context, "item"),
-                                                IntegerArgumentType.getInteger(context, "tier")
-                                        ))
-                                )
                         )
-                )
-        );
+                );
     }
 
     private static int run(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, Identifier itemId, int tier) throws CommandSyntaxException {

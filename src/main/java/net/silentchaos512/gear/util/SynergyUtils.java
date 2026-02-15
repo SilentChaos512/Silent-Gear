@@ -65,7 +65,9 @@ public final class SynergyUtils {
 
         // Synergy traits
         for (TraitInstance trait : traits) {
-            synergy = trait.getTrait().onCalculateSynergy(synergy, trait.getLevel());
+            if (trait.isValid()) {
+                synergy = trait.getTrait().onCalculateSynergy(synergy, trait.getLevel());
+            }
         }
 
         return (float) Mth.clamp(synergy, MIN_VALUE, MAX_VALUE);

@@ -11,6 +11,7 @@ import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.property.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -50,7 +51,7 @@ public class GearProperties {
                             .affectedBySynergy(true)
             ) {
                 @Override
-                public void buildTooltip(TextListBuilder listBuilder, NumberPropertyValue value, ItemStack stack, GearTooltipFlag flag) {
+                public void buildTooltip(TextListBuilder listBuilder, NumberPropertyValue value, ItemStack stack, GearTooltipFlag flag, FormatColorScheme colorScheme) {
                     // Durability-specific formatting
                     int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
                     int durabilityMax = stack.getMaxDamage();

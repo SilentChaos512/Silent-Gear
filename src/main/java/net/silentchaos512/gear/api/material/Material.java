@@ -123,6 +123,17 @@ public interface Material extends GearComponent<MaterialInstance> {
         return getDisplayName(material, partType);
     }
 
+    /**
+     * Gets a simple name for the material, which may differ from the name that ends up being display in the final gear
+     * item name. The returned value should make sense when displayed by itself, not necessarily when appended to other
+     * text. For example, "gold" instead of "golden" or "wood" instead of "wooden".
+     *
+     * @return A simple name for the material
+     */
+    default Component getSimpleName() {
+        return getDisplayName(MaterialInstance.of(this), PartTypes.MAIN.get());
+    }
+
     Component getDisplayNamePrefix(PartType partType);
 
     TextureType getMainTextureType(MaterialInstance material);

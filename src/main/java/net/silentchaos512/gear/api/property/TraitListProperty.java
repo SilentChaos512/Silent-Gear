@@ -13,6 +13,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -82,8 +83,10 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
         Map<Trait, Integer> count = new HashMap<>();
 
         for (var traitInstance : traits) {
-            map.merge(traitInstance.getTrait(), traitInstance.getLevel(), Integer::sum);
-            count.merge(traitInstance.getTrait(), 1, Integer::sum);
+            if (traitInstance.isValid()) {
+                map.merge(traitInstance.getTrait(), traitInstance.getLevel(), Integer::sum);
+                count.merge(traitInstance.getTrait(), 1, Integer::sum);
+            }
         }
 
         Trait[] keys = map.keySet().toArray(new Trait[0]);
@@ -126,12 +129,12 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
     }
 
     @Override
-    public MutableComponent formatValueWithColor(TraitListPropertyValue value, boolean addColor, FormatContext formatContext) {
-        return formatValue(value, formatContext).plainCopy();
+    public MutableComponent formatValueWithColor(TraitListPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
+        return formatValue(value, formatContext, FormatColorScheme.NO_COLORS).plainCopy();
     }
 
     @Override
-    public Component formatValue(TraitListPropertyValue value, FormatContext formatContext) {
+    public Component formatValue(TraitListPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
         return Component.literal(
                 value.value.stream()
                         .map(traitInstance -> traitInstance.getDisplayName(formatContext))
@@ -146,7 +149,7 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
     }
 
     @Override
-    public void buildTooltip(TextListBuilder listBuilder, TraitListPropertyValue value, ItemStack gearItemStack, GearTooltipFlag flag) {
+    public void buildTooltip(TextListBuilder listBuilder, TraitListPropertyValue value, ItemStack gearItemStack, GearTooltipFlag flag, FormatColorScheme colorScheme) {
         var propertyName = TextUtil.withColor(getDisplayName(), this.nameColor);
 
         if (value.value.isEmpty()) {

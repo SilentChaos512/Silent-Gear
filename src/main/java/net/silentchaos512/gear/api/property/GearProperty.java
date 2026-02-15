@@ -12,6 +12,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -138,17 +139,6 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return value;
     }
 
-    @Deprecated(forRemoval = true)
-    public List<Component> getTooltipLines(V value, GearTooltipFlag flag) {
-        return List.of(formatText(value, flag));
-    }
-
-    @Deprecated(forRemoval = true)
-    @SuppressWarnings("unchecked")
-    public final List<Component> getTooltipLinesUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag) {
-        return getTooltipLines((V) value, flag);
-    }
-
     @SuppressWarnings("unchecked")
     public final boolean isHiddenUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag) {
         return isHidden((V) value, flag);
@@ -159,21 +149,21 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     }
 
     @SuppressWarnings("unchecked")
-    public final void buildTooltipUnchecked(TextListBuilder listBuilder, GearPropertyValue<?> value, ItemStack gearItemStack, GearTooltipFlag flag) {
-        buildTooltip(listBuilder, (V) value, gearItemStack, flag);
+    public final void buildTooltipUnchecked(TextListBuilder listBuilder, GearPropertyValue<?> value, ItemStack gearItemStack, GearTooltipFlag flag, FormatColorScheme colorScheme) {
+        buildTooltip(listBuilder, (V) value, gearItemStack, flag, colorScheme);
     }
 
-    public void buildTooltip(TextListBuilder listBuilder, V value, ItemStack gearItemStack, GearTooltipFlag flag) {
-        listBuilder.add(formatText(value, flag));
+    public void buildTooltip(TextListBuilder listBuilder, V value, ItemStack gearItemStack, GearTooltipFlag flag, FormatColorScheme colorScheme) {
+        listBuilder.add(formatText(value, flag, colorScheme));
     }
 
     @SuppressWarnings("unchecked")
-    public final Component formatTextUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag) {
-        return formatText((V) value, flag);
+    public final Component formatTextUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag, FormatColorScheme colorScheme) {
+        return formatText((V) value, flag, colorScheme);
     }
 
-    public Component formatText(V value, GearTooltipFlag flag) {
-        var valueText = formatValue(value, FormatContext.GEAR);
+    public Component formatText(V value, GearTooltipFlag flag, FormatColorScheme colorScheme) {
+        var valueText = formatValue(value, FormatContext.GEAR, colorScheme);
         return formatText(valueText);
     }
 
@@ -182,20 +172,20 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return Component.translatable("property.silentgear.displayFormat", propertyName, valueText);
     }
 
-    public abstract Component formatValue(V value, FormatContext formatContext);
+    public abstract Component formatValue(V value, FormatContext formatContext, FormatColorScheme colorScheme);
 
-    public abstract MutableComponent formatValueWithColor(V value, boolean addColor, FormatContext formatContext);
+    public abstract MutableComponent formatValueWithColor(V value, FormatContext formatContext, FormatColorScheme colorScheme);
 
     @SuppressWarnings("unchecked")
-    public Component formatModifiersUnchecked(Collection<? extends GearPropertyValue<?>> mods, boolean addModColors, FormatContext formatContext) {
-        return formatModifiers((Collection<V>) mods, addModColors, formatContext);
+    public Component formatModifiersUnchecked(Collection<? extends GearPropertyValue<?>> mods, FormatContext formatContext, FormatColorScheme colorScheme) {
+        return formatModifiers((Collection<V>) mods, formatContext, colorScheme);
     }
 
-    public Component formatModifiers(Collection<V> mods, boolean addModColors, FormatContext formatContext) {
+    public Component formatModifiers(Collection<V> mods, FormatContext formatContext, FormatColorScheme colorScheme) {
         if (mods.size() == 1) {
             V inst = mods.iterator().next();
             int decimalPlaces = getPreferredDecimalPlaces(inst);
-            return formatValueWithColor(inst, addModColors, formatContext);
+            return formatValueWithColor(inst, formatContext, colorScheme);
         }
 
         // Sort modifiers by operation
@@ -206,7 +196,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
             if (!result.getSiblings().isEmpty()) {
                 result.append(", ");
             }
-            result.append(formatValueWithColor(value, addModColors, formatContext));
+            result.append(formatValueWithColor(value, formatContext, colorScheme));
         }
 
         return result;
@@ -214,11 +204,12 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
 
     public MutableComponent formatModifiersWithColorUnchecked(
             Collection<GearPropertyValue<?>> mods,
-            boolean addColor,
-            FormatContext formatContext) {
+            FormatContext formatContext,
+            FormatColorScheme colorScheme
+    ) {
         //noinspection unchecked
         V value = valueOf(compute((Collection<V>) mods));
-        return formatValueWithColor(value, addColor, formatContext);
+        return formatValueWithColor(value, formatContext, colorScheme);
     }
 
     public int getPreferredDecimalPlaces(V value) {

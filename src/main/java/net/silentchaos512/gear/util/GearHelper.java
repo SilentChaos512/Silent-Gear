@@ -48,6 +48,7 @@ import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
@@ -440,7 +441,9 @@ public final class GearHelper {
     private static float getTraitModifiedMiningSpeed(ItemStack stack, BlockState state, float baseSpeed) {
         var totalModifier = 0f;
         for (var traitInstance : TraitHelper.getTraits(stack)) {
-            totalModifier += traitInstance.getTrait().getMiningSpeedModifier(traitInstance.getLevel(), state, baseSpeed);
+            if (traitInstance.isValid()) {
+                totalModifier += traitInstance.getTrait().getMiningSpeedModifier(traitInstance.getLevel(), state, baseSpeed);
+            }
         }
         return baseSpeed * (1f + totalModifier);
     }
@@ -462,9 +465,11 @@ public final class GearHelper {
     public static InteractionResult useOn(UseOnContext context) {
         InteractionResult ret = InteractionResult.PASS;
         for (var traitInstance : TraitHelper.getTraits(context.getItemInHand())) {
-            InteractionResult result = traitInstance.getTrait().onItemUse(context, traitInstance.getLevel());
-            if (result != InteractionResult.PASS) {
-                ret = result;
+            if (traitInstance.isValid()) {
+                InteractionResult result = traitInstance.getTrait().onItemUse(context, traitInstance.getLevel());
+                if (result != InteractionResult.PASS) {
+                    ret = result;
+                }
             }
         }
         return ret;
@@ -479,7 +484,9 @@ public final class GearHelper {
         //}
 
         for (var traitInstance : TraitHelper.getTraits(stack)) {
-            traitInstance.getTrait().onItemSwing(stack, wielder, traitInstance.getLevel());
+            if (traitInstance.isValid()) {
+                traitInstance.getTrait().onItemSwing(stack, wielder, traitInstance.getLevel());
+            }
         }
     }
 

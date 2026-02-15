@@ -183,7 +183,7 @@ public final class SgBlocks {
             properties -> new AlloyMakerBlock<>(Const.CRUDE_MIXER_INFO, properties) {
                 @Override
                 public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-                    return Shapes.block();
+                    return AlloyMakerBlock.MIXING_BOWL;
                 }
             },
             properties -> properties
@@ -196,7 +196,7 @@ public final class SgBlocks {
             properties -> new AlloyMakerBlock<>(Const.SUPER_MIXER_INFO, properties) {
                 @Override
                 public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-                    return Shapes.block();
+                    return AlloyMakerBlock.MIXING_BOWL;
                 }
             },
             props -> props

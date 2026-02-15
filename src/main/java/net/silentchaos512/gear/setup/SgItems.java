@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 public final class SgItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(SilentGear.MOD_ID);
 
+    public static final DeferredItem<MaterialBookItem> MATERIAL_BOOK = register("material_book", () ->
+            new MaterialBookItem(unstackableProps()));
     public static final DeferredItem<BlueprintPackageItem> BLUEPRINT_PACKAGE = register(
             "blueprint_package",
             BlueprintPackageItem::new
