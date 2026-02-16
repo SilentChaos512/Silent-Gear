@@ -22,6 +22,7 @@ import net.silentchaos512.gear.client.ColorHandlers;
 import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
+import net.silentchaos512.gear.client.gui.book.MaterialBookScreen;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
@@ -131,7 +132,7 @@ class SideProxy implements IProxy {
 
     private static void serverStarted(ServerStartedEvent event) {
         server = event.getServer();
-        SilentGear.LOGGER.info( "Traits loaded: {}", SgRegistries.TRAIT.stream().count());
+        SilentGear.LOGGER.info("Traits loaded: {}", SgRegistries.TRAIT.stream().count());
         SilentGear.LOGGER.info("Parts loaded: {}", SgRegistries.PART.stream().count());
         SilentGear.LOGGER.info("- Compound: {}", SgRegistries.PART.stream()
                 .filter(part -> part instanceof CoreGearPart).count());
@@ -172,6 +173,10 @@ class SideProxy implements IProxy {
     @Override
     public MinecraftServer getServer() {
         return server;
+    }
+
+    @Override
+    public void openMaterialBookScreen() {
     }
 
     static class Client extends SideProxy {
@@ -232,6 +237,11 @@ class SideProxy implements IProxy {
             Minecraft mc = Minecraft.getInstance();
             //noinspection ConstantConditions -- mc can be null during runData and some other circumstances
             return mc != null && mc.getConnection() != null;
+        }
+
+        @Override
+        public void openMaterialBookScreen() {
+            Minecraft.getInstance().setScreen(new MaterialBookScreen());
         }
     }
 

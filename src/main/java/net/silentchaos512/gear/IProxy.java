@@ -29,4 +29,6 @@ public interface IProxy {
 
     @Nullable
     MinecraftServer getServer();
+
+    void openMaterialBookScreen();
 }
