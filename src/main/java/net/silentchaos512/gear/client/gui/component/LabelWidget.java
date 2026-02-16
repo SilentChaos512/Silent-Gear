@@ -67,7 +67,7 @@ public class LabelWidget extends StringWidget {
         }
         Font font = this.getFont();
         int width = this.getWidth() - xOffset;
-        int textWidth = font.width(component);
+        int textWidth = (int) (font.width(component) * this.scale);
         var rawAlignmentX = Math.round(this.alignX * (width - textWidth) / scale);
         int rawX = this.getX() + rawAlignmentX + xOffset;
         int rawY = this.getY() + (this.getHeight() - 9) / 2;
