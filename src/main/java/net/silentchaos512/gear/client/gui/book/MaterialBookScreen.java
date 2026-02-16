@@ -41,37 +41,40 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
         // Sort and display options
         builder.addLabel(Component.literal("• ").append(Component.translatable("gui.silentgear.material_book.allMaterials")));
         var byNameTitle = Component.literal("  ◦ ").append(Component.translatable("gui.silentgear.material_book.byName"));
-        builder.add(new ClickableLabelPageElement(byNameTitle, button -> onPressAllMaterialsByName(byNameTitle)));
+        builder.add(new ClickableLabelPageElement(byNameTitle, button -> onPressAllMaterialsByName()));
         var byIdTitle = Component.literal("  ◦ ").append(Component.translatable("gui.silentgear.material_book.byId"));
-        builder.add(new ClickableLabelPageElement(byIdTitle, button -> onPressAllMaterialsById(byIdTitle)));
+        builder.add(new ClickableLabelPageElement(byIdTitle, button -> onPressAllMaterialsById()));
         builder.addLabel(Component.literal("• ").append(Component.translatable("gui.silentgear.material_book.byProperty")));
         for (GearProperty<?, ? extends GearPropertyValue<?>> property : SgRegistries.GEAR_PROPERTY) {
             if (property instanceof NumberProperty numberProperty) {
                 var title = Component.literal("  ◦ ").append(property.getDisplayName());
-                builder.add(new ClickableLabelPageElement(title, button -> onPressAllMaterialsByProperty(title, numberProperty)));
+                builder.add(new ClickableLabelPageElement(title, button -> onPressAllMaterialsByProperty(numberProperty)));
             }
         }
 
         return builder;
     }
 
-    private void onPressAllMaterialsByName(Component newScreenTitle) {
+    private void onPressAllMaterialsByName() {
         var materials = SgRegistries.MATERIAL.getValues(true);
+        var newScreenTitle = Component.translatable("gui.silentgear.material_book.allMaterials.byName");
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.MATERIAL_SORT_BY_DISPLAY_NAME);
         var minecraft = Minecraft.getInstance();
         minecraft.execute(() -> minecraft.setScreen(newScreen));
     }
 
-    private void onPressAllMaterialsById(Component newScreenTitle) {
+    private void onPressAllMaterialsById() {
         var materials = SgRegistries.MATERIAL.getValues(true);
+        var newScreenTitle = Component.translatable("gui.silentgear.material_book.allMaterials.byId");
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.MATERIAL_SORT_BY_ID);
         var minecraft = Minecraft.getInstance();
         minecraft.execute(() -> minecraft.setScreen(newScreen));
     }
 
-    private void onPressAllMaterialsByProperty(Component newScreenTitle, GearProperty<Float, NumberPropertyValue> property) {
+    private void onPressAllMaterialsByProperty(GearProperty<Float, NumberPropertyValue> property) {
         var materials = new ArrayList<>(SgRegistries.MATERIAL.getValues(true));
         materials.removeIf(mat -> mat.getProperty(MaterialInstance.of(mat), PartTypes.MAIN, PropertyKey.of(property, GearTypes.ALL.get())) <= 0.0001f);
+        var newScreenTitle = Component.translatable("gui.silentgear.material_book.materialsByProperty", property.getDisplayName());
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.compareByProperty(property));
         var minecraft = Minecraft.getInstance();
         minecraft.execute(() -> minecraft.setScreen(newScreen));
