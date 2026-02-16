@@ -58,19 +58,22 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
     private void onPressAllMaterialsByName(Component newScreenTitle) {
         var materials = SgRegistries.MATERIAL.getValues(true);
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.MATERIAL_SORT_BY_DISPLAY_NAME);
-        Minecraft.getInstance().setScreen(newScreen);
+        var minecraft = Minecraft.getInstance();
+        minecraft.execute(() -> minecraft.setScreen(newScreen));
     }
 
     private void onPressAllMaterialsById(Component newScreenTitle) {
         var materials = SgRegistries.MATERIAL.getValues(true);
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.MATERIAL_SORT_BY_ID);
-        Minecraft.getInstance().setScreen(newScreen);
+        var minecraft = Minecraft.getInstance();
+        minecraft.execute(() -> minecraft.setScreen(newScreen));
     }
 
     private void onPressAllMaterialsByProperty(Component newScreenTitle, GearProperty<Float, NumberPropertyValue> property) {
         var materials = new ArrayList<>(SgRegistries.MATERIAL.getValues(true));
         materials.removeIf(mat -> mat.getProperty(MaterialInstance.of(mat), PartTypes.MAIN, PropertyKey.of(property, GearTypes.ALL.get())) <= 0.0001f);
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.compareByProperty(property));
-        Minecraft.getInstance().setScreen(newScreen);
+        var minecraft = Minecraft.getInstance();
+        minecraft.execute(() -> minecraft.setScreen(newScreen));
     }
 }

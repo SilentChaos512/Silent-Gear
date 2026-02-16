@@ -23,6 +23,7 @@ import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
 import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.gui.book.MaterialBookScreen;
+import net.silentchaos512.gear.client.gui.book.MaterialListBookScreen;
 import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
@@ -241,7 +242,8 @@ class SideProxy implements IProxy {
 
         @Override
         public void openMaterialBookScreen() {
-            Minecraft.getInstance().setScreen(new MaterialBookScreen());
+            var minecraft = Minecraft.getInstance();
+            minecraft.execute(() -> minecraft.setScreen(new MaterialBookScreen()));
         }
     }
 
