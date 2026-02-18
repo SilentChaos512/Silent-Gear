@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.api.material;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -15,6 +16,7 @@ import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -159,6 +161,7 @@ public interface Material extends GearComponent<MaterialInstance> {
      *              item in the matching stacks array.
      * @return An item matching the normal ingredient, or {@link ItemStack#EMPTY} if there are none
      */
+    @Deprecated
     default ItemStack getDisplayItem(PartType type, int ticks) {
         ItemStack[] stacks = getIngredient().getItems();
         if (stacks.length == 0) return ItemStack.EMPTY;

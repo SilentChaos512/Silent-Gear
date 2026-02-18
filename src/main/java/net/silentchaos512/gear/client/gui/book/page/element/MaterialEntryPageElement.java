@@ -17,7 +17,7 @@ public record MaterialEntryPageElement(Material material) implements PageElement
         componentAccess.addRenderableWidget(
                 new IngredientLabelButton(
                         pageX, pageY, widgetWidth, widgetHeight,
-                        material.getIngredient(),
+                        material,
                         text,
                         font,
                         button -> onPress(componentAccess, material)

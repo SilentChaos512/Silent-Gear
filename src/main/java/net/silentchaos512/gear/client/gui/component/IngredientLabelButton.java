@@ -1,29 +1,53 @@
 package net.silentchaos512.gear.client.gui.component;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.silentchaos512.gear.api.material.Material;
+import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.lib.event.ClientTicks;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class IngredientLabelButton extends LabelButton {
-    private final Ingredient ingredient;
+    private static final ItemStack NO_ITEMS_ICON = new ItemStack(Items.BARRIER);
 
-    public IngredientLabelButton(Ingredient ingredient, Component message, Font font, OnPress onPress) {
-        super(message, font, onPress);
-        this.ingredient = ingredient;
-    }
+    private final List<ItemStack> displayItems;
 
-    public IngredientLabelButton(int width, int height, Ingredient ingredient, Component message, Font font, OnPress onPress) {
-        super(width, height, message, font, onPress);
-        this.ingredient = ingredient;
+    public IngredientLabelButton(int x, int y, int width, int height, List<ItemStack> displayItems, Component message, Font font, OnPress onPress) {
+        super(x, y, width, height, message, font, onPress);
+        this.displayItems = ImmutableList.copyOf(displayItems);
     }
 
     public IngredientLabelButton(int x, int y, int width, int height, Ingredient ingredient, Component message, Font font, OnPress onPress) {
-        super(x, y, width, height, message, font, onPress);
-        this.ingredient = ingredient;
+        this(x, y, width, height, Arrays.asList(ingredient.getItems()), message, font, onPress);
+    }
+
+    public IngredientLabelButton(int x, int y, int width, int height, Material material, Component message, Font font, OnPress onPress) {
+        this(x, y, width, height, getItemsFromMaterial(material), message, font, onPress);
+    }
+
+    private static List<ItemStack> getItemsFromMaterial(Material material) {
+        List<ItemStack> list = new ArrayList<>();
+        if (!material.getIngredient().hasNoItems()) {
+            list.addAll(Arrays.asList(material.getIngredient().getItems()));
+        }
+        // Add part substitutes so pure rod materials will display an item
+        for (PartType partType : material.getPartTypes(MaterialInstance.of(material))) {
+            material.getPartSubstitute(partType).ifPresent(ingredient -> {
+                if (!ingredient.hasNoItems()) {
+                    list.addAll(Arrays.asList(ingredient.getItems()));
+                }
+            });
+        }
+        return list;
     }
 
     public static int getWidth(Component text, Font font) {
@@ -51,19 +75,18 @@ public class IngredientLabelButton extends LabelButton {
         int y = this.getY() + (this.getHeight() - 9) / 2;
 
         // Render icon
-        var items = this.ingredient.getItems();
-        ItemStack item;
-        if (items.length > 0) {
-            // Cycle through items
-            int index = (ClientTicks.ticksInGame() / 20) % items.length;
-            item = items[index];
-        } else {
-            // Empty ingredient
-            item = new ItemStack(Items.BARRIER);
-        }
+        ItemStack item = getRenderItem(ClientTicks.ticksInGame());
         guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(0.5f, 0.5f, 1.0f);
         guiGraphics.renderItem(item, x * 2, y * 2);
         guiGraphics.pose().popPose();
+    }
+
+    private ItemStack getRenderItem(int ticksInGame) {
+        if (this.displayItems.isEmpty()) {
+            return NO_ITEMS_ICON;
+        }
+        int index = (ticksInGame / 20) % this.displayItems.size();
+        return this.displayItems.get(index);
     }
 }
