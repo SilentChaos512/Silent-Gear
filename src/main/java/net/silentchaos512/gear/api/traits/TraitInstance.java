@@ -49,11 +49,15 @@ public record TraitInstance(
         this(DataResource.trait(SgRegistries.TRAIT.getKey(trait)), level, conditions);
     }
 
+    private TraitInstance(Trait trait, int level, Collection<ITraitCondition> conditions) {
+        this(DataResource.trait(SgRegistries.TRAIT.getKey(trait)), level, conditions);
+    }
+
     private TraitInstance(DataResource<Trait> trait, int level, ITraitCondition... conditions) {
         this(trait, level, Arrays.asList(conditions));
     }
 
-    private TraitInstance(DataResource<Trait> trait, int level, List<ITraitCondition> conditions) {
+    private TraitInstance(DataResource<Trait> trait, int level, Collection<ITraitCondition> conditions) {
         this(
                 trait,
                 level,
@@ -61,7 +65,7 @@ public record TraitInstance(
         );
     }
 
-    private static ImmutableList<ITraitCondition> createFilteredConditionsList(DataResource<Trait> trait, List<ITraitCondition> conditions) {
+    private static ImmutableList<ITraitCondition> createFilteredConditionsList(DataResource<Trait> trait, Collection<ITraitCondition> conditions) {
         // Use a set to filter out duplicates, then create the immutable list
         var set = new LinkedHashSet<ITraitCondition>();
         if (trait.isPresent()) {
@@ -76,6 +80,10 @@ public record TraitInstance(
     }
 
     public static TraitInstance of(Trait trait, int level, ITraitCondition... conditions) {
+        return new TraitInstance(trait, level, conditions);
+    }
+
+    public static TraitInstance of(Trait trait, int level, Collection<ITraitCondition> conditions) {
         return new TraitInstance(trait, level, conditions);
     }
 

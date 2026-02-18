@@ -6,6 +6,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.CustomTooltipProperty;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitInstance;
@@ -74,19 +75,18 @@ public class MaterialTooltips extends GearComponentTooltips {
         tooltip.add(Component.translatable("misc.silentgear.tooltip.properties").withStyle(ChatFormatting.GOLD));
     }
 
-    public static void propertiesLines(List<Component> tooltip, boolean showHiddenValues, boolean colorPropertyName, FormatColorScheme valueColorScheme, PartType partType, MaterialInstance material) {
+    public static void propertiesLines(List<Component> tooltip, GearTooltipStyle format, FormatColorScheme valueColorScheme, PartType partType, MaterialInstance material) {
         TextListBuilder builder = new TextListBuilder();
 
         for (GearProperty<?, ?> property : SgRegistries.GEAR_PROPERTY) {
-            propertyModifierLinesForProperty(showHiddenValues, colorPropertyName, valueColorScheme, partType, material, builder, property);
+            propertyModifierLinesForProperty(format, valueColorScheme, partType, material, builder, property);
         }
 
         tooltip.addAll(builder.build());
     }
 
     public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> void propertyModifierLinesForProperty(
-            boolean showHiddenValues,
-            boolean colorPropertyName,
+            GearTooltipStyle format,
             FormatColorScheme valueColorScheme,
             PartType partType,
             MaterialInstance material,
@@ -94,9 +94,14 @@ public class MaterialTooltips extends GearComponentTooltips {
             P property
     ) {
         Collection<V> modsAll = material.getPropertyModifiers(partType, PropertyKey.of(property, GearTypes.ALL.get()));
+
+        if (property instanceof CustomTooltipProperty customTooltipProperty && customTooltipProperty.addCustomTooltip(format, valueColorScheme, modsAll, builder)) {
+            return;
+        }
+
         //noinspection unchecked
-        Optional<MutableComponent> head = propertyLine(showHiddenValues, colorPropertyName, valueColorScheme, GearTypes.ALL.get(), property, (Collection<GearPropertyValue<?>>) modsAll);
-        builder.add(head.orElseGet(() -> TextUtil.withOptionalColor(property.getDisplayName(), property.getGroup().getColor(), colorPropertyName)));
+        Optional<MutableComponent> head = propertyLine(format, valueColorScheme, GearTypes.ALL.get(), property, (Collection<GearPropertyValue<?>>) modsAll);
+        builder.add(head.orElseGet(() -> TextUtil.withOptionalColor(property.getDisplayName(), property.getGroup().getColor(), format.colorPropertyName())));
 
         builder.indent();
 
@@ -110,7 +115,7 @@ public class MaterialTooltips extends GearComponentTooltips {
                 //noinspection unchecked
                 var castedKey = (PropertyKey<T, V>) key;
                 Collection<V> mods = material.getPropertyModifiers(partType, castedKey);
-                Optional<MutableComponent> line = subPropertyLine(showHiddenValues, colorPropertyName, castedKey.property(), key.gearType(), mods);
+                Optional<MutableComponent> line = subPropertyLine(format, castedKey.property(), key.gearType(), mods);
 
                 if (line.isPresent()) {
                     builder.add(line.get());

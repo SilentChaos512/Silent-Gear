@@ -3,9 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.1.1] - 2026-02-18
 ### Added
 - Config option to disable spawning with a material book
+### Changed
+- Expanded traits information in material book, add explanation of trait conditions (the asterisk) [#882]
+- Trait condition English localizations changed to read like plain English
 ### Fixed
 - Material list in Material Book now clips text too long for the page (such as missing translations) [#882]
 - Material book will now show icons for materials with only part substitutes (such as blaze rod, etc.) [#882]

@@ -9,6 +9,8 @@ import net.silentchaos512.gear.client.gui.component.LabelWidget;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public record LabelPageElement(
         Component text,
@@ -75,21 +77,26 @@ public record LabelPageElement(
         }
 
         List<Component> result = new ArrayList<>();
+        String initialIndent = getInitialIndent(removeLegacyFormatCodes(fullText.getString()));
         // TODO: Split hyphenated words too?
-        String[] words = fullText.getString().replaceAll("(§.)+", "").split("\\s+");
+        String[] words = fullText.getString().split("\\s+");
         String lineBuilder = "";
         String line;
         for (String word : words) {
+            if (word.isEmpty()) continue;
+
             line = lineBuilder;
-            if (!lineBuilder.isEmpty()) {
+            if (lineBuilder.isEmpty()) {
+                lineBuilder += initialIndent;
+            } else {
                 lineBuilder += " ";
             }
             lineBuilder = lineBuilder + word;
-            if (font.width(lineBuilder) > maxWidth) {
+            if (font.width(removeLegacyFormatCodes(lineBuilder)) > maxWidth) {
                 result.add(Component.literal(line).withStyle(fullText.getStyle()));
                 lineBuilder = word;
                 if (this.indentWrap) {
-                    lineBuilder = "    " + lineBuilder;
+                    lineBuilder = "    " + initialIndent + lineBuilder;
                 }
             }
         }
@@ -97,5 +104,19 @@ public record LabelPageElement(
             result.add(Component.literal(lineBuilder).withStyle(fullText.getStyle()));
         }
         return result;
+    }
+
+    private static String removeLegacyFormatCodes(String text) {
+        return text.replaceAll("(§.)+", "");
+    }
+
+    private static final Pattern INITIAL_WHITESPACE = Pattern.compile("^\\s+");
+
+    private static String getInitialIndent(String text) {
+        Matcher m = INITIAL_WHITESPACE.matcher(text);
+        if (m.find()) {
+            return m.group(0);
+        }
+        return "";
     }
 }

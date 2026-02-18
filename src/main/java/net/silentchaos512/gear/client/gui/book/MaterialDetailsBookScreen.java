@@ -12,6 +12,7 @@ import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
 import net.silentchaos512.gear.client.gui.book.page.element.LabelPageElement;
 import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.client.tooltip.GearComponentTooltips;
+import net.silentchaos512.gear.client.tooltip.GearTooltipStyle;
 import net.silentchaos512.gear.client.tooltip.MaterialTooltips;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -56,7 +57,8 @@ public class MaterialDetailsBookScreen extends AbstractMaterialBookScreen {
             }
 
             List<Component> propertiesLines = new ArrayList<>();
-            MaterialTooltips.propertiesLines(propertiesLines, false, false, FormatColorScheme.DARK_GREY_ZERO_OR_NO_COLOR, partType, materialInstance);
+            var format = new GearTooltipStyle(false, false, false);
+            MaterialTooltips.propertiesLines(propertiesLines, format, FormatColorScheme.DARK_GREY_ZERO_OR_NO_COLOR, partType, materialInstance);
             for (Component line : propertiesLines) {
                 builder.add(new LabelPageElement(line, 0.6f, LabelPageElement.Alignment.LEFT, true, true));
             }

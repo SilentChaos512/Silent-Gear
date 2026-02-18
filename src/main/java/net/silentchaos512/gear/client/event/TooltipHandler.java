@@ -15,10 +15,7 @@ import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.client.KeyTracker;
-import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
-import net.silentchaos512.gear.client.tooltip.GearComponentTooltips;
-import net.silentchaos512.gear.client.tooltip.MaterialTooltips;
-import net.silentchaos512.gear.client.tooltip.PartTooltips;
+import net.silentchaos512.gear.client.tooltip.*;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.AbstractGearPart;
@@ -127,7 +124,8 @@ public final class TooltipHandler {
                 MaterialTooltips.partTypesPagesHeader(event.getToolTip(), partTypes, selectedPartType);
 
                 MaterialTooltips.propertiesHeader(event.getToolTip(), material);
-                MaterialTooltips.propertiesLines(event.getToolTip(), event.getFlags().isAdvanced(), true, FormatColorScheme.LIGHT, selectedPartType, material);
+                var format = new GearTooltipStyle(event.getFlags().isAdvanced(), true, true);
+                MaterialTooltips.propertiesLines(event.getToolTip(), format, FormatColorScheme.LIGHT, selectedPartType, material);
             }
         } else if (event.getFlags().isAdvanced()) {
             MaterialTooltips.addJeiSearchTerms(event.getToolTip(), material);
@@ -203,7 +201,8 @@ public final class TooltipHandler {
 
         for (GearProperty<?, ?> property : getPartRelevantProperties(part, gearType)) {
             var modifiers = new ArrayList<GearPropertyValue<?>>(part.getPropertyModifiers(part.getType(), PropertyKey.of(property, gearType)));
-            PartTooltips.propertyLine(event.getFlags().isAdvanced(), true, FormatColorScheme.LIGHT, part.getGearType(), property, modifiers).ifPresent(builder::add);
+            var format = new GearTooltipStyle(event.getFlags().isAdvanced(), true, true);
+            PartTooltips.propertyLine(format, FormatColorScheme.LIGHT, part.getGearType(), property, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
     }

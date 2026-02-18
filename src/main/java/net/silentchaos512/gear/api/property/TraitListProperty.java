@@ -9,11 +9,13 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
+import net.silentchaos512.gear.client.tooltip.GearTooltipStyle;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -26,7 +28,7 @@ import net.silentchaos512.gear.util.TextUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitListPropertyValue> {
+public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitListPropertyValue> implements CustomTooltipProperty {
     public static final Codec<TraitListPropertyValue> CODEC = Codec.list(TraitInstance.CODEC)
             .xmap(
                     TraitListPropertyValue::new,
@@ -81,11 +83,15 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
 
         Map<Trait, Integer> map = new LinkedHashMap<>();
         Map<Trait, Integer> count = new HashMap<>();
+        Map<Trait, Set<ITraitCondition>> conditions = new HashMap<>();
 
         for (var traitInstance : traits) {
             if (traitInstance.isValid()) {
                 map.merge(traitInstance.getTrait(), traitInstance.getLevel(), Integer::sum);
                 count.merge(traitInstance.getTrait(), 1, Integer::sum);
+                for (ITraitCondition condition : traitInstance.conditions()) {
+                    conditions.computeIfAbsent(traitInstance.getTrait(), traitIn -> new LinkedHashSet<>()).add(condition);
+                }
             }
         }
 
@@ -101,7 +107,7 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
         // TODO: Trait cancelling? Events?
 
         List<TraitInstance> ret = new ArrayList<>();
-        map.forEach((trait, level) -> ret.add(TraitInstance.of(trait, level)));
+        map.forEach((trait, level) -> ret.add(TraitInstance.of(trait, level, conditions.computeIfAbsent(trait, traitIn -> Collections.emptySet()))));
         if (filterConditions) {
             // Remove if the conditions don't match the gear
             ret.removeIf(trait -> !trait.conditionsMatch(PartGearKey.of(itemType, PartTypes.NONE.get()), parts));
@@ -168,5 +174,36 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
             }
         }
         listBuilder.unindent();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T, V extends GearPropertyValue<T>> boolean addCustomTooltip(GearTooltipStyle format, FormatColorScheme valueColorScheme, Collection<V> modifiers, TextListBuilder builder) {
+        if (format.compactStylePreferred()) {
+            return false;
+        }
+
+        var traitList = this.compute(getZeroValue(), false, GearTypes.ALL.get(), (Collection<TraitListPropertyValue>) modifiers);
+        if (traitList.isEmpty()) {
+            return true;
+        }
+
+        builder.add(Component.translatable("property.silentgear.traits"));
+        builder.indent();
+        for (TraitInstance trait : traitList) {
+            builder.add(trait.getDisplayName(FormatContext.ANY));
+            if (!trait.conditions().isEmpty()) {
+                builder.indent().setBullet("*");
+                for (ITraitCondition condition : trait.conditions()) {
+                    var text = condition.getDisplayText();
+                    var strippedText = text.getString().replaceAll("^\\(|\\)$", "");
+                    builder.add(Component.literal(strippedText), ChatFormatting.DARK_GRAY);
+                }
+                builder.unindent();
+            }
+        }
+        builder.unindent();
+
+        return true;
     }
 }
