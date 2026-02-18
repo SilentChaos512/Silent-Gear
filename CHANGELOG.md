@@ -4,8 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Config option to disable spawning with a material book
 ### Fixed
-- Material list in Material Book now clips text too long for the page (such as missing translations)
+- Material list in Material Book now clips text too long for the page (such as missing translations) [#882]
 
 ## [1.21.1-4.1.0.2] - 2026-02-16
 ### Fixed

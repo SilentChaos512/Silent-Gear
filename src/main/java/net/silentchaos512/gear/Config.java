@@ -25,6 +25,8 @@ public final class Config {
         // Blueprints
         public static final ModConfigSpec.EnumValue<BlueprintType.ConfigOption> blueprintTypes;
         public static final ModConfigSpec.BooleanValue spawnWithStarterBlueprints;
+        // Material Book
+        public static final ModConfigSpec.BooleanValue spawnWithMaterialBook;
         // Compounds
         public static final ModConfigSpec.DoubleValue crudeMixerPropertyMultiplier;
         // Nerfed gear
@@ -94,6 +96,14 @@ public final class Config {
                                     "The blueprint package gives some blueprints when used (right-click).",
                                     "To change what is given, override the starter_blueprints loot table.")
                             .define("spawn_with_starter_blueprints", true);
+                    builder.pop();
+                }
+                {
+                    builder.comment("Material book settings");
+                    builder.push("material_book");
+                    spawnWithMaterialBook = builder
+                            .comment("Give the player a material book when joining the world for the first time")
+                            .define("spawn_with_material_book", true);
                     builder.pop();
                 }
                 {
