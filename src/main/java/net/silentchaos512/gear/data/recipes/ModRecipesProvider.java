@@ -101,6 +101,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         registerPressing();
         registerSmithing();
         registerSalvaging();
+        registerCraftingItems();
 
         if (ADD_TEST_RECIPES) {
             registerTestRecipes();
@@ -1014,7 +1015,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         shapelessExt(RecipeCategory.MISC, Items.FEATHER)
                 .requires(CraftingItems.FLUFFY_FEATHER)
-                .save(this.output);
+                .unlockedBy("has_item", has(CraftingItems.FLUFFY_FEATHER))
+                .save(this.output, modId("feather_from_fluffy"));
 
         shaped(RecipeCategory.MISC, CraftingItems.FLUFFY_STRING)
                 .pattern("###")
@@ -1024,7 +1026,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
 
         shapelessExt(RecipeCategory.MISC, Items.STRING)
                 .requires(CraftingItems.FLUFFY_STRING)
-                .save(this.output);
+                .unlockedBy("has_item", has(CraftingItems.FLUFFY_STRING))
+                .save(this.output, modId("string_from_fluffy"));
 
         shaped(RecipeCategory.MISC, Items.WHITE_WOOL)
                 .pattern("###")
@@ -1033,7 +1036,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .define('#', CraftingItems.FLUFFY_PUFF)
                 .define('~', Tags.Items.STRINGS)
                 .unlockedBy("has_item", has(CraftingItems.FLUFFY_PUFF))
-                .save(this.output, modId("fluffy_wool"));
+                .save(this.output, modId("wool_from_fluffy"));
 
         shaped(RecipeCategory.MISC, CraftingItems.FINE_SILK_CLOTH)
                 .pattern("##")

@@ -13,16 +13,23 @@
       "components": {
         "minecraft:attribute_modifiers": [
           {
+            "type": "minecraft:armor",
+            "amount": 0.0,
+            "id": "minecraft:armor.boots",
+            "operation": "add_value",
+            "slot": "feet"
+          },
+          {
+            "type": "minecraft:armor_toughness",
+            "amount": 0.0,
+            "id": "minecraft:armor.boots",
+            "operation": "add_value",
+            "slot": "feet"
+          },
+          {
             "type": "minecraft:block_interaction_range",
             "amount": 0.0,
             "id": "silentgear:reach_modifier",
-            "operation": "add_value",
-            "slot": "mainhand"
-          },
-          {
-            "type": "minecraft:attack_damage",
-            "amount": 0.0,
-            "id": "minecraft:base_attack_damage",
             "operation": "add_value",
             "slot": "mainhand"
           }
