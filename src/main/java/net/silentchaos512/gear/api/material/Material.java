@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.api.material;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.SilentGear;
@@ -14,7 +13,6 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -68,6 +66,19 @@ public interface Material extends GearComponent<MaterialInstance> {
     Optional<Ingredient> getPartSubstitute(PartType partType);
 
     boolean hasPartSubstitutes();
+
+    default boolean isObtainable() {
+        if (getIngredient().isPresent() && !getIngredient().get().isEmpty()) {
+            return true;
+        }
+        for (PartType partType : SgRegistries.PART_TYPE) {
+            var optional = getPartSubstitute(partType);
+            if (optional.isPresent() && !optional.get().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     boolean canSalvage();
 

@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.property.NumberProperty;
@@ -19,6 +20,7 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MaterialBookScreen extends AbstractMaterialBookScreen {
     public MaterialBookScreen() {
@@ -56,7 +58,7 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
     }
 
     private void onPressAllMaterialsByName() {
-        var materials = SgRegistries.MATERIAL.getValues(true);
+        var materials = getValidMaterials();
         var newScreenTitle = Component.translatable("gui.silentgear.material_book.allMaterials.byName");
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.MATERIAL_SORT_BY_DISPLAY_NAME);
         var minecraft = Minecraft.getInstance();
@@ -64,7 +66,7 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
     }
 
     private void onPressAllMaterialsById() {
-        var materials = SgRegistries.MATERIAL.getValues(true);
+        var materials = getValidMaterials();
         var newScreenTitle = Component.translatable("gui.silentgear.material_book.allMaterials.byId");
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.MATERIAL_SORT_BY_ID);
         var minecraft = Minecraft.getInstance();
@@ -72,11 +74,17 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
     }
 
     private void onPressAllMaterialsByProperty(GearProperty<Float, NumberPropertyValue> property) {
-        var materials = new ArrayList<>(SgRegistries.MATERIAL.getValues(true));
+        var materials = getValidMaterials();
         materials.removeIf(mat -> mat.getProperty(MaterialInstance.of(mat), PartTypes.MAIN, PropertyKey.of(property, GearTypes.ALL.get())) <= 0.0001f);
         var newScreenTitle = Component.translatable("gui.silentgear.material_book.materialsByProperty", property.getDisplayName());
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.compareByProperty(property));
         var minecraft = Minecraft.getInstance();
         minecraft.execute(() -> minecraft.setScreen(newScreen));
+    }
+
+    private static List<Material> getValidMaterials() {
+        var list = new ArrayList<>(SgRegistries.MATERIAL.getValues(true));
+        list.removeIf(mat -> !mat.isObtainable());
+        return list;
     }
 }
