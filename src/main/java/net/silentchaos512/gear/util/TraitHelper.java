@@ -264,7 +264,7 @@ public final class TraitHelper {
 
         for (var trait : traits.value()) {
             if (trait.isValid()) {
-                trait.getTrait().onUpdate(new TraitActionContext(player, trait, gear), isEquipped);
+                trait.getTrait().inventoryTick(new TraitActionContext(player, trait, gear), level, entity, isEquipped);
             }
         }
     }

@@ -6,6 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.permissions.Permissions;
 import net.silentchaos512.gear.util.TextUtil;
 
 /**
@@ -40,7 +41,7 @@ public final class SGearCommand {
                 .withStyle(ChatFormatting.GOLD), false);
 
         // Operator commands (level 2)
-        if (source.hasPermission(2)) {
+        if (source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
             source.sendSuccess(() -> TextUtil.translate("command", "help.operatorSection")
                     .withStyle(ChatFormatting.DARK_AQUA), false);
             source.sendSuccess(() -> helpLine("grade set <grade>", "help.grade"), false);

@@ -35,7 +35,7 @@ public final class PropertiesCommand {
      */
     public static ArgumentBuilder<CommandSourceStack, ?> createSubcommand() {
         return Commands.literal("properties")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .executes(ctx -> showHelp(ctx.getSource()))
                 .then(Commands.literal("help")
                         .executes(ctx -> showHelp(ctx.getSource())))
@@ -57,7 +57,7 @@ public final class PropertiesCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_properties")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(buildInfoArgument())
                 .then(buildRecalculateArgument())
         );

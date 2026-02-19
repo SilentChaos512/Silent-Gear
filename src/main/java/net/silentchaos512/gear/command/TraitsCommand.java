@@ -91,9 +91,9 @@ public final class TraitsCommand {
 
     private static LiteralArgumentBuilder<CommandSourceStack> buildDescribeArgument() {
         return Commands.literal("describe")
-                .then(Commands.argument("traitID", ResourceLocationArgument.id())
+                .then(Commands.argument("traitID", IdentifierArgument.id())
                         .suggests(TRAIT_ID_SUGGESTIONS)
-                        .executes(context -> runDescribe(context, ResourceLocationArgument.getId(context, "traitID")))
+                        .executes(context -> runDescribe(context, IdentifierArgument.getId(context, "traitID")))
                 );
     }
 
@@ -107,7 +107,7 @@ public final class TraitsCommand {
                 .executes(TraitsCommand::runList);
     }
 
-    private static int runDescribe(CommandContext<CommandSourceStack> context, ResourceLocation traitId) {
+    private static int runDescribe(CommandContext<CommandSourceStack> context, Identifier traitId) {
         Trait trait = SgRegistries.TRAIT.get(traitId);
         if (trait == null) {
             context.getSource().sendFailure(TextUtil.translate("command", "traits.traitNotFound"));
@@ -170,7 +170,7 @@ public final class TraitsCommand {
 
         // List
         String listStr = traits.stream()
-                .map(ResourceLocation::toString)
+                .map(Identifier::toString)
                 .collect(Collectors.joining(", "));
         source.sendSuccess(() -> Component.literal(listStr), true);
 

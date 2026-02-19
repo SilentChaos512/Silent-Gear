@@ -5,7 +5,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
@@ -68,7 +68,7 @@ public class MaterialDetailsBookScreen extends AbstractMaterialBookScreen {
     }
 
     private void addDescriptionPageIfAvailable(SectionBuilder builder, Material material) {
-        ResourceLocation id = SgRegistries.MATERIAL.getKey(material);
+        Identifier id = SgRegistries.MATERIAL.getKey(material);
         String key = String.format("material.%s.%s.book_desc", id.getNamespace(), id.getPath());
         if (I18n.exists(key)) {
             Component text = Component.translatable(key);

@@ -90,7 +90,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .block(SgBlocks.BORT_BLOCK, SgTags.Items.STORAGE_BLOCKS_BORT));
 
         registerSpecialRecipes();
-        registerBooks(consumer);
+        registerBooks();
         registerCrudeTools();
         registerBlueprints();
         registerCompoundParts();
@@ -126,12 +126,12 @@ public class ModRecipesProvider extends LibRecipeProvider {
         special(this.output, SgRecipes.MOD_KIT_REMOVE_PART.get(), ModKitRemovePartRecipe::new);
     }
 
-    private void registerBooks(RecipeOutput output) {
+    private void registerBooks() {
         shapeless(RecipeCategory.MISC, SgItems.MATERIAL_BOOK)
                 .requires(Items.BOOK)
                 .requires(SgTags.Items.BLUEPRINT_PAPER)
                 .unlockedBy("has_item", has(SgTags.Items.BLUEPRINT_PAPER))
-                .save(output);
+                .save(this.output);
     }
 
     private void registerBlueprints() {

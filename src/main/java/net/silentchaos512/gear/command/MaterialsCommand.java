@@ -11,7 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -20,7 +20,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
@@ -32,6 +31,7 @@ import net.silentchaos512.gear.network.payload.server.CommandOutputPayload;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -93,9 +93,9 @@ public final class MaterialsCommand {
 
     private static LiteralArgumentBuilder<CommandSourceStack> buildDescribeArgument() {
         return Commands.literal("describe")
-                .then(Commands.argument("materialID", ResourceLocationArgument.id())
+                .then(Commands.argument("materialID", IdentifierArgument.id())
                         .suggests(MATERIAL_ID_SUGGESTIONS)
-                        .executes(context -> runDescribe(context, ResourceLocationArgument.getId(context, "materialID")))
+                        .executes(context -> runDescribe(context, IdentifierArgument.getId(context, "materialID")))
                 );
     }
 
@@ -117,7 +117,7 @@ public final class MaterialsCommand {
 
         // List
         String listStr = materials.stream()
-                .map(ResourceLocation::toString)
+                .map(Identifier::toString)
                 .collect(Collectors.joining(", "));
         source.sendSuccess(() -> Component.literal(listStr), true);
 
@@ -128,7 +128,7 @@ public final class MaterialsCommand {
         return 1;
     }
 
-    private static int runDescribe(CommandContext<CommandSourceStack> context, ResourceLocation materialId) {
+    private static int runDescribe(CommandContext<CommandSourceStack> context, Identifier materialId) {
         Material material = SgRegistries.MATERIAL.get(materialId);
         if (material == null) {
             context.getSource().sendFailure(TextUtil.translate("command", "mats.materialNotFound"));
@@ -152,7 +152,7 @@ public final class MaterialsCommand {
         // Parent row (if exists)
         Material parent = material.getParent();
         if (parent != null) {
-            ResourceLocation parentId = SgRegistries.MATERIAL.getKey(parent);
+            Identifier parentId = SgRegistries.MATERIAL.getKey(parent);
             source.sendSuccess(() -> tableRow("mats.describe.parent", parentId.toString()), true);
         }
 

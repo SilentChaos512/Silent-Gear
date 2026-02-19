@@ -2,7 +2,6 @@ package net.silentchaos512.gear.api.property;
 
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -12,6 +11,7 @@ import net.minecraft.world.item.component.SwingAnimation;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 
 import java.util.Collection;
 import java.util.List;
@@ -80,14 +80,14 @@ public class SwingAnimationProperty extends GearProperty<SwingAnimation, SwingAn
     }
 
     @Override
-    public Component formatValue(SwingAnimationPropertyValue value, FormatContext formatContext) {
+    public Component formatValue(SwingAnimationPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
         SwingAnimation animation = value.value;
         float durationInSeconds = animation.duration() / 20f;
         return Component.literal(String.format("%s %.1fs", animation.type().name(), durationInSeconds));
     }
 
     @Override
-    public MutableComponent formatValueWithColor(SwingAnimationPropertyValue value, boolean addColor, FormatContext formatContext) {
-        return formatValue(value, formatContext).plainCopy();
+    public MutableComponent formatValueWithColor(SwingAnimationPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
+        return formatValue(value, formatContext, colorScheme).plainCopy();
     }
 }

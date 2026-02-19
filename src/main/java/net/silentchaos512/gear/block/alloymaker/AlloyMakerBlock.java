@@ -47,7 +47,7 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
     private static final VoxelShape BOWL_INSIDE = Shapes.or(BOWL_RIM_INSIDE, BOWL_MIDDLE_INSIDE);
     private static final VoxelShape BOWL_CONVEX_BASE = Shapes.or(BOWL_RIM, BOWL_MIDDLE, BOWL_BOTTOM_1, BOWL_BOTTOM_2, BOWL_BOTTOM_3);
 
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final VoxelShape TALL_MACHINE = Block.box(1, 0, 1, 15, 27, 15);
     public static final VoxelShape MIXING_BOWL = Shapes.join(BOWL_CONVEX_BASE, BOWL_INSIDE, BooleanOp.ONLY_FIRST);

@@ -93,7 +93,7 @@ public class ModItemModelProvider extends ItemModelGenerators {
         flatItem(SgItems.COATING_SMITHING_TEMPLATE);
 
         // Misc
-        builder(SgItems.MATERIAL_BOOK, itemGenerated);
+        flatItem(SgItems.MATERIAL_BOOK);
         flatItem(SgItems.BLUEPRINT_PACKAGE);
 //        flatItem(SgItems.FLAX_SEEDS);
 //        flatItem(SgItems.FLUFFY_SEEDS);

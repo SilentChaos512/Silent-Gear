@@ -15,6 +15,7 @@ import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyGroups;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.client.KeyTracker;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -101,7 +102,7 @@ public class GearItemTooltips {
             for (GearProperty<?, ?> property : getDisplayProperties(stack, flag)) {
                 GearPropertyValue<?> value = gearProperties.get(property);
                 if (value != null && !property.isHiddenUnchecked(value, flag)) {
-                    property.buildTooltipUnchecked(builder, value, stack, flag);
+                    property.buildTooltipUnchecked(builder, value, stack, flag, FormatColorScheme.NO_COLORS);
                 }
             }
 

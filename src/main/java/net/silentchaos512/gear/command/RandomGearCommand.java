@@ -3,11 +3,10 @@ package net.silentchaos512.gear.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.minecraft.ChatFormatting;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -38,7 +37,7 @@ public final class RandomGearCommand {
      */
     public static ArgumentBuilder<CommandSourceStack, ?> createSubcommand() {
         return Commands.literal("random")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .executes(ctx -> showHelp(ctx.getSource()))
                 .then(Commands.literal("help")
                         .executes(ctx -> showHelp(ctx.getSource())))
@@ -56,26 +55,26 @@ public final class RandomGearCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_random_gear")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(buildPlayersArgument())
         );
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> buildPlayersArgument() {
         return Commands.argument("players", EntityArgument.players())
-                .then(Commands.argument("item", ResourceLocationArgument.id())
+                .then(Commands.argument("item", IdentifierArgument.id())
                         .suggests(itemIdSuggestions)
                         .executes(context -> run(
                                 context,
                                 EntityArgument.getPlayers(context, "players"),
-                                ResourceLocationArgument.getId(context, "item"),
+                                IdentifierArgument.getId(context, "item"),
                                 3
                         ))
                         .then(Commands.argument("tier", IntegerArgumentType.integer())
                                 .executes(context -> run(
                                         context,
                                         EntityArgument.getPlayers(context, "players"),
-                                        ResourceLocationArgument.getId(context, "item"),
+                                        IdentifierArgument.getId(context, "item"),
                                         IntegerArgumentType.getInteger(context, "tier")
                                 ))
                         )

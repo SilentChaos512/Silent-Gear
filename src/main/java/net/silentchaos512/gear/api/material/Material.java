@@ -9,6 +9,7 @@ import net.silentchaos512.gear.api.util.GearComponent;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

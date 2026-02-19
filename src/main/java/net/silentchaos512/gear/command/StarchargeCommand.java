@@ -34,7 +34,7 @@ public final class StarchargeCommand {
      */
     public static LiteralArgumentBuilder<CommandSourceStack> createSubcommand() {
         return Commands.literal("starcharged")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .executes(ctx -> showHelp(ctx.getSource()))
                 .then(Commands.literal("help")
                         .executes(ctx -> showHelp(ctx.getSource())))
@@ -83,7 +83,7 @@ public final class StarchargeCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_starcharged")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(buildListArgument())
                 .then(buildSetArgument())
         );

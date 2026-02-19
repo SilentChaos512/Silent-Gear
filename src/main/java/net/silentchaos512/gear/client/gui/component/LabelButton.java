@@ -2,7 +2,9 @@ package net.silentchaos512.gear.client.gui.component;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.navigation.CommonInputs;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 public class LabelButton extends LabelWidget {
@@ -22,22 +24,22 @@ public class LabelButton extends LabelWidget {
         this.active = true;
     }
 
-    private void onPress() {
+    private void onPress(InputWithModifiers input) {
         this.onPress.onPress(this);
     }
 
     @Override
-    public void onClick(double mouseX, double mouseY) {
-        this.onPress();
+    public void onClick(MouseButtonEvent input, boolean b) {
+        this.onPress(input);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent input) {
         if (!this.active || !this.visible) {
             return false;
-        } else if (CommonInputs.selected(keyCode)) {
+        } else if (input.isSelection()) {
             this.playDownSound(Minecraft.getInstance().getSoundManager());
-            this.onPress();
+            this.onPress(input);
             return true;
         } else {
             return false;

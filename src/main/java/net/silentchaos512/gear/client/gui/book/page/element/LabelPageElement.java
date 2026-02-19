@@ -52,7 +52,6 @@ public record LabelPageElement(
                 case CENTER -> widget.alignCenter();
                 case RIGHT -> widget.alignRight();
             }
-            widget.setColor(0x0);
             y += scaledHeight;
         }
     }

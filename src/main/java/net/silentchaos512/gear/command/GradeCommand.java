@@ -31,7 +31,7 @@ public final class GradeCommand {
      */
     public static LiteralArgumentBuilder<CommandSourceStack> createSubcommand() {
         return Commands.literal("grade")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .executes(ctx -> showHelp(ctx.getSource()))
                 .then(Commands.literal("help")
                         .executes(ctx -> showHelp(ctx.getSource())))
@@ -78,7 +78,7 @@ public final class GradeCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("sgear_grade")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(buildListArgument())
                 .then(buildSetArgument())
         );

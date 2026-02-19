@@ -9,8 +9,9 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.gui.book.page.Page;
 import net.silentchaos512.gear.client.gui.book.page.SectionBuilder;
@@ -22,13 +23,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class AbstractMaterialBookScreen extends Screen {
-    public static final ResourceLocation BOOK_TEXTURE = SilentGear.getId("textures/gui/guide_book.png");
-    public static final ResourceLocation PAGE_BACKWARD = ResourceLocation.withDefaultNamespace("widget/page_backward");
-    public static final ResourceLocation PAGE_BACKWARD_HIGHLIGHTED = ResourceLocation.withDefaultNamespace("widget/page_backward_highlighted");
-    public static final ResourceLocation PAGE_FORWARD = ResourceLocation.withDefaultNamespace("widget/page_forward");
-    public static final ResourceLocation PAGE_FORWARD_HIGHLIGHTED = ResourceLocation.withDefaultNamespace("widget/page_forward_highlighted");
-    public static final ResourceLocation PAGE_RETURN = SilentGear.getId("textures/gui/sprites/widget/page_return.png");
-    public static final ResourceLocation PAGE_RETURN_HIGHLIGHTED = SilentGear.getId("textures/gui/sprites/widget/page_return_highlighted.png");
+    public static final Identifier BOOK_TEXTURE = SilentGear.getId("textures/gui/guide_book.png");
+    public static final Identifier PAGE_BACKWARD = Identifier.withDefaultNamespace("widget/page_backward");
+    public static final Identifier PAGE_BACKWARD_HIGHLIGHTED = Identifier.withDefaultNamespace("widget/page_backward_highlighted");
+    public static final Identifier PAGE_FORWARD = Identifier.withDefaultNamespace("widget/page_forward");
+    public static final Identifier PAGE_FORWARD_HIGHLIGHTED = Identifier.withDefaultNamespace("widget/page_forward_highlighted");
+    public static final Identifier PAGE_RETURN = SilentGear.getId("textures/gui/sprites/widget/page_return.png");
+    public static final Identifier PAGE_RETURN_HIGHLIGHTED = SilentGear.getId("textures/gui/sprites/widget/page_return_highlighted.png");
 
     @Nullable private final Screen previousScreen;
     private List<Page> pages;
@@ -145,9 +146,9 @@ public class AbstractMaterialBookScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderTransparentBackground(guiGraphics);
-        guiGraphics.pose().pushPose();
-        guiGraphics.blit(BOOK_TEXTURE, this.width / 2 - 140, 20, 280, 179, 0, 0, 280, 179, 512, 512);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().pushMatrix();
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, BOOK_TEXTURE, this.width / 2 - 140, 20, 0f, 0f, 280, 179, 512, 512);
+        guiGraphics.pose().popMatrix();
     }
 
     protected  void onPageBackward() {

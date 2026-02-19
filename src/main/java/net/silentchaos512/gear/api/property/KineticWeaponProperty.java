@@ -2,7 +2,6 @@ package net.silentchaos512.gear.api.property;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -12,6 +11,7 @@ import net.minecraft.world.item.component.KineticWeapon;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 
 import java.util.Collection;
 import java.util.List;
@@ -116,7 +116,7 @@ public class KineticWeaponProperty extends GearProperty<KineticWeapon, KineticWe
     }
 
     @Override
-    public Component formatValue(KineticWeaponPropertyValue value, FormatContext formatContext) {
+    public Component formatValue(KineticWeaponPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
         return Component.literal(
                 String.format(
                         "KineticWeapon(cct=%d,dt=%d,p1=%s,p2=%s,p3=%s,fm=%.2f,dmg=%.2f)",
@@ -141,7 +141,7 @@ public class KineticWeaponProperty extends GearProperty<KineticWeapon, KineticWe
     }
 
     @Override
-    public MutableComponent formatValueWithColor(KineticWeaponPropertyValue value, boolean addColor, FormatContext formatContext) {
-        return formatValue(value, formatContext).plainCopy();
+    public MutableComponent formatValueWithColor(KineticWeaponPropertyValue value, FormatContext formatContext, FormatColorScheme colorScheme) {
+        return formatValue(value, formatContext, colorScheme).plainCopy();
     }
 }

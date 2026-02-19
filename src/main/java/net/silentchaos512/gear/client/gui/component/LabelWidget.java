@@ -26,7 +26,6 @@ public class LabelWidget extends StringWidget {
 
     public LabelWidget(int x, int y, int width, int height, Component message, Font font) {
         super(x, y, width, height, message, font);
-        this.setColor(0x0);
     }
 
     public LabelWidget setScale(float scale) {
@@ -62,7 +61,7 @@ public class LabelWidget extends StringWidget {
     protected void renderWithHorizontalOffset(GuiGraphics guiGraphics, int xOffset) {
         var component = this.getMessage().copy();
         if (this.active && this.isHovered) {
-            component = component.withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.GOLD);
+            component = this.getMessage().copy().withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.GOLD);
         }
         Font font = this.getFont();
         int width = this.getWidth();
@@ -73,10 +72,10 @@ public class LabelWidget extends StringWidget {
         int scaledX = Math.round(rawX / this.scale);
         int scaledY = Math.round(rawY / this.scale);
         FormattedCharSequence formattedcharsequence = textWidth > width ? this.clipText(component, width) : component.getVisualOrderText();
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().scale(this.scale, this.scale, 1f);
-        guiGraphics.drawString(font, formattedcharsequence, scaledX, scaledY, this.getColor(), false);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().pushMatrix();
+        guiGraphics.pose().scale(this.scale, this.scale);
+        guiGraphics.drawString(font, formattedcharsequence, scaledX, scaledY, 0xFF000000, false);
+        guiGraphics.pose().popMatrix();
     }
 
     protected FormattedCharSequence clipText(Component message, int width) {

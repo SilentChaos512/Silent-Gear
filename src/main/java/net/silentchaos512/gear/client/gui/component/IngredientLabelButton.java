@@ -1,12 +1,16 @@
 package net.silentchaos512.gear.client.gui.component;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.silentchaos512.lib.event.ClientTicks;
+
+import java.util.Objects;
 
 public class IngredientLabelButton extends LabelButton {
     private final Ingredient ingredient;
@@ -51,19 +55,20 @@ public class IngredientLabelButton extends LabelButton {
         int y = this.getY() + (this.getHeight() - 9) / 2;
 
         // Render icon
-        var items = this.ingredient.getItems();
+        var contextMap = SlotDisplayContext.fromLevel(Objects.requireNonNull(Minecraft.getInstance().level));
+        var items = this.ingredient.display().resolveForStacks(contextMap);
         ItemStack item;
-        if (items.length > 0) {
+        if (!items.isEmpty()) {
             // Cycle through items
-            int index = (ClientTicks.ticksInGame() / 20) % items.length;
-            item = items[index];
+            int index = (ClientTicks.ticksInGame() / 20) % items.size();
+            item = items.get(index);
         } else {
             // Empty ingredient
             item = new ItemStack(Items.BARRIER);
         }
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().scale(0.5f, 0.5f, 1.0f);
+        guiGraphics.pose().pushMatrix();
+        guiGraphics.pose().scale(0.5f, 0.5f);
         guiGraphics.renderItem(item, x * 2, y * 2);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 }

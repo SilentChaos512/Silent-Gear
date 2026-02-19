@@ -3,23 +3,21 @@ package net.silentchaos512.gear.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.minecraft.ChatFormatting;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearItem;
-import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
-import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
@@ -28,6 +26,7 @@ import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.TextUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -92,9 +91,9 @@ public final class PartsCommand {
 
     private static LiteralArgumentBuilder<CommandSourceStack> buildDescribeArgument() {
         return Commands.literal("describe")
-                .then(Commands.argument("partID", ResourceLocationArgument.id())
+                .then(Commands.argument("partID", IdentifierArgument.id())
                         .suggests(partIdSuggestions)
-                        .executes(context -> runDescribe(context, ResourceLocationArgument.getId(context, "partID")))
+                        .executes(context -> runDescribe(context, IdentifierArgument.getId(context, "partID")))
                 );
     }
 
@@ -113,7 +112,7 @@ public final class PartsCommand {
 
         // List
         String listStr = parts.stream()
-                .map(ResourceLocation::toString)
+                .map(Identifier::toString)
                 .collect(Collectors.joining(", "));
         source.sendSuccess(() -> Component.literal(listStr), true);
 
@@ -124,7 +123,7 @@ public final class PartsCommand {
         return 1;
     }
 
-    private static int runDescribe(CommandContext<CommandSourceStack> context, ResourceLocation partId) {
+    private static int runDescribe(CommandContext<CommandSourceStack> context, Identifier partId) {
         GearPart part = SgRegistries.PART.get(partId);
         if (part == null) {
             context.getSource().sendFailure(TextUtil.translate("command", "parts.partNotFound"));

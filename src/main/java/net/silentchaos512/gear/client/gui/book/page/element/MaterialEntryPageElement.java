@@ -3,6 +3,8 @@ package net.silentchaos512.gear.client.gui.book.page.element;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.client.gui.book.AbstractMaterialBookScreen;
 import net.silentchaos512.gear.client.gui.book.MaterialDetailsBookScreen;
@@ -17,7 +19,7 @@ public record MaterialEntryPageElement(Material material) implements PageElement
         componentAccess.addRenderableWidget(
                 new IngredientLabelButton(
                         pageX, pageY, widgetWidth, widgetHeight,
-                        material.getIngredient(),
+                        material.getIngredient().orElseGet(() -> Ingredient.of(Items.BARRIER)),
                         text,
                         font,
                         button -> onPress(componentAccess, material)

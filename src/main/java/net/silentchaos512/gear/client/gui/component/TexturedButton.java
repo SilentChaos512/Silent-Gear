@@ -1,11 +1,11 @@
 package net.silentchaos512.gear.client.gui.component;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
 
 public class TexturedButton extends Button {
     private final WidgetSprites sprites;
@@ -18,16 +18,16 @@ public class TexturedButton extends Button {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
-        RenderSystem.enableBlend();
-        RenderSystem.enableDepthTest();
-        ResourceLocation sprite = this.sprites.get(this.active, this.isHoveredOrFocused());
+    protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        Identifier sprite = this.sprites.get(this.active, this.isHoveredOrFocused());
+        int width = this.getWidth();
+        int height = this.getHeight();
+        int x = this.getX();
+        int y = this.getY();
         if (this.spriteBlit) {
-            guiGraphics.blitSprite(sprite, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, width, height, 0, 0, x, y, width, height);
         } else {
-            guiGraphics.blit(sprite, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), this.getWidth(), this.getHeight());
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, sprite, x, y, 0, 0, width, height, width, height);
         }
-        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }
