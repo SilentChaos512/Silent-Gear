@@ -9,6 +9,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FormattedCharSequence;
+import net.silentchaos512.gear.client.gui.book.page.Page;
 import net.silentchaos512.lib.util.MathUtils;
 
 public class LabelWidget extends StringWidget {
@@ -25,7 +26,7 @@ public class LabelWidget extends StringWidget {
     }
 
     public LabelWidget(int x, int y, int width, int height, Component message, Font font) {
-        super(x, y, width, height, message, font);
+        super(x, y, Math.min(width, Page.PAGE_WIDTH), height, message, font);
     }
 
     public LabelWidget setScale(float scale) {
@@ -64,8 +65,8 @@ public class LabelWidget extends StringWidget {
             component = this.getMessage().copy().withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.GOLD);
         }
         Font font = this.getFont();
-        int width = this.getWidth();
-        int textWidth = font.width(component);
+        int width = this.getWidth() - xOffset;
+        int textWidth = (int) (font.width(component) * this.scale);
         var rawAlignmentX = Math.round(this.alignX * (width - textWidth) / scale);
         int rawX = this.getX() + rawAlignmentX + xOffset;
         int rawY = this.getY() + (this.getHeight() - 9) / 2;

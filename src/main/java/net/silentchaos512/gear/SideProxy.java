@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -12,12 +13,20 @@ import net.neoforged.fml.event.lifecycle.*;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.silentchaos512.gear.client.ColorHandlers;
+import net.silentchaos512.gear.client.event.ExtraBlockBreakHandler;
+import net.silentchaos512.gear.client.event.GearHudOverlay;
 import net.silentchaos512.gear.client.event.TooltipHandler;
+import net.silentchaos512.gear.client.gui.book.MaterialBookScreen;
+import net.silentchaos512.gear.client.gui.book.MaterialListBookScreen;
+import net.silentchaos512.gear.client.util.ModItemModelProperties;
 import net.silentchaos512.gear.gear.material.MaterialSerializers;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartSerializers;
@@ -28,7 +37,9 @@ import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 class SideProxy implements IProxy {
     @Nullable
@@ -83,15 +94,16 @@ class SideProxy implements IProxy {
 
     private static void commonSetup(FMLCommonSetupEvent event) {
         InitialSpawnItems.add(SilentGear.getId("starter_blueprints"), p -> {
-            if (Config.Common.spawnWithStarterBlueprints.get())
-                return Collections.singleton(SgItems.BLUEPRINT_PACKAGE.get().getDefaultStack());
-            return Collections.emptyList();
+            if (Config.Common.isLoaded() && Config.Common.spawnWithStarterBlueprints.get()) {
+                return List.of(SgItems.BLUEPRINT_PACKAGE.toStack());
+            }
+            return List.of();
         });
         InitialSpawnItems.add(SilentGear.getId("material_book"), p -> {
-            /*ServerTicks.scheduleAction(() -> {
-                p.sendSystemMessage(Component.literal("A new Silent Gear material book has been added. Enjoy!"));
-            });*/
-            return Collections.singleton(SgItems.MATERIAL_BOOK.toStack());
+            if (Config.Common.isLoaded() && Config.Common.spawnWithMaterialBook.get()) {
+                return List.of(SgItems.MATERIAL_BOOK.toStack());
+            }
+            return List.of();
         });
 
         Greetings.addMessage(SideProxy::detectDataLoadingFailure);
@@ -126,7 +138,7 @@ class SideProxy implements IProxy {
 
     private static void serverStarted(ServerStartedEvent event) {
         server = event.getServer();
-        SilentGear.LOGGER.info( "Traits loaded: {}", SgRegistries.TRAIT.stream().count());
+        SilentGear.LOGGER.info("Traits loaded: {}", SgRegistries.TRAIT.stream().count());
         SilentGear.LOGGER.info("Parts loaded: {}", SgRegistries.PART.stream().count());
         SilentGear.LOGGER.info("- Compound: {}", SgRegistries.PART.stream()
                 .filter(part -> part instanceof CoreGearPart).count());
@@ -167,6 +179,10 @@ class SideProxy implements IProxy {
     @Override
     public MinecraftServer getServer() {
         return server;
+    }
+
+    @Override
+    public void openMaterialBookScreen() {
     }
 
     static class Client extends SideProxy {
@@ -223,6 +239,12 @@ class SideProxy implements IProxy {
             Minecraft mc = Minecraft.getInstance();
             //noinspection ConstantConditions -- mc can be null during runData and some other circumstances
             return mc != null && mc.getConnection() != null;
+        }
+
+        @Override
+        public void openMaterialBookScreen() {
+            var minecraft = Minecraft.getInstance();
+            minecraft.execute(() -> minecraft.setScreen(new MaterialBookScreen()));
         }
     }
 

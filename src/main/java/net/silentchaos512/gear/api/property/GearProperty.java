@@ -13,6 +13,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
+import net.silentchaos512.gear.client.tooltip.GearTooltipStyle;
 import net.silentchaos512.gear.client.util.GearTooltipFlag;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -155,6 +156,10 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
 
     public void buildTooltip(TextListBuilder listBuilder, V value, ItemStack gearItemStack, GearTooltipFlag flag, FormatColorScheme colorScheme) {
         listBuilder.add(formatText(value, flag, colorScheme));
+    }
+
+    public void buildModifiersTooltip(TextListBuilder listBuilder, Collection<V> modifiers, GearTooltipStyle format, FormatColorScheme colorScheme) {
+
     }
 
     @SuppressWarnings("unchecked")

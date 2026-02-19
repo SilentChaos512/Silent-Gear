@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.client.util;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -13,20 +14,38 @@ public class TextListBuilder {
 
     private final List<Component> list = new ArrayList<>();
     private int indent = 0;
+    private String bullet = BULLETS[0];
 
     public TextListBuilder indent() {
         ++indent;
+        setDefaultBullet();
         return this;
     }
 
     public TextListBuilder unindent() {
         if (indent > 0)
             --indent;
+        setDefaultBullet();
+        return this;
+    }
+
+    public TextListBuilder setBullet(String bulletCharacter) {
+        this.bullet = bulletCharacter;
+        return this;
+    }
+
+    public TextListBuilder setDefaultBullet() {
+        this.bullet = BULLETS[Mth.clamp(this.indent, 0, BULLETS.length - 1)];
         return this;
     }
 
     public TextListBuilder add(Component text) {
         this.list.add(indentWithBullet().append(text));
+        return this;
+    }
+
+    public TextListBuilder add(Component text, ChatFormatting style) {
+        this.list.add(indentWithBullet().append(text).withStyle(style));
         return this;
     }
 
@@ -41,8 +60,7 @@ public class TextListBuilder {
             builder.append("  ");
         }
 
-        String bullet = BULLETS[Mth.clamp(this.indent, 0, BULLETS.length - 1)];
-        builder.append(bullet).append(" ");
+        builder.append(this.bullet).append(" ");
         return Component.literal(builder.toString());
     }
 

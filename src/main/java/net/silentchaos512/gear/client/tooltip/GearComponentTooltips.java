@@ -17,8 +17,7 @@ import java.util.*;
 public class GearComponentTooltips {
     @SuppressWarnings("unchecked")
     public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> propertyLine(
-            boolean showHiddenValues,
-            boolean colorPropertyName,
+            GearTooltipStyle format,
             FormatColorScheme valueColorScheme,
             GearType gearType,
             GearProperty<?, ?> propertyIn,
@@ -30,10 +29,10 @@ public class GearComponentTooltips {
             var modifiers = (Collection<V>) modifiersIn;
             T value = property.compute(property.getZeroValue(), false, gearType, modifiers);
             boolean isZero = isTrueZeroValue(property, value, modifiers);
-            if (showHiddenValues || !isZero) {
+            if (format.showHiddenValues() || !isZero) {
                 Color nameColor = isZero ? TooltipHandler.MC_DARK_GRAY : property.getGroup().getColor();
 
-                MutableComponent nameStr = TextUtil.withOptionalColor(property.getDisplayName(), nameColor, colorPropertyName);
+                MutableComponent nameStr = TextUtil.withOptionalColor(property.getDisplayName(), nameColor, format.colorPropertyName());
                 MutableComponent statListText = GearPropertyMap.formatText(
                         modifiers,
                         property,
@@ -49,8 +48,7 @@ public class GearComponentTooltips {
     }
 
     protected static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> subPropertyLine(
-            boolean showHiddenValues,
-            boolean addColors,
+            GearTooltipStyle format,
             P property,
             GearType gearType,
             Collection<V> modifiers
@@ -58,17 +56,17 @@ public class GearComponentTooltips {
         if (!modifiers.isEmpty()) {
             T value = property.compute(property.getZeroValue(), modifiers);
             boolean isZero = isTrueZeroValue(property, value, modifiers);
-            if (showHiddenValues || !isZero) {
+            if (format.showHiddenValues() || !isZero) {
                 Color color = isZero ? TooltipHandler.MC_DARK_GRAY : Color.WHITE;
 
-                MutableComponent nameStr = TextUtil.withOptionalColor(gearType.getDisplayName().copy(), color, addColors);
+                MutableComponent nameStr = TextUtil.withOptionalColor(gearType.getDisplayName().copy(), color, format.colorPropertyName());
                 var uncoloredFormattedText = GearPropertyMap.formatText(
                         modifiers,
                         property,
                         property.getPreferredDecimalPlaces(property.valueOf(value)),
                         FormatColorScheme.NO_COLORS
                 );
-                MutableComponent statListText = TextUtil.withOptionalColor(uncoloredFormattedText, color, addColors);
+                MutableComponent statListText = TextUtil.withOptionalColor(uncoloredFormattedText, color, format.colorPropertyName());
 
                 return Optional.of(Component.translatable("property.silentgear.displayFormat", nameStr, statListText));
             }
