@@ -22,7 +22,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.SwingAnimationType;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.SwingAnimation;
@@ -48,7 +51,6 @@ import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
@@ -601,7 +603,7 @@ public final class GearHelper {
     public static Rarity getRarity(ItemStack stack) {
         int rarity = (int) GearData.getProperties(stack).getNumber(GearProperties.RARITY);
         if (stack.isEnchanted())
-            if (Config.Client.vanillaStyleTooltips.get()) {
+            if (Config.Client.isLoaded() && Config.Client.vanillaStyleTooltips.get()) {
                 rarity += 80;
             } else {
                 rarity += 20;

@@ -373,6 +373,10 @@ public final class Config {
 
         private Client() {
         }
+
+        public static boolean isLoaded() {
+            return SPEC.isLoaded();
+        }
     }
 
     private Config() {
