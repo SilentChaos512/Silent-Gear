@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "silentlib:block/crop_cutout",
   "textures": {
-    "cross": "silentgear:block/flax_plant_stage3"
+    "crop": "silentgear:block/flax_plant_stage3"
   }
 }

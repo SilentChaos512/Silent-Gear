@@ -16,11 +16,13 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.ModCropBlock;
 import net.silentchaos512.gear.data.SgBlockFamilies;
 import net.silentchaos512.gear.setup.SgBlocks;
+import net.silentchaos512.lib.data.client.LibBlockModelGenerators;
+import net.silentchaos512.lib.data.client.LibModelTemplates;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class ModBlockModelGenerator extends BlockModelGenerators {
+public class ModBlockModelGenerator extends LibBlockModelGenerators {
     public ModBlockModelGenerator(Consumer<BlockModelDefinitionGenerator> blockStateOutput, ItemModelOutput itemModelOutput, BiConsumer<Identifier, ModelInstance> modelOutput) {
         super(blockStateOutput, itemModelOutput, modelOutput);
     }
@@ -48,7 +50,7 @@ public class ModBlockModelGenerator extends BlockModelGenerators {
         createTrivialCube(SgBlocks.NETHERWOOD_LEAVES.get());
         woodProvider(SgBlocks.NETHERWOOD_LOG.get()).logWithHorizontal(SgBlocks.NETHERWOOD_LOG.get()).wood(SgBlocks.NETHERWOOD_WOOD.get());
         woodProvider(SgBlocks.STRIPPED_NETHERWOOD_LOG.get()).logWithHorizontal(SgBlocks.STRIPPED_NETHERWOOD_LOG.get()).wood(SgBlocks.STRIPPED_NETHERWOOD_WOOD.get());
-        createPlantWithDefaultItem(SgBlocks.NETHERWOOD_SAPLING.get(), SgBlocks.POTTED_NETHERWOOD_SAPLING.get(), PlantType.NOT_TINTED);
+        createPlantCutoutWithDefaultItem(SgBlocks.NETHERWOOD_SAPLING.get(), SgBlocks.POTTED_NETHERWOOD_SAPLING.get());
         family(SgBlocks.NETHERWOOD_PLANKS.get()).generateFor(SgBlockFamilies.NETHERWOOD.get());
 
         // Fluffy blocks
@@ -89,8 +91,8 @@ public class ModBlockModelGenerator extends BlockModelGenerators {
         orientableMachineBlockWithoutLitState(SgBlocks.SUPER_MIXER, "super_mixer");
 
         // Plants
-        createCropBlock(SgBlocks.FLAX_PLANT.get(), ModCropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
-        createCropBlock(SgBlocks.FLUFFY_PLANT.get(), ModCropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
+        createCropCutoutBlock(SgBlocks.FLAX_PLANT.get(), ModCropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
+        createCropCutoutBlock(SgBlocks.FLUFFY_PLANT.get(), ModCropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
         createWildCrop(SgBlocks.WILD_FLAX_PLANT, "block/flax_plant_stage3");
         createWildCrop(SgBlocks.WILD_FLUFFY_PLANT, "block/fluffy_plant_stage3");
     }
@@ -108,9 +110,9 @@ public class ModBlockModelGenerator extends BlockModelGenerators {
 
     private void createWildCrop(DeferredBlock<?> block, String texturePath) {
         var multivariant = plainVariant(
-                PlantType.NOT_TINTED.getCross().create(
+                LibModelTemplates.CROP_CUTOUT.create(
                         block.get(),
-                        TextureMapping.cross(SilentGear.getId(texturePath)),
+                        TextureMapping.crop(SilentGear.getId(texturePath)),
                         this.modelOutput
                 )
         );
