@@ -102,4 +102,11 @@ public record PartGearKey (
         var gearTypeShortStr = SilentGear.shortenId(SgRegistries.GEAR_TYPE.getKey(gearType()));
         return partTypeShortStr + "/" + gearTypeShortStr;
     }
+
+    @Override
+    public String toString() {
+        return "PartGearKey[" +
+                "gearType=" + gearType + ", " +
+                "partType=" + partType + ']';
+    }
 }

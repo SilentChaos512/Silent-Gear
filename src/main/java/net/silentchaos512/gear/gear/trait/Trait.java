@@ -294,4 +294,9 @@ public final class Trait {
             tooltip.add(Component.literal("    ").append(description));
         }
     }
+
+    @Override
+    public String toString() {
+        return "Trait{" + SgRegistries.TRAIT.getKey(this) + "}";
+    }
 }

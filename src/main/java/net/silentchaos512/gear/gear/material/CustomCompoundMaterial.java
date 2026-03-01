@@ -13,6 +13,7 @@ import net.silentchaos512.gear.api.material.MaterialSerializer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.util.DataResource;
+import net.silentchaos512.gear.setup.SgRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,13 @@ public class CustomCompoundMaterial extends AbstractMaterial {
     @Override
     public boolean isSimple() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomCompoundMaterial{" +
+                SgRegistries.MATERIAL.getKey(this) +
+                '}';
     }
 
     public static class Serializer extends MaterialSerializer<CustomCompoundMaterial> {

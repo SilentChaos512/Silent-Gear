@@ -190,7 +190,7 @@ public class CoreGearPart extends AbstractGearPart {
 
     @Override
     public String toString() {
-        return "CompoundPart{" +
+        return "CoreGearPart{" +
                 "id=" + SgRegistries.PART.getKey(this) +
                 ", partType=" + partType +
                 '}';

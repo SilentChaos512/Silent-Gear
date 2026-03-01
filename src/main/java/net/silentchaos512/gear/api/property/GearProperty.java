@@ -240,6 +240,11 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return key != null ? key.hashCode() : super.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "" + SgRegistries.GEAR_PROPERTY.getKey(this);
+    }
+
     public enum FormatContext {
         GEAR,
         PART,

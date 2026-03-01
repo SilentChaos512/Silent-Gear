@@ -15,6 +15,7 @@ import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.item.ProcessedMaterialItem;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -114,6 +115,13 @@ public class ProcessedMaterial extends AbstractMaterial {
     public String getModelKey(MaterialInstance material) {
         MaterialInstance base = getBaseMaterial(material);
         return super.getModelKey(material) + (base != null && base.isValid() ? "[" + base.getModelKey() + "]" : "");
+    }
+
+    @Override
+    public String toString() {
+        return "ProcessedMaterial{" +
+                SgRegistries.MATERIAL.getKey(this) +
+                '}';
     }
 
     public static class Serializer extends MaterialSerializer<ProcessedMaterial> {
