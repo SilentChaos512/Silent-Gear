@@ -52,7 +52,8 @@ public class UpgradeGearPart extends CoreGearPart {
 
     @Override
     public void addInformation(PartInstance part, ItemStack gear, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(1, part.getDisplayName(this.partType));
+        int idx = Math.min(1, tooltip.size());
+        tooltip.add(idx, part.getDisplayName(this.partType));
     }
 
     @Override
