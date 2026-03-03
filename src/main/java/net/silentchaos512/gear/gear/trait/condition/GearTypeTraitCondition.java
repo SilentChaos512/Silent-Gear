@@ -51,7 +51,7 @@ public record GearTypeTraitCondition(GearType gearType) implements ITraitConditi
                 // Filter on main parts
                 return isMatch(context);
             } else {
-                // Don't filter yet, this would fail on upgrades
+                // Don't filter yet, this could fail on upgrades and materials
                 return true;
             }
         }

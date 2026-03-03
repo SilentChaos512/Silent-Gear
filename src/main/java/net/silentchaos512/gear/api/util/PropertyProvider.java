@@ -24,7 +24,7 @@ public interface PropertyProvider<D extends GearComponentInstance<?>> {
     default <T, V extends GearPropertyValue<T>> T getProperty(D instance, PartType partType, PropertyKey<T, V> key) {
         var property = key.property();
         var mods = getPropertyModifiers(instance, partType, key);
-        return property.compute(ComputeContext.from(instance), mods);
+        return property.compute(ComputeContext.from(instance, partType), mods);
     }
 
     default <T, V extends GearPropertyValue<T>> T getProperty(D instance, Supplier<PartType> partType, PropertyKey<T, V> key) {
@@ -34,7 +34,7 @@ public interface PropertyProvider<D extends GearComponentInstance<?>> {
     default <T, V extends GearPropertyValue<T>> T getPropertyUnclamped(D instance, PartType partType, PropertyKey<T, V> key) {
         var property = key.property();
         var mods = getPropertyModifiers(instance, partType, key);
-        return property.compute(ComputeContext.from(instance), property.getBaseValue(), false, key.gearType(), mods);
+        return property.compute(ComputeContext.from(instance, partType), property.getBaseValue(), false, key.gearType(), mods);
     }
 
     default <T, V extends GearPropertyValue<T>> T getPropertyUnclamped(D instance, Supplier<PartType> partType, PropertyKey<T, V> key) {

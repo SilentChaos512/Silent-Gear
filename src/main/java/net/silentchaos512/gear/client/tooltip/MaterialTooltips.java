@@ -100,7 +100,7 @@ public class MaterialTooltips extends GearComponentTooltips {
             return;
         }
 
-        ComputeContext context = ComputeContext.from(material);
+        ComputeContext context = ComputeContext.material(material, partType);
         //noinspection unchecked
         Optional<MutableComponent> head = propertyLine(context, format, valueColorScheme, GearTypes.ALL.get(), property, (Collection<GearPropertyValue<?>>) modsAll);
         builder.add(head.orElseGet(() -> TextUtil.withOptionalColor(property.getDisplayName(), property.getGroup().getColor(), format.colorPropertyName())));

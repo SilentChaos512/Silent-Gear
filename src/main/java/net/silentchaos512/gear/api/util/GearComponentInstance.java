@@ -43,7 +43,7 @@ public interface GearComponentInstance<A extends GearComponent<?>> {
     default Collection<TraitInstance> getTraits(PartGearKey key) {
         var property = GearProperties.TRAITS.get();
         var mods = getPropertyModifiers(key.partType(), PropertyKey.of(property, key.gearType()));
-        return property.compute(ComputeContext.from(this), mods);
+        return property.compute(ComputeContext.from(this, key.partType()), mods);
     }
 
     default Component getDisplayName(PartType type) {

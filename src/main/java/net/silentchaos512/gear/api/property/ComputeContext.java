@@ -6,12 +6,14 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.gear.material.CompoundMaterial;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ComputeContext {
@@ -40,11 +42,21 @@ public abstract class ComputeContext {
         return part(part, part.getMaterials());
     }
 
-    public static ComputeContext from(GearComponentInstance<?> component) {
+    public static ComputeContext.Material material(MaterialInstance material, PartType partType) {
+        List<MaterialInstance> subMaterials = new ArrayList<>();
+        if (material.isValid() && material.get() instanceof CompoundMaterial compoundMaterial) {
+            subMaterials.addAll(compoundMaterial.getSubMaterials(material));
+        }
+        var result = new Material(material, subMaterials);
+        result.partType = partType;
+        return result;
+    }
+
+    public static ComputeContext from(GearComponentInstance<?> component, PartType partType) {
         if (component instanceof PartInstance partInstance) {
-            return part(partInstance, partInstance.getMaterials());
+            return ComputeContext.part(partInstance);
         } else if (component instanceof MaterialInstance materialInstance) {
-            return new ComputeContext.Material(materialInstance, List.of());
+            return ComputeContext.material(materialInstance, partType);
         } else {
             throw new IllegalArgumentException("Unknown GearComponentInstanceType: " + component);
         }

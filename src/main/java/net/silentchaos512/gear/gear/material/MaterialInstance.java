@@ -287,7 +287,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public Collection<TraitInstance> getTraits(PartGearKey key) {
         var property = GearProperties.TRAITS.get();
         var mods = getPropertyModifiers(key.partType(), PropertyKey.of(property, key.gearType()));
-        return property.compute(ComputeContext.from(this), List.of(), false, key.gearType(), key.gearType(), mods);
+        return property.compute(ComputeContext.material(this, key.partType()), List.of(), false, key.gearType(), key.gearType(), mods);
     }
 
     public MutableComponent getDisplayNameWithModifiers(PartType partType, ItemStack gear) {

@@ -12,6 +12,8 @@ import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
+import net.silentchaos512.gear.gear.material.CompoundMaterial;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -52,6 +54,11 @@ public record MaterialCountTraitCondition(int requiredCount) implements ITraitCo
     public Optional<ITraitCondition> reduce(Trait trait, ComputeContext context) {
         if (context instanceof ComputeContext.Gear || context instanceof ComputeContext.Part) {
             return Optional.empty();
+        } else if (context instanceof ComputeContext.Material materialCtx) {
+            var material = materialCtx.material();
+            if (material.isValid() && material.get() instanceof CompoundMaterial) {
+                return Optional.empty();
+            }
         }
         return Optional.of(this);
     }
