@@ -1,0 +1,119 @@
+package net.silentchaos512.gear.api.property;
+
+import com.google.common.collect.ImmutableList;
+import net.minecraft.world.item.ItemStack;
+import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.GearHelper;
+
+import java.util.List;
+
+public abstract class ComputeContext {
+    private final List<? extends GearComponentInstance<?>> components;
+    PartType partType = PartTypes.NONE.get();
+    GearType gearType = GearTypes.ALL.get();
+
+    protected ComputeContext(List<? extends GearComponentInstance<?>> components) {
+        this.components = ImmutableList.copyOf(components);
+    }
+
+    public static ComputeContext.Gear gear(ItemStack gear, List<PartInstance> parts) {
+        var result = new ComputeContext.Gear(gear, parts);
+        result.gearType = GearHelper.getType(gear);
+        return result;
+    }
+
+    public static ComputeContext.Part part(PartInstance part, List<MaterialInstance> materials) {
+        var result = new ComputeContext.Part(part, materials);
+        result.partType = part.getType();
+        result.gearType = part.getGearType();
+        return result;
+    }
+
+    public static ComputeContext.Part part(PartInstance part) {
+        return part(part, part.getMaterials());
+    }
+
+    public static ComputeContext from(GearComponentInstance<?> component) {
+        if (component instanceof PartInstance partInstance) {
+            return part(partInstance, partInstance.getMaterials());
+        } else if (component instanceof MaterialInstance materialInstance) {
+            return new ComputeContext.Material(materialInstance, List.of());
+        } else {
+            throw new IllegalArgumentException("Unknown GearComponentInstanceType: " + component);
+        }
+    }
+
+    public static ComputeContext.Empty empty() {
+        return Empty.INSTANCE;
+    }
+
+    public List<? extends GearComponentInstance<?>> components() {
+        return this.components;
+    }
+
+    public PartType partType() {
+        return this.partType;
+    }
+
+    public GearType gearType() {
+        return this.gearType;
+    }
+
+    public PartGearKey partGearKey() {
+        return PartGearKey.of(this.gearType, this.partType);
+    }
+
+    public static class Gear extends ComputeContext {
+        private final ItemStack gear;
+
+        Gear(ItemStack gear, List<? extends GearComponentInstance<?>> components) {
+            super(components);
+            this.gear = gear;
+        }
+
+        public ItemStack gear() {
+            return this.gear;
+        }
+    }
+
+    public static class Part extends ComputeContext {
+        private final PartInstance part;
+
+        Part(PartInstance part, List<? extends GearComponentInstance<?>> components) {
+            super(components);
+            this.part = part;
+        }
+
+        public PartInstance part() {
+            return this.part;
+        }
+    }
+
+    public static class Material extends ComputeContext {
+        private final MaterialInstance material;
+
+        Material(MaterialInstance material, List<? extends GearComponentInstance<?>> components) {
+            super(components);
+            this.material = material;
+        }
+
+        public MaterialInstance material() {
+            return this.material;
+        }
+    }
+
+    public static class Empty extends ComputeContext {
+        static final Empty INSTANCE = new Empty(List.of());
+
+        Empty(List<? extends GearComponentInstance<?>> components) {
+            super(components);
+        }
+    }
+}

@@ -5,14 +5,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
-import net.silentchaos512.gear.api.util.GearComponentInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.util.TextUtil;
 
-import java.util.List;
+import java.util.Optional;
 
 public record NotTraitCondition(ITraitCondition child) implements ITraitCondition {
     public static final MapCodec<NotTraitCondition> CODEC = RecordCodecBuilder.mapCodec(
@@ -32,8 +31,13 @@ public record NotTraitCondition(ITraitCondition child) implements ITraitConditio
     }
 
     @Override
-    public boolean matches(Trait trait, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
-        return !this.child.matches(trait, key, components);
+    public boolean matches(Trait trait, ComputeContext context) {
+        return !this.child.matches(trait, context);
+    }
+
+    @Override
+    public Optional<ITraitCondition> reduce(Trait trait, ComputeContext context) {
+        return Optional.empty();
     }
 
     @Override

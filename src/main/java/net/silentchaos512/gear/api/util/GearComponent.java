@@ -11,7 +11,7 @@ import net.silentchaos512.gear.setup.gear.GearProperties;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-public interface GearComponent<D> extends PropertyProvider<D> {
+public interface GearComponent<D extends GearComponentInstance<?>> extends PropertyProvider<D> {
     /**
      * Gets the ingredient to match for crafting.
      *

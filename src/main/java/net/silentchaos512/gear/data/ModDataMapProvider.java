@@ -17,9 +17,8 @@ public class ModDataMapProvider extends DataMapProvider {
         super(packOutput, lookupProvider);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    protected void gather() {
+    protected void gather(HolderLookup.Provider lookupProvider) {
         final var compostables = builder(NeoForgeDataMaps.COMPOSTABLES);
         compostables.add(SgItems.FLAX_SEEDS, new Compostable(0.3f, true), false);
         compostables.add(SgItems.FLUFFY_SEEDS, new Compostable(0.3f, true), false);

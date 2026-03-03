@@ -6,12 +6,11 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.silentchaos512.gear.api.util.GearComponentInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.SgRegistries;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface ITraitCondition {
     @SuppressWarnings("RedundantCast") // Fails to build without casting the codec
@@ -34,7 +33,9 @@ public interface ITraitCondition {
 
     TraitConditionSerializer<?> serializer();
 
-    boolean matches(Trait trait, PartGearKey key, List<? extends GearComponentInstance<?>> components);
+    boolean matches(Trait trait, ComputeContext context);
+
+    Optional<ITraitCondition> reduce(Trait trait, ComputeContext context);
 
     MutableComponent getDisplayText();
 }

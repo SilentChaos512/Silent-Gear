@@ -6,6 +6,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.CustomTooltipProperty;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
@@ -99,8 +100,9 @@ public class MaterialTooltips extends GearComponentTooltips {
             return;
         }
 
+        ComputeContext context = ComputeContext.from(material);
         //noinspection unchecked
-        Optional<MutableComponent> head = propertyLine(format, valueColorScheme, GearTypes.ALL.get(), property, (Collection<GearPropertyValue<?>>) modsAll);
+        Optional<MutableComponent> head = propertyLine(context, format, valueColorScheme, GearTypes.ALL.get(), property, (Collection<GearPropertyValue<?>>) modsAll);
         builder.add(head.orElseGet(() -> TextUtil.withOptionalColor(property.getDisplayName(), property.getGroup().getColor(), format.colorPropertyName())));
 
         builder.indent();
@@ -115,7 +117,7 @@ public class MaterialTooltips extends GearComponentTooltips {
                 //noinspection unchecked
                 var castedKey = (PropertyKey<T, V>) key;
                 Collection<V> mods = material.getPropertyModifiers(partType, castedKey);
-                Optional<MutableComponent> line = subPropertyLine(format, castedKey.property(), key.gearType(), mods);
+                Optional<MutableComponent> line = subPropertyLine(context, format, castedKey.property(), key.gearType(), mods);
 
                 if (line.isPresent()) {
                     builder.add(line.get());

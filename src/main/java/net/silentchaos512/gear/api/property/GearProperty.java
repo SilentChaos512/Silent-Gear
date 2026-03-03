@@ -58,36 +58,36 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     public StreamCodec<FriendlyByteBuf, GearPropertyValue<?>> rawStreamCodec() {
         //noinspection unchecked
         return (StreamCodec<FriendlyByteBuf, GearPropertyValue<?>>) streamCodec();
-    };
+    }
 
     public abstract V valueOf(T value);
 
-    public T compute(Collection<V> modifiers) {
-        return compute(this.baseValue, true, GearTypes.ALL.get(), modifiers);
+    public T compute(ComputeContext context, Collection<V> modifiers) {
+        return compute(context, this.baseValue, true, GearTypes.ALL.get(), modifiers);
     }
 
-    public T compute(T baseValue, Collection<V> modifiers) {
-        return compute(baseValue, true, GearTypes.ALL.get(), modifiers);
+    public T compute(ComputeContext context, T baseValue, Collection<V> modifiers) {
+        return compute(context, baseValue, true, GearTypes.ALL.get(), modifiers);
     }
 
-    public T compute(T baseValue, boolean clampResult, GearType gearType, Collection<V> modifiers) {
-        return compute(baseValue, clampResult, gearType, gearType, modifiers);
+    public T compute(ComputeContext context, T baseValue, boolean clampResult, GearType gearType, Collection<V> modifiers) {
+        return compute(context, baseValue, clampResult, gearType, gearType, modifiers);
     }
 
-    public abstract T compute(T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers);
+    public abstract T compute(ComputeContext context, T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers);
 
-    public T computeForGear(T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers, List<PartInstance> parts) {
-        return compute(baseValue, clampResult, itemType, statType, modifiers);
+    @SuppressWarnings("unchecked")
+    public V computeUnchecked(ComputeContext context, boolean clampResult, GearType itemType, GearType statType, Collection<GearPropertyValue<?>> modifiers) {
+        return valueOf(compute(context, getBaseValue(), clampResult, itemType, statType, (Collection<V>) modifiers));
+    }
+
+    public T computeForGear(ComputeContext context, T baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<V> modifiers, List<PartInstance> parts) {
+        return compute(context, baseValue, clampResult, itemType, statType, modifiers);
     }
 
     @SuppressWarnings("unchecked")
-    public V computeUnchecked(boolean clampResult, GearType itemType, GearType statType, Collection<GearPropertyValue<?>> modifiers) {
-        return valueOf(compute(getBaseValue(), clampResult, itemType, statType, (Collection<V>) modifiers));
-    }
-
-    @SuppressWarnings("unchecked")
-    public V computeUncheckedForGear(GearType itemType, GearType statType, Collection<GearPropertyValue<?>> modifiers, List<PartInstance> parts) {
-        return valueOf(computeForGear(getBaseValue(), true, itemType, statType, (Collection<V>) modifiers, parts));
+    public V computeUncheckedForGear(ComputeContext context, GearType itemType, GearType statType, Collection<GearPropertyValue<?>> modifiers, List<PartInstance> parts) {
+        return valueOf(computeForGear(context, getBaseValue(), true, itemType, statType, (Collection<V>) modifiers, parts));
     }
 
     public T getDefaultValue() {
@@ -126,7 +126,11 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return group;
     }
 
-    public abstract List<V> compressModifiers(Collection<V> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components);
+    public abstract List<V> compressModifiers(ComputeContext context, Collection<V> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components);
+
+    public List<V> reduce(ComputeContext context, Collection<V> modifiers) {
+        return List.copyOf(modifiers);
+    }
 
     public V applySynergy(V value, float synergy) {
         return value;
@@ -200,12 +204,13 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     }
 
     public MutableComponent formatModifiersWithColorUnchecked(
+            ComputeContext context,
             Collection<GearPropertyValue<?>> mods,
             FormatContext formatContext,
             FormatColorScheme colorScheme
     ) {
         //noinspection unchecked
-        V value = valueOf(compute((Collection<V>) mods));
+        V value = valueOf(compute(context, (Collection<V>) mods));
         return formatValueWithColor(value, formatContext, colorScheme);
     }
 
@@ -227,7 +232,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     public boolean equals(Object obj) {
         if (obj == this) return true;
 
-        if (!(obj instanceof GearProperty<?,?> other)) return false;
+        if (!(obj instanceof GearProperty<?, ?> other)) return false;
 
         var key = SgRegistries.GEAR_PROPERTY.getKey(this);
         assert key != null;
@@ -265,7 +270,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         private boolean visible;
 
         public Builder(T defaultValue) {
-            this (defaultValue, defaultValue);
+            this(defaultValue, defaultValue);
         }
 
         public Builder(T defaultValue, T baseValue) {

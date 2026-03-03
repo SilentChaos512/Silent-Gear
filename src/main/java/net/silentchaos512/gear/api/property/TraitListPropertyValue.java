@@ -35,7 +35,7 @@ public class TraitListPropertyValue extends GearPropertyValue<List<TraitInstance
     @Override
     public String toString() {
         var listText = this.value.stream()
-                .map(trait -> trait.getDisplayName().toString())
+                .map(trait -> trait.getDisplayName().getString())
                 .collect(Collectors.joining(", "));
         return "[" + listText + "]";
     }

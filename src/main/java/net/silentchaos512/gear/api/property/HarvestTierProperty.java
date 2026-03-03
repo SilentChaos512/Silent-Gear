@@ -45,7 +45,7 @@ public class HarvestTierProperty extends GearProperty<HarvestTier, HarvestTierPr
     }
 
     @Override
-    public HarvestTier compute(HarvestTier baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<HarvestTierPropertyValue> modifiers) {
+    public HarvestTier compute(ComputeContext context, HarvestTier baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<HarvestTierPropertyValue> modifiers) {
         HarvestTier possibleBest = baseValue;
 
         for (var mod : modifiers) {
@@ -68,8 +68,8 @@ public class HarvestTierProperty extends GearProperty<HarvestTier, HarvestTierPr
     }
 
     @Override
-    public List<HarvestTierPropertyValue> compressModifiers(Collection<HarvestTierPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
-        var value = compute(getBaseValue(), true, key.gearType(), modifiers);
+    public List<HarvestTierPropertyValue> compressModifiers(ComputeContext context, Collection<HarvestTierPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+        var value = compute(context, getBaseValue(), true, key.gearType(), modifiers);
         return List.of(new HarvestTierPropertyValue(value));
     }
 

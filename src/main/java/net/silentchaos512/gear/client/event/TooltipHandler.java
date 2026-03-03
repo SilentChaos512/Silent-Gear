@@ -8,6 +8,7 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyGroups;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
@@ -197,12 +198,13 @@ public final class TooltipHandler {
 
     private static void getPartStatLines(ItemTooltipEvent event, PartInstance part) {
         GearType gearType = getPartGearType(part);
+        ComputeContext.Part context = ComputeContext.part(part);
         TextListBuilder builder = new TextListBuilder();
 
         for (GearProperty<?, ?> property : getPartRelevantProperties(part, gearType)) {
             var modifiers = new ArrayList<GearPropertyValue<?>>(part.getPropertyModifiers(part.getType(), PropertyKey.of(property, gearType)));
             var format = new GearTooltipStyle(event.getFlags().isAdvanced(), true, true);
-            PartTooltips.propertyLine(format, FormatColorScheme.LIGHT, part.getGearType(), property, modifiers).ifPresent(builder::add);
+            PartTooltips.propertyLine(context, format, FormatColorScheme.LIGHT, part.getGearType(), property, modifiers).ifPresent(builder::add);
         }
         event.getToolTip().addAll(builder.build());
     }

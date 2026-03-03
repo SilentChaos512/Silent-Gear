@@ -12,6 +12,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.TooltipFlag;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
@@ -141,7 +142,7 @@ public record TraitInstance(
         }
     }
 
-    public boolean conditionsMatch(PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+    public boolean conditionsMatch(ComputeContext context) {
         if (!isValid()) {
             return false;
         }
@@ -149,12 +150,23 @@ public record TraitInstance(
         Trait trait = getTrait();
 
         for (ITraitCondition condition : getConditions()) {
-            if (!condition.matches(trait, key, components)) {
+            if (!condition.matches(trait, context)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public Optional<TraitInstance> reduceConditions(ComputeContext context) {
+        if (conditionsMatch(context)) {
+            List<ITraitCondition> filteredConditions = new ArrayList<>();
+            for (ITraitCondition condition : conditions) {
+                condition.reduce(this.trait.get(), context).ifPresent(filteredConditions::add);
+            }
+            return Optional.of(TraitInstance.of(this.trait.get(), this.level, filteredConditions));
+        }
+        return Optional.empty();
     }
 
     public MutableComponent getConditionsText() {

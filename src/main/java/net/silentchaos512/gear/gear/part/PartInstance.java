@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
@@ -179,7 +180,7 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
 
     @Override
     public <T, V extends GearPropertyValue<T>> T getProperty(PartType partType, PropertyKey<T, V> key) {
-        return key.property().compute(key.property().getBaseValue(), getPropertyModifiers(partType, key));
+        return key.property().compute(ComputeContext.part(this, this.getMaterials()), key.property().getBaseValue(), getPropertyModifiers(partType, key));
     }
 
     @Override

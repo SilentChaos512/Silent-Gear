@@ -7,15 +7,15 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.silentchaos512.gear.api.item.GearType;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
-import net.silentchaos512.gear.api.util.GearComponentInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public record GearTypeTraitCondition(GearType gearType) implements ITraitCondition {
@@ -45,8 +45,30 @@ public record GearTypeTraitCondition(GearType gearType) implements ITraitConditi
     }
 
     @Override
-    public boolean matches(Trait trait, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
-        return key.getGearType().matches(this.gearType);
+    public boolean matches(Trait trait, ComputeContext context) {
+        if (context instanceof ComputeContext.Part partCtx) {
+            if (partCtx.part().getType().is(PartTypes.MAIN)) {
+                // Filter on main parts
+                return isMatch(context);
+            } else {
+                // Don't filter yet, this would fail on upgrades
+                return true;
+            }
+        }
+        // Gear items
+        return isMatch(context);
+    }
+
+    private boolean isMatch(ComputeContext context) {
+        return context.partGearKey().gearType().matches(this.gearType);
+    }
+
+    @Override
+    public Optional<ITraitCondition> reduce(Trait trait, ComputeContext context) {
+        if (context.partType().is(PartTypes.MAIN) && matches(trait, context)) {
+            return Optional.empty();
+        }
+        return Optional.of(this);
     }
 
     @Override
