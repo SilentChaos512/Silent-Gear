@@ -294,7 +294,6 @@ public class TraitsProvider extends TraitsProviderBase {
                                 .build()
                 )
                 .overridesTrait(Const.Traits.FLAMMABLE)
-                .withGearTypeCondition(GearTypes.ARMOR)
                 .extraWikiLines("  - The item cannot be destroyed by fire or lava")
         );
         ret.add(TraitBuilder.of(Const.Traits.KITTY_VISION, 1)

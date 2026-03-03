@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-4.1.2] - 2026-03-03
+### Changed
+- Removed the armor type condition from Flame Ward, so other items can benefit from the fireproof effect (not being destroyed when dropped in lava)
+### Fixed
+- Some traits with conditions attached being lost from the final gear item [#890, #885]
+
 ## [1.21.1-4.1.1] - 2026-02-18
 ### Added
 - Config option to disable spawning with a material book
