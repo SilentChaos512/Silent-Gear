@@ -47,7 +47,7 @@ public class SwingAnimationProperty extends GearProperty<SwingAnimation, SwingAn
     }
 
     @Override
-    public SwingAnimation compute(SwingAnimation baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<SwingAnimationPropertyValue> modifiers) {
+    public SwingAnimation compute(ComputeContext context, SwingAnimation baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<SwingAnimationPropertyValue> modifiers) {
         if (modifiers.isEmpty()) {
             return SwingAnimation.DEFAULT;
         }
@@ -75,8 +75,8 @@ public class SwingAnimationProperty extends GearProperty<SwingAnimation, SwingAn
     }
 
     @Override
-    public List<SwingAnimationPropertyValue> compressModifiers(Collection<SwingAnimationPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
-        return List.of(new SwingAnimationPropertyValue(compute(getBaseValue(), true, key.gearType(), modifiers)));
+    public List<SwingAnimationPropertyValue> compressModifiers(ComputeContext context, Collection<SwingAnimationPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+        return List.of(new SwingAnimationPropertyValue(compute(context, getBaseValue(), true, key.gearType(), modifiers)));
     }
 
     @Override

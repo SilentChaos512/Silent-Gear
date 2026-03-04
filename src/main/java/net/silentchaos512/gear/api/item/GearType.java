@@ -7,6 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyGroup;
@@ -126,13 +127,10 @@ public record GearType(
         return relevantPropertyGroups;
     }
 
-    public boolean isPropertyRelevant(GearProperty<?, ?> propertyType) {
-        for (GearPropertyGroup group : relevantPropertyGroups) {
-            if (propertyType.getGroup() == group) {
-                return true;
-            }
-        }
-        return false;
+    public Iterable<GearProperty<?, ?>> getRelevantProperties() {
+        return relevantPropertyGroups().stream()
+                .flatMap(group -> group.getProperties().stream())
+                .toList();
     }
 
     @Override

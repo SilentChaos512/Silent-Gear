@@ -16,6 +16,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitEffect;
 import net.silentchaos512.gear.api.traits.TraitEffectType;
@@ -69,17 +70,21 @@ public class OxidationTraitEffect extends TraitEffect {
     }
 
     @Override
-    public Optional<TraitInstance> transformTrait(ItemStack gear, Trait trait, int traitLevel) {
-        byte stage = gear.getOrDefault(SgDataComponents.OXIDATION_STAGE, (byte) 0);
-        if (stage == 0) {
-            return Optional.empty();
-        } else if (this.nextOxidationTrait.isPresent()) {
-            if (stage >= trait.getMaxLevel()) {
-                gear.set(SgDataComponents.OXIDATION_STAGE, (byte) 1);
-                return Optional.of(TraitInstance.of(this.nextOxidationTrait.get(), stage));
+    public Optional<TraitInstance> transformTrait(ComputeContext context, Trait trait, int traitLevel) {
+        if (context instanceof ComputeContext.Gear gearCtx) {
+            ItemStack gear = gearCtx.gear();
+            byte stage = gear.getOrDefault(SgDataComponents.OXIDATION_STAGE, (byte) 0);
+            if (stage == 0) {
+                return Optional.empty();
+            } else if (this.nextOxidationTrait.isPresent()) {
+                if (stage >= trait.getMaxLevel()) {
+                    gear.set(SgDataComponents.OXIDATION_STAGE, (byte) 1);
+                    return Optional.of(TraitInstance.of(this.nextOxidationTrait.get(), stage));
+                }
             }
+            return Optional.of(TraitInstance.of(trait, stage));
         }
-        return Optional.of(TraitInstance.of(trait, stage));
+        return Optional.of(TraitInstance.of(trait, traitLevel));
     }
 
     @Override

@@ -21,6 +21,7 @@ import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.*;
+import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PropertyKey;
@@ -234,7 +235,7 @@ public final class GearData {
 
         final Map<GearProperty<?, ?>, GearPropertyValue<?>> finalBaseValues = new LinkedHashMap<>();
 
-        for (var property : SgRegistries.GEAR_PROPERTY) {
+        for (var property : gearType.getRelevantProperties()) {
             if (property.isForMaterialsOnly()) {
                 // No parts should return material-only property values, but this safety check makes sure they don't end
                 // up on gear items, just in case!

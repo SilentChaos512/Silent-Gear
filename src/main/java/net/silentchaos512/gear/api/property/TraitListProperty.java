@@ -109,8 +109,8 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
         map.forEach((trait, level) -> {
             Set<ITraitCondition> traitConditions = conditions.computeIfAbsent(trait, traitIn -> Collections.emptySet());
             var instance = TraitInstance.of(trait, level, traitConditions);
-            var transformed = instance.getTrait().transformTrait(gear, level).orElse(instance);
-            ret.add(transformed);
+            var transformed = instance.getTrait().transformTrait(context, level);
+            transformed.ifPresent(ret::add);
         });
         if (filterConditions) {
             // Remove if the conditions don't match the gear

@@ -50,7 +50,7 @@ public class KineticWeaponProperty extends GearProperty<KineticWeapon, KineticWe
     }
 
     @Override
-    public KineticWeapon compute(KineticWeapon baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<KineticWeaponPropertyValue> modifiers) {
+    public KineticWeapon compute(ComputeContext context, KineticWeapon baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<KineticWeaponPropertyValue> modifiers) {
         if (modifiers.isEmpty()) {
             return getZeroValue();
         }
@@ -111,8 +111,8 @@ public class KineticWeaponProperty extends GearProperty<KineticWeapon, KineticWe
     }
 
     @Override
-    public List<KineticWeaponPropertyValue> compressModifiers(Collection<KineticWeaponPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
-        return List.of(new KineticWeaponPropertyValue(compute(getBaseValue(), true, key.gearType(), modifiers)));
+    public List<KineticWeaponPropertyValue> compressModifiers(ComputeContext context, Collection<KineticWeaponPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+        return List.of(new KineticWeaponPropertyValue(compute(context, getBaseValue(), true, key.gearType(), modifiers)));
     }
 
     @Override

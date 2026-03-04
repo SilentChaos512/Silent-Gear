@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
@@ -126,14 +127,14 @@ public final class Trait {
         return description.copy();
     }
 
-    public Optional<TraitInstance> transformTrait(ItemStack gear, int traitLevel) {
+    public Optional<TraitInstance> transformTrait(ComputeContext context, int traitLevel) {
         for (TraitEffect effect : this.effects) {
-            var inst = effect.transformTrait(gear, this, traitLevel);;
+            var inst = effect.transformTrait(context, this, traitLevel);
             if (inst.isPresent()) {
                 return inst;
             }
         }
-        return Optional.empty();
+        return Optional.of(TraitInstance.of(this, traitLevel));
     }
 
     public void onBlockBreak(TraitActionContext context, BlockEvent.BreakEvent event) {

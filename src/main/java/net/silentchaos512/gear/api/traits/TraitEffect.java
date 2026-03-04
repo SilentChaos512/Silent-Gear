@@ -14,6 +14,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.gear.trait.Trait;
@@ -50,8 +51,8 @@ public abstract class TraitEffect {
         return synergy;
     }
 
-    public Optional<TraitInstance> transformTrait(ItemStack gear, Trait trait, int traitLevel) {
-        return Optional.empty();
+    public Optional<TraitInstance> transformTrait(ComputeContext context, Trait trait, int traitLevel) {
+        return Optional.of(TraitInstance.of(trait, traitLevel));
     }
 
     public void onBlockBreak(TraitActionContext context, BlockEvent.BreakEvent event) {

@@ -173,6 +173,11 @@ public class GearTypes {
     );
     public static final DeferredHolder<GearType, GearType> SPEAR = REGISTRAR.register("spear",
             () -> GearType.Builder.of(MELEE_WEAPON)
+                    .relevantPropertyGroups(
+                            GearPropertyGroups.SPECIAL,
+                            GearPropertyGroups.GENERAL,
+                            GearPropertyGroups.ATTACK
+                    )
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> MACE = REGISTRAR.register("mace",
