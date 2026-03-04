@@ -16,6 +16,20 @@ import net.silentchaos512.gear.util.GearHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Intended to hold a collection of variables needed for computing {@link GearProperty} values and reducing value lists.
+ * The main class is abstract, with several subclasses that can be instantiated via static helper methods.
+ * <p>
+ * The {@link Gear} context contains the possibly unfinished gear {@link ItemStack} and is used when the gear item's
+ * final property values are being calculated.
+ * <p>
+ * The {@link Part} context contains a {@link PartInstance} and is used when part properties are calculating.
+ * <p>
+ * The {@link Material} context contains a {@link MaterialInstance} and is used when working with materials. A
+ * {@link PartType} must also be provided.
+ * <p>
+ * The {@link Empty} context contains no information and should only be used in rare cases.
+ */
 public abstract class ComputeContext {
     private final List<? extends GearComponentInstance<?>> components;
     PartType partType = PartTypes.NONE.get();

@@ -126,8 +126,28 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         return group;
     }
 
+    /**
+     * Reduces the collection of modifiers into a smaller one by combining similar modifiers. For example, numerical
+     * properties will group modifiers by operation. Not all property types will have a meaningful way to compress
+     * modifiers.
+     *
+     * @param context    The context
+     * @param modifiers  The uncompressed modifiers
+     * @param key        The part/gear type
+     * @param components The parts/materials
+     * @return A list of modifiers which may be identical to the original, or modified in some way, usually to be
+     * shorter and more compact.
+     */
     public abstract List<V> compressModifiers(ComputeContext context, Collection<V> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components);
 
+    /**
+     * Performs special reductions on the modifier collection, usually based on the context. For example, traits use
+     * this method to filter out conditions that are no longer needed.
+     *
+     * @param context   The context
+     * @param modifiers The modifier list (before event is fired)
+     * @return A list of modifiers, which may or may not be different from the original
+     */
     public List<V> reduce(ComputeContext context, Collection<V> modifiers) {
         return List.copyOf(modifiers);
     }

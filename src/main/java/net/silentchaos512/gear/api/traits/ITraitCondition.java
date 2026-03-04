@@ -35,6 +35,14 @@ public interface ITraitCondition {
 
     boolean matches(Trait trait, ComputeContext context);
 
+    /**
+     * Filters out trait conditions that are no longer relevant. Note this method is called after the conditions
+     * attached to the trait are determined to match with {@link #matches(Trait, ComputeContext)}.
+     *
+     * @param trait   The trait
+     * @param context The context
+     * @return A new trait condition to replace the existing one, or an empty optional to remove it
+     */
     Optional<ITraitCondition> reduce(Trait trait, ComputeContext context);
 
     MutableComponent getDisplayText();

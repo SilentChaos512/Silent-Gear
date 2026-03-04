@@ -158,6 +158,13 @@ public record TraitInstance(
         return true;
     }
 
+    /**
+     * Filters out conditions that are no longer relevant based on the context.
+     *
+     * @param context The context
+     * @return A new trait instance that may have either filtered or identical conditions, or an empty optional if the
+     * trait conditions do not match the context and the trait should be removed.
+     */
     public Optional<TraitInstance> reduceConditions(ComputeContext context) {
         if (conditionsMatch(context)) {
             List<ITraitCondition> filteredConditions = new ArrayList<>();
