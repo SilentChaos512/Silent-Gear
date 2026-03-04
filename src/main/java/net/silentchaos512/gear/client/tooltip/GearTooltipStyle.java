@@ -5,4 +5,7 @@ public record GearTooltipStyle(
         boolean colorPropertyName,
         boolean compactStylePreferred
 ) {
+    public GearTooltipStyle withoutCompactStyle() {
+        return new GearTooltipStyle(this.showHiddenValues, this.colorPropertyName, false);
+    }
 }

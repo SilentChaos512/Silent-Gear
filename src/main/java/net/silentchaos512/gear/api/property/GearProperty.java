@@ -154,10 +154,6 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         listBuilder.add(formatText(value, flag, colorScheme));
     }
 
-    public void buildModifiersTooltip(TextListBuilder listBuilder, Collection<V> modifiers, GearTooltipStyle format, FormatColorScheme colorScheme) {
-
-    }
-
     @SuppressWarnings("unchecked")
     public final Component formatTextUnchecked(GearPropertyValue<?> value, GearTooltipFlag flag, FormatColorScheme colorScheme) {
         return formatText((V) value, flag, colorScheme);

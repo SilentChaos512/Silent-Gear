@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.client.tooltip;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
@@ -18,6 +19,7 @@ import net.silentchaos512.gear.client.event.TooltipHandler;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
@@ -79,11 +81,19 @@ public class MaterialTooltips extends GearComponentTooltips {
     public static void propertiesLines(List<Component> tooltip, GearTooltipStyle format, FormatColorScheme valueColorScheme, PartType partType, MaterialInstance material) {
         TextListBuilder builder = new TextListBuilder();
 
-        for (GearProperty<?, ?> property : SgRegistries.GEAR_PROPERTY) {
-            propertyModifierLinesForProperty(format, valueColorScheme, partType, material, builder, property);
+        for (GearProperty<?, ?> property : getPropertiesToDisplay()) {
+            GearTooltipStyle newFormat = KeyTracker.isDisplayTraitDescriptionsDown() ? format.withoutCompactStyle() : format;
+            propertyModifierLinesForProperty(newFormat, valueColorScheme, partType, material, builder, property);
         }
 
         tooltip.addAll(builder.build());
+    }
+
+    private static Iterable<GearProperty<?, ? extends GearPropertyValue<?>>> getPropertiesToDisplay() {
+        if (KeyTracker.isDisplayTraitDescriptionsDown()) {
+            return List.of(GearProperties.TRAITS.get());
+        }
+        return SgRegistries.GEAR_PROPERTY;
     }
 
     public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> void propertyModifierLinesForProperty(

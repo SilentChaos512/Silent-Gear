@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.21.1-4.1.2] - 2026-03-03
+### Added
+- More detailed tooltips for traits on materials when a bound key (default Shift) is held
 ### Changed
 - Removed the armor type condition from Flame Ward, so other items can benefit from the fireproof effect (not being destroyed when dropped in lava)
 ### Fixed

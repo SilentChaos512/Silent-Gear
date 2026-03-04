@@ -16,6 +16,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyGroups;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.property.TraitListPropertyValue;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.client.tooltip.FormatColorScheme;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -23,6 +24,7 @@ import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.SgRegistries;
+import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -95,11 +97,16 @@ public final class GearClientHelper {
     }
 
     public static void addPropertiesInfo(ItemStack stack, List<Component> tooltip, GearTooltipFlag flag, GearItem item) {
+        var gearProperties = GearData.getProperties(stack);
+        if (!KeyTracker.isDisplayPropertiesDown()) {
+            var value = gearProperties.getOrDefault(GearProperties.TRAITS.get(), TraitListPropertyValue.empty());
+            var text = GearProperties.TRAITS.get().formatText(value, flag, FormatColorScheme.WHITE_ONLY);
+            tooltip.add(text);
+        }
         if (KeyTracker.isDisplayPropertiesDown() && flag.showProperties()) {
             tooltip.add(TextUtil.withColor(misc("tooltip.properties"), Color.GOLD));
 
             TextListBuilder builder = new TextListBuilder();
-            var gearProperties = GearData.getProperties(stack);
 
             for (GearProperty<?, ?> property : getDisplayProperties(stack, flag)) {
                 GearPropertyValue<?> value = gearProperties.get(property);

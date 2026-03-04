@@ -202,19 +202,22 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
             return true;
         }
 
-        builder.add(Component.translatable("property.silentgear.traits"));
+        var headerText = Component.translatable("property.silentgear.traits");
+        builder.add(format.colorPropertyName() ? headerText.withColor(this.nameColor.getColor()) : headerText);
         builder.indent();
         for (TraitInstance trait : traitList) {
             builder.add(trait.getDisplayName(FormatContext.ANY));
+            builder.indent();
+            builder.add(trait.getDescription().withStyle(ChatFormatting.ITALIC));
             if (!trait.conditions().isEmpty()) {
-                builder.indent().setBullet("*");
+                builder.setBullet("*");
                 for (ITraitCondition condition : trait.conditions()) {
                     var text = condition.getDisplayText();
                     var strippedText = text.getString().replaceAll("^\\(|\\)$", "");
-                    builder.add(Component.literal(strippedText), ChatFormatting.DARK_GRAY);
+                    builder.add(Component.literal(strippedText).withStyle(ChatFormatting.ITALIC), ChatFormatting.DARK_GRAY);
                 }
-                builder.unindent();
             }
+            builder.unindent();
         }
         builder.unindent();
 
