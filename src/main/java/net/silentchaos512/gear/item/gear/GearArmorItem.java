@@ -61,6 +61,12 @@ public class GearArmorItem extends BasicGearItem implements GearArmor {
                             .setAsset(equippableInfo.assetId())
                             .build()
             );
+
+            int color = GearArmorItem.getArmorColor(gear);
+            gear.set(
+                    DataComponents.DYED_COLOR,
+                    new DyedItemColor(color)
+            );
         }
     }
 
