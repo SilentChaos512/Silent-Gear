@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
@@ -17,6 +18,7 @@ import java.util.*;
 public class GearComponentTooltips {
     @SuppressWarnings("unchecked")
     public static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> propertyLine(
+            ComputeContext context,
             GearTooltipStyle format,
             FormatColorScheme valueColorScheme,
             GearType gearType,
@@ -27,7 +29,7 @@ public class GearComponentTooltips {
             // Cast to true types
             var property = (P) propertyIn;
             var modifiers = (Collection<V>) modifiersIn;
-            T value = property.compute(property.getZeroValue(), false, gearType, modifiers);
+            T value = property.compute(context, property.getZeroValue(), false, gearType, modifiers);
             boolean isZero = isTrueZeroValue(property, value, modifiers);
             if (format.showHiddenValues() || !isZero) {
                 Color nameColor = isZero ? TooltipHandler.MC_DARK_GRAY : property.getGroup().getColor();
@@ -48,13 +50,14 @@ public class GearComponentTooltips {
     }
 
     protected static <T, V extends GearPropertyValue<T>, P extends GearProperty<T, V>> Optional<MutableComponent> subPropertyLine(
+            ComputeContext context,
             GearTooltipStyle format,
             P property,
             GearType gearType,
             Collection<V> modifiers
     ) {
         if (!modifiers.isEmpty()) {
-            T value = property.compute(property.getZeroValue(), modifiers);
+            T value = property.compute(context, property.getZeroValue(), modifiers);
             boolean isZero = isTrueZeroValue(property, value, modifiers);
             if (format.showHiddenValues() || !isZero) {
                 Color color = isZero ? TooltipHandler.MC_DARK_GRAY : Color.WHITE;

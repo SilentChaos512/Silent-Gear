@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.part.PartDisplayData;
 import net.silentchaos512.gear.api.part.PartSerializer;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
+import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.Color;
@@ -59,6 +60,14 @@ public class UpgradeGearPart extends CoreGearPart {
     @Override
     public boolean canAddToGear(ItemStack gear, PartInstance part) {
         return this.upgradeGearTypes.test(GearHelper.getType(gear));
+    }
+
+    @Override
+    public String toString() {
+        return "UpgradeGearPart{" +
+                "id=" + SgRegistries.PART.getKey(this) +
+                ", partType=" + partType +
+                '}';
     }
 
     public static class Serializer extends PartSerializer<UpgradeGearPart> {

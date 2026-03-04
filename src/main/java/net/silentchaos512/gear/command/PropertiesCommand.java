@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
@@ -94,6 +95,7 @@ public final class PropertiesCommand {
 
         GearItem item = (GearItem) stack.getItem();
         PartList parts = GearData.getConstruction(stack).parts();
+        ComputeContext.Gear computeContext = ComputeContext.gear(stack, parts);
         GearPropertyMap properties = parts.getPropertyModifiersFromParts(item.getGearType());
 
         for (var property : SgRegistries.GEAR_PROPERTY) {
@@ -104,7 +106,7 @@ public final class PropertiesCommand {
                 Component name = TextUtil.withColor(property.getDisplayName(), property.getGroup().getColor());
                 Component modsText = GearPropertyMap.formatTextUnchecked(mods, property, FormatColorScheme.NO_COLORS);
                 Component valueText = TextUtil.withColor(
-                        property.formatModifiersWithColorUnchecked(mods, GearProperty.FormatContext.GEAR, FormatColorScheme.NO_COLORS),
+                        property.formatModifiersWithColorUnchecked(computeContext, mods, GearProperty.FormatContext.GEAR, FormatColorScheme.NO_COLORS),
                         ChatFormatting.YELLOW
                 );
 

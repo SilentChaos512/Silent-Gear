@@ -18,6 +18,7 @@ import net.silentchaos512.gear.api.part.PartCraftingData;
 import net.silentchaos512.gear.api.part.PartDisplayData;
 import net.silentchaos512.gear.api.part.PartSerializer;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.PropertyKey;
@@ -127,8 +128,8 @@ public class CoreGearPart extends AbstractGearPart {
             return List.of();
         }
 
-        var materials = getMaterials(part);
-        List<V> mods = materials.stream()
+        final var materials = getMaterials(part);
+        final List<V> mods = materials.stream()
                 .filter(MaterialInstance::isValid)
                 .flatMap(m -> m.getPropertyModifiers(partType, key).stream())
                 .collect(Collectors.toList());
@@ -141,11 +142,12 @@ public class CoreGearPart extends AbstractGearPart {
             return mods;
         }
 
-        GetPropertyModifiersEvent<T, V> event = new GetPropertyModifiersEvent<>(part, key, mods);
+        final List<V> reducedList = key.property().reduce(ComputeContext.part(part, materials), mods);
+        GetPropertyModifiersEvent<T, V> event = new GetPropertyModifiersEvent<>(part, key, reducedList);
         NeoForge.EVENT_BUS.post(event);
 
         var modifiers = event.getModifiers();
-        return key.property().compressModifiers(modifiers, part.getKey(), List.of(part));
+        return key.property().compressModifiers(ComputeContext.part(part), modifiers, part.getKey(), List.of(part));
     }
 
     @Override
@@ -194,7 +196,7 @@ public class CoreGearPart extends AbstractGearPart {
 
     @Override
     public String toString() {
-        return "CompoundPart{" +
+        return "CoreGearPart{" +
                 "id=" + SgRegistries.PART.getKey(this) +
                 ", partType=" + partType +
                 '}';

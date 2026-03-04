@@ -68,10 +68,18 @@ public record PartGearKey (
         return null;
     }
 
+    /**
+     * @deprecated use {@link #gearType()} instead
+     */
+    @Deprecated(forRemoval = true)
     public GearType getGearType() {
         return gearType;
     }
 
+    /**
+     * @deprecated use {@link #partType()} instead
+     */
+    @Deprecated(forRemoval = true)
     public PartType getPartType() {
         return partType;
     }
@@ -102,5 +110,12 @@ public record PartGearKey (
         var partTypeShortStr = SilentGear.shortenId(SgRegistries.PART_TYPE.getKey(partType()));
         var gearTypeShortStr = SilentGear.shortenId(SgRegistries.GEAR_TYPE.getKey(gearType()));
         return partTypeShortStr + "/" + gearTypeShortStr;
+    }
+
+    @Override
+    public String toString() {
+        return "PartGearKey[" +
+                "gearType=" + gearType + ", " +
+                "partType=" + partType + ']';
     }
 }

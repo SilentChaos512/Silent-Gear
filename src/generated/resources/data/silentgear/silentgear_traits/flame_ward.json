@@ -1,10 +1,5 @@
 {
-  "conditions": [
-    {
-      "type": "silentgear:gear_type",
-      "gear_type": "silentgear:armor"
-    }
-  ],
+  "conditions": [],
   "description": {
     "translate": "trait.silentgear.flame_ward.desc"
   },

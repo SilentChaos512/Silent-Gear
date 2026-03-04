@@ -17,9 +17,12 @@ import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
+import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
+import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.setup.SgRegistries;
@@ -278,6 +281,13 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
             propertyModifiers = modifier.modifyProperties(this, partType, key, propertyModifiers);
         }
         return propertyModifiers;
+    }
+
+    @Override
+    public Collection<TraitInstance> getTraits(PartGearKey key) {
+        var property = GearProperties.TRAITS.get();
+        var mods = getPropertyModifiers(key.partType(), PropertyKey.of(property, key.gearType()));
+        return property.compute(ComputeContext.material(this, key.partType()), List.of(), false, key.gearType(), key.gearType(), mods);
     }
 
     public MutableComponent getDisplayNameWithModifiers(PartType partType, ItemStack gear) {

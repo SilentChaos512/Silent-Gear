@@ -109,7 +109,7 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
     }
 
     @Override
-    public Float compute(Float baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<NumberPropertyValue> modifiers) {
+    public Float compute(ComputeContext context, Float baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<NumberPropertyValue> modifiers) {
         if (modifiers.isEmpty())
             return baseValue;
 
@@ -143,7 +143,7 @@ public class NumberProperty extends GearProperty<Float, NumberPropertyValue> {
     }
 
     @Override
-    public List<NumberPropertyValue> compressModifiers(Collection<NumberPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+    public List<NumberPropertyValue> compressModifiers(ComputeContext context, Collection<NumberPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
         var result = new ArrayList<NumberPropertyValue>();
         for (var operation : Operation.values()) {
             var modsForOp = modifiers.stream().filter(m -> m.operation() == operation).toList();

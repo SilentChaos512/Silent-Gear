@@ -47,7 +47,7 @@ public class BooleanProperty extends GearProperty<Boolean, BooleanPropertyValue>
     }
 
     @Override
-    public Boolean compute(Boolean baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<BooleanPropertyValue> modifiers) {
+    public Boolean compute(ComputeContext context, Boolean baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<BooleanPropertyValue> modifiers) {
         for (BooleanPropertyValue mod : modifiers) {
             if (mod.value) {
                 return true;
@@ -67,8 +67,8 @@ public class BooleanProperty extends GearProperty<Boolean, BooleanPropertyValue>
     }
 
     @Override
-    public List<BooleanPropertyValue> compressModifiers(Collection<BooleanPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
-        return List.of(valueOf(compute(getBaseValue(), true, key.gearType(), modifiers)));
+    public List<BooleanPropertyValue> compressModifiers(ComputeContext context, Collection<BooleanPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+        return List.of(valueOf(compute(context, getBaseValue(), true, key.gearType(), modifiers)));
     }
 
     @Override

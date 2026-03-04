@@ -21,7 +21,6 @@ import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.setup.gear.GearTypes;
-import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -59,12 +58,12 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
     }
 
     @Override
-    public List<TraitInstance> compute(List<TraitInstance> baseValue, boolean filterConditions, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers) {
-        return computeForGear(baseValue, filterConditions, itemType, statType, modifiers, List.of(), ItemStack.EMPTY);
+    public List<TraitInstance> compute(ComputeContext context, List<TraitInstance> baseValue, boolean filterConditions, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers) {
+        return computeForGear(context, baseValue, filterConditions, itemType, statType, modifiers, List.of());
     }
 
     @Override
-    public List<TraitInstance> computeForGear(List<TraitInstance> baseValue, boolean filterConditions, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers, List<PartInstance> parts, ItemStack gear) {
+    public List<TraitInstance> computeForGear(ComputeContext context, List<TraitInstance> baseValue, boolean filterConditions, GearType itemType, GearType statType, Collection<TraitListPropertyValue> modifiers, List<PartInstance> parts) {
         if (modifiers.isEmpty()) {
             return baseValue;
         }
@@ -73,10 +72,10 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
         for (var mod : modifiers) {
             list.addAll(mod.value);
         }
-        return computeTraits(filterConditions, itemType, baseValue, list, parts, gear);
+        return computeTraits(context, filterConditions, itemType, baseValue, list, parts);
     }
 
-    public List<TraitInstance> computeTraits(boolean filterConditions, GearType itemType, List<TraitInstance> baseValue, Collection<TraitInstance> traits, List<PartInstance> parts, ItemStack gear) {
+    public List<TraitInstance> computeTraits(ComputeContext context, boolean filterConditions, GearType itemType, List<TraitInstance> baseValue, Collection<TraitInstance> traits, List<PartInstance> parts) {
         if (traits.isEmpty()) {
             return baseValue;
         }
@@ -115,14 +114,29 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
         });
         if (filterConditions) {
             // Remove if the conditions don't match the gear
-            ret.removeIf(trait -> !trait.conditionsMatch(PartGearKey.of(itemType, PartTypes.NONE.get()), parts));
+            ret.removeIf(trait -> !trait.conditionsMatch(context));
         }
         return ret;
     }
 
     @Override
-    public List<TraitListPropertyValue> compressModifiers(Collection<TraitListPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+    public List<TraitListPropertyValue> compressModifiers(ComputeContext context, Collection<TraitListPropertyValue> modifiers, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
         return List.copyOf(modifiers);
+    }
+
+    @Override
+    public List<TraitListPropertyValue> reduce(ComputeContext context, Collection<TraitListPropertyValue> modifiers) {
+        List<TraitListPropertyValue> result = new ArrayList<>();
+        for (TraitListPropertyValue traitList : modifiers) {
+            List<TraitInstance> newList = new ArrayList<>();
+            for (TraitInstance inst : traitList.value) {
+                inst.reduceConditions(context).ifPresent(newList::add);
+            }
+            if (!newList.isEmpty()) {
+                result.add(new TraitListPropertyValue(newList));
+            }
+        }
+        return result;
     }
 
     @Override
@@ -152,7 +166,7 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
 
     @Override
     public List<TraitListPropertyValue> sortForDisplay(Collection<TraitListPropertyValue> mods) {
-        return List.of(valueOf(compute(this.baseValue, false, GearTypes.ALL.get(), mods)));
+        return List.of(valueOf(compute(ComputeContext.empty(), this.baseValue, false, GearTypes.ALL.get(), mods)));
     }
 
     @Override
@@ -188,24 +202,27 @@ public class TraitListProperty extends GearProperty<List<TraitInstance>, TraitLi
             return false;
         }
 
-        var traitList = this.compute(getZeroValue(), false, GearTypes.ALL.get(), (Collection<TraitListPropertyValue>) modifiers);
+        var traitList = this.compute(ComputeContext.empty(), getZeroValue(), false, GearTypes.ALL.get(), (Collection<TraitListPropertyValue>) modifiers);
         if (traitList.isEmpty()) {
             return true;
         }
 
-        builder.add(Component.translatable("property.silentgear.traits"));
+        var headerText = Component.translatable("property.silentgear.traits");
+        builder.add(format.colorPropertyName() ? headerText.withColor(this.nameColor.getColor()) : headerText);
         builder.indent();
         for (TraitInstance trait : traitList) {
             builder.add(trait.getDisplayName(FormatContext.ANY));
+            builder.indent();
+            builder.add(trait.getDescription().withStyle(ChatFormatting.ITALIC));
             if (!trait.conditions().isEmpty()) {
-                builder.indent().setBullet("*");
+                builder.setBullet("*");
                 for (ITraitCondition condition : trait.conditions()) {
                     var text = condition.getDisplayText();
                     var strippedText = text.getString().replaceAll("^\\(|\\)$", "");
-                    builder.add(Component.literal(strippedText), ChatFormatting.DARK_GRAY);
+                    builder.add(Component.literal(strippedText).withStyle(ChatFormatting.ITALIC), ChatFormatting.DARK_GRAY);
                 }
-                builder.unindent();
             }
+            builder.unindent();
         }
         builder.unindent();
 

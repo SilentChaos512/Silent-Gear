@@ -7,16 +7,16 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.traits.ITraitCondition;
 import net.silentchaos512.gear.api.traits.TraitConditionSerializer;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.GearComponentInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
+import net.silentchaos512.gear.gear.material.CompoundMaterial;
 import net.silentchaos512.gear.gear.trait.Trait;
 import net.silentchaos512.gear.util.TextUtil;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 
 public record MaterialRatioTraitCondition(float requiredRatio) implements ITraitCondition {
     public static final MapCodec<MaterialRatioTraitCondition> CODEC = RecordCodecBuilder.mapCodec(
@@ -36,19 +36,31 @@ public record MaterialRatioTraitCondition(float requiredRatio) implements ITrait
     }
 
     @Override
-    public boolean matches(Trait trait, PartGearKey key, List<? extends GearComponentInstance<?>> components) {
+    public boolean matches(Trait trait, ComputeContext context) {
         int count = 0;
-        for (GearComponentInstance<?> comp : components) {
-            Collection<TraitInstance> traits = comp.getTraits(key);
-            for (TraitInstance inst : traits) {
+        for (GearComponentInstance<?> comp : context.components()) {
+            for (TraitInstance inst : comp.getTraits(context.partGearKey())) {
                 if (inst.isValid() && inst.getTrait() == trait) {
                     ++count;
                     break;
                 }
             }
         }
-        float ratio = (float) count / components.size();
+        float ratio = (float) count / context.components().size();
         return ratio >= this.requiredRatio;
+    }
+
+    @Override
+    public Optional<ITraitCondition> reduce(Trait trait, ComputeContext context) {
+        if (context instanceof ComputeContext.Gear || context instanceof ComputeContext.Part) {
+            return Optional.empty();
+        } else if (context instanceof ComputeContext.Material materialCtx) {
+            var material = materialCtx.material();
+            if (material.isValid() && material.get() instanceof CompoundMaterial) {
+                return Optional.empty();
+            }
+        }
+        return Optional.of(this);
     }
 
     @Override

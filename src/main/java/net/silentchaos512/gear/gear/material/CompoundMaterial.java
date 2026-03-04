@@ -12,6 +12,7 @@ import net.silentchaos512.gear.api.event.GetMaterialPropertiesEvent;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.*;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
@@ -143,8 +144,9 @@ public class CompoundMaterial extends AbstractMaterial {
             return propertyMods;
         }
 
+        final List<V> reducedList = key.property().reduce(ComputeContext.material(material, partType), propertyMods);
         //noinspection unchecked
-        var castedPropertyMods = (Collection<GearPropertyValue<?>>) propertyMods;
+        var castedPropertyMods = (Collection<GearPropertyValue<?>>) reducedList;
         var event = new GetMaterialPropertiesEvent(material, partType, key.property(), castedPropertyMods);
         NeoForge.EVENT_BUS.post(event);
 
@@ -153,7 +155,7 @@ public class CompoundMaterial extends AbstractMaterial {
         //noinspection unchecked
         final var modifiersFromEvent = (List<V>) new ArrayList<>(event.getModifiers());
         final var partGearKey = PartGearKey.ofAll(partType);
-        final var compressedModifiers = key.property().compressModifiers(modifiersFromEvent, partGearKey, subMaterials);
+        final var compressedModifiers = key.property().compressModifiers(ComputeContext.material(material, partType), modifiersFromEvent, partGearKey, subMaterials);
 
         // Synergy
         final var modifiersWithSynergy = new ArrayList<V>();

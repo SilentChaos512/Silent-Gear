@@ -17,7 +17,6 @@ public class ModDataMapProvider extends DataMapProvider {
         super(packOutput, lookupProvider);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void gather(HolderLookup.Provider provider) {
         final var compostables = builder(NeoForgeDataMaps.COMPOSTABLES);

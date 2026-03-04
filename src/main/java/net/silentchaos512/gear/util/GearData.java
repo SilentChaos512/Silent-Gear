@@ -20,11 +20,7 @@ import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.property.GearProperty;
-import net.silentchaos512.gear.api.property.GearPropertyMap;
-import net.silentchaos512.gear.api.property.GearPropertyValue;
-import net.silentchaos512.gear.api.property.TraitListPropertyValue;
-import net.silentchaos512.gear.api.traits.TraitActionContext;
+import net.silentchaos512.gear.api.property.*;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PropertyKey;
@@ -111,17 +107,18 @@ public final class GearData {
         }
 
         @Nullable var oldProperties = gear.get(SgDataComponents.GEAR_PROPERTIES);
+        ComputeContext.Gear context = ComputeContext.gear(gear, parts);
 
         onRecalculatePre(gear, player, oldProperties, gearConstructionData);
 
         // Calculate base values, then bonuses from traits and such, then the final values!
         // All of these are stored for tooltip purposes
         // First, calculate base properties (first pass, creates the traits list and everything)
-        var baseProperties = calculateBaseProperties(gear, player, gearType, gearConstructionData);
+        var baseProperties = calculateBaseProperties(context, player, gearType, gearConstructionData);
         // Second, calculate bonus modifiers provided by traits
-        var bonusValues = calculateBonusProperties(gear, player, gearType, baseProperties);
+        var bonusValues = calculateBonusProperties(context, player, gearType, baseProperties);
         // Finally, combine the base and bonus modifiers into the final property values
-        var finalProperties = calculateFinalProperties(gear, player, gearType, baseProperties, bonusValues);
+        var finalProperties = calculateFinalProperties(context, player, gearType, baseProperties, bonusValues);
         gear.set(SgDataComponents.GEAR_PROPERTIES, finalProperties);
 
         printStatsForDebugging(gear, oldProperties, baseProperties, bonusValues, finalProperties);
@@ -230,7 +227,7 @@ public final class GearData {
         }
     }
 
-    private static GearPropertiesData calculateBaseProperties(ItemStack gear, @Nullable Player player, GearType gearType, GearConstructionData gearConstructionData) {
+    private static GearPropertiesData calculateBaseProperties(ComputeContext.Gear context, @Nullable Player player, GearType gearType, GearConstructionData gearConstructionData) {
         // Get all property modifiers from all parts and item class modifiers
         final PartList parts = gearConstructionData.parts();
         final GearPropertyMap propertyMods = parts.getPropertyModifiersFromParts(gearType);
@@ -247,20 +244,20 @@ public final class GearData {
             Collection<GearPropertyValue<?>> modifiers = propertyMods.get(key);
             GearType statGearType = propertyMods.getMostSpecificKey(key).gearType();
 
-            final GearPropertyValue<?> value = property.computeUncheckedForGear(gearType, statGearType, modifiers, parts, gear);
+            final GearPropertyValue<?> value = property.computeUncheckedForGear(context, gearType, statGearType, modifiers, parts);
             finalBaseValues.put(property, value);
         }
 
         return new GearPropertiesData(finalBaseValues);
     }
 
-    private static GearPropertyMap calculateBonusProperties(ItemStack gear, @Nullable Player player, GearType gearType, GearPropertiesData baseProperties) {
+    private static GearPropertyMap calculateBonusProperties(ComputeContext.Gear context, @Nullable Player player, GearType gearType, GearPropertiesData baseProperties) {
         var bonusProperties = new GearPropertyMap();
 
         List<TraitInstance> traits = baseProperties.getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty()).value();
 
-        var damageValue = gear.getOrDefault(DataComponents.DAMAGE, 0); // Cannot use gear#getDamageValue (infinite recursion)
-        var baseDurability = gearType.getBaseDurability(baseProperties); // Cannot use gear#getMaxDamage (infinite recursion)
+        final int damageValue = context.gear().getOrDefault(DataComponents.DAMAGE, 0); // Cannot use gear#getDamageValue (infinite recursion)
+        final int baseDurability = gearType.getBaseDurability(baseProperties); // Cannot use gear#getMaxDamage (infinite recursion)
         final float damageRatio = Mth.clamp((float) damageValue / baseDurability, 0f, 1f);
 
         for (var property : SgRegistries.GEAR_PROPERTY) {
@@ -287,7 +284,7 @@ public final class GearData {
         return bonusProperties;
     }
 
-    private static GearPropertiesData calculateFinalProperties(ItemStack gear, @Nullable Player player, GearType gearType, GearPropertiesData baseProperties, GearPropertyMap bonusProperties) {
+    private static GearPropertiesData calculateFinalProperties(ComputeContext.Gear context, @Nullable Player player, GearType gearType, GearPropertiesData baseProperties, GearPropertyMap bonusProperties) {
         GearPropertyMap combinedMods = new GearPropertyMap();
         Map<GearProperty<?, ?>, GearPropertyValue<?>> finalValues = new LinkedHashMap<>();
 
@@ -296,7 +293,7 @@ public final class GearData {
                 var key = PropertyKey.of(property, gearType);
                 combinedMods.put(key, baseProperties.get(property));
                 combinedMods.putAll(key, bonusProperties.get(key));
-                finalValues.put(property, property.computeUnchecked(true, gearType, gearType, combinedMods.get(key)));
+                finalValues.put(property, property.computeUnchecked(context, true, gearType, gearType, combinedMods.get(key)));
             }
         }
 
