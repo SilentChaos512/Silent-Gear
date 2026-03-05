@@ -25,13 +25,6 @@
             "id": "minecraft:armor.boots",
             "operation": "add_value",
             "slot": "feet"
-          },
-          {
-            "type": "minecraft:block_interaction_range",
-            "amount": 0.0,
-            "id": "silentgear:reach_modifier",
-            "operation": "add_value",
-            "slot": "mainhand"
           }
         ],
         "silentgear:construction": {
@@ -59,34 +52,14 @@
           "silentgear:armor": 0.0,
           "silentgear:armor_durability": 0.0,
           "silentgear:armor_toughness": 0.0,
-          "silentgear:attack_damage": 0.0,
-          "silentgear:attack_reach": 0.0,
-          "silentgear:attack_speed": 0.0,
-          "silentgear:block_reach": 0.0,
           "silentgear:charging_value": 0.0,
-          "silentgear:draw_speed": 0.0,
           "silentgear:durability": 0.0,
           "silentgear:enchantment_value": 0.0,
-          "silentgear:harvest_speed": 0.0,
-          "silentgear:harvest_tier": {
-            "incorrect_blocks_for_tool": "minecraft:incorrect_for_wooden_tool",
-            "level_hint": "0",
-            "name": "wood"
-          },
-          "silentgear:kinetic_weapon": {
-            "contact_cooldown_ticks": 0,
-            "damage_multiplier": 0.0
-          },
           "silentgear:knockback_resistance": 0.0,
           "silentgear:magic_armor": 0.0,
-          "silentgear:magic_damage": 0.0,
-          "silentgear:projectile_accuracy": 0.0,
-          "silentgear:projectile_speed": 0.0,
-          "silentgear:ranged_damage": 0.0,
           "silentgear:rarity": 0.0,
           "silentgear:repair_efficiency": 0.0,
           "silentgear:repair_value": 0.0,
-          "silentgear:swing_animation": {},
           "silentgear:traits": []
         }
       },

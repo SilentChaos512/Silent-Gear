@@ -11,6 +11,12 @@ public interface SgEquippableInfo {
             SgEquipmentAssets.GENERIC_SHINY,
             true
     );
+    MaterialEquippableInfo GENERIC_FLAT = new MaterialEquippableInfo(
+            SoundEvents.ARMOR_EQUIP_GENERIC,
+            SgEquipmentAssets.GENERIC_FLAT,
+            SgEquipmentAssets.GENERIC_FLAT,
+            true
+    );
     MaterialEquippableInfo CRIMSON_STEEL = new MaterialEquippableInfo(
             SoundEvents.ARMOR_EQUIP_NETHERITE,
             SgEquipmentAssets.CRIMSON_STEEL,

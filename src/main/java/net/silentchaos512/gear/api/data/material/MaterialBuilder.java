@@ -149,7 +149,8 @@ public class MaterialBuilder<M extends Material> {
     }
 
     public MaterialBuilder<M> displayWithDefaultName(Component namePrefix, int color, TextureType textureType) {
-        return displayWithDefaultName(namePrefix, color, textureType, SgEquippableInfo.GENERIC_SHINY);
+        var equippableInfo = textureType == TextureType.HIGH_CONTRAST ? SgEquippableInfo.GENERIC_SHINY : SgEquippableInfo.GENERIC_FLAT;
+        return displayWithDefaultName(namePrefix, color, textureType, equippableInfo);
     }
 
     public MaterialBuilder<M> displayWithDefaultName(Component namePrefix, int color, TextureType textureType, MaterialEquippableInfo armor) {
@@ -168,7 +169,8 @@ public class MaterialBuilder<M extends Material> {
     }
 
     public MaterialBuilder<M> display(Component name, Component namePrefix, int color, TextureType textureType) {
-        return display(name, namePrefix, color, textureType, SgEquippableInfo.GENERIC_SHINY);
+        var equippableInfo = textureType == TextureType.HIGH_CONTRAST ? SgEquippableInfo.GENERIC_SHINY : SgEquippableInfo.GENERIC_FLAT;
+        return display(name, namePrefix, color, textureType, equippableInfo);
     }
 
     public MaterialBuilder<M> display(Component name, Component namePrefix, int color, TextureType textureType, MaterialEquippableInfo armor) {

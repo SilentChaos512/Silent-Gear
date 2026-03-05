@@ -12,8 +12,8 @@
     "color": "#FF724728",
     "equippable": {
       "always_use_tint": true,
-      "asset_id": "silentgear:generic_shiny",
-      "compound_asset_id": "silentgear:generic_shiny",
+      "asset_id": "silentgear:generic_flat",
+      "compound_asset_id": "silentgear:generic_flat",
       "equip_sound": "minecraft:item.armor.equip_generic"
     },
     "main_texture_type": "LOW_CONTRAST",

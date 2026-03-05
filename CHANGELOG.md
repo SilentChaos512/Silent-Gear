@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gear items showing irrelevant properties
 - Armor colors (ForAnything47) [#891, #888]
 - Armor missing texture on leggings [#888]
+- Worn armor textures for low contrast materials (wood, stone, wool, etc.) is now a low contrast textures (item textures are still wrong)
 
 ## [1.21.11-4.1.4] - 2026-03-01
 ### Fixed

@@ -7,6 +7,7 @@ import net.silentchaos512.gear.SilentGear;
 
 public interface SgEquipmentAssets {
     ResourceKey<EquipmentAsset> GENERIC_SHINY = createId("generic_shiny");
+    ResourceKey<EquipmentAsset> GENERIC_FLAT = createId("generic_flat");
     ResourceKey<EquipmentAsset> GENERIC_NETHERITE = createId("generic_netherite");
     ResourceKey<EquipmentAsset> GENERIC_TURTLE = createId("generic_turtle");
     ResourceKey<EquipmentAsset> CRIMSON_STEEL = createId("crimson_steel");

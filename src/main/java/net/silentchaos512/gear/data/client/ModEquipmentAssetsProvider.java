@@ -24,6 +24,12 @@ public class ModEquipmentAssetsProvider extends EquipmentAssetProvider {
                         .build()
         );
         output.accept(
+                SgEquipmentAssets.GENERIC_FLAT,
+                EquipmentClientInfo.builder()
+                        .addHumanoidLayers(SilentGear.getId("generic_flat"), true)
+                        .build()
+        );
+        output.accept(
                 SgEquipmentAssets.GENERIC_NETHERITE,
                 EquipmentClientInfo.builder()
                         .addHumanoidLayers(SilentGear.getId("generic_netherite"), true)
