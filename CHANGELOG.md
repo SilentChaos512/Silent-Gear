@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.11-4.1.5] - 2026-03-04
+- Merge changes from the 1.21.1 branch (fix missing traits on gear items issue, show trait descriptions)
+### Fixed
+- Gear items showing irrelevant properties
+- Armor colors (ForAnything47) [#891, #888]
+- Armor missing texture on leggings [#888]
+
 ## [1.21.11-4.1.4] - 2026-03-01
 ### Fixed
 - Crash on item tooltips when applying upgrade parts (ForAnything47) [#887, #886]
