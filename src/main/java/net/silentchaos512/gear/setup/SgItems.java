@@ -20,6 +20,8 @@ import net.silentchaos512.gear.item.blueprint.BlueprintType;
 import net.silentchaos512.gear.item.blueprint.PartBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.lib.SilentLib;
+import net.silentchaos512.lib.component.LootContainer;
 import net.silentchaos512.lib.util.TimeUtils;
 
 import java.util.Collection;
@@ -42,7 +44,9 @@ public final class SgItems {
 
     public static final DeferredItem<BlueprintPackageItem> BLUEPRINT_PACKAGE = register(
             "blueprint_package",
-            BlueprintPackageItem::new
+            BlueprintPackageItem::new,
+            properties -> properties
+                    .component(SilentLib.LOOT_CONTAINER, new LootContainer(BlueprintPackageItem.DEFAULT_LOOT_TABLE))
     );
 
     public static final DeferredItem<Item> MOD_KIT = register(
