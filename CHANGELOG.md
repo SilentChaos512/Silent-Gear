@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Smithing tables erroneously modifying the input gear item [#894, #878]
 - Server connection issue relating to null parts when constructing creative tab [#895]
-- Property visibility fixed, gear no longer stores irrelevant properties
+- Possible crash when filling repair kits [#892]
+- Property visibility fixed; gear no longer stores irrelevant properties
 
 ## [1.21.1-4.1.2] - 2026-03-03
 - (Technical) Various method signature changes, mostly related to computing gear property values. This may cause incompatibilities with some add-on mods.
