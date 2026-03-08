@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -152,9 +153,11 @@ public class RepairKitItem extends Item {
         }
 
         for (Map.Entry<MaterialInstance, Float> entry : storedMaterials.entrySet()) {
-            tooltip.add(TextUtil.translate("item", "repair_kit.material",
-                    entry.getKey().getSimpleNameWithModifiers(),
-                    format(entry.getValue())));
+            MaterialInstance material = entry.getKey();
+            float amount = entry.getValue();
+            MutableComponent name = material.getSimpleNameWithModifiers().withColor(material.getNameColor());
+            String amountStr = format(amount);
+            tooltip.add(Component.translatable("item.silentgear.repair_kit.material", name, amountStr));
         }
     }
 

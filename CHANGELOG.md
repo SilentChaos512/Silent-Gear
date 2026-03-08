@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Technical) GearConstructionData#parts is now guaranteed to be immutable to prevent accidental modification.
 ### Changed
 - Simple material names ("gold" as opposed to "golden") are now used wherever it makes sense grammatically
+- Repair kit now colors the names of materials for easier identification
 ### Fixed
 - Repair kits not storing some materials correctly (such as alloys) [#793]
   - Existing repair kits should retain any simple materials and will save their contents using a new codec
