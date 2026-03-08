@@ -3,8 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-- (Technical) GearConstructionData#parts is now guaranteed to be immutable to prevent accidental modification.
+## [1.21.1-4.1.3] - 2026-03-08
 ### Changed
 - Simple material names ("gold" as opposed to "golden") are now used wherever it makes sense grammatically
 - Repair kit now colors the names of materials for easier identification
@@ -16,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Server connection issue relating to null parts when constructing creative tab [#895]
 - Possible crash when filling repair kits [#892]
 - Property visibility fixed; gear no longer stores irrelevant properties
+- Corrected tier hint for gold to "0"
+- Harvest tiers equivalent to wood/gold now transfer to alloys correctly
 
 ## [1.21.1-4.1.2] - 2026-03-03
 - (Technical) Various method signature changes, mostly related to computing gear property values. This may cause incompatibilities with some add-on mods.
