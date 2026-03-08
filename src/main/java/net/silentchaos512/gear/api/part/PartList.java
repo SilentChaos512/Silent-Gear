@@ -125,7 +125,7 @@ public class PartList extends AbstractList<PartInstance> {
     @Override
     public String toString() {
         var listText = this.list.stream()
-                .map(part -> part.getDisplayName().getString())
+                .map(part -> part != null && part.isValid() ? part.getDisplayName().getString() : null)
                 .collect(Collectors.joining(", "));
         return "PartList[" + listText + "]";
     }

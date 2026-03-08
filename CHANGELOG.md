@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Technical) GearConstructionData#parts is now guaranteed to be immutable to prevent accidental modification.
 ### Fixed
 - Smithing tables erroneously modifying the input gear item [#894, #878]
+- Server connection issue relating to null parts when constructing creative tab [#895]
 - Property visibility fixed, gear no longer stores irrelevant properties
 
 ## [1.21.1-4.1.2] - 2026-03-03
