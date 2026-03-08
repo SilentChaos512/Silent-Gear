@@ -126,13 +126,10 @@ public record GearType(
         return relevantPropertyGroups;
     }
 
-    public boolean isPropertyRelevant(GearProperty<?, ?> propertyType) {
-        for (GearPropertyGroup group : relevantPropertyGroups) {
-            if (propertyType.getGroup() == group) {
-                return true;
-            }
-        }
-        return false;
+    public Iterable<GearProperty<?, ?>> getRelevantProperties() {
+        return relevantPropertyGroups().stream()
+                .flatMap(group -> group.getProperties().stream())
+                .toList();
     }
 
     @Override

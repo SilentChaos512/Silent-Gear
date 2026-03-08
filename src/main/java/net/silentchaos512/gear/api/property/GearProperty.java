@@ -162,7 +162,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
     }
 
     public boolean isHidden(V value, GearTooltipFlag flag) {
-        return false;
+        return !this.visible;
     }
 
     @SuppressWarnings("unchecked")
@@ -283,7 +283,7 @@ public abstract class GearProperty<T, V extends GearPropertyValue<T>> {
         private boolean affectedBySynergy;
         private boolean affectedByGrades;
         public boolean forMaterialsOnly;
-        private boolean visible;
+        private boolean visible = true;
 
         public Builder(T defaultValue) {
             this(defaultValue, defaultValue);

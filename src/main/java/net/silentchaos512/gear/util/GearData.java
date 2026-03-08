@@ -190,7 +190,7 @@ public final class GearData {
 
         final Map<GearProperty<?, ?>, GearPropertyValue<?>> finalBaseValues = new LinkedHashMap<>();
 
-        for (var property : SgRegistries.GEAR_PROPERTY) {
+        for (var property : gearType.getRelevantProperties()) {
             if (property.isForMaterialsOnly()) {
                 // No parts should return material-only property values, but this safety check makes sure they don't end
                 // up on gear items, just in case!
