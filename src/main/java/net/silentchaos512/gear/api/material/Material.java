@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.api.material;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -16,7 +15,6 @@ import net.silentchaos512.lib.event.ClientTicks;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -135,8 +133,12 @@ public interface Material extends GearComponent<MaterialInstance> {
      *
      * @return A simple name for the material
      */
+    default Component getSimpleName(MaterialInstance material) {
+        return getDisplayName(material, PartTypes.MAIN.get());
+    }
+
     default Component getSimpleName() {
-        return getDisplayName(MaterialInstance.of(this), PartTypes.MAIN.get());
+        return getSimpleName(MaterialInstance.of(this));
     }
 
     Component getDisplayNamePrefix(PartType partType);

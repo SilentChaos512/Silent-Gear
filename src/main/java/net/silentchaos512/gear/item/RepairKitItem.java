@@ -12,7 +12,6 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.gear.GearProperties;
-import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -154,7 +153,7 @@ public class RepairKitItem extends Item {
 
         for (Map.Entry<MaterialInstance, Float> entry : storedMaterials.entrySet()) {
             tooltip.add(TextUtil.translate("item", "repair_kit.material",
-                    entry.getKey().getDisplayNameWithModifiers(PartTypes.MAIN.get(), ItemStack.EMPTY),
+                    entry.getKey().getSimpleNameWithModifiers(),
                     format(entry.getValue())));
         }
     }

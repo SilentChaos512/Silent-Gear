@@ -198,6 +198,14 @@ public class CompoundMaterial extends AbstractMaterial {
     }
 
     @Override
+    public Component getSimpleName(@Nullable MaterialInstance material) {
+        if (material != null) {
+            return material.getItem().getHoverName();
+        }
+        return this.display.name().copy();
+    }
+
+    @Override
     public int getColor(MaterialInstance material, PartType partType, GearType gearType) {
         return ColorUtils.getBlendedColorForCompoundMaterial(getSubMaterials(material));
     }

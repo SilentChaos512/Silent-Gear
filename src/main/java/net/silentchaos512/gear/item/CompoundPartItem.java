@@ -2,7 +2,6 @@ package net.silentchaos512.gear.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -118,7 +117,7 @@ public class CompoundPartItem extends Item {
 
         if (part != null && material != null && Config.Client.showPartTooltips.get()) {
             var nameColor = material.getNameColor(part.getType(), this.getGearType());
-            var displayNameWithModifiers = material.getDisplayNameWithModifiers(part.getType(), ItemStack.EMPTY);
+            var displayNameWithModifiers = material.getSimpleNameWithModifiers();
             tooltip.add(TextUtil.withColor(displayNameWithModifiers, nameColor));
         }
     }

@@ -91,7 +91,7 @@ public class ProcessedMaterial extends AbstractMaterial {
         if (material != null) {
             var baseMaterial = getBaseMaterial(material);
             return baseMaterial != null && baseMaterial.isValid()
-                    ? baseMaterial.getDisplayName(partType).plainCopy()
+                    ? baseMaterial.getSimpleName().plainCopy()
                     : TextUtil.misc("unknown");
         }
         return super.getBaseMaterialName(null, partType);

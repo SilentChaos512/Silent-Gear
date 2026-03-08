@@ -4,13 +4,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.TraitInstance;
-import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.material.AbstractMaterial;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -19,7 +18,6 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.gear.util.TextUtil;
-import net.silentchaos512.gear.util.TraitHelper;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -80,7 +78,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     @Override
     public Component getName(ItemStack stack) {
         MaterialInstance material = getPrimaryMaterial(stack);
-        Component text = material != null ? material.getDisplayName(PartTypes.MAIN.get()) : TextUtil.misc("unknown");
+        Component text = material != null ? material.getSimpleName() : TextUtil.misc("unknown");
         return Component.translatable(this.getDescriptionId(), text);
     }
 
@@ -99,7 +97,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
             TextListBuilder statsBuilder = new TextListBuilder();
             for (MaterialInstance subMaterial : subMaterials) {
                 int nameColor = subMaterial.getNameColor(PartTypes.MAIN.get(), GearTypes.ALL.get());
-                statsBuilder.add(TextUtil.withColor(subMaterial.getDisplayName(PartTypes.MAIN.get()).copy(), nameColor));
+                statsBuilder.add(TextUtil.withColor(subMaterial.getSimpleName().copy(), nameColor));
             }
             tooltip.addAll(statsBuilder.build());
         }

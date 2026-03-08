@@ -31,7 +31,7 @@ public class ProcessedMaterialItem extends SingleMaterialItem implements IColore
     @Override
     public Component getName(ItemStack stack) {
         var baseMaterial = getMaterial(stack);
-        var materialName = baseMaterial != null ? baseMaterial.getDisplayName(PartTypes.MAIN.get()) : TextUtil.misc("unknown");
+        var materialName = baseMaterial != null ? baseMaterial.getSimpleName() : TextUtil.misc("unknown");
         return Component.translatable(this.getDescriptionId(), materialName);
     }
 }
