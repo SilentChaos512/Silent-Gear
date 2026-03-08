@@ -21,8 +21,10 @@ public abstract class GearSmithingRecipe extends SmithingTransformRecipe {
 
     @Override
     public ItemStack assemble(SmithingRecipeInput input, HolderLookup.Provider registryAccess) {
-        ItemStack gearCopy = input.base().transmuteCopy(this.gearItem.getItem(), 1);
+        ItemStack gearCopy = input.base().copy();
+        gearCopy.setCount(1); // Ensure arrows or other stackable items are not duplicated
         ItemStack upgradeItem = input.addition();
+        // gearCopy is safe to modify, but I chose not the update the applyUpgrade method signature for now
         return applyUpgrade(gearCopy, upgradeItem);
     }
 

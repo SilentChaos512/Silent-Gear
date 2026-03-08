@@ -118,10 +118,14 @@ public class PartList extends AbstractList<PartInstance> {
         return builder.build();
     }
 
+    public PartList mutableCopy() {
+        return PartList.of(this);
+    }
+
     @Override
     public String toString() {
         var listText = this.list.stream()
-                .map(part -> part.getDisplayName().toString())
+                .map(part -> part.getDisplayName().getString())
                 .collect(Collectors.joining(", "));
         return "PartList[" + listText + "]";
     }
