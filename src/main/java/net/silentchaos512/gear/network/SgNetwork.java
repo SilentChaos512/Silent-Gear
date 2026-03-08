@@ -12,7 +12,7 @@ import net.silentchaos512.gear.network.payload.server.*;
 public final class SgNetwork {
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
-        final var registrar = event.registrar("4.0");
+        final var registrar = event.registrar("4.1.3");
         // Data resource sync packets
         registrar.playToClient(
                 SyncTraitsPayload.TYPE,

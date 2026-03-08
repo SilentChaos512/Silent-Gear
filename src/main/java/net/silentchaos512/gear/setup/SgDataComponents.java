@@ -2,6 +2,8 @@ package net.silentchaos512.gear.setup;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Unit;
@@ -15,6 +17,7 @@ import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
+import net.silentchaos512.gear.core.component.RepairKitCodecs;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 
 import java.util.HashMap;
@@ -23,7 +26,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class SgDataComponents {
-    public static final DeferredRegister.DataComponents REGISTRAR = DeferredRegister.createDataComponents(SilentGear.MOD_ID);
+    public static final DeferredRegister.DataComponents REGISTRAR = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, SilentGear.MOD_ID);
 
     public static final Supplier<DataComponentType<ItemContainerContents>> CONTAINED_ITEMS = REGISTRAR.registerComponentType(
             "contained_items",
@@ -105,54 +108,11 @@ public class SgDataComponents {
                     .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.INT)
     );
-    /*public static final Supplier<DataComponentType<TraitAddedEnchantments>> TRAIT_ADDED_ENCHANTMENTS = REGISTRAR.registerComponentType(
-            "trait_added_enchantments",
-            builder -> builder
-                    .persistent(TraitAddedEnchantments.CODEC)
-                    .networkSynchronized(TraitAddedEnchantments.STREAM_CODEC)
-    );*/
-    /**
-     * A map of MaterialInstance to Float, encoded as a map of DataResource<Material> to Float.
-     * Used by repair kits.
-     */
+    // Use by repair kits
     public static final Supplier<DataComponentType<Map<MaterialInstance, Float>>> MATERIAL_STORAGE = REGISTRAR.registerComponentType(
             "material_storage",
             builder -> builder
-                    .persistent(
-                            Codec.unboundedMap(DataResource.MATERIAL_CODEC, Codec.FLOAT)
-                                    .xmap(
-                                            map -> {
-                                                var result = new HashMap<MaterialInstance, Float>();
-                                                map.forEach((material, value) -> result.put(MaterialInstance.of(material), value));
-                                                return result;
-                                            },
-                                            map -> {
-                                                var result = new HashMap<DataResource<Material>, Float>();
-                                                map.forEach((material, value) -> result.put(DataResource.material(material), value));
-                                                return result;
-                                            }
-                                    )
-                    )
-                    .networkSynchronized(
-                            StreamCodec.of(
-                                    (buf, map) -> {
-                                        buf.writeVarInt(map.size());
-                                        map.forEach((material, value) -> {
-                                            DataResource.MATERIAL_STREAM_CODEC.encode(buf, DataResource.material(material));
-                                            buf.writeFloat(value);
-                                        });
-                                    },
-                                    buf -> {
-                                        var result = new HashMap<MaterialInstance, Float>();
-                                        int size = buf.readVarInt();
-                                        for (int i = 0; i < size; ++i) {
-                                            var material = MaterialInstance.of(DataResource.MATERIAL_STREAM_CODEC.decode(buf));
-                                            var value = buf.readFloat();
-                                            result.put(material, value);
-                                        }
-                                        return result;
-                                    }
-                            )
-                    )
+                    .persistent(RepairKitCodecs.MATERIAL_STORAGE_CODEC)
+                    .networkSynchronized(RepairKitCodecs.MATERIAL_STORAGE_STREAM_CODEC)
     );
 }
