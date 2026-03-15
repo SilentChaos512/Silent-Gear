@@ -3,6 +3,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.11-4.1.6] - 2026-03-15
+- Merge changes from the 1.21.1 branch, all changes detailed below
+### Changed
+- Simple material names ("gold" as opposed to "golden") are now used wherever it makes sense grammatically
+- Repair kit now colors the names of materials for easier identification
+### Fixed
+- Blueprint package not giving any items
+- Repair kits not storing some materials correctly (such as alloys) [#793]
+  - Existing repair kits should retain any simple materials and will save their contents using a new codec
+  - "Unknown Alloys" may still appear until overwritten; they cannot be retrieved
+- Smithing tables erroneously modifying the input gear item [#894, #878]
+- Server connection issue relating to null parts when constructing creative tab [#895]
+- Possible crash when filling repair kits [#892]
+- Property visibility fixed; gear no longer stores irrelevant properties
+- Corrected tier hint for gold to "0"
+- Harvest tiers equivalent to wood/gold now transfer to alloys correctly
+
 ## [1.21.11-4.1.5] - 2026-03-04
 - Merge changes from the 1.21.1 branch (fix missing traits on gear items issue, show trait descriptions)
 ### Fixed
