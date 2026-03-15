@@ -74,7 +74,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     @Override
     public Component getName(ItemStack stack) {
         MaterialInstance material = getPrimaryMaterial(stack);
-        Component text = material != null ? material.getDisplayName(PartTypes.MAIN.get()) : TextUtil.misc("unknown");
+        Component text = material != null ? material.getSimpleName() : TextUtil.misc("unknown");
         return Component.translatable(this.getDescriptionId(), text);
     }
 
@@ -94,7 +94,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
             TextListBuilder materialListBuilder = new TextListBuilder();
             for (MaterialInstance subMaterial : subMaterials) {
                 int nameColor = subMaterial.getNameColor(PartTypes.MAIN.get(), GearTypes.ALL.get());
-                materialListBuilder.add(TextUtil.withColor(subMaterial.getDisplayName(PartTypes.MAIN.get()).copy(), nameColor));
+                materialListBuilder.add(TextUtil.withColor(subMaterial.getSimpleName().copy(), nameColor));
             }
             materialListBuilder.build().forEach(tooltipAdder);
         }

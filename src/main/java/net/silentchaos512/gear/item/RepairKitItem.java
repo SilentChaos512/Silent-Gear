@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +14,6 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.gear.GearProperties;
-import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.TextUtil;
 
@@ -154,9 +154,11 @@ public class RepairKitItem extends Item {
         }
 
         for (Map.Entry<MaterialInstance, Float> entry : storedMaterials.entrySet()) {
-            tooltipAdder.accept(TextUtil.translate("item", "repair_kit.material",
-                    entry.getKey().getDisplayNameWithModifiers(PartTypes.MAIN.get(), ItemStack.EMPTY),
-                    format(entry.getValue())));
+            MaterialInstance material = entry.getKey();
+            float amount = entry.getValue();
+            MutableComponent name = material.getSimpleNameWithModifiers().withColor(material.getNameColor());
+            String amountStr = format(amount);
+            tooltipAdder.accept(Component.translatable("item.silentgear.repair_kit.material", name, amountStr));
         }
     }
 

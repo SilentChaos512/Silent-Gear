@@ -46,7 +46,7 @@ public class HarvestTierProperty extends GearProperty<HarvestTier, HarvestTierPr
 
     @Override
     public HarvestTier compute(ComputeContext context, HarvestTier baseValue, boolean clampResult, GearType itemType, GearType statType, Collection<HarvestTierPropertyValue> modifiers) {
-        HarvestTier possibleBest = baseValue;
+        HarvestTier possibleBest = null;
 
         for (var mod : modifiers) {
             if (mod.value.isBetterThan(possibleBest)) {
@@ -54,7 +54,7 @@ public class HarvestTierProperty extends GearProperty<HarvestTier, HarvestTierPr
             }
         }
 
-        return possibleBest;
+        return possibleBest != null ? possibleBest : baseValue;
     }
 
     @Override

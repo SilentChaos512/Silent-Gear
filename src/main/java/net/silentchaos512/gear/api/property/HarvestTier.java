@@ -24,11 +24,11 @@ public record HarvestTier(
         Optional<String> levelHint,
         TagKey<Block> incorrectForTool
 ) {
-    public static final HarvestTier ZERO = create("wood", "0", BlockTags.INCORRECT_FOR_WOODEN_TOOL);
+    public static final HarvestTier ZERO = create("zero", "0", BlockTags.INCORRECT_FOR_WOODEN_TOOL);
     // Some common tiers for lazy material creation (extra mod metals, etc.)
-    public static final HarvestTier WOOD = ZERO;
+    public static final HarvestTier WOOD = create("wood", "0", BlockTags.INCORRECT_FOR_WOODEN_TOOL);;
     public static final HarvestTier STONE = create("stone", "1", BlockTags.INCORRECT_FOR_STONE_TOOL);
-    public static final HarvestTier GOLD = create("gold", "1", BlockTags.INCORRECT_FOR_GOLD_TOOL);
+    public static final HarvestTier GOLD = create("gold", "0", BlockTags.INCORRECT_FOR_GOLD_TOOL);
     public static final HarvestTier IRON = create("iron", "2", BlockTags.INCORRECT_FOR_IRON_TOOL);
     public static final HarvestTier DIAMOND = create("diamond", "3", BlockTags.INCORRECT_FOR_DIAMOND_TOOL);
     public static final HarvestTier NETHERITE = create("netherite", "4", BlockTags.INCORRECT_FOR_NETHERITE_TOOL);

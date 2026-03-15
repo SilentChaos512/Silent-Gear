@@ -11,6 +11,7 @@ import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -53,4 +54,8 @@ public interface GearComponentInstance<A extends GearComponent<?>> {
     Component getDisplayName(PartType type, ItemStack gear);
 
     int getNameColor(PartType partType, GearType gearType);
+
+    default int getNameColor() {
+        return getNameColor(PartTypes.MAIN.get(), GearTypes.ALL.get());
+    }
 }

@@ -3,7 +3,6 @@ package net.silentchaos512.gear.crafting.recipe.smithing;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
-import net.silentchaos512.gear.util.GearData;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -29,11 +28,12 @@ public abstract class GearSmithingRecipe implements SmithingRecipe {
 
     @Override
     public ItemStack assemble(SmithingRecipeInput input, HolderLookup.Provider registryAccess) {
-        ItemStack result = input.base().transmuteCopy(this.gearItem.getItem(), 1);
+        ItemStack gearCopy = input.base().copy();
+        gearCopy.setCount(1); // Ensure arrows or other stackable items are not duplicated
         ItemStack upgradeItem = input.addition();
-        applyUpgrade(result, upgradeItem);
-        GearData.recalculateGearData(result, null);
-        return result;
+        // gearCopy is safe to modify, but I chose not the update the applyUpgrade method signature for now
+        applyUpgrade(gearCopy, upgradeItem);
+        return gearCopy;
     }
 
     protected abstract void applyUpgrade(ItemStack stackToModify, ItemStack upgradeItem);

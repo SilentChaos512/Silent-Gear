@@ -144,8 +144,12 @@ public interface Material extends GearComponent<MaterialInstance> {
      *
      * @return A simple name for the material
      */
+    default Component getSimpleName(MaterialInstance material) {
+        return getDisplayName(material, PartTypes.MAIN.get());
+    }
+
     default Component getSimpleName() {
-        return getDisplayName(MaterialInstance.of(this), PartTypes.MAIN.get());
+        return getSimpleName(MaterialInstance.of(this));
     }
 
     Component getDisplayNamePrefix(PartType partType);

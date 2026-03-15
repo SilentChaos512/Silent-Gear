@@ -121,7 +121,7 @@ public class CompoundPartItem extends Item {
 
         if (part != null && material != null && Config.Client.showPartTooltips.get()) {
             var nameColor = material.getNameColor(part.getType(), this.getGearType());
-            var displayNameWithModifiers = material.getDisplayNameWithModifiers(part.getType(), ItemStack.EMPTY);
+            var displayNameWithModifiers = material.getSimpleNameWithModifiers();
             tooltipAdder.accept(TextUtil.withColor(displayNameWithModifiers, nameColor));
         }
     }

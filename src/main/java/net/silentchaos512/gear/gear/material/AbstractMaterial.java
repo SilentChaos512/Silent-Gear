@@ -177,7 +177,7 @@ public abstract class AbstractMaterial implements Material {
     }
 
     @Override
-    public Component getSimpleName() {
+    public Component getSimpleName(@Nullable MaterialInstance material) {
         var name = display.name();
         if (name.getContents() instanceof TranslatableContents translatableContents) {
             var key = translatableContents.getKey();

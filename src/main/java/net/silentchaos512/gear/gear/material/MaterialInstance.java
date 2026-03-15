@@ -204,6 +204,11 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return mat != null ? mat.getDisplayName(this, partType) : Component.literal(getId().toString());
     }
 
+    public Component getSimpleName() {
+        var mat = getNullable();
+        return mat != null ? mat.getSimpleName(this) : Component.literal(getId().toString());
+    }
+
     public String getModelKey() {
         var mat = getNullable();
         return mat != null ? mat.getModelKey(this) : "null";
@@ -292,6 +297,14 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
 
     public MutableComponent getDisplayNameWithModifiers(PartType partType, ItemStack gear) {
         MutableComponent name = getDisplayName(partType, gear).copy();
+        for (IMaterialModifier modifier : getModifiers()) {
+            name = modifier.modifyMaterialName(name);
+        }
+        return name;
+    }
+
+    public MutableComponent getSimpleNameWithModifiers() {
+        MutableComponent name = getSimpleName().copy();
         for (IMaterialModifier modifier : getModifiers()) {
             name = modifier.modifyMaterialName(name);
         }

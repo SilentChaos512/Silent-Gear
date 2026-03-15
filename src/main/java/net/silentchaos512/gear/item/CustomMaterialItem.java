@@ -34,7 +34,7 @@ public class CustomMaterialItem extends SingleMaterialItem implements IColoredMa
     public Component getName(ItemStack stack) {
         var material = getMaterial(stack);
         if (material == null) return super.getName(stack);
-        return Component.translatable(this.getDescriptionId(), material.getDisplayName(PartTypes.MAIN.get()));
+        return Component.translatable(this.getDescriptionId(), material.getSimpleName());
     }
 
     @SuppressWarnings("deprecation")

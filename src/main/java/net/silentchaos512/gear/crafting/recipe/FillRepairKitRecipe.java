@@ -17,6 +17,9 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.collection.StackList;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FillRepairKitRecipe extends CustomRecipe {
     public FillRepairKitRecipe(CraftingBookCategory bookCategory) {
         super(bookCategory);
@@ -49,13 +52,25 @@ public class FillRepairKitRecipe extends CustomRecipe {
 
     @Override
     public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
-        StackList list = StackList.from(inv);
-        ItemStack repairKit = list.uniqueOfType(RepairKitItem.class).copy();
-        repairKit.setCount(1);
-        RepairKitItem repairKitItem = (RepairKitItem) repairKit.getItem();
+        ItemStack repairKit = ItemStack.EMPTY;
+        RepairKitItem repairKitItem = null;
+        List<ItemStack> materials = new ArrayList<>();
 
-        for (ItemStack mat : list.allMatches(FillRepairKitRecipe::isRepairMaterial)) {
-            if (!repairKitItem.addMaterial(repairKit, mat)) {
+        for (ItemStack stack : inv.items()) {
+            if (stack.getItem() instanceof RepairKitItem item) {
+                repairKit = stack.copy();
+                repairKitItem = item;
+            } else if (isRepairMaterial(stack)) {
+                materials.add(stack);
+            }
+        }
+        if (repairKit.isEmpty() || repairKitItem == null || materials.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
+        // Apply materials to repair kit copy
+        for (ItemStack materialStack : materials) {
+            if (!repairKitItem.addMaterial(repairKit, materialStack)) {
                 // Repair kit is too full to accept more materials
                 return ItemStack.EMPTY;
             }

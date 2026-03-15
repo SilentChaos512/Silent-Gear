@@ -265,9 +265,12 @@ public final class MaterialsCommand {
     }
 
     private static String makeTsvLine(MaterialInstance material, PartType partType) {
+        var displayName = material.getDisplayName(partType);
+        var simpleName = material.getSimpleName();
+        boolean simpleNameIsDifferent = !simpleName.getString().equals(displayName.getString());
         StringBuilder builder = new StringBuilder();
         appendTsv(builder, SgRegistries.MATERIAL.getPackName(material.get()));
-        appendTsv(builder, material.getDisplayName(partType).getString());
+        appendTsv(builder, displayName.getString() + (simpleNameIsDifferent ? " (" + simpleName.getString() + ")" : ""));
         appendTsv(builder, partType.getDisplayName().getString());
         appendTsv(builder, material.getId().toString());
         appendTsv(builder, getParentName(material.get(), partType));

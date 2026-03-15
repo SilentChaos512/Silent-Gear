@@ -478,7 +478,7 @@ public final class GearData {
 
     public static void addOrReplacePart(ItemStack gear, PartInstance part) {
         PartType partType = part.getType();
-        PartList parts = getConstruction(gear).parts();
+        PartList parts = getConstruction(gear).parts().mutableCopy();
         List<PartInstance> partsOfType = parts.getPartsOfType(partType);
         PartInstance removedPart = null;
 

@@ -585,7 +585,7 @@
   "item.silentgear.repair_kit.hint1": "Used to repair gear items",
   "item.silentgear.repair_kit.hint2": "Craft with materials to fill, or a stick to empty",
   "item.silentgear.repair_kit.hint3": "Craft with a gear item to repair it",
-  "item.silentgear.repair_kit.material": "- %s: %d",
+  "item.silentgear.repair_kit.material": "- %s: %s",
   "item.silentgear.ring": "Ring",
   "item.silentgear.ring.nameProper": "%s Ring",
   "item.silentgear.ring_shank": "Ring Shank",

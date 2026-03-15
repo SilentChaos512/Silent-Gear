@@ -42,6 +42,13 @@ public record GearConstructionData(
             GearConstructionData::new
     );
 
+    public GearConstructionData(PartList parts, boolean isExample, int brokenCount, int repairedCount) {
+        this.parts = PartList.immutable(parts);
+        this.isExample = isExample;
+        this.brokenCount = brokenCount;
+        this.repairedCount = repairedCount;
+    }
+
     @Nullable
     public PartInstance getPartOfType(Supplier<PartType> type) {
         return getPartOfType(type.get());

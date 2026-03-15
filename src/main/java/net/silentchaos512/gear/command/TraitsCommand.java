@@ -323,7 +323,7 @@ public final class TraitsCommand {
                 foundAny = true;
 
                 str.append("**")
-                        .append(instance.getDisplayName(PartTypes.MAIN.get()).getString())
+                        .append(instance.getSimpleName().getString())
                         .append("**")
                         .append(" _(")
                         .append(typesWithTrait.stream().map(pt ->
