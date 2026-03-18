@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.gear.material;
 
 import com.google.common.collect.Sets;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -184,9 +183,7 @@ public abstract class AbstractMaterial implements Material {
         if (name.getContents() instanceof TranslatableContents translatableContents) {
             var key = translatableContents.getKey();
             var simpleNameKey = key + ".simple";
-            if (I18n.exists(simpleNameKey)) {
-                return Component.translatable(simpleNameKey);
-            }
+            return Component.translatableWithFallback(simpleNameKey, "%s", name);
         }
         return name;
     }
