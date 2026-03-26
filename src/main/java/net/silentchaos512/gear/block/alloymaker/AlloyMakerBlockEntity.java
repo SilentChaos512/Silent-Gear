@@ -93,9 +93,9 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
         return this.info.getOutputItem();
     }
 
-    protected ItemStack getWorkOutput(@Nullable R recipe, RegistryAccess registryAccess, List<MaterialInstance> materials) {
+    protected ItemStack getWorkOutput(@Nullable R recipe, List<MaterialInstance> materials) {
         if (recipe != null) {
-            return recipe.assemble(AlloyRecipeInput.of(this), registryAccess);
+            return recipe.assemble(AlloyRecipeInput.of(this));
         }
         var result = getOutputItem(materials).create(materials);
         applyModifiers(result);
@@ -165,7 +165,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
         assert level != null;
 
         ItemStack current = getItem(getOutputSlotIndex());
-        ItemStack output = getWorkOutput(recipe, registryAccess, materials);
+        ItemStack output = getWorkOutput(recipe, materials);
 
         updateOutputHint(output);
 
@@ -185,7 +185,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
             }
 
             if (progress >= WORK_TIME && !level.isClientSide()) {
-                finishWork(recipe, registryAccess, materials, current);
+                finishWork(recipe, materials, current);
             }
         } else {
             stopWork(false);
@@ -204,13 +204,13 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
         }
     }
 
-    private void finishWork(@Nullable R recipe, RegistryAccess registryAccess, List<MaterialInstance> materials, ItemStack current) {
+    private void finishWork(@Nullable R recipe, List<MaterialInstance> materials, ItemStack current) {
         progress = 0;
         for (int i = 0; i < getInputSlotCount(); ++i) {
             removeItem(i, 1);
         }
 
-        ItemStack output = getWorkOutput(recipe, registryAccess, materials);
+        ItemStack output = getWorkOutput(recipe, materials);
         if (!current.isEmpty()) {
             current.grow(output.getCount());
         } else {

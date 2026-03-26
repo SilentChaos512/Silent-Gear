@@ -1,9 +1,8 @@
 package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -24,19 +23,19 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     private final GearItem item;
     private final Lazy<ItemStack> exampleOutput;
 
-    public ShapelessGearRecipe(String pGroup, CraftingBookCategory pCategory, ItemStack pResult, List<Ingredient> pIngredients) {
-        super(pGroup, pCategory, pResult, pIngredients);
+    public ShapelessGearRecipe(CommonInfo commonInfo, CraftingBookInfo bookInfo, ItemStackTemplate result, List<Ingredient> ingredients) {
+        super(commonInfo, bookInfo, result, ingredients);
 
-        if (!(pResult.getItem() instanceof GearItem)) {
-            throw new JsonParseException("result is not a gear item: " + pResult);
+        if (!(result.item().value() instanceof GearItem gearItem)) {
+            throw new JsonParseException("result is not a gear item: " + result);
         }
-        this.item = (GearItem) pResult.getItem();
+        this.item = gearItem;
 
         this.exampleOutput = Lazy.of(() -> {
             // Create an example item, so we're not just showing a broken item
-            ItemStack result = this.item.construct(GearHelper.getExamplePartsFromRecipe(this.item.getGearType(), this.getIngredientsForDisplay()));
-            GearData.setExampleTag(result, true);
-            return result;
+            ItemStack exampleItem = this.item.construct(GearHelper.getExamplePartsFromRecipe(this.item.getGearType(), this.ingredients));
+            GearData.setExampleTag(exampleItem, true);
+            return exampleItem;
         });
     }
 
@@ -46,16 +45,16 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public boolean matches(CraftingInput inv, Level worldIn) {
-        if (!super.matches(inv, worldIn)) return false;
+    public boolean matches(CraftingInput input, Level worldIn) {
+        if (!super.matches(input, worldIn)) return false;
 
         GearType gearType = item.getGearType();
-        Collection<PartInstance> parts = getParts(inv);
+        Collection<PartInstance> parts = getParts(input);
 
         if (parts.isEmpty()) return false;
 
         for (PartInstance part : parts) {
-            if (!part.isCraftingAllowed(gearType, inv)) {
+            if (!part.isCraftingAllowed(gearType, input)) {
                 return false;
             }
         }
@@ -64,8 +63,8 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
-        return item.construct(getParts(inv));
+    public ItemStack assemble(CraftingInput input) {
+        return item.construct(getParts(input));
     }
 
     @Override
@@ -74,8 +73,8 @@ public final class ShapelessGearRecipe extends ExtendedShapelessRecipe implement
     }
 
     @Override
-    public ItemStack getResultForDisplay() {
-        return this.exampleOutput.get();
+    public ItemStackTemplate getResultForDisplay() {
+        return ItemStackTemplate.fromNonEmptyStack(this.exampleOutput.get());
     }
 
     @Override

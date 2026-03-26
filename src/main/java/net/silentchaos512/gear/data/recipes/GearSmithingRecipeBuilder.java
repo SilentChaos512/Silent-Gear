@@ -9,9 +9,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -24,13 +24,14 @@ import net.silentchaos512.gear.crafting.recipe.smithing.GearSmithingRecipe;
 import net.silentchaos512.gear.crafting.recipe.smithing.UpgradeSmithingRecipe;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+/** @noinspection OptionalUsedAsFieldOrParameterType*/
 public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements RecipeBuilder {
     private final GearSmithingRecipe.Factory<R> factory;
     private final String recipeFolder;
@@ -77,8 +78,10 @@ public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements 
     }
 
     @Override
-    public Item getResult() {
-        return this.gearItem;
+    public ResourceKey<Recipe<?>> defaultId() {
+        Identifier itemId = NameUtils.fromItem(this.gearItem);
+        String recipePath = "smithing/" + this.recipeFolder + "/" + itemId.getPath();
+        return ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(itemId.getNamespace(), recipePath));
     }
 
     public void save(RecipeOutput pRecipeOutput) {
@@ -97,7 +100,7 @@ public class GearSmithingRecipeBuilder<R extends GearSmithingRecipe> implements 
             this.criteria.forEach(advancement$builder::addCriterion);
         }
 
-        var recipe = factory.create(new ItemStack(gearItem), template, addition);
+        var recipe = factory.create(Ingredient.of(gearItem), template, addition);
         var advancementHolder = advancement$builder != null
                 ? advancement$builder.build(pId.identifier().withPrefix("recipes/smithing/" + recipeFolder + "/"))
                 : null;

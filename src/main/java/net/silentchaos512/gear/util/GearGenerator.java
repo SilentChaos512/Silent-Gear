@@ -44,7 +44,7 @@ public final class GearGenerator {
             throw new RuntimeException("Called GearGenerator.randomizeParts on non-gear");
         }
         GearType gearType = item.getGearType();
-        PartList parts = PartList.of();
+        PartList parts = PartList.mutable();
 
         for (PartType partType : item.getRequiredParts()) {
             getRandomPart(gearType, partType).ifPresent(parts::add);

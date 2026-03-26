@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -29,12 +30,12 @@ public abstract class EnchantedDropsTraitLootModifier extends LootModifier {
 
     protected abstract void addEnchantments(HolderLookup.RegistryLookup<Enchantment> registry, ItemEnchantments.Mutable enchantments, int traitLevel);
 
-    private ItemStack createEnchantedCopy(ItemStack tool, ServerLevel level) {
-        var copy = tool.copy();
-        copy.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+    private ItemStack createEnchantedCopy(ItemInstance tool, ServerLevel level) {
+        var result = new ItemStack(tool.typeHolder().value());
+        result.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         var registry = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-        EnchantmentHelper.updateEnchantments(copy, enchantments -> addEnchantments(registry, enchantments, this.traitLevel));
-        return copy;
+        EnchantmentHelper.updateEnchantments(result, enchantments -> addEnchantments(registry, enchantments, this.traitLevel));
+        return result;
     }
 
     private LootContext createEnchantedLootContext(LootContext original, ItemStack enchantedTool) {

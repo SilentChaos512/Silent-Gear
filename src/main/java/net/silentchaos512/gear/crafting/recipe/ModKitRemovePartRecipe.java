@@ -1,9 +1,7 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -19,10 +17,7 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.lib.collection.StackList;
 
 public class ModKitRemovePartRecipe extends CustomRecipe {
-    public ModKitRemovePartRecipe(CraftingBookCategory bookCategory) {
-        super(bookCategory);
-    }
-
+    public static final ModKitRemovePartRecipe INSTANCE = new ModKitRemovePartRecipe();
     @Override
     public boolean matches(CraftingInput inv, Level worldIn) {
         ItemStack gear = ItemStack.EMPTY;
@@ -51,8 +46,8 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
-        StackList list = StackList.from(inv);
+    public ItemStack assemble(CraftingInput input) {
+        StackList list = StackList.from(input);
         ItemStack gear = list.uniqueOfType(GearItem.class);
         ItemStack modKit = list.uniqueOfType(ModKitItem.class);
         if (gear.isEmpty() || modKit.isEmpty()) return ItemStack.EMPTY;
@@ -79,8 +74,11 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
 
             if (stack.getItem() instanceof GearItem) {
                 list.set(i, part != null ? part.getItem() : ItemStack.EMPTY);
-            } else if (!stack.getCraftingRemainder().isEmpty()) {
-                list.set(i, stack.getCraftingRemainder());
+            } else {
+                var craftingRemainder = stack.getCraftingRemainder();
+                if (craftingRemainder != null) {
+                    list.set(i, craftingRemainder.create());
+                }
             }
         }
 

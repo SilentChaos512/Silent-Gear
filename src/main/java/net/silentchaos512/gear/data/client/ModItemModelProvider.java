@@ -4,6 +4,7 @@ import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -194,8 +195,8 @@ public class ModItemModelProvider extends ItemModelGenerators {
     private void generateWithTintedBaseLayer(ItemLike item, String texturePath, String overlaySuffix, ItemTintSource tintSource) {
         Identifier key = this.generateLayeredItem(
                 item.asItem(),
-                SilentGear.getId(texturePath),
-                SilentGear.getId(texturePath + overlaySuffix)
+                new Material(SilentGear.getId(texturePath)),
+                new Material(SilentGear.getId(texturePath + overlaySuffix))
         );
         this.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(key, tintSource, BLANK_LAYER));
     }
@@ -206,14 +207,22 @@ public class ModItemModelProvider extends ItemModelGenerators {
     }
 
     private void layeredItem(ItemLike item, String texture0, String texture1) {
-        var model = generateLayeredItem(item.asItem(), SilentGear.getId(texture0), SilentGear.getId(texture1));
+        var model = generateLayeredItem(
+                item.asItem(),
+                new Material(SilentGear.getId(texture0)),
+                new Material(SilentGear.getId(texture1))
+        );
         this.itemModelOutput.accept(item.asItem(), ItemModelUtils.plainModel(model));
     }
 
     private void layeredItem(ItemLike item, String texture0, String texture1, String texture2) {
         var model = ModelTemplates.THREE_LAYERED_ITEM.create(
                 item.asItem(),
-                TextureMapping.layered(SilentGear.getId(texture0), SilentGear.getId(texture1), SilentGear.getId(texture2)),
+                TextureMapping.layered(
+                        new Material(SilentGear.getId(texture0)),
+                        new Material(SilentGear.getId(texture1)),
+                        new Material(SilentGear.getId(texture2))
+                ),
                 this.modelOutput
         );
         this.itemModelOutput.accept(item.asItem(), ItemModelUtils.plainModel(model));
@@ -222,8 +231,8 @@ public class ModItemModelProvider extends ItemModelGenerators {
     private void generateMaterialColoredItemWithOverlay(ItemLike item, String texturePath, String overlayTexture) {
         Identifier key = this.generateLayeredItem(
                 item.asItem(),
-                SilentGear.getId(texturePath),
-                SilentGear.getId(overlayTexture)
+                new Material(SilentGear.getId(texturePath)),
+                new Material(SilentGear.getId(overlayTexture))
         );
         this.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(key, SgItemTintSources.blendedMaterialColor(), BLANK_LAYER));
     }
@@ -232,9 +241,9 @@ public class ModItemModelProvider extends ItemModelGenerators {
         Identifier key = ModelTemplates.THREE_LAYERED_ITEM.create(
                 item.asItem(),
                 TextureMapping.layered(
-                        SilentGear.getId(texturePath),
-                        SilentGear.getId(overlayTexture1),
-                        SilentGear.getId(overlayTexture2)
+                        new Material(SilentGear.getId(texturePath)),
+                        new Material(SilentGear.getId(overlayTexture1)),
+                        new Material(SilentGear.getId(overlayTexture2))
                 ),
                 this.modelOutput
         );

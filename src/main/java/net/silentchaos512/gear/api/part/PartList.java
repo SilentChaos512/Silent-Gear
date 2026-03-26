@@ -20,14 +20,14 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class PartList extends AbstractList<PartInstance> {
-    public static final Codec<PartList> CODEC = Codec.list(PartInstance.CODEC)
+    public static final Codec<PartList.Immutable> CODEC = Codec.list(PartInstance.CODEC)
             .xmap(
-                    PartList::of,
+                    PartList::immutable,
                     partList -> partList.list
             );
-    public static final StreamCodec<RegistryFriendlyByteBuf, PartList> STREAM_CODEC = StreamCodec.of(
+    public static final StreamCodec<RegistryFriendlyByteBuf, PartList.Immutable> STREAM_CODEC = StreamCodec.of(
             (buf, list) -> CodecUtils.encodeList(buf, list, PartInstance.STREAM_CODEC),
-            buf -> PartList.of(CodecUtils.decodeList(buf, PartInstance.STREAM_CODEC))
+            buf -> PartList.immutable(CodecUtils.decodeList(buf, PartInstance.STREAM_CODEC))
     );
 
     final List<PartInstance> list = new ArrayList<>();
@@ -35,17 +35,17 @@ public class PartList extends AbstractList<PartInstance> {
     private PartList() {
     }
 
-    public static PartList empty() {
-        return new PartList();
+    public static PartList.Immutable empty() {
+        return Immutable.EMPTY;
     }
 
-    public static PartList of(Collection<PartInstance> c) {
+    public static PartList mutable(Collection<PartInstance> c) {
         PartList ret = new PartList();
         ret.addAll(c);
         return ret;
     }
 
-    public static PartList of(PartInstance... parts) {
+    public static PartList mutable(PartInstance... parts) {
         PartList ret = new PartList();
         Collections.addAll(ret, parts);
         return ret;
@@ -119,7 +119,7 @@ public class PartList extends AbstractList<PartInstance> {
     }
 
     public PartList mutableCopy() {
-        return PartList.of(this);
+        return PartList.mutable(this);
     }
 
     @Override
@@ -245,6 +245,8 @@ public class PartList extends AbstractList<PartInstance> {
     }
 
     public static class Immutable extends PartList {
+        static final Immutable EMPTY = new Immutable();
+
         private Immutable(Collection<PartInstance> parts) {
             this.list.addAll(parts);
         }

@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.client.gui.component;
 
 import net.minecraft.client.GameNarrator;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -18,16 +18,16 @@ public class TexturedButton extends Button {
     }
 
     @Override
-    protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         Identifier sprite = this.sprites.get(this.active, this.isHoveredOrFocused());
         int width = this.getWidth();
         int height = this.getHeight();
         int x = this.getX();
         int y = this.getY();
         if (this.spriteBlit) {
-            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, width, height, 0, 0, x, y, width, height);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, width, height, 0, 0, x, y, width, height);
         } else {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, sprite, x, y, 0, 0, width, height, width, height);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, sprite, x, y, 0, 0, width, height, width, height);
         }
     }
 }

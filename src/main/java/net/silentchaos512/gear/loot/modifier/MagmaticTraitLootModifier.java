@@ -37,7 +37,7 @@ public class MagmaticTraitLootModifier extends LootModifier {
 
     private static ItemStack smelt(ItemStack stack, LootContext context) {
         return context.getLevel().recipeAccess().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(stack), context.getLevel())
-                .map(r -> r.value().assemble(new SingleRecipeInput(stack), context.getLevel().registryAccess()))
+                .map(r -> r.value().assemble(new SingleRecipeInput(stack)))
                 .filter(s -> !s.isEmpty())
                 .map(s -> s.copyWithCount(stack.getCount() * s.getCount()))
                 .orElse(stack);

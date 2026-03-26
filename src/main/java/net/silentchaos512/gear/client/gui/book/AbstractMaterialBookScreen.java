@@ -2,7 +2,7 @@ package net.silentchaos512.gear.client.gui.book;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -144,11 +144,11 @@ public class AbstractMaterialBookScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderTransparentBackground(guiGraphics);
-        guiGraphics.pose().pushMatrix();
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, BOOK_TEXTURE, this.width / 2 - 140, 20, 0f, 0f, 280, 179, 512, 512);
-        guiGraphics.pose().popMatrix();
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
+        graphics.pose().pushMatrix();
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK_TEXTURE, this.width / 2 - 140, 20, 0f, 0f, 280, 179, 512, 512);
+        graphics.pose().popMatrix();
     }
 
     protected  void onPageBackward() {

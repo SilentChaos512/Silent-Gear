@@ -1,8 +1,6 @@
 package net.silentchaos512.gear.crafting.recipe.salvage;
 
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +12,6 @@ import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.util.GearData;
 
 import java.util.ArrayList;
@@ -22,6 +19,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class GearSalvagingRecipe extends SalvagingRecipe {
+    public static final RecipeSerializer<GearSalvagingRecipe> SERIALIZER = new RecipeSerializer<>(
+            RecordCodecBuilder.mapCodec(
+                    instance -> instance.group(
+                            Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient)
+                    ).apply(instance, GearSalvagingRecipe::new)
+            ),
+            StreamCodec.composite(
+                    Ingredient.CONTENTS_STREAM_CODEC, r -> r.ingredient,
+                    GearSalvagingRecipe::new
+            )
+    );
+
     public GearSalvagingRecipe(Ingredient ingredient) {
         super(ingredient, Collections.emptyList());
     }
@@ -65,28 +74,6 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
 
     @Override
     public RecipeSerializer<? extends Recipe<SingleRecipeInput>> getSerializer() {
-        return SgRecipes.SALVAGING_GEAR.get();
-    }
-
-    public static class Serializer implements RecipeSerializer<GearSalvagingRecipe> {
-        public static final MapCodec<GearSalvagingRecipe> CODEC = RecordCodecBuilder.mapCodec(
-                instance -> instance.group(
-                        Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient)
-                ).apply(instance, GearSalvagingRecipe::new)
-        );
-        public static final StreamCodec<RegistryFriendlyByteBuf, GearSalvagingRecipe> STREAM_CODEC = StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC, r -> r.ingredient,
-                GearSalvagingRecipe::new
-        );
-
-        @Override
-        public MapCodec<GearSalvagingRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, GearSalvagingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
+        return SERIALIZER;
     }
 }

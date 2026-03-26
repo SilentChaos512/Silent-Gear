@@ -6,11 +6,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.setup.SgLoot;
 import net.silentchaos512.gear.util.GearData;
 
 import java.util.List;
@@ -46,7 +44,7 @@ public final class SetPartsFunction extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
-        return SgLoot.SET_PARTS.get();
+    public MapCodec<? extends LootItemConditionalFunction> codec() {
+        return CODEC;
     }
 }

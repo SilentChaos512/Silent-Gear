@@ -5,8 +5,7 @@ import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.silentchaos512.gear.core.SoundPlayback;
@@ -17,15 +16,15 @@ public class ToolActionRecipeBuilder implements RecipeBuilder {
     private final Ingredient tool;
     private final Ingredient ingredient;
     private final int damageToTool;
-    private final ItemStack result;
+    private final ItemStackTemplate result;
     private final SoundPlayback sound;
 
     @Deprecated(forRemoval = true)
-    public ToolActionRecipeBuilder(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStack result) {
+    public ToolActionRecipeBuilder(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStackTemplate result) {
         this(tool, ingredient, damageToTool, result, new SoundPlayback(SoundEvents.STONE_HIT, 1f, 1f, 0f));
     }
 
-    public ToolActionRecipeBuilder(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStack result, SoundPlayback sound) {
+    public ToolActionRecipeBuilder(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStackTemplate result, SoundPlayback sound) {
         this.tool = tool;
         this.ingredient = ingredient;
         this.damageToTool = damageToTool;
@@ -44,8 +43,8 @@ public class ToolActionRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public Item getResult() {
-        return result.getItem();
+    public ResourceKey<Recipe<?>> defaultId() {
+        return RecipeBuilder.getDefaultRecipeId(result);
     }
 
     @Override

@@ -1,11 +1,9 @@
 package net.silentchaos512.gear.crafting.recipe.salvage;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
@@ -26,13 +24,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
+    public static final RecipeSerializer<SalvagingRecipe> SERIALIZER = new RecipeSerializer<>(
+            RecordCodecBuilder.mapCodec(
+                    instance -> instance.group(
+                            Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient),
+                            Codec.list(ItemStack.CODEC).fieldOf("results").forGetter(r -> r.results)
+                    ).apply(instance, SalvagingRecipe::new)
+            ),
+            StreamCodec.composite(
+                    Ingredient.CONTENTS_STREAM_CODEC, r -> r.ingredient,
+                    ItemStack.STREAM_CODEC.apply(ByteBufCodecs.collection(NonNullList::createWithCapacity)), r -> r.results,
+                    SalvagingRecipe::new
+            )
+    );
+
     protected final Ingredient ingredient;
-    private final List<ItemStack> results = new ArrayList<>();
+    private final List<ItemStack> results;
     @Nullable private PlacementInfo placementInfo = null;
 
     public SalvagingRecipe(Ingredient ingredient, List<ItemStack> results) {
         this.ingredient = ingredient;
-        this.results.addAll(results);
+        this.results = ImmutableList.copyOf(results);
     }
 
     public Ingredient getIngredient() {
@@ -54,14 +66,14 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
 
     @Deprecated
     @Override
-    public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(SingleRecipeInput input) {
         // DO NOT USE
         return !results.isEmpty() ? results.getFirst() : ItemStack.EMPTY;
     }
 
     @Override
     public RecipeSerializer<? extends Recipe<SingleRecipeInput>> getSerializer() {
-        return SgRecipes.SALVAGING.get();
+        return SERIALIZER;
     }
 
     @Override
@@ -85,6 +97,16 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
     @Override
     public boolean isSpecial() {
         return true;
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
     }
 
     /**
@@ -119,29 +141,5 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
                 && part.get() instanceof CoreGearPart
                 && partStack.getItem() instanceof CompoundPartItem
                 && part.getItem().getMaxStackSize() == 1;
-    }
-
-    public static class Serializer implements RecipeSerializer<SalvagingRecipe> {
-        public static final MapCodec<SalvagingRecipe> CODEC = RecordCodecBuilder.mapCodec(
-                instance -> instance.group(
-                        Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient),
-                        Codec.list(ItemStack.CODEC).fieldOf("results").forGetter(r -> r.results)
-                ).apply(instance, SalvagingRecipe::new)
-        );
-        public static final StreamCodec<RegistryFriendlyByteBuf, SalvagingRecipe> STREAM_CODEC = StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC, r -> r.ingredient,
-                ItemStack.STREAM_CODEC.apply(ByteBufCodecs.collection(NonNullList::createWithCapacity)), r -> r.results,
-                SalvagingRecipe::new
-        );
-
-        @Override
-        public MapCodec<SalvagingRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, SalvagingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
     }
 }

@@ -2,47 +2,64 @@ package net.silentchaos512.gear.crafting.recipe;
 
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.lib.crafting.recipe.ExtendedShapelessRecipe;
+import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public final class ConversionRecipe extends ExtendedShapelessRecipe {
+    public static final RecipeSerializer<ConversionRecipe> SERIALIZER = new RecipeSerializer<>(
+            RecordCodecBuilder.mapCodec(
+                    i -> i.group(
+                            Recipe.CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
+                            CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(o -> o.bookInfo),
+                            Result.CODEC.fieldOf("result").forGetter(o -> o.result),
+                            Codec.lazyInitialized(() -> Ingredient.CODEC.listOf(1, ShapedRecipePattern.getMaxWidth() * ShapedRecipePattern.getMaxHeight())).fieldOf("ingredients").forGetter(o -> o.ingredients)
+                    ).apply(i, ConversionRecipe::new)
+            ),
+            StreamCodec.composite(
+                    Recipe.CommonInfo.STREAM_CODEC, o -> o.commonInfo,
+                    CraftingRecipe.CraftingBookInfo.STREAM_CODEC, o -> o.bookInfo,
+                    Result.STREAM_CODEC, o -> o.result,
+                    Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.ingredients,
+                    ConversionRecipe::new
+            )
+    );
+
     private final Result result;
     private final GearItem item;
 
-    public ConversionRecipe(String pGroup, CraftingBookCategory pCategory, Result pResult, List<Ingredient> pIngredients) {
-        super(pGroup, pCategory, pResult.item.getDefaultInstance(), pIngredients);
-        this.result = pResult;
+    public ConversionRecipe(CommonInfo commonInfo, CraftingBookInfo bookInfo, Result result, List<Ingredient> ingredients) {
+        super(commonInfo, bookInfo, new ItemStackTemplate(result.item), ingredients);
+        this.result = result;
 
         if (!(this.result.item instanceof GearItem)) {
-            throw new JsonParseException("result is not a gear item: " + BuiltInRegistries.ITEM.getKey(this.result.item));
+            throw new JsonParseException("result is not a gear item: " + NameUtils.fromItem(this.result.item));
         }
         this.item = (GearItem) this.result.item;
     }
 
     @Override
     public RecipeSerializer<? extends ConversionRecipe> getSerializer() {
-        return SgRecipes.CONVERSION.get();
+        return SERIALIZER;
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv) {
         ItemStack result = item.construct(getParts());
         ItemStack original = findOriginalItem(inv);
         if (!original.isEmpty()) {
@@ -64,9 +81,9 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     }
 
     private Collection<PartInstance> getParts() {
-        PartList ret = PartList.of();
+        PartList ret = PartList.mutable();
         this.result.parts.forEach(part -> {
-            if (part != null) {
+            if (part.isValid()) {
                 ret.add(part);
             }
         });
@@ -86,6 +103,11 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
                 ).apply(instance, Result::new)
         );
 
+        public static final StreamCodec<RegistryFriendlyByteBuf, Result> STREAM_CODEC = StreamCodec.of(
+                (buf, r) -> r.toNetwork(buf),
+                Result::fromNetwork
+        );
+
         public static Result fromNetwork(RegistryFriendlyByteBuf buf) {
             var item = BuiltInRegistries.ITEM.get(buf.readIdentifier()).orElseThrow().value();
             var parts = new ArrayList<PartInstance>();
@@ -100,54 +122,6 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
             buf.writeIdentifier(BuiltInRegistries.ITEM.getKey(item));
             buf.writeByte(parts.size());
             parts.forEach(part -> PartInstance.STREAM_CODEC.encode(buf, part));
-        }
-    }
-
-    public static class Serializer implements RecipeSerializer<ConversionRecipe> {
-        private static final MapCodec<ConversionRecipe> CODEC = RecordCodecBuilder.mapCodec(
-                instance -> instance.group(
-                                Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group),
-                                CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(recipe -> recipe.category),
-                                Result.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
-                                Codec.lazyInitialized(() -> Ingredient.CODEC.listOf(1, ShapedRecipePattern.getMaxHeight() * ShapedRecipePattern.getMaxWidth()))
-                                        .fieldOf("ingredients")
-                                        .forGetter(recipe -> recipe.ingredients)
-                        )
-                        .apply(instance, ConversionRecipe::new)
-        );
-        public static final StreamCodec<RegistryFriendlyByteBuf, ConversionRecipe> STREAM_CODEC = StreamCodec.of(
-                Serializer::toNetwork,
-                Serializer::fromNetwork
-        );
-
-        @Override
-        public MapCodec<ConversionRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ConversionRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-
-        public static ConversionRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-            var group = buf.readUtf();
-            var bookCategory = buf.readEnum(CraftingBookCategory.class);
-            var result = Result.fromNetwork(buf);
-            var ingredients = NonNullList.<Ingredient>create();
-            var ingredientListSize = buf.readVarInt();
-            for (int i = 0; i < ingredientListSize; ++i) {
-                ingredients.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
-            }
-            return new ConversionRecipe(group, bookCategory, result, ingredients);
-        }
-
-        public static void toNetwork(RegistryFriendlyByteBuf buf, ConversionRecipe recipe) {
-            buf.writeUtf(recipe.group);
-            buf.writeEnum(recipe.category);
-            recipe.result.toNetwork(buf);
-            buf.writeVarInt(recipe.ingredients.size());
-            recipe.ingredients.forEach(ing -> Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ing));
         }
     }
 }

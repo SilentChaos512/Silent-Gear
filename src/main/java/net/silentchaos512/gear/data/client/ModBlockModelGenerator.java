@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.data.client;
 
-import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
 import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
@@ -8,6 +7,7 @@ import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -112,7 +112,7 @@ public class ModBlockModelGenerator extends LibBlockModelGenerators {
         var multivariant = plainVariant(
                 LibModelTemplates.CROP_CUTOUT.create(
                         block.get(),
-                        TextureMapping.crop(SilentGear.getId(texturePath)),
+                        TextureMapping.crop(new Material(SilentGear.getId(texturePath))),
                         this.modelOutput
                 )
         );

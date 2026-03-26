@@ -4,6 +4,7 @@ import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartType;
@@ -84,7 +85,7 @@ public class GearItemModelBuilder {
         List<ItemTintSource> tintSourceList = new ArrayList<>();
         int i = 0;
         for (PartType partType : this.layers.keySet()) {
-            textureMapping.put(TEXTURE_SLOTS.get(i), this.layers.get(partType));
+            textureMapping.put(TEXTURE_SLOTS.get(i), new Material(this.layers.get(partType)));
             tintSourceList.add(this.tints.getOrDefault(partType, ItemModelGenerators.BLANK_LAYER));
             i += 1;
             if (i >= TEXTURE_SLOTS.size()) {

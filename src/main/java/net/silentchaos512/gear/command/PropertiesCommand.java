@@ -119,7 +119,6 @@ public final class PropertiesCommand {
                     var partMods = part.getPropertyModifiers(part.getType(), key);
                     if (!partMods.isEmpty()) {
                         Component partName = part.getDisplayName(part.getType());
-                        //noinspection unchecked
                         Component partModsText = GearPropertyMap.formatTextUnchecked(partMods, property, FormatColorScheme.NO_COLORS);
 
                         context.getSource().sendSuccess(

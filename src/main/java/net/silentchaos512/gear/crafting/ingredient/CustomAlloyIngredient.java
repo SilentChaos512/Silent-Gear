@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * @deprecated can we just use DataComponentIngredient instead?
+ * @deprecated can we just use {@link net.neoforged.neoforge.common.crafting.DataComponentIngredient} instead?
  */
 @Deprecated
 public class CustomAlloyIngredient implements ICustomIngredient {

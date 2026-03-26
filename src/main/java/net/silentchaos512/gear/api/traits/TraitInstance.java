@@ -33,7 +33,7 @@ public record TraitInstance(
     public static final Codec<TraitInstance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     DataResource.TRAIT_CODEC.fieldOf("trait").forGetter(t -> t.trait),
-                    ExtraCodecs.POSITIVE_INT.fieldOf("level").forGetter(t -> t.level),
+                    Codec.INT.fieldOf("level").forGetter(t -> t.level),
                     Codec.list(ITraitCondition.DISPATCH_CODEC).optionalFieldOf("conditions").forGetter(t -> Optional.of(new ArrayList<>(t.conditions)))
             ).apply(instance, (id, level, conditions) ->
                     new TraitInstance(id, level, conditions.orElse(Collections.emptyList()))

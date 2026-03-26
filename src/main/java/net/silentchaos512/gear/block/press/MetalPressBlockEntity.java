@@ -31,7 +31,8 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
 
     private int progress = 0;
 
-    @SuppressWarnings("OverlyComplexAnonymousInnerClass") private final ContainerData fields = new ContainerData() {
+    @SuppressWarnings("OverlyComplexAnonymousInnerClass")
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             if (index == 0) {
@@ -72,9 +73,9 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
         return null;
     }
 
-    private ItemStack getWorkOutput(@Nullable PressingRecipe recipe, RegistryAccess registryAccess) {
+    private ItemStack getWorkOutput(@Nullable PressingRecipe recipe) {
         if (recipe != null) {
-            return recipe.assemble(new SingleRecipeInput(getItem(0)), registryAccess);
+            return recipe.assemble(new SingleRecipeInput(getItem(0)));
         }
         return ItemStack.EMPTY;
     }
@@ -92,7 +93,7 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
         assert level != null;
 
         ItemStack current = getItem(1);
-        ItemStack output = getWorkOutput(recipe, registryAccess);
+        ItemStack output = getWorkOutput(recipe);
 
         if (!current.isEmpty()) {
             int newCount = current.getCount() + output.getCount();
@@ -109,7 +110,7 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
         }
 
         if (progress >= WORK_TIME && !level.isClientSide()) {
-            finishWork(recipe, registryAccess, current);
+            finishWork(recipe, current);
         }
 
         sendUpdate(this.getBlockState().setValue(MetalPressBlock.LIT, true));
@@ -120,8 +121,8 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
         sendUpdate(this.getBlockState().setValue(MetalPressBlock.LIT, false));
     }
 
-    private void finishWork(PressingRecipe recipe, RegistryAccess registryAccess, ItemStack current) {
-        ItemStack output = getWorkOutput(recipe, registryAccess);
+    private void finishWork(PressingRecipe recipe, ItemStack current) {
+        ItemStack output = getWorkOutput(recipe);
         if (!current.isEmpty()) {
             current.grow(output.getCount());
         } else {

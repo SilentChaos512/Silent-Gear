@@ -1,8 +1,6 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -15,15 +13,12 @@ import net.silentchaos512.gear.setup.SgRecipes;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
-import net.silentchaos512.lib.collection.StackList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FillRepairKitRecipe extends CustomRecipe {
-    public FillRepairKitRecipe(CraftingBookCategory bookCategory) {
-        super(bookCategory);
-    }
+    public static final FillRepairKitRecipe INSTANCE = new FillRepairKitRecipe();
 
     @Override
     public boolean matches(CraftingInput inv, Level worldIn) {
@@ -51,12 +46,12 @@ public class FillRepairKitRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput input) {
         ItemStack repairKit = ItemStack.EMPTY;
         RepairKitItem repairKitItem = null;
         List<ItemStack> materials = new ArrayList<>();
 
-        for (ItemStack stack : inv.items()) {
+        for (ItemStack stack : input.items()) {
             if (stack.getItem() instanceof RepairKitItem item) {
                 repairKit = stack.copy();
                 repairKitItem = item;
@@ -85,10 +80,12 @@ public class FillRepairKitRecipe extends CustomRecipe {
     }
 
     private static boolean isRepairMaterial(MaterialInstance material) {
+        if (!material.isValid()) return false;
+
         float durability = material.getProperty(PartTypes.MAIN, PropertyKey.of(GearProperties.DURABILITY, GearTypes.ALL));
         float armorDurability = material.getProperty(PartTypes.MAIN, PropertyKey.of(GearProperties.ARMOR_DURABILITY, GearTypes.ALL));
         Material mat = material.get();
-        return mat != null && mat.isAllowedInPart(material, PartTypes.MAIN.get())
+        return mat.isAllowedInPart(material, PartTypes.MAIN.get())
                 && (durability > 0 || armorDurability > 0);
     }
 

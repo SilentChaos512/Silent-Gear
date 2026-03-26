@@ -13,7 +13,7 @@ public abstract class GearItemEvent extends Event {
 
     public GearItemEvent(ItemStack gear, Collection<PartInstance> parts) {
         this.gear = gear;
-        this.parts = PartList.of(parts);
+        this.parts = PartList.mutable(parts);
     }
 
     public ItemStack getGear() {
@@ -21,6 +21,6 @@ public abstract class GearItemEvent extends Event {
     }
 
     public PartList getParts() {
-        return PartList.of(parts);
+        return PartList.mutable(parts);
     }
 }

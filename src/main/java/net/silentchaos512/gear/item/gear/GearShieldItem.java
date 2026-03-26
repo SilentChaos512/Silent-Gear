@@ -2,6 +2,7 @@ package net.silentchaos512.gear.item.gear;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -11,6 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
@@ -49,18 +52,24 @@ public class GearShieldItem extends BasicGearItem {
                             .setSwappable(false)
                             .build()
             );
-            gear.set(
-                    DataComponents.BLOCKS_ATTACKS,
-                    new BlocksAttacks(
-                            0.25F,
-                            1.0F,
-                            List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
-                            new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, 1.0F),
-                            Optional.of(DamageTypeTags.BYPASSES_SHIELD),
-                            Optional.of(SoundEvents.SHIELD_BLOCK),
-                            Optional.of(SoundEvents.SHIELD_BREAK)
-                    )
-            );
+            var server = SilentGear.PROXY.getServer();
+            if (server != null) {
+                var damageTypes = server.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
+                gear.set(
+                        DataComponents.BLOCKS_ATTACKS,
+                        new BlocksAttacks(
+                                0.25F,
+                                1.0F,
+                                List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
+                                new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, 1.0F),
+                                Optional.of(damageTypes.getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
+                                Optional.of(SoundEvents.SHIELD_BLOCK),
+                                Optional.of(SoundEvents.SHIELD_BREAK)
+                        )
+                );
+            } else if (FMLEnvironment.getDist().isDedicatedServer()) {
+                SilentGear.LOGGER.warn("server is null?");
+            }
             gear.set(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK);
         }
     }

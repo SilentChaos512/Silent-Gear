@@ -1,9 +1,7 @@
 package net.silentchaos512.gear.crafting.recipe.alloy;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -88,13 +86,23 @@ public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
     }
 
     @Override
-    public ItemStack assemble(AlloyRecipeInput inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(AlloyRecipeInput input) {
         return this.result.getResult();
     }
 
     @Override
     public boolean isSpecial() {
         return true;
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
     }
 
     @Override
@@ -152,38 +160,25 @@ public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
         R create(Result result, List<Ingredient> ingredients);
     }
 
-    public static class Serializer<T extends AlloyRecipe> implements RecipeSerializer<T> {
-        private final MapCodec<T> codec;
-        private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec;
-
-        public Serializer(Factory<T> factory) {
-            this.codec = RecordCodecBuilder.mapCodec(
-                    instance -> instance.group(
-                            Result.CODEC.fieldOf("result").forGetter(r -> r.result),
-                            Codec.list(Ingredient.CODEC).fieldOf("ingredients").forGetter(r -> r.ingredients)
-                    ).apply(instance, factory::create)
-            );
-            this.streamCodec = StreamCodec.of(
-                    (buf, r) -> {
-                        Result.STREAM_CODEC.encode(buf, r.result);
-                        CodecUtils.encodeList(buf, r.ingredients, Ingredient.CONTENTS_STREAM_CODEC);
-                    },
-                    buf -> {
-                        var result = Result.STREAM_CODEC.decode(buf);
-                        var ingredients = CodecUtils.decodeList(buf, Ingredient.CONTENTS_STREAM_CODEC);
-                        return factory.create(result, ingredients);
-                    }
-            );
-        }
-
-        @Override
-        public MapCodec<T> codec() {
-            return codec;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
-            return streamCodec;
-        }
+    public static <R extends AlloyRecipe> RecipeSerializer<R> createSerializer(Factory<R> factory) {
+        return new RecipeSerializer<>(
+                RecordCodecBuilder.mapCodec(
+                        instance -> instance.group(
+                                Result.CODEC.fieldOf("result").forGetter(r -> r.result),
+                                Codec.list(Ingredient.CODEC).fieldOf("ingredients").forGetter(r -> r.ingredients)
+                        ).apply(instance, factory::create)
+                ),
+                StreamCodec.of(
+                        (buf, r) -> {
+                            Result.STREAM_CODEC.encode(buf, r.result);
+                            CodecUtils.encodeList(buf, r.ingredients, Ingredient.CONTENTS_STREAM_CODEC);
+                        },
+                        buf -> {
+                            var result = Result.STREAM_CODEC.decode(buf);
+                            var ingredients = CodecUtils.decodeList(buf, Ingredient.CONTENTS_STREAM_CODEC);
+                            return factory.create(result, ingredients);
+                        }
+                )
+        );
     }
 }

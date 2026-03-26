@@ -1,8 +1,7 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -20,13 +19,13 @@ import java.util.List;
 public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     private final CompoundPartItem item;
 
-    public ShapelessCompoundPartRecipe(String pGroup, CraftingBookCategory pCategory, ItemStack pResult, List<Ingredient> pIngredients) {
-        super(pGroup, pCategory, pResult, pIngredients);
+    public ShapelessCompoundPartRecipe(CommonInfo commonInfo, CraftingBookInfo bookInfo, ItemStackTemplate result, List<Ingredient> ingredients) {
+        super(commonInfo, bookInfo, result, ingredients);
 
-        if (!(pResult.getItem() instanceof CompoundPartItem)) {
-            throw new IllegalArgumentException("result is not a compound part item: " + pResult);
+        if (!(result.item().value() instanceof CompoundPartItem)) {
+            throw new IllegalArgumentException("result is not a compound part item: " + result);
         }
-        this.item = (CompoundPartItem) pResult.getItem();
+        this.item = (CompoundPartItem) result.item().value();
     }
 
     protected GearType getGearType() {
@@ -34,7 +33,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public RecipeSerializer<? extends ShapelessCompoundPartRecipe> getSerializer() {
+    public RecipeSerializer<ShapelessCompoundPartRecipe> getSerializer() {
         return SgRecipes.COMPOUND_PART.get();
     }
 
@@ -66,7 +65,7 @@ public class ShapelessCompoundPartRecipe extends ExtendedShapelessRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv) {
         return item.create(getMaterials(inv));
     }
 

@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
@@ -78,3 +79,4 @@ public class ToolActionRecipeCategory implements IRecipeCategory<ToolActionRecip
         background.draw(guiGraphics);
     }
 }
+*/

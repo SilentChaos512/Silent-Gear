@@ -10,9 +10,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 abstract class GearLootCondition implements LootItemCondition {
     static ItemStack getItemUsed(LootContext context) {
         // Attempt to get the tool from context first, then the attacking player if unavailable
-        ItemStack tool = context.getOptionalParameter(LootContextParams.TOOL);
-        if (tool != null && !tool.isEmpty()) {
-            return tool;
+        var tool = context.getOptionalParameter(LootContextParams.TOOL);
+        if (tool != null && tool instanceof ItemStack stack) {
+            return stack;
         }
 
         Entity entity = context.getOptionalParameter(LootContextParams.ATTACKING_ENTITY);

@@ -8,9 +8,8 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
-import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
@@ -32,17 +31,17 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public final class SgLoot {
-    public static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, SilentGear.MOD_ID);
-    public static final DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, SilentGear.MOD_ID);
+    public static final DeferredRegister<MapCodec<? extends LootItemCondition>> LOOT_CONDITIONS = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, SilentGear.MOD_ID);
+    public static final DeferredRegister<MapCodec<? extends LootItemFunction>> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, SilentGear.MOD_ID);
     public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, SilentGear.MOD_ID);
 
     // Conditions
-    public static final DeferredHolder<LootItemConditionType, LootItemConditionType> HAS_TRAIT =
-            registerCondition("has_trait", () -> new LootItemConditionType(HasTraitCondition.CODEC));
+    public static final DeferredHolder<MapCodec<? extends LootItemCondition>, MapCodec<HasTraitCondition>> HAS_TRAIT =
+            LOOT_CONDITIONS.register("has_trait", () -> HasTraitCondition.CODEC);
 
     // Functions
-    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<? extends LootItemConditionalFunction>> SET_PARTS =
-            registerFunction("set_parts", () -> new LootItemFunctionType<>(SetPartsFunction.CODEC));
+    public static final DeferredHolder<MapCodec<? extends LootItemFunction>, MapCodec<SetPartsFunction>> SET_PARTS =
+            LOOT_FUNCTIONS.register("set_parts", () -> SetPartsFunction.CODEC);
 
     // Modifiers
     public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<BonusDropsTraitLootModifier>> BONUS_DROPS_TRAIT =
@@ -55,14 +54,6 @@ public final class SgLoot {
             registerModifier("fortune_trait", FortuneTraitLootModifier.CODEC);
 
     private SgLoot() {
-    }
-
-    private static <T extends LootItemConditionType> DeferredHolder<LootItemConditionType, T> registerCondition(String name, Supplier<T> condition) {
-        return LOOT_CONDITIONS.register(name, condition);
-    }
-
-    private static <T extends LootItemFunctionType<? extends LootItemConditionalFunction>> DeferredHolder<LootItemFunctionType<?>, T> registerFunction(String name, Supplier<T> condition) {
-        return LOOT_FUNCTIONS.register(name, condition);
     }
 
     private static <T extends IGlobalLootModifier> DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<T>> registerModifier(String name, Supplier<MapCodec<T>> codec) {

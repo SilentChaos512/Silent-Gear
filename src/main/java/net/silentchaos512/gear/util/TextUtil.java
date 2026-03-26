@@ -53,6 +53,7 @@ public final class TextUtil {
         return text;
     }
 
+    @Nullable
     public static MutableComponent separatedList(Collection<Component> list) {
         MutableComponent ret = null;
         for (Component c : list) {

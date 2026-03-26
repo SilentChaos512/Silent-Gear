@@ -48,6 +48,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ModRecipesProvider extends LibRecipeProvider {
     private static final boolean ADD_TEST_RECIPES = false;
@@ -464,7 +465,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private ExtendedShapelessRecipeBuilder.Basic<ShapelessCompoundPartRecipe> compoundPart(RecipeCategory category, MainPartItem mainPartItem, int count) {
-        var resultStack = new ItemStack(mainPartItem, count);
+        var resultStack = new ItemStackTemplate(mainPartItem, count);
         return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, category, resultStack, ShapelessCompoundPartRecipe::new);
     }
 
@@ -945,7 +946,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.UPGRADE_BASE))
                 .save(this.output);
 
-        SimpleCookingRecipeBuilder.smelting(tag(SgTags.Items.NETHERWOOD_LOGS), RecipeCategory.MISC, SgItems.NETHERWOOD_CHARCOAL, 0.15f, 200)
+        SimpleCookingRecipeBuilder.smelting(tag(SgTags.Items.NETHERWOOD_LOGS), RecipeCategory.MISC, CookingBookCategory.MISC, SgItems.NETHERWOOD_CHARCOAL, 0.15f, 200)
                 .unlockedBy("has_item", has(SgTags.Items.NETHERWOOD_LOGS))
                 .save(this.output);
 
@@ -1126,7 +1127,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("###")
                 .unlockedBy("has_item", has(Tags.Items.GEMS_DIAMOND))
                 .save(this.output, modId("diamond_from_shards"));
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(CraftingItems.SINEW), RecipeCategory.MISC, CraftingItems.DRIED_SINEW, 0.35f, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(CraftingItems.SINEW), RecipeCategory.MISC, CookingBookCategory.MISC, CraftingItems.DRIED_SINEW, 0.35f, 200)
                 .unlockedBy("has_item", has(CraftingItems.SINEW))
                 .save(this.output);
         shapeless(RecipeCategory.MISC, CraftingItems.EMERALD_SHARD, 9)
@@ -1458,8 +1459,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
         return new ExtendedShapedRecipeBuilder.Basic<>(this.items, recipeCategory, new ItemStack(item, count), ShapedRecipe::new);
     }
 
-    private void special(RecipeOutput consumer, RecipeSerializer<? extends CraftingRecipe> serializer, Function<CraftingBookCategory, Recipe<?>> factory) {
-        SpecialRecipeBuilder.special(factory).save(consumer, NameUtils.fromRecipeSerializer(serializer).toString());
+    private void special(RecipeOutput consumer, RecipeSerializer<? extends CraftingRecipe> serializer, Supplier<Recipe<?>> recipe) {
+        SpecialRecipeBuilder.special(recipe).save(consumer, NameUtils.fromRecipeSerializer(serializer).toString());
     }
 
     @SuppressWarnings("MethodWithTooManyParameters")
@@ -1741,29 +1742,29 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private ToolActionRecipeBuilder toolAction(TagKey<Item> tool, ItemLike ingredient, int damageToTool, ItemLike result, int count, SoundPlayback sound) {
-        return new ToolActionRecipeBuilder(tag(tool), Ingredient.of(ingredient), damageToTool, new ItemStack(result, count), sound);
+        return new ToolActionRecipeBuilder(tag(tool), Ingredient.of(ingredient), damageToTool, new ItemStackTemplate(result.asItem(), count), sound);
     }
 
     private ToolActionRecipeBuilder toolAction(TagKey<Item> tool, TagKey<Item> ingredient, int damageToTool, ItemLike result, int count, SoundPlayback sound) {
-        return new ToolActionRecipeBuilder(tag(tool), tag(ingredient), damageToTool, new ItemStack(result, count), sound);
+        return new ToolActionRecipeBuilder(tag(tool), tag(ingredient), damageToTool, new ItemStackTemplate(result.asItem(), count), sound);
     }
 
     private void metals(float smeltingXp, Metals metal) {
         if (metal.ore != null && metal.oreTag != null) {
             var oreTagIngredient = tag(metal.oreTag);
-            SimpleCookingRecipeBuilder.blasting(oreTagIngredient, RecipeCategory.MISC, metal.ingot, smeltingXp, 100)
+            SimpleCookingRecipeBuilder.blasting(oreTagIngredient, RecipeCategory.MISC, CookingBookCategory.MISC, metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", has(metal.oreTag))
                     .save(this.output, modId(metal.name + "_ore_blasting"));
-            SimpleCookingRecipeBuilder.smelting(oreTagIngredient, RecipeCategory.MISC, metal.ingot, smeltingXp, 200)
+            SimpleCookingRecipeBuilder.smelting(oreTagIngredient, RecipeCategory.MISC, CookingBookCategory.MISC, metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", has(metal.oreTag))
                     .save(this.output, modId(metal.name + "_ore_smelting"));
         }
 
         if (metal.rawOre != null) {
-            SimpleCookingRecipeBuilder.blasting(Ingredient.of(metal.rawOre), RecipeCategory.MISC, metal.ingot, smeltingXp, 100)
+            SimpleCookingRecipeBuilder.blasting(Ingredient.of(metal.rawOre), RecipeCategory.MISC, CookingBookCategory.MISC, metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", has(metal.rawOre))
                     .save(this.output, modId(metal.name + "_raw_ore_blasting"));
-            SimpleCookingRecipeBuilder.smelting(Ingredient.of(metal.rawOre), RecipeCategory.MISC, metal.ingot, smeltingXp, 200)
+            SimpleCookingRecipeBuilder.smelting(Ingredient.of(metal.rawOre), RecipeCategory.MISC, CookingBookCategory.MISC, metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", has(metal.rawOre))
                     .save(this.output, modId(metal.name + "_raw_ore_smelting"));
 
@@ -1779,10 +1780,10 @@ public class ModRecipesProvider extends LibRecipeProvider {
         }
 
         if (metal.dustTag != null) {
-            SimpleCookingRecipeBuilder.blasting(tag(metal.dustTag), RecipeCategory.MISC, metal.ingot, smeltingXp, 100)
+            SimpleCookingRecipeBuilder.blasting(tag(metal.dustTag), RecipeCategory.MISC, CookingBookCategory.MISC, metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", hasIngot)
                     .save(this.output, modId(metal.name + "_dust_blasting"));
-            SimpleCookingRecipeBuilder.smelting(tag(metal.dustTag), RecipeCategory.MISC, metal.ingot, smeltingXp, 200)
+            SimpleCookingRecipeBuilder.smelting(tag(metal.dustTag), RecipeCategory.MISC, CookingBookCategory.MISC, metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", hasIngot)
                     .save(this.output, modId(metal.name + "_dust_smelting"));
         }

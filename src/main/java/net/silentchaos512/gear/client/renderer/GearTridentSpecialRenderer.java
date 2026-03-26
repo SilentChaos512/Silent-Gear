@@ -3,7 +3,6 @@ package net.silentchaos512.gear.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.client.model.GearTridentModel;
 import net.silentchaos512.gear.core.ToolColors;
@@ -31,11 +30,10 @@ public class GearTridentSpecialRenderer implements SpecialModelRenderer<ToolColo
 
     @Override
     public void getExtents(Consumer<Vector3fc> output) {
-
     }
 
     @Override
-    public void submit(@Nullable ToolColors colors, ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
+    public void submit(@Nullable ToolColors colors, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, boolean hasFoil, int outlineColor) {
         poseStack.pushPose();
         poseStack.scale(1.0f, -1.0f, -1.0f);
         // FIXME

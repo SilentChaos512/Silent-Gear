@@ -2,9 +2,7 @@ package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
@@ -41,7 +39,6 @@ public class GearSpearItem extends BasicGearItem implements GearWeapon {
         var primaryMaterial = primaryPart != null ? primaryPart.getPrimaryMaterial() : null;
         var isWood = primaryMaterial != null && (primaryMaterial.is(Const.Materials.WOOD) || primaryMaterial.parentIs(Const.Materials.WOOD));
 
-        gear.set(DataComponents.DAMAGE_TYPE, new EitherHolder<>(DamageTypes.SPEAR));
         gear.set(DataComponents.KINETIC_WEAPON, getKineticWeaponComponent(gear, finalProperties));
         gear.set(
                 DataComponents.PIERCING_WEAPON,

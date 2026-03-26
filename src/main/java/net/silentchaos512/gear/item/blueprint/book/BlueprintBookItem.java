@@ -9,10 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -30,6 +27,7 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,8 +152,11 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     @Override
-    public ItemStack getCraftingRemainder(ItemStack itemStack) {
-        return itemStack.copy();
+    public @Nullable ItemStackTemplate getCraftingRemainder(ItemInstance instance) {
+        if (instance instanceof ItemStackTemplate itemStackTemplate) {
+            return itemStackTemplate;
+        }
+        return ItemStackTemplate.fromNonEmptyStack((ItemStack) instance);
     }
 
     @Override

@@ -29,13 +29,13 @@ public class BonusDropsTraitLootModifier extends LootModifier {
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         ObjectArrayList<ItemStack> ret = new ObjectArrayList<>(generatedLoot);
-        ItemStack tool = context.getOptionalParameter(LootContextParams.TOOL);
+        var tool = context.getOptionalParameter(LootContextParams.TOOL);
 
-        if (tool != null && GearHelper.isGear(tool)) {
+        if (tool != null && GearHelper.isGear(tool) && tool instanceof ItemStack gearStack) {
             //noinspection OverlyLongLambda
-            TraitHelper.activateTraits(tool, 0, (trait, value) -> {
+            TraitHelper.activateTraits(gearStack, 0, (trait, value) -> {
                 generatedLoot.forEach(lootStack -> {
-                    ItemStack stack = trait.getTrait().addLootDrops(new TraitActionContext(null, trait, tool), lootStack);
+                    ItemStack stack = trait.getTrait().addLootDrops(new TraitActionContext(null, trait, gearStack), lootStack);
                     if (!stack.isEmpty()) {
                         ret.add(stack);
                     }

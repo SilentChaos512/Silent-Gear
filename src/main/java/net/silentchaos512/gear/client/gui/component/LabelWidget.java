@@ -2,7 +2,7 @@ package net.silentchaos512.gear.client.gui.component;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.CommonComponents;
@@ -55,11 +55,12 @@ public class LabelWidget extends StringWidget {
     }
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderWithHorizontalOffset(guiGraphics, 0);
+    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractWidgetRenderState(graphics, mouseX, mouseY, a);
+        extractWithHorizontalOffset(graphics, 0);
     }
 
-    protected void renderWithHorizontalOffset(GuiGraphics guiGraphics, int xOffset) {
+    protected void extractWithHorizontalOffset(GuiGraphicsExtractor graphics, int xOffset) {
         var component = this.getMessage().copy();
         if (this.active && this.isHovered) {
             component = this.getMessage().copy().withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.GOLD);
@@ -73,10 +74,10 @@ public class LabelWidget extends StringWidget {
         int scaledX = Math.round(rawX / this.scale);
         int scaledY = Math.round(rawY / this.scale);
         FormattedCharSequence formattedcharsequence = textWidth > width ? this.clipText(component, width) : component.getVisualOrderText();
-        guiGraphics.pose().pushMatrix();
-        guiGraphics.pose().scale(this.scale, this.scale);
-        guiGraphics.drawString(font, formattedcharsequence, scaledX, scaledY, 0xFF000000, false);
-        guiGraphics.pose().popMatrix();
+        graphics.pose().pushMatrix();
+        graphics.pose().scale(this.scale, this.scale);
+        graphics.text(font, formattedcharsequence, scaledX, scaledY, 0xFF000000, false);
+        graphics.pose().popMatrix();
     }
 
     protected FormattedCharSequence clipText(Component message, int width) {

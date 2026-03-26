@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
@@ -115,3 +116,4 @@ public class AlloyMakingRecipeCategory implements IRecipeCategory<AlloyRecipe> {
         arrow.draw(guiGraphics, 93 - GUI_START_X, 34 - GUI_START_Y);
     }
 }
+*/

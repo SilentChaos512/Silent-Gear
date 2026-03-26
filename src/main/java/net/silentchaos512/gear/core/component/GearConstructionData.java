@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public record GearConstructionData(
-        PartList parts,
+        PartList.Immutable parts,
         boolean isExample,
         int brokenCount,
         int repairedCount
@@ -42,7 +42,7 @@ public record GearConstructionData(
             GearConstructionData::new
     );
 
-    public GearConstructionData(PartList parts, boolean isExample, int brokenCount, int repairedCount) {
+    public GearConstructionData(PartList.Immutable parts, boolean isExample, int brokenCount, int repairedCount) {
         this.parts = PartList.immutable(parts);
         this.isExample = isExample;
         this.brokenCount = brokenCount;
@@ -57,7 +57,7 @@ public record GearConstructionData(
     @Nullable
     public PartInstance getPartOfType(PartType type) {
         for (PartInstance part : parts) {
-            if (part != null && part.getType() == type) {
+            if (part.isValid() && part.getType() == type) {
                 return part;
             }
         }

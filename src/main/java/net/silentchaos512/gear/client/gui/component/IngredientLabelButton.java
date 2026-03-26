@@ -3,7 +3,7 @@ package net.silentchaos512.gear.client.gui.component;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
@@ -68,11 +68,13 @@ public class IngredientLabelButton extends LabelButton {
     }
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractWidgetRenderState(graphics, mouseX, mouseY, a);
+
         Font font = this.getFont();
         int textXOffset = getIconSpace(font);
         // Render label with offset to leave room for icon
-        renderWithHorizontalOffset(guiGraphics, textXOffset);
+        extractWithHorizontalOffset(graphics, textXOffset);
 
         // Recompute x and y positions
         Component component = this.getMessage();
@@ -83,10 +85,10 @@ public class IngredientLabelButton extends LabelButton {
 
         // Render icon
         ItemStack item = getRenderItem(ClientTicks.ticksInGame());
-        guiGraphics.pose().pushMatrix();
-        guiGraphics.pose().scale(0.5f, 0.5f);
-        guiGraphics.renderItem(item, x * 2, y * 2);
-        guiGraphics.pose().popMatrix();
+        graphics.pose().pushMatrix();
+        graphics.pose().scale(0.5f, 0.5f);
+        graphics.item(item, x * 2, y * 2);
+        graphics.pose().popMatrix();
     }
 
     private ItemStack getRenderItem(int ticksInGame) {

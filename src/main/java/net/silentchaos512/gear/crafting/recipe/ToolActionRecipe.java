@@ -1,12 +1,11 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.core.SoundPlayback;
@@ -17,14 +16,34 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
+    public static final RecipeSerializer<ToolActionRecipe> SERIALIZER = new RecipeSerializer<>(
+            RecordCodecBuilder.mapCodec(
+                    instance -> instance.group(
+                            Ingredient.CODEC.fieldOf("tool").forGetter(r -> r.tool),
+                            Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient),
+                            ExtraCodecs.NON_NEGATIVE_INT.fieldOf("damage_to_tool").forGetter(r -> r.damageToTool),
+                            ItemStackTemplate.CODEC.fieldOf("result").forGetter(r -> r.result),
+                            SoundPlayback.CODEC.fieldOf("sound").forGetter(r -> r.sound)
+                    ).apply(instance, ToolActionRecipe::new)
+            ),
+            StreamCodec.composite(
+                    Ingredient.CONTENTS_STREAM_CODEC, r -> r.tool,
+                    Ingredient.CONTENTS_STREAM_CODEC, r -> r.ingredient,
+                    ByteBufCodecs.VAR_INT, r -> r.damageToTool,
+                    ItemStackTemplate.STREAM_CODEC, r -> r.result,
+                    SoundPlayback.STREAM_CODEC, r -> r.sound,
+                    ToolActionRecipe::new
+            )
+    );
+
     private final Ingredient tool;
     private final Ingredient ingredient;
     private final int damageToTool;
-    private final ItemStack result;
+    private final ItemStackTemplate result;
     private final SoundPlayback sound;
     @Nullable private PlacementInfo placementInfo;
 
-    public ToolActionRecipe(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStack result, SoundPlayback sound) {
+    public ToolActionRecipe(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStackTemplate result, SoundPlayback sound) {
         this.tool = tool;
         this.ingredient = ingredient;
         this.damageToTool = damageToTool;
@@ -44,8 +63,8 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
         return damageToTool;
     }
 
-    public ItemStack getResult() {
-        return result.copy();
+    public ItemStackTemplate getResult() {
+        return result;
     }
 
     public SoundPlayback getSound() {
@@ -58,8 +77,18 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
     }
 
     @Override
-    public ItemStack assemble(ToolActionRecipe.Input pContainer, HolderLookup.Provider pRegistryAccess) {
-        return result.copy();
+    public ItemStack assemble(ToolActionRecipe.Input input) {
+        return result.create();
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
     }
 
     @Override
@@ -83,49 +112,6 @@ public class ToolActionRecipe implements Recipe<ToolActionRecipe.Input> {
     @Override
     public RecipeBookCategory recipeBookCategory() {
         return SgRecipeBookCategories.TOOL_ACTION.get();
-    }
-
-    public static class Serializer implements RecipeSerializer<ToolActionRecipe> {
-        public static final MapCodec<ToolActionRecipe> CODEC = RecordCodecBuilder.mapCodec(
-                instance -> instance.group(
-                        Ingredient.CODEC.fieldOf("tool").forGetter(r -> r.tool),
-                        Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient),
-                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("damage_to_tool").forGetter(r -> r.damageToTool),
-                        ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result),
-                        SoundPlayback.CODEC.fieldOf("sound").forGetter(r -> r.sound)
-                ).apply(instance, ToolActionRecipe::new)
-        );
-        public static final StreamCodec<RegistryFriendlyByteBuf, ToolActionRecipe> STREAM_CODEC = StreamCodec.of(
-                Serializer::toNetwork,
-                Serializer::fromNetwork
-        );
-
-        @Override
-        public MapCodec<ToolActionRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ToolActionRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-
-        public static ToolActionRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-            var tool = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
-            var ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
-            var damageToTool = buf.readVarInt();
-            var result = ItemStack.STREAM_CODEC.decode(buf);
-            var soundEffect = SoundPlayback.STREAM_CODEC.decode(buf);
-            return new ToolActionRecipe(tool, ingredient, damageToTool, result, soundEffect);
-        }
-
-        public static void toNetwork(RegistryFriendlyByteBuf buf, ToolActionRecipe recipe) {
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.tool);
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.ingredient);
-            buf.writeVarInt(recipe.damageToTool);
-            ItemStack.STREAM_CODEC.encode(buf, recipe.result);
-            SoundPlayback.STREAM_CODEC.encode(buf, recipe.sound);
-        }
     }
 
     public record Input(ItemStack tool, ItemStack ingredient) implements RecipeInput {

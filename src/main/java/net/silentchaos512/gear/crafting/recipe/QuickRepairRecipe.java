@@ -1,16 +1,14 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.CommonHooks;
-import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.Config;
+import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.RepairContext;
 import net.silentchaos512.gear.item.RepairKitItem;
@@ -24,9 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class QuickRepairRecipe extends CustomRecipe {
-    public QuickRepairRecipe(CraftingBookCategory bookCategory) {
-        super(bookCategory);
-    }
+    public static final QuickRepairRecipe INSTANCE = new QuickRepairRecipe();
 
     @Override
     public boolean matches(CraftingInput inv, Level worldIn) {
@@ -78,7 +74,7 @@ public class QuickRepairRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(GearItem.class).copy();
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
@@ -141,8 +137,11 @@ public class QuickRepairRecipe extends CustomRecipe {
                 ItemStack copy = stack.copy();
                 item.removeRepairMaterials(copy, item.getRepairMaterials(gear, copy, RepairContext.Type.QUICK));
                 list.set(i, copy);
-            } else if (!stack.getCraftingRemainder().isEmpty()) {
-                list.set(i, stack.getCraftingRemainder());
+            } else {
+                var craftingRemainder = stack.getCraftingRemainder();
+                if (craftingRemainder != null) {
+                    list.set(i, craftingRemainder.create());
+                }
             }
         }
 

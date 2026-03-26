@@ -335,13 +335,6 @@ public class ModItemTagsProvider extends LibItemTagsProvider {
                 GearItemSets.PROSPECTOR_HAMMER.gearItem()
         );
 
-        tag(ItemTags.DYEABLE)
-                .add(GearItemSets.HELMET.gearItem())
-                .add(GearItemSets.CHESTPLATE.gearItem())
-                .add(GearItemSets.LEGGINGS.gearItem())
-                .add(GearItemSets.BOOTS.gearItem())
-                .add(GearItemSets.ELYTRA.gearItem());
-
         tag(ItemTags.CHICKEN_FOOD)
                 .add(SgItems.FLAX_SEEDS.get())
                 .add(SgItems.FLUFFY_SEEDS.get());

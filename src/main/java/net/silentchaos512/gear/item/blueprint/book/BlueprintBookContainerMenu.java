@@ -4,7 +4,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -65,6 +65,11 @@ public class BlueprintBookContainerMenu extends AbstractContainerMenu {
         }
     }
 
+    int getContainerRows() {
+        IContainerItem item = (IContainerItem) this.item.getItem();
+        return item.getInventoryRows(this.item);
+    }
+
     @Override
     public boolean stillValid(Player playerIn) {
         return true;
@@ -102,26 +107,26 @@ public class BlueprintBookContainerMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-        if (slotId < 0 || slotId > slots.size()) {
-            super.clicked(slotId, dragType, clickTypeIn, player);
+    public void clicked(int slotIndex, int buttonNum, ContainerInput containerInput, Player player) {
+        if (slotIndex < 0 || slotIndex > slots.size()) {
+            super.clicked(slotIndex, buttonNum, containerInput, player);
             return;
         }
 
-        Slot slot = slots.get(slotId);
-        if (!canTake(slotId, slot, dragType, player, clickTypeIn)) {
+        Slot slot = slots.get(slotIndex);
+        if (!canTake(slotIndex, slot, buttonNum, player, containerInput)) {
             return;
         }
 
-        super.clicked(slotId, dragType, clickTypeIn, player);
+        super.clicked(slotIndex, buttonNum, containerInput, player);
     }
 
-    public boolean canTake(int slotId, Slot slot, int button, Player player, ClickType clickType) {
+    public boolean canTake(int slotId, Slot slot, int button, Player player, ContainerInput clickType) {
         if (slotId == bookSlot)
             return false;
 
         // Hotbar swapping via number keys
-        if (clickType == ClickType.SWAP) {
+        if (clickType == ContainerInput.SWAP) {
             int hotbarId = itemHandler.getSlots() + 27 + button;
             // Block swapping with container
             if (bookSlot == hotbarId)

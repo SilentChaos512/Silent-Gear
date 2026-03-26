@@ -21,6 +21,7 @@ import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.FabricAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.GemAlloyRecipe;
 import net.silentchaos512.gear.crafting.recipe.alloy.MetalAlloyRecipe;
+import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -123,5 +124,11 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
                 ? advancement$builder.build(pId.identifier().withPrefix("recipes/alloying/" + recipeFolder + "/"))
                 : null;
         pRecipeOutput.accept(pId, recipe, advancementHolder);
+    }
+
+    @Override
+    public ResourceKey<Recipe<?>> defaultId() {
+        var itemId = NameUtils.fromItem(this.resultItem);
+        return ResourceKey.create(Registries.RECIPE, itemId.withPath(path -> "alloying/" + recipeFolder + "/" + path));
     }
 }

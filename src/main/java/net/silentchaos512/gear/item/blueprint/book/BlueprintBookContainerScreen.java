@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.item.blueprint.book;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -10,10 +10,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.silentchaos512.gear.client.KeyTracker;
-import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.network.payload.client.SelectBlueprintInBookPayload;
 import net.silentchaos512.lib.util.Color;
 
@@ -25,12 +23,9 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
     private int selected;
 
     public BlueprintBookContainerScreen(BlueprintBookContainerMenu container, Inventory playerInventory, Component title) {
-        super(container, playerInventory, title);
+        super(container, playerInventory, title, 176, 114 + container.getContainerRows() * 18);
         this.playerInventory = playerInventory;
-        ItemStack stack = container.item;
-        IContainerItem item = (IContainerItem) stack.getItem();
-        this.inventoryRows = item.getInventoryRows(stack);
-        this.imageHeight = 114 + this.inventoryRows * 18;
+        this.inventoryRows = container.getContainerRows();
         this.selected = BlueprintBookItem.getSelectedSlot(container.item);
     }
 
@@ -54,24 +49,12 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        super.render(graphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(graphics, mouseX, mouseY);
-    }
-
-    @Override
-    protected void renderLabels(GuiGraphics graphics, int x, int y) {
-        graphics.drawString(this.font, this.getTitle().getString(), 8, 6, 4210752, false);
-        graphics.drawString(this.font, playerInventory.getDisplayName().getString(), 8, this.imageHeight - 96 + 2, 4210752, false);
-    }
-
-    @Override
-    protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
-        if (minecraft == null) return;
-        int i = (this.width - this.imageWidth) / 2;
-        int j = (this.height - this.imageHeight) / 2;
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0, 0, this.imageWidth, this.inventoryRows * 18 + 17, 256, 256);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j + this.inventoryRows * 18 + 17, 0, 126, this.imageWidth, 96, 256, 256);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.imageWidth, this.inventoryRows * 18 + 17, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y + this.inventoryRows * 18 + 17, 0, 126, this.imageWidth, 96, 256, 256);
 
         int left = leftPos + 8 + 18 * (this.selected % 9);
         int top = topPos + 18 + 18 * (this.selected / 9);

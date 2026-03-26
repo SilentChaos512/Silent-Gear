@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.block.charger;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -21,40 +21,34 @@ public class ChargerContainerScreen extends AbstractContainerScreen<ChargerConta
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        super.render(graphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(graphics, mouseX, mouseY);
-    }
-
-    @Override
-    protected void renderTooltip(GuiGraphics graphics, int x, int y) {
-        if (isHovering(153, 17, 13, 51, x, y)) {
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        if (isHovering(153, 17, 13, 51, mouseX, mouseY)) {
             List<Component> text = ImmutableList.of(
                     TextUtil.translate("container", "material_charger.charge",
                             String.format("%,d", menu.getCharge()),
                             String.format("%,d", menu.getMaxCharge())),
                     TextUtil.translate("container", "material_charger.charge.hint")
             );
-            graphics.setTooltipForNextFrame(this.font, text, Optional.empty(), x, y);
-        } else if (isHovering(8, 70, 100, 8, x, y)) {
+            graphics.setTooltipForNextFrame(this.font, text, Optional.empty(), mouseX, mouseY);
+        } else if (isHovering(8, 70, 100, 8, mouseX, mouseY)) {
             var text = TextUtil.translate("container", "material_charger.structure_level.hint");
-            graphics.setTooltipForNextFrame(this.font, List.of(text), Optional.empty(), x, y);
+            graphics.setTooltipForNextFrame(this.font, List.of(text), Optional.empty(), mouseX, mouseY);
         }
-        super.renderTooltip(graphics, x, y);
+        super.extractTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int x, int y) {
+    protected void extractLabels(GuiGraphicsExtractor graphics, int xm, int ym) {
         Component text = TextUtil.translate("container", "material_charger");
-        graphics.drawString(this.font, text.getString(), 8, 6, 0x404040, false);
+        graphics.text(this.font, text.getString(), 8, 6, 0x404040, false);
         var structureLevel = this.menu.fields.get(2);
         var structureText = TextUtil.translate("container", "material_charger.structure_level", structureLevel);
-        graphics.drawString(this.font, structureText.getString(), 8, 70, 0x404040, false);
+        graphics.text(this.font, structureText.getString(), 8, 70, 0x404040, false);
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
-        if (minecraft == null) return;
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
 
         int posX = (this.width - this.imageWidth) / 2;
         int posY = (this.height - this.imageHeight) / 2;

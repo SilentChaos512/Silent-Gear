@@ -5,10 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.trait.Trait;
-import net.silentchaos512.gear.setup.SgLoot;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.SimpleIntRange;
 import net.silentchaos512.gear.util.TraitHelper;
@@ -50,7 +48,7 @@ public class HasTraitCondition extends GearLootCondition {
     }
 
     @Override
-    public LootItemConditionType getType() {
-        return SgLoot.HAS_TRAIT.get();
+    public MapCodec<? extends LootItemCondition> codec() {
+        return CODEC;
     }
 }

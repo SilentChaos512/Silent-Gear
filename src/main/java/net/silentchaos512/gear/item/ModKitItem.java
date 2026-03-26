@@ -3,9 +3,7 @@ package net.silentchaos512.gear.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
@@ -14,6 +12,7 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +82,7 @@ public class ModKitItem extends Item implements ICycleItem {
     }
 
     @Override
-    public ItemStack getCraftingRemainder(ItemStack itemStack) {
-        return itemStack.copy();
+    public @Nullable ItemStackTemplate getCraftingRemainder(ItemInstance instance) {
+        return new ItemStackTemplate(instance.typeHolder().value());
     }
 }

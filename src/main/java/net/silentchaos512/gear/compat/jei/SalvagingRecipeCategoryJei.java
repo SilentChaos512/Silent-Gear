@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
@@ -87,3 +88,4 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
         arrow.draw(guiGraphics, 32 - GUI_START_X, 34 - GUI_START_Y);
     }
 }
+*/

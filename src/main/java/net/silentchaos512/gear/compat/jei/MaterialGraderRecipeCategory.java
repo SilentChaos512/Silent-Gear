@@ -1,3 +1,4 @@
+/*
 package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
@@ -98,3 +99,4 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     public static class GraderRecipe {
     }
 }
+*/

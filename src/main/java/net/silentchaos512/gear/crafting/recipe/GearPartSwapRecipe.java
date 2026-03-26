@@ -1,18 +1,16 @@
 package net.silentchaos512.gear.crafting.recipe;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.CommonHooks;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.setup.SgRecipes;
@@ -22,9 +20,7 @@ import net.silentchaos512.lib.collection.StackList;
 import java.util.*;
 
 public class GearPartSwapRecipe extends CustomRecipe {
-    public GearPartSwapRecipe(CraftingBookCategory bookCategory) {
-        super(bookCategory);
-    }
+    public static final GearPartSwapRecipe INSTANCE = new GearPartSwapRecipe();
 
     @Override
     public boolean matches(CraftingInput inv, Level worldIn) {
@@ -53,8 +49,8 @@ public class GearPartSwapRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
-        StackList list = StackList.from(inv);
+    public ItemStack assemble(CraftingInput input) {
+        StackList list = StackList.from(input);
         ItemStack gear = list.uniqueOfType(GearItem.class);
         if (gear.isEmpty()) return ItemStack.EMPTY;
 
@@ -64,7 +60,7 @@ public class GearPartSwapRecipe extends CustomRecipe {
         ItemStack result = gear.copy();
         PartList originalParts = GearData.getConstruction(gear).parts();
         List<PartInstance> parts = new ArrayList<>(originalParts);
-        PartList newParts = PartList.of();
+        PartList newParts = PartList.mutable();
 
         for (ItemStack stack : others) {
             PartInstance part = PartInstance.from(stack);

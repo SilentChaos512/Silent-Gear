@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.setup;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -24,7 +26,10 @@ public class GearItemSets {
     public static final GearItemSet<GearMacheteItem> MACHETE = set(GearTypes.MACHETE, "machete_blade", GearMacheteItem::new);
     public static final GearItemSet<GearDaggerItem> KNIFE = set(GearTypes.KNIFE, "knife_blade", GearDaggerItem::new);
     public static final GearItemSet<GearDaggerItem> DAGGER = set(GearTypes.DAGGER, "dagger_blade", GearDaggerItem::new);
-    public static final GearItemSet<GearSpearItem> SPEAR = set(GearTypes.SPEAR, "spearhead", GearSpearItem::new);
+    public static final GearItemSet<GearSpearItem> SPEAR = set(GearTypes.SPEAR, "spearhead", GearSpearItem::new,
+            GearHelper.getBaseItemProperties()
+                    .delayedHolderComponent(DataComponents.DAMAGE_TYPE, DamageTypes.SPEAR)
+    );
     public static final GearItemSet<GearTridentItem> TRIDENT = set(GearTypes.TRIDENT, "trident_prongs", GearTridentItem::new);
     public static final GearItemSet<GearMaceItem> MACE = set(GearTypes.MACE, "mace_core", GearMaceItem::new);
 

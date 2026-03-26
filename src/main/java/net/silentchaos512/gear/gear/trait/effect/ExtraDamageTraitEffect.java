@@ -3,6 +3,7 @@ package net.silentchaos512.gear.gear.trait.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.TypedInstance;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -101,7 +102,7 @@ public class ExtraDamageTraitEffect extends TraitEffect {
 
     public enum AffectedMobTypes implements StringRepresentable {
         ALL((entity, tag) -> true),
-        TAGGED((entity, tag) -> entity.getType().is(tag)),
+        TAGGED(TypedInstance::is),
         HIGH_HEALTH((entity, tag) -> entity.getMaxHealth() > 21f),
         FIRE_IMMUNE((entity, tag) -> entity.fireImmune()),
         AQUATIC(((entity, tag) -> entity.canDrownInFluidType(NeoForgeMod.WATER_TYPE.value())));

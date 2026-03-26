@@ -1,6 +1,8 @@
 package net.silentchaos512.gear.setup;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -40,50 +42,78 @@ public final class SgRecipes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<ToolActionRecipe>> TOOL_ACTION_TYPE = registerType(Const.TOOL_ACTION);
 
     // Serializers
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessCompoundPartRecipe>> COMPOUND_PART = register(Const.COMPOUND_PART, () ->
-            new ExtendedShapelessRecipe.BasicSerializer<>(ShapelessCompoundPartRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AlloyRecipe>> COMPOUNDING = register(Const.ALLOY_MAKING, () ->
-            new AlloyRecipe.Serializer<>(AlloyRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CrudeAlloyRecipe>> ALLOY_MAKING_CRUDE = register(Const.ALLOY_MAKING_CRUDE, () ->
-            new AlloyRecipe.Serializer<>(CrudeAlloyRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FabricAlloyRecipe>> ALLOY_MAKING_FABRIC = register(Const.ALLOY_MAKING_FABRIC, () ->
-            new AlloyRecipe.Serializer<>(FabricAlloyRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GemAlloyRecipe>> ALLOY_MAKING_GEM = register(Const.ALLOY_MAKING_GEM, () ->
-            new AlloyRecipe.Serializer<>(GemAlloyRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MetalAlloyRecipe>> ALLOY_MAKING_METAL = register(Const.ALLOY_MAKING_METAL, () ->
-            new AlloyRecipe.Serializer<>(MetalAlloyRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SuperAlloyRecipe>> ALLOY_MAKING_SUPER = register(Const.ALLOY_MAKING_SUPER, () ->
-            new AlloyRecipe.Serializer<>(SuperAlloyRecipe::new));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessCompoundPartRecipe>> COMPOUND_PART = register(Const.COMPOUND_PART,
+            () -> ExtendedShapelessRecipe.basicSerializer(ShapelessCompoundPartRecipe::new)
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AlloyRecipe>> COMPOUNDING = register(Const.ALLOY_MAKING,
+            () -> AlloyRecipe.createSerializer(AlloyRecipe::new)
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CrudeAlloyRecipe>> ALLOY_MAKING_CRUDE = register(Const.ALLOY_MAKING_CRUDE,
+            () -> AlloyRecipe.createSerializer(CrudeAlloyRecipe::new)
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FabricAlloyRecipe>> ALLOY_MAKING_FABRIC = register(Const.ALLOY_MAKING_FABRIC,
+            () -> AlloyRecipe.createSerializer(FabricAlloyRecipe::new)
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GemAlloyRecipe>> ALLOY_MAKING_GEM = register(Const.ALLOY_MAKING_GEM,
+            () -> AlloyRecipe.createSerializer(GemAlloyRecipe::new)
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MetalAlloyRecipe>> ALLOY_MAKING_METAL = register(Const.ALLOY_MAKING_METAL,
+            () -> AlloyRecipe.createSerializer(MetalAlloyRecipe::new)
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SuperAlloyRecipe>> ALLOY_MAKING_SUPER = register(Const.ALLOY_MAKING_SUPER,
+            () -> AlloyRecipe.createSerializer(SuperAlloyRecipe::new)
+    );
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ConversionRecipe>> CONVERSION = register(Const.CONVERSION,
-            ConversionRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FillRepairKitRecipe>> FILL_REPAIR_KIT = register(Const.FILL_REPAIR_KIT, () ->
-            new CustomRecipe.Serializer<>(FillRepairKitRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ModKitRemovePartRecipe>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART, () ->
-            new CustomRecipe.Serializer<>(ModKitRemovePartRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PressingRecipe>> PRESSING = register(Const.PRESSING, () ->
-            new SingleItemRecipe.Serializer<>(PressingRecipe::new) {});
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MaterialPressingRecipe>> PRESSING_MATERIAL = register(Const.PRESSING_MATERIAL, () ->
-            new SingleItemRecipe.Serializer<>(MaterialPressingRecipe::new) {});
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<QuickRepairRecipe>> QUICK_REPAIR = register(Const.QUICK_REPAIR, () ->
-            new CustomRecipe.Serializer<>(QuickRepairRecipe::new));
+            () -> ConversionRecipe.SERIALIZER
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FillRepairKitRecipe>> FILL_REPAIR_KIT = register(Const.FILL_REPAIR_KIT,
+            () -> emptyCustomRecipe(FillRepairKitRecipe.INSTANCE)
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ModKitRemovePartRecipe>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART,
+            () -> emptyCustomRecipe(ModKitRemovePartRecipe.INSTANCE)
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PressingRecipe>> PRESSING = register(Const.PRESSING,
+            () -> new RecipeSerializer<>(
+                    SingleItemRecipe.simpleMapCodec(PressingRecipe::new),
+                    SingleItemRecipe.simpleStreamCodec(PressingRecipe::new)
+            )
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MaterialPressingRecipe>> PRESSING_MATERIAL = register(Const.PRESSING_MATERIAL,
+            () -> new RecipeSerializer<>(
+                    SingleItemRecipe.simpleMapCodec(MaterialPressingRecipe::new),
+                    SingleItemRecipe.simpleStreamCodec(MaterialPressingRecipe::new)
+            )
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<QuickRepairRecipe>> QUICK_REPAIR = register(Const.QUICK_REPAIR,
+            () -> emptyCustomRecipe(QuickRepairRecipe.INSTANCE)
+    );
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SalvagingRecipe>> SALVAGING = register(Const.SALVAGING,
-            SalvagingRecipe.Serializer::new);
+            () -> SalvagingRecipe.SERIALIZER
+    );
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GearSalvagingRecipe>> SALVAGING_GEAR = register(Const.SALVAGING_GEAR,
-            GearSalvagingRecipe.Serializer::new);
+            () -> GearSalvagingRecipe.SERIALIZER
+    );
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CompoundPartSalvagingRecipe>> SALVAGING_COMPOUND_PART = register(Const.SALVAGING_COMPOUND_PART,
-            CompoundPartSalvagingRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapedGearRecipe>> SHAPED_GEAR = register(Const.SHAPED_GEAR_CRAFTING, () ->
-            new ExtendedShapedRecipe.BasicSerializer<>(ShapedGearRecipe::new));
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessGearRecipe>> SHAPELESS_GEAR = register(Const.SHAPELESS_GEAR_CRAFTING, () ->
-            new ExtendedShapelessRecipe.BasicSerializer<>(ShapelessGearRecipe::new));
+            () -> CompoundPartSalvagingRecipe.SERIALIZER
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapedGearRecipe>> SHAPED_GEAR = register(Const.SHAPED_GEAR_CRAFTING,
+            () -> ExtendedShapedRecipe.basicSerializer(ShapedGearRecipe::new)
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessGearRecipe>> SHAPELESS_GEAR = register(Const.SHAPELESS_GEAR_CRAFTING,
+            () -> ExtendedShapelessRecipe.basicSerializer(ShapelessGearRecipe::new)
+    );
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CoatingSmithingRecipe>> SMITHING_COATING = register(Const.SMITHING_COATING,
-            CoatingSmithingRecipe.Serializer::new);
+            () -> CoatingSmithingRecipe.SERIALIZER
+    );
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<UpgradeSmithingRecipe>> SMITHING_UPGRADE = register(Const.SMITHING_UPGRADE,
-            UpgradeSmithingRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GearPartSwapRecipe>> SWAP_GEAR_PART = register(Const.SWAP_GEAR_PART, () ->
-            new CustomRecipe.Serializer<>(GearPartSwapRecipe::new));
+            () -> UpgradeSmithingRecipe.SERIALIZER
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GearPartSwapRecipe>> SWAP_GEAR_PART = register(Const.SWAP_GEAR_PART,
+            () -> emptyCustomRecipe(GearPartSwapRecipe.INSTANCE)
+    );
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ToolActionRecipe>> TOOL_ACTION = register(Const.TOOL_ACTION,
-            ToolActionRecipe.Serializer::new);
+            () -> ToolActionRecipe.SERIALIZER
+    );
 
     private SgRecipes() {
     }
@@ -103,5 +133,9 @@ public final class SgRecipes {
         }
 
         return false;
+    }
+
+    private static <R extends CustomRecipe> RecipeSerializer<R> emptyCustomRecipe(R instance) {
+        return new RecipeSerializer<>(MapCodec.unit(instance), StreamCodec.unit(instance));
     }
 }

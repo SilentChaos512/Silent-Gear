@@ -14,6 +14,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -48,14 +49,15 @@ public class ModAdvancementProvider extends AdvancementProvider {
         public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
             HolderGetter<Item> items = registries.lookupOrThrow(Registries.ITEM);
 
-            ItemStack rootIcon = new ItemStack(GearItemSets.PICKAXE.gearItem());
-            GearData.writeConstructionParts(rootIcon, ImmutableList.of(
+            ItemStack pickaxeRootIcon = new ItemStack(GearItemSets.PICKAXE.gearItem());
+            GearData.writeConstructionParts(pickaxeRootIcon, ImmutableList.of(
                     PartInstance.create(Const.Parts.PICKAXE_HEAD, GearItemSets.PICKAXE.mainPart(), Const.Materials.CRIMSON_STEEL),
                     PartInstance.create(Const.Parts.ROD, SgItems.ROD.get(), Const.Materials.BLAZE_GOLD),
                     PartInstance.create(Const.Parts.TIP, SgItems.TIP.get(), Const.Materials.AZURE_ELECTRUM),
                     PartInstance.create(Const.Parts.GRIP, SgItems.GRIP.get(), Const.Materials.WOOL_BLACK),
                     PartInstance.create(Const.Parts.BINDING, SgItems.BINDING.get(), Const.Materials.STRING)
             ));
+            var rootIcon = ItemStackTemplate.fromNonEmptyStack(pickaxeRootIcon);
             AdvancementHolder root = Advancement.Builder.advancement()
                     .display(rootIcon, title("root"), description("root"), Identifier.withDefaultNamespace("textures/gui/advancements/backgrounds/adventure.png"), AdvancementType.TASK, false, false, false)
                     .addCriterion("get_item", getItem(Items.CRAFTING_TABLE))
@@ -196,9 +198,10 @@ public class ModAdvancementProvider extends AdvancementProvider {
             AdvancementHolder crimsonSteel = simpleGetItem(saver, CraftingItems.CRIMSON_STEEL_INGOT, crimsonIron, "crimson_steel");
             AdvancementHolder salvager = simpleGetItem(saver, SgBlocks.SALVAGER, crimsonIron);
 
+            var emeraldTipUpgrade = ItemStackTemplate.fromNonEmptyStack(SgItems.TIP.get().create(MaterialInstance.of(Const.Materials.EMERALD)));
             AdvancementHolder highDurability = Advancement.Builder.advancement()
                     .parent(materialGrader)
-                    .display(SgItems.TIP.get().create(MaterialInstance.of(Const.Materials.EMERALD)), title("high_durability"), description("high_durability"), null, AdvancementType.TASK, true, true, false)
+                    .display(emeraldTipUpgrade, title("high_durability"), description("high_durability"), null, AdvancementType.TASK, true, true, false)
                     .addCriterion("durability", SgCriteriaTriggers.GEAR_PROPERTY.get().createCriterion(new GearPropertyTrigger.Instance(Optional.empty(), GearProperties.DURABILITY.get(), MinMaxBounds.Doubles.atLeast(16_000))))
                     .save(saver, id("high_durability"));
             AdvancementHolder graderCatalyst2 = Advancement.Builder.advancement()
@@ -250,7 +253,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
             GearData.recalculateGearData(azureSilverBoots, null);
             AdvancementHolder moonwalker = Advancement.Builder.advancement()
                     .parent(azureSilver)
-                    .display(azureSilverBoots, title("moonwalker"), description("moonwalker"), null, AdvancementType.TASK, true, true, false)
+                    .display(ItemStackTemplate.fromNonEmptyStack(azureSilverBoots), title("moonwalker"), description("moonwalker"), null, AdvancementType.TASK, true, true, false)
                     .addCriterion("fall_with_moonwalker_boots", SgCriteriaTriggers.FALL_WITH_MOONWALKER.get().createCriterion(new PlayerTrigger.TriggerInstance(Optional.empty())))
                     .save(saver, id("moonwalker"));
 
@@ -268,7 +271,7 @@ public class ModAdvancementProvider extends AdvancementProvider {
         private static AdvancementHolder simpleGetItem(Consumer<AdvancementHolder> saver, ItemLike item, ItemStack icon, AdvancementHolder parent, String key) {
             return Advancement.Builder.advancement()
                     .parent(parent)
-                    .display(icon, title(key), description(key), null, AdvancementType.TASK, true, true, false)
+                    .display(ItemStackTemplate.fromNonEmptyStack(icon), title(key), description(key), null, AdvancementType.TASK, true, true, false)
                     .addCriterion("get_item", getItem(item))
                     .save(saver, id(key));
         }

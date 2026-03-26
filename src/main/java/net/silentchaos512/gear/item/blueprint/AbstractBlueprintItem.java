@@ -3,12 +3,10 @@ package net.silentchaos512.gear.item.blueprint;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.silentchaos512.gear.Config;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -33,13 +31,11 @@ public abstract class AbstractBlueprintItem extends Item implements IBlueprint {
     }
 
     @Override
-    public ItemStack getCraftingRemainder(ItemStack itemStack) {
+    public @Nullable ItemStackTemplate getCraftingRemainder(ItemInstance instance) {
         if (this.type == BlueprintType.BLUEPRINT) {
-            ItemStack copy = itemStack.copy();
-            copy.setCount(1);
-            return copy;
+            return new ItemStackTemplate(instance.typeHolder().value(), 1);
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 
     boolean isDisabled() {

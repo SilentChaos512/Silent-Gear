@@ -69,7 +69,7 @@ public class GearAxeItem extends AxeItem implements GearDiggerTool {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+    public boolean canPerformAction(ItemInstance stack, ItemAbility itemAbility) {
         if (!GearHelper.isBroken(stack)) {
             return super.canPerformAction(stack, itemAbility);
         }

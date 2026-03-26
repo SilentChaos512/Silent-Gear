@@ -93,7 +93,7 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
         var optionalHolder = getRecipe(tool, this.item);
         if (optionalHolder.isPresent() && this.level != null) {
             var recipe = optionalHolder.get().value();
-            ItemStack result = recipe.assemble(new ToolActionRecipe.Input(tool, this.item), this.level.registryAccess());
+            ItemStack result = recipe.assemble(new ToolActionRecipe.Input(tool, this.item));
             int damage = recipe.getDamageToTool();
 
             this.dropItem(result.copy());

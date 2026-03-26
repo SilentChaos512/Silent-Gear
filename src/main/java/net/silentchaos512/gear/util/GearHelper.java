@@ -22,10 +22,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.SwingAnimationType;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.SwingAnimation;
@@ -98,11 +95,11 @@ public final class GearHelper {
     /**
      * Check if the item is a Silent Gear tool, weapon, or armor item.
      *
-     * @param stack The item
-     * @return True if {@code stack} is a gear item
+     * @param instance The item
+     * @return True if {@code instance} is a gear item
      */
-    public static boolean isGear(ItemStack stack) {
-        return stack.getItem() instanceof GearItem;
+    public static boolean isGear(ItemInstance instance) {
+        return instance.typeHolder().value() instanceof GearItem;
     }
 
     /**
@@ -288,7 +285,7 @@ public final class GearHelper {
     private static void notifyPlayerOfBrokenGear(ItemStack stack, Player player) {
         if (Config.Common.sendGearBrokenMessage.get()) {
             // Notify player. Mostly for armor, but might help new players as well.
-            player.displayClientMessage(Component.translatable("misc.silentgear.notifyOnBreak", stack.getHoverName()), false);
+            player.sendSystemMessage(Component.translatable("misc.silentgear.notifyOnBreak", stack.getHoverName()));
         }
     }
 

@@ -36,7 +36,6 @@ import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,7 +43,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -150,7 +148,7 @@ public final class GearEvents {
             stack.shrink(1);
             if (event.getEntity() instanceof Player player) {
                 var text = TextUtil.translate("trait", "flammable.itemDestroyed", stack.getHoverName());
-                player.displayClientMessage(text, false);
+                player.sendSystemMessage(text);
             }
         }
     }
@@ -208,9 +206,9 @@ public final class GearEvents {
         }
     }
 
-    public static int getLightForLustrousTrait(BlockAndTintGetter world, BlockPos pos) {
-        int blockLight = world.getBrightness(LightLayer.BLOCK, pos);
-        int skyLight = world.getBrightness(LightLayer.SKY, pos);
+    public static int getLightForLustrousTrait(Level level, BlockPos pos) {
+        int blockLight = level.getBrightness(LightLayer.BLOCK, pos);
+        int skyLight = level.getBrightness(LightLayer.SKY, pos);
         // Block light is less effective
         return Math.max(skyLight, blockLight * 3 / 4);
     }
@@ -346,7 +344,7 @@ public final class GearEvents {
         if (!level.isClientSide()) {
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
-            if (!player.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
+            if (!player.isEyeInFluid(Tags.Fluids.WATER) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
                 // Vanilla duration is 200, but that causes flickering numbers/icon
                 player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 210, 0, false, false, true));
             }
