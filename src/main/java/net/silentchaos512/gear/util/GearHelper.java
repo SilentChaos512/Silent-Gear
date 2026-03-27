@@ -18,7 +18,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -29,12 +28,8 @@ import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.NeoForge;
 import net.silentchaos512.gear.Config;
@@ -43,12 +38,10 @@ import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.crafting.ingredient.IGearIngredient;
@@ -56,13 +49,11 @@ import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgCriteriaTriggers;
 import net.silentchaos512.gear.setup.SgDataComponents;
-import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.SgSounds;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.util.NameUtils;
-import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -78,18 +69,15 @@ import java.util.stream.Stream;
  */
 public final class GearHelper {
     private static final Identifier REACH_MODIFIER_ID = SilentGear.getId("reach_modifier");
-    private static final Identifier ATTACK_REACH_MODIFIER_ID = SilentGear.getId("attack_reach_modifier");
     private static final float BROKEN_ATTACK_SPEED_CHANGE = 0.7f;
     private static final float BROKEN_DESTROY_SPEED = 0.25f;
 
     private GearHelper() {
     }
 
-    public static Optional<GearItem> getItem(ItemStack gear) {
-        if (gear.getItem() instanceof GearItem) {
-            return Optional.of((GearItem) gear.getItem());
-        }
-        return Optional.empty();
+    public static Optional<GearItem> getItem(ItemInstance instance) {
+        var item = instance.typeHolder().value();
+        return item instanceof GearItem gearItem ? Optional.of(gearItem) : Optional.empty();
     }
 
     /**
@@ -105,17 +93,15 @@ public final class GearHelper {
     /**
      * Check if the item is a Silent Gear item and has all the parts it requires to function.
      *
-     * @param stack The item
-     * @return True if {@code stack} is a gear item with no missing required parts
+     * @param instance The item
+     * @return True if {@code instance} is a gear item with no missing required parts
      */
-    public static boolean isValidGear(ItemStack stack) {
-        if (!isGear(stack)) {
-            return false;
-        }
+    public static boolean isValidGear(ItemInstance instance) {
+        var item = instance.typeHolder().value();
+        if (!(item instanceof GearItem gearItem)) return false;
 
-        GearItem item = (GearItem) stack.getItem();
-        for (PartType type : item.getRequiredParts()) {
-            if (!GearData.hasPartOfType(stack, type)) {
+        for (PartType type : gearItem.getRequiredParts()) {
+            if (!GearData.hasPartOfType(instance, type)) {
                 return false;
             }
         }
@@ -123,19 +109,19 @@ public final class GearHelper {
         return true;
     }
 
-    public static boolean isAttackingItem(ItemStack gear) {
-        var type = getType(gear);
+    public static boolean isAttackingItem(ItemInstance instance) {
+        var type = getType(instance);
         return type.matches(GearTypes.MELEE_WEAPON.get(), false) || type.matches(GearTypes.HARVEST_TOOL.get());
     }
 
     //region Attribute modifiers
 
-    public static void onAddAttackDamageModifier(ItemStack stack, float value, ItemAttributeModifiers.Builder builder) {
-        if (!isAttackingItem(stack)) {
+    public static void onAddAttackDamageModifier(ItemInstance instance, float value, ItemAttributeModifiers.Builder builder) {
+        if (!isAttackingItem(instance)) {
             return;
         }
 
-        float adjustedValue = isBroken(stack) ? 1f : Math.max(value, 0f);
+        float adjustedValue = isBroken(instance) ? 1f : Math.max(value, 0f);
         builder.add(
                 Attributes.ATTACK_DAMAGE,
                 new AttributeModifier(
@@ -147,13 +133,13 @@ public final class GearHelper {
         );
     }
 
-    public static void onAddAttackSpeedModifier(ItemStack stack, float value, ItemAttributeModifiers.Builder builder) {
-        if (!isAttackingItem(stack)) {
+    public static void onAddAttackSpeedModifier(ItemInstance instance, float value, ItemAttributeModifiers.Builder builder) {
+        if (!isAttackingItem(instance)) {
             return;
         }
 
         float speed = value - 4.0f;
-        if (isBroken(stack)) {
+        if (isBroken(instance)) {
             speed += BROKEN_ATTACK_SPEED_CHANGE;
         }
         builder.add(
@@ -167,7 +153,7 @@ public final class GearHelper {
         );
     }
 
-    public static void onAddBlockReachModifier(ItemStack stack, float value, ItemAttributeModifiers.Builder builder) {
+    public static void onAddBlockReachModifier(ItemInstance instance, float value, ItemAttributeModifiers.Builder builder) {
         builder.add(
                 Attributes.BLOCK_INTERACTION_RANGE,
                 new AttributeModifier(
@@ -188,19 +174,19 @@ public final class GearHelper {
         return material != null && getIsRepairable(stack, material);
     }
 
-    public static boolean getIsRepairable(ItemStack gear, MaterialInstance material) {
-        var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
+    public static boolean getIsRepairable(ItemInstance instance, MaterialInstance material) {
+        var data = instance.get(SgDataComponents.GEAR_CONSTRUCTION);
         return data != null
                 && data.getPrimaryPart() != null
-                && material.getRepairValue(gear) > 0
-                && material.canRepair(gear);
+                && material.getRepairValue(instance) > 0
+                && material.canRepair(instance);
     }
 
-    public static NumberProperty getDurabilityProperty(ItemStack gear) {
-        return getItem(gear).map(GearItem::getDurabilityStat).map(Supplier::get).orElse(GearProperties.DURABILITY.get());
+    public static NumberProperty getDurabilityProperty(ItemInstance instance) {
+        return getItem(instance).map(GearItem::getDurabilityStat).map(Supplier::get).orElse(GearProperties.DURABILITY.get());
     }
 
-    public static float getRepairModifier(ItemStack gear) {
+    public static float getRepairModifier(ItemInstance gear) {
         return getItem(gear).map(item -> item.getRepairModifier(gear)).orElse(1f);
     }
 
@@ -307,19 +293,20 @@ public final class GearHelper {
         return damage;
     }
 
-    private static boolean canBreakPermanently(ItemStack stack) {
+    private static boolean canBreakPermanently(ItemInstance stack) {
         return (Config.Common.isLoaded() && Config.Common.gearBreaksPermanently.get()) || TraitHelper.hasTrait(stack, Const.Traits.RED_CARD);
     }
 
-    public static boolean isBroken(ItemStack stack) {
-        if (stack.isEmpty() || canBreakPermanently(stack) || isUnbreakable(stack))
+    public static boolean isBroken(ItemInstance stack) {
+        if (canBreakPermanently(stack) || isUnbreakable(stack))
             return false;
 
-        int maxDamage = stack.getMaxDamage();
-        return maxDamage > 0 && stack.getDamageValue() >= maxDamage - 1;
+        int maxDamage = stack.getOrDefault(DataComponents.MAX_DAMAGE, 0);
+        int damage = stack.getOrDefault(DataComponents.DAMAGE, 0);
+        return maxDamage > 0 && damage >= maxDamage - 1;
     }
 
-    public static boolean isUnbreakable(ItemStack stack) {
+    public static boolean isUnbreakable(ItemInstance stack) {
         return TraitHelper.getTraitLevel(stack, Const.Traits.INDESTRUCTIBLE) > 0 || stack.has(DataComponents.UNBREAKABLE);
     }
 
@@ -384,15 +371,13 @@ public final class GearHelper {
                 .setNoCombineRepair();
     }
 
-    public static GearType getType(ItemStack gear) {
+    public static GearType getType(ItemInstance gear) {
         return getType(gear, GearTypes.NONE.get());
     }
 
-    public static GearType getType(ItemStack gear, GearType defaultType) {
-        if (gear.isEmpty() || !(gear.getItem() instanceof GearItem)) {
-            return defaultType;
-        }
-        return ((GearItem) gear.getItem()).getGearType();
+    public static GearType getType(ItemInstance gear, GearType defaultType) {
+        var item = gear.typeHolder().value();
+        return item instanceof GearItem gearItem ? gearItem.getGearType() : defaultType;
     }
 
     /**
@@ -403,8 +388,8 @@ public final class GearHelper {
      * @return True only if all parts are identical
      */
     @Deprecated // May not be needed if arrows get redesigned
-    public static boolean isEquivalent(ItemStack gear1, ItemStack gear2) {
-        if (!GearHelper.isGear(gear1) || !GearHelper.isGear(gear2) || gear1.getItem() != gear2.getItem()) {
+    public static boolean isEquivalent(ItemInstance gear1, ItemInstance gear2) {
+        if (!GearHelper.isGear(gear1) || !GearHelper.isGear(gear2) || gear1.typeHolder().value() != gear2.typeHolder().value()) {
             return false;
         }
 
@@ -415,7 +400,7 @@ public final class GearHelper {
         return constructionData1.equals(constructionData2);
     }
 
-    public static boolean isCorrectToolForDrops(ItemStack stack, BlockState state, @Nullable TagKey<Block> blocksForTool) {
+    public static boolean isCorrectToolForDrops(ItemInstance stack, BlockState state, @Nullable TagKey<Block> blocksForTool) {
         if (GearHelper.isBroken(stack)) return false;
 
         Tool tool = stack.get(DataComponents.TOOL);
@@ -437,7 +422,7 @@ public final class GearHelper {
         return 1f;
     }
 
-    private static float getTraitModifiedMiningSpeed(ItemStack stack, BlockState state, float baseSpeed) {
+    private static float getTraitModifiedMiningSpeed(ItemInstance stack, BlockState state, float baseSpeed) {
         var totalModifier = 0f;
         for (var traitInstance : TraitHelper.getTraits(stack)) {
             if (traitInstance.isValid()) {
@@ -475,126 +460,11 @@ public final class GearHelper {
     }
 
     public static void onItemSwing(ItemStack stack, LivingEntity wielder) {
-        //if (wielder instanceof Player
-        //         && getType(stack).matches(GearTypes.MELEE_WEAPON.get())
-        //        && tryAttackWithExtraReach((Player) wielder, false) != null) {
-            // Player attacked something, ignore traits
-        //    return;
-        //}
-
         for (var traitInstance : TraitHelper.getTraits(stack)) {
             if (traitInstance.isValid()) {
                 traitInstance.getTrait().onItemSwing(stack, wielder, traitInstance.getLevel());
             }
         }
-    }
-
-    /**
-     * Checks if the player would be able to attack an entity which may be outside the vanilla
-     * range, based on reach distance attribute value.
-     *
-     * @param player The attacking player
-     * @return The targeted entity if a vulnerable entity is within range, null otherwise
-     */
-    @Nullable
-    public static Entity getAttackTargetWithExtraReach(Player player) {
-        if (getType(player.getMainHandItem()).matches(GearTypes.MELEE_WEAPON.get())) {
-            return tryAttackWithExtraReach(player, true);
-        }
-        return null;
-    }
-
-    /**
-     * Attempts to attack an entity which may be outside the vanilla range, based on reach distance
-     * attribute value.
-     *
-     * @param player The attacking player
-     * @return The attacked entity if the attack was successful, null otherwise
-     */
-    @Nullable
-    public static Entity tryAttackWithExtraReach(Player player) {
-        return tryAttackWithExtraReach(player, false);
-    }
-
-    @Nullable
-    private static Entity tryAttackWithExtraReach(Player player, boolean simulate) {
-        // Attempt to attack something if wielding a weapon with increased melee range
-        double range = getAttackRange(player);
-        Vec3 vector3d = player.getEyePosition(0f);
-        double rangeSquared = range * range;
-
-        Vec3 vector3d1 = player.getViewVector(1.0F);
-        Vec3 vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
-        AABB axisalignedbb = player.getBoundingBox().expandTowards(vector3d1.scale(range)).inflate(1.0D, 1.0D, 1.0D);
-
-        EntityHitResult rayTrace = rayTraceEntities(player, vector3d, vector3d2, axisalignedbb, (entity) -> {
-            return !entity.isSpectator() && entity.isPickable();
-        }, rangeSquared);
-
-        if (rayTrace != null) {
-            Entity entity = rayTrace.getEntity();
-            if (!simulate) {
-                player.attack(entity);
-            }
-            return entity;
-        }
-
-        return null;
-    }
-
-    private static double getAttackRange(LivingEntity entity) {
-        ItemStack stack = entity.getMainHandItem();
-        double base = getType(stack).matches(GearTypes.TOOL.get())
-                ? GearData.getProperties(stack).getNumber(GearProperties.ATTACK_REACH)
-                : GearProperties.ATTACK_REACH.get().getBaseValue();
-
-        // Also check Forge reach distance, to allow curios to add more reach
-        AttributeInstance attribute = entity.getAttribute(Attributes.ENTITY_INTERACTION_RANGE);
-        if (attribute != null) {
-            double reachBonus = attribute.getValue() - attribute.getBaseValue();
-            return base + reachBonus;
-        }
-
-        return base;
-    }
-
-    @SuppressWarnings({"MethodWithTooManyParameters", "OverlyComplexMethod"})
-    @Nullable
-    private static EntityHitResult rayTraceEntities(Entity shooter, Vec3 startVec, Vec3 endVec, AABB boundingBox, Predicate<Entity> filter, double distance) {
-        // Copied from ProjectileHelper (getEntityHitResult)
-        Level world = shooter.level();
-        double d0 = distance;
-        Entity entity = null;
-        Vec3 vector3d = null;
-
-        for (Entity entity1 : world.getEntities(shooter, boundingBox, filter)) {
-            AABB axisalignedbb = entity1.getBoundingBox().inflate(entity1.getPickRadius());
-            Optional<Vec3> optional = axisalignedbb.clip(startVec, endVec);
-            if (axisalignedbb.contains(startVec)) {
-                if (d0 >= 0.0D) {
-                    entity = entity1;
-                    vector3d = optional.orElse(startVec);
-                    d0 = 0.0D;
-                }
-            } else if (optional.isPresent()) {
-                Vec3 vector3d1 = optional.get();
-                double d1 = startVec.distanceToSqr(vector3d1);
-                if (d1 < d0 || d0 == 0.0D) {
-                    if (entity1.getRootVehicle() == shooter.getRootVehicle() && !entity1.canRiderInteract()) {
-                        if (d0 == 0.0D) {
-                            entity = entity1;
-                            vector3d = vector3d1;
-                        }
-                    } else {
-                        entity = entity1;
-                        vector3d = vector3d1;
-                        d0 = d1;
-                    }
-                }
-            }
-        }
-
-        return entity == null ? null : new EntityHitResult(entity, vector3d);
     }
 
     public static Rarity getRarity(ItemStack stack) {
@@ -612,66 +482,6 @@ public final class GearHelper {
         if (rarity < 120)
             return Rarity.RARE;
         return Rarity.EPIC;
-    }
-
-    private static ItemStack createSampleItem(GearItem item, int tier) {
-        ItemStack result = GearGenerator.create(item);
-        if (result.isEmpty()) {
-            Collection<PartInstance> parts = new ArrayList<>();
-            for (PartType partType : item.getRequiredParts()) {
-                partType.makeCompoundPart(item.getGearType(), Const.Materials.EXAMPLE).ifPresent(parts::add);
-            }
-            result = item.construct(parts);
-        }
-        GearData.setExampleTag(result, true);
-        return result;
-    }
-
-    private static ItemStack createSampleItem(GearItem item, DataResource<Material> mainMaterial) {
-        Collection<PartInstance> parts = Lists.newArrayList();
-        for (PartType partType : item.getRequiredParts()) {
-            // FIXME: Cords are missing from bows and fishing rods
-            partType.makeCompoundPart(item.getGearType(), selectMaterialForSample(partType, item.getGearType(), mainMaterial))
-                    .ifPresent(parts::add);
-        }
-        ItemStack result = new ItemStack(item);
-        GearData.writeConstructionParts(result, parts);
-        GearData.recalculateGearData(result, null);
-        return result;
-    }
-
-    private static DataResource<Material> selectMaterialForSample(PartType partType, GearType gearType, DataResource<Material> main) {
-        if (partType == PartTypes.ROD.get()) {
-            return Const.Materials.WOOD;
-        } else if (partType == PartTypes.CORD.get()) {
-            return Const.Materials.STRING;
-        } else if (partType == PartTypes.FLETCHING.get()) {
-            return Const.Materials.FEATHER;
-        } else if (partType == PartTypes.BINDING.get()) {
-            return Const.Materials.STRING;
-        } else if (partType == PartTypes.SETTING.get()) {
-            return getRandomMaterial(partType, gearType);
-        }
-        return main;
-    }
-
-    private static DataResource<Material> getRandomMaterial(PartType partType, GearType gearType) {
-        // Excludes children, will select a random child material (if appropriate) below
-        List<Material> matsOfTier = new ArrayList<>();
-        for (Material material : SgRegistries.MATERIAL.getValues(true)) {
-            MaterialInstance inst = MaterialInstance.of(material);
-            if (inst.allowedInPart(partType) && inst.isCraftingAllowed(partType, gearType)) {
-                matsOfTier.add(inst.get());
-            }
-        }
-
-        if (!matsOfTier.isEmpty()) {
-            Material material = matsOfTier.get(SilentGear.RANDOM.nextInt(matsOfTier.size()));
-            return DataResource.material(SgRegistries.MATERIAL.getKey(material));
-        }
-
-        // Something went wrong...
-        return Const.Materials.EXAMPLE;
     }
 
     @Nullable

@@ -164,7 +164,7 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
                 ItemStack stack = input.split(1);
 
                 data.remove(lowestMaterial);
-                var materialStack = lowestMaterial.getItem();
+                var materialStack = lowestMaterial.copyItem();
                 targetGrade.setGradeOnStack(materialStack);
                 data.add(MaterialInstance.of(lowestMaterial.get(), materialStack));
                 // Make sure the highest graded material is first

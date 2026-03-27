@@ -3,7 +3,6 @@
   "damage_to_tool": 1,
   "ingredient": "#c:ingots/crimson_iron",
   "result": {
-    "count": 1,
     "id": "silentgear:crimson_iron_dust"
   },
   "sound": {

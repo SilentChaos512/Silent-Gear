@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
@@ -80,7 +81,7 @@ public final class TraitHelper {
      * @param trait The trait to look for
      * @return The level of the trait on the gear, or zero if it does not have the trait
      */
-    public static int getTraitLevel(ItemStack gear, DataResource<Trait> trait) {
+    public static int getTraitLevel(ItemInstance gear, DataResource<Trait> trait) {
         if (GearHelper.isGear(gear)) {
             var list = GearData.getProperties(gear).getOrDefault(GearProperties.TRAITS, TraitListPropertyValue.empty());
             for (var traitInstance : list.value()) {
@@ -100,7 +101,7 @@ public final class TraitHelper {
      * @param trait The trait
      * @return True if and only if the gear item has the trait
      */
-    public static boolean hasTrait(ItemStack gear, DataResource<Trait> trait) {
+    public static boolean hasTrait(ItemInstance gear, DataResource<Trait> trait) {
         if (GearHelper.isGear(gear)) {
             return hasTrait(GearData.getProperties(gear), trait);
         }
@@ -115,7 +116,7 @@ public final class TraitHelper {
      * @param trait The trait
      * @return True if and only if the gear item has the trait
      */
-    public static boolean hasTrait(ItemStack gear, Trait trait) {
+    public static boolean hasTrait(ItemInstance gear, Trait trait) {
         if (GearHelper.isGear(gear)) {
             return hasTrait(GearData.getProperties(gear), trait);
         }
@@ -204,10 +205,10 @@ public final class TraitHelper {
         return false;
     }
 
-    public static List<TraitInstance> getTraits(ItemStack gear) {
-        if (!GearHelper.isGear(gear)) return Collections.emptyList();
+    public static List<TraitInstance> getTraits(ItemInstance instance) {
+        if (!GearHelper.isGear(instance)) return Collections.emptyList();
 
-        var properties = GearData.getProperties(gear);
+        var properties = GearData.getProperties(instance);
         var traitList = properties.get(GearProperties.TRAITS);
         if (traitList != null) {
             return traitList.value();

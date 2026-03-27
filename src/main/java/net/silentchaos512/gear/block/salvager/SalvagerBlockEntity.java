@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
@@ -118,10 +119,10 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
         SilentGear.LOGGER.debug("Loss rate for '{}': {}", stack, lossRate);
         ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
 
-        for (ItemStack part : recipe.getPossibleResults(this)) {
-            ItemStack copy = part.copy();
+        for (ItemStackTemplate salvageItem : recipe.getPossibleResults(this)) {
+            ItemStack copy = salvageItem.create();
             int count = copy.getCount();
-            PartInstance partData = PartInstance.from(part);
+            PartInstance partData = PartInstance.from(copy);
             double partLossRate = partData != null && partData.isValid()
                     ? partData.get().getSalvageLossRate(partData, stack, lossRate)
                     : lossRate;

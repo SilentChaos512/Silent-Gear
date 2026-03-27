@@ -5,8 +5,6 @@
     "gear_type": "silentgear:tool",
     "part_type": "silentgear:coating"
   },
-  "gear": {
-    "id": "silentgear:helmet"
-  },
+  "gear": "silentgear:helmet",
   "template": "silentgear:coating_smithing_template"
 }

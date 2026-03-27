@@ -4,6 +4,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -45,21 +46,21 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public List<ItemStack> getPossibleResults(Container inv) {
+    public List<ItemStackTemplate> getPossibleResults(Container inv) {
         ItemStack input = inv.getItem(0);
         // Block salvaging of stackable items like arrows
         if (input.getMaxStackSize() > 1) {
             return List.of();
         }
 
-        List<ItemStack> ret = new ArrayList<>();
+        List<ItemStackTemplate> ret = new ArrayList<>();
         PartList parts = GearData.getConstruction(input).parts();
 
         for (PartInstance part : parts) {
             if (Config.Common.salvagerBreakDownPartsWithGear.get()) {
                 ret.addAll(salvagePart(part));
             } else {
-                ret.add(part.getItem());
+                ret.addAll(itemToList(part));
             }
         }
 
@@ -67,7 +68,7 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
     }
 
     @Override
-    public List<ItemStack> getPossibleResultsForDisplay() {
+    public List<ItemStackTemplate> getPossibleResultsForDisplay() {
         // Cannot compute anything without an input item
         return List.of();
     }

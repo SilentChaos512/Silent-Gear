@@ -4,7 +4,5 @@
     "neoforge:ingredient_type": "silentgear:part_type",
     "part_type": "silentgear:misc_upgrade"
   },
-  "gear": {
-    "id": "silentgear:bow"
-  }
+  "gear": "silentgear:bow"
 }

@@ -7,6 +7,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Util;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
@@ -40,7 +41,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public PartType getPartType(ItemStack stack) {
+    public PartType getPartType(ItemInstance instance) {
         return PartTypes.MAIN.get();
     }
 
@@ -49,7 +50,7 @@ public class GearBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public GearType getGearType(ItemStack stack) {
+    public GearType getGearType(ItemInstance instance) {
         return gearType.get();
     }
 

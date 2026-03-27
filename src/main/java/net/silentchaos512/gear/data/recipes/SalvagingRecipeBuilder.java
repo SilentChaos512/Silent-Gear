@@ -5,11 +5,13 @@ import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -26,14 +28,14 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements RecipeBuilder {
-    private final BiFunction<Ingredient, List<ItemStack>, R> factory;
+    private final BiFunction<Ingredient, List<ItemStackTemplate>, R> factory;
     private final String recipeFolder;
     private final Ingredient ingredient;
-    private final List<ItemStack> results = new ArrayList<>();
+    private final List<ItemStackTemplate> results = new ArrayList<>();
     private final boolean resultsMustBePresent;
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    private SalvagingRecipeBuilder(BiFunction<Ingredient, List<ItemStack>, R> factory, String recipeFolder, Ingredient ingredient, boolean resultsMustBePresent) {
+    private SalvagingRecipeBuilder(BiFunction<Ingredient, List<ItemStackTemplate>, R> factory, String recipeFolder, Ingredient ingredient, boolean resultsMustBePresent) {
         this.factory = factory;
         this.recipeFolder = recipeFolder;
         this.ingredient = ingredient;
@@ -57,7 +59,7 @@ public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements 
     }
 
     public SalvagingRecipeBuilder<R> addResult(ItemLike item, int count) {
-        this.results.add(new ItemStack(item, count));
+        this.results.add(new ItemStackTemplate(item.asItem(), count));
         return this;
     }
 
@@ -73,8 +75,10 @@ public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements 
     }
 
     @Override
-    public Item getResult() {
-        return !results.isEmpty() ? results.iterator().next().getItem() : Items.AIR;
+    public ResourceKey<Recipe<?>> defaultId() {
+        // We don't have enough information to create a useful path or even get a namespace.
+        // Require the use of save(RecipeOutput, ResourceKey<Recipe<?>>) instead.
+        throw new UnsupportedOperationException("Cannot compute a default ID for salvaging recipe. Please provide a recipe ID when saving.");
     }
 
     @Override

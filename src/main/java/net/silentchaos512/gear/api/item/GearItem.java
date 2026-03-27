@@ -4,6 +4,7 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.ItemLike;
@@ -86,7 +87,7 @@ public interface GearItem extends ItemLike {
         return getGearType().durabilityStat();
     }
 
-    default float getRepairModifier(ItemStack stack) {
+    default float getRepairModifier(ItemInstance instance) {
         return 1f;
     }
 

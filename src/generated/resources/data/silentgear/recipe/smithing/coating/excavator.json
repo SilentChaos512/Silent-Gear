@@ -5,8 +5,6 @@
     "gear_type": "silentgear:tool",
     "part_type": "silentgear:coating"
   },
-  "gear": {
-    "id": "silentgear:excavator"
-  },
+  "gear": "silentgear:excavator",
   "template": "silentgear:coating_smithing_template"
 }

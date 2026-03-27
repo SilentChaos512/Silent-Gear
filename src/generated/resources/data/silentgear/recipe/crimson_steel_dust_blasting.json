@@ -5,7 +5,6 @@
   "experience": 0.5,
   "ingredient": "#c:dusts/crimson_steel",
   "result": {
-    "count": 1,
     "id": "silentgear:crimson_steel_ingot"
   }
 }

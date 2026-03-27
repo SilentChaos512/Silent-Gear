@@ -3,11 +3,9 @@
   "ingredient": "minecraft:netherite_shovel",
   "results": [
     {
-      "count": 1,
       "id": "minecraft:diamond"
     },
     {
-      "count": 1,
       "id": "minecraft:netherite_ingot"
     },
     {

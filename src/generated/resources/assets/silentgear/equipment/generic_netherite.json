@@ -8,6 +8,14 @@
         "texture": "silentgear:generic_netherite"
       }
     ],
+    "humanoid_baby": [
+      {
+        "dyeable": {
+          "color_when_undyed": -6265536
+        },
+        "texture": "silentgear:generic_netherite"
+      }
+    ],
     "humanoid_leggings": [
       {
         "dyeable": {

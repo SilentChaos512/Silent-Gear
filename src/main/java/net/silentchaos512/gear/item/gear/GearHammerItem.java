@@ -2,6 +2,7 @@ package net.silentchaos512.gear.item.gear;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -19,7 +20,7 @@ public class GearHammerItem extends GearPickaxeItem implements IAoeTool {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+    public boolean canPerformAction(ItemInstance instance, ItemAbility itemAbility) {
         return getGearType().canPerformAction(itemAbility);
     }
 

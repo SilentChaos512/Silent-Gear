@@ -14,7 +14,6 @@
           "saturation": 1.0
         },
         "minecraft:use_remainder": {
-          "count": 1,
           "id": "minecraft:stick"
         }
       }

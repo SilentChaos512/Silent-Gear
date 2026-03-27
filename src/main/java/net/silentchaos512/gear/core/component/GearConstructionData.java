@@ -49,6 +49,10 @@ public record GearConstructionData(
         this.repairedCount = repairedCount;
     }
 
+    public GearConstructionData(PartList.Immutable parts) {
+        this(parts, false, 0, 0);
+    }
+
     @Nullable
     public PartInstance getPartOfType(Supplier<PartType> type) {
         return getPartOfType(type.get());
@@ -78,7 +82,7 @@ public record GearConstructionData(
     @Nullable
     public MaterialInstance getMainTextureMaterial() {
         var part = getCoatingOrMainPart();
-        if (part != null && part.isValid() && part.get() instanceof CoreGearPart) {
+        if (part != null && part.getItem() != null && part.isValid() && part.get() instanceof CoreGearPart) {
             return CompoundPartItem.getPrimaryMaterial(part.getItem());
         }
         return null;

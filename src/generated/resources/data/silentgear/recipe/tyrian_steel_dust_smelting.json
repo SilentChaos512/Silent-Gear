@@ -5,7 +5,6 @@
   "experience": 0.75,
   "ingredient": "#c:dusts/tyrian_steel",
   "result": {
-    "count": 1,
     "id": "silentgear:tyrian_steel_ingot"
   }
 }

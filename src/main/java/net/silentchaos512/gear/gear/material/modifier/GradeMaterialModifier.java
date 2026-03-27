@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
@@ -74,8 +75,8 @@ public record GradeMaterialModifier(MaterialGrade grade) implements IMaterialMod
         }
 
         @Override
-        public Optional<GradeMaterialModifier> readModifier(ItemStack stack) {
-            var grade = stack.get(SgDataComponents.MATERIAL_GRADE);
+        public Optional<GradeMaterialModifier> readModifier(ItemInstance instance) {
+            var grade = instance.get(SgDataComponents.MATERIAL_GRADE);
             if (grade != null) {
                 return Optional.of(new GradeMaterialModifier(grade));
             }

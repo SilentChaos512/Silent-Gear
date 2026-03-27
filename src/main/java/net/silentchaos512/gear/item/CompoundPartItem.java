@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
@@ -42,13 +43,13 @@ public class CompoundPartItem extends Item {
         return GearTypes.NONE.get();
     }
 
-    public static List<MaterialInstance> getMaterials(ItemStack stack) {
-        return stack.getOrDefault(SgDataComponents.MATERIAL_LIST, List.of());
+    public static List<MaterialInstance> getMaterials(ItemInstance instance) {
+        return instance.getOrDefault(SgDataComponents.MATERIAL_LIST, List.of());
     }
 
     @Nullable
-    public static MaterialInstance getPrimaryMaterial(ItemStack stack) {
-        var materials = getMaterials(stack);
+    public static MaterialInstance getPrimaryMaterial(ItemInstance instance) {
+        var materials = getMaterials(instance);
         return !materials.isEmpty() ? materials.getFirst() : null;
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.equipment.Equippable;
@@ -75,7 +76,7 @@ public class GearShieldItem extends BasicGearItem {
     }
 
     @Override
-    public float getRepairModifier(ItemStack stack) {
+    public float getRepairModifier(ItemInstance instance) {
         return getGearType().armorDurabilityMultiplier();
     }
 

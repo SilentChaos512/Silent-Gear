@@ -10,6 +10,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.silentchaos512.gear.api.item.GearType;
@@ -46,8 +47,8 @@ public final class BlueprintIngredient implements ICustomIngredient, IGearIngred
     }
 
     public static <T extends Item & IBlueprint> BlueprintIngredient of(T item) {
-        ItemStack stack = new ItemStack(item);
-        return new BlueprintIngredient(item.getPartType(stack), item.getGearType(stack));
+        var template = new ItemStackTemplate(item);
+        return new BlueprintIngredient(item.getPartType(template), item.getGearType(template));
     }
 
     public static BlueprintIngredient of(GearItemSet<?> gearItemSet) {

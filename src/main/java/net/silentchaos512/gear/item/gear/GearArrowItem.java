@@ -13,6 +13,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -52,7 +53,7 @@ public class GearArrowItem extends ArrowItem implements GearItem {
     }
 
     @Override
-    public float getRepairModifier(ItemStack stack) {
+    public float getRepairModifier(ItemInstance instance) {
         // No repairs
         return 0f;
     }

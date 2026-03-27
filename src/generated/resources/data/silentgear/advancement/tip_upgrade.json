@@ -17,7 +17,13 @@
       "translate": "advancements.silentgear.tip_upgrade.description"
     },
     "icon": {
-      "count": 1,
+      "components": {
+        "silentgear:material_list": [
+          {
+            "material": "silentgear:example"
+          }
+        ]
+      },
       "id": "silentgear:tip"
     },
     "title": {

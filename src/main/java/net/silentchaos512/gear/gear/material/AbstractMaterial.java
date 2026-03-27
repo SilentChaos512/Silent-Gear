@@ -88,7 +88,7 @@ public abstract class AbstractMaterial implements Material {
     }
 
     public static MaterialInstance removeEnhancements(MaterialInstance material) {
-        ItemStack stack = material.getItem().copy();
+        ItemStack stack = material.getItem().create();
         for (IMaterialModifierType<?> modifierType : SgRegistries.MATERIAL_MODIFIER_TYPE) {
             modifierType.removeModifier(stack);
         }

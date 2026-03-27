@@ -69,8 +69,6 @@ public class IngredientLabelButton extends LabelButton {
 
     @Override
     public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        super.extractWidgetRenderState(graphics, mouseX, mouseY, a);
-
         Font font = this.getFont();
         int textXOffset = getIconSpace(font);
         // Render label with offset to leave room for icon

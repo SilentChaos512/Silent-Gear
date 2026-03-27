@@ -5,7 +5,6 @@
   "experience": 1.5,
   "ingredient": "silentgear:raw_azure_silver",
   "result": {
-    "count": 1,
     "id": "silentgear:azure_silver_ingot"
   }
 }

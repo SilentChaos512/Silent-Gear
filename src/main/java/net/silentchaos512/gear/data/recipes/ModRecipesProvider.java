@@ -47,7 +47,6 @@ import net.silentchaos512.lib.util.NameUtils;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ModRecipesProvider extends LibRecipeProvider {
@@ -460,17 +459,13 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .save(this.output);
     }
 
-    private ExtendedShapelessRecipeBuilder.Basic<ShapelessCompoundPartRecipe> compoundPart(DeferredItem<?> item, int count) {
-        return compoundPart(RecipeCategory.MISC, item, count);
-    }
-
-    private ExtendedShapelessRecipeBuilder.Basic<ShapelessCompoundPartRecipe> compoundPart(RecipeCategory category, MainPartItem mainPartItem, int count) {
+    private ExtendedShapelessRecipeBuilder.Basic<ShapelessCompoundPartRecipe> compoundPart(MainPartItem mainPartItem, int count) {
         var resultStack = new ItemStackTemplate(mainPartItem, count);
-        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, category, resultStack, ShapelessCompoundPartRecipe::new);
+        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, RecipeCategory.COMBAT, resultStack, ShapelessCompoundPartRecipe::new);
     }
 
-    private ExtendedShapelessRecipeBuilder.Basic<ShapelessCompoundPartRecipe> compoundPart(RecipeCategory category, DeferredItem<?> item, int count) {
-        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, category, item.toStack(count), ShapelessCompoundPartRecipe::new);
+    private ExtendedShapelessRecipeBuilder.Basic<ShapelessCompoundPartRecipe> compoundPart(DeferredItem<?> item, int count) {
+        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, RecipeCategory.MISC, new ItemStackTemplate(item, count), ShapelessCompoundPartRecipe::new);
     }
 
     private void registerCompoundParts() {
@@ -523,23 +518,23 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private ExtendedShapelessRecipeBuilder.Basic<ShapelessGearRecipe> shapelessGear(RecipeCategory category, DeferredItem<?> item) {
-        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, category, item.toStack(), ShapelessGearRecipe::new);
+        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, category, new ItemStackTemplate(item), ShapelessGearRecipe::new);
     }
 
     private ExtendedShapelessRecipeBuilder.Basic<ShapelessGearRecipe> shapelessGear(RecipeCategory category, ItemLike item) {
-        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, category, new ItemStack(item), ShapelessGearRecipe::new);
+        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, category, new ItemStackTemplate(item.asItem()), ShapelessGearRecipe::new);
     }
 
     private ExtendedShapedRecipeBuilder.Basic<ShapedGearRecipe> shapedGear(RecipeCategory category, DeferredItem<?> item) {
-        return new ExtendedShapedRecipeBuilder.Basic<>(this.items, category, item.toStack(), ShapedGearRecipe::new);
+        return new ExtendedShapedRecipeBuilder.Basic<>(this.items, category, new ItemStackTemplate(item), ShapedGearRecipe::new);
     }
 
     private ExtendedShapedRecipeBuilder.Basic<ShapedGearRecipe> shapedGear(RecipeCategory category, ItemLike item) {
-        return new ExtendedShapedRecipeBuilder.Basic<>(this.items, category, new ItemStack(item), ShapedGearRecipe::new);
+        return new ExtendedShapedRecipeBuilder.Basic<>(this.items, category, new ItemStackTemplate(item.asItem()), ShapedGearRecipe::new);
     }
 
     private ExtendedShapelessRecipeBuilder.Basic<ShapelessCompoundPartRecipe> shapelessPart(RecipeCategory category, ItemLike item) {
-        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, category, new ItemStack(item), ShapelessCompoundPartRecipe::new);
+        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, category, new ItemStackTemplate(item.asItem()), ShapelessCompoundPartRecipe::new);
     }
 
     private void registerGear() {
@@ -592,7 +587,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
         armorRecipes(7, GearItemSets.LEGGINGS);
         armorRecipes(4, GearItemSets.BOOTS);
 
-        compoundPart(RecipeCategory.COMBAT, GearItemSets.ELYTRA.mainPart(), 1)
+        compoundPart(GearItemSets.ELYTRA.mainPart(), 1)
                 .requires(BlueprintIngredient.of(GearItemSets.ELYTRA))
                 .requires(PartMaterialIngredient.of(PartTypes.MAIN.get(),
                         GearTypes.ELYTRA.get(),
@@ -1071,13 +1066,6 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.NETHER_STAR_FRAGMENT))
                 .save(this.output);
 
-        /*shapeless(RecipeCategory.MISC, CraftingItems.BRONZE_INGOT, 4)
-                .requires(Tags.Items.INGOTS_COPPER, 3)
-                .requires(Tags.Items.INGOTS_IRON, 1)
-                .unlockedBy("has_item", has(Tags.Items.INGOTS_COPPER))
-                .save(this.output);*/
-
-
         shaped(RecipeCategory.MISC, CraftingItems.ADVANCED_UPGRADE_BASE)
                 .define('/', SgTags.Items.NUGGETS_DIAMOND)
                 .define('D', Tags.Items.DYES_BLUE)
@@ -1448,7 +1436,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private ExtendedShapelessRecipeBuilder<ShapelessRecipe> shapelessExt(RecipeCategory recipeCategory, ItemLike item, int count) {
-        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, recipeCategory, new ItemStack(item, count), ShapelessRecipe::new);
+        return new ExtendedShapelessRecipeBuilder.Basic<>(this.items, recipeCategory, new ItemStackTemplate(item.asItem(), count), ShapelessRecipe::new);
     }
 
     private ExtendedShapedRecipeBuilder.Basic<ShapedRecipe> shapedExt(RecipeCategory recipeCategory, ItemLike item) {
@@ -1456,7 +1444,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     }
 
     private ExtendedShapedRecipeBuilder.Basic<ShapedRecipe> shapedExt(RecipeCategory recipeCategory, ItemLike item, int count) {
-        return new ExtendedShapedRecipeBuilder.Basic<>(this.items, recipeCategory, new ItemStack(item, count), ShapedRecipe::new);
+        return new ExtendedShapedRecipeBuilder.Basic<>(this.items, recipeCategory, new ItemStackTemplate(item.asItem(), count), ShapedRecipe::new);
     }
 
     private void special(RecipeOutput consumer, RecipeSerializer<? extends CraftingRecipe> serializer, Supplier<Recipe<?>> recipe) {

@@ -215,7 +215,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
                 if (materialChargeMod == null) {
                     // charge material
                     data.remove(i);
-                    var materialStack = materialInstance.getItem();
+                    var materialStack = materialInstance.copyItem();
                     modifierType.addModifier(mod, materialStack);
                     data.add(MaterialInstance.of(materialInstance.get(), materialStack));
                     break;

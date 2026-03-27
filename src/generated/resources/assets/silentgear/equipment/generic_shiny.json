@@ -11,6 +11,17 @@
         "texture": "silentgear:generic_shiny_overlay"
       }
     ],
+    "humanoid_baby": [
+      {
+        "dyeable": {
+          "color_when_undyed": -6265536
+        },
+        "texture": "silentgear:generic_shiny"
+      },
+      {
+        "texture": "silentgear:generic_shiny_overlay"
+      }
+    ],
     "humanoid_leggings": [
       {
         "dyeable": {

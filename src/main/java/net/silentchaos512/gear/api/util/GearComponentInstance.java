@@ -1,8 +1,10 @@
 package net.silentchaos512.gear.api.util;
 
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.ComputeContext;
@@ -23,7 +25,34 @@ public interface GearComponentInstance<A extends GearComponent<?>> {
 
     Identifier getId();
 
-    ItemStack getItem();
+    @Nullable ItemStackTemplate getItem();
+
+    default ItemStack copyItem() {
+        var item = getItem();
+        return item != null ? item.create() : ItemStack.EMPTY;
+    }
+
+    default <T> @Nullable T getItemData(Supplier<? extends DataComponentType<? extends T>> componentType) {
+        return getItemData(componentType.get());
+    }
+
+    default <T> @Nullable T getItemData(DataComponentType<? extends T> componentType) {
+        var item = getItem();
+        if (item == null) return null;
+        return item.get(componentType);
+    }
+
+    default <T> T getItemData(Supplier<? extends DataComponentType<? extends T>> componentType, T defaultValue) {
+        return getItemData(componentType.get(), defaultValue);
+    }
+
+    default <T> T getItemData(DataComponentType<? extends T> componentType, T defaultValue) {
+        var item = getItem();
+        if (item == null) return defaultValue;
+        return item.getOrDefault(componentType, defaultValue);
+    }
+
+    boolean is(DataResource<A> resource);
 
     <T, V extends GearPropertyValue<T>> T getProperty(PartType partType, PropertyKey<T, V> key);
 

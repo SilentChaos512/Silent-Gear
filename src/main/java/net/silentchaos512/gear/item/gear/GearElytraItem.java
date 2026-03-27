@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -102,7 +103,7 @@ public class GearElytraItem extends BasicGearItem implements GearArmor {
     }
 
     @Override
-    public float getRepairModifier(ItemStack stack) {
+    public float getRepairModifier(ItemInstance instance) {
         return getGearType().armorDurabilityMultiplier();
     }
 

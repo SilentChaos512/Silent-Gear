@@ -11,11 +11,9 @@
       "id": "minecraft:string"
     },
     {
-      "count": 1,
       "id": "minecraft:iron_ingot"
     },
     {
-      "count": 1,
       "id": "minecraft:tripwire_hook"
     }
   ]

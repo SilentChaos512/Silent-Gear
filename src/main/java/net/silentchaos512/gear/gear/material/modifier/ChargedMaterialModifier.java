@@ -9,6 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
@@ -81,8 +82,8 @@ public abstract class ChargedMaterialModifier implements IMaterialModifier {
         }
 
         @Override
-        public Optional<T> readModifier(ItemStack stack) {
-            var modifierLevel = stack.getOrDefault(this.dataComponentType.get(), 0);
+        public Optional<T> readModifier(ItemInstance instance) {
+            var modifierLevel = instance.getOrDefault(this.dataComponentType.get(), 0);
             if (modifierLevel > 0) {
                 return Optional.of(factory.apply(modifierLevel));
             }

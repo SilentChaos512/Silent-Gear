@@ -5,7 +5,6 @@
   "experience": 0.35,
   "ingredient": "silentgear:sinew",
   "result": {
-    "count": 1,
     "id": "silentgear:dried_sinew"
   }
 }

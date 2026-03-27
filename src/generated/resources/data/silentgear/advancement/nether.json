@@ -14,7 +14,6 @@
       "translate": "advancements.silentgear.nether.description"
     },
     "icon": {
-      "count": 1,
       "id": "minecraft:obsidian"
     },
     "show_toast": false,

@@ -15,8 +15,10 @@ import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.item.ProcessedMaterialItem;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.ItemHelper;
 import net.silentchaos512.gear.util.TextUtil;
 
 import javax.annotation.Nullable;
@@ -32,7 +34,7 @@ public class ProcessedMaterial extends AbstractMaterial {
 
     @Nullable
     public static MaterialInstance getBaseMaterial(MaterialInstance material) {
-        return ProcessedMaterialItem.getMaterial(material.getItem());
+        return material.getItemData(SgDataComponents.MATERIAL_SINGLE);
     }
 
     @Override
@@ -100,7 +102,7 @@ public class ProcessedMaterial extends AbstractMaterial {
     @Override
     public Component getDisplayName(@Nullable MaterialInstance material, PartType type) {
         if (material != null) {
-            return material.getItem().getHoverName().plainCopy();
+            return ItemHelper.getHoverName(material.getItem()).plainCopy();
         }
         return super.getDisplayName(null, type);
     }

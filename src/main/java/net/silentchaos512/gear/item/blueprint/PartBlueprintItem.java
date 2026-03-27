@@ -5,6 +5,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.silentchaos512.gear.api.item.GearType;
@@ -33,12 +34,12 @@ public class PartBlueprintItem extends AbstractBlueprintItem {
     }
 
     @Override
-    public PartType getPartType(ItemStack stack) {
+    public PartType getPartType(ItemInstance instance) {
         return partType.get();
     }
 
     @Override
-    public GearType getGearType(ItemStack stack) {
+    public GearType getGearType(ItemInstance instance) {
         return GearTypes.NONE.get();
     }
 

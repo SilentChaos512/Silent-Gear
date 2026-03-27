@@ -1,6 +1,7 @@
 package net.silentchaos512.gear.gear.part;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -77,7 +78,8 @@ public abstract class AbstractGearPart implements GearPart {
         GearPart.super.onAddToGear(gear, part);
         // Transfer durability from main parts
         if (part.getType() == PartTypes.MAIN.get()) {
-             gear.setDamageValue(part.getItem().getDamageValue());
+            int damage = part.getItemData(DataComponents.DAMAGE, 0);
+            gear.setDamageValue(damage);
         }
     }
 

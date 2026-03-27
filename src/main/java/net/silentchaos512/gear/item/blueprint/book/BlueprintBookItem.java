@@ -44,7 +44,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         return Mth.clamp(slot, 0, INVENTORY_SIZE - 1);
     }
 
-    public static int getSelectedSlot(ItemStack book) {
+    public static int getSelectedSlot(ItemInstance book) {
         return clampSelectedSlot(book.getOrDefault(SgDataComponents.SELECTED_SLOT, 0));
     }
 
@@ -52,13 +52,16 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
         book.set(SgDataComponents.SELECTED_SLOT, clampSelectedSlot(slot));
     }
 
-    private ItemStack getSelectedItem(ItemStack book) {
-        return getInventory(book).getStackInSlot(getSelectedSlot(book));
+    private ItemStack getSelectedItem(ItemInstance book) {
+        if (book instanceof ItemStack stack) {
+            return getInventory(stack).getStackInSlot(getSelectedSlot(book));
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public PartType getPartType(ItemStack stack) {
-        ItemStack selected = getSelectedItem(stack);
+    public PartType getPartType(ItemInstance instance) {
+        ItemStack selected = getSelectedItem(instance);
         if (!selected.isEmpty() && canStore(selected)) {
             return ((AbstractBlueprintItem) selected.getItem()).getPartType(selected);
         }
@@ -66,8 +69,8 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     @Override
-    public GearType getGearType(ItemStack stack) {
-        ItemStack selected = getSelectedItem(stack);
+    public GearType getGearType(ItemInstance instance) {
+        ItemStack selected = getSelectedItem(instance);
         if (!selected.isEmpty() && canStore(selected)) {
             return ((AbstractBlueprintItem) selected.getItem()).getGearType(selected);
         }
@@ -75,7 +78,7 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     }
 
     @Override
-    public int getInventorySize(ItemStack stack) {
+    public int getInventorySize(ItemInstance instance) {
         return INVENTORY_SIZE;
     }
 

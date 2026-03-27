@@ -5,8 +5,6 @@
     "gear_type": "silentgear:tool",
     "part_type": "silentgear:coating"
   },
-  "gear": {
-    "id": "silentgear:pickaxe"
-  },
+  "gear": "silentgear:pickaxe",
   "template": "silentgear:coating_smithing_template"
 }

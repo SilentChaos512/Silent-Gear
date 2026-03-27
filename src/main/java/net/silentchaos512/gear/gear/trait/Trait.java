@@ -55,10 +55,6 @@ public final class Trait {
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, Trait> STREAM_CODEC = StreamCodec.of(
             (buf, t) -> {
-                var traitId = SgRegistries.TRAIT.getKey(t);
-                SilentGear.LOGGER.debug("trait encode {}", traitId);
-                buf.writeIdentifier(traitId);
-
                 ByteBufCodecs.VAR_INT.encode(buf, t.maxLevel);
                 ComponentSerialization.STREAM_CODEC.encode(buf, t.displayName);
                 ComponentSerialization.STREAM_CODEC.encode(buf, t.description);
@@ -67,9 +63,6 @@ public final class Trait {
                 CodecUtils.encodeList(buf, t.wikiLines, ComponentSerialization.STREAM_CODEC);
             },
             buf -> {
-                var traitId = buf.readIdentifier();
-                SilentGear.LOGGER.debug("trait decode {}", traitId);
-
                 var maxLevel = ByteBufCodecs.VAR_INT.decode(buf);
                 var displayName = ComponentSerialization.STREAM_CODEC.decode(buf);
                 var description = ComponentSerialization.STREAM_CODEC.decode(buf);

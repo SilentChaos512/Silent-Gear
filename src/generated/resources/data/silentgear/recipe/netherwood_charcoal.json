@@ -5,7 +5,6 @@
   "experience": 0.15,
   "ingredient": "#silentgear:netherwood_logs",
   "result": {
-    "count": 1,
     "id": "silentgear:netherwood_charcoal"
   }
 }

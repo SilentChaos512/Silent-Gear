@@ -56,7 +56,6 @@ public class LabelWidget extends StringWidget {
 
     @Override
     public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        super.extractWidgetRenderState(graphics, mouseX, mouseY, a);
         extractWithHorizontalOffset(graphics, 0);
     }
 

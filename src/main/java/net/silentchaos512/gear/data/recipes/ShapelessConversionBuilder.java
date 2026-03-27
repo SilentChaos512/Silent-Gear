@@ -26,13 +26,13 @@ public class ShapelessConversionBuilder extends ExtendedShapelessRecipeBuilder<C
     @Override
     public ConversionRecipe createRecipe(ResourceKey<Recipe<?>> id) {
         return new ConversionRecipe(
-                group != null ? group : "",
-                RecipeBuilder.determineBookCategory(category),
+                this.commonInfo,
+                this.bookInfo,
                 new ConversionRecipe.Result(
-                        resultItem.asItem(),
-                        parts
+                        this.resultItem.asItem(),
+                        this.parts
                 ),
-                ingredients
+                this.ingredients
         );
     }
 }

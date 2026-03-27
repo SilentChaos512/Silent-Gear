@@ -3,7 +3,6 @@ package net.silentchaos512.gear.setup.gear;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.enchantment.Enchantable;
 import net.neoforged.neoforge.registries.DeferredRegister;

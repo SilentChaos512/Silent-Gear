@@ -13,7 +13,7 @@
   },
   "display": {
     "announce_to_chat": false,
-    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "background": "minecraft:gui/advancements/backgrounds/adventure",
     "description": {
       "translate": "advancements.silentgear.root.description"
     },
@@ -32,7 +32,6 @@
                     }
                   ]
                 },
-                "count": 1,
                 "id": "silentgear:pickaxe_head"
               },
               "part": "silentgear:pickaxe_head"
@@ -46,7 +45,6 @@
                     }
                   ]
                 },
-                "count": 1,
                 "id": "silentgear:rod"
               },
               "part": "silentgear:rod"
@@ -60,7 +58,6 @@
                     }
                   ]
                 },
-                "count": 1,
                 "id": "silentgear:tip"
               },
               "part": "silentgear:tip"
@@ -74,7 +71,6 @@
                     }
                   ]
                 },
-                "count": 1,
                 "id": "silentgear:grip"
               },
               "part": "silentgear:grip"
@@ -88,7 +84,6 @@
                     }
                   ]
                 },
-                "count": 1,
                 "id": "silentgear:binding"
               },
               "part": "silentgear:binding"
@@ -97,7 +92,6 @@
           "repairedCount": 0
         }
       },
-      "count": 1,
       "id": "silentgear:pickaxe"
     },
     "show_toast": false,

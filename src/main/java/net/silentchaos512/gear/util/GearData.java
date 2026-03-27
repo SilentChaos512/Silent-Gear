@@ -7,6 +7,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -44,31 +45,33 @@ public final class GearData {
         throw new IllegalAccessError("Utility class");
     }
 
-    public static GearPropertiesData getProperties(ItemStack gear) {
-        return getProperties(gear, null);
+    public static GearPropertiesData getProperties(ItemInstance instance) {
+        return getProperties(instance, null);
     }
 
-    public static GearPropertiesData getProperties(ItemStack gear, @Nullable Player player) {
-        var data = gear.get(SgDataComponents.GEAR_PROPERTIES);
+    public static GearPropertiesData getProperties(ItemInstance instance, @Nullable Player player) {
+        var data = instance.get(SgDataComponents.GEAR_PROPERTIES);
         if (data != null) {
             return data;
         }
-        recalculateGearData(gear, null);
-        return gear.getOrDefault(SgDataComponents.GEAR_PROPERTIES, GearPropertiesData.EMPTY);
+        if (instance instanceof ItemStack stack) {
+            recalculateGearData(stack, null);
+        }
+        return instance.getOrDefault(SgDataComponents.GEAR_PROPERTIES, GearPropertiesData.EMPTY);
     }
 
     /**
      * Gets the gear construction data component. If the component is not present, this instead
      * returns a default object to help eliminate frequent null checks.
      *
-     * @param gear The gear item
+     * @param instance The gear item
      * @return The gear construction data component, or a new, empty component
      */
-    public static GearConstructionData getConstruction(ItemStack gear) {
-        if (!(gear.getItem() instanceof GearItem)) {
-            throw new IllegalArgumentException("Not a gear item: " + gear);
+    public static GearConstructionData getConstruction(ItemInstance instance) {
+        if (!GearHelper.isGear(instance)) {
+            throw new IllegalArgumentException("Not a gear item: " + instance);
         }
-        return gear.getOrDefault(SgDataComponents.GEAR_CONSTRUCTION, GearConstructionData.EMPTY);
+        return instance.getOrDefault(SgDataComponents.GEAR_CONSTRUCTION, GearConstructionData.EMPTY);
     }
 
     /**
@@ -81,7 +84,7 @@ public final class GearData {
      *               player during crafting.
      */
     public static void recalculateGearData(ItemStack gear, @Nullable Player player) {
-        var gearConstructionData = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
+        var gearConstructionData = gear.getOrDefault(SgDataComponents.GEAR_CONSTRUCTION, GearConstructionData.EMPTY);
         try {
             var gearType = GearHelper.getType(gear);
             tryRecalculateGearData(gear, player, gearType, gearConstructionData);
@@ -90,18 +93,13 @@ public final class GearData {
 
             CrashReportCategory itemCategory = report.addCategory("Gear Item");
             itemCategory.setDetail("Name", gear.getHoverName().getString() + " (" + NameUtils.fromItem(gear) + ")");
-            itemCategory.setDetail("Data", gearConstructionData != null ? gearConstructionData : "null");
+            itemCategory.setDetail("Data", gearConstructionData);
 
             throw new ReportedException(report);
         }
     }
 
     private static void tryRecalculateGearData(ItemStack gear, @Nullable Player player, GearType gearType, GearConstructionData gearConstructionData) {
-        if (gearConstructionData == null) {
-            //SilentGear.LOGGER.error("{}: gear item has no GearConstructionData?", getPlayersItemNameText(gear, player));
-            return;
-        }
-
         final PartList parts = gearConstructionData.parts();
         if (parts.isEmpty() || parts.getMains().isEmpty()) {
             SilentGear.LOGGER.debug("Not recalculating stats for {}", getPlayersItemNameText(gear, player));
@@ -347,13 +345,13 @@ public final class GearData {
     /**
      * Gets the first part in the construction parts list that is of the given type.
      *
-     * @param stack The gear item
+     * @param instance The gear item
      * @param type  The part type
      * @return The first part of the given type, or null if there is none
      */
     @Nullable
-    public static PartInstance getPartOfType(ItemStack stack, PartType type) {
-        var data = stack.get(SgDataComponents.GEAR_CONSTRUCTION);
+    public static PartInstance getPartOfType(ItemInstance instance, PartType type) {
+        var data = instance.get(SgDataComponents.GEAR_CONSTRUCTION);
         if (data == null) return null;
 
         for (PartInstance part : data.parts()) {
@@ -368,12 +366,12 @@ public final class GearData {
     /**
      * Check if the gear item has at least one part of the given type.
      *
-     * @param stack The gear item
+     * @param instance The gear item
      * @param type  The part type
      * @return True if and only if the construction parts include a part of the given type
      */
-    public static boolean hasPartOfType(ItemStack stack, PartType type) {
-        var data = stack.get(SgDataComponents.GEAR_CONSTRUCTION);
+    public static boolean hasPartOfType(ItemInstance instance, PartType type) {
+        var data = instance.get(SgDataComponents.GEAR_CONSTRUCTION);
         if (data == null) return false;
 
         for (PartInstance part : data.parts()) {
@@ -419,9 +417,9 @@ public final class GearData {
         writeConstructionParts(gear, parts);
     }
 
-    public static boolean hasPart(ItemStack gear, PartType partType, Predicate<PartInstance> predicate) {
-        for (PartInstance partData : getConstruction(gear).parts()) {
-            if (predicate.test(partData)) {
+    public static boolean hasPart(ItemInstance instance, PartType partType, Predicate<PartInstance> predicate) {
+        for (PartInstance part : getConstruction(instance).parts()) {
+            if (part.getType().equals(partType) && predicate.test(part)) {
                 return true;
             }
         }
@@ -432,14 +430,14 @@ public final class GearData {
      * Determine if the gear has the specified part. This scans the construction NBT directly for
      * speed, no part data list is created. Compares part registry names only.
      *
-     * @param gear The gear item
+     * @param instance The gear item
      * @param part The part to check for
      * @return True if the item has the part in its construction, false otherwise
      */
-    public static boolean hasPart(ItemStack gear, GearPart part) {
-        if (checkNonGearItem(gear, "hasPart")) return false;
+    public static boolean hasPart(ItemInstance instance, GearPart part) {
+        if (checkNonGearItem(instance, "hasPart")) return false;
 
-        for (var partInstance : getConstruction(gear).parts()) {
+        for (var partInstance : getConstruction(instance).parts()) {
             if (partInstance.isValid() && partInstance.get() == part) {
                 return true;
             }
@@ -452,23 +450,16 @@ public final class GearData {
      * Determine if the gear has the specified part. This scans the construction NBT directly for
      * speed, no part data list is created. Compares part registry names only.
      *
-     * @param gear The gear item
+     * @param instance The gear item
      * @param part The part to check for
      * @return True if the item has the part in its construction, false otherwise
      */
-    public static boolean hasPart(ItemStack gear, DataResource<GearPart> part) {
-        if (checkNonGearItem(gear, "hasPart")) return false;
+    public static boolean hasPart(ItemInstance instance, DataResource<GearPart> part) {
+        if (checkNonGearItem(instance, "hasPart")) return false;
 
-        String partId = part.getId().toString();
-        return hasPart(gear, partId);
-    }
-
-    private static boolean hasPart(ItemStack gear, String partId) {
-        var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
-        if (data == null) return false;
-
-        for (PartInstance part : data.parts()) {
-            if (part.getId().toString().equalsIgnoreCase(partId)) {
+        var data = instance.getOrDefault(SgDataComponents.GEAR_CONSTRUCTION, GearConstructionData.EMPTY);
+        for (PartInstance partInConstruction : data.parts()) {
+            if (partInConstruction.is(part)) {
                 return true;
             }
         }
@@ -530,13 +521,13 @@ public final class GearData {
 
     //endregion
 
-    public static boolean isExampleGear(ItemStack stack) {
-        var data = stack.get(SgDataComponents.GEAR_CONSTRUCTION);
+    public static boolean isExampleGear(ItemInstance instance) {
+        var data = instance.get(SgDataComponents.GEAR_CONSTRUCTION);
         return data != null && data.isExample();
     }
 
-    public static int getBrokenCount(ItemStack stack) {
-        var data = stack.get(SgDataComponents.GEAR_CONSTRUCTION);
+    public static int getBrokenCount(ItemInstance instance) {
+        var data = instance.get(SgDataComponents.GEAR_CONSTRUCTION);
         return data != null ? data.brokenCount() : 0;
     }
 
@@ -548,8 +539,8 @@ public final class GearData {
         }
     }
 
-    public static int getRepairedCount(ItemStack stack) {
-        var data = stack.get(SgDataComponents.GEAR_CONSTRUCTION);
+    public static int getRepairedCount(ItemInstance instance) {
+        var data = instance.get(SgDataComponents.GEAR_CONSTRUCTION);
         return data != null ? data.repairedCount() : 0;
     }
 
@@ -561,10 +552,10 @@ public final class GearData {
         }
     }
 
-    private static boolean checkNonGearItem(ItemStack stack, String methodName) {
-        if (GearHelper.isGear(stack)) return false;
+    private static boolean checkNonGearItem(ItemInstance instance, String methodName) {
+        if (GearHelper.isGear(instance)) return false;
 
-        SilentGear.LOGGER.error("Called {} on non-gear item, {}", methodName, stack);
+        SilentGear.LOGGER.error("Called {} on non-gear item, {}", methodName, instance);
         SilentGear.LOGGER.catching(new IllegalArgumentException());
         return true;
     }
@@ -586,11 +577,11 @@ public final class GearData {
         @SubscribeEvent
         public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
             Player player = event.getEntity();
-            StackList.from(player.getInventory())
-                    .stream()
-                    .filter(s -> s.getItem() instanceof GearItem)
-                    .forEach(s -> recalculateGearData(s, player));
-
+            for (ItemStack stack : player.getInventory()) {
+                if (stack.getItem() instanceof GearItem) {
+                    recalculateGearData(stack, player);
+                }
+            }
             if (ModList.get().isLoaded(Const.CURIOS)) {
                 CuriosCompat.getEquippedCurios(player).forEach(s -> recalculateGearData(s, player));
             }

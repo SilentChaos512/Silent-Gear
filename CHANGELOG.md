@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.1-4.1.7] - 2026-03-27
+- Updated to NeoForge 26.1
+- Note: JEI plugin is disabled until JEI updates and I can update the plugin
+
 ## [1.21.1-4.1.6.1] - 2026-03-18
 ### Fixed
 - Crash on servers when recalculating gear caused when checking for simple material names (ForAnything47) [#901, #900]

@@ -7,6 +7,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Unit;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifier;
 import net.silentchaos512.gear.api.material.modifier.IMaterialModifierType;
@@ -42,8 +43,8 @@ public abstract class UnitMaterialModifier implements IMaterialModifier {
         }
 
         @Override
-        public Optional<M> readModifier(ItemStack stack) {
-            return stack.has(this.dataComponent) ? Optional.of(this.instance) : Optional.empty();
+        public Optional<M> readModifier(ItemInstance instance) {
+            return instance.has(this.dataComponent) ? Optional.of(this.instance) : Optional.empty();
         }
 
         @Override

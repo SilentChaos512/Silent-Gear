@@ -9,13 +9,16 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.util.GearComponentInstance;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRecipeBookCategories;
 import net.silentchaos512.gear.setup.SgRecipes;
 
@@ -28,21 +31,21 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
             RecordCodecBuilder.mapCodec(
                     instance -> instance.group(
                             Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.ingredient),
-                            Codec.list(ItemStack.CODEC).fieldOf("results").forGetter(r -> r.results)
+                            Codec.list(ItemStackTemplate.CODEC).fieldOf("results").forGetter(r -> r.results)
                     ).apply(instance, SalvagingRecipe::new)
             ),
             StreamCodec.composite(
                     Ingredient.CONTENTS_STREAM_CODEC, r -> r.ingredient,
-                    ItemStack.STREAM_CODEC.apply(ByteBufCodecs.collection(NonNullList::createWithCapacity)), r -> r.results,
+                    ItemStackTemplate.STREAM_CODEC.apply(ByteBufCodecs.collection(NonNullList::createWithCapacity)), r -> r.results,
                     SalvagingRecipe::new
             )
     );
 
     protected final Ingredient ingredient;
-    private final List<ItemStack> results;
+    private final List<ItemStackTemplate> results;
     @Nullable private PlacementInfo placementInfo = null;
 
-    public SalvagingRecipe(Ingredient ingredient, List<ItemStack> results) {
+    public SalvagingRecipe(Ingredient ingredient, List<ItemStackTemplate> results) {
         this.ingredient = ingredient;
         this.results = ImmutableList.copyOf(results);
     }
@@ -51,11 +54,11 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
         return ingredient;
     }
 
-    public List<ItemStack> getPossibleResults(Container inv) {
-        return new ArrayList<>(results);
+    public List<ItemStackTemplate> getPossibleResults(Container inv) {
+        return this.results;
     }
 
-    public List<ItemStack> getPossibleResultsForDisplay() {
+    public List<ItemStackTemplate> getPossibleResultsForDisplay() {
         return getPossibleResults(new SimpleContainer(1));
     }
 
@@ -68,7 +71,7 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
     @Override
     public ItemStack assemble(SingleRecipeInput input) {
         // DO NOT USE
-        return !results.isEmpty() ? results.getFirst() : ItemStack.EMPTY;
+        return !results.isEmpty() ? results.getFirst().create() : ItemStack.EMPTY;
     }
 
     @Override
@@ -116,30 +119,35 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
      * @param part The part
      * @return The list of items to return
      */
-    public static List<ItemStack> salvagePart(PartInstance part) {
-        ItemStack partStack = part.getItem();
-        if (canSalvagePart(part, partStack)) {
-            List<MaterialInstance> materialsInPart = CompoundPartItem.getMaterials(partStack);
+    public static List<ItemStackTemplate> salvagePart(PartInstance part) {
+        ItemStack partStack = part.copyItem();
+        if (canSalvagePart(part)) {
+            List<MaterialInstance> materialsInPart = part.getItemData(SgDataComponents.MATERIAL_LIST, List.of());
             if (materialsInPart.isEmpty()) {
-                SilentGear.LOGGER.warn("Compound part contains no materials? {}", partStack);
-                return List.of(partStack);
+                SilentGear.LOGGER.warn("Compound part contains no materials? {}", part);
+                return itemToList(part);
             }
 
-            List<ItemStack> result = new ArrayList<>();
+            List<ItemStackTemplate> result = new ArrayList<>();
             var partMaterials = part.getMaterials();
             for (var material : partMaterials) {
                 var salvagedMaterial = material.onSalvage();
-                result.add(salvagedMaterial.getItem());
+                result.addAll(itemToList(salvagedMaterial));
             }
             return result;
         }
-        return List.of(partStack);
+        return itemToList(part);
     }
 
-    private static boolean canSalvagePart(PartInstance part, ItemStack partStack) {
-        return part.isValid()
-                && part.get() instanceof CoreGearPart
-                && partStack.getItem() instanceof CompoundPartItem
-                && part.getItem().getMaxStackSize() == 1;
+    static List<ItemStackTemplate> itemToList(GearComponentInstance<?> instance) {
+        return instance.getItem() != null ? List.of(instance.getItem()) : List.of();
+    }
+
+    private static boolean canSalvagePart(PartInstance part) {
+        var partItem = part.getItem();
+        return part.isValid() && part.get() instanceof CoreGearPart
+                && partItem != null
+                && partItem.item().value() instanceof CompoundPartItem
+                && partItem.getMaxStackSize() == 1;
     }
 }

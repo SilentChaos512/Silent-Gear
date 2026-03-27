@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,7 +29,7 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+    public boolean canPerformAction(ItemInstance instance, ItemAbility itemAbility) {
         return getGearType().canPerformAction(itemAbility);
     }
 
@@ -48,7 +49,7 @@ public class GearProspectorHammerItem extends GearPickaxeItem {
         Set<BlockState> matches = getTargetedBlocks(context, range, face);
 
         // List the ores found in chat, if any
-        player.displayClientMessage(listFoundBlocks(matches), false);
+        player.sendSystemMessage(listFoundBlocks(matches));
 
         GearHelper.attemptDamage(context.getItemInHand(), 2, player, context.getHand());
         player.getCooldowns().addCooldown(context.getItemInHand(), 20);

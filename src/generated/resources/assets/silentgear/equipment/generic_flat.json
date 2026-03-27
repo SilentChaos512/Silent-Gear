@@ -8,6 +8,14 @@
         "texture": "silentgear:generic_flat"
       }
     ],
+    "humanoid_baby": [
+      {
+        "dyeable": {
+          "color_when_undyed": -6265536
+        },
+        "texture": "silentgear:generic_flat"
+      }
+    ],
     "humanoid_leggings": [
       {
         "dyeable": {

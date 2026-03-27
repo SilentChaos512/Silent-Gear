@@ -5,7 +5,6 @@
   "experience": 1.0,
   "ingredient": "#c:ores/crimson_iron",
   "result": {
-    "count": 1,
     "id": "silentgear:crimson_iron_ingot"
   }
 }

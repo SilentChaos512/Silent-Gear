@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.UseRemainder;
@@ -618,7 +619,7 @@ public class TraitsProvider extends TraitsProviderBase {
                                         )
                                         .set(
                                                 DataComponents.USE_REMAINDER,
-                                                new UseRemainder(new ItemStack(Items.STICK))
+                                                new UseRemainder(new ItemStackTemplate(Items.STICK))
                                         )
                                         .build()
                         )

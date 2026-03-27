@@ -24,7 +24,6 @@ import net.silentchaos512.gear.gear.part.CoreGearPart;
 import net.silentchaos512.gear.gear.part.PartSerializers;
 import net.silentchaos512.gear.setup.*;
 import net.silentchaos512.gear.setup.gear.*;
-import net.silentchaos512.gear.world.SgWorldFeatures;
 import net.silentchaos512.lib.event.Greetings;
 import net.silentchaos512.lib.event.InitialSpawnItems;
 
@@ -68,7 +67,6 @@ class SideProxy implements IProxy {
         SgSlotDisplayTypes.SLOT_DISPLAY_TYPES.register(modEventBus);
         SgSounds.REGISTRAR.register(modEventBus);
 
-        modEventBus.addListener(SgWorldFeatures::registerFeatures);
         modEventBus.addListener(SideProxy::commonSetup);
         modEventBus.addListener(SideProxy::registerCapabilities);
         modEventBus.addListener(SideProxy::imcEnqueue);

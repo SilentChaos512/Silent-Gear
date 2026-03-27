@@ -5,7 +5,6 @@
   "experience": 0.5,
   "ingredient": "#c:dusts/blaze_gold",
   "result": {
-    "count": 1,
     "id": "silentgear:blaze_gold_ingot"
   }
 }

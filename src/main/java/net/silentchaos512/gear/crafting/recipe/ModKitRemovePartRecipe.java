@@ -73,7 +73,7 @@ public class ModKitRemovePartRecipe extends CustomRecipe {
             ItemStack stack = inv.getItem(i);
 
             if (stack.getItem() instanceof GearItem) {
-                list.set(i, part != null ? part.getItem() : ItemStack.EMPTY);
+                list.set(i, part != null ? part.copyItem() : ItemStack.EMPTY);
             } else {
                 var craftingRemainder = stack.getCraftingRemainder();
                 if (craftingRemainder != null) {

@@ -92,11 +92,6 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
         return this;
     }
 
-    @Override
-    public Item getResult() {
-        return resultItem;
-    }
-
     public void save(RecipeOutput pRecipeOutput) {
         String name = "alloying/" + recipeFolder + "/" + BuiltInRegistries.ITEM.getKey(resultItem).getPath();
         if (resultMaterial != null) {

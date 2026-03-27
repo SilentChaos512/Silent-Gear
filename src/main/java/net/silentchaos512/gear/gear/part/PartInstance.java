@@ -2,11 +2,15 @@ package net.silentchaos512.gear.gear.part;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -27,6 +31,7 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.ItemHelper;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nonnull;
@@ -37,29 +42,31 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
     public static final Codec<PartInstance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     DataResource.PART_CODEC.fieldOf("part").forGetter(p -> p.part),
-                    ItemStack.OPTIONAL_CODEC.optionalFieldOf("item", ItemStack.EMPTY).forGetter(p -> p.craftingItem)
-            ).apply(instance, PartInstance::of)
+                    ItemStackTemplate.CODEC.optionalFieldOf("item").forGetter(p -> Optional.ofNullable(p.craftingItem))
+            ).apply(instance, PartInstance::new)
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, PartInstance> STREAM_CODEC = StreamCodec.composite(
             DataResource.PART_STREAM_CODEC, p -> p.part,
-            ItemStack.OPTIONAL_STREAM_CODEC, p -> p.craftingItem,
+            ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC), p -> Optional.ofNullable(p.craftingItem),
             PartInstance::new
     );
 
     private final DataResource<GearPart> part;
-    private final ItemStack craftingItem;
+    @Nullable private final ItemStackTemplate craftingItem;
 
     private PartInstance(DataResource<GearPart> part) {
-        this(part, ItemStack.EMPTY);
+        this(part, (ItemStackTemplate) null);
     }
 
-    private PartInstance(DataResource<GearPart> part, ItemStack craftingItem) {
+    private PartInstance(DataResource<GearPart> part, @Nullable ItemStackTemplate craftingItem) {
         this.part = part;
-        this.craftingItem = craftingItem.copy();
-        if (!this.craftingItem.isEmpty()) {
-            this.craftingItem.setCount(1);
-        }
+        this.craftingItem = craftingItem != null ? craftingItem.withCount(1) : null;
+    }
+
+    /** @noinspection OptionalUsedAsFieldOrParameterType*/
+    private PartInstance(DataResource<GearPart> part, Optional<ItemStackTemplate> craftingItem) {
+        this(part, craftingItem.orElse(null));
     }
 
     public static PartInstance of(DataResource<GearPart> part) {
@@ -70,12 +77,12 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
         return new PartInstance(DataResource.part(SgRegistries.PART.getKey(part)));
     }
 
-    public static PartInstance of(DataResource<GearPart> part, ItemStack craftingItem) {
-        return new PartInstance(part, craftingItem);
+    public static PartInstance of(DataResource<GearPart> part, @Nullable ItemInstance craftingItem) {
+        return new PartInstance(part, ItemHelper.toTemplate(craftingItem));
     }
 
-    public static PartInstance of(GearPart part, ItemStack craftingItem) {
-        return new PartInstance(DataResource.part(SgRegistries.PART.getKey(part)), craftingItem);
+    public static PartInstance of(GearPart part, @Nullable ItemInstance craftingItem) {
+        return new PartInstance(DataResource.part(SgRegistries.PART.getKey(part)), ItemHelper.toTemplate(craftingItem));
     }
 
     public static PartInstance create(DataResource<GearPart> part, CompoundPartItem item, DataResource<Material> material) {
@@ -83,9 +90,9 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
     }
 
     public static PartInstance create(DataResource<GearPart> part, CompoundPartItem item, List<MaterialInstance> materials) {
-        ItemStack partStack = new ItemStack(item);
-        partStack.set(SgDataComponents.MATERIAL_LIST, materials);
-        return new PartInstance(part, partStack);
+        var patch = DataComponentPatch.builder().set(SgDataComponents.MATERIAL_LIST.get(), materials).build();
+        var template = new ItemStackTemplate(item, patch);
+        return new PartInstance(part, template);
     }
 
     @Nullable
@@ -103,7 +110,10 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
                 return null;
             }
         }
-        return of(part, craftingItem);
+        if (!craftingItem.isEmpty()) {
+            return of(part, ItemStackTemplate.fromNonEmptyStack(craftingItem));
+        }
+        return of(part);
     }
 
     @Nullable
@@ -149,7 +159,7 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
     }
 
     @Override
-    public ItemStack getItem() {
+    public @Nullable ItemStackTemplate getItem() {
         return craftingItem;
     }
 
@@ -174,6 +184,11 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
     public MaterialInstance getPrimaryMaterial() {
         var part = getNullable();
         return part != null ? part.getPrimaryMaterial(this) : null;
+    }
+
+    @Override
+    public boolean is(DataResource<GearPart> resource) {
+        return this.part.equals(resource);
     }
 
     @Override
@@ -267,12 +282,11 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PartInstance otherPart = (PartInstance) o;
-        return this.part.equals(otherPart.part) &&
-                ItemStack.isSameItemSameComponents(craftingItem, otherPart.craftingItem);
+        return this.part.equals(otherPart.part) && ItemHelper.equals(craftingItem, otherPart.craftingItem);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(part, ItemStack.hashItemAndComponents(craftingItem));
+        return Objects.hash(part, ItemHelper.hashItemAndComponents(craftingItem));
     }
 }

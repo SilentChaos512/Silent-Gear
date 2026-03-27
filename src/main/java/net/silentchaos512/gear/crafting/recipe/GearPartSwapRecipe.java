@@ -113,7 +113,7 @@ public class GearPartSwapRecipe extends CustomRecipe {
                             // Return old part
                             PartInstance oldPart = partsOfType.get(index);
                             oldPart.onRemoveFromGear(gear);
-                            ItemStack oldPartItem = oldPart.getItem();
+                            ItemStack oldPartItem = oldPart.copyItem();
                             // Store gear damage on main part item
                             if (oldPartItem.getItem() instanceof MainPartItem) {
                                 oldPartItem.setDamageValue(gear.getDamageValue());

@@ -19,9 +19,11 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.item.CompoundMaterialItem;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.ItemHelper;
 import net.silentchaos512.gear.util.SynergyUtils;
 import net.silentchaos512.lib.util.Color;
 import net.silentchaos512.lib.util.MathUtils;
@@ -36,7 +38,7 @@ public class CompoundMaterial extends AbstractMaterial {
     }
 
     public List<MaterialInstance> getSubMaterials(MaterialInstance material) {
-        return CompoundMaterialItem.getSubMaterials(material.getItem());
+        return material.getItemData(SgDataComponents.MATERIAL_LIST, List.of());
     }
 
     @Override
@@ -192,7 +194,7 @@ public class CompoundMaterial extends AbstractMaterial {
     @Override
     public Component getDisplayName(@Nullable MaterialInstance material, PartType type) {
         if (material != null) {
-            return material.getItem().getHoverName();
+            return ItemHelper.getHoverName(material.getItem());
         }
         return this.display.name().copy();
     }
@@ -200,7 +202,7 @@ public class CompoundMaterial extends AbstractMaterial {
     @Override
     public Component getSimpleName(@Nullable MaterialInstance material) {
         if (material != null) {
-            return material.getItem().getHoverName();
+            return ItemHelper.getHoverName(material.getItem());
         }
         return this.display.name().copy();
     }

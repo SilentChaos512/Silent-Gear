@@ -211,8 +211,8 @@ public final class TooltipHandler {
     }
 
     private static GearType getPartGearType(PartInstance part) {
-        if (part.getItem().getItem() instanceof CompoundPartItem) {
-            GearType gearType = ((CompoundPartItem) part.getItem().getItem()).getGearType();
+        if (part.getItem() != null && part.getItem().item().value() instanceof CompoundPartItem compoundPartItem) {
+            GearType gearType = compoundPartItem.getGearType();
 
             if (gearType.isGear()) {
                 return gearType;

@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -94,7 +95,7 @@ public class GearArmorItem extends BasicGearItem implements GearArmor {
     //region Stats and attributes
 
     @Override
-    public float getRepairModifier(ItemStack stack) {
+    public float getRepairModifier(ItemInstance instance) {
         return getGearType().armorDurabilityMultiplier();
     }
 

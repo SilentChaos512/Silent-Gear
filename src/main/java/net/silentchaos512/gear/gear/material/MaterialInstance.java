@@ -8,7 +8,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
@@ -31,6 +33,7 @@ import net.silentchaos512.gear.setup.gear.MaterialModifiers;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.gear.util.ItemHelper;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nonnull;
@@ -41,14 +44,14 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public static final Codec<MaterialInstance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     DataResource.MATERIAL_CODEC.fieldOf("material").forGetter(m -> m.material),
-                    ItemStack.OPTIONAL_CODEC.optionalFieldOf("item", ItemStack.EMPTY).forGetter(m -> m.item),
+                    ItemStackTemplate.CODEC.optionalFieldOf("item").forGetter(m -> Optional.ofNullable(m.item)),
                     Codec.list(MaterialModifiers.CODEC).optionalFieldOf("modifiers", List.of()).forGetter(m -> m.modifiers)
             ).apply(instance, MaterialInstance::new)
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MaterialInstance> STREAM_CODEC = StreamCodec.composite(
             DataResource.MATERIAL_STREAM_CODEC, m -> m.material,
-            ItemStack.OPTIONAL_STREAM_CODEC, m -> m.item,
+            ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC), m -> Optional.ofNullable(m.item),
             MaterialModifiers.STREAM_CODEC.apply(ByteBufCodecs.list()), m -> m.modifiers,
             MaterialInstance::new
     );
@@ -56,23 +59,26 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     private static final Map<Identifier, MaterialInstance> QUICK_CACHE = new HashMap<>();
 
     private final DataResource<Material> material;
-    private final ItemStack item;
+    @Nullable private final ItemStackTemplate item;
     private final List<IMaterialModifier> modifiers;
 
     private MaterialInstance(DataResource<Material> material) {
-        this(material, ItemStack.EMPTY);
+        this(material, null);
     }
 
-    private MaterialInstance(DataResource<Material> material, ItemStack craftingItem) {
+    private MaterialInstance(DataResource<Material> material, @Nullable ItemStackTemplate craftingItem) {
         this(material, craftingItem, getMaterialModifiersFromItem(craftingItem));
     }
-    private MaterialInstance(DataResource<Material> material, ItemStack craftingItem, List<IMaterialModifier> modifiers) {
+
+    private MaterialInstance(DataResource<Material> material, @Nullable ItemStackTemplate craftingItem, List<IMaterialModifier> modifiers) {
         this.material = material;
-        this.item = craftingItem.copy();
-        if (!this.item.isEmpty()) {
-            this.item.setCount(1);
-        }
+        this.item = craftingItem != null ? craftingItem.withCount(1) : null;
         this.modifiers = modifiers;
+    }
+
+    /** @noinspection OptionalUsedAsFieldOrParameterType*/
+    private MaterialInstance(DataResource<Material> material, Optional<ItemStackTemplate> craftingItem, List<IMaterialModifier> modifiers) {
+        this(material, craftingItem.orElse(null), modifiers);
     }
 
     public static MaterialInstance of(DataResource<Material> material) {
@@ -83,27 +89,29 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return of(DataResource.material(SgRegistries.MATERIAL.getKey(material)));
     }
 
-    public static MaterialInstance of(DataResource<Material> material, ItemStack craftingItem) {
-        return new MaterialInstance(material, craftingItem);
+    public static MaterialInstance of(DataResource<Material> material, @Nullable ItemInstance craftingItem) {
+        return new MaterialInstance(material, ItemHelper.toTemplate(craftingItem));
     }
 
-    public static MaterialInstance of(Material material, ItemStack craftingItem) {
-        return of(DataResource.material(SgRegistries.MATERIAL.getKey(material)), craftingItem);
+    public static MaterialInstance of(Material material, @Nullable ItemInstance craftingItem) {
+        return of(DataResource.material(SgRegistries.MATERIAL.getKey(material)), ItemHelper.toTemplate(craftingItem));
     }
 
     @Nullable
     public static MaterialInstance from(ItemStack stack) {
         Material material = SgRegistries.MATERIAL.fromItem(stack);
-        if (material != null) {
-            return of(material, stack);
+        if (material != null && !stack.isEmpty()) {
+            return of(material, ItemStackTemplate.fromNonEmptyStack(stack));
         }
         return null;
     }
 
-    private static List<IMaterialModifier> getMaterialModifiersFromItem(ItemStack stack) {
+    private static List<IMaterialModifier> getMaterialModifiersFromItem(@Nullable ItemInstance instance) {
         var list = new ArrayList<IMaterialModifier>();
-        for (IMaterialModifierType<?> type : SgRegistries.MATERIAL_MODIFIER_TYPE) {
-            type.readModifier(stack).ifPresent(list::add);
+        if (instance != null) {
+            for (IMaterialModifierType<?> type : SgRegistries.MATERIAL_MODIFIER_TYPE) {
+                type.readModifier(instance).ifPresent(list::add);
+            }
         }
         return List.copyOf(list);
     }
@@ -142,7 +150,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     }
 
     @Override
-    public ItemStack getItem() {
+    public @Nullable ItemStackTemplate getItem() {
         return item;
     }
 
@@ -156,7 +164,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return mat != null ? mat.getIngredient() : Optional.empty();
     }
 
-    public boolean canRepair(ItemStack gear) {
+    public boolean canRepair(ItemInstance gear) {
         if (!material.isPresent() || !material.get().isAllowedInPart(this, PartTypes.MAIN.get())) {
             return false;
         }
@@ -173,11 +181,11 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return false;
     }
 
-    public int getRepairValue(ItemStack gear) {
-        return this.getRepairValue(gear, RepairContext.Type.QUICK);
+    public int getRepairValue(ItemInstance instance) {
+        return this.getRepairValue(instance, RepairContext.Type.QUICK);
     }
 
-    public int getRepairValue(ItemStack gear, RepairContext.Type type) {
+    public int getRepairValue(ItemInstance gear, RepairContext.Type type) {
         if (this.canRepair(gear)) {
             float durability = getProperty(PartTypes.MAIN.get(), GearHelper.getDurabilityProperty(gear));
             float repairValueMulti = 1 + getProperty(PartTypes.MAIN.get(), GearProperties.REPAIR_VALUE.get());
@@ -226,14 +234,14 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         if (o == null || getClass() != o.getClass()) return false;
         MaterialInstance that = (MaterialInstance) o;
         return this.getId().equals(that.getId()) &&
-                ItemStack.isSameItemSameComponents(item, that.item);
+                ItemHelper.equals(item, that.item);
     }
 
     @Override
     public int hashCode() {
         return Arrays.hashCode(new int[]{
                 this.material.getId().hashCode(),
-                ItemStack.hashItemAndComponents(this.item)
+                ItemHelper.hashItemAndComponents(this.item)
         });
     }
 
@@ -331,12 +339,13 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return material != null ? material.onSalvage(this) : this;
     }
 
+    @Override
     public boolean is(DataResource<Material> material) {
         return this.material == material;
     }
 
     public boolean parentIs(DataResource<Material> material) {
-         @Nullable var parent = get().getParent();
+        @Nullable var parent = get().getParent();
         return parent == material;
     }
 }

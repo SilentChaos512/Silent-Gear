@@ -29,6 +29,7 @@ import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.IngredientUtils;
+import net.silentchaos512.gear.util.ItemHelper;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
@@ -87,7 +88,7 @@ public class CoreGearPart extends AbstractGearPart {
     @Override
     public Component getDisplayName(@Nullable PartInstance part) {
         if (part != null) {
-            return part.getItem().getHoverName();
+            return ItemHelper.getHoverName(part.getItem());
         }
         return super.getDisplayName(null);
     }

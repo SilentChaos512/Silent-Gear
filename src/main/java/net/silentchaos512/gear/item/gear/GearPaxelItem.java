@@ -3,6 +3,7 @@ package net.silentchaos512.gear.item.gear;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
@@ -26,7 +27,7 @@ public class GearPaxelItem extends GearPickaxeItem {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+    public boolean canPerformAction(ItemInstance instance, ItemAbility itemAbility) {
         return getGearType().canPerformAction(itemAbility);
     }
 
