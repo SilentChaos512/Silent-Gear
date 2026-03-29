@@ -34,7 +34,6 @@ import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.ItemHelper;
 import net.silentchaos512.lib.util.Color;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -147,7 +146,6 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
         return part.getId();
     }
 
-    @Nonnull
     @Override
     public GearPart get() {
         return part.get();

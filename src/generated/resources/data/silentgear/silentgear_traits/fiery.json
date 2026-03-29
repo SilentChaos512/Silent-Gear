@@ -1,9 +1,27 @@
 {
-  "conditions": [],
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "silentgear:weapon"
+    }
+  ],
   "description": {
     "translate": "trait.silentgear.fiery.desc"
   },
-  "effects": [],
+  "effects": [
+    {
+      "type": "silentgear:enchantment",
+      "enchantments": {
+        "minecraft:fire_aspect": [
+          1,
+          2
+        ],
+        "minecraft:flame": [
+          1
+        ]
+      }
+    }
+  ],
   "max_level": 2,
   "name": {
     "translate": "trait.silentgear.fiery"

@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.data.trait;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
@@ -258,9 +260,29 @@ public class TraitsProvider extends TraitsProviderBase {
 
         // Enchantment
 
-        ret.add(new TraitBuilder(Const.Traits.FIERY, 2));
-        ret.add(new TraitBuilder(Const.Traits.SILKY, 1));
-        ret.add(new TraitBuilder(Const.Traits.FORTUNATE, 3));
+        ret.add(new TraitBuilder(Const.Traits.FIERY, 2)
+                .withGearTypeCondition(GearTypes.WEAPON)
+                .effects(
+                        new EnchantmentTraitEffect(
+                                ImmutableMap.of(
+                                        Enchantments.FIRE_ASPECT, List.of(1, 2),
+                                        Enchantments.FLAME, List.of(1)
+                                )
+                        )
+                )
+        );
+        ret.add(new TraitBuilder(Const.Traits.SILKY, 1)
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL)
+                .effects(
+                        EnchantmentTraitEffect.single(Enchantments.SILK_TOUCH, 1)
+                )
+        );
+        ret.add(new TraitBuilder(Const.Traits.FORTUNATE, 3)
+                .withGearTypeCondition(GearTypes.HARVEST_TOOL)
+                .effects(
+                        EnchantmentTraitEffect.single(Enchantments.FORTUNE, 1, 2, 3)
+                )
+        );
 
         // Wielder Effect (Potion)
 

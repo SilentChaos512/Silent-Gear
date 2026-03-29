@@ -34,7 +34,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -256,11 +255,6 @@ public final class GearEvents {
             event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
         }
 
-        if (TraitHelper.hasTrait(tool, Const.Traits.SILKY)) { // TODO: Make it a trait effect?
-            // Block has been silk touched, no XP
-            event.setDroppedExperience(0);
-        }
-
         if (TraitHelper.hasTrait(tool, Const.Traits.JABBERWOCKY) && event.getState().is(Tags.Blocks.ORES_DIAMOND) && !hasSilkTouch(event.getLevel(), tool)) {
             Entity entity = JABBERWOCKY_MOBS.get(SilentGear.RANDOM.nextInt(JABBERWOCKY_MOBS.size())).apply(event.getBreaker().level());
             entity.teleportTo(event.getPos().getX() + 0.5, event.getPos().getY(), event.getPos().getZ() + 0.5);
@@ -272,7 +266,7 @@ public final class GearEvents {
         Holder.Reference<Enchantment> silkTouch = level.registryAccess()
                 .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(Enchantments.SILK_TOUCH);
-        return EnchantmentHelper.getTagEnchantmentLevel(silkTouch, tool) > 0;
+        return tool.getEnchantmentLevel(silkTouch) > 0;
     }
 
     @SubscribeEvent

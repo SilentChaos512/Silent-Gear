@@ -54,6 +54,9 @@ public record GearTypeTraitCondition(GearType gearType) implements ITraitConditi
                 // Don't filter yet, this could fail on upgrades and materials
                 return true;
             }
+        } else if (context instanceof ComputeContext.Material) {
+            // Don't filter on compound materials
+            return true;
         }
         // Gear items
         return isMatch(context);

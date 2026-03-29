@@ -41,14 +41,16 @@ public class PartList extends AbstractList<PartInstance> {
 
     public static PartList mutable(Collection<PartInstance> c) {
         PartList ret = new PartList();
-        ret.addAll(c);
+        for (var part : c) {
+            if (part != null) {
+                ret.add(part);
+            }
+        }
         return ret;
     }
 
     public static PartList mutable(PartInstance... parts) {
-        PartList ret = new PartList();
-        Collections.addAll(ret, parts);
-        return ret;
+        return mutable(Arrays.asList(parts));
     }
 
     public static PartList.Immutable immutable(Collection<PartInstance> c) {
@@ -110,9 +112,9 @@ public class PartList extends AbstractList<PartInstance> {
 
     public List<PartInstance> getParts(Predicate<PartInstance> predicate) {
         ImmutableList.Builder<PartInstance> builder = ImmutableList.builder();
-        for (PartInstance partData : this.list) {
-            if (predicate.test(partData)) {
-                builder.add(partData);
+        for (PartInstance part : this.list) {
+            if (part != null && part.isValid() && predicate.test(part)) {
+                builder.add(part);
             }
         }
         return builder.build();
@@ -248,11 +250,15 @@ public class PartList extends AbstractList<PartInstance> {
         static final Immutable EMPTY = new Immutable();
 
         private Immutable(Collection<PartInstance> parts) {
-            this.list.addAll(parts);
+            for (var part : parts) {
+                if (part != null) {
+                    this.list.add(part);
+                }
+            }
         }
 
         private Immutable(PartInstance... parts) {
-            Collections.addAll(this.list, parts);
+            this(Arrays.asList(parts));
         }
 
         @Override

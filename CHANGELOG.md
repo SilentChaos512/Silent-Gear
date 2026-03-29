@@ -3,6 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.1-4.1.8] - 2026-03-29
+### Added
+- Enchantment trait effects. These now add enchantments without actually tampering with item data, so the enchantments will not show up in the tooltip, but should work correctly in most cases.
+  - Fortunate and Silky now apply Fortune or Silk Touch. Fiery applies Fire Aspect or Flame.
+  - Also fixes [#885]
+### Fixed
+- Traits with gear type conditions being filtered out of alloys [#903]
+- Possible fix for null parts in parts lists [#895]
+- Wild plants spawning only one per patch
+
 ## [26.1-4.1.7] - 2026-03-27
 - Updated to NeoForge 26.1
 - Note: JEI plugin is disabled until JEI updates and I can update the plugin

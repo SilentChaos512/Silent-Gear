@@ -21,9 +21,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.function.SetPartsFunction;
 import net.silentchaos512.gear.loot.modifier.BonusDropsTraitLootModifier;
-import net.silentchaos512.gear.loot.modifier.FortuneTraitLootModifier;
 import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
-import net.silentchaos512.gear.loot.modifier.SilkTouchTraitLootModifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,10 +46,6 @@ public final class SgLoot {
             registerModifier("bonus_drops_trait", BonusDropsTraitLootModifier.CODEC);
     public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<MagmaticTraitLootModifier>> MAGMATIC_SMELTING =
             registerModifier("magmatic_smelting", MagmaticTraitLootModifier.CODEC);
-    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<SilkTouchTraitLootModifier>> SILK_TOUCH_TRAIT =
-            registerModifier("silk_touch_trait", SilkTouchTraitLootModifier.CODEC);
-    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<FortuneTraitLootModifier>> FORTUNE_TRAIT =
-            registerModifier("fortune_trait", FortuneTraitLootModifier.CODEC);
 
     private SgLoot() {
     }

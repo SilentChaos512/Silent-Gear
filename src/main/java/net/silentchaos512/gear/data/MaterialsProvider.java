@@ -230,7 +230,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.TIP, GearProperties.MAGIC_DAMAGE, 1, NumberProperty.Operation.ADD)
                 .stat(PartTypes.TIP, GearProperties.RARITY, 14, NumberProperty.Operation.ADD)
                 .trait(PartTypes.TIP, Const.Traits.SOFT, 2)
-                .trait(PartTypes.TIP, Const.Traits.FIERY, 4)
+                .trait(PartTypes.TIP, Const.Traits.FIERY, 2)
                 //coating
                 .stat(PartTypes.COATING, GearProperties.DURABILITY, -0.05f, NumberProperty.Operation.MULTIPLY_TOTAL)
                 .stat(PartTypes.COATING, GearProperties.ARMOR_DURABILITY, -0.05f, NumberProperty.Operation.MULTIPLY_TOTAL)
