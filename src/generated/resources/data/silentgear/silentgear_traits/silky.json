@@ -1,9 +1,23 @@
 {
-  "conditions": [],
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "silentgear:harvest_tool"
+    }
+  ],
   "description": {
     "translate": "trait.silentgear.silky.desc"
   },
-  "effects": [],
+  "effects": [
+    {
+      "type": "silentgear:enchantment",
+      "enchantments": {
+        "minecraft:silk_touch": [
+          1
+        ]
+      }
+    }
+  ],
   "max_level": 1,
   "name": {
     "translate": "trait.silentgear.silky"

@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-4.1.4] - 2026-03-29
+### Added
+- Enchantment trait effects. These now add enchantments without actually tampering with item data, so the enchantments will not show up in the tooltip, but should work correctly in most cases.
+### Fixed
+- Traits with gear type conditions being filtered out of alloys [#903]
+
 ## [1.21.1-4.1.3.1] - 2026-03-18
 ### Fixed
 - Crash on servers when recalculating gear caused when checking for simple material names (ForAnything47) [#901, #900]

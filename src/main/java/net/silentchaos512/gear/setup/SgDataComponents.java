@@ -2,7 +2,6 @@ package net.silentchaos512.gear.setup;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -10,17 +9,14 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.MaterialGrade;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.api.property.GearPropertyMap;
-import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.core.component.RepairKitCodecs;
+import net.silentchaos512.gear.core.component.TraitAddedEnchantments;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -51,6 +47,12 @@ public class SgDataComponents {
             builder -> builder
                     .persistent(GearPropertiesData.CODEC)
                     .networkSynchronized(GearPropertiesData.STREAM_CODEC)
+    );
+    public static final Supplier<DataComponentType<TraitAddedEnchantments>> TRAIT_ENCHANTMENTS = REGISTRAR.registerComponentType(
+            "trait_enchantments",
+            builder -> builder
+                    .persistent(TraitAddedEnchantments.CODEC)
+                    .networkSynchronized(TraitAddedEnchantments.STREAM_CODEC)
     );
     @Deprecated // Remove in 1.21.2
     public static final Supplier<DataComponentType<String>> GEAR_MODEL_KEY = REGISTRAR.registerComponentType(

@@ -141,10 +141,9 @@ public final class GearData {
 
         if (oldProperties == null) return;
 
-        // Remove attribute modifiers, so they can be completely redone
+        // Remove data components that need to be completely redone
         gear.remove(DataComponents.ATTRIBUTE_MODIFIERS);
-
-        // TODO: Remove trait-added enchantments
+        gear.remove(SgDataComponents.TRAIT_ENCHANTMENTS);
 
         // Let traits do their thing
         for (var trait : oldProperties.getTraits()) {

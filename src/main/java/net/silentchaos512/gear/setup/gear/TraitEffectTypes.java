@@ -63,6 +63,12 @@ public class TraitEffectTypes {
             DurabilityTraitEffect.STREAM_CODEC,
             "Adds a chance of either canceling durability loss or losing extra durability"
     );
+    public static final Supplier<TraitEffectType<EnchantmentTraitEffect>> ENCHANTMENT = register(
+            "enchantment",
+            EnchantmentTraitEffect.CODEC,
+            EnchantmentTraitEffect.STREAM_CODEC,
+            "Adds enchantments to an item without conflicting with traditional enchantments"
+    );
     public static final Supplier<TraitEffectType<ExtraDamageTraitEffect>> EXTRA_DAMAGE = register(
             "extra_damage",
             ExtraDamageTraitEffect.CODEC,

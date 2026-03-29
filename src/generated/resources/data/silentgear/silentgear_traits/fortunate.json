@@ -1,9 +1,25 @@
 {
-  "conditions": [],
+  "conditions": [
+    {
+      "type": "silentgear:gear_type",
+      "gear_type": "silentgear:harvest_tool"
+    }
+  ],
   "description": {
     "translate": "trait.silentgear.fortunate.desc"
   },
-  "effects": [],
+  "effects": [
+    {
+      "type": "silentgear:enchantment",
+      "enchantments": {
+        "minecraft:fortune": [
+          1,
+          2,
+          3
+        ]
+      }
+    }
+  ],
   "max_level": 3,
   "name": {
     "translate": "trait.silentgear.fortunate"

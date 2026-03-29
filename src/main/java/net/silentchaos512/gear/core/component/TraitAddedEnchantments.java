@@ -1,40 +1,59 @@
 package net.silentchaos512.gear.core.component;
 
-import net.minecraft.core.Holder;
+import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.Codec;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public record TraitAddedEnchantments(
-        List<Holder<Enchantment>> enchantments // FIXME: map of trait data resource to enchantments?
+        Map<ResourceKey<Enchantment>, Integer> enchantments
 ) {
-    /*public static final Codec<TraitAddedEnchantments> CODEC = RecordCodecBuilder.create(
-            instance -> instance.group(
-                    Codec.list(BuiltInRegistries.ENCHANTMENT.holderByNameCodec()).fieldOf("enchantments").forGetter(d -> d.enchantments)
-            ).apply(instance, TraitAddedEnchantments::new)
-    );
+    public static final TraitAddedEnchantments EMPTY = new TraitAddedEnchantments(ImmutableMap.of());
+
+    public static final Codec<TraitAddedEnchantments> CODEC =
+            Codec.unboundedMap(ResourceKey.codec(Registries.ENCHANTMENT), Codec.INT)
+                    .xmap(TraitAddedEnchantments::new, d -> d.enchantments);
+
     public static final StreamCodec<RegistryFriendlyByteBuf, TraitAddedEnchantments> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(Registries.ENCHANTMENT).apply(ByteBufCodecs.list()), d -> d.enchantments,
+            ByteBufCodecs.map(
+                    HashMap::new,
+                    ResourceKey.streamCodec(Registries.ENCHANTMENT),
+                    ByteBufCodecs.VAR_INT,
+                    256
+            ),
+            e -> e.enchantments,
             TraitAddedEnchantments::new
     );
 
-    public TraitAddedEnchantments(List<Holder<Enchantment>> enchantments) {
-        this.enchantments = ImmutableList.copyOf(enchantments);
+    public TraitAddedEnchantments(Map<ResourceKey<Enchantment>, Integer> enchantments) {
+        this.enchantments = ImmutableMap.copyOf(enchantments);
     }
 
-    public static TraitAddedEnchantments empty() {
-        return new TraitAddedEnchantments(Collections.emptyList());
+    public Mutable toMutable() {
+        return new Mutable(this.enchantments);
     }
 
-    public static class Mutable {
-        private final List<Holder<Enchantment>> list = new ArrayList<>();
+    public record Mutable(
+            Map<ResourceKey<Enchantment>, Integer> enchantments
+    ) {
+        public Mutable(Map<ResourceKey<Enchantment>, Integer> enchantments) {
+            this.enchantments = new HashMap<>(enchantments);
+        }
 
-        public Mutable(TraitAddedEnchantments original) {
-            this.list.addAll(original.enchantments);
+        public Mutable set(ResourceKey<Enchantment> enchantment, int level) {
+            this.enchantments.put(enchantment, level);
+            return this;
         }
 
         public TraitAddedEnchantments toImmutable() {
-            return new TraitAddedEnchantments(this.list);
+            return new TraitAddedEnchantments(this.enchantments);
         }
-    }*/
+    }
 }

@@ -42,7 +42,7 @@
       "harvest_speed": 11.0,
       "harvest_tier": {
         "incorrect_blocks_for_tool": "minecraft:incorrect_for_gold_tool",
-        "level_hint": "1",
+        "level_hint": "0",
         "name": "gold"
       },
       "magic_armor": 10.0,
