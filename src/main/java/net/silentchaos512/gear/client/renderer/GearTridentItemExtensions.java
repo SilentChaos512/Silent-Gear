@@ -12,8 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.silentchaos512.gear.item.gear.GearTridentItem;
 
-public class SgClientItemExtensions implements IClientItemExtensions {
-    private final SgBlockEntityWithoutLevelRenderer renderer = new SgBlockEntityWithoutLevelRenderer();
+public class GearTridentItemExtensions implements IClientItemExtensions {
+    private final GearTridentRenderer renderer = new GearTridentRenderer();
 
     @Override
     public BlockEntityWithoutLevelRenderer getCustomRenderer() {

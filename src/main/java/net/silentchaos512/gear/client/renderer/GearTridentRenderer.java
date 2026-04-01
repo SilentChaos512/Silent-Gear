@@ -15,9 +15,9 @@ import net.silentchaos512.gear.client.model.GearTridentModel;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
-public class SgBlockEntityWithoutLevelRenderer extends BlockEntityWithoutLevelRenderer {
+public class GearTridentRenderer extends BlockEntityWithoutLevelRenderer {
 	private GearTridentModel trident_model;
-    public SgBlockEntityWithoutLevelRenderer() {
+    public GearTridentRenderer() {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
         trident_model = GearTridentModel.bakeModel();
     }
