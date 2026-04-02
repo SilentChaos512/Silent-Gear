@@ -69,7 +69,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         var gearTypeName = GearHelper.gearTypeName(gearType);
 
         var material = partInst.getPrimaryMaterial();
-        if (material == null) throw new IllegalStateException("Part has no material: " + partInst);
+        if (material == null) return List.of();
 
         if (partType == PartTypes.MAIN.get()) {
             var mainPart = construction.getCoatingOrMainPart();
