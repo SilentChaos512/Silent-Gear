@@ -22,8 +22,6 @@ import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.client.util.ColorUtils;
-import net.silentchaos512.gear.core.component.GearConstructionData;
-import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
@@ -60,7 +58,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         }
     }
 
-    public ResourceLocation getPartTextureLocation(GearType gearType, PartInstance partInst) {
+    public List<ResourceLocation> getPartTextureLocations (GearType gearType, PartInstance partInst) {
         var part = partInst.get();
         var partType = part.getType();
         var gearTypeName = GearHelper.gearTypeName(gearType);
@@ -69,36 +67,52 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         if (material == null) throw new IllegalStateException("Part has no material: " + partInst);
 
         if (partType == PartTypes.MAIN.get()) {
-            return ResourceLocation.fromNamespaceAndPath(
-                    SilentGear.MOD_ID,
-                    "item/%s/main_generic_%s".formatted(gearTypeName, material.getMainTextureType().alias)
-            );
+            if (material.getMainTextureType() == TextureType.HIGH_CONTRAST) {
+                return List.of(
+                        ResourceLocation.fromNamespaceAndPath(
+                                SilentGear.MOD_ID,
+                                "item/%s/main_generic_hc".formatted(gearTypeName)
+                        ),
+                        ResourceLocation.fromNamespaceAndPath(
+                                SilentGear.MOD_ID,
+                                "item/%s/_highlight".formatted(gearTypeName)
+                        )
+                );
+            }
+            else {
+                return List.of(
+                        ResourceLocation.fromNamespaceAndPath(
+                                SilentGear.MOD_ID,
+                                "item/%s/main_generic_%s".formatted(gearTypeName, material.getMainTextureType().alias)
+                        )
+                );
+            }
         }
         else if (partType == PartTypes.ROD.get()) {
-            return ResourceLocation.fromNamespaceAndPath(
+            return List.of(ResourceLocation.fromNamespaceAndPath(
                     SilentGear.MOD_ID,
                     "item/%s/rod_generic_%s".formatted(gearTypeName, material.getMainTextureType().alias)
-            );
+            ));
         }
         else if (partType == PartTypes.TIP.get()) {
-            return ResourceLocation.fromNamespaceAndPath(
+            return List.of(ResourceLocation.fromNamespaceAndPath(
                     SilentGear.MOD_ID,
                     "item/%s/tip_sharp".formatted(gearTypeName)
-            );
+            ));
         }
         else if (partType == PartTypes.GRIP.get()) {
-            return ResourceLocation.fromNamespaceAndPath(
+            return List.of(ResourceLocation.fromNamespaceAndPath(
                     SilentGear.MOD_ID,
                     "item/%s/grip_wool".formatted(gearTypeName)
-            );
+            ));
         }
         else if (partType == PartTypes.BINDING.get()) {
-            return ResourceLocation.fromNamespaceAndPath(
+            return List.of(ResourceLocation.fromNamespaceAndPath(
                     SilentGear.MOD_ID,
                     "item/%s/binding_generic".formatted(gearTypeName)
-            );
+            ));
         }
-        return ResourceLocation.fromNamespaceAndPath("neoforge", "empty");
+        return List.of();
     }
 
     @Override
@@ -117,22 +131,22 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         var vc = buffer.getBuffer(RenderType.CUTOUT);
 
         for (var partInst : construction.parts()) {
-            var spriteLoc = getPartTextureLocation(type, partInst);
-            if (spriteLoc.getPath().equals("empty")) continue;
+            var spriteLocations = getPartTextureLocations(type, partInst);
 
-            SilentGear.LOGGER.info(spriteLoc);
-            var sprite = blockAtlas.apply(spriteLoc);
+            for (var spriteLocation : spriteLocations) {
+                var sprite = blockAtlas.apply(spriteLocation);
 
-            var packedColor = ColorUtils.getBlendedColorForPartInGear(stack, partInst.getType());
-            var red = FastColor.ARGB32.red(packedColor);
-            var green = FastColor.ARGB32.green(packedColor);
-            var blue = FastColor.ARGB32.blue(packedColor);
-            var alpha = FastColor.ARGB32.alpha(packedColor);
+                var packedColor = ColorUtils.getBlendedColorForPartInGear(stack, partInst.getType());
+                var red = FastColor.ARGB32.red(packedColor);
+                var green = FastColor.ARGB32.green(packedColor);
+                var blue = FastColor.ARGB32.blue(packedColor);
+                var alpha = FastColor.ARGB32.alpha(packedColor);
 
-            var quads = getQuadsForSprite(sprite);
+                var quads = getQuadsForSprite(sprite);
 
-            for (BakedQuad quad : quads) {
-                vc.putBulkData(poseStack.last(), quad, red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f, packedLight, packedOverlay);
+                for (BakedQuad quad : quads) {
+                    vc.putBulkData(poseStack.last(), quad, red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f, packedLight, packedOverlay);
+                }
             }
         }
         poseStack.popPose();
