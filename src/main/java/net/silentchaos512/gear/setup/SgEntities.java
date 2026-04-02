@@ -73,9 +73,26 @@ public final class SgEntities {
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-            event.registerItem(
-                    new GearItemExtensions(),
-                    GearItemSets.PICKAXE.gearItem()
+            event.registerItem(new GearItemExtensions(),
+                    GearItemSets.SWORD.gearItem(),
+                    GearItemSets.KATANA.gearItem(),
+                    GearItemSets.MACHETE.gearItem(),
+                    GearItemSets.SPEAR.gearItem(),
+                    GearItemSets.MACE.gearItem(),
+                    GearItemSets.KNIFE.gearItem(),
+                    GearItemSets.DAGGER.gearItem(),
+                    GearItemSets.PICKAXE.gearItem(),
+                    GearItemSets.SHOVEL.gearItem(),
+                    GearItemSets.AXE.gearItem(),
+                    GearItemSets.PAXEL.gearItem(),
+                    GearItemSets.HAMMER.gearItem(),
+                    GearItemSets.EXCAVATOR.gearItem(),
+                    GearItemSets.SAW.gearItem(),
+                    GearItemSets.PROSPECTOR_HAMMER.gearItem(),
+                    GearItemSets.HOE.gearItem(),
+                    GearItemSets.MATTOCK.gearItem(),
+                    GearItemSets.SICKLE.gearItem(),
+                    GearItemSets.SHEARS.gearItem()
             );
             // Register special model rendering for trident
             event.registerItem(

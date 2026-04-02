@@ -1,5 +1,6 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "builtin/entity",
+  "gui_light": "front",
   "display": {
     "thirdperson_righthand": {
       "rotation": [ 30, -90, 55 ],

@@ -148,26 +148,26 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         // Temp models
         // Gear
-        tempGearStandardTool(GearItemSets.SWORD, itemHandheld);
-        tempGearStandardTool(GearItemSets.KATANA, itemHandheld);
-        tempGearStandardTool(GearItemSets.MACHETE, itemHandheld);
-        tempGearStandardTool(GearItemSets.SPEAR, itemHandheld);
+        withExistingParent(GearItemSets.SWORD.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.KATANA.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.MACHETE.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.SPEAR.name(), modLoc("item/base_gear"));
         tempGearStandardTool(GearItemSets.TRIDENT, itemHandheld, false);
-        tempGearStandardTool(GearItemSets.MACE, itemHandheld);
-        tempGearStandardTool(GearItemSets.KNIFE, itemHandheld);
-        tempGearStandardTool(GearItemSets.DAGGER, itemHandheld);
+        withExistingParent(GearItemSets.MACE.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.KNIFE.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.DAGGER.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.PICKAXE.name(), modLoc("item/base_gear"));
-        tempGearStandardTool(GearItemSets.SHOVEL, itemHandheld);
-        tempGearStandardTool(GearItemSets.AXE, itemHandheld);
-        tempGearStandardTool(GearItemSets.PAXEL, itemHandheld);
-        tempGearStandardTool(GearItemSets.HAMMER, itemHandheld);
-        tempGearStandardTool(GearItemSets.EXCAVATOR, itemHandheld);
-        tempGearStandardTool(GearItemSets.SAW, getExistingFile(modLoc("item/saw_base")));
-        tempGearStandardTool(GearItemSets.PROSPECTOR_HAMMER, itemHandheld);
-        tempGearStandardTool(GearItemSets.HOE, itemHandheld);
-        tempGearStandardTool(GearItemSets.MATTOCK, itemHandheld);
-        tempGearStandardTool(GearItemSets.SICKLE, itemHandheld);
-        tempGearStandardTool(GearItemSets.SHEARS, itemHandheld);
+        withExistingParent(GearItemSets.SHOVEL.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.AXE.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.PAXEL.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.HAMMER.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.EXCAVATOR.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.SAW.name(), modLoc("item/saw_base"));
+        withExistingParent(GearItemSets.PROSPECTOR_HAMMER.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.HOE.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.MATTOCK.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.SICKLE.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.SHEARS.name(), modLoc("item/base_gear"));
         tempGearBow(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
         // tempGearBow(SgItems.BOW, itemHandheld);
         // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
