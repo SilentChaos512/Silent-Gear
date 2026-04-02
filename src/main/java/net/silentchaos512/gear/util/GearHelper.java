@@ -826,4 +826,8 @@ public final class GearHelper {
         float f = Math.max(0f, (float) (stack.getMaxDamage() - stack.getDamageValue()) / stack.getMaxDamage());
         return Mth.hsvToRgb(f / 3f, 1f, 1f);
     }
+
+    public static String gearTypeName(GearType gearType) {
+        return Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(gearType)).getPath();
+    }
 }

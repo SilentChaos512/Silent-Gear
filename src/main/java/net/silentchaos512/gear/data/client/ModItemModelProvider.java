@@ -26,6 +26,7 @@ import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.Const;
+import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnull;
@@ -226,10 +227,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearPart(SgItems.SETTING);
     }
 
-    private String gearTypeName(GearType gearType) {
-        return Objects.requireNonNull(SgRegistries.GEAR_TYPE.getKey(gearType)).getPath();
-    }
-
     private String itemNamePath(GearItemSet<?> itemSet) {
         return BuiltInRegistries.ITEM.getKey(itemSet.gearItem()).getPath();
     }
@@ -243,7 +240,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private void tempGearStandardTool(GearItemSet<? extends GearItem> item, ModelFile parent, boolean buildMainModel) {
-        String name = gearTypeName(item.type());
+        String name = GearHelper.gearTypeName(item.type());
         String path = BuiltInRegistries.ITEM.getKey(item.gearItem()).getPath();
         ModelFile mainModelFile = new ModelFile.UncheckedModelFile(modLoc("item/" + path));
 
@@ -318,7 +315,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder tempGear(DeferredItem<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.get().getGearType());
+        String name = GearHelper.gearTypeName(item.get().getGearType());
         return getBuilder(item.getId().getPath())
                 .parent(parent)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
@@ -327,7 +324,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder tempGearBow(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
+        String name = GearHelper.gearTypeName(item.type());
         return getBuilder(itemNamePath(item))
                 .parent(parent)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
@@ -337,7 +334,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder tempGearCurio(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
+        String name = GearHelper.gearTypeName(item.type());
         return getBuilder(itemNamePath(item))
                 .parent(parent)
                 .texture("layer0", "item/" + name + "/main_generic_hc")
@@ -347,7 +344,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder tempGearArmor(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
+        String name = GearHelper.gearTypeName(item.type());
         return getBuilder(itemNamePath(item))
                 .parent(parent)
                 .texture("layer0", "item/" + name + "/main_generic_hc")
@@ -355,7 +352,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder tempGearElytra(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
+        String name = GearHelper.gearTypeName(item.type());
         return getBuilder(itemNamePath(item))
                 .parent(parent)
                 .texture("layer0", "item/" + name + "/main_generic_hc")
@@ -364,7 +361,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder tempGearArrow(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = gearTypeName(item.type());
+        String name = GearHelper.gearTypeName(item.type());
         return getBuilder(itemNamePath(item))
                 .parent(parent)
                 .texture("layer0", "item/" + name + "/rod_generic_lc")
@@ -374,7 +371,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder tempMainPart(GearItemSet<? extends GearItem> item) {
-        String name = gearTypeName(item.type());
+        String name = GearHelper.gearTypeName(item.type());
         return getBuilder(itemNamePath(item.mainPart()))
                 .parent(getExistingFile(ResourceLocation.withDefaultNamespace("item/generated")))
                 .texture("layer0", "item/" + name + "/main_generic_hc")
