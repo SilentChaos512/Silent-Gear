@@ -156,7 +156,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         tempGearStandardTool(GearItemSets.MACE, itemHandheld);
         tempGearStandardTool(GearItemSets.KNIFE, itemHandheld);
         tempGearStandardTool(GearItemSets.DAGGER, itemHandheld);
-        tempGearStandardTool(GearItemSets.PICKAXE, itemHandheld);
         tempGearStandardTool(GearItemSets.SHOVEL, itemHandheld);
         tempGearStandardTool(GearItemSets.AXE, itemHandheld);
         tempGearStandardTool(GearItemSets.PAXEL, itemHandheld);
