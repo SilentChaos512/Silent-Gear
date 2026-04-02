@@ -69,7 +69,16 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         var gearTypeName = GearHelper.gearTypeName(gearType);
 
         var material = partInst.getPrimaryMaterial();
-        if (material == null) return List.of();
+        if (material == null) {
+            if (partInst.getId().equals(ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, "spoon_upgrade"))) {
+                return List.of(
+                        ResourceLocation.fromNamespaceAndPath(
+                                SilentGear.MOD_ID,
+                                "item/%s/spoon".formatted(gearTypeName)
+                        )
+                );
+            }
+        }
 
         if (partType == PartTypes.MAIN.get()) {
             var mainPart = construction.getCoatingOrMainPart();
@@ -152,12 +161,13 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                 var red = FastColor.ARGB32.red(packedColor);
                 var green = FastColor.ARGB32.green(packedColor);
                 var blue = FastColor.ARGB32.blue(packedColor);
-                var alpha = FastColor.ARGB32.alpha(packedColor);
+                // Alpha is discarded and forced to full for cutout rendering
+                // Additionally prevents parts without materials from not rendering
 
                 var quads = getQuadsForSprite(sprite);
 
                 for (BakedQuad quad : quads) {
-                    vc.putBulkData(poseStack.last(), quad, red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f, packedLight, packedOverlay);
+                    vc.putBulkData(poseStack.last(), quad, red / 255.0f, green / 255.0f, blue / 255.0f, 1.0f, packedLight, packedOverlay);
                 }
             }
         }
