@@ -22,6 +22,7 @@ import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
@@ -58,7 +59,11 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         }
     }
 
-    public List<ResourceLocation> getPartTextureLocations (GearType gearType, PartInstance partInst) {
+    public List<ResourceLocation> getPartTextureLocations (
+            GearType gearType,
+            PartInstance partInst,
+            GearConstructionData construction
+    ) {
         var part = partInst.get();
         var partType = part.getType();
         var gearTypeName = GearHelper.gearTypeName(gearType);
@@ -67,7 +72,12 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         if (material == null) throw new IllegalStateException("Part has no material: " + partInst);
 
         if (partType == PartTypes.MAIN.get()) {
-            if (material.getMainTextureType() == TextureType.HIGH_CONTRAST) {
+            var mainPart = construction.getCoatingOrMainPart();
+            if (mainPart == null)
+                throw new IllegalStateException("Gear appears to have no main part: " + construction);
+            if (mainPart.getPrimaryMaterial() == null)
+                throw new IllegalStateException("Main part appears to have no material: " + mainPart);
+            if (mainPart.getPrimaryMaterial().getMainTextureType() == TextureType.HIGH_CONTRAST) {
                 return List.of(
                         ResourceLocation.fromNamespaceAndPath(
                                 SilentGear.MOD_ID,
@@ -125,18 +135,20 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         var construction = GearData.getConstruction(stack);
 
         GearType type = item.getGearType();
-        String name = GearHelper.gearTypeName(type);
 
         poseStack.pushPose();
         var vc = buffer.getBuffer(RenderType.CUTOUT);
 
         for (var partInst : construction.parts()) {
-            var spriteLocations = getPartTextureLocations(type, partInst);
+            var spriteLocations = getPartTextureLocations(type, partInst, construction);
 
             for (var spriteLocation : spriteLocations) {
                 var sprite = blockAtlas.apply(spriteLocation);
 
                 var packedColor = ColorUtils.getBlendedColorForPartInGear(stack, partInst.getType());
+                if (partInst.getType() == PartTypes.MAIN.get() && GearData.hasPartOfType(stack, PartTypes.COATING.get())) {
+                    packedColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get());
+                }
                 var red = FastColor.ARGB32.red(packedColor);
                 var green = FastColor.ARGB32.green(packedColor);
                 var blue = FastColor.ARGB32.blue(packedColor);
