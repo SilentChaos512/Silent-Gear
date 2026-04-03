@@ -24,12 +24,8 @@ public class GearTridentRenderer extends BlockEntityWithoutLevelRenderer {
     
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext transform, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-    	ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-    	ModelManager modelManager = Minecraft.getInstance().getModelManager();
 	   	if (transform == ItemDisplayContext.GUI || transform == ItemDisplayContext.FIXED || transform == ItemDisplayContext.GROUND) {
-			BakedModel model = modelManager.getModel(GearTridentModel.TRIDENT_ICON);
-			model = model.getOverrides().resolve(model, stack, null, null, 0);
-			itemRenderer.render(stack, transform, false, poseStack, bufferSource, packedLight, packedOverlay, model);
+			GearItemExtensions.renderer.renderByItem(stack, transform, poseStack, bufferSource, packedLight, packedOverlay);
 		} else {
 	       poseStack.pushPose();
 	       poseStack.scale(1.0F, -1.0F, -1.0F);

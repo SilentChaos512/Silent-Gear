@@ -6,7 +6,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 @MethodsReturnNonnullByDefault
 public class GearItemExtensions implements IClientItemExtensions {
-    private final GearItemRenderer renderer = new GearItemRenderer();
+    final static GearItemRenderer renderer = new GearItemRenderer();
 
     @Override
     public BlockEntityWithoutLevelRenderer getCustomRenderer() {

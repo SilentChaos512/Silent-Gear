@@ -152,7 +152,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(GearItemSets.KATANA.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.MACHETE.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.SPEAR.name(), modLoc("item/base_gear"));
-        tempGearStandardTool(GearItemSets.TRIDENT, itemHandheld, false);
+        //TODO: Trident's model is not datagenned currently
         withExistingParent(GearItemSets.MACE.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.KNIFE.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.DAGGER.name(), modLoc("item/base_gear"));
@@ -168,6 +168,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(GearItemSets.MATTOCK.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.SICKLE.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.SHEARS.name(), modLoc("item/handheld_gear"));
+        //TODO: Make custom renderer for 'animated' items such as the bow
         tempGearBow(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
         // tempGearBow(SgItems.BOW, itemHandheld);
         // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
