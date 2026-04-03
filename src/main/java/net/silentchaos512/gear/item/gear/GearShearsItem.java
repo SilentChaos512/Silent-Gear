@@ -17,6 +17,7 @@ import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.client.util.GearClientHelper;
@@ -67,6 +68,14 @@ public class GearShearsItem extends ShearsItem implements GearTool {
             return InteractionResult.PASS;
         }
         return super.interactLivingEntity(stack, playerIn, entity, hand);
+    }
+
+    @Override
+    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+        if (GearHelper.isBroken(stack)) {
+            return false;
+        }
+        return super.canPerformAction(stack, itemAbility);
     }
 
     @Override

@@ -155,9 +155,11 @@ public final class GearData {
 
     private static void onRecalculatePost(ItemStack gear, @Nullable Player player, GearPropertiesData finalProperties) {
         // Set other data components
-        if (gear.getItem() instanceof GearTool gearTool) {
+        if (!GearHelper.isBroken(gear) && gear.getItem() instanceof GearTool gearTool) {
             GearPropertiesData properties = gear.getOrDefault(SgDataComponents.GEAR_PROPERTIES, GearPropertiesData.EMPTY);
             gear.set(DataComponents.TOOL, gearTool.createToolProperties(properties));
+        } else {
+            gear.remove(DataComponents.TOOL);
         }
 
         var modelIndex = calculateModelIndex(gear);
