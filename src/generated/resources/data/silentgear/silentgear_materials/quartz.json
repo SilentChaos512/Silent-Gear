@@ -97,7 +97,7 @@
     "silentgear:tip": {
       "armor_durability": {
         "operation": "ADD",
-        "value": 64.0
+        "value": 4.0
       },
       "attack_damage": {
         "operation": "ADD",
