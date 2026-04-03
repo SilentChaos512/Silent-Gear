@@ -131,6 +131,12 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                     "item/%s/binding_generic".formatted(gearTypeName)
             ));
         }
+        else if (partType == PartTypes.FLETCHING.get()) {
+            return List.of(ResourceLocation.fromNamespaceAndPath(
+                    SilentGear.MOD_ID,
+                    "item/%s/fletching_generic".formatted(gearTypeName)
+            ));
+        }
         return List.of();
     }
 
