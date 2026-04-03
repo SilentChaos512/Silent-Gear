@@ -117,6 +117,7 @@ class SideProxy implements IProxy {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.SALVAGER.get(), (be, side) -> be.getItemHandler());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.STARLIGHT_CHARGER.get(), (be, side) -> be.getItemHandler());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.SUPER_MIXER.get(), (be, side) -> be.getItemHandler());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SgBlockEntities.CRUDE_MIXER.get(), (be, side) -> be.getItemHandler());
     }
 
     private static void imcEnqueue(InterModEnqueueEvent event) {

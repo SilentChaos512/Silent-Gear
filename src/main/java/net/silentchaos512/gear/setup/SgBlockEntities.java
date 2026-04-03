@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.setup;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -14,15 +13,15 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.alloymaker.AlloyMakerBlockEntity;
+import net.silentchaos512.gear.block.alloymaker.CrudeAlloyMakerBlockEntity;
+import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
 import net.silentchaos512.gear.block.press.MetalPressBlockEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerBlockEntity;
 import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlockEntity;
 import net.silentchaos512.gear.client.renderer.blockentity.StoneAnvilRenderer;
 import net.silentchaos512.gear.crafting.recipe.alloy.*;
-import net.silentchaos512.gear.gear.material.modifier.CrudeMaterialModifier;
 import net.silentchaos512.gear.gear.material.modifier.StarchargedMaterialModifier;
 import net.silentchaos512.gear.util.Const;
 
@@ -63,12 +62,7 @@ public final class SgBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyMakerBlockEntity<CrudeAlloyRecipe>>> CRUDE_MIXER = register(
             "crude_mixer",
-            (pos, state) -> new AlloyMakerBlockEntity<>(Const.CRUDE_MIXER_INFO, pos, state) {
-                @Override
-                protected void applyModifiers(ItemStack result) {
-                    CrudeMaterialModifier.setOn(result);
-                }
-            },
+            (pos, state) -> new CrudeAlloyMakerBlockEntity<>(Const.CRUDE_MIXER_INFO, pos, state),
             SgBlocks.CRUDE_MIXER
     );
 
