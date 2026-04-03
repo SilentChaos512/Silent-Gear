@@ -167,16 +167,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(GearItemSets.HOE.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.MATTOCK.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.SICKLE.name(), modLoc("item/base_gear"));
-        withExistingParent(GearItemSets.SHEARS.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.SHEARS.name(), modLoc("item/handheld_gear"));
         tempGearBow(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
         // tempGearBow(SgItems.BOW, itemHandheld);
         // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
         // tempGearBow(SgItems.SLINGSHOT, itemHandheld);
-        withExistingParent(GearItemSets.ARROW.name(), modLoc("item/base_gear"));
-        withExistingParent(GearItemSets.HELMET.name(), modLoc("item/base_gear"));
-        withExistingParent(GearItemSets.CHESTPLATE.name(), modLoc("item/base_gear"));
-        withExistingParent(GearItemSets.LEGGINGS.name(), modLoc("item/base_gear"));
-        withExistingParent(GearItemSets.BOOTS.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.ARROW.name(), modLoc("item/handheld_gear"));
+        withExistingParent(GearItemSets.HELMET.name(), modLoc("item/handheld_gear"));
+        withExistingParent(GearItemSets.CHESTPLATE.name(), modLoc("item/handheld_gear"));
+        withExistingParent(GearItemSets.LEGGINGS.name(), modLoc("item/handheld_gear"));
+        withExistingParent(GearItemSets.BOOTS.name(), modLoc("item/handheld_gear"));
         tempGearElytra(GearItemSets.ELYTRA, itemGenerated);
         tempGearCurio(GearItemSets.RING, itemGenerated);
         tempGearCurio(GearItemSets.BRACELET, itemGenerated);
