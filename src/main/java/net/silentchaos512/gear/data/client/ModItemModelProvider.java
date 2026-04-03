@@ -179,8 +179,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(GearItemSets.BOOTS.name(), modLoc("item/handheld_gear"));
         withExistingParent(GearItemSets.ELYTRA.name(), modLoc("item/handheld_gear"));
         withExistingParent(GearItemSets.RING.name(), modLoc("item/handheld_gear"));
-        tempGearCurio(GearItemSets.BRACELET, itemGenerated);
-        tempGearCurio(GearItemSets.NECKLACE, itemGenerated);
+        withExistingParent(GearItemSets.BRACELET.name(), modLoc("item/handheld_gear"));
+        withExistingParent(GearItemSets.NECKLACE.name(), modLoc("item/handheld_gear"));
         // Parts
         tempMainPart(GearItemSets.SWORD);
         tempMainPart(GearItemSets.KATANA);

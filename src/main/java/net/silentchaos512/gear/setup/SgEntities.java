@@ -99,7 +99,9 @@ public final class SgEntities {
                     GearItemSets.LEGGINGS.gearItem(),
                     GearItemSets.BOOTS.gearItem(),
                     GearItemSets.ELYTRA.gearItem(),
-                    GearItemSets.RING.gearItem()
+                    GearItemSets.RING.gearItem(),
+                    GearItemSets.BRACELET.gearItem(),
+                    GearItemSets.NECKLACE.gearItem()
             );
             // Register special model rendering for trident
             event.registerItem(

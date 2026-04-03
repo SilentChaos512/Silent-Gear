@@ -1,9 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "silentgear:item/bracelet/main_generic_hc",
-    "layer1": "silentgear:item/bracelet/_highlight",
-    "layer2": "silentgear:item/bracelet/adornment_generic",
-    "layer3": "silentgear:item/bracelet/adornment_highlight"
-  }
+  "parent": "silentgear:item/handheld_gear"
 }
