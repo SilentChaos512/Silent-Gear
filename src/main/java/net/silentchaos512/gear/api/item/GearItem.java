@@ -34,7 +34,11 @@ public interface GearItem extends ItemLike {
         ItemStack result = new ItemStack(this);
         GearData.writeConstructionParts(result, parts);
         GearData.recalculateGearData(result, null);
-        parts.forEach(p -> p.onAddToGear(result));
+        parts.forEach(p -> {
+            if (p != null) {
+                p.onAddToGear(result);
+            }
+        });
         // Allow traits to make any needed changes (must be done after a recalculate)
         TraitHelper.activateTraits(result, 0, (trait, value) -> {
             trait.getTrait().onGearCrafted(new TraitActionContext(null, trait, result));
