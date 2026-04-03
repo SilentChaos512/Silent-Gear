@@ -3,6 +3,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1-4.1.5] - 2026-04-03
+### Changed
+- Super Mixer now has 8 input slots (up from 4)
+- Alloy Forge, Recrystallizer, and Refabricator now have 6 input slots (up from 4)
+### Fixed
+- Some inconsistent crashes with repair gear and chopping trees (likely mod interaction) [#912]
+- `c:ores_in_ground/end_stone` containing azure silver block instead of ore [#911]
+- Part types (and probably gear types) not accepting namespaces other than Silent Gear [#908]
+- Fixed duplication bug with alloy makers [#907, #609]
+- Crude mixer not applying the "Crude" penalty modifier [#905]
+- Armor durability modifier on quartz tip upgrade changed to +4 [#898]
+- Minor blueprint book tooltip text error [#897]
+- Add additional null check for [#895]
+- Shears breaking blocks normally when broken [#864]
+- Synergy of alloys increasing based on number of materials used, rather than unique materials with shared categories. Duplicate materials will no longer increase or decrease synergy.
+- The "Fully-Loaded Blueprint Book" not showing in the creative menu
+
 ## [1.21.1-4.1.4] - 2026-03-29
 ### Added
 - Enchantment trait effects. These now add enchantments without actually tampering with item data, so the enchantments will not show up in the tooltip, but should work correctly in most cases.
