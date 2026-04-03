@@ -42,7 +42,7 @@ public class PartList extends AbstractList<PartInstance> {
     public static PartList of(Collection<PartInstance> c) {
         PartList ret = new PartList();
         for (var part : c) {
-            if (part != null && part.isValid()) {
+            if (part != null) {
                 ret.add(part);
             }
         }
