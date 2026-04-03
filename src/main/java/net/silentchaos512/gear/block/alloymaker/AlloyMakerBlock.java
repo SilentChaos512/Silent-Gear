@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -29,7 +28,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.block.IDroppableInventory;
 import net.silentchaos512.gear.block.ModContainerBlock;
 import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.util.TextUtil;
@@ -103,19 +101,6 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
-    @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
-            BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-            if (tileEntity instanceof IDroppableInventory droppableInventory) {
-                Containers.dropContents(worldIn, pos, droppableInventory.getItemsToDrop());
-                worldIn.updateNeighbourForOutputSignal(pos, this);
-            }
-            super.onRemove(state, worldIn, pos, newState, isMoving);
-        }
-    }
-
-    @SuppressWarnings("deprecation")
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
