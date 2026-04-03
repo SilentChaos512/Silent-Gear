@@ -10,7 +10,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -82,7 +81,7 @@ public class CodecUtils {
                         p_315852_ -> registry.getHolder(p_315852_)
                                 .map(DataResult::success)
                                 .orElseGet(() -> DataResult.error(() -> "Unknown registry key in " + registry.key() + ": " + p_315852_)),
-                        p_325513_ -> SilentGear.getId(p_325513_.key().location().toString())
+                        p_325513_ -> SilentGear.getIdWithModNamespaceAsDefault(p_325513_.key().location().toString())
                 );
         return ExtraCodecs.overrideLifecycle(
                 codec, p_325514_ -> registry.registrationInfo(p_325514_.key()).map(RegistrationInfo::lifecycle).orElse(Lifecycle.experimental())

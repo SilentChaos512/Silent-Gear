@@ -74,6 +74,13 @@ public final class SilentGear {
         return ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, path);
     }
 
+    public static ResourceLocation getIdWithModNamespaceAsDefault(String path) {
+        if (path.contains(":")) {
+            return ResourceLocation.tryParse(path);
+        }
+        return ResourceLocation.fromNamespaceAndPath(SilentGear.MOD_ID, path);
+    }
+
     @Nullable
     public static ResourceLocation getIdWithDefaultNamespace(String name) {
         if (name.contains(":"))
