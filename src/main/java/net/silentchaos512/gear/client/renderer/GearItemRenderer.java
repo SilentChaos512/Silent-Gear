@@ -102,7 +102,10 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                 return List.of(
                         ResourceLocation.fromNamespaceAndPath(
                                 SilentGear.MOD_ID,
-                                "item/%s/main_generic_%s".formatted(gearTypeName, material.getMainTextureType().alias)
+                                "item/%s/main_generic_%s".formatted(
+                                        gearTypeName,
+                                        mainPart.getPrimaryMaterial().getMainTextureType().alias
+                                )
                         )
                 );
             }
