@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -19,6 +20,7 @@ import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
 import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.item.ICycleItem;
+import net.silentchaos512.gear.item.ItemWithSubItems;
 import net.silentchaos512.gear.item.blueprint.AbstractBlueprintItem;
 import net.silentchaos512.gear.item.blueprint.IBlueprint;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -31,7 +33,7 @@ import net.silentchaos512.lib.util.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlueprintBookItem extends Item implements IBlueprint, IContainerItem, ICycleItem {
+public class BlueprintBookItem extends Item implements IBlueprint, IContainerItem, ICycleItem, ItemWithSubItems {
     public static final int INVENTORY_SIZE = 6 * 9;
 
     public BlueprintBookItem(Properties properties) {
@@ -156,5 +158,11 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     @Override
     public boolean hasCraftingRemainingItem(ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public void addSubItems(CreativeModeTab.Output output) {
+        output.accept(this);
+        output.accept(createdFullyLoadedBook());
     }
 }
