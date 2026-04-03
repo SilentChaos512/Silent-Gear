@@ -24,6 +24,7 @@ import net.silentchaos512.gear.api.material.TextureType;
 import net.silentchaos512.gear.client.util.ColorUtils;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -156,6 +157,54 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
 
         poseStack.pushPose();
         var vc = buffer.getBuffer(RenderType.CUTOUT);
+
+        //TODO: Remove need for forcing main rendering - example items don't contain main by default in JEI
+        if (!GearData.hasPartOfType(stack, PartTypes.MAIN.get())) {
+            var mainSprite = blockAtlas.apply(
+                    ResourceLocation.fromNamespaceAndPath(
+                            SilentGear.MOD_ID,
+                            "item/%s/main_generic_lc".formatted(GearHelper.gearTypeName(type))
+                    )
+            );
+
+            var quads = getQuadsForSprite(mainSprite);
+
+            for (BakedQuad quad : quads) {
+                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
+            }
+        }
+
+        //TODO: Remove need for forcing rod rendering - example items don't contain rods by default in JEI
+        if (!type.isArmor() && !GearData.hasPartOfType(stack, PartTypes.ROD.get())) {
+            var mainSprite = blockAtlas.apply(
+                    ResourceLocation.fromNamespaceAndPath(
+                            SilentGear.MOD_ID,
+                            "item/%s/rod_generic_lc".formatted(GearHelper.gearTypeName(type))
+                    )
+            );
+
+            var quads = getQuadsForSprite(mainSprite);
+
+            for (BakedQuad quad : quads) {
+                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
+            }
+        }
+
+        //TODO: Remove need for forcing fletching rendering - arrows in creative inventory don't have fletching
+        if (type == GearTypes.ARROW.get() && !GearData.hasPartOfType(stack, PartTypes.FLETCHING.get())) {
+            var mainSprite = blockAtlas.apply(
+                    ResourceLocation.fromNamespaceAndPath(
+                            SilentGear.MOD_ID,
+                            "item/arrow/fletching_generic"
+                    )
+            );
+
+            var quads = getQuadsForSprite(mainSprite);
+
+            for (BakedQuad quad : quads) {
+                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
+            }
+        }
 
         for (var partInst : construction.parts()) {
             var spriteLocations = getPartTextureLocations(type, partInst, construction);
