@@ -1,7 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "silentgear:item/leggings/main_generic_hc",
-    "layer1": "silentgear:item/leggings/_highlight"
-  }
+  "parent": "silentgear:item/base_gear"
 }

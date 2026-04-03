@@ -173,10 +173,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
         // tempGearBow(SgItems.SLINGSHOT, itemHandheld);
         tempGearArrow(GearItemSets.ARROW, itemGenerated);
-        tempGearArmor(GearItemSets.HELMET, itemGenerated);
-        tempGearArmor(GearItemSets.CHESTPLATE, itemGenerated);
-        tempGearArmor(GearItemSets.LEGGINGS, itemGenerated);
-        tempGearArmor(GearItemSets.BOOTS, itemGenerated);
+        withExistingParent(GearItemSets.HELMET.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.CHESTPLATE.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.LEGGINGS.name(), modLoc("item/base_gear"));
+        withExistingParent(GearItemSets.BOOTS.name(), modLoc("item/base_gear"));
         tempGearElytra(GearItemSets.ELYTRA, itemGenerated);
         tempGearCurio(GearItemSets.RING, itemGenerated);
         tempGearCurio(GearItemSets.BRACELET, itemGenerated);
