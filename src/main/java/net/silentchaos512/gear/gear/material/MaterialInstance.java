@@ -157,7 +157,7 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     }
 
     public boolean canRepair(ItemStack gear) {
-        if (!material.isPresent() || !material.get().isAllowedInPart(this, PartTypes.MAIN.get())) {
+        if (!material.isPresent() || !material.get().isAllowedInPart(this, PartTypes.MAIN.get()) || !GearHelper.isGear(gear)) {
             return false;
         }
 

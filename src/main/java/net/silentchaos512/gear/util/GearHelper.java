@@ -40,7 +40,6 @@ import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.material.Material;
-import net.silentchaos512.gear.api.part.GearPart;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
@@ -367,6 +366,10 @@ public final class GearHelper {
     }
 
     public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+        if (!isGear(stack)) {
+            return amount;
+        }
+
         var gearBreaksPermanently = Config.Common.isLoaded() && Config.Common.gearBreaksPermanently.get();
         final int preTraitValue;
         final int clampedValue;
