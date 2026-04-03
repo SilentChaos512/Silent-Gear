@@ -404,7 +404,7 @@
   "item.silentgear.blueprint_book": "Blueprint Book",
   "item.silentgear.blueprint_book.fully_loaded": "Fully-Loaded Blueprint Book",
   "item.silentgear.blueprint_book.keyHint": "Cycle with %s and %s",
-  "item.silentgear.blueprint_book.selected": "Selected: %s",
+  "item.silentgear.blueprint_book.selected": "Selected: ",
   "item.silentgear.blueprint_package": "Blueprint Package",
   "item.silentgear.blueprint_package.desc1": "Contains some blueprints for gear crafting",
   "item.silentgear.blueprint_package.desc2": "Right-click to open",

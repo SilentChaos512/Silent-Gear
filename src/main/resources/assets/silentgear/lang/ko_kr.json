@@ -275,7 +275,7 @@
     "item.silentgear.blueprint.sword.desc": "클래식",
     "item.silentgear.blueprint_book": "청사진 책",
     "item.silentgear.blueprint_book.keyHint": "%s 와(과) %s로 회전합니다",
-    "item.silentgear.blueprint_book.selected": "선택됨: %s",
+    "item.silentgear.blueprint_book.selected": "선택됨: ",
     "item.silentgear.blueprint_package": "청사진 패키지",
     "item.silentgear.blueprint_package.desc1": "장비 제작을 위한 청사진이 조금 들어있습니다",
     "item.silentgear.blueprint_package.desc2": "우클릭으로 열기",

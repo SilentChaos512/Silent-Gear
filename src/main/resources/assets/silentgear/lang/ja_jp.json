@@ -445,7 +445,7 @@
   "item.silentgear.blueprint_book": "設計図本",
   "item.silentgear.blueprint_book.fully_loaded": "フルロードされた設計図本",
   "item.silentgear.blueprint_book.keyHint": "%s と %s のサイクル",
-  "item.silentgear.blueprint_book.selected": "選択: %s",
+  "item.silentgear.blueprint_book.selected": "選択: ",
   "item.silentgear.blueprint_package": "設計図パッケージ",
   "item.silentgear.blueprint_package.desc1": "ギアクラフト用の設計図がいくつか含まれています",
   "item.silentgear.blueprint_package.desc2": "右クリックで開ける",

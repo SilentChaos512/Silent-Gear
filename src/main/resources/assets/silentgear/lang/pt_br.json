@@ -394,7 +394,7 @@
   "item.silentgear.blueprint_book": "Livro de Projetos",
   "item.silentgear.blueprint_book.fully_loaded": "Livro de Projetos Totalmente Carregado",
   "item.silentgear.blueprint_book.keyHint": "Alterne com %s e %s",
-  "item.silentgear.blueprint_book.selected": "Selecionado: %s",
+  "item.silentgear.blueprint_book.selected": "Selecionado: ",
   "item.silentgear.blueprint_package": "Pacote de Projetos",
   "item.silentgear.blueprint_package.desc1": "Contém alguns projetos para a fabricação de equipamentos",
   "item.silentgear.blueprint_package.desc2": "Clique com o botão direito para abrir",
