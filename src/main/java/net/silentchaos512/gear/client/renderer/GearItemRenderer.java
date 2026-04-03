@@ -170,7 +170,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         poseStack.pushPose();
         var vc = buffer.getBuffer(RenderType.CUTOUT);
 
-        //TODO: Remove need for forcing main rendering - example items don't contain main by default in JEI
+        //TODO: Remove need for forcing main rendering - example items don't contain main by default in JEI/Creative
         if (!GearData.hasPartOfType(stack, PartTypes.MAIN.get())) {
             var mainSprite = blockAtlas.apply(
                     ResourceLocation.fromNamespaceAndPath(
@@ -186,7 +186,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
             }
         }
 
-        //TODO: Remove need for forcing rod rendering - example items don't contain rods by default in JEI
+        //TODO: Remove need for forcing rod rendering - example items don't contain rods by default in JEI/Creative
         if (!type.isArmor() && !type.matches(GearTypes.CURIO.get()) && !GearData.hasPartOfType(stack, PartTypes.ROD.get())) {
             var mainSprite = blockAtlas.apply(
                     ResourceLocation.fromNamespaceAndPath(
@@ -212,6 +212,34 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
             );
 
             var quads = getQuadsForSprite(mainSprite);
+
+            for (BakedQuad quad : quads) {
+                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
+            }
+        }
+
+        //TODO: Remove need for forcing fletching rendering - example items don't contain adornments by default
+        if (type.matches(GearTypes.CURIO.get()) && !GearData.hasPartOfType(stack, PartTypes.SETTING.get())) {
+            var mainSprite = blockAtlas.apply(
+                    ResourceLocation.fromNamespaceAndPath(
+                            SilentGear.MOD_ID,
+                            "item/%s/adornment_generic".formatted(GearHelper.gearTypeName(type))
+                    )
+            );
+            var highlightSprite = blockAtlas.apply(
+                    ResourceLocation.fromNamespaceAndPath(
+                            SilentGear.MOD_ID,
+                            "item/%s/adornment_highlight".formatted(GearHelper.gearTypeName(type))
+                    )
+            );
+
+            var quads = getQuadsForSprite(mainSprite);
+
+            for (BakedQuad quad : quads) {
+                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
+            }
+
+            quads = getQuadsForSprite(highlightSprite);
 
             for (BakedQuad quad : quads) {
                 vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
