@@ -70,7 +70,7 @@ public final class Const {
                     MaterialCategories.METAL,
                     MaterialCategories.DUST
             ),
-            4,
+            6,
             () -> SgItems.ALLOY_INGOT.get(),
             () -> SgBlocks.ALLOY_FORGE.get(),
             () -> SgBlockEntities.ALLOY_FORGE.get(),
@@ -86,7 +86,7 @@ public final class Const {
                     MaterialCategories.GEM,
                     MaterialCategories.DUST
             ),
-            4,
+            6,
             () -> SgItems.HYBRID_GEM.get(),
             () -> SgBlocks.RECRYSTALLIZER.get(),
             () -> SgBlockEntities.RECRYSTALLIZER.get(),
@@ -103,7 +103,7 @@ public final class Const {
                     MaterialCategories.FIBER,
                     MaterialCategories.SLIME
             ),
-            4,
+            6,
             () -> SgItems.MIXED_FABRIC.get(),
             () -> SgBlocks.REFABRICATOR.get(),
             () -> SgBlockEntities.REFABRICATOR.get(),
@@ -114,7 +114,7 @@ public final class Const {
     );
 
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
-    public static final AlloyMakerInfo<CrudeAlloyRecipe> CRUDE_MIXER_INFO = new AlloyMakerInfo<>(
+    public static final AlloyMakerInfo<CrudeAlloyRecipe> CRUDE_MIXER_INFO = new AlloyMakerInfo<CrudeAlloyRecipe>(
             List.of(),
             4,
             () -> SgItems.CRUDE_ALLOY.get(),
@@ -129,7 +129,7 @@ public final class Const {
     @SuppressWarnings({"Convert2MethodRef", "FunctionalExpressionCanBeFolded"})
     public static final AlloyMakerInfo<SuperAlloyRecipe> SUPER_MIXER_INFO = new AlloyMakerInfo<>(
             List.of(),
-            4,
+            8,
             () -> SgItems.SUPER_ALLOY.get(),
             () -> SgBlocks.SUPER_MIXER.get(),
             () -> SgBlockEntities.SUPER_MIXER.get(),

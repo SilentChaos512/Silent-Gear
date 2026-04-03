@@ -40,7 +40,6 @@ import java.util.*;
 
 @SuppressWarnings("WeakerAccess")
 public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlockEntity implements IDroppableInventory {
-    public static final int STANDARD_INPUT_SLOTS = 4;
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
 
     private final AlloyMakerInfo<R> info;
@@ -79,7 +78,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     };
 
     public AlloyMakerBlockEntity(AlloyMakerInfo<R> info, BlockPos pos, BlockState state) {
-        super(info.getBlockEntityType(), pos, state, () -> createItemHandler(info));
+        super(info.getBlockEntityType(), pos, state, info.getInputSlotCount() + 2, () -> createItemHandler(info));
         this.info = info;
         this.quickCheck = RecipeManager.createCheck(info.getRecipeType());
     }
@@ -122,7 +121,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     }
 
     public void encodeExtraData(FriendlyByteBuf buffer) {
-        buffer.writeByte(this.getItemHandler().getSlots());
+        buffer.writeByte(getContainerSize());
         buffer.writeByte(this.fields.getCount());
     }
 

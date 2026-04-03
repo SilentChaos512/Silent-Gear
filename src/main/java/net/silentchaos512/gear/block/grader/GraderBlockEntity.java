@@ -74,7 +74,7 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
     };
 
     public GraderBlockEntity(BlockPos pos, BlockState state) {
-        super(SgBlockEntities.MATERIAL_GRADER.get(), pos, state);
+        super(SgBlockEntities.MATERIAL_GRADER.get(), pos, state, INVENTORY_SIZE);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, GraderBlockEntity blockEntity) {

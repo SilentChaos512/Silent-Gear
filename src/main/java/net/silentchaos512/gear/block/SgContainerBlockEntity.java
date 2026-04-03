@@ -15,9 +15,11 @@ import java.util.function.Supplier;
 
 public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     protected final ItemStackHandler items;
+    private final int inventorySize;
 
-    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
+    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, int inventorySize) {
         super(pType, pPos, pBlockState);
+        this.inventorySize = inventorySize;
         this.items = createItemHandler();
     }
 
@@ -25,15 +27,16 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
      * This constructor is provided for cases where additional parameters in the block entity's constructor are required
      * to create the item handler. In such cases, {@link #createItemHandler()} will not work.
      */
-    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, Supplier<ItemStackHandler> itemHandlerFactory) {
+    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, int inventorySize, Supplier<ItemStackHandler> itemHandlerFactory) {
         super(pType, pPos, pBlockState);
+        this.inventorySize = inventorySize;
         this.items = itemHandlerFactory.get();
     }
 
     /**
      * Creates an item handler for the block entity's inventory. This is called in the default constructor. If you
      * require information from fields in your block entity, use the
-     * {@link #SgContainerBlockEntity(BlockEntityType, BlockPos, BlockState, Supplier)} constructor instead.
+     * {@link #SgContainerBlockEntity(BlockEntityType, BlockPos, BlockState, int, Supplier)} constructor instead.
      *
      * @return The newly created item handler, which is stored in {@link #items}
      */
@@ -137,6 +140,16 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         this.items.deserializeNBT(registries, tag.getCompound("items"));
+        // Loaded item list may not be the correct size, so we need to copy the deserialized list, set the correct size,
+        // then copy the items back.
+        var itemListWithCorrectSize = NonNullList.withSize(this.inventorySize, ItemStack.EMPTY);
+        for (int i = 0; i < this.items.getSlots(); ++i) {
+            itemListWithCorrectSize.set(i, this.items.getStackInSlot(i));
+        }
+        this.items.setSize(this.inventorySize);
+        for (int i = 0; i < this.items.getSlots(); ++i) {
+            this.items.setStackInSlot(i, itemListWithCorrectSize.get(i));
+        }
     }
 
     @Override

@@ -90,7 +90,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
     };
 
     public ChargerBlockEntity(BlockEntityType<?> type, ChargedMaterialModifier.Type<T> modifierType, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+        super(type, pos, state, INVENTORY_SIZE);
         this.modifierType = modifierType;
     }
 

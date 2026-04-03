@@ -28,7 +28,7 @@ public abstract class AlloyMakerScreen extends AbstractContainerScreen<AlloyMake
         this.workButton = Button.builder(getWorkEnabledButtonTitle(), b -> {
             this.menu.toggleWorkEnabled();
             b.setMessage(getWorkEnabledButtonTitle());
-        }).bounds(this.leftPos + 70, this.topPos + 60, 50, 20).build();;
+        }).bounds(this.leftPos + 70, this.topPos + 62, 50, 20).build();;
         this.addWidget(this.workButton);
     }
 

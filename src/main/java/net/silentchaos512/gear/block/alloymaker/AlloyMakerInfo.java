@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 public class AlloyMakerInfo<R extends AlloyRecipe> {
     private final Supplier<AlloyMakerBlock<R>> block;
-    private final Supplier<BlockEntityType<AlloyMakerBlockEntity<R>>> blockEntityType;
+    private final Supplier<BlockEntityType<? extends AlloyMakerBlockEntity<R>>> blockEntityType;
     private final Supplier<MenuType<? extends AlloyMakerContainer>> containerType;
     private final Supplier<RecipeType<R>> recipeType;
     private final Supplier<CompoundMaterialItem> outputItem;
@@ -30,7 +30,7 @@ public class AlloyMakerInfo<R extends AlloyRecipe> {
                           int inputSlotCount,
                           Supplier<CompoundMaterialItem> outputItem,
                           Supplier<AlloyMakerBlock<R>> block,
-                          Supplier<BlockEntityType<AlloyMakerBlockEntity<R>>> blockEntityType,
+                          Supplier<BlockEntityType<? extends AlloyMakerBlockEntity<R>>> blockEntityType,
                           Supplier<MenuType<? extends AlloyMakerContainer>> containerType,
                           Supplier<RecipeSerializer<R>> recipeSerializer,
                           Supplier<RecipeType<R>> recipeType,
@@ -54,7 +54,7 @@ public class AlloyMakerInfo<R extends AlloyRecipe> {
         return block.get();
     }
 
-    public BlockEntityType<AlloyMakerBlockEntity<R>> getBlockEntityType() {
+    public BlockEntityType<? extends AlloyMakerBlockEntity<R>> getBlockEntityType() {
         return blockEntityType.get();
     }
 
