@@ -69,11 +69,11 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
-        if (worldIn.isClientSide) {
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
-        this.interactWith(worldIn, pos, player);
+        this.interactWith(level, pos, player);
         return InteractionResult.CONSUME;
     }
 

@@ -53,8 +53,8 @@ public class SalvagerBlock extends ModContainerBlock<SalvagerBlockEntity> {
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
-        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        BlockEntity tileEntity = level.getBlockEntity(pos);
         if (tileEntity instanceof SalvagerBlockEntity salvager) {
             player.openMenu(salvager);
             return InteractionResult.SUCCESS;

@@ -59,18 +59,18 @@ public class GraderBlock extends ModContainerBlock<GraderBlockEntity> implements
     }
 
     @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        BlockEntity tileEntity = level.getBlockEntity(pos);
         if (tileEntity instanceof Container) {
             Container inventory = (Container) tileEntity;
-            Containers.dropContents(worldIn, pos, inventory);
+            Containers.dropContents(level, pos, inventory);
         }
-        super.onRemove(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
-        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        BlockEntity tileEntity = level.getBlockEntity(pos);
         if (tileEntity instanceof MenuProvider) {
             player.openMenu((MenuProvider) tileEntity);
         }

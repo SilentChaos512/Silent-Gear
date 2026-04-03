@@ -46,11 +46,11 @@ public class MetalPressBlock extends ModContainerBlock<MetalPressBlockEntity> {
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
-        if (worldIn.isClientSide) {
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
-        this.interactWith(worldIn, pos, player);
+        this.interactWith(level, pos, player);
         return InteractionResult.CONSUME;
     }
 
@@ -68,15 +68,15 @@ public class MetalPressBlock extends ModContainerBlock<MetalPressBlockEntity> {
     }
 
     @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+            BlockEntity tileEntity = level.getBlockEntity(pos);
             if (tileEntity instanceof MetalPressBlockEntity) {
                 MetalPressBlockEntity te = (MetalPressBlockEntity) tileEntity;
-                Containers.dropContents(worldIn, pos, te);
-                worldIn.updateNeighbourForOutputSignal(pos, this);
+                Containers.dropContents(level, pos, te);
+                level.updateNeighbourForOutputSignal(pos, this);
             }
-            super.onRemove(state, worldIn, pos, newState, isMoving);
+            super.onRemove(state, level, pos, newState, isMoving);
         }
     }
 
