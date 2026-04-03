@@ -141,6 +141,18 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                     "item/%s/fletching_generic".formatted(gearTypeName)
             ));
         }
+        else if (partType == PartTypes.SETTING.get()) {
+            return List.of(
+                    ResourceLocation.fromNamespaceAndPath(
+                        SilentGear.MOD_ID,
+                        "item/%s/adornment_generic".formatted(gearTypeName)
+                    ),
+                    ResourceLocation.fromNamespaceAndPath(
+                            SilentGear.MOD_ID,
+                            "item/%s/adornment_highlight".formatted(gearTypeName)
+                    )
+            );
+        }
         return List.of();
     }
 
@@ -175,7 +187,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         }
 
         //TODO: Remove need for forcing rod rendering - example items don't contain rods by default in JEI
-        if (!type.isArmor() && !GearData.hasPartOfType(stack, PartTypes.ROD.get())) {
+        if (!type.isArmor() && !type.matches(GearTypes.CURIO.get()) && !GearData.hasPartOfType(stack, PartTypes.ROD.get())) {
             var mainSprite = blockAtlas.apply(
                     ResourceLocation.fromNamespaceAndPath(
                             SilentGear.MOD_ID,
