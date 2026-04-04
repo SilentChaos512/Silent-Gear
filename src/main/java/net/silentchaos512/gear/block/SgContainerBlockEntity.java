@@ -3,6 +3,7 @@ package net.silentchaos512.gear.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -147,5 +148,17 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
         ContainerHelper.saveAllItems(output, this.items);
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if (this.level != null) {
+            if (this instanceof IDroppableInventory droppableInventory) {
+                var itemsToDrop = droppableInventory.getItemsToDrop();
+                Containers.dropContents(level, pos, itemsToDrop);
+            } else {
+                Containers.dropContents(level, pos, this);
+            }
+        }
     }
 }

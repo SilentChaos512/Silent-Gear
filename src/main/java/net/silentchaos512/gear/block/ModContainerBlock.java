@@ -29,22 +29,6 @@ public abstract class ModContainerBlock<T extends BlockEntity> extends BaseEntit
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (state.getBlock() != newState.getBlock()) {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-            if (blockEntity instanceof IDroppableInventory droppableInventory) {
-                var itemsToDrop = droppableInventory.getItemsToDrop();
-                Containers.dropContents(level, pos, itemsToDrop);
-                level.updateNeighbourForOutputSignal(pos, this);
-            } else if (blockEntity instanceof Container container) {
-                Containers.dropContents(level, pos, container);
-                level.updateNeighbourForOutputSignal(pos, this);
-            }
-            super.onRemove(state, level, pos, newState, isMoving);
-        }
-    }
-
-    @Override
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!level.isClientSide()) {
             BlockEntity tile = level.getBlockEntity(pos);

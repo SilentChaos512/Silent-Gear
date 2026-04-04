@@ -3,6 +3,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.1-4.1.9] - 2026-04-04
+- Ported recent fixes from 1.21.1 branch
+
 ## [26.1-4.1.8] - 2026-03-29
 ### Added
 - Enchantment trait effects. These now add enchantments without actually tampering with item data, so the enchantments will not show up in the tooltip, but should work correctly in most cases.
