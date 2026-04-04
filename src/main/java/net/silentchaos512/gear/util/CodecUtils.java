@@ -81,7 +81,7 @@ public class CodecUtils {
                         p_315852_ -> registry.get(p_315852_)
                                 .map(DataResult::success)
                                 .orElseGet(() -> DataResult.error(() -> "Unknown registry key in " + registry.key() + ": " + p_315852_)),
-                        p_325513_ -> SilentGear.getId(p_325513_.key().identifier().toString())
+                        p_325513_ -> SilentGear.getIdWithModNamespaceAsDefault(p_325513_.key().identifier().toString())
                 );
         return ExtraCodecs.overrideLifecycle(
                 codec, p_325514_ -> registry.registrationInfo(p_325514_.key()).map(RegistrationInfo::lifecycle).orElse(Lifecycle.experimental())

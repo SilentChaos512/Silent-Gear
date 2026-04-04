@@ -12,15 +12,16 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     protected final NonNullList<ItemStack> items;
+    private final int inventorySize;
 
-    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
+    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, int inventorySize) {
         super(pType, pPos, pBlockState);
+        this.inventorySize = inventorySize;
         this.items = createInternalItemList();
     }
 
@@ -28,15 +29,16 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
      * This constructor is provided for cases where additional parameters in the block entity's constructor are required
      * to create the item handler. In such cases, {@link #createInternalItemList()} will not work.
      */
-    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, Supplier<NonNullList<ItemStack>> itemListFactory) {
+    protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, int inventorySize, Supplier<NonNullList<ItemStack>> itemListFactory) {
         super(pType, pPos, pBlockState);
+        this.inventorySize = inventorySize;
         this.items = itemListFactory.get();
     }
 
     /**
      * Creates an item handler for the block entity's inventory. This is called in the default constructor. If you
      * require information from fields in your block entity, use the
-     * {@link #SgContainerBlockEntity(BlockEntityType, BlockPos, BlockState, Supplier)} constructor instead.
+     * {@link #SgContainerBlockEntity(BlockEntityType, BlockPos, BlockState, int, Supplier)} constructor instead.
      *
      * @return The newly created item handler, which is stored in {@link #items}
      */
@@ -54,7 +56,7 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
      *
      * @return The item handler
      */
-    public ResourceHandler<@NotNull ItemResource> getItemHandler() {
+    public ResourceHandler<ItemResource> getItemHandler() {
         return new ItemStacksResourceHandler(this.items);
     }
 

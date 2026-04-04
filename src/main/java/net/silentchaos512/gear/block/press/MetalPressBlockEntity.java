@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 
 public class MetalPressBlockEntity extends SgContainerBlockEntity {
     static final int WORK_TIME = TimeUtils.ticksFromSeconds(SilentGear.isDevBuild() ? 2 : 10);
+    static final int INVENTORY_SIZE = 2;
 
     private final RecipeManager.CachedCheck<SingleRecipeInput, PressingRecipe> quickCheck;
 
@@ -55,7 +56,7 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
     };
 
     public MetalPressBlockEntity(BlockPos pos, BlockState state) {
-        super(SgBlockEntities.METAL_PRESS.get(), pos, state);
+        super(SgBlockEntities.METAL_PRESS.get(), pos, state, INVENTORY_SIZE);
         this.quickCheck = RecipeManager.createCheck(SgRecipes.PRESSING_TYPE.get());
     }
 

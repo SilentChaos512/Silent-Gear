@@ -58,10 +58,10 @@ public class GraderBlock extends ModContainerBlock<GraderBlockEntity> implements
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
-        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if (tileEntity instanceof MenuProvider) {
-            player.openMenu((MenuProvider) tileEntity);
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof MenuProvider menuProvider) {
+            player.openMenu(menuProvider);
         }
         return InteractionResult.SUCCESS;
     }
@@ -75,7 +75,7 @@ public class GraderBlock extends ModContainerBlock<GraderBlockEntity> implements
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 

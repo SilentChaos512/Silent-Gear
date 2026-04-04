@@ -73,6 +73,13 @@ public final class SilentGear {
         return Identifier.fromNamespaceAndPath(SilentGear.MOD_ID, path);
     }
 
+    public static Identifier getIdWithModNamespaceAsDefault(String path) {
+        if (path.contains(":")) {
+            return Identifier.tryParse(path);
+        }
+        return Identifier.fromNamespaceAndPath(SilentGear.MOD_ID, path);
+    }
+
     @Nullable
     public static Identifier getIdWithDefaultNamespace(String name) {
         if (name.contains(":"))

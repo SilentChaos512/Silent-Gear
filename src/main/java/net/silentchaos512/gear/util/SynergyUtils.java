@@ -42,10 +42,11 @@ public final class SynergyUtils {
             synergy -= NO_SHARED_CATEGORY_PENALTY;
         }
 
-        // Bonus synergy for shared categories
+        // Bonus synergy for shared categories, but only for unique materials
+        int uniqueCount = getUniqueCount(materials);
         for (int k : categoryCounts.values()) {
             if (k > 1) {
-                synergy += SHARED_CATEGORY_BONUS * k;
+                synergy += SHARED_CATEGORY_BONUS * ((double) k / (materials.size() - uniqueCount + 1));
             }
         }
 

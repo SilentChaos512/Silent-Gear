@@ -269,7 +269,7 @@
     "item.silentgear.blueprint.sword.desc": "Der Klassiker",
     "item.silentgear.blueprint_book": "Blaupausenbuch",
     "item.silentgear.blueprint_book.keyHint": "Blättere mit %s und %s",
-    "item.silentgear.blueprint_book.selected": "Gewählt: %s",
+    "item.silentgear.blueprint_book.selected": "Gewählt: ",
     "item.silentgear.blueprint_package": "Blaupausenbündel",
     "item.silentgear.blueprint_package.desc1": "Enthält einige Blaupausen für Ausrüstung",
     "item.silentgear.blueprint_package.desc2": "Öffne mit Rechtsklick",

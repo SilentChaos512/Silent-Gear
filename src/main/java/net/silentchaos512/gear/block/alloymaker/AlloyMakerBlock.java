@@ -67,17 +67,17 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
-        if (worldIn.isClientSide()) {
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
-        this.interactWith(worldIn, pos, player);
+        this.interactWith(level, pos, player);
         return InteractionResult.CONSUME;
     }
 
-    protected void interactWith(Level worldIn, BlockPos pos, Player player) {
-        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if (tileEntity instanceof AlloyMakerBlockEntity<?> compoundMaker && player instanceof ServerPlayer) {
+    protected void interactWith(Level level, BlockPos pos, Player player) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof AlloyMakerBlockEntity<?> compoundMaker && player instanceof ServerPlayer) {
             player.openMenu(compoundMaker, compoundMaker::encodeExtraData);
         }
     }
@@ -117,7 +117,7 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return TALL_MACHINE;
     }
 

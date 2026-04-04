@@ -29,16 +29,7 @@ public class AlloyMakerContainer extends AbstractContainerMenu {
         this.inventory = inventory;
         this.fields = fields;
 
-        //assertInventorySize(this.inventory, CompounderTileEntity.INVENTORY_SIZE);
-
-        for (int i = 0; i < this.inventory.getContainerSize() - 2; ++i) {
-            addSlot(new Slot(this.inventory, i, 17 + 18 * i, 35) /*{
-                @Override
-                public boolean isItemValid(ItemStack stack) {
-                    return CompounderTileEntity.canAcceptInput(stack, categories);
-                }
-            }*/);
-        }
+        addContainerInputSlots();
         addSlot(new SlotOutputOnly(this.inventory, this.inventory.getContainerSize() - 2, 126, 35));
         addSlot(new SlotOutputOnly(this.inventory, this.inventory.getContainerSize() - 1, 126, 60) {
             @Override
@@ -50,6 +41,21 @@ public class AlloyMakerContainer extends AbstractContainerMenu {
         InventoryUtils.createPlayerSlots(playerInventory, 8, 84).forEach(this::addSlot);
 
         addDataSlots(this.fields);
+    }
+
+    private void addContainerInputSlots() {
+        int inputSlotCount = this.inventory.getContainerSize() - 2;
+        // Designed for 4, 6, or 8 input slots (4x1, 3x2, or 4x2)
+        int rowCount = inputSlotCount > 4 ? 2 : 1;
+        int rowSize = inputSlotCount == 6 ? 3 : 4;
+        int xOffset = inputSlotCount == 6 ? 26 : 17;
+        int yOffset = rowCount == 1 ? 35 : 26;
+
+        for (int row = 0; row < rowCount; ++row) {
+            for (int col = 0; col < rowSize; ++col) {
+                addSlot(new Slot(this.inventory, col + row * rowSize, xOffset + 18 * col, yOffset + 18 * row));
+            }
+        }
     }
 
     boolean getWorkEnabled() {

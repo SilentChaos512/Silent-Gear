@@ -183,7 +183,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(Tags.Blocks.ORES_IN_GROUND_DEEPSLATE, SgBlocks.DEEPSLATE_BORT_ORE);
         builder(Tags.Blocks.ORES_IN_GROUND_NETHERRACK, SgBlocks.CRIMSON_IRON_ORE);
         builder(SgTags.Blocks.ORES_IN_GROUND_BLACKSTONE, SgBlocks.BLACKSTONE_CRIMSON_IRON_ORE);
-        builder(SgTags.Blocks.ORES_IN_GROUND_END_STONE, SgBlocks.AZURE_SILVER_BLOCK);
+        builder(SgTags.Blocks.ORES_IN_GROUND_END_STONE, SgBlocks.AZURE_SILVER_ORE);
 
         // Minecraft
         builder(BlockTags.CROPS, SgBlocks.FLAX_PLANT, SgBlocks.FLUFFY_PLANT);

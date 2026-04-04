@@ -39,8 +39,8 @@ public class StoneAnvilBlock extends BaseEntityBlock implements SimpleWaterlogge
             Block.box(1, 13, 1, 15, 14, 15)
     );
 
-    public StoneAnvilBlock(Properties pProperties) {
-        super(pProperties);
+    public StoneAnvilBlock(Properties properties) {
+        super(properties);
         this.registerDefaultState(
                 defaultBlockState()
                         .setValue(WATERLOGGED, false)
@@ -60,52 +60,52 @@ public class StoneAnvilBlock extends BaseEntityBlock implements SimpleWaterlogge
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new StoneAnvilBlockEntity(pPos, pState);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new StoneAnvilBlockEntity(pos, state);
     }
 
 
 
     @Override
-    protected InteractionResult useItemOn(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHitResult) {
-        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof StoneAnvilBlockEntity stoneAnvil) {
-            ItemStack stack = pPlayer.getItemInHand(pHand);
-            var stackToConsume = pPlayer.getAbilities().instabuild ? stack.copy() : stack;
-            if (!pLevel.isClientSide() && stoneAnvil.interact(pPlayer, stackToConsume, pHand)) {
+            ItemStack stackInHand = player.getItemInHand(hand);
+            var stackToConsume = player.getAbilities().instabuild ? stackInHand.copy() : stackInHand;
+            if (!level.isClientSide() && stoneAnvil.interact(player, stackToConsume, hand)) {
                 return InteractionResult.SUCCESS;
             }
 
             return InteractionResult.CONSUME;
         }
 
-        return super.useItemOn(pStack, pState, pLevel, pPos, pPlayer, pHand, pHitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        LevelAccessor levelaccessor = pContext.getLevel();
-        BlockPos blockpos = pContext.getClickedPos();
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        LevelAccessor levelaccessor = context.getLevel();
+        BlockPos blockpos = context.getClickedPos();
         boolean flag = levelaccessor.getFluidState(blockpos).getType() == Fluids.WATER;
         return this.defaultBlockState()
                 .setValue(WATERLOGGED, flag)
-                .setValue(FACING, pContext.getHorizontalDirection());
+                .setValue(FACING, context.getHorizontalDirection());
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState pState) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public FluidState getFluidState(BlockState pState) {
-        return pState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(pState);
+    public FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override

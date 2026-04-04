@@ -61,7 +61,7 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
     };
 
     public SalvagerBlockEntity(BlockPos pos, BlockState state) {
-        super(SgBlockEntities.SALVAGER.get(), pos, state);
+        super(SgBlockEntities.SALVAGER.get(), pos, state, INVENTORY_SIZE);
         this.quickCheck = RecipeManager.createCheck(SgRecipes.SALVAGING_TYPE.get());
     }
 

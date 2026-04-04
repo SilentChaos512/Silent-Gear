@@ -80,6 +80,10 @@ public class QuickRepairRecipe extends CustomRecipe {
         ItemStack repairKit = list.uniqueOfType(RepairKitItem.class);
         Collection<ItemStack> mats = list.allMatches(mat -> SgRecipes.isRepairMaterial(gear, mat));
 
+        if (gear.isEmpty() || repairKit.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
         // Repair with materials first
         repairWithLooseMaterials(gear, repairKit, mats);
 
