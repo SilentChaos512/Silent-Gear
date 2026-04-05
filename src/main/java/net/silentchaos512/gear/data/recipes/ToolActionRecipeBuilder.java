@@ -4,7 +4,6 @@ import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -18,11 +17,6 @@ public class ToolActionRecipeBuilder implements RecipeBuilder {
     private final int damageToTool;
     private final ItemStackTemplate result;
     private final SoundPlayback sound;
-
-    @Deprecated(forRemoval = true)
-    public ToolActionRecipeBuilder(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStackTemplate result) {
-        this(tool, ingredient, damageToTool, result, new SoundPlayback(SoundEvents.STONE_HIT, 1f, 1f, 0f));
-    }
 
     public ToolActionRecipeBuilder(Ingredient tool, Ingredient ingredient, int damageToTool, ItemStackTemplate result, SoundPlayback sound) {
         this.tool = tool;

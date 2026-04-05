@@ -24,7 +24,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.silentchaos512.gear.Config;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearProperty;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
@@ -258,11 +257,6 @@ public final class Trait {
 
     public boolean showInTooltip(TooltipFlag flag) {
         return !isHidden() || flag.isAdvanced();
-    }
-
-    @Deprecated
-    public void addInformation(int level, List<Component> tooltip) {
-        addInformation(level, tooltip, TooltipFlag.NORMAL);
     }
 
     /**

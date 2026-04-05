@@ -139,8 +139,6 @@ public final class SgTags {
         public static final TagKey<Item> RODS_IRON = common("rods/iron");
         public static final TagKey<Item> RODS_NETHERWOOD = mod("rods/netherwood");
         public static final TagKey<Item> RODS_STONE = common("rods/stone");
-        @Deprecated(forRemoval = true)
-        public static final TagKey<Item> RODS_ROUGH = mod("rods/rough");
         // Rods without items
         public static final TagKey<Item> RODS_AZURE_ELECTRUM = common("rods/azure_electrum");
         public static final TagKey<Item> RODS_AZURE_SILVER = common("rods/azure_silver");

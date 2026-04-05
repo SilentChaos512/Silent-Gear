@@ -116,13 +116,6 @@ public class CoreGearPart extends AbstractGearPart {
     }
 
     @Override
-    public String getModelKey(PartInstance part) {
-        var primaryMaterial = getPrimaryMaterial(part);
-        String str = "{" + (primaryMaterial != null ? primaryMaterial.getModelKey() : "null") + "}";
-        return super.getModelKey(part) + str;
-    }
-
-    @Override
     public <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(PartInstance part, PartType partType, PropertyKey<T, V> key) {
         if (key.property().isForMaterialsOnly()) {
             // Property does not apply to parts/gear

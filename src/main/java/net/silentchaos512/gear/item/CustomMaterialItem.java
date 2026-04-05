@@ -16,18 +16,9 @@ import net.silentchaos512.gear.util.Const;
 
 import java.util.function.Consumer;
 
-public class CustomMaterialItem extends SingleMaterialItem implements IColoredMaterialItem, ItemWithSubItems {
+public class CustomMaterialItem extends SingleMaterialItem implements ItemWithSubItems {
     public CustomMaterialItem(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public int getColor(ItemStack stack, int layer) {
-        var material = getMaterial(stack);
-        if (layer == 0 && material != null) {
-            return material.getColor(GearTypes.ALL.get(), PartTypes.MAIN.get()) | 0xFF000000;
-        }
-        return 0xFFFFFFFF;
     }
 
     @Override

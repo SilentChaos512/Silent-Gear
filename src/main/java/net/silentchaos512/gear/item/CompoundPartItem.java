@@ -82,17 +82,6 @@ public class CompoundPartItem extends Item {
         return s.toString();
     }
 
-    @Deprecated
-    public int getColor(ItemStack stack, int layer) {
-        if (layer == 0) {
-            var primaryMaterial = getPrimaryMaterial(stack);
-            return primaryMaterial != null
-                    ? primaryMaterial.getColor(getGearType(), getPartType()) | 0xFF000000
-                    : 0xFFFFFFFF;
-        }
-        return 0xFFFFFFFF;
-    }
-
     public int getColorWeight(int index, int totalCount) {
         return totalCount - index;
     }

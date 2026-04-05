@@ -3,11 +3,8 @@ package net.silentchaos512.gear.client.util;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
-import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
@@ -21,57 +18,6 @@ import java.util.function.Supplier;
 
 public final class ColorUtils {
     private ColorUtils() {
-    }
-
-    public static int getBlendedColor(GearItem item, PartInstance part, Collection<? extends MaterialInstance> materials) {
-        int[] componentSums = new int[3];
-        int maxColorSum = 0;
-        int colorCount = 0;
-
-        int i = 0;
-        for (MaterialInstance mat : materials) {
-            int color = mat.getColor(item.getGearType(), part.getType());
-            int r = (color >> 16) & 0xFF;
-            int g = (color >> 8) & 0xFF;
-            int b = color & 0xFF;
-            int colorWeight = (materials.size() - i) * (materials.size() - i);
-            for (int j = 0; j < colorWeight; ++j) {
-                maxColorSum += Math.max(r, Math.max(g, b));
-                componentSums[0] += r;
-                componentSums[1] += g;
-                componentSums[2] += b;
-                ++colorCount;
-            }
-            ++i;
-        }
-
-        return blendColors(componentSums, maxColorSum, colorCount);
-    }
-
-    @Deprecated(forRemoval = true)
-    public static int getBlendedColor(CompoundPartItem item, Collection<? extends MaterialInstance> materials) {
-        int[] componentSums = new int[3];
-        int maxColorSum = 0;
-        int colorCount = 0;
-
-        int i = 0;
-        for (MaterialInstance mat : materials) {
-            int color = mat.getColor(item.getGearType(), item.getPartType());
-            int r = (color >> 16) & 0xFF;
-            int g = (color >> 8) & 0xFF;
-            int b = color & 0xFF;
-            int colorWeight = item.getColorWeight(i, materials.size());
-            for (int j = 0; j < colorWeight; ++j) {
-                maxColorSum += Math.max(r, Math.max(g, b));
-                componentSums[0] += r;
-                componentSums[1] += g;
-                componentSums[2] += b;
-                ++colorCount;
-            }
-            ++i;
-        }
-
-        return blendColors(componentSums, maxColorSum, colorCount);
     }
 
     public static int getBlendedColorForCompoundMaterial(Collection<? extends MaterialInstance> materials) {
@@ -138,13 +84,13 @@ public final class ColorUtils {
             .build();
 
     public static boolean hasCachedColor(ItemStack stack, PartType partType, int animationFrame) {
-        String modelKey = GearData.getModelKey(stack, animationFrame);
+        String modelKey = GearData.getColorCacheKey(stack, animationFrame);
         Map<PartType, Integer> map = GEAR_COLOR_CACHE.getIfPresent(modelKey);
         return map != null && map.containsKey(partType);
     }
 
     public static int getCachedColor(ItemStack stack, PartType partType, int animationFrame) {
-        Map<PartType, Integer> partTypeMap = GEAR_COLOR_CACHE.getIfPresent(GearData.getModelKey(stack, animationFrame));
+        Map<PartType, Integer> partTypeMap = GEAR_COLOR_CACHE.getIfPresent(GearData.getColorCacheKey(stack, animationFrame));
         if (partTypeMap != null) {
             return partTypeMap.getOrDefault(partType, 0xFFFFFFFF);
         }
@@ -152,7 +98,7 @@ public final class ColorUtils {
     }
 
     public static void setCachedColor(ItemStack stack, PartType partType, int animationFrame, int color) {
-        String modelKey = GearData.getModelKey(stack, animationFrame);
+        String modelKey = GearData.getColorCacheKey(stack, animationFrame);
         Map<PartType, Integer> map = GEAR_COLOR_CACHE.getIfPresent(modelKey);
         if (map == null) {
             map = new HashMap<>();

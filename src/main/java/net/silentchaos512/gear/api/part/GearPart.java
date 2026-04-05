@@ -4,13 +4,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.CraftingInput;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.util.GearComponent;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
-import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
@@ -102,10 +100,6 @@ public interface GearPart extends GearComponent<PartInstance> {
 
     default Component getDisplayNamePrefix(@Nullable PartInstance part, ItemStack gear) {
         return Component.empty();
-    }
-
-    default String getModelKey(PartInstance part) {
-        return SilentGear.shortenId(SgRegistries.PART.getKey(this));
     }
 
     void addInformation(PartInstance part, ItemStack gear, List<Component> tooltip, TooltipFlag flag);

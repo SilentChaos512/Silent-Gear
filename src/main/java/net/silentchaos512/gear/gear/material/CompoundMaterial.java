@@ -18,7 +18,6 @@ import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.client.util.ColorUtils;
-import net.silentchaos512.gear.item.CompoundMaterialItem;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
@@ -216,15 +215,6 @@ public class CompoundMaterial extends AbstractMaterial {
     public int getNameColor(MaterialInstance material, PartType partType, GearType gearType) {
         var color = getColor(material, partType, gearType);
         return Color.blend(color, Color.VALUE_WHITE, 0.25f) & 0xFFFFFF;
-    }
-
-    @Override
-    public String getModelKey(MaterialInstance material) {
-        var commaSeparatedMaterialList = getSubMaterials(material).stream()
-                .filter(MaterialInstance::isValid)
-                .map(MaterialInstance::getModelKey)
-                .collect(Collectors.joining(","));
-        return super.getModelKey(material) + "[" + commaSeparatedMaterialList + "]";
     }
 
     @Override

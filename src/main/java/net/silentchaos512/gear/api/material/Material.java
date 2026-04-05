@@ -2,7 +2,6 @@ package net.silentchaos512.gear.api.material;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.util.GearComponent;
@@ -46,11 +45,6 @@ public interface Material extends GearComponent<MaterialInstance> {
      */
     default Optional<Material> getParentOptional() {
         return Optional.ofNullable(getParent());
-    }
-
-    @Deprecated
-    default Collection<IMaterialCategory> getCategories() {
-        return getCategories(MaterialInstance.of(this));
     }
 
     /**
@@ -159,11 +153,6 @@ public interface Material extends GearComponent<MaterialInstance> {
     int getColor(MaterialInstance material, PartType partType, GearType gearType);
 
     int getNameColor(MaterialInstance material, PartType partType, GearType gearType);
-
-    @Deprecated(forRemoval = true)
-    default String getModelKey(MaterialInstance material) {
-        return SilentGear.shortenId(SgRegistries.MATERIAL.getKey(this));
-    }
 
     MaterialEquippableInfo getEquippableInfo();
 }

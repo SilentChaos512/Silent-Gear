@@ -229,11 +229,6 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
         return part != null ? part.getDisplayName(this, type) : Component.empty();
     }
 
-    public String getModelKey() {
-        var part = getNullable();
-        return part != null ? part.getModelKey(this) : "null";
-    }
-
     public int getColor(ItemStack gear) {
         return getColor(gear, 0, 0);
     }

@@ -139,24 +139,6 @@ public final class TooltipHandler {
         // Type
         event.getToolTip().add(TextUtil.withColor(part.getType().getDisplayName(), Color.AQUAMARINE));
 
-        // Traits
-        /*List<TraitInstance> traits = new ArrayList<>();
-        for (TraitInstance traitInstance : part.getTraits(PartGearKey.of(part.getGearType(), part.getType()))) {
-            if (traitInstance.getTrait().showInTooltip(event.getFlags())) {
-                traits.add(traitInstance);
-            }
-        }
-
-        int numTraits = traits.size();
-        int traitIndex = getTraitDisplayIndex(numTraits);
-        int i = 0;
-        for (TraitInstance inst : traits) {
-            if (traitIndex < 0 || traitIndex == i) {
-                inst.addInformation(event.getToolTip(), event.getFlags());
-            }
-            ++i;
-        }*/
-
         // Properties
         if (KeyTracker.isDisplayPropertiesDown()) {
             event.getToolTip().add(Component.translatable("misc.silentgear.tooltip.properties")

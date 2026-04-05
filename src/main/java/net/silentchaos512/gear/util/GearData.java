@@ -33,7 +33,6 @@ import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
-import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -563,8 +562,7 @@ public final class GearData {
         result.set(SgDataComponents.GEAR_IS_EXAMPLE, value);
     }
 
-    @Deprecated(forRemoval = true)
-    public static String getModelKey(ItemStack stack, int animationFrame) {
+    public static String getColorCacheKey(ItemStack stack, int animationFrame) {
         return String.format("%d.%d", stack.getComponents().hashCode(), animationFrame);
     }
 

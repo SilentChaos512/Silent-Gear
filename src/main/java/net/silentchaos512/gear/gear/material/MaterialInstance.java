@@ -217,11 +217,6 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return mat != null ? mat.getSimpleName(this) : Component.literal(getId().toString());
     }
 
-    public String getModelKey() {
-        var mat = getNullable();
-        return mat != null ? mat.getModelKey(this) : "null";
-    }
-
     @Override
     public int getNameColor(PartType partType, GearType gearType) {
         var mat = getNullable();

@@ -151,11 +151,6 @@ public class WielderEffectTraitEffect extends TraitEffect {
             this.levels = levels;
         }
 
-        @Deprecated
-        public static PotionData of(boolean requiresFullSet, Holder<MobEffect> effect, int... levels) {
-            return of(requiresFullSet ? LevelType.FULL_SET_ONLY : LevelType.PIECE_COUNT, effect, levels);
-        }
-
         public static PotionData of(LevelType type, Holder<MobEffect> effect, int... levels) {
             var duration = TimeUtils.ticksFromSeconds(getDefaultDuration(effect));
             return new PotionData(type, effect, duration, Arrays.stream(levels).boxed().toList());

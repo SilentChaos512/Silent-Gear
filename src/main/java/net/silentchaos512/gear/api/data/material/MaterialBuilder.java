@@ -224,15 +224,6 @@ public class MaterialBuilder<M extends Material> {
         return stat(key, property, new NumberPropertyValue(value, operation));
     }
 
-    @Deprecated
-    public MaterialBuilder<M> mainStatsCommon(float toolDurability, float armorDurability, float enchantmentValue, float rarity) {
-        stat(PartTypes.MAIN, GearProperties.DURABILITY, NumberPropertyValue.average(toolDurability));
-        stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, NumberPropertyValue.average(armorDurability));
-        stat(PartTypes.MAIN, GearProperties.ENCHANTMENT_VALUE, NumberPropertyValue.average(enchantmentValue));
-        stat(PartTypes.MAIN, GearProperties.RARITY, NumberPropertyValue.average(rarity));
-        return this;
-    }
-
     public MaterialBuilder<M> mainStatsCommon(float toolDurability, float armorDurability, float enchantmentValue, float rarity, float chargeValue) {
         stat(PartTypes.MAIN, GearProperties.DURABILITY, NumberPropertyValue.average(toolDurability));
         stat(PartTypes.MAIN, GearProperties.ARMOR_DURABILITY, NumberPropertyValue.average(armorDurability));
@@ -288,14 +279,6 @@ public class MaterialBuilder<M extends Material> {
     public MaterialBuilder<M> mainStatsProjectile(float projectileSpeed, float projectileAccuracy) {
         stat(PartTypes.MAIN, GearProperties.PROJECTILE_SPEED, NumberPropertyValue.average(projectileSpeed));
         stat(PartTypes.MAIN, GearProperties.PROJECTILE_ACCURACY, NumberPropertyValue.average(projectileAccuracy));
-        return this;
-    }
-
-    @Deprecated
-    public MaterialBuilder<M> mainStatsArmor(float armor, float toughness, float magicArmor) {
-        stat(PartTypes.MAIN, GearProperties.ARMOR, NumberPropertyValue.average(armor));
-        stat(PartTypes.MAIN, GearProperties.ARMOR_TOUGHNESS, NumberPropertyValue.average(toughness));
-        stat(PartTypes.MAIN, GearProperties.MAGIC_ARMOR, NumberPropertyValue.average(magicArmor));
         return this;
     }
 

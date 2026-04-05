@@ -385,24 +385,8 @@ public final class GearHelper {
         return item instanceof GearItem gearItem ? gearItem.getGearType() : defaultType;
     }
 
-    /**
-     * Check if both gear items are made of the same parts.
-     *
-     * @param gear1 First item
-     * @param gear2 Second item
-     * @return True only if all parts are identical
-     */
-    @Deprecated // May not be needed if arrows get redesigned
-    public static boolean isEquivalent(ItemInstance gear1, ItemInstance gear2) {
-        if (!GearHelper.isGear(gear1) || !GearHelper.isGear(gear2) || gear1.typeHolder().value() != gear2.typeHolder().value()) {
-            return false;
-        }
-
-        var constructionData1 = GearData.getConstruction(gear1);
-        var constructionData2 = GearData.getConstruction(gear2);
-
-
-        return constructionData1.equals(constructionData2);
+    public static GearType getType(ItemLike item) {
+        return getType(new ItemStackTemplate(item.asItem()));
     }
 
     public static boolean isCorrectToolForDrops(ItemInstance stack, BlockState state, @Nullable TagKey<Block> blocksForTool) {

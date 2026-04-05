@@ -53,11 +53,6 @@ public final class SilentGear {
         return "0.0.0";
     }
 
-    @Deprecated
-    public static String getVersion(boolean correctInDev) {
-        return getVersion();
-    }
-
     public static boolean isDevBuild() {
         return "NONE".equals(getVersion()) || !FMLEnvironment.isProduction();
     }

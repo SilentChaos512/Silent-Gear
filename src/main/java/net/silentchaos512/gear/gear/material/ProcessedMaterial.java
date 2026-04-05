@@ -14,7 +14,6 @@ import net.silentchaos512.gear.api.property.GearPropertyMap;
 import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PropertyKey;
-import net.silentchaos512.gear.item.ProcessedMaterialItem;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.PartTypes;
@@ -111,12 +110,6 @@ public class ProcessedMaterial extends AbstractMaterial {
     public int getNameColor(MaterialInstance material, PartType partType, GearType gearType) {
         MaterialInstance base = getBaseMaterial(material);
         return base != null && base.isValid() ? base.getNameColor(partType, gearType) : -1;
-    }
-
-    @Override
-    public String getModelKey(MaterialInstance material) {
-        MaterialInstance base = getBaseMaterial(material);
-        return super.getModelKey(material) + (base != null && base.isValid() ? "[" + base.getModelKey() + "]" : "");
     }
 
     @Override

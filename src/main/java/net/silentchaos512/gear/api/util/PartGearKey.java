@@ -68,22 +68,6 @@ public record PartGearKey (
         return null;
     }
 
-    /**
-     * @deprecated use {@link #gearType()} instead
-     */
-    @Deprecated(forRemoval = true)
-    public GearType getGearType() {
-        return gearType;
-    }
-
-    /**
-     * @deprecated use {@link #partType()} instead
-     */
-    @Deprecated(forRemoval = true)
-    public PartType getPartType() {
-        return partType;
-    }
-
     public Component getDisplayName() {
         return partType.getDisplayName().append(" / ").append(gearType.getDisplayName());
     }
