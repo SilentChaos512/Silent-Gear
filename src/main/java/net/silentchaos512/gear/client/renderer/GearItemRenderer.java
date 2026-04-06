@@ -156,6 +156,14 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         return List.of();
     }
 
+    public void expandIfNotGui(ItemDisplayContext displayContext, PoseStack poseStack) {
+        if (displayContext != ItemDisplayContext.GUI) {
+            poseStack.translate(0.5f, 0.5f, 0.5f);
+            poseStack.scale(1.005f, 1.005f, 1.005f);
+            poseStack.translate(-0.5f, -0.5f, -0.5f);
+        }
+    }
+
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         if (!(stack.getItem() instanceof GearItem item))
@@ -184,6 +192,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
             for (BakedQuad quad : quads) {
                 vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
             }
+            expandIfNotGui(displayContext, poseStack);
         }
 
         //TODO: Remove need for forcing rod rendering - example items don't contain rods by default in JEI/Creative
@@ -200,6 +209,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
             for (BakedQuad quad : quads) {
                 vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
             }
+            expandIfNotGui(displayContext, poseStack);
         }
 
         //TODO: Remove need for forcing fletching rendering - arrows in creative inventory don't have fletching
@@ -216,6 +226,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
             for (BakedQuad quad : quads) {
                 vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
             }
+            expandIfNotGui(displayContext, poseStack);
         }
 
         //TODO: Remove need for forcing fletching rendering - example items don't contain adornments by default
@@ -244,6 +255,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
             for (BakedQuad quad : quads) {
                 vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
             }
+            expandIfNotGui(displayContext, poseStack);
         }
 
         for (var partInst : construction.parts()) {
@@ -267,6 +279,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                 for (BakedQuad quad : quads) {
                     vc.putBulkData(poseStack.last(), quad, red / 255.0f, green / 255.0f, blue / 255.0f, 1.0f, packedLight, packedOverlay);
                 }
+                expandIfNotGui(displayContext, poseStack);
             }
         }
         poseStack.popPose();
