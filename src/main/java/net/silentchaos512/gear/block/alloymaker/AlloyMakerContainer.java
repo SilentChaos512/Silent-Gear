@@ -102,7 +102,7 @@ public class AlloyMakerContainer extends AbstractContainerMenu {
 
                 slot.onQuickCraft(stack1, stack);
             } else if (index >= inventorySize) {
-                if (isValidIngredient()) {
+                if (isValidIngredient(stack1)) {
                     if (!this.moveItemStackTo(stack1, 0, outputSlot, false)) {
                         // Move from player or hotbar to input slots
                         return ItemStack.EMPTY;
@@ -136,7 +136,12 @@ public class AlloyMakerContainer extends AbstractContainerMenu {
         return stack;
     }
 
-    private boolean isValidIngredient() {
-        return true; // TODO
+    private boolean isValidIngredient(ItemStack stack) {
+        for (int i = 0; i < this.inventory.getContainerSize() - 2; ++i) {
+            if (this.slots.get(i).mayPlace(stack)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
