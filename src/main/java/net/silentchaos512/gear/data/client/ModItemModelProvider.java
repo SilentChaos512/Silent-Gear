@@ -233,16 +233,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         return BuiltInRegistries.ITEM.getKey(item).getPath();
     }
 
-    private ItemModelBuilder tempGearBow(GearItemSet<? extends GearItem> item, ModelFile parent) {
-        String name = GearHelper.gearTypeName(item.type());
-        return getBuilder(itemNamePath(item))
-                .parent(parent)
-                .texture("layer0", "item/" + name + "/rod_generic_lc")
-                .texture("layer1", "item/" + name + "/main_generic_hc")
-                .texture("layer2", "item/" + name + "/_highlight")
-                .texture("layer3", "item/" + name + "/bowstring_string");
-    }
-
     private ItemModelBuilder tempMainPart(GearItemSet<? extends GearItem> item) {
         String name = GearHelper.gearTypeName(item.type());
         return getBuilder(itemNamePath(item.mainPart()))
