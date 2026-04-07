@@ -5,8 +5,8 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 @MethodsReturnNonnullByDefault
-public class GearBowItemExtensions implements IClientItemExtensions {
-    final static GearBowItemRenderer renderer = new GearBowItemRenderer();
+public class GearRangedItemExtensions implements IClientItemExtensions {
+    final static GearRangedItemRenderer renderer = new GearRangedItemRenderer();
 
     @Override
     public BlockEntityWithoutLevelRenderer getCustomRenderer() {

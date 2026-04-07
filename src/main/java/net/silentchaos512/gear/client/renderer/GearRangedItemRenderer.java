@@ -39,13 +39,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
-public class GearBowItemRenderer extends BlockEntityWithoutLevelRenderer {
+public class GearRangedItemRenderer extends BlockEntityWithoutLevelRenderer {
     private static final Cache<TextureAtlasSprite, List<BakedQuad>> QUADS_FOR_SPRITES_CACHE = CacheBuilder.newBuilder()
             .maximumSize(128)
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
 
-    public GearBowItemRenderer() {
+    public GearRangedItemRenderer() {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
     }
 

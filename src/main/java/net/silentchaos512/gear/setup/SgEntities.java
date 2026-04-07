@@ -16,7 +16,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.model.GearTridentModel;
-import net.silentchaos512.gear.client.renderer.GearBowItemExtensions;
+import net.silentchaos512.gear.client.renderer.GearRangedItemExtensions;
 import net.silentchaos512.gear.client.renderer.GearItemExtensions;
 import net.silentchaos512.gear.client.renderer.GearTridentItemExtensions;
 import net.silentchaos512.gear.client.renderer.entity.GearArrowRenderer;
@@ -106,7 +106,7 @@ public final class SgEntities {
             );
             // Special model rendering for bow
             event.registerItem(
-                    new GearBowItemExtensions(),
+                    new GearRangedItemExtensions(),
                     GearItemSets.BOW.gearItem(),
                     GearItemSets.CROSSBOW.gearItem(),
                     GearItemSets.SLINGSHOT.gearItem()
