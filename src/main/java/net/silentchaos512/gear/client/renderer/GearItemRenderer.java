@@ -263,11 +263,12 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
 
             for (var spriteLocation : spriteLocations) {
                 var sprite = blockAtlas.apply(spriteLocation);
+                
+                var packedColor =
+                        (partInst.getType() == PartTypes.MAIN.get() && GearData.hasPartOfType(stack, PartTypes.COATING.get()))
+                            ? ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get())
+                            : ColorUtils.getBlendedColorForPartInGear(stack, partInst.getType());
 
-                var packedColor = ColorUtils.getBlendedColorForPartInGear(stack, partInst.getType());
-                if (partInst.getType() == PartTypes.MAIN.get() && GearData.hasPartOfType(stack, PartTypes.COATING.get())) {
-                    packedColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get());
-                }
                 var red = FastColor.ARGB32.red(packedColor);
                 var green = FastColor.ARGB32.green(packedColor);
                 var blue = FastColor.ARGB32.blue(packedColor);
