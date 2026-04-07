@@ -166,7 +166,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(GearItemSets.MATTOCK.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.SICKLE.name(), modLoc("item/base_gear"));
         withExistingParent(GearItemSets.SHEARS.name(), modLoc("item/handheld_gear"));
-        tempGearBow(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
+        withExistingParent(GearItemSets.FISHING_ROD.name(), modLoc("item/rod_base"));
         withExistingParent(GearItemSets.BOW.name(), modLoc("item/bow_base"));
         withExistingParent(GearItemSets.CROSSBOW.name(), modLoc("item/crossbow_base"));
         withExistingParent(GearItemSets.SLINGSHOT.name(), modLoc("item/slingshot_base"));

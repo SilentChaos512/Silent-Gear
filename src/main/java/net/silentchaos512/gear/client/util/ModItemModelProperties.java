@@ -4,7 +4,9 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -21,6 +23,21 @@ public final class ModItemModelProperties {
 
     @SuppressWarnings("OverlyComplexMethod")
     public static void register(FMLClientSetupEvent event) {
+        var cast = ResourceLocation.withDefaultNamespace("cast");
+        register(event, GearItemSets.FISHING_ROD.gearItem(), cast, (stack, level, entity, par4) -> {
+            if (entity == null) {
+                return 0.0F;
+            } else {
+                boolean inMainHand = entity.getMainHandItem() == stack;
+                boolean inOffHand = entity.getOffhandItem() == stack;
+                if (entity.getMainHandItem().getItem() instanceof FishingRodItem) {
+                    inOffHand = false;
+                }
+
+                return (inMainHand || inOffHand) && entity instanceof Player player && player.fishing != null ? 1.0F : 0.0F;
+            }
+        });
+
         var pull = ResourceLocation.withDefaultNamespace("pull");
         register(event, GearItemSets.BOW.gearItem(), pull, (stack, level, entity, par4) -> {
             if (entity == null) {

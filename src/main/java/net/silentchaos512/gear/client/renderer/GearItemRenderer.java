@@ -3,12 +3,14 @@ package net.silentchaos512.gear.client.renderer;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Transformation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
@@ -33,6 +35,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
 public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
@@ -153,7 +156,96 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                     )
             );
         }
+        else if (partType == PartTypes.CORD.get()) {
+            return List.of(ResourceLocation.fromNamespaceAndPath(
+                    SilentGear.MOD_ID,
+                    "item/%s/bowstring_string".formatted(gearTypeName)
+            ));
+        }
         return List.of();
+    }
+
+    public void renderColoredSprite(
+            TextureAtlasSprite sprite,
+            VertexConsumer vc,
+            PoseStack poseStack,
+            int packedLight,
+            int packedOverlay,
+            ItemDisplayContext displayContext,
+            int packedColor
+    ) {
+        var red = FastColor.ARGB32.red(packedColor);
+        var green = FastColor.ARGB32.green(packedColor);
+        var blue = FastColor.ARGB32.blue(packedColor);
+        // Alpha is discarded and forced to full for cutout rendering
+        // Additionally prevents parts without materials from not rendering
+
+        var quads = getQuadsForSprite(sprite);
+
+        for (BakedQuad quad : quads) {
+            vc.putBulkData(poseStack.last(), quad, red / 255.0f, green / 255.0f, blue / 255.0f, 1.0f, packedLight, packedOverlay);
+        }
+        expandIfNotGui(displayContext, poseStack);
+    }
+
+    public void renderUncoloredSprite(
+            TextureAtlasSprite sprite,
+            VertexConsumer vc,
+            PoseStack poseStack,
+            int packedLight,
+            int packedOverlay,
+            ItemDisplayContext displayContext
+    ) {
+        var quads = getQuadsForSprite(sprite);
+
+        for (BakedQuad quad : quads) {
+            vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
+        }
+        expandIfNotGui(displayContext, poseStack);
+    }
+
+    public void rodLineRendering(
+            GearConstructionData construction,
+            VertexConsumer vc,
+            ItemStack stack,
+            Function<ResourceLocation, TextureAtlasSprite> blockAtlas,
+            PoseStack poseStack,
+            ItemDisplayContext displayContext,
+            int packedLight,
+            int packedOverlay
+    ) {
+        var mc = Minecraft.getInstance();
+
+        // Return w/o rendering if cast
+        var cast = ItemProperties.getProperty(stack, ResourceLocation.withDefaultNamespace("cast"));
+        if (cast != null && cast.call(stack, mc.level, mc.player, 0) == 1.0) return;
+
+        SilentGear.LOGGER.info(cast != null);
+
+        int bobberColor =
+                (GearData.hasPartOfType(stack, PartTypes.COATING.get()))
+                        ? ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get())
+                        : ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+
+        int lineColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.CORD.get());
+
+        var bobberSprite = construction.getPrimaryPart() != null && construction.getPrimaryPart().getPrimaryMaterial() != null
+                ? blockAtlas.apply(ResourceLocation.fromNamespaceAndPath(
+                        SilentGear.MOD_ID,
+                        "item/fishing_rod/bobber_%s".formatted(construction.getPrimaryPart().getPrimaryMaterial().getMainTextureType().alias)
+                ))
+                : blockAtlas.apply(ResourceLocation.fromNamespaceAndPath(
+                    SilentGear.MOD_ID,
+                    "item/fishing_rod/bobber_lc"
+                ));
+
+        var lineSprite = blockAtlas.apply(ResourceLocation.fromNamespaceAndPath(
+                SilentGear.MOD_ID,
+                "item/fishing_rod/line"
+        ));
+
+        renderColoredSprite(lineSprite, vc, poseStack, packedLight, packedOverlay, displayContext, lineColor);
+        renderColoredSprite(bobberSprite, vc, poseStack, packedLight, packedOverlay, displayContext, bobberColor);
     }
 
     public void expandIfNotGui(ItemDisplayContext displayContext, PoseStack poseStack) {
@@ -187,12 +279,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                     )
             );
 
-            var quads = getQuadsForSprite(mainSprite);
-
-            for (BakedQuad quad : quads) {
-                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
-            }
-            expandIfNotGui(displayContext, poseStack);
+            renderUncoloredSprite(mainSprite, vc, poseStack, packedLight, packedOverlay, displayContext);
         }
 
         //TODO: Remove need for forcing rod rendering - example items don't contain rods by default in JEI/Creative
@@ -204,12 +291,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                     )
             );
 
-            var quads = getQuadsForSprite(mainSprite);
-
-            for (BakedQuad quad : quads) {
-                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
-            }
-            expandIfNotGui(displayContext, poseStack);
+            renderUncoloredSprite(mainSprite, vc, poseStack, packedLight, packedOverlay, displayContext);
         }
 
         //TODO: Remove need for forcing fletching rendering - arrows in creative inventory don't have fletching
@@ -221,12 +303,7 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                     )
             );
 
-            var quads = getQuadsForSprite(mainSprite);
-
-            for (BakedQuad quad : quads) {
-                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
-            }
-            expandIfNotGui(displayContext, poseStack);
+            renderUncoloredSprite(mainSprite, vc, poseStack, packedLight, packedOverlay, displayContext);
         }
 
         //TODO: Remove need for forcing fletching rendering - example items don't contain adornments by default
@@ -244,18 +321,8 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
                     )
             );
 
-            var quads = getQuadsForSprite(mainSprite);
-
-            for (BakedQuad quad : quads) {
-                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
-            }
-
-            quads = getQuadsForSprite(highlightSprite);
-
-            for (BakedQuad quad : quads) {
-                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
-            }
-            expandIfNotGui(displayContext, poseStack);
+            renderUncoloredSprite(mainSprite, vc, poseStack, packedLight, packedOverlay, displayContext);
+            renderUncoloredSprite(highlightSprite, vc, poseStack, packedLight, packedOverlay, displayContext);
         }
 
         for (var partInst : construction.parts()) {
@@ -263,26 +330,19 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
 
             for (var spriteLocation : spriteLocations) {
                 var sprite = blockAtlas.apply(spriteLocation);
-                
+
                 var packedColor =
                         (partInst.getType() == PartTypes.MAIN.get() && GearData.hasPartOfType(stack, PartTypes.COATING.get()))
                             ? ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get())
                             : ColorUtils.getBlendedColorForPartInGear(stack, partInst.getType());
 
-                var red = FastColor.ARGB32.red(packedColor);
-                var green = FastColor.ARGB32.green(packedColor);
-                var blue = FastColor.ARGB32.blue(packedColor);
-                // Alpha is discarded and forced to full for cutout rendering
-                // Additionally prevents parts without materials from not rendering
-
-                var quads = getQuadsForSprite(sprite);
-
-                for (BakedQuad quad : quads) {
-                    vc.putBulkData(poseStack.last(), quad, red / 255.0f, green / 255.0f, blue / 255.0f, 1.0f, packedLight, packedOverlay);
-                }
-                expandIfNotGui(displayContext, poseStack);
+                renderColoredSprite(sprite, vc, poseStack, packedLight, packedOverlay, displayContext, packedColor);
             }
         }
+
+        if (type.matches(GearTypes.FISHING_ROD.get()))
+            rodLineRendering(construction, vc, stack, blockAtlas, poseStack, displayContext, packedLight, packedOverlay);
+
         poseStack.popPose();
     }
 }

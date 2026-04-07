@@ -94,6 +94,7 @@ public final class SgEntities {
                     GearItemSets.MATTOCK.gearItem(),
                     GearItemSets.SICKLE.gearItem(),
                     GearItemSets.SHEARS.gearItem(),
+                    GearItemSets.FISHING_ROD.gearItem(),
                     GearItemSets.ARROW.gearItem(),
                     GearItemSets.HELMET.gearItem(),
                     GearItemSets.CHESTPLATE.gearItem(),
