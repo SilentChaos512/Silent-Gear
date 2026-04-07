@@ -108,7 +108,8 @@ public final class SgEntities {
             event.registerItem(
                     new GearBowItemExtensions(),
                     GearItemSets.BOW.gearItem(),
-                    GearItemSets.CROSSBOW.gearItem()
+                    GearItemSets.CROSSBOW.gearItem(),
+                    GearItemSets.SLINGSHOT.gearItem()
             );
             // Register special model rendering for trident
             event.registerItem(
