@@ -3,6 +3,7 @@ package net.silentchaos512.gear.client.renderer;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Transformation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -31,9 +32,11 @@ import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
 public class GearBowItemRenderer extends BlockEntityWithoutLevelRenderer {
@@ -141,13 +144,32 @@ public class GearBowItemRenderer extends BlockEntityWithoutLevelRenderer {
         return List.of();
     }
 
+    public void renderUncoloredSprite(
+            TextureAtlasSprite sprite,
+            VertexConsumer vc,
+            PoseStack poseStack,
+            int packedLight,
+            int packedOverlay,
+            ItemDisplayContext displayContext
+    ) {
+        var quads = getQuadsForSprite(sprite);
+
+        for (BakedQuad quad : quads) {
+            vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
+        }
+        expandIfNotGui(displayContext, poseStack);
+    }
+
     public int getPullState(ItemStack stack) {
         var mc = Minecraft.getInstance();
 
+        // Return fully pulled if it is charged
+        var chargedFunc = ItemProperties.getProperty(stack, ResourceLocation.withDefaultNamespace("charged"));
+        if (chargedFunc != null && chargedFunc.call(stack, mc.level, mc.player, 0) == 1.0) return 3;
+
         // Return no pull state if bow is not being pulled
         var pullingFunc = ItemProperties.getProperty(stack, ResourceLocation.withDefaultNamespace("pulling"));
-        if (pullingFunc == null) return -1;
-        if (pullingFunc.call(stack, mc.level, mc.player, 0) != 1.0) return -1;
+        if (pullingFunc == null || pullingFunc.call(stack, mc.level, mc.player, 0) != 1.0) return -1;
 
         // Get how much bow is pulled and return value accordingly
         var pullFunc = ItemProperties.getProperty(stack, ResourceLocation.withDefaultNamespace("pull"));
@@ -164,6 +186,45 @@ public class GearBowItemRenderer extends BlockEntityWithoutLevelRenderer {
             poseStack.scale(1.005f, 1.005f, 1.005f);
             poseStack.translate(-0.5f, -0.5f, -0.5f);
         }
+    }
+
+    public void crossbowProjectileRendering(
+            VertexConsumer vc,
+            ItemStack stack,
+            Function<ResourceLocation, TextureAtlasSprite> blockAtlas,
+            PoseStack poseStack,
+            ItemDisplayContext displayContext,
+            int packedLight,
+            int packedOverlay
+    ) {
+        var mc = Minecraft.getInstance();
+
+        // Return w/o rendering if not charged
+        var chargedFunc = ItemProperties.getProperty(stack, ResourceLocation.withDefaultNamespace("charged"));
+        if (chargedFunc == null) return;
+        if (chargedFunc.call(stack, mc.level, mc.player, 0) != 1.0) return;
+
+        // Get whether it is a firework or arrow loaded
+        var fireworkFunc = ItemProperties.getProperty(stack, ResourceLocation.withDefaultNamespace("firework"));
+        if (fireworkFunc == null || fireworkFunc.call(stack, mc.level, mc.player, 0) != 1.0) {
+            var sprite = blockAtlas.apply(
+                    ResourceLocation.fromNamespaceAndPath(
+                            SilentGear.MOD_ID,
+                            "item/crossbow/charged_arrow"
+                    )
+            );
+
+            renderUncoloredSprite(sprite, vc, poseStack, packedLight, packedOverlay, displayContext);
+            return;
+        }
+        var sprite = blockAtlas.apply(
+                ResourceLocation.fromNamespaceAndPath(
+                        SilentGear.MOD_ID,
+                        "item/crossbow/charged_firework"
+                )
+        );
+
+        renderUncoloredSprite(sprite, vc, poseStack, packedLight, packedOverlay, displayContext);
     }
 
     @Override
@@ -190,12 +251,7 @@ public class GearBowItemRenderer extends BlockEntityWithoutLevelRenderer {
                     )
             );
 
-            var quads = getQuadsForSprite(mainSprite);
-
-            for (BakedQuad quad : quads) {
-                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
-            }
-            expandIfNotGui(displayContext, poseStack);
+            renderUncoloredSprite(mainSprite, vc, poseStack, packedLight, packedOverlay, displayContext);
         }
 
         //TODO: Remove need for forcing rod rendering - example items don't contain rods by default in JEI/Creative
@@ -207,12 +263,7 @@ public class GearBowItemRenderer extends BlockEntityWithoutLevelRenderer {
                     )
             );
 
-            var quads = getQuadsForSprite(mainSprite);
-
-            for (BakedQuad quad : quads) {
-                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
-            }
-            expandIfNotGui(displayContext, poseStack);
+            renderUncoloredSprite(mainSprite, vc, poseStack, packedLight, packedOverlay, displayContext);
         }
 
         //TODO: Remove need for forcing bowstring rendering - example items don't contain rods by default in JEI/Creative
@@ -224,15 +275,17 @@ public class GearBowItemRenderer extends BlockEntityWithoutLevelRenderer {
                     )
             );
 
-            var quads = getQuadsForSprite(mainSprite);
-
-            for (BakedQuad quad : quads) {
-                vc.putBulkData(poseStack.last(), quad, 1.0f, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
-            }
-            expandIfNotGui(displayContext, poseStack);
+            renderUncoloredSprite(mainSprite, vc, poseStack, packedLight, packedOverlay, displayContext);
         }
 
-        for (var partInst : construction.parts()) {
+        // Force cord to render last (fixes crossbow rendering)
+        var sortedParts = new ArrayList<PartInstance>();
+        construction.parts().forEach(partInstance -> {
+            if (partInstance.getType() == PartTypes.CORD.get()) sortedParts.add(partInstance);
+            else sortedParts.addFirst(partInstance);
+        });
+
+        for (var partInst : sortedParts) {
             var spriteLocations = getPartTextureLocations(type, partInst, construction);
 
             for (var spriteLocation : spriteLocations) {
@@ -264,6 +317,7 @@ public class GearBowItemRenderer extends BlockEntityWithoutLevelRenderer {
                 expandIfNotGui(displayContext, poseStack);
             }
         }
+        crossbowProjectileRendering(vc, stack, blockAtlas, poseStack, displayContext, packedLight, packedOverlay);
         poseStack.popPose();
     }
 }
