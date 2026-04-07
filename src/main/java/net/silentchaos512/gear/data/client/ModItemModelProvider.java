@@ -14,7 +14,6 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.CraftingItems;
@@ -25,7 +24,6 @@ import net.silentchaos512.gear.setup.GearItemSets;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.SgRegistries;
-import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.lib.util.NameUtils;
 
@@ -170,7 +168,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(GearItemSets.SHEARS.name(), modLoc("item/handheld_gear"));
         //TODO: Make custom renderer for 'animated' items such as the bow
         tempGearBow(GearItemSets.FISHING_ROD, getExistingFile(ResourceLocation.withDefaultNamespace("item/handheld_rod")));
-        // tempGearBow(SgItems.BOW, itemHandheld);
+        withExistingParent(GearItemSets.BOW.name(), modLoc("item/base_gear"));
         // tempGearBow(SgItems.CROSSBOW, itemHandheld); // manual override in resources
         // tempGearBow(SgItems.SLINGSHOT, itemHandheld);
         withExistingParent(GearItemSets.ARROW.name(), modLoc("item/handheld_gear"));
