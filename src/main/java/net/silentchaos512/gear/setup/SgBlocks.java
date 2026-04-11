@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -29,6 +28,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
 import net.silentchaos512.gear.block.alloymaker.AlloyMakerBlock;
+import net.silentchaos512.gear.block.alloymaker.entity.*;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.charger.StarlightChargerBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
@@ -107,18 +107,21 @@ public final class SgBlocks {
 
     public static final DeferredBlock<AlloyMakerBlock<MetalAlloyRecipe>> ALLOY_FORGE = register("alloy_forge", () ->
             new AlloyMakerBlock<>(Const.METAL_ALLOY_MAKER_INFO,
+                    AlloyForgeBlockEntity::new,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final DeferredBlock<AlloyMakerBlock<GemAlloyRecipe>> RECRYSTALLIZER = register("recrystallizer", () ->
             new AlloyMakerBlock<>(Const.GEM_ALLOY_MAKER_INFO,
+                    RecrystallizerBlockEntity::new,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
 
     public static final DeferredBlock<AlloyMakerBlock<FabricAlloyRecipe>> REFABRICATOR = register("refabricator", () ->
             new AlloyMakerBlock<>(Const.FABRIC_ALLOY_MAKER_INFO,
+                    RefabricatorBlockEntity::new,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)));
@@ -127,6 +130,7 @@ public final class SgBlocks {
             "crude_mixer",
             () -> new AlloyMakerBlock<>(
                     Const.CRUDE_MIXER_INFO,
+                    CrudeMixerBlockEntity::new,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.STONE)
@@ -142,6 +146,7 @@ public final class SgBlocks {
             "super_mixer",
             () -> new AlloyMakerBlock<>(
                     Const.SUPER_MIXER_INFO,
+                    SuperMixerBlockEntity::new,
                     BlockBehaviour.Properties.of()
                             .strength(4, 20)
                             .sound(SoundType.METAL)

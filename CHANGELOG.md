@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Crash when connecting hoppers or pipes to alloy makers
+
 ## [1.21.1-4.1.5] - 2026-04-03
 ### Changed
 - Super Mixer now has 8 input slots (up from 4)

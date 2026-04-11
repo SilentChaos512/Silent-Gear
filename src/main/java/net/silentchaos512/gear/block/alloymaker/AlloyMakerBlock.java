@@ -57,10 +57,10 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
     private final AlloyMakerInfo<R> info;
     private final MapCodec<AlloyMakerBlock<R>> codec;
 
-    public AlloyMakerBlock(AlloyMakerInfo<R> info, Properties properties) {
-        super((pos, state) -> new AlloyMakerBlockEntity<>(info, pos, state), properties);
+    public AlloyMakerBlock(AlloyMakerInfo<R> info, BlockEntityType.BlockEntitySupplier<? extends AlloyMakerBlockEntity<R>> blockEntityFactory, Properties properties) {
+        super(blockEntityFactory, properties);
         this.info = info;
-        this.codec = simpleCodec(p -> new AlloyMakerBlock<>(info, p));
+        this.codec = simpleCodec(p -> new AlloyMakerBlock<>(info, blockEntityFactory, p));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
     }
 
