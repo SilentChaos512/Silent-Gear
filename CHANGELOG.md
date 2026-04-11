@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Alloy makers rejecting valid inputs from custom recipes (moostoet) [#920, #919]
+- Conversion recipes not being disabled by the config option [#918]
 - Crash when connecting hoppers or pipes to alloy makers
 
 ## [1.21.1-4.1.5] - 2026-04-03

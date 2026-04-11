@@ -7,7 +7,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -17,6 +16,8 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -44,6 +45,15 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     @Override
     public RecipeSerializer<?> getSerializer() {
         return SgRecipes.CONVERSION.get();
+    }
+
+    private static boolean allowedInConfig() {
+        return Config.Common.isLoaded() && Config.Common.allowConversionRecipes.getAsBoolean();
+    }
+
+    @Override
+    public boolean matches(CraftingInput pInv, Level pLevel) {
+        return allowedInConfig() && super.matches(pInv, pLevel);
     }
 
     @Override
