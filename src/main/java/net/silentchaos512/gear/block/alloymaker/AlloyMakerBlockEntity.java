@@ -20,6 +20,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
@@ -44,6 +45,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
 
     private final AlloyMakerInfo<R> info;
     private final RecipeManager.CachedCheck<AlloyRecipeInput, R> quickCheck;
+    private final IItemHandler automationItemHandler;
 
     private ItemStack outputItemHint = ItemStack.EMPTY;
     private int progress = 0;
@@ -81,6 +83,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
         super(info.getBlockEntityType(), pos, state, info.getInputSlotCount() + 2, () -> createItemHandler(info));
         this.info = info;
         this.quickCheck = RecipeManager.createCheck(info.getRecipeType());
+        this.automationItemHandler = createAutomationItemHandler();
     }
 
     protected RecipeType<R> getRecipeType() {
@@ -302,7 +305,32 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        return index < getInputSlotCount();
+        return index >= 0 && index < getInputSlotCount() && acceptsInput(stack);
+    }
+
+    private boolean acceptsInput(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+
+        var material = MaterialInstance.from(stack);
+        if (material != null && this.info.acceptsMaterial(material)) {
+            return true;
+        }
+
+        if (this.level == null) {
+            return false;
+        }
+
+        for (var recipeHolder : this.level.getRecipeManager().getAllRecipesFor(getRecipeType())) {
+            for (var ingredient : recipeHolder.value().getIngredients()) {
+                if (ingredient.test(stack)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -323,12 +351,8 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
         return new ItemStackHandler(totalSlots) {
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
-                // Only materials in the correct categories are accepted
-                if (slot >= 0 && slot < inputSlotCount) {
-                    var material = MaterialInstance.from(stack);
-                    return material != null && info.acceptsMaterial(material);
-                }
-                return false;
+                // Validation for GUI input and automation lives on the block entity.
+                return slot >= 0 && slot < inputSlotCount;
             }
 
             @Override
@@ -338,6 +362,49 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
                 return super.extractItem(slot, amount, simulate);
             }
         };
+    }
+
+    private IItemHandler createAutomationItemHandler() {
+        return new IItemHandler() {
+            @Override
+            public int getSlots() {
+                return items.getSlots();
+            }
+
+            @Override
+            public ItemStack getStackInSlot(int slot) {
+                return items.getStackInSlot(slot);
+            }
+
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                if (!AlloyMakerBlockEntity.this.canPlaceItem(slot, stack)) {
+                    return stack;
+                }
+
+                return items.insertItem(slot, stack, simulate);
+            }
+
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return items.extractItem(slot, amount, simulate);
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return items.getSlotLimit(slot);
+            }
+
+            @Override
+            public boolean isItemValid(int slot, ItemStack stack) {
+                return AlloyMakerBlockEntity.this.canPlaceItem(slot, stack);
+            }
+        };
+    }
+
+    @Override
+    public IItemHandler getItemHandler() {
+        return this.automationItemHandler;
     }
 
     @Override
