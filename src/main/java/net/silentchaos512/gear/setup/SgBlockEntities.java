@@ -16,6 +16,7 @@ import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.alloymaker.entity.*;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.grader.GraderBlockEntity;
+import net.silentchaos512.gear.block.paintmixer.PaintMixerBlockEntity;
 import net.silentchaos512.gear.block.press.MetalPressBlockEntity;
 import net.silentchaos512.gear.block.salvager.SalvagerBlockEntity;
 import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlockEntity;
@@ -85,6 +86,12 @@ public final class SgBlockEntities {
             "stone_anvil",
             StoneAnvilBlockEntity::new,
             SgBlocks.STONE_ANVIL
+    );
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PaintMixerBlockEntity>> PAINT_MIXER = register(
+            "paint_mixer",
+            PaintMixerBlockEntity::new,
+            SgBlocks.PAINT_MIXER
     );
 
     private SgBlockEntities() {

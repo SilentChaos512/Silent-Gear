@@ -93,6 +93,36 @@ public final class ColorUtils {
         return blendColors(componentSums, maxColorSum, colorCount);
     }
 
+    public static int getBlendedColor(Collection<Integer> colors) {
+        if (colors.isEmpty()) {
+            return -1;
+        }
+
+        float ratio = 1f / colors.size();
+
+        int a = 0;
+        int r = 0;
+        int g = 0;
+        int b = 0;
+
+        for (int color : colors) {
+            int a1 = (color >> 24 & 0xff);
+            int r1 = ((color & 0xff0000) >> 16);
+            int g1 = ((color & 0xff00) >> 8);
+            int b1 = (color & 0xff);
+            a += (int) (a1 * ratio);
+            r += (int) (r1 * ratio);
+            g += (int) (g1 * ratio);
+            b += (int) (b1 * ratio);
+        }
+
+        return a << 24 | r << 16 | g << 8 | b;
+    }
+
+    public static int colorBlendTest(Collection<Integer> colors) {
+        
+    }
+
     private static int blendColors(int[] componentSums, float maxColorSum, int colorCount) {
         if (colorCount > 0) {
             int r = componentSums[0] / colorCount;

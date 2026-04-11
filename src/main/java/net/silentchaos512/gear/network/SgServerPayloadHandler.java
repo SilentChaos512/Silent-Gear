@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.silentchaos512.gear.block.alloymaker.AlloyMakerContainer;
+import net.silentchaos512.gear.block.container.ToggleableWorkMode;
 import net.silentchaos512.gear.item.ICycleItem;
 import net.silentchaos512.gear.item.blueprint.book.BlueprintBookItem;
 import net.silentchaos512.gear.network.payload.client.*;
@@ -30,10 +30,10 @@ public class SgServerPayloadHandler {
     public void handleAck(AckPayload data, IPayloadContext ctx) {
     }
 
-    public void handleAlloyMakerUpdate(AlloyMakerUpdatePayload data, IPayloadContext ctx) {
+    public void handleWorkModeTogglePayload(ToggleWorkModePayload data, IPayloadContext ctx) {
         handleData(ctx, () -> {
             Player player = ctx.player();
-            if (player.containerMenu instanceof AlloyMakerContainer container) {
+            if (player.containerMenu instanceof ToggleableWorkMode container) {
                 container.setWorkEnabled(data.workEnabled());
             }
         });

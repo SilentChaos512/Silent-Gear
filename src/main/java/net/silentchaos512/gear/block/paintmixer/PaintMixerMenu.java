@@ -1,80 +1,77 @@
-package net.silentchaos512.gear.block.alloymaker;
+package net.silentchaos512.gear.block.paintmixer;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.api.material.IMaterialCategory;
 import net.silentchaos512.gear.block.container.ToggleableWorkMode;
+import net.silentchaos512.gear.setup.SgMenuTypes;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 
-import java.util.Collection;
+import javax.annotation.Nullable;
 
-public class AlloyMakerContainer extends AbstractContainerMenu implements ToggleableWorkMode {
-    private final Container inventory;
-    private final ContainerData fields;
+public class PaintMixerMenu extends AbstractContainerMenu implements ToggleableWorkMode {
+    private final Container container;
+    private final ContainerData data;
 
-    public AlloyMakerContainer(MenuType<?> containerType, int id, Inventory playerInventory, FriendlyByteBuf buffer, Collection<IMaterialCategory> categories) {
-        this(containerType, id, playerInventory, new SimpleContainer(buffer.readByte()), new SimpleContainerData(buffer.readByte()), categories);
+    public PaintMixerMenu(int containerId, Inventory playerInventory, @Nullable FriendlyByteBuf buf) {
+        this(containerId, playerInventory, new SimpleContainer(PaintMixerBlockEntity.INVENTORY_SIZE), new SimpleContainerData(PaintMixerBlockEntity.DATA_COUNT));
     }
 
-    @SuppressWarnings("OverridableMethodCallDuringObjectConstruction")
-    public AlloyMakerContainer(MenuType<?> containerType, int id, Inventory playerInventory, Container inventory, ContainerData fields, Collection<IMaterialCategory> categories) {
-        super(containerType, id);
-        this.inventory = inventory;
-        this.fields = fields;
+    public PaintMixerMenu(int containerId, Inventory playerInventory, Container container, ContainerData data) {
+        super(SgMenuTypes.PAINT_MIXER.get(), containerId);
+        this.container = container;
+        this.data = data;
 
         addContainerInputSlots();
-        addSlot(new SlotOutputOnly(this.inventory, this.inventory.getContainerSize() - 2, 126, 35));
-        addSlot(new SlotOutputOnly(this.inventory, this.inventory.getContainerSize() - 1, 126, 60) {
-            @Override
-            public boolean mayPickup(Player playerIn) {
-                return false;
-            }
-        });
-
+        addSlot(new SlotOutputOnly(this.container, this.container.getContainerSize() - 1, 126, 35));
         InventoryUtils.createPlayerSlots(playerInventory, 8, 84).forEach(this::addSlot);
 
-        addDataSlots(this.fields);
+        addDataSlots(this.data);
     }
 
     private void addContainerInputSlots() {
-        int inputSlotCount = this.inventory.getContainerSize() - 2;
-        // Designed for 4, 6, or 8 input slots (4x1, 3x2, or 4x2)
-        int rowCount = inputSlotCount > 4 ? 2 : 1;
-        int rowSize = inputSlotCount == 6 ? 3 : 4;
-        int xOffset = inputSlotCount == 6 ? 26 : 17;
-        int yOffset = rowCount == 1 ? 35 : 26;
+        int rowCount = 2;
+        int rowSize = 4;
+        int xOffset = 17;
+        int yOffset = 26;
 
         for (int row = 0; row < rowCount; ++row) {
             for (int col = 0; col < rowSize; ++col) {
-                addSlot(new Slot(this.inventory, col + row * rowSize, xOffset + 18 * col, yOffset + 18 * row));
+                addSlot(new Slot(this.container, col + row * rowSize, xOffset + 18 * col, yOffset + 18 * row));
             }
         }
     }
 
     @Override
     public boolean getWorkEnabled() {
-        return this.fields.get(1) != 0;
+        return this.data.get(1) != 0;
     }
 
     @Override
     public void setWorkEnabled(boolean value) {
-        this.fields.set(1, value ? 1 : 0);
+        this.data.set(1, value ? 1 : 0);
     }
 
     public int getProgressArrowScale() {
-        int progress = fields.get(0);
-        return progress != 0 ? progress * 24 / AlloyMakerBlockEntity.WORK_TIME : 0;
+        int progress = this.data.get(0);
+        return progress != 0 ? progress * 24 / PaintMixerBlockEntity.WORK_TIME : 0;
+    }
+
+    public int getPaintColor() {
+        return this.data.get(2);
     }
 
     @Override
-    public boolean stillValid(Player playerIn) {
-        return inventory.stillValid(playerIn);
+    public boolean stillValid(Player player) {
+        return this.container.stillValid(player);
     }
 
     @Override
@@ -85,7 +82,7 @@ public class AlloyMakerContainer extends AbstractContainerMenu implements Toggle
         if (slot != null && slot.hasItem()) {
             ItemStack stack1 = slot.getItem();
             stack = stack1.copy();
-            final int inventorySize = inventory.getContainerSize();
+            final int inventorySize = this.container.getContainerSize();
             final int playerInventoryEnd = inventorySize + 27;
             final int playerHotbarEnd = playerInventoryEnd + 9;
             int outputSlot = inventorySize - 2;
@@ -98,7 +95,7 @@ public class AlloyMakerContainer extends AbstractContainerMenu implements Toggle
 
                 slot.onQuickCraft(stack1, stack);
             } else if (index >= inventorySize) {
-                if (isValidIngredient(stack1)) {
+                if (PaintUtils.getPaintColor(stack1).isPresent()) {
                     if (!this.moveItemStackTo(stack1, 0, outputSlot, false)) {
                         // Move from player or hotbar to input slots
                         return ItemStack.EMPTY;
@@ -130,14 +127,5 @@ public class AlloyMakerContainer extends AbstractContainerMenu implements Toggle
         }
 
         return stack;
-    }
-
-    private boolean isValidIngredient(ItemStack stack) {
-        for (int i = 0; i < this.inventory.getContainerSize() - 2; ++i) {
-            if (this.slots.get(i).mayPlace(stack)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
