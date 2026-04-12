@@ -24,32 +24,35 @@ import net.silentchaos512.gear.api.traits.TraitEffectType;
 import net.silentchaos512.gear.gear.util.MagnetPullTracker;
 import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
 
+import javax.swing.text.html.Option;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class ItemMagnetTraitEffect extends TraitEffect {
     public static final MapCodec<ItemMagnetTraitEffect> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     Codec.FLOAT.fieldOf("pull_strength").forGetter(e -> e.pullStrength),
                     Codec.FLOAT.fieldOf("effect_range").forGetter(e -> e.effectRange),
-                    Ingredient.NON_AIR_HOLDER_SET_CODEC.fieldOf("affected_items").forGetter(e -> e.affectedItems),
+                    Codec.lazyInitialized(() -> Ingredient.CODEC).optionalFieldOf("affected_items").forGetter(e -> e.affectedItems),
                     Codec.STRING.fieldOf("affected_items_text_for_wiki").forGetter(e -> e.affectedItemsTextForWiki)
             ).apply(instance, ItemMagnetTraitEffect::new)
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemMagnetTraitEffect> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.FLOAT, e -> e.pullStrength,
             ByteBufCodecs.FLOAT, e -> e.effectRange,
-            ByteBufCodecs.holderSet(Registries.ITEM), e -> e.affectedItems,
+            ByteBufCodecs.optional(Ingredient.CONTENTS_STREAM_CODEC), e -> e.affectedItems,
             ByteBufCodecs.STRING_UTF8, e -> e.affectedItemsTextForWiki,
             ItemMagnetTraitEffect::new
     );
 
     private final float pullStrength; // ORIGINAL: 0.06
     private final float effectRange; // ORIGINAL: 3.0
-    private final HolderSet<Item> affectedItems;
+    private final Optional<Ingredient> affectedItems;
     private final String affectedItemsTextForWiki;
 
-    public ItemMagnetTraitEffect(float pullStrength, float effectRange, HolderSet<Item> affectedItems, String affectedItemsTextForWiki) {
+    public ItemMagnetTraitEffect(float pullStrength, float effectRange, Optional<Ingredient> affectedItems, String affectedItemsTextForWiki) {
         this.pullStrength = pullStrength;
         this.effectRange = effectRange;
         this.affectedItems = affectedItems;
@@ -62,15 +65,15 @@ public class ItemMagnetTraitEffect extends TraitEffect {
     }
 
     public static ItemMagnetTraitEffect attractAll(float pullStrength, float effectRange) {
-        return new ItemMagnetTraitEffect(pullStrength, effectRange, HolderSet.empty(), "all items");
+        return new ItemMagnetTraitEffect(pullStrength, effectRange, Optional.empty(), "all items");
     }
 
-    public static ItemMagnetTraitEffect attractSome(HolderSet<Item> affectedItems, String affectedItemsDescription) {
+    public static ItemMagnetTraitEffect attractSome(Ingredient affectedItems, String affectedItemsDescription) {
         return attractSome(0.06f, 3.0f, affectedItems, affectedItemsDescription);
     }
 
-    public static ItemMagnetTraitEffect attractSome(float pullStrength, float effectRange, HolderSet<Item> affectedItems, String affectedItemsDescription) {
-        return new ItemMagnetTraitEffect(pullStrength, effectRange, affectedItems, affectedItemsDescription);
+    public static ItemMagnetTraitEffect attractSome(float pullStrength, float effectRange, Ingredient affectedItems, String affectedItemsDescription) {
+        return new ItemMagnetTraitEffect(pullStrength, effectRange, Optional.of(affectedItems), affectedItemsDescription);
     }
 
     @Override
@@ -98,7 +101,7 @@ public class ItemMagnetTraitEffect extends TraitEffect {
     }
 
     private boolean canAffectItem(ItemStack stack) {
-        return this.affectedItems.size() == 0 || stack.is(this.affectedItems);
+        return this.affectedItems.isEmpty() || this.affectedItems.get().test(stack);
     }
 
     private boolean canMagneticPullItem(ItemEntity entity) {

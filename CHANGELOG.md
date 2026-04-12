@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.1-4.1.10] - 2026-04-12
+- Ported recent fixes from 1.21.1 branch
+### Fixed (not including ported fixes)
+- Magnetic trait effects causing a server crash [#909]
+
 ## [26.1-4.1.9] - 2026-04-04
 - Ported recent fixes from 1.21.1 branch
 

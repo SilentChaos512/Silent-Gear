@@ -617,7 +617,7 @@ public class TraitsProvider extends TraitsProviderBase {
                         ItemMagnetTraitEffect.attractSome(
                                 0.06f,
                                 2f,
-                                items.getOrThrow(SgTags.Items.GREEDY_MAGNET_ATTRACTED),
+                                Ingredient.of(items.getOrThrow(SgTags.Items.GREEDY_MAGNET_ATTRACTED)),
                                 "ores and gems"
                         )
                 )

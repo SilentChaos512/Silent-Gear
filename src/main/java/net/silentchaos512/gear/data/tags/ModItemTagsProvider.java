@@ -375,6 +375,7 @@ public class ModItemTagsProvider extends LibItemTagsProvider {
         tag(SgTags.Items.GOLD_DIGGER_DROPS).addTag(Tags.Items.NUGGETS);
         tag(SgTags.Items.GREEDY_MAGNET_ATTRACTED)
                 .addTag(Tags.Items.GEMS)
+                .addTag(Tags.Items.RAW_MATERIALS)
                 .addTag(Tags.Items.ORES)
                 .addTag(Tags.Items.INGOTS)
                 .addTag(Tags.Items.NUGGETS)
