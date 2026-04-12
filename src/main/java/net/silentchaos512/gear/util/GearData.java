@@ -499,7 +499,7 @@ public final class GearData {
     }
 
     public static void addPart(ItemStack gear, PartInstance part) {
-        PartList parts = getConstruction(gear).parts();
+        PartList parts = getConstruction(gear).parts().mutableCopy();
         parts.add(part);
         writeConstructionParts(gear, parts);
         part.onAddToGear(gear);
