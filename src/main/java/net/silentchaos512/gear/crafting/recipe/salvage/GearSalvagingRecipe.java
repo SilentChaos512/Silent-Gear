@@ -49,7 +49,7 @@ public class GearSalvagingRecipe extends SalvagingRecipe {
             if (Config.Common.salvagerBreakDownPartsWithGear.get()) {
                 ret.addAll(salvagePart(part));
             } else {
-                ret.add(part.getItem());
+                ret.add(part.getSalvageItem());
             }
         }
 

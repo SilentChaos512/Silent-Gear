@@ -25,6 +25,10 @@ public interface GearComponentInstance<A extends GearComponent<?>> {
 
     ItemStack getItem();
 
+    default ItemStack getSalvageItem() {
+        return getItem().copy();
+    }
+
     <T, V extends GearPropertyValue<T>> T getProperty(PartType partType, PropertyKey<T, V> key);
 
     default <T, V extends GearPropertyValue<T>> T getProperty(PartType partType, GearProperty<T, V> property) {

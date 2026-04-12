@@ -84,22 +84,26 @@ public abstract class AbstractMaterial implements Material {
 
     @Override
     public MaterialInstance onSalvage(MaterialInstance material) {
-        return removeEnhancements(material);
+        var itemWithoutEnhancements = removeEnhancements(material.get(), material.getSalvageItem());
+        return MaterialInstance.of(material.get(), itemWithoutEnhancements);
     }
 
     public static MaterialInstance removeEnhancements(MaterialInstance material) {
-        ItemStack stack = material.getItem().copy();
-        for (IMaterialModifierType<?> modifierType : SgRegistries.MATERIAL_MODIFIER_TYPE) {
-            modifierType.removeModifier(stack);
-        }
-        stack.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-
-        Material iMaterial = material.get();
-        if (iMaterial != null) {
-            return MaterialInstance.of(iMaterial, stack);
+        if (material.isValid()) {
+            ItemStack newItemStack = removeEnhancements(material.get(), material.getItem());
+            return MaterialInstance.of(material.get(), newItemStack);
         } else {
             return material;
         }
+    }
+
+    public static ItemStack removeEnhancements(Material material, ItemStack stack) {
+        ItemStack result = stack.copy();
+        for (IMaterialModifierType<?> modifierType : SgRegistries.MATERIAL_MODIFIER_TYPE) {
+            modifierType.removeModifier(result);
+        }
+        result.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+        return result;
     }
 
     @Override

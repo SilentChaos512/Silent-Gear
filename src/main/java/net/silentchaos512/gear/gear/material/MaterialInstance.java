@@ -146,6 +146,18 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return item;
     }
 
+    @Override
+    public ItemStack getSalvageItem() {
+        if (getItem().isEmpty()) {
+            // Item is missing. Try to get an item associated with this part.
+            var itemsInIngredient = this.material.get().getIngredient().getItems();
+            if (itemsInIngredient.length > 0) {
+                return itemsInIngredient[0].copy();
+            }
+        }
+        return GearComponentInstance.super.getSalvageItem();
+    }
+
     public Collection<IMaterialCategory> getCategories() {
         var mat = getNullable();
         return mat != null ? mat.getCategories(this) : Collections.emptySet();

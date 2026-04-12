@@ -89,17 +89,16 @@ public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
      * @return The list of items to return
      */
     public static List<ItemStack> salvagePart(PartInstance part) {
-        ItemStack partStack = part.getItem();
+        ItemStack partStack = part.getSalvageItem();
         if (canSalvagePart(part, partStack)) {
-            List<MaterialInstance> materialsInPart = CompoundPartItem.getMaterials(partStack);
+            List<MaterialInstance> materialsInPart = part.getMaterials();
             if (materialsInPart.isEmpty()) {
                 SilentGear.LOGGER.warn("Compound part contains no materials? {}", partStack);
                 return List.of(partStack);
             }
 
             List<ItemStack> result = new ArrayList<>();
-            var partMaterials = part.getMaterials();
-            for (var material : partMaterials) {
+            for (var material : materialsInPart) {
                 var salvagedMaterial = material.onSalvage();
                 result.add(salvagedMaterial.getItem());
             }
