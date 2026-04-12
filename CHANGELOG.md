@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Alloy makers rejecting valid inputs from custom recipes (moostoet) [#920, #919]
 - Conversion recipes not being disabled by the config option [#918]
+- Server crash with "Tree Harvester" mod [#912]
 - Materials not returned when salvaging parts from converted vanilla tools [#862]
 - Crash when connecting hoppers or pipes to alloy makers
+- Smithing table recipe error caused my immutable part list
 
 ## [1.21.1-4.1.5] - 2026-04-03
 ### Changed

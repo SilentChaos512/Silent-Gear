@@ -366,7 +366,7 @@ public final class GearHelper {
     }
 
     public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        if (!isGear(stack)) {
+        if (stack.isEmpty() || !isGear(stack)) {
             return amount;
         }
 
@@ -390,12 +390,17 @@ public final class GearHelper {
                 clampedValue = Math.min(stack.getMaxDamage() - stack.getDamageValue() - 1, postTraitValue);
                 if (!isBroken(stack) && stack.getDamageValue() + preTraitValue >= stack.getMaxDamage() - 1) {
                     onBroken.accept(stack.getItem());
+                    // Ensure item is not destroyed by third-party onBroken handlers
+                    stack.setCount(1);
+                    stack.setDamageValue(stack.getMaxDamage() - 1);
                 }
             }
         }
 
         // Apply damage to gear item
-        GearHelper.damageParts(stack, clampedValue);
+        if (!stack.isEmpty()) {
+            GearHelper.damageParts(stack, clampedValue);
+        }
         return clampedValue;
     }
 
