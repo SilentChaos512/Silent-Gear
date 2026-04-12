@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.1.6] - 2026-04-12
 ### Fixed
 - Alloy makers rejecting valid inputs from custom recipes (moostoet) [#920, #919]
 - Conversion recipes not being disabled by the config option [#918]
