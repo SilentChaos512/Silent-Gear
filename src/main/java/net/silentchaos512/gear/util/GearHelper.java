@@ -299,12 +299,16 @@ public final class GearHelper {
         return (Config.Common.isLoaded() && Config.Common.gearBreaksPermanently.get()) || TraitHelper.hasTrait(stack, Const.Traits.RED_CARD);
     }
 
-    public static boolean isBroken(ItemInstance stack) {
-        if (canBreakPermanently(stack) || isUnbreakable(stack))
+    public static boolean isBroken(ItemInstance instance) {
+        if (canBreakPermanently(instance) || isUnbreakable(instance))
             return false;
 
-        int maxDamage = stack.getOrDefault(DataComponents.MAX_DAMAGE, 0);
-        int damage = stack.getOrDefault(DataComponents.DAMAGE, 0);
+        int maxDamage = instance instanceof ItemStack stack
+                ? stack.getMaxDamage()
+                : instance.getOrDefault(DataComponents.MAX_DAMAGE, 0);
+        int damage = instance instanceof ItemStack stack
+                ? stack.getDamageValue()
+                : instance.getOrDefault(DataComponents.DAMAGE, 0);
         return maxDamage > 0 && damage >= maxDamage - 1;
     }
 

@@ -5,6 +5,7 @@ import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemInstance;
@@ -156,6 +157,7 @@ public final class GearData {
         }
 
         setGearAttributeModifiers(gear, finalProperties);
+        setBasicGearDataComponents(gear, finalProperties);
         setGearDataComponentsFromProperties(gear, finalProperties);
         modifyEnchantmentData(gear, player);
 
@@ -185,6 +187,17 @@ public final class GearData {
             inst.getTrait().onGetAttributeModifiers(context, attributesBuilder);
         }
         gear.set(DataComponents.ATTRIBUTE_MODIFIERS, attributesBuilder.build());
+    }
+
+    private static void setBasicGearDataComponents(ItemStack gear, GearPropertiesData finalProperties) {
+        gear.set(DataComponents.ITEM_MODEL, getModel(gear, finalProperties));
+
+        // Although this component isn't normally referenced, go ahead and store the max damage value as a precaution.
+        gear.set(DataComponents.MAX_DAMAGE, gear.getMaxDamage());
+    }
+
+    private static Identifier getModel(ItemStack gear, GearPropertiesData finalProperties) {
+        return NameUtils.fromItem(gear);
     }
 
     private static void setGearDataComponentsFromProperties(ItemStack gear, GearPropertiesData finalProperties) {

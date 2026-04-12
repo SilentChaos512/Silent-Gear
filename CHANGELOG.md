@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [26.1-4.1.10] - 2026-04-12
 - Ported recent fixes from 1.21.1 branch
 ### Fixed (not including ported fixes)
+- Upgraded gear items being considered broken before running out of durability [#913]
+- Gear item models not updating correctly [#910]
 - Magnetic trait effects causing a server crash [#909]
 
 ## [26.1-4.1.9] - 2026-04-04
