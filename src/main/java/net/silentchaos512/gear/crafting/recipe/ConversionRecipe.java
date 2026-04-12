@@ -3,6 +3,8 @@ package net.silentchaos512.gear.crafting.recipe;
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -11,6 +13,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
+import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.part.PartList;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -56,6 +60,15 @@ public final class ConversionRecipe extends ExtendedShapelessRecipe {
     @Override
     public RecipeSerializer<? extends ConversionRecipe> getSerializer() {
         return SERIALIZER;
+    }
+
+    private static boolean allowedInConfig() {
+        return Config.Common.isLoaded() && Config.Common.allowConversionRecipes.getAsBoolean();
+    }
+
+    @Override
+    public boolean matches(CraftingInput pInv, Level pLevel) {
+        return allowedInConfig() && super.matches(pInv, pLevel);
     }
 
     @Override

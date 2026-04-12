@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -32,6 +31,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.*;
 import net.silentchaos512.gear.block.alloymaker.AlloyMakerBlock;
+import net.silentchaos512.gear.block.alloymaker.entity.*;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.charger.StarlightChargerBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
@@ -153,7 +153,7 @@ public final class SgBlocks {
 
     public static final DeferredBlock<AlloyMakerBlock<MetalAlloyRecipe>> ALLOY_FORGE = register(
             "alloy_forge",
-            properties -> new AlloyMakerBlock<>(Const.METAL_ALLOY_MAKER_INFO, properties),
+            properties -> new AlloyMakerBlock<>(Const.METAL_ALLOY_MAKER_INFO, AlloyForgeBlockEntity::new, properties),
             props -> props
                     .strength(4, 20)
                     .sound(SoundType.METAL),
@@ -162,7 +162,7 @@ public final class SgBlocks {
 
     public static final DeferredBlock<AlloyMakerBlock<GemAlloyRecipe>> RECRYSTALLIZER = register(
             "recrystallizer",
-            properties -> new AlloyMakerBlock<>(Const.GEM_ALLOY_MAKER_INFO, properties),
+            properties -> new AlloyMakerBlock<>(Const.GEM_ALLOY_MAKER_INFO, RecrystallizerBlockEntity::new, properties),
             props -> props
                     .strength(4, 20)
                     .sound(SoundType.METAL),
@@ -171,7 +171,7 @@ public final class SgBlocks {
 
     public static final DeferredBlock<AlloyMakerBlock<FabricAlloyRecipe>> REFABRICATOR = register(
             "refabricator",
-            properties -> new AlloyMakerBlock<>(Const.FABRIC_ALLOY_MAKER_INFO, properties),
+            properties -> new AlloyMakerBlock<>(Const.FABRIC_ALLOY_MAKER_INFO, RefabricatorBlockEntity::new, properties),
             props -> props
                     .strength(4, 20)
                     .sound(SoundType.METAL),
@@ -180,7 +180,7 @@ public final class SgBlocks {
 
     public static final DeferredBlock<AlloyMakerBlock<CrudeAlloyRecipe>> CRUDE_MIXER = register(
             "crude_mixer",
-            properties -> new AlloyMakerBlock<>(Const.CRUDE_MIXER_INFO, properties) {
+            properties -> new AlloyMakerBlock<>(Const.CRUDE_MIXER_INFO, CrudeMixerBlockEntity::new, properties) {
                 @Override
                 public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
                     return AlloyMakerBlock.MIXING_BOWL;
@@ -193,7 +193,7 @@ public final class SgBlocks {
 
     public static final DeferredBlock<AlloyMakerBlock<SuperAlloyRecipe>> SUPER_MIXER = register(
             "super_mixer",
-            properties -> new AlloyMakerBlock<>(Const.SUPER_MIXER_INFO, properties) {
+            properties -> new AlloyMakerBlock<>(Const.SUPER_MIXER_INFO, SuperMixerBlockEntity::new, properties) {
                 @Override
                 public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
                     return AlloyMakerBlock.MIXING_BOWL;

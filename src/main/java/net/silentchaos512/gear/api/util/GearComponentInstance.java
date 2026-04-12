@@ -14,6 +14,7 @@ import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.ItemHelper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -53,6 +54,10 @@ public interface GearComponentInstance<A extends GearComponent<?>> {
     }
 
     boolean is(DataResource<A> resource);
+
+    default @Nullable ItemStackTemplate getSalvageItem(PartType partType) {
+        return getItem();
+    }
 
     <T, V extends GearPropertyValue<T>> T getProperty(PartType partType, PropertyKey<T, V> key);
 

@@ -154,6 +154,23 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return item;
     }
 
+    @Override
+    public @Nullable ItemStackTemplate getSalvageItem(PartType partType) {
+        if (getItem() == null) {
+            // Item is missing. Try to get an item associated with this part.
+            var ingredient = this.getIngredient();
+            if (ingredient.isPresent()) {
+                return ItemHelper.getAnyMatchingItem(ingredient.get());
+            } else {
+                var partSubstitute = this.getPartSubstitute(partType);
+                if (partSubstitute.isPresent()) {
+                    return ItemHelper.getAnyMatchingItem(partSubstitute.get());
+                }
+            }
+        }
+        return GearComponentInstance.super.getSalvageItem(partType);
+    }
+
     public Collection<IMaterialCategory> getCategories() {
         var mat = getNullable();
         return mat != null ? mat.getCategories(this) : Collections.emptySet();
@@ -162,6 +179,11 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public Optional<Ingredient> getIngredient() {
         var mat = getNullable();
         return mat != null ? mat.getIngredient() : Optional.empty();
+    }
+
+    public Optional<Ingredient> getPartSubstitute(PartType partType) {
+        var mat = getNullable();
+        return mat != null ? mat.getPartSubstitute(partType) : Optional.empty();
     }
 
     public boolean canRepair(ItemInstance gear) {
@@ -329,9 +351,9 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         return material != null && material.isCraftingAllowed(this, partType, gearType);
     }
 
-    public MaterialInstance onSalvage() {
+    public MaterialInstance onSalvage(PartType partType) {
         Material material = getNullable();
-        return material != null ? material.onSalvage(this) : this;
+        return material != null ? material.onSalvage(this, partType) : this;
     }
 
     @Override

@@ -1,17 +1,29 @@
 package net.silentchaos512.gear.util;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringUtil;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.WrittenBookContent;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.stream.Stream;
 
+// TODO: Maybe move this to Silent Lib?
 public class ItemHelper {
+    @SuppressWarnings("deprecation")
+    public static @Nullable ItemStackTemplate getAnyMatchingItem(Ingredient ingredient) {
+        var optionalItem = ingredient.items().findAny();
+        return optionalItem.map(ItemStackTemplate::new).orElse(null);
+    }
+
     public static @Nullable Component getCustomName(ItemInstance instance) {
         Component customName = instance.get(DataComponents.CUSTOM_NAME);
         if (customName != null) {

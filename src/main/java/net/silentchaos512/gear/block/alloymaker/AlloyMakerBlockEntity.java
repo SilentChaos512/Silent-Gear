@@ -16,12 +16,15 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.material.Material;
 import net.silentchaos512.gear.api.part.PartType;
@@ -45,12 +48,14 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
 
     private final AlloyMakerInfo<R> info;
     private final RecipeManager.CachedCheck<AlloyRecipeInput, R> quickCheck;
+    private final IItemHandler automationItemHandler;
 
     private ItemStack outputItemHint = ItemStack.EMPTY;
     private int progress = 0;
     private boolean workEnabled = true;
 
-    @SuppressWarnings("OverlyComplexAnonymousInnerClass") private final ContainerData fields = new ContainerData() {
+    @SuppressWarnings("OverlyComplexAnonymousInnerClass")
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -82,6 +87,7 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
         super(info.getBlockEntityType(), pos, state, info.getInputSlotCount() + 2, () -> createInternalItemList(info));
         this.info = info;
         this.quickCheck = RecipeManager.createCheck(info.getRecipeType());
+        this.automationItemHandler = createAutomationItemHandler();
     }
 
     protected RecipeType<R> getRecipeType() {
@@ -304,10 +310,39 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
     }
 
     @Override
-    public boolean canPlaceItem(int slot, ItemStack stack) {
-        if (slot >= getInputSlotCount()) return false;
+    public boolean canPlaceItem(int index, ItemStack stack) {
+        return index >= 0 && index < getInputSlotCount() && acceptsInput(stack);
+    }
+
+    private boolean acceptsInput(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+
         var material = MaterialInstance.from(stack);
-        return material != null && this.info.acceptsMaterial(material);
+        if (material != null && this.info.acceptsMaterial(material)) {
+            return true;
+        }
+
+        if (this.level == null) {
+            return false;
+        }
+
+        // TODO: May need to cache these...
+        if (this.level.recipeAccess() instanceof RecipeManager recipeManager) {
+            for (var recipeHolder : recipeManager.getRecipes()) {
+                var recipe = recipeHolder.value();
+                if (recipe.getType().equals(this.getRecipeType()) && recipe instanceof AlloyRecipe alloyRecipe) {
+                    for (var ingredient : alloyRecipe.getIngredients()) {
+                        if (ingredient.test(stack)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -328,6 +363,54 @@ public class AlloyMakerBlockEntity<R extends AlloyRecipe> extends SgContainerBlo
 
     public static NonNullList<ItemStack> createInternalItemList(AlloyMakerInfo<?> info) {
         return NonNullList.withSize(info.getInputSlotCount() + 2, ItemStack.EMPTY);
+    }
+
+    @Deprecated
+    private IItemHandler createAutomationItemHandler() {
+        return new IItemHandler() {
+            @Override
+            public int getSlots() {
+                return items.size();
+            }
+
+            @Override
+            public ItemStack getStackInSlot(int slot) {
+                return items.get(slot);
+            }
+
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                if (!AlloyMakerBlockEntity.this.canPlaceItem(slot, stack)) {
+                    return stack;
+                }
+
+                if (!simulate) {
+                    return items.set(slot, stack);
+                }
+                return ItemStack.EMPTY;
+            }
+
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                var current = items.get(slot);
+                var split = current.split(amount);
+                var remainder = current.split(current.count() - amount);
+                if (!simulate) {
+                    items.set(slot, remainder);
+                }
+                return split;
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return items.get(slot).getMaxStackSize();
+            }
+
+            @Override
+            public boolean isItemValid(int slot, ItemStack stack) {
+                return AlloyMakerBlockEntity.this.canPlaceItem(slot, stack);
+            }
+        };
     }
 
     @Override

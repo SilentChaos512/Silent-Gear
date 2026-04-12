@@ -5,6 +5,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -19,6 +20,7 @@ import net.silentchaos512.gear.api.util.PropertyKey;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.ItemHelper;
 import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
@@ -83,22 +85,31 @@ public abstract class AbstractMaterial implements Material {
     }
 
     @Override
-    public MaterialInstance onSalvage(MaterialInstance material) {
-        return removeEnhancements(material);
+    public MaterialInstance onSalvage(MaterialInstance material, PartType partType) {
+        var salvageItem = material.getSalvageItem(partType);
+        if (salvageItem != null) {
+            var itemWithoutEnhancements = removeEnhancements(material.get(), salvageItem);
+            return MaterialInstance.of(material.get(), itemWithoutEnhancements);
+        }
+        return material;
     }
 
     public static MaterialInstance removeEnhancements(MaterialInstance material) {
-        ItemStack stack = material.getItem().create();
-        for (IMaterialModifierType<?> modifierType : SgRegistries.MATERIAL_MODIFIER_TYPE) {
-            modifierType.removeModifier(stack);
-        }
-        stack.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-
-        if (material.isValid()) {
-            return MaterialInstance.of(material.get(), stack);
+        if (material.isValid() && material.getItem() != null) {
+            ItemStack newItemStack = removeEnhancements(material.get(), material.getItem());
+            return MaterialInstance.of(material.get(), newItemStack);
         } else {
             return material;
         }
+    }
+
+    public static ItemStack removeEnhancements(Material material, ItemStackTemplate stack) {
+        ItemStack result = stack.create();
+        for (IMaterialModifierType<?> modifierType : SgRegistries.MATERIAL_MODIFIER_TYPE) {
+            modifierType.removeModifier(result);
+        }
+        result.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+        return result;
     }
 
     @Override

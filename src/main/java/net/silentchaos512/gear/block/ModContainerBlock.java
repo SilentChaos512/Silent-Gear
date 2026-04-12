@@ -15,9 +15,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 
 public abstract class ModContainerBlock<T extends BlockEntity> extends BaseEntityBlock {
-    private final BlockEntityType.BlockEntitySupplier<T> tileFactory;
+    private final BlockEntityType.BlockEntitySupplier<? extends T> tileFactory;
 
-    public ModContainerBlock(BlockEntityType.BlockEntitySupplier<T> tileFactory, Properties properties) {
+    public ModContainerBlock(BlockEntityType.BlockEntitySupplier<? extends T> tileFactory, Properties properties) {
         super(properties);
         this.tileFactory = tileFactory;
     }

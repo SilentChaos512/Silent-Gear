@@ -161,6 +161,10 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
         return craftingItem;
     }
 
+    public @Nullable ItemStackTemplate getSalvageItem() {
+        return this.getSalvageItem(this.getType());
+    }
+
     public PartType getType() {
         return part.map(GearPart::getType).orElse(PartTypes.NONE.get());
     }

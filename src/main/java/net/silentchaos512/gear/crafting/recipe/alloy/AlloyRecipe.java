@@ -1,5 +1,6 @@
 package net.silentchaos512.gear.crafting.recipe.alloy;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -30,13 +31,13 @@ import java.util.*;
 import java.util.function.BiFunction;
 
 public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
-    final List<Ingredient> ingredients = new ArrayList<>();
+    final List<Ingredient> ingredients;
     final Result result;
     @Nullable private PlacementInfo placementInfo = null;
 
     public AlloyRecipe(Result result, List<Ingredient> ingredients) {
         this.result = result;
-        this.ingredients.addAll(ingredients);
+        this.ingredients = ImmutableList.copyOf(ingredients);
     }
 
     public static <R extends AlloyRecipe> R makeExample(AlloyMakerInfo<?> info, int count, BiFunction<Result, List<Ingredient>, R> recipeFactory) {
@@ -51,6 +52,10 @@ public class AlloyRecipe implements Recipe<AlloyRecipeInput> {
 
     public ItemStack getResultForRecipeDisplay() {
         return this.result.getResult();
+    }
+
+    public List<Ingredient> getIngredients() {
+        return this.ingredients;
     }
 
     @Override

@@ -76,7 +76,7 @@ public interface Material extends GearComponent<MaterialInstance> {
 
     boolean canSalvage();
 
-    MaterialInstance onSalvage(MaterialInstance material);
+    MaterialInstance onSalvage(MaterialInstance material, PartType partType);
 
     /**
      * Check if the material is simple or compound.
