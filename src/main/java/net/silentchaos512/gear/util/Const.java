@@ -37,9 +37,11 @@ public final class Const {
     public static final ResourceLocation CONVERSION = modId("conversion");
     public static final ResourceLocation FILL_REPAIR_KIT = modId("fill_repair_kit");
     public static final ResourceLocation GRADING = modId("grading");
+    public static final ResourceLocation MOD_KIT_PAINT_PART = modId("mod_kit_paint_part");
     public static final ResourceLocation MOD_KIT_REMOVE_PART = modId("mod_kit_remove_part");
     public static final ResourceLocation PRESSING = modId("pressing");
     public static final ResourceLocation PRESSING_MATERIAL = modId("pressing/material");
+    public static final ResourceLocation QUICK_PAINT = modId("quick_paint");
     public static final ResourceLocation QUICK_REPAIR = modId("quick_repair");
     public static final ResourceLocation SALVAGING = modId("salvaging");
     public static final ResourceLocation SALVAGING_COMPOUND_PART = modId("salvaging/compound_part");

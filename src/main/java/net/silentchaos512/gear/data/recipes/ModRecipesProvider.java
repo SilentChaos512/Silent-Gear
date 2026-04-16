@@ -28,6 +28,8 @@ import net.silentchaos512.gear.crafting.ingredient.CustomAlloyIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
+import net.silentchaos512.gear.crafting.recipe.modkit.ModKitPaintPartRecipe;
+import net.silentchaos512.gear.crafting.recipe.modkit.ModKitRemovePartRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -126,7 +128,9 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void registerSpecialRecipes(RecipeOutput consumer) {
         special(consumer, SgRecipes.FILL_REPAIR_KIT.get(), FillRepairKitRecipe::new);
         special(consumer, SgRecipes.SWAP_GEAR_PART.get(), GearPartSwapRecipe::new);
+        special(consumer, SgRecipes.QUICK_PAINT.get(), QuickPaintRecipe::new);
         special(consumer, SgRecipes.QUICK_REPAIR.get(), QuickRepairRecipe::new);
+        special(consumer, SgRecipes.MOD_KIT_PAINT_PART.get(), ModKitPaintPartRecipe::new);
         special(consumer, SgRecipes.MOD_KIT_REMOVE_PART.get(), ModKitRemovePartRecipe::new);
     }
 
@@ -695,6 +699,18 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern(" # ")
                 .pattern("#/#")
                 .unlockedBy("has_item", has(Tags.Items.COBBLESTONES))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.PAINT_MIXER)
+                .pattern("sds")
+                .pattern("c/c")
+                .pattern("sbs")
+                .define('d', Tags.Items.DYES)
+                .define('c', Tags.Items.INGOTS_COPPER)
+                .define('/', SgTags.Items.RODS_IRON)
+                .define('s', Blocks.SMOOTH_STONE)
+                .define('b', Tags.Items.BUCKETS_EMPTY)
+                .unlockedBy("has_item", has(Tags.Items.DYES))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SgBlocks.ALLOY_FORGE)

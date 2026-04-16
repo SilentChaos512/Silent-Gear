@@ -95,7 +95,7 @@ public class PaintMixerMenu extends AbstractContainerMenu implements ToggleableW
 
                 slot.onQuickCraft(stack1, stack);
             } else if (index >= inventorySize) {
-                if (PaintUtils.getPaintColor(stack1).isPresent()) {
+                if (PaintUtils.getPaintMixColor(stack1).isPresent()) {
                     if (!this.moveItemStackTo(stack1, 0, outputSlot, false)) {
                         // Move from player or hotbar to input slots
                         return ItemStack.EMPTY;

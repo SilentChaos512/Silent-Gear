@@ -6,9 +6,10 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearItem;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.item.CompoundPartItem;
 import net.silentchaos512.gear.item.IColoredMaterialItem;
+import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgItems;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 
@@ -40,6 +41,13 @@ public final class ColorHandlers {
             IColoredMaterialItem coloredMaterialItem = (IColoredMaterialItem) item;
             event.register(coloredMaterialItem::getColor, item);
         });
+
+        event.register((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return stack.getOrDefault(SgDataComponents.PAINT_COLOR, -1);
+            }
+            return -1;
+        }, SgItems.PAINT);
     }
 
     /**
@@ -51,8 +59,8 @@ public final class ColorHandlers {
      */
     public static int getShieldColor(ItemStack stack, int tintIndex) {
         return switch (tintIndex) {
-            case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
-            case 1 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+            case 0 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+            case 1 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
             default -> 0xFFFFFFFF;
         };
     }

@@ -94,7 +94,7 @@ public class PaintMixerBlockEntity extends SgContainerBlockEntity {
         for (int i = 0; i < INPUT_SLOT_COUNT; ++i) {
             var stack = getItem(i);
             if (!stack.isEmpty()) {
-                if (PaintUtils.getPaintColor(stack).isPresent()) {
+                if (PaintUtils.getPaintMixColor(stack).isPresent()) {
                     ++count;
                 } else {
                     return -1;

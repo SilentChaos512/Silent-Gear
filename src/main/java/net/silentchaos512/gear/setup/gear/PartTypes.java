@@ -70,6 +70,7 @@ public class PartTypes {
     public static final DeferredHolder<PartType, PartType> MISC_UPGRADE = register("misc_upgrade", builder -> builder
             .isRemovable(true)
             .isUpgrade(true)
+            .canPaint(false)
             .maxPerItem(256)
     );
 

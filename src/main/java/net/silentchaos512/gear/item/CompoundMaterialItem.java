@@ -8,7 +8,7 @@ import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.traits.TraitInstance;
 import net.silentchaos512.gear.api.util.PropertyKey;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.client.util.TextListBuilder;
 import net.silentchaos512.gear.gear.material.AbstractMaterial;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -70,7 +70,7 @@ public class CompoundMaterialItem extends Item implements IColoredMaterialItem {
     @Override
     public int getColor(ItemStack stack, int layer) {
         if (layer == 0) {
-            return ColorUtils.getBlendedColorForCompoundMaterial(getSubMaterials(stack));
+            return GearColorUtils.getBlendedColorForCompoundMaterial(getSubMaterials(stack));
         }
         return 0xFFFFFFFF;
     }

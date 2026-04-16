@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
@@ -42,9 +42,9 @@ public interface GearRangedWeapon extends GearTool {
     default ItemColor getItemColors() {
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
-                case 1 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
-                case 3 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.CORD.get());
+                case 0 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+                case 1 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+                case 3 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.CORD.get());
                 default -> 0xFFFFFFFF;
             };
         };

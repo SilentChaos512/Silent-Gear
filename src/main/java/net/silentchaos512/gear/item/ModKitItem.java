@@ -2,7 +2,6 @@ package net.silentchaos512.gear.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -14,7 +13,6 @@ import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ModKitItem extends Item implements ICycleItem {
@@ -34,7 +32,7 @@ public class ModKitItem extends Item implements ICycleItem {
     @Override
     public void onCycleKeyPress(ItemStack stack, ICycleItem.Direction direction) {
         PartType selected = getSelectedType(stack);
-        List<PartType> types = getRemovableTypes();
+        List<PartType> types = SgRegistries.PART_TYPE.stream().toList();
         if (types.isEmpty()) return;
 
         if (selected == PartTypes.NONE.get()) {
@@ -53,30 +51,22 @@ public class ModKitItem extends Item implements ICycleItem {
         }
     }
 
-    private static List<PartType> getRemovableTypes() {
-        List<PartType> list = new ArrayList<>();
-        for (PartType partType : SgRegistries.PART_TYPE) {
-            if (partType.isRemovable()) {
-                list.add(partType);
-            }
-        }
-        return list;
-    }
-
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
         PartType selected = getSelectedType(stack);
         var selectedName = selected.getDisplayName().withStyle(ChatFormatting.GRAY);
         tooltip.add(TextUtil.withColor(TextUtil.translate("item", "mod_kit.selected", selectedName), Color.SKYBLUE));
 
+        if (selected.canPaint()) {
+            tooltip.add(TextUtil.translate("item", "mod_kit.can_paint"));
+        }
+        if (selected.isRemovable()) {
+            tooltip.add(TextUtil.translate("item", "mod_kit.can_remove"));
+        }
+
         tooltip.add(TextUtil.translate("item", "mod_kit.keyHint",
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE)));
-
-        if (flagIn.isAdvanced()) {
-            MutableComponent text = Component.literal("Removable types: " + getRemovableTypes().size());
-            tooltip.add(TextUtil.withColor(text, ChatFormatting.DARK_GRAY));
-        }
     }
 
     @Override

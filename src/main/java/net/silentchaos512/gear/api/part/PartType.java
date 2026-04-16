@@ -1,14 +1,12 @@
 package net.silentchaos512.gear.api.part;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
@@ -18,7 +16,6 @@ import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.item.CompoundPartItem;
-import net.silentchaos512.gear.item.MainPartItem;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.util.CodecUtils;
 import net.silentchaos512.lib.util.NameUtils;
@@ -33,6 +30,7 @@ import java.util.function.Supplier;
 public record PartType(
         boolean isRemovable,
         boolean isUpgrade,
+        boolean canPaint,
         int maxPerItem,
         @Nullable Function<GearType, Optional<CompoundPartItem>> compoundParts
 ) {
@@ -45,6 +43,7 @@ public record PartType(
         this(
                 builder.isRemovable,
                 builder.isUpgrade,
+                builder.canPaint,
                 builder.maxPerItem,
                 builder.compoundPartItem
         );
@@ -98,6 +97,7 @@ public record PartType(
     public static final class Builder {
         private boolean isRemovable = false;
         private boolean isUpgrade = false;
+        private boolean canPaint = true;
         @Nullable private Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
         private int maxPerItem = 1;
 
@@ -114,6 +114,11 @@ public record PartType(
 
         public Builder isUpgrade(boolean value) {
             this.isUpgrade = value;
+            return this;
+        }
+
+        public Builder canPaint(boolean value) {
+            this.canPaint = value;
             return this;
         }
 

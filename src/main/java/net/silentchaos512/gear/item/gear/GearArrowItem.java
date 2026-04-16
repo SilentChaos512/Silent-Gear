@@ -23,7 +23,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
 import net.silentchaos512.gear.gear.part.PartInstance;
@@ -161,9 +161,9 @@ public class GearArrowItem extends ArrowItem implements GearItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
-                case 1 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
-                case 3 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.FLETCHING.get());
+                case 0 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+                case 1 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+                case 3 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.FLETCHING.get());
                 default -> 0xFFFFFFFF;
             };
         };

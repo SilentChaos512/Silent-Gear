@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.util.TextUtil;
+import net.silentchaos512.lib.util.Color;
 
 public class PaintMixerScreen extends AbstractContainerScreen<PaintMixerMenu> {
     public static final ResourceLocation TEXTURE = SilentGear.getId("textures/gui/paint_mixer.png");
@@ -66,8 +67,18 @@ public class PaintMixerScreen extends AbstractContainerScreen<PaintMixerMenu> {
         graphics.blit(TEXTURE, posX + 93, posY + 34, 176, 14, menu.getProgressArrowScale() + 1, 16);
 
         // Color indicator
+        renderColorSample(graphics);
+    }
+
+    private void renderColorSample(GuiGraphics graphics) {
         var left = this.leftPos + 16;
         var top = this.topPos + 61;
-        graphics.fill(left, top, left + 72, top + 11, this.menu.getPaintColor() | 0xFF000000);
+        var bottom = top + 11;
+        var color = this.menu.getPaintColor() | 0xFF000000;
+        graphics.fill(left + 16, top, left + 56, bottom, color);
+        graphics.fill(left, top, left + 8, bottom, Color.blend(color, 0xFF000000, 0.75f));
+        graphics.fill(left + 8, top, left + 16, bottom, Color.blend(color, 0xFF000000, 0.5f));
+        graphics.fill(left + 56, top, left + 64, bottom, Color.blend(color, -1, 0.5f));
+        graphics.fill(left + 64, top, left + 72, bottom, Color.blend(color, -1, 0.75f));
     }
 }

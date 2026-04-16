@@ -2,11 +2,17 @@ package net.silentchaos512.gear.block.paintmixer;
 
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
+import net.silentchaos512.gear.util.GearData;
+import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.lib.util.ColorBlendAlgorithm;
+import net.silentchaos512.lib.util.ColorUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +20,7 @@ import java.util.Objects;
 import java.util.OptionalInt;
 
 public class PaintUtils {
-    public static OptionalInt getPaintColor(ItemStack stack) {
+    public static OptionalInt getPaintMixColor(ItemStack stack) {
         if (stack.has(SgDataComponents.PAINT_COLOR)) {
             return OptionalInt.of(Objects.requireNonNull(stack.get(SgDataComponents.PAINT_COLOR)));
         } else if (stack.getItem() instanceof DyeItem dyeItem) {
@@ -28,12 +34,21 @@ public class PaintUtils {
         return OptionalInt.empty();
     }
 
+    public static OptionalInt getPaintOrDyeColor(ItemStack stack) {
+        if (stack.has(SgDataComponents.PAINT_COLOR)) {
+            return OptionalInt.of(Objects.requireNonNull(stack.get(SgDataComponents.PAINT_COLOR)));
+        } else if (stack.getItem() instanceof DyeItem dyeItem) {
+            return OptionalInt.of(dyeItem.getDyeColor().getTextureDiffuseColor());
+        }
+        return OptionalInt.empty();
+    }
+
     public static OptionalInt getBlendedColor(PaintMixerBlockEntity container) {
         Collection<Integer> colors = new ArrayList<>();
         for (int i = 0; i < PaintMixerBlockEntity.INPUT_SLOT_COUNT; ++i) {
             var stack = container.getItem(i);
             if (!stack.isEmpty()) {
-                var color = getPaintColor(stack);
+                var color = getPaintMixColor(stack);
                 if (color.isPresent()) {
                     colors.add(color.getAsInt());
                 } else {
@@ -41,6 +56,32 @@ public class PaintUtils {
                 }
             }
         }
-        return OptionalInt.of(ColorUtils.getBlendedColor(colors));
+        return OptionalInt.of(ColorUtils.blend(ColorBlendAlgorithm.MIXBOX, colors));
+    }
+
+    public static PartInstance paint(PartInstance part, int color) {
+        var newItem = part.getItem().copy();
+        newItem.set(SgDataComponents.PAINT_COLOR, color);
+        return PartInstance.of(DataResource.part(part.getId()), newItem);
+    }
+
+    public static ItemStack paint(ItemStack stack, int color) {
+        if (GearHelper.isGear(stack)) {
+            var mainPart = GearData.getPartOfType(stack, PartTypes.MAIN.get());
+            if (mainPart == null) {
+                return ItemStack.EMPTY;
+            }
+            var paintedPart = paint(mainPart, color);
+            var result = stack.copy();
+            GearData.addOrReplacePart(result, paintedPart);
+            GearData.recalculateGearData(result, CommonHooks.getCraftingPlayer());
+            return result;
+        }
+
+        var part = PartInstance.from(stack);
+        if (part != null) {
+            return paint(part, color).getItem();
+        }
+        return ItemStack.EMPTY;
     }
 }

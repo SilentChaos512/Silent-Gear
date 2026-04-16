@@ -11,7 +11,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.api.property.NumberProperty;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
@@ -93,17 +93,17 @@ public interface GearItem extends ItemLike {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+                case 0 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
                 case 1 -> {
                     if (GearData.hasPartOfType(stack, PartTypes.COATING.get())) {
-                        yield ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get());
+                        yield GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get());
                     } else {
-                        yield ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+                        yield GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
                     }
                 }
                 // 2: highlight layer, no color needed
-                case 3 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.TIP.get());
-                case 4 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.GRIP.get());
+                case 3 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.TIP.get());
+                case 4 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.GRIP.get());
                 default -> 0xFFFFFFFF;
             };
         };

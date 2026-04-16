@@ -552,6 +552,8 @@
   "item.silentgear.mattock_head.nameProper": "%s Mattock Head",
   "item.silentgear.mixed_fabric": "%s Mixed Fabric",
   "item.silentgear.mod_kit": "Gear Mod Kit",
+  "item.silentgear.mod_kit.can_paint": "Can paint parts of this type",
+  "item.silentgear.mod_kit.can_remove": "Can remove parts of this type",
   "item.silentgear.mod_kit.keyHint": "Cycle part type with %s and %s",
   "item.silentgear.mod_kit.selected": "Removes parts of type: %s",
   "item.silentgear.necklace": "Necklace",
