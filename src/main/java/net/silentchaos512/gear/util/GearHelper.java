@@ -392,7 +392,7 @@ public final class GearHelper {
                     onBroken.accept(stack.getItem());
                     // Ensure item is not destroyed by third-party onBroken handlers
                     stack.setCount(1);
-                    stack.setDamageValue(stack.getMaxDamage() - 1);
+                    stack.setDamageValue(stack.getMaxDamage() - 2);
                 }
             }
         }
