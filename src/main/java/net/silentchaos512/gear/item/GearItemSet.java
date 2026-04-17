@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 public final class GearItemSet<I extends Item & GearItem> {
     private final DeferredHolder<GearType, GearType> type;
@@ -34,7 +35,7 @@ public final class GearItemSet<I extends Item & GearItem> {
     private DeferredItem<GearBlueprintItem> template;
 
     private Function<Item.Properties, I> gearItemFactory;
-    private final Item.Properties gearItemProperties;
+    private UnaryOperator<Item.Properties> gearItemProperties;
     private Function<Item.Properties, MainPartItem> mainPartFactory;
     private Function<Item.Properties, GearBlueprintItem> blueprintFactory;
     private Function<Item.Properties, GearBlueprintItem> templateFactory;
@@ -43,7 +44,7 @@ public final class GearItemSet<I extends Item & GearItem> {
             DeferredHolder<GearType, GearType> type,
             String partName,
             BiFunction<Supplier<GearType>, Item.Properties, I> gearItem,
-            Item.Properties gearItemProperties
+            UnaryOperator<Item.Properties> gearItemProperties
     ) {
         this(type, partName, properties -> gearItem.apply(type::value, properties), gearItemProperties);
     }
@@ -52,7 +53,7 @@ public final class GearItemSet<I extends Item & GearItem> {
             DeferredHolder<GearType, GearType> type,
             String partName,
             Function<Item.Properties, I> gearItem,
-            Item.Properties gearItemProperties
+            UnaryOperator<Item.Properties> gearItemProperties
     ) {
         this(
                 type,
@@ -69,7 +70,7 @@ public final class GearItemSet<I extends Item & GearItem> {
             DeferredHolder<GearType, GearType> type,
             String partName,
             Function<Item.Properties, I> gearItem,
-            Item.Properties gearItemProperties,
+            UnaryOperator<Item.Properties> gearItemProperties,
             Function<Item.Properties, MainPartItem> mainPart,
             Function<Item.Properties, GearBlueprintItem> blueprint,
             Function<Item.Properties, GearBlueprintItem> template
@@ -115,11 +116,12 @@ public final class GearItemSet<I extends Item & GearItem> {
         checkNotRegistered(this.gearItemFactory, "gear item");
         this.gearItem = registrar.registerItem(name(), this.gearItemFactory, this.gearItemProperties);
         this.gearItemFactory = null;
+        this.gearItemProperties = null;
     }
 
     public void registerMainPartItem(DeferredRegister.Items registrar) {
         checkNotRegistered(this.mainPartFactory, "main part");
-        this.mainPart = registrar.registerItem(this.partName, mainPartFactory, new Item.Properties().stacksTo(1).setNoCombineRepair());
+        this.mainPart = registrar.registerItem(this.partName, mainPartFactory, p -> p.stacksTo(1).setNoCombineRepair());
         this.mainPartFactory = null;
     }
 

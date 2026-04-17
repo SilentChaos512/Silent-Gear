@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.1.2-4.1.10.1] - 2026-04-17
+### Fixed
+- Crash on NeoForge 26.1.2.3-beta and higher [#930]
+- Gear items breaking when they shouldn't
+
 ## [26.1-4.1.10] - 2026-04-12
 - Ported recent fixes from 1.21.1 branch
 ### Fixed (not including ported fixes)
