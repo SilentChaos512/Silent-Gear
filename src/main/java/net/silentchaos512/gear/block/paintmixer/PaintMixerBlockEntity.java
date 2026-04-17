@@ -1,7 +1,11 @@
 package net.silentchaos512.gear.block.paintmixer;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -94,7 +98,7 @@ public class PaintMixerBlockEntity extends SgContainerBlockEntity {
         for (int i = 0; i < INPUT_SLOT_COUNT; ++i) {
             var stack = getItem(i);
             if (!stack.isEmpty()) {
-                if (PaintUtils.getPaintMixColor(stack).isPresent()) {
+                if (PaintUtils.isPaintMixerInput(stack)) {
                     ++count;
                 } else {
                     return -1;
@@ -166,5 +170,37 @@ public class PaintMixerBlockEntity extends SgContainerBlockEntity {
         var result = new ItemStack(SgItems.PAINT.get(), count);
         result.set(SgDataComponents.PAINT_COLOR, this.paintColor);
         return result;
+    }
+
+    @Override
+    public void loadAdditional(CompoundTag tags, HolderLookup.Provider provider) {
+        super.loadAdditional(tags, provider);
+        this.progress = tags.getInt("Progress");
+        this.workEnabled = tags.getBoolean("WorkEnabled");
+    }
+
+    @Override
+    public void saveAdditional(CompoundTag tags, HolderLookup.Provider provider) {
+        super.saveAdditional(tags, provider);
+        tags.putInt("Progress", this.progress);
+        tags.putBoolean("WorkEnabled", this.workEnabled);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag tags = super.getUpdateTag(provider);
+        tags.putInt("Progress", this.progress);
+        tags.putBoolean("WorkEnabled", this.workEnabled);
+        return tags;
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider provider) {
+        super.onDataPacket(net, packet, provider);
+        CompoundTag tags = packet.getTag();
+        if (tags != null) {
+            this.progress = tags.getInt("Progress");
+            this.workEnabled = tags.getBoolean("WorkEnabled");
+        }
     }
 }

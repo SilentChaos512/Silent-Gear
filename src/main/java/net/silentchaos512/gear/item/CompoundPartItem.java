@@ -9,6 +9,7 @@ import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.block.paintmixer.PaintUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -81,6 +82,10 @@ public class CompoundPartItem extends Item {
 
     public int getColor(ItemStack stack, int layer) {
         if (layer == 0) {
+            var paintColor = PaintUtils.getPaintColor(stack);
+            if (paintColor.isPresent()) {
+                return paintColor.getAsInt();
+            }
             var primaryMaterial = getPrimaryMaterial(stack);
             return primaryMaterial != null
                     ? primaryMaterial.getColor(getGearType(), getPartType()) | 0xFF000000

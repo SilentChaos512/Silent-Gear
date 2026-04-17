@@ -54,7 +54,7 @@ public class ModKitItem extends Item implements ICycleItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
         PartType selected = getSelectedType(stack);
-        var selectedName = selected.getDisplayName().withStyle(ChatFormatting.GRAY);
+        var selectedName = selected.getDisplayName().withStyle(ChatFormatting.YELLOW);
         tooltip.add(TextUtil.withColor(TextUtil.translate("item", "mod_kit.selected", selectedName), Color.SKYBLUE));
 
         if (selected.canPaint()) {

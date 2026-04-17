@@ -555,7 +555,7 @@
   "item.silentgear.mod_kit.can_paint": "Can paint parts of this type",
   "item.silentgear.mod_kit.can_remove": "Can remove parts of this type",
   "item.silentgear.mod_kit.keyHint": "Cycle part type with %s and %s",
-  "item.silentgear.mod_kit.selected": "Removes parts of type: %s",
+  "item.silentgear.mod_kit.selected": "Part Type: %s",
   "item.silentgear.necklace": "Necklace",
   "item.silentgear.necklace.nameProper": "%s Necklace",
   "item.silentgear.necklace_chain": "Necklace Chain",

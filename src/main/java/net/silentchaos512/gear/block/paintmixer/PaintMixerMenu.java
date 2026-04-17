@@ -45,7 +45,12 @@ public class PaintMixerMenu extends AbstractContainerMenu implements ToggleableW
 
         for (int row = 0; row < rowCount; ++row) {
             for (int col = 0; col < rowSize; ++col) {
-                addSlot(new Slot(this.container, col + row * rowSize, xOffset + 18 * col, yOffset + 18 * row));
+                addSlot(new Slot(this.container, col + row * rowSize, xOffset + 18 * col, yOffset + 18 * row) {
+                    @Override
+                    public boolean mayPlace(ItemStack stack) {
+                        return PaintUtils.isPaintMixerInput(stack);
+                    }
+                });
             }
         }
     }
@@ -95,7 +100,7 @@ public class PaintMixerMenu extends AbstractContainerMenu implements ToggleableW
 
                 slot.onQuickCraft(stack1, stack);
             } else if (index >= inventorySize) {
-                if (PaintUtils.getPaintMixColor(stack1).isPresent()) {
+                if (PaintUtils.isPaintMixerInput(stack1)) {
                     if (!this.moveItemStackTo(stack1, 0, outputSlot, false)) {
                         // Move from player or hotbar to input slots
                         return ItemStack.EMPTY;

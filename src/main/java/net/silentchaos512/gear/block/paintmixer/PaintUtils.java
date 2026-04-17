@@ -7,6 +7,7 @@ import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
+import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
@@ -43,6 +44,17 @@ public class PaintUtils {
         return OptionalInt.empty();
     }
 
+    public static OptionalInt getPaintColor(ItemStack stack) {
+        if (stack.has(SgDataComponents.PAINT_COLOR)) {
+            return OptionalInt.of(Objects.requireNonNull(stack.get(SgDataComponents.PAINT_COLOR)));
+        }
+        return OptionalInt.empty();
+    }
+
+    public static boolean isPaintMixerInput(ItemStack stack) {
+        return getPaintMixColor(stack).isPresent() || stack.is(SgTags.Items.PAINT_FILLER);
+    }
+
     public static OptionalInt getBlendedColor(PaintMixerBlockEntity container) {
         Collection<Integer> colors = new ArrayList<>();
         for (int i = 0; i < PaintMixerBlockEntity.INPUT_SLOT_COUNT; ++i) {
@@ -51,7 +63,7 @@ public class PaintUtils {
                 var color = getPaintMixColor(stack);
                 if (color.isPresent()) {
                     colors.add(color.getAsInt());
-                } else {
+                } else if (!stack.is(SgTags.Items.PAINT_FILLER)) {
                     return OptionalInt.empty();
                 }
             }

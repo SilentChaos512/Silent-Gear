@@ -335,6 +335,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(SgTags.Blocks.FLUFFY_BLOCKS, SgTags.Items.FLUFFY_BLOCKS);
         copy(SgTags.Blocks.NETHERWOOD_LOGS, SgTags.Items.NETHERWOOD_LOGS);
 
+        tag(SgTags.Items.PAINT_FILLER).addTag(Tags.Items.SLIME_BALLS);
+
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_1).add(CraftingItems.GLOWING_DUST.asItem());
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_2).add(CraftingItems.BLAZING_DUST.asItem());
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_3).add(CraftingItems.GLITTERY_DUST.asItem());
