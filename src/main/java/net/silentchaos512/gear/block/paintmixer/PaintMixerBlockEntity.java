@@ -153,15 +153,16 @@ public class PaintMixerBlockEntity extends SgContainerBlockEntity {
 
     private void finishWork(ItemStack current) {
         progress = 0;
-        for (int i = 0; i < INPUT_SLOT_COUNT; ++i) {
-            removeItem(i, 1);
-        }
 
         ItemStack output = getWorkOutput();
         if (!current.isEmpty()) {
             current.grow(output.getCount());
         } else {
             setItem(OUTPUT_SLOT_INDEX, output);
+        }
+
+        for (int i = 0; i < INPUT_SLOT_COUNT; ++i) {
+            removeItem(i, 1);
         }
     }
 

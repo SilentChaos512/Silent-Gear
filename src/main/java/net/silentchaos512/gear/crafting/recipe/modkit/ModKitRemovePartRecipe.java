@@ -21,6 +21,11 @@ public class ModKitRemovePartRecipe extends ModKitRecipe {
     }
 
     @Override
+    public boolean isActionSupported(PartType partType) {
+        return partType.isRemovable();
+    }
+
+    @Override
     public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         StackList list = StackList.from(inv);
         ItemStack gear = list.uniqueOfType(GearItem.class);

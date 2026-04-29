@@ -16,6 +16,8 @@ public abstract class ModKitRecipe extends CustomRecipe {
         super(category);
     }
 
+    public abstract boolean isActionSupported(PartType partType);
+
     @Override
     public boolean matches(CraftingInput input, Level level) {
         ItemStack gear = ItemStack.EMPTY;
@@ -39,7 +41,7 @@ public abstract class ModKitRecipe extends CustomRecipe {
             }
         }
 
-        return !gear.isEmpty() && foundModKit && GearData.hasPartOfType(gear, type);
+        return !gear.isEmpty() && foundModKit && isActionSupported(type) && GearData.hasPartOfType(gear, type);
     }
 
     public static boolean isModKit(ItemStack stack) {

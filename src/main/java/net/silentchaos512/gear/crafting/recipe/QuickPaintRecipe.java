@@ -56,6 +56,7 @@ public class QuickPaintRecipe extends CustomRecipe {
 
         for (int i = 0; i < input.size(); ++i) {
             var stack = input.getItem(i);
+            if (stack.isEmpty()) continue;
 
             if (isPaintable(stack)) {
                 paintable = stack;

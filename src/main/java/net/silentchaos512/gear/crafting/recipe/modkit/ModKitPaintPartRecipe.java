@@ -28,6 +28,11 @@ public class ModKitPaintPartRecipe extends ModKitRecipe {
     }
 
     @Override
+    public boolean isActionSupported(PartType partType) {
+        return partType.canPaint();
+    }
+
+    @Override
     public boolean matches(CraftingInput input, Level level) {
         ItemStack gearItem = ItemStack.EMPTY;
         boolean foundModKit = false;
@@ -46,7 +51,7 @@ public class ModKitPaintPartRecipe extends ModKitRecipe {
                     return false;
                 }
                 partType = ModKitItem.getSelectedType(stack);
-                if (!partType.canPaint()) {
+                if (!isActionSupported(partType)) {
                     // selected part type does not allow paint
                     return false;
                 }
