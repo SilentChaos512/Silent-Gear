@@ -4,6 +4,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - 2026-04-30
+### Added
+- The paint mixer and paint
+  - The paint mixer makes paint from dyes, gear materials, and other paints. Mix and match!
+  - Paint and dyes can be used to customize the colors of gear items, with each part being colored separately.
+    - Craft a gear item with paint or dyes to color the main part
+    - Craft a gear item with a mod kit and paint or dyes to color a specific part
+    - Craft a part with paint or dyes to color the part
+### Changed
+- Color mixing is now done with a new algorithm that produces more vibrant and realistic colors. This applies to alloys and paint.
 ### Fixed
 - Blueprint book and mod kit items not cycling correcting with Z/C keys in many cases [#936]
 
