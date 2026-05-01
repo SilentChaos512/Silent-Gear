@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.block.SgContainerBlockEntity;
-import net.silentchaos512.gear.crafting.recipe.alloy.AlloyRecipe;
 import net.silentchaos512.gear.setup.SgBlockEntities;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgItems;
@@ -108,16 +107,28 @@ public class PaintMixerBlockEntity extends SgContainerBlockEntity {
         return count;
     }
 
-    public static <R extends AlloyRecipe> void tick(Level level, BlockPos pos, BlockState state, PaintMixerBlockEntity blockEntity) {
+    public static void tick(Level level, BlockPos pos, BlockState state, PaintMixerBlockEntity blockEntity) {
         if (blockEntity.areInputsEmpty()) {
             // No point in doing anything when input slots are empty
             blockEntity.paintColor = 0;
             return;
         }
 
-        var newColor = PaintUtils.getBlendedColor(blockEntity);
-        blockEntity.paintColor = newColor.isPresent() ? newColor.getAsInt() : 0;
-        blockEntity.doWork(level);
+        if (blockEntity.canWork()) {
+            var newColor = PaintUtils.getBlendedColor(blockEntity);
+            blockEntity.paintColor = newColor.isPresent() ? newColor.getAsInt() : 0;
+            blockEntity.doWork(level);
+        }
+    }
+
+    private boolean canWork() {
+        // true if any item provides a paint color
+        for (int i = 0; i < INPUT_SLOT_COUNT; ++i) {
+            if (PaintUtils.isPaintMixerColorInput(getItem(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void doWork(Level level) {

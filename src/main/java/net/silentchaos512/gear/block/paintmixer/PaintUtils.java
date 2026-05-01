@@ -52,7 +52,11 @@ public class PaintUtils {
     }
 
     public static boolean isPaintMixerInput(ItemStack stack) {
-        return getPaintMixColor(stack).isPresent() || stack.is(SgTags.Items.PAINT_FILLER);
+        return isPaintMixerColorInput(stack) || stack.is(SgTags.Items.PAINT_FILLER);
+    }
+
+    public static boolean isPaintMixerColorInput(ItemStack stack) {
+        return getPaintMixColor(stack).isPresent();
     }
 
     public static OptionalInt getBlendedColor(PaintMixerBlockEntity container) {

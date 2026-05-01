@@ -16,8 +16,9 @@ import java.util.function.Consumer;
 public class PartTypes {
     public static final DeferredRegister<PartType> REGISTRAR = DeferredRegister.create(SgRegistries.PART_TYPE, SilentGear.MOD_ID);
 
-    public static final DeferredHolder<PartType, PartType> NONE = register("none", builder -> {
-    });
+    public static final DeferredHolder<PartType, PartType> NONE = register("none", builder -> builder
+            .canPaint(false)
+    );
     public static final DeferredHolder<PartType, PartType> MAIN = register("main", builder -> builder
             .compoundPartItem(gearType -> {
                 // PartType will cache the result on its own

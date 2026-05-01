@@ -21,8 +21,7 @@ public class ModKitItem extends Item implements ICycleItem {
     }
 
     public static PartType getSelectedType(ItemStack stack) {
-        var type = stack.get(SgDataComponents.PART_TYPE);
-        return type != null ? type : PartTypes.NONE.get();
+        return stack.getOrDefault(SgDataComponents.PART_TYPE, PartTypes.MAIN.get());
     }
 
     private static void setSelectedType(ItemStack stack, PartType type) {
@@ -35,20 +34,12 @@ public class ModKitItem extends Item implements ICycleItem {
         List<PartType> types = SgRegistries.PART_TYPE.stream().toList();
         if (types.isEmpty()) return;
 
-        if (selected == PartTypes.NONE.get()) {
-            if (direction == ICycleItem.Direction.BACK) {
-                setSelectedType(stack, types.getLast());
-            } else if (direction == ICycleItem.Direction.NEXT) {
-                setSelectedType(stack, types.getFirst());
-            }
-        } else {
-            int index = types.indexOf(selected) + direction.scale;
-            // Wrap around
-            if (index < 0) index = types.size() - 1;
-            if (index >= types.size()) index = 0;
+        int index = types.indexOf(selected) + direction.scale;
+        // Wrap around
+        if (index < 0) index = types.size() - 1;
+        if (index >= types.size()) index = 0;
 
-            setSelectedType(stack, types.get(index));
-        }
+        setSelectedType(stack, types.get(index));
     }
 
     @Override
@@ -57,16 +48,23 @@ public class ModKitItem extends Item implements ICycleItem {
         var selectedName = selected.getDisplayName().withStyle(ChatFormatting.YELLOW);
         tooltip.add(TextUtil.withColor(TextUtil.translate("item", "mod_kit.selected", selectedName), Color.SKYBLUE));
 
-        if (selected.canPaint()) {
-            tooltip.add(TextUtil.translate("item", "mod_kit.can_paint"));
-        }
-        if (selected.isRemovable()) {
-            tooltip.add(TextUtil.translate("item", "mod_kit.can_remove"));
-        }
-
         tooltip.add(TextUtil.translate("item", "mod_kit.keyHint",
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_BACK), Color.AQUAMARINE),
                 TextUtil.withColor(TextUtil.keyBinding(KeyTracker.CYCLE_NEXT), Color.AQUAMARINE)));
+
+        // Indicate if painting/removing parts is possible
+        var paintText = TextUtil.translate("item", "mod_kit.paint").withStyle(ChatFormatting.GREEN);
+        var removeText = TextUtil.translate("item", "mod_kit.remove").withStyle(ChatFormatting.RED);
+        if (selected.canPaint() && selected.isRemovable()) {
+            var text = TextUtil.translate("item", "mod_kit.can_paint_and_remove", paintText, removeText);
+            tooltip.add(text);
+        } else if (selected.canPaint()) {
+            tooltip.add(TextUtil.translate("item", "mod_kit.can_paint_or_remove", paintText));
+        } else if (selected.isRemovable()) {
+            tooltip.add(TextUtil.translate("item", "mod_kit.can_paint_or_remove", removeText));
+        } else {
+            tooltip.add(TextUtil.translate("item", "mod_kit.no_actions").withStyle(ChatFormatting.RED));
+        }
     }
 
     @Override
