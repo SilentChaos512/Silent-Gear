@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -52,6 +53,8 @@ public abstract class ModContainerBlock<T extends BlockEntity> extends BaseEntit
             BlockEntity tile = level.getBlockEntity(pos);
             if (tile instanceof INamedContainerExtraData te && player instanceof ServerPlayer) {
                 player.openMenu(te, te::encodeExtraData);
+            } else if (tile instanceof MenuProvider menuProvider) {
+                player.openMenu(menuProvider);
             }
         }
         return InteractionResult.SUCCESS;

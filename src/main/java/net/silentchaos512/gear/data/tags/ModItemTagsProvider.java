@@ -323,17 +323,12 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 GearItemSets.PROSPECTOR_HAMMER.gearItem()
         );
 
-        tag(ItemTags.DYEABLE)
-                .add(GearItemSets.HELMET.gearItem())
-                .add(GearItemSets.CHESTPLATE.gearItem())
-                .add(GearItemSets.LEGGINGS.gearItem())
-                .add(GearItemSets.BOOTS.gearItem())
-                .add(GearItemSets.ELYTRA.gearItem());
-
         // Silent Gear
 
         copy(SgTags.Blocks.FLUFFY_BLOCKS, SgTags.Items.FLUFFY_BLOCKS);
         copy(SgTags.Blocks.NETHERWOOD_LOGS, SgTags.Items.NETHERWOOD_LOGS);
+
+        tag(SgTags.Items.PAINT_FILLER).addTag(Tags.Items.SLIME_BALLS);
 
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_1).add(CraftingItems.GLOWING_DUST.asItem());
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_2).add(CraftingItems.BLAZING_DUST.asItem());

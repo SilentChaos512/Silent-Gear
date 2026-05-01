@@ -152,6 +152,7 @@ public final class SgTags {
         public static final TagKey<Item> TOOLS_SICKLE = common("tools/sickle");
 
         public static final TagKey<Item> BLUEPRINTS = mod("blueprints");
+        public static final TagKey<Item> PAINT_FILLER = mod("paint_filler");
 
         public static final TagKey<Item> GRADER_CATALYSTS = mod("grader_catalysts");
         public static final TagKey<Item> GRADER_CATALYSTS_TIER_1 = mod("grader_catalysts/tier1");

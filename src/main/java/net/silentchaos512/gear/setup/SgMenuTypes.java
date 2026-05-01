@@ -19,6 +19,8 @@ import net.silentchaos512.gear.block.charger.ChargerContainerMenu;
 import net.silentchaos512.gear.block.charger.ChargerContainerScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
 import net.silentchaos512.gear.block.grader.GraderScreen;
+import net.silentchaos512.gear.block.paintmixer.PaintMixerMenu;
+import net.silentchaos512.gear.block.paintmixer.PaintMixerScreen;
 import net.silentchaos512.gear.block.press.MetalPressContainer;
 import net.silentchaos512.gear.block.press.MetalPressScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerContainer;
@@ -80,6 +82,11 @@ public final class SgMenuTypes {
             )
     );
 
+    public static final DeferredHolder<MenuType<?>, MenuType<PaintMixerMenu>> PAINT_MIXER = register(
+            "paint_mixer",
+            PaintMixerMenu::new
+    );
+
     public static final DeferredHolder<MenuType<?>, MenuType<SalvagerContainer>> SALVAGER = register("salvager",
             SalvagerContainer::new);
 
@@ -121,6 +128,7 @@ public final class SgMenuTypes {
             event.register(MATERIAL_GRADER.get(), GraderScreen::new);
             event.register(METAL_ALLOYER.get(), AlloyForgeScreen::new);
             event.register(METAL_PRESS.get(), MetalPressScreen::new);
+            event.register(PAINT_MIXER.get(), PaintMixerScreen::new);
             event.register(RECRYSTALLIZER.get(), RecrystallizerScreen::new);
             event.register(REFABRICATOR.get(), RefabricatorScreen::new);
             event.register(SALVAGER.get(), SalvagerScreen::new);

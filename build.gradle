@@ -3,6 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
+    id 'com.gradleup.shadow' version '9.+'
     id 'net.neoforged.gradle.userdev' version '7.0.170'
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "com.modrinth.minotaur" version "2.+"
@@ -31,6 +32,24 @@ repositories {
 // Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
+configurations {
+    extraLibs {}
+    implementation.extendsFrom extraLibs
+}
+
+dependencies {
+    extraLibs "com.scrtwpns:mixbox:2.0.0"
+}
+
+tasks.shadowJar {
+    archiveClassifier.set ''
+    dependencies {
+        include dependency("com.scrtwpns:mixbox")
+    }
+    relocate('com.scrtwpns', 'shadow.silentgear.scrtwpns')
+}
+assemble.dependsOn shadowJar
+
 runs {
     // applies to all the run configs below
     configureEach {
@@ -52,11 +71,17 @@ runs {
     client {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        dependencies {
+            runtime project.configurations.extraLibs
+        }
     }
 
     server {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
+        //programArgument '--nogui'
+        dependencies {
+            runtime project.configurations.extraLibs
+        }
     }
 
     // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -72,6 +97,10 @@ runs {
 
         // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
         programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+
+        dependencies {
+            runtime project.configurations.extraLibs
+        }
     }
 }
 

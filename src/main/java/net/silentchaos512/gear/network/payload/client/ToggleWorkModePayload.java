@@ -6,12 +6,13 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.silentchaos512.gear.SilentGear;
 
-public record AlloyMakerUpdatePayload(boolean workEnabled) implements CustomPacketPayload {
-    public static final Type<AlloyMakerUpdatePayload> TYPE = new Type<>(SilentGear.getId("alloy_maker_update"));
+// Formerly AlloyMakerUpdatePayload
+public record ToggleWorkModePayload(boolean workEnabled) implements CustomPacketPayload {
+    public static final Type<ToggleWorkModePayload> TYPE = new Type<>(SilentGear.getId("toggle_work_mode"));
 
-    public static final StreamCodec<FriendlyByteBuf, AlloyMakerUpdatePayload> STREAM_CODEC = StreamCodec.composite(
+    public static final StreamCodec<FriendlyByteBuf, ToggleWorkModePayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.BOOL, d -> d.workEnabled,
-            AlloyMakerUpdatePayload::new
+            ToggleWorkModePayload::new
     );
 
     @Override

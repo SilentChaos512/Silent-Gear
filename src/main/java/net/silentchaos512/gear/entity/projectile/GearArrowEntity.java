@@ -10,7 +10,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.setup.gear.GearProperties;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -60,9 +60,9 @@ public class GearArrowEntity extends AbstractArrow {
     }
     
     private void setColors(ItemStack stack) {
-    	int rodColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
-    	int tipColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
-    	int fletchingColor = ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.FLETCHING.get());
+    	int rodColor = GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+    	int tipColor = GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+    	int fletchingColor = GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.FLETCHING.get());
     	this.entityData.set(ID_COLOR_ROD, rodColor);
     	this.entityData.set(ID_COLOR_TIP, tipColor);
     	this.entityData.set(ID_COLOR_FLETCHING, fletchingColor);

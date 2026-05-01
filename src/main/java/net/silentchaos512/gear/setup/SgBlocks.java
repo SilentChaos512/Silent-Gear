@@ -32,6 +32,7 @@ import net.silentchaos512.gear.block.alloymaker.entity.*;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.charger.StarlightChargerBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
+import net.silentchaos512.gear.block.paintmixer.PaintMixerBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlock;
@@ -95,6 +96,12 @@ public final class SgBlocks {
     public static final DeferredBlock<GraderBlock> MATERIAL_GRADER = register("material_grader", () ->
             new GraderBlock(BlockBehaviour.Properties.of()
                     .strength(5, 30)));
+
+    public static final DeferredBlock<PaintMixerBlock> PAINT_MIXER = register("paint_mixer", () ->
+            new PaintMixerBlock(BlockBehaviour.Properties.of()
+                    .strength(5, 30)
+            )
+    );
 
     public static final DeferredBlock<SalvagerBlock> SALVAGER = register("salvager", () ->
             new SalvagerBlock(BlockBehaviour.Properties.of()
@@ -206,19 +213,19 @@ public final class SgBlocks {
     public static final DeferredBlock<TorchBlock> STONE_TORCH = register("stone_torch",
             () -> new TorchBlock(ParticleTypes.FLAME,
                     BlockBehaviour.Properties.of()
-                                .noCollission()
-                                .strength(0)
-                                .lightLevel(state -> 14)
-                                .sound(SoundType.STONE)),
+                            .noCollission()
+                            .strength(0)
+                            .lightLevel(state -> 14)
+                            .sound(SoundType.STONE)),
             bro -> getStoneTorchItem());
     public static final DeferredBlock<WallTorchBlock> WALL_STONE_TORCH = registerNoItem("wall_stone_torch", () ->
             new WallTorchBlock(ParticleTypes.FLAME,
                     BlockBehaviour.Properties.of()
-                                .noCollission()
-                                .strength(0)
-                                .lightLevel(state -> 14)
-                                .sound(SoundType.STONE)
-                                .lootFrom(STONE_TORCH)));
+                            .noCollission()
+                            .strength(0)
+                            .lightLevel(state -> 14)
+                            .sound(SoundType.STONE)
+                            .lootFrom(STONE_TORCH)));
 
     public static final DeferredBlock<Block> NETHERWOOD_CHARCOAL_BLOCK = register("netherwood_charcoal_block",
             () -> new Block(BlockBehaviour.Properties.of()

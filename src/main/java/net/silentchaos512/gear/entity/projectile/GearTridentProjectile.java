@@ -24,7 +24,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.item.gear.GearTridentItem;
 import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -90,11 +90,11 @@ public class GearTridentProjectile extends AbstractArrow {
     }
     
     private void setColors(ItemStack pickupItemStack) {
-        int toolRodColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.ROD.get());
-        int gripColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.GRIP.get());
-        int spikesColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.MAIN.get());
-        int tipColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.TIP.get());
-        int coatingColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.COATING.get());
+        int toolRodColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.ROD.get());
+        int gripColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.GRIP.get());
+        int spikesColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.MAIN.get());
+        int tipColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.TIP.get());
+        int coatingColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.COATING.get());
         this.entityData.set(ID_COLOR_TOOLROD, toolRodColor);
         this.entityData.set(ID_COLOR_GRIP, gripColor == -1 ? toolRodColor : gripColor);
         this.entityData.set(ID_COLOR_SPIKES, coatingColor == -1 ? spikesColor : coatingColor);

@@ -36,6 +36,7 @@ import net.silentchaos512.lib.util.Color;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 
 public final class MaterialInstance implements GearComponentInstance<Material> {
     public static final Codec<MaterialInstance> CODEC = RecordCodecBuilder.create(
@@ -203,6 +204,10 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public int getColor(GearType gearType, PartType partType) {
         var mat = getNullable();
         return mat != null ? mat.getColor(this, partType, gearType) : Color.VALUE_WHITE;
+    }
+
+    public int getColor(Supplier<GearType> gearType, Supplier<PartType> partType) {
+        return getColor(gearType.get(), partType.get());
     }
 
     public TextureType getMainTextureType() {

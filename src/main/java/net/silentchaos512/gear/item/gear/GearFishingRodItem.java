@@ -31,7 +31,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
@@ -212,9 +212,9 @@ public class GearFishingRodItem extends FishingRodItem implements GearTool {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
-                case 1 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
-                case 3 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.CORD.get());
+                case 0 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.ROD.get());
+                case 1 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+                case 3 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.CORD.get());
                 default -> 0xFFFFFFFF;
             };
         };

@@ -1,21 +1,20 @@
 package net.silentchaos512.gear.setup;
 
 import net.minecraft.client.renderer.entity.FishingHookRenderer;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -29,7 +28,7 @@ import net.silentchaos512.gear.entity.GearFishingHook;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
 import net.silentchaos512.gear.entity.projectile.GearTridentProjectile;
 import net.silentchaos512.gear.entity.projectile.SlingshotProjectile;
-import net.silentchaos512.gear.item.gear.GearTridentItem;
+import net.silentchaos512.gear.item.gear.GearArmorItem;
 
 public final class SgEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, SilentGear.MOD_ID);
@@ -75,13 +74,30 @@ public final class SgEntities {
             event.registerEntityRenderer(TRIDENT_PROJECTILE.get(), GearTridentProjectileRenderer::new);
         }
         
-        // Register special model rendering for trident
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+            // Register special model rendering for trident
             event.registerItem(
                     new SgClientItemExtensions(),
                     GearItemSets.TRIDENT.gearItem()
+            );
+            // Equipped armor colors
+            event.registerItem(
+                    new IClientItemExtensions() {
+                        @Override
+                        public int getArmorLayerTintColor(ItemStack stack, LivingEntity entity, ArmorMaterial.Layer layer, int layerIdx, int fallbackColor) {
+                            if (layerIdx == 0) {
+                                return GearArmorItem.getArmorColor(stack);
+                            }
+                            return -1;
+                        }
+                    },
+                    GearItemSets.HELMET.gearItem(),
+                    GearItemSets.CHESTPLATE.gearItem(),
+                    GearItemSets.LEGGINGS.gearItem(),
+                    GearItemSets.BOOTS.gearItem(),
+                    GearItemSets.ELYTRA.gearItem()
             );
         }
         

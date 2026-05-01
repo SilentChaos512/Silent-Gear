@@ -218,7 +218,11 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
 
     public String getModelKey() {
         var part = getNullable();
-        return part != null ? part.getModelKey(this) : "null";
+        var key = part != null ? part.getModelKey(this) : "null";
+        if (this.craftingItem.has(SgDataComponents.PAINT_COLOR)) {
+            key += Color.format(this.craftingItem.getOrDefault(SgDataComponents.PAINT_COLOR, 0));
+        }
+        return key;
     }
 
     public int getColor(ItemStack gear) {
@@ -231,6 +235,9 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
 
     public int getColor(GearType gearType, int layer, int animationFrame) {
         var part = getNullable();
+        if (this.craftingItem.has(SgDataComponents.PAINT_COLOR)) {
+            return this.craftingItem.getOrDefault(SgDataComponents.PAINT_COLOR, 0);
+        }
         if (part != null) {
             return part.getColor(this, gearType, layer, animationFrame);
         }

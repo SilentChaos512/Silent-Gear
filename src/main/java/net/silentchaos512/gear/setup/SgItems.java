@@ -151,6 +151,10 @@ public final class SgItems {
     public static final DeferredItem<ProcessedMaterialItem> SHEET_METAL = register("sheet_metal", () ->
             new ProcessedMaterialItem(baseProps()));
 
+    public static final DeferredItem<PaintItem> PAINT = register("paint", () ->
+            new PaintItem(new Item.Properties().component(SgDataComponents.PAINT_COLOR, 0xFFFFFF))
+    );
+
     static {
         CraftingItems.register(ITEMS);
     }

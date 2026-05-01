@@ -59,6 +59,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         dropSelf(SgBlocks.AZURE_ELECTRUM_BLOCK.get());
         dropSelf(SgBlocks.TYRIAN_STEEL_BLOCK.get());
         dropSelf(SgBlocks.MATERIAL_GRADER.get());
+        dropSelf(SgBlocks.PAINT_MIXER.get());
         dropSelf(SgBlocks.NETHERWOOD_CHARCOAL_BLOCK.get());
         dropSelf(SgBlocks.NETHERWOOD_FENCE.get());
         dropSelf(SgBlocks.NETHERWOOD_FENCE_GATE.get());

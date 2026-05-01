@@ -58,6 +58,11 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         builder(SgItems.NETHERWOOD_CHARCOAL, itemGenerated);
 
+        builder(SgItems.PAINT)
+                .parent(itemGenerated)
+                .texture("layer0", "item/paint")
+                .texture("layer1", "item/paint_bucket");
+
         // Crafted materials
         builder(SgItems.SHEET_METAL)
                 .parent(itemGenerated)

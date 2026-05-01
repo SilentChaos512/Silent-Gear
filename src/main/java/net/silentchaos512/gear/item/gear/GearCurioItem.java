@@ -18,7 +18,7 @@ import net.neoforged.fml.ModList;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.Const;
@@ -136,8 +136,8 @@ public class GearCurioItem extends Item implements GearItem {
         //noinspection OverlyLongLambda
         return (stack, tintIndex) -> {
             return switch (tintIndex) {
-                case 0 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
-                case 2 -> ColorUtils.getBlendedColorForPartInGear(stack, PartTypes.SETTING.get());
+                case 0 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.MAIN.get());
+                case 2 -> GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.SETTING.get());
                 default -> 0xFFFFFFFF;
             };
         };
