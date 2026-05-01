@@ -71,7 +71,7 @@ public class KeyTracker {
             }
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
-                ClientPacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.CYCLE_NEXT, getHoveredSlot()));
+                ClientPacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.CYCLE_NEXT, getHoveredSlot(hovered)));
             }
         }
         if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == CYCLE_BACK.getKey().getValue()) {
@@ -80,13 +80,13 @@ public class KeyTracker {
             }
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
-                ClientPacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.CYCLE_BACK, getHoveredSlot()));
+                ClientPacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.CYCLE_BACK, getHoveredSlot(hovered)));
             }
         }
         if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == OPEN_ITEM.getKey().getValue()) {
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
-                ClientPacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.OPEN_ITEM, getHoveredSlot()));
+                ClientPacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.OPEN_ITEM, getHoveredSlot(hovered)));
             }
         }
     }
@@ -94,7 +94,7 @@ public class KeyTracker {
     private static ItemStack getHoveredItem() {
         Screen currentScreen = Minecraft.getInstance().screen;
         if (currentScreen instanceof AbstractContainerScreen<?> containerScreen) {
-            Slot slot = containerScreen.getSlotUnderMouse();
+            Slot slot = containerScreen.getHoveredSlot();
             if (slot != null) {
                 return slot.getItem();
             }
@@ -102,10 +102,22 @@ public class KeyTracker {
         return ItemStack.EMPTY;
     }
 
-    private static int getHoveredSlot() {
+    private static int getHoveredSlot(ItemStack hoveredItem) {
+        var player = Minecraft.getInstance().player;
+        if (player == null) return -1;
+
+        var menu = player.containerMenu;
+        for (var slot : menu.slots) {
+            if (ItemStack.isSameItemSameComponents(hoveredItem, slot.getItem())) {
+                return menu.slots.indexOf(slot);
+            }
+        }
+
+        // old code as fallback, should never be called
+        SilentGear.LOGGER.warn("Using fallback method for KeyTracker#getHoveredSlot ({})", hoveredItem);
         Screen currentScreen = Minecraft.getInstance().screen;
         if (currentScreen instanceof AbstractContainerScreen<?> containerScreen) {
-            Slot slot = containerScreen.getSlotUnderMouse();
+            Slot slot = containerScreen.getHoveredSlot();
             if (slot != null) {
                 return slot.getContainerSlot();
             }

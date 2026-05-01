@@ -8,7 +8,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.setup.SgRegistries;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +22,7 @@ public record GearPartColor(Holder<PartType> partType) implements ItemTintSource
     @Override
     public int calculate(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity) {
         if (this.partType.isBound()) {
-            return ColorUtils.getBlendedColorForPartInGear(stack, this.partType.value());
+            return GearColorUtils.getBlendedColorForPartInGear(stack, this.partType.value());
         }
         // Part type not valid?
         return 0xFFFF00FF;

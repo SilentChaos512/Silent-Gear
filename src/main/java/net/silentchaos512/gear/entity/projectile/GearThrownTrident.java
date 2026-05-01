@@ -23,7 +23,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.silentchaos512.gear.api.item.GearType;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.item.gear.GearTridentItem;
 import net.silentchaos512.gear.setup.SgEntities;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -41,7 +41,7 @@ public class GearThrownTrident extends AbstractArrow {
     private boolean dealtDamage;
     private float attackDamage;
     public int clientSideReturnTridentTickCount;
-	private int life;;
+    private int life;
 
     public GearThrownTrident(EntityType<? extends GearThrownTrident> entityType, Level level) {
         super(entityType, level);
@@ -68,7 +68,7 @@ public class GearThrownTrident extends AbstractArrow {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(ID_LOYALTY, (byte)0);
+        builder.define(ID_LOYALTY, (byte) 0);
         builder.define(ID_FOIL, false);
         builder.define(ID_COLOR_TOOLROD, -1);
         builder.define(ID_COLOR_GRIP, -1);
@@ -77,24 +77,27 @@ public class GearThrownTrident extends AbstractArrow {
     }
 
     public int getToolRodColor() {
-    	return this.entityData.get(ID_COLOR_TOOLROD);
+        return this.entityData.get(ID_COLOR_TOOLROD);
     }
+
     public int getGripColor() {
-    	return this.entityData.get(ID_COLOR_GRIP);
+        return this.entityData.get(ID_COLOR_GRIP);
     }
+
     public int getSpikesColor() {
-    	return this.entityData.get(ID_COLOR_SPIKES);
+        return this.entityData.get(ID_COLOR_SPIKES);
     }
+
     public int getTipColor() {
-    	return this.entityData.get(ID_COLOR_TIP);
+        return this.entityData.get(ID_COLOR_TIP);
     }
 
     private void setColors(ItemStack pickupItemStack) {
-        int toolRodColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.ROD.get());
-        int gripColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.GRIP.get());
-        int spikesColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.MAIN.get());
-        int tipColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.TIP.get());
-        int coatingColor = ColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.COATING.get());
+        int toolRodColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.ROD.get());
+        int gripColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.GRIP.get());
+        int spikesColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.MAIN.get());
+        int tipColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.TIP.get());
+        int coatingColor = GearColorUtils.getBlendedColorForPartInGear(pickupItemStack, PartTypes.COATING.get());
         this.entityData.set(ID_COLOR_TOOLROD, toolRodColor);
         this.entityData.set(ID_COLOR_GRIP, gripColor == -1 ? toolRodColor : gripColor);
         this.entityData.set(ID_COLOR_SPIKES, coatingColor == -1 ? spikesColor : coatingColor);
@@ -119,12 +122,12 @@ public class GearThrownTrident extends AbstractArrow {
             } else {
                 this.setNoPhysics(true);
                 Vec3 vec3 = entity.getEyePosition().subtract(this.position());
-                this.setPosRaw(this.getX(), this.getY() + vec3.y * 0.015 * (double)i, this.getZ());
+                this.setPosRaw(this.getX(), this.getY() + vec3.y * 0.015 * (double) i, this.getZ());
                 if (this.level().isClientSide()) {
                     this.yOld = this.getY();
                 }
 
-                double d0 = 0.05 * (double)i;
+                double d0 = 0.05 * (double) i;
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.95).add(vec3.normalize().scale(d0)));
                 if (this.clientSideReturnTridentTickCount == 0) {
                     this.playSound(SoundEvents.TRIDENT_RETURN, 10.0F, 1.0F);
@@ -163,7 +166,7 @@ public class GearThrownTrident extends AbstractArrow {
         Entity entity = result.getEntity();
         float f = attackDamage;
         Entity entity1 = this.getOwner();
-        DamageSource damagesource = this.damageSources().trident(this, (Entity)(entity1 == null ? this : entity1));
+        DamageSource damagesource = this.damageSources().trident(this, (Entity) (entity1 == null ? this : entity1));
         if (this.level() instanceof ServerLevel serverlevel) {
             f = EnchantmentHelper.modifyDamage(serverlevel, this.getWeaponItem(), entity, damagesource, f);
         }
@@ -192,14 +195,14 @@ public class GearThrownTrident extends AbstractArrow {
     protected void hitBlockEnchantmentEffects(ServerLevel level, BlockHitResult hitResult, ItemStack stack) {
         Vec3 vec3 = hitResult.getBlockPos().clampLocationWithin(hitResult.getLocation());
         EnchantmentHelper.onHitBlock(
-            level,
-            stack,
-            this.getOwner() instanceof LivingEntity livingentity ? livingentity : null,
-            this,
-            null,
-            vec3,
-            level.getBlockState(hitResult.getBlockPos()),
-            p_348680_ -> this.kill(level)
+                level,
+                stack,
+                this.getOwner() instanceof LivingEntity livingentity ? livingentity : null,
+                this,
+                null,
+                vec3,
+                level.getBlockState(hitResult.getBlockPos()),
+                p_348680_ -> this.kill(level)
         );
     }
 
@@ -251,8 +254,8 @@ public class GearThrownTrident extends AbstractArrow {
 
     private byte getLoyaltyFromItem(ItemStack stack) {
         return this.level() instanceof ServerLevel serverlevel
-            ? (byte)Mth.clamp(EnchantmentHelper.getTridentReturnToOwnerAcceleration(serverlevel, stack, this), 0, 127)
-            : 0;
+                ? (byte) Mth.clamp(EnchantmentHelper.getTridentReturnToOwnerAcceleration(serverlevel, stack, this), 0, 127)
+                : 0;
     }
 
     @Override
@@ -261,7 +264,7 @@ public class GearThrownTrident extends AbstractArrow {
         if (this.pickup != AbstractArrow.Pickup.ALLOWED || i <= 0) {
             this.life++;
             if (this.life > 6000) {
-            	this.discard();
+                this.discard();
             }
         }
     }

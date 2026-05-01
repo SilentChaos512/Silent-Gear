@@ -1,7 +1,7 @@
 package net.silentchaos512.gear.core;
 
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearHelper;
 
@@ -18,11 +18,11 @@ public record ToolColors(
         }
 
         return new ToolColors(
-                ColorUtils.getBlendedColorForPartInGear(gear, PartTypes.MAIN),
-                ColorUtils.getBlendedColorForPartInGear(gear, PartTypes.COATING),
-                ColorUtils.getBlendedColorForPartInGear(gear, PartTypes.ROD),
-                ColorUtils.getBlendedColorForPartInGear(gear, PartTypes.GRIP),
-                ColorUtils.getBlendedColorForPartInGear(gear, PartTypes.TIP)
+                GearColorUtils.getBlendedColorForPartInGear(gear, PartTypes.MAIN.get()),
+                GearColorUtils.getBlendedColorForPartInGear(gear, PartTypes.COATING.get()),
+                GearColorUtils.getBlendedColorForPartInGear(gear, PartTypes.ROD.get()),
+                GearColorUtils.getBlendedColorForPartInGear(gear, PartTypes.GRIP.get()),
+                GearColorUtils.getBlendedColorForPartInGear(gear, PartTypes.TIP.get())
         );
     }
 }

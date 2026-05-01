@@ -22,12 +22,6 @@ public class MainPartItem extends CompoundPartItem {
     }
 
     @Override
-    public int getColorWeight(int index, int totalCount) {
-        int diff = super.getColorWeight(index, totalCount);
-        return diff * diff;
-    }
-
-    @Override
     public int getMaxDamage(ItemStack stack) {
         PartInstance part = PartInstance.from(stack);
         if (part != null) {

@@ -344,6 +344,7 @@ public class ModItemTagsProvider extends LibItemTagsProvider {
 
         // Silent Gear
 
+        tag(SgTags.Items.PAINT_FILLER).addTag(Tags.Items.SLIME_BALLS);
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_1).add(CraftingItems.GLOWING_DUST.asItem());
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_2).add(CraftingItems.BLAZING_DUST.asItem());
         tag(SgTags.Items.GRADER_CATALYSTS_TIER_3).add(CraftingItems.GLITTERY_DUST.asItem());

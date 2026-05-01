@@ -11,6 +11,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.crafting.recipe.*;
 import net.silentchaos512.gear.crafting.recipe.alloy.*;
+import net.silentchaos512.gear.crafting.recipe.modkit.ModKitPaintPartRecipe;
+import net.silentchaos512.gear.crafting.recipe.modkit.ModKitRemovePartRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.PressingRecipe;
 import net.silentchaos512.gear.crafting.recipe.salvage.CompoundPartSalvagingRecipe;
@@ -69,6 +71,9 @@ public final class SgRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FillRepairKitRecipe>> FILL_REPAIR_KIT = register(Const.FILL_REPAIR_KIT,
             () -> emptyCustomRecipe(FillRepairKitRecipe.INSTANCE)
     );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ModKitPaintPartRecipe>> MOD_KIT_PAINT_PART = register(Const.MOD_KIT_PAINT_PART,
+            () -> emptyCustomRecipe(ModKitPaintPartRecipe.INSTANCE)
+    );
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ModKitRemovePartRecipe>> MOD_KIT_REMOVE_PART = register(Const.MOD_KIT_REMOVE_PART,
             () -> emptyCustomRecipe(ModKitRemovePartRecipe.INSTANCE)
     );
@@ -83,6 +88,9 @@ public final class SgRecipes {
                     SingleItemRecipe.simpleMapCodec(MaterialPressingRecipe::new),
                     SingleItemRecipe.simpleStreamCodec(MaterialPressingRecipe::new)
             )
+    );
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<QuickPaintRecipe>> QUICK_PAINT = register(Const.QUICK_PAINT,
+            () -> emptyCustomRecipe(QuickPaintRecipe.INSTANCE)
     );
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<QuickRepairRecipe>> QUICK_REPAIR = register(Const.QUICK_REPAIR,
             () -> emptyCustomRecipe(QuickRepairRecipe.INSTANCE)

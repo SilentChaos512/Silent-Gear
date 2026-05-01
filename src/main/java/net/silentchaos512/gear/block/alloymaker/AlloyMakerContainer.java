@@ -7,15 +7,14 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.silentchaos512.gear.api.material.IMaterialCategory;
-import net.silentchaos512.gear.network.payload.client.AlloyMakerUpdatePayload;
+import net.silentchaos512.gear.block.container.ToggleableWorkMode;
 import net.silentchaos512.lib.inventory.SlotOutputOnly;
 import net.silentchaos512.lib.util.InventoryUtils;
 
 import java.util.Collection;
 
-public class AlloyMakerContainer extends AbstractContainerMenu {
+public class AlloyMakerContainer extends AbstractContainerMenu implements ToggleableWorkMode {
     private final Container inventory;
     private final ContainerData fields;
 
@@ -58,17 +57,14 @@ public class AlloyMakerContainer extends AbstractContainerMenu {
         }
     }
 
-    boolean getWorkEnabled() {
+    @Override
+    public boolean getWorkEnabled() {
         return this.fields.get(1) != 0;
     }
 
+    @Override
     public void setWorkEnabled(boolean value) {
         this.fields.set(1, value ? 1 : 0);
-    }
-
-    void toggleWorkEnabled() {
-        this.fields.set(1, this.fields.get(1) == 0 ? 1 : 0);
-        ClientPacketDistributor.sendToServer(new AlloyMakerUpdatePayload(getWorkEnabled()));
     }
 
     public int getProgressArrowScale() {

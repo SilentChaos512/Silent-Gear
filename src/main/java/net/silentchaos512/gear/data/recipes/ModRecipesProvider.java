@@ -7,7 +7,9 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
@@ -26,6 +28,7 @@ import net.silentchaos512.gear.crafting.ingredient.CustomAlloyIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
+import net.silentchaos512.gear.crafting.recipe.modkit.ModKitRemovePartRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
@@ -123,6 +126,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void registerSpecialRecipes() {
         special(this.output, SgRecipes.FILL_REPAIR_KIT.get(), FillRepairKitRecipe::new);
         special(this.output, SgRecipes.SWAP_GEAR_PART.get(), GearPartSwapRecipe::new);
+        special(this.output, SgRecipes.QUICK_PAINT.get(), QuickPaintRecipe::new);
         special(this.output, SgRecipes.QUICK_REPAIR.get(), QuickRepairRecipe::new);
         special(this.output, SgRecipes.MOD_KIT_REMOVE_PART.get(), ModKitRemovePartRecipe::new);
     }
@@ -746,6 +750,18 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern(" # ")
                 .pattern("#/#")
                 .unlockedBy("has_item", has(Tags.Items.COBBLESTONES))
+                .save(this.output);
+
+        shaped(RecipeCategory.DECORATIONS, SgBlocks.PAINT_MIXER)
+                .pattern("sds")
+                .pattern("c/c")
+                .pattern("sbs")
+                .define('d', Tags.Items.DYES)
+                .define('c', Tags.Items.INGOTS_COPPER)
+                .define('/', SgTags.Items.RODS_IRON)
+                .define('s', Blocks.SMOOTH_STONE)
+                .define('b', Tags.Items.BUCKETS_EMPTY)
+                .unlockedBy("has_item", has(Tags.Items.DYES))
                 .save(this.output);
 
         shaped(RecipeCategory.DECORATIONS, SgBlocks.ALLOY_FORGE)

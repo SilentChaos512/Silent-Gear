@@ -35,6 +35,7 @@ import net.silentchaos512.gear.block.alloymaker.entity.*;
 import net.silentchaos512.gear.block.charger.ChargerBlockEntity;
 import net.silentchaos512.gear.block.charger.StarlightChargerBlock;
 import net.silentchaos512.gear.block.grader.GraderBlock;
+import net.silentchaos512.gear.block.paintmixer.PaintMixerBlock;
 import net.silentchaos512.gear.block.press.MetalPressBlock;
 import net.silentchaos512.gear.block.salvager.SalvagerBlock;
 import net.silentchaos512.gear.block.stoneanvil.StoneAnvilBlock;
@@ -130,6 +131,14 @@ public final class SgBlocks {
     public static final DeferredBlock<GraderBlock> MATERIAL_GRADER = register(
             "material_grader",
             GraderBlock::new,
+            props -> props
+                    .strength(5, 30),
+            SgBlocks::blockItemWithTooltip
+    );
+
+    public static final DeferredBlock<PaintMixerBlock> PAINT_MIXER = register(
+            "paint_mixer",
+            PaintMixerBlock::new,
             props -> props
                     .strength(5, 30),
             SgBlocks::blockItemWithTooltip

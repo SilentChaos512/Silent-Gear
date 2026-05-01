@@ -8,9 +8,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.silentchaos512.gear.Config;
-import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
+import net.silentchaos512.gear.block.paintmixer.PaintUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
@@ -18,7 +18,6 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.util.Const;
 import net.silentchaos512.gear.util.TextUtil;
 import net.silentchaos512.lib.util.Color;
-import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;
@@ -71,19 +70,18 @@ public class CompoundPartItem extends Item {
         return result;
     }
 
-    public static String getModelKey(ItemStack stack) {
-        StringBuilder s = new StringBuilder(SilentGear.shortenId(NameUtils.fromItem(stack)) + "#");
-        var materials = getMaterials(stack);
-
-        for (var material : materials) {
-            s.append(SilentGear.shortenId(material.getId()));
+    public int getColor(ItemStack stack, int layer) {
+        if (layer == 0) {
+            var paintColor = PaintUtils.getPaintColor(stack);
+            if (paintColor.isPresent()) {
+                return paintColor.getAsInt();
+            }
+            var primaryMaterial = getPrimaryMaterial(stack);
+            return primaryMaterial != null
+                    ? primaryMaterial.getColor(getGearType(), getPartType()) | 0xFF000000
+                    : 0xFFFFFFFF;
         }
-
-        return s.toString();
-    }
-
-    public int getColorWeight(int index, int totalCount) {
-        return totalCount - index;
+        return 0xFFFFFFFF;
     }
 
     @Override

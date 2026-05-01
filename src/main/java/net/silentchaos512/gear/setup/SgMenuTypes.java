@@ -18,6 +18,8 @@ import net.silentchaos512.gear.block.charger.ChargerContainerMenu;
 import net.silentchaos512.gear.block.charger.ChargerContainerScreen;
 import net.silentchaos512.gear.block.grader.GraderContainer;
 import net.silentchaos512.gear.block.grader.GraderScreen;
+import net.silentchaos512.gear.block.paintmixer.PaintMixerMenu;
+import net.silentchaos512.gear.block.paintmixer.PaintMixerScreen;
 import net.silentchaos512.gear.block.press.MetalPressContainer;
 import net.silentchaos512.gear.block.press.MetalPressScreen;
 import net.silentchaos512.gear.block.salvager.SalvagerContainer;
@@ -30,32 +32,45 @@ import java.util.List;
 public final class SgMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(BuiltInRegistries.MENU, SilentGear.MOD_ID);
 
-    public static final DeferredHolder<MenuType<?>, MenuType<GraderContainer>> MATERIAL_GRADER = register("material_grader",
-            GraderContainer::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<GraderContainer>> MATERIAL_GRADER = register(
+            "material_grader",
+            GraderContainer::new
+    );
 
-    public static final DeferredHolder<MenuType<?>, MenuType<MetalPressContainer>> METAL_PRESS = register("metal_press",
-            MetalPressContainer::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<MetalPressContainer>> METAL_PRESS = register(
+            "metal_press",
+            MetalPressContainer::new
+    );
 
     public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> METAL_ALLOYER = register("metal_alloyer",
-            (id, playerInventory, buffer) -> new AlloyMakerContainer(getMetalAlloyer(),
+            (id, playerInventory, buffer) -> new AlloyMakerContainer(
+                    getMetalAlloyer(),
                     id,
                     playerInventory,
                     buffer,
-                    SgBlocks.ALLOY_FORGE.get().getCategories()));
+                    SgBlocks.ALLOY_FORGE.get().getCategories()
+            )
+    );
 
     public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> RECRYSTALLIZER = register("recrystallizer",
-            (id, playerInventory, buffer) -> new AlloyMakerContainer(getRecrystallizer(),
+            (id, playerInventory, buffer) -> new AlloyMakerContainer(
+                    getRecrystallizer(),
                     id,
                     playerInventory,
                     buffer,
-                    SgBlocks.RECRYSTALLIZER.get().getCategories()));
+                    SgBlocks.RECRYSTALLIZER.get().getCategories()
+            )
+    );
 
     public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> REFABRICATOR = register("refabricator",
-            (id, playerInventory, buffer) -> new AlloyMakerContainer(getRefabricator(),
+            (id, playerInventory, buffer) -> new AlloyMakerContainer(
+                    getRefabricator(),
                     id,
                     playerInventory,
                     buffer,
-                    SgBlocks.REFABRICATOR.get().getCategories()));
+                    SgBlocks.REFABRICATOR.get().getCategories()
+            )
+    );
 
     public static final DeferredHolder<MenuType<?>, MenuType<AlloyMakerContainer>> CRUDE_MIXER = register(
             "crude_mixer",
@@ -79,14 +94,25 @@ public final class SgMenuTypes {
             )
     );
 
-    public static final DeferredHolder<MenuType<?>, MenuType<SalvagerContainer>> SALVAGER = register("salvager",
-            SalvagerContainer::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<PaintMixerMenu>> PAINT_MIXER = register(
+            "paint_mixer",
+            PaintMixerMenu::new
+    );
 
-    public static final DeferredHolder<MenuType<?>, MenuType<ChargerContainerMenu>> STARLIGHT_CHARGER = register("starlight_charger",
-            ChargerContainerMenu::createStarlightCharger);
+    public static final DeferredHolder<MenuType<?>, MenuType<SalvagerContainer>> SALVAGER = register(
+            "salvager",
+            SalvagerContainer::new
+    );
 
-    public static final DeferredHolder<MenuType<?>, MenuType<BlueprintBookContainerMenu>> BLUEPRINT_BOOK = register("blueprint_book",
-            BlueprintBookContainerMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<ChargerContainerMenu>> STARLIGHT_CHARGER = register(
+            "starlight_charger",
+            ChargerContainerMenu::createStarlightCharger
+    );
+
+    public static final DeferredHolder<MenuType<?>, MenuType<BlueprintBookContainerMenu>> BLUEPRINT_BOOK = register(
+            "blueprint_book",
+            BlueprintBookContainerMenu::new
+    );
 
     private SgMenuTypes() {
     }
@@ -119,6 +145,7 @@ public final class SgMenuTypes {
             event.register(MATERIAL_GRADER.get(), GraderScreen::new);
             event.register(METAL_ALLOYER.get(), AlloyForgeScreen::new);
             event.register(METAL_PRESS.get(), MetalPressScreen::new);
+            event.register(PAINT_MIXER.get(), PaintMixerScreen::new);
             event.register(RECRYSTALLIZER.get(), RecrystallizerScreen::new);
             event.register(REFABRICATOR.get(), RefabricatorScreen::new);
             event.register(SALVAGER.get(), SalvagerScreen::new);

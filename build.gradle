@@ -4,6 +4,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.1.21'
+    id 'com.gradleup.shadow' version '9.+'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -49,6 +50,24 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
 
+configurations {
+    extraLibs {}
+    implementation.extendsFrom extraLibs
+}
+
+dependencies {
+    extraLibs "com.scrtwpns:mixbox:2.0.0"
+}
+
+tasks.shadowJar {
+    archiveClassifier.set ''
+    dependencies {
+        include dependency("com.scrtwpns:mixbox")
+    }
+    relocate('com.scrtwpns', 'shadow.silentgear.scrtwpns')
+}
+assemble.dependsOn shadowJar
+
 runs {
     // applies to all the run configs below
     configureEach {
@@ -70,11 +89,17 @@ runs {
     client {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        dependencies {
+            runtime project.configurations.extraLibs
+        }
     }
 
     server {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
         //programArgument '--nogui'
+        dependencies {
+            runtime project.configurations.extraLibs
+        }
     }
 
     // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -90,6 +115,10 @@ runs {
 
         // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
         arguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+
+        dependencies {
+            runtime project.configurations.extraLibs
+        }
     }
 }
 

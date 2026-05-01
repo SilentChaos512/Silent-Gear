@@ -12,7 +12,7 @@ import net.silentchaos512.gear.network.payload.server.*;
 public final class SgNetwork {
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
-        final var registrar = event.registrar("4.1.3");
+        final var registrar = event.registrar("4.2");
         // Data resource sync packets
         registrar.playToClient(
                 SyncTraitsPayload.TYPE,
@@ -44,9 +44,9 @@ public final class SgNetwork {
 
         // Play phase client 2 server play packets
         registrar.playToServer(
-                AlloyMakerUpdatePayload.TYPE,
-                AlloyMakerUpdatePayload.STREAM_CODEC,
-                (data, ctx) -> SgServerPayloadHandler.getInstance().handleAlloyMakerUpdate(data, ctx)
+                ToggleWorkModePayload.TYPE,
+                ToggleWorkModePayload.STREAM_CODEC,
+                (data, ctx) -> SgServerPayloadHandler.getInstance().handleWorkModeTogglePayload(data, ctx)
         );
         registrar.playToServer(
                 SwingGearPayload.TYPE,

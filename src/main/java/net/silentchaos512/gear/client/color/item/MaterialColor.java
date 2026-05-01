@@ -5,7 +5,7 @@ import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.gear.material.MaterialInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.gear.GearTypes;
@@ -20,14 +20,16 @@ public record MaterialColor() implements ItemTintSource {
 
     @Override
     public int calculate(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity) {
-        if (stack.has(SgDataComponents.MATERIAL_SINGLE)) {
+        if (stack.has(SgDataComponents.PAINT_COLOR)) {
+            return stack.getOrDefault(SgDataComponents.PAINT_COLOR, -1);
+        } else if (stack.has(SgDataComponents.MATERIAL_SINGLE)) {
             MaterialInstance material = stack.get(SgDataComponents.MATERIAL_SINGLE);
             assert material != null;
             return material.getColor(GearTypes.ALL.get(), PartTypes.MAIN.get()) | 0xFF000000;
         } else if (stack.has(SgDataComponents.MATERIAL_LIST)) {
             List<MaterialInstance> materials = stack.get(SgDataComponents.MATERIAL_LIST);
             assert materials != null;
-            return ColorUtils.getBlendedColorForCompoundMaterial(materials);
+            return GearColorUtils.getBlendedColorForCompoundMaterial(materials);
         }
         // No material(s) in item
         return -1;

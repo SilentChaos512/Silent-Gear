@@ -37,9 +37,11 @@ public final class Const {
     public static final Identifier CONVERSION = modId("conversion");
     public static final Identifier FILL_REPAIR_KIT = modId("fill_repair_kit");
     public static final Identifier GRADING = modId("grading");
+    public static final Identifier MOD_KIT_PAINT_PART = modId("mod_kit_paint_part");
     public static final Identifier MOD_KIT_REMOVE_PART = modId("mod_kit_remove_part");
     public static final Identifier PRESSING = modId("pressing");
     public static final Identifier PRESSING_MATERIAL = modId("pressing/material");
+    public static final Identifier QUICK_PAINT = modId("quick_paint");
     public static final Identifier QUICK_REPAIR = modId("quick_repair");
     public static final Identifier SALVAGING = modId("salvaging");
     public static final Identifier SALVAGING_COMPOUND_PART = modId("salvaging/compound_part");

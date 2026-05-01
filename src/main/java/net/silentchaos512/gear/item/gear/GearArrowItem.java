@@ -79,13 +79,14 @@ public class GearArrowItem extends ArrowItem implements GearItem {
         arrow.setBaseDamage(GearData.getProperties(ammo).getNumber(GearProperties.RANGED_DAMAGE));
         return arrow;
     }
+
     @Override
     public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
-    	GearArrowEntity arrow = new GearArrowEntity(level, pos.x(), pos.y(), pos.z(), stack.copyWithCount(1), null);
+        GearArrowEntity arrow = new GearArrowEntity(level, pos.x(), pos.y(), pos.z(), stack.copyWithCount(1), null);
         arrow.pickup = AbstractArrow.Pickup.ALLOWED;
         return arrow;
     }
-    
+
 
     @Override
     public InteractionResult useOn(UseOnContext context) {

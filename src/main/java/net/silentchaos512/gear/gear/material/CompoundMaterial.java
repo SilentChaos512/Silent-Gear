@@ -17,7 +17,7 @@ import net.silentchaos512.gear.api.property.GearPropertyValue;
 import net.silentchaos512.gear.api.util.DataResource;
 import net.silentchaos512.gear.api.util.PartGearKey;
 import net.silentchaos512.gear.api.util.PropertyKey;
-import net.silentchaos512.gear.client.util.ColorUtils;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
@@ -208,7 +208,7 @@ public class CompoundMaterial extends AbstractMaterial {
 
     @Override
     public int getColor(MaterialInstance material, PartType partType, GearType gearType) {
-        return ColorUtils.getBlendedColorForCompoundMaterial(getSubMaterials(material));
+        return GearColorUtils.getBlendedColorForCompoundMaterial(getSubMaterials(material));
     }
 
     @Override

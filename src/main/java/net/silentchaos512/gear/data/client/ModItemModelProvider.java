@@ -40,6 +40,8 @@ public class ModItemModelProvider extends ItemModelGenerators {
 
         flatItem(SgItems.NETHERWOOD_CHARCOAL);
 
+        generateWithTintedBaseLayer(SgItems.PAINT, "_bucket", SgItemTintSources.paintedColor());
+
         // Crafted materials
         generateWithTintedBaseLayer(SgItems.SHEET_METAL, "_highlight", SgItemTintSources.blendedMaterialColor());
 

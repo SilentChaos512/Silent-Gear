@@ -30,6 +30,7 @@ import java.util.function.Supplier;
 public record PartType(
         boolean isRemovable,
         boolean isUpgrade,
+        boolean canPaint,
         int maxPerItem,
         @Nullable Function<GearType, Optional<CompoundPartItem>> compoundParts
 ) {
@@ -42,6 +43,7 @@ public record PartType(
         this(
                 builder.isRemovable,
                 builder.isUpgrade,
+                builder.canPaint,
                 builder.maxPerItem,
                 builder.compoundPartItem
         );
@@ -95,6 +97,7 @@ public record PartType(
     public static final class Builder {
         private boolean isRemovable = false;
         private boolean isUpgrade = false;
+        private boolean canPaint = true;
         @Nullable private Function<GearType, Optional<CompoundPartItem>> compoundPartItem;
         private int maxPerItem = 1;
 
@@ -111,6 +114,11 @@ public record PartType(
 
         public Builder isUpgrade(boolean value) {
             this.isUpgrade = value;
+            return this;
+        }
+
+        public Builder canPaint(boolean value) {
+            this.canPaint = value;
             return this;
         }
 

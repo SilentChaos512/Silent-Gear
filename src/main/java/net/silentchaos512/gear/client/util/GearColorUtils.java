@@ -9,57 +9,23 @@ import net.silentchaos512.gear.setup.gear.GearTypes;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
+import net.silentchaos512.lib.util.ColorBlendAlgorithm;
+import net.silentchaos512.lib.util.ColorUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
-public final class ColorUtils {
-    private ColorUtils() {
+public final class GearColorUtils {
+    private GearColorUtils() {
     }
 
     public static int getBlendedColorForCompoundMaterial(Collection<? extends MaterialInstance> materials) {
-        int[] componentSums = new int[3];
-        int maxColorSum = 0;
-        int colorCount = 0;
-
-        for (MaterialInstance mat : materials) {
-            int color = mat.getColor(GearTypes.ALL.get(), PartTypes.MAIN.get());
-            int r = (color >> 16) & 0xFF;
-            int g = (color >> 8) & 0xFF;
-            int b = color & 0xFF;
-            maxColorSum += Math.max(r, Math.max(g, b));
-            componentSums[0] += r;
-            componentSums[1] += g;
-            componentSums[2] += b;
-            ++colorCount;
-        }
-
-        return blendColors(componentSums, maxColorSum, colorCount);
-    }
-
-    private static int blendColors(int[] componentSums, float maxColorSum, int colorCount) {
-        if (colorCount > 0) {
-            int r = componentSums[0] / colorCount;
-            int g = componentSums[1] / colorCount;
-            int b = componentSums[2] / colorCount;
-            float maxAverage = maxColorSum / (float) colorCount;
-            float max = (float) Math.max(r, Math.max(g, b));
-            r = (int) ((float) r * maxAverage / max);
-            g = (int) ((float) g * maxAverage / max);
-            b = (int) ((float) b * maxAverage / max);
-            int finalColor = (r << 8) + g;
-            finalColor = (finalColor << 8) + b;
-            return finalColor | 0xFF000000;
-        }
-
-        return 0xFFFFFFFF;
-    }
-
-    public static int getBlendedColorForPartInGear(ItemStack stack, Supplier<PartType> partType) {
-        return getBlendedColorForPartInGear(stack, partType.get());
+        var colorsIntList = materials.stream()
+                .map(mat -> mat.getColor(GearTypes.ALL, PartTypes.MAIN))
+                .toList();
+        return ColorUtils.blend(ColorBlendAlgorithm.MIXBOX, colorsIntList);
     }
 
     public static int getBlendedColorForPartInGear(ItemStack stack, PartType partType) {

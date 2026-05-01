@@ -39,6 +39,7 @@ import net.silentchaos512.lib.util.Color;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 
 public final class MaterialInstance implements GearComponentInstance<Material> {
     public static final Codec<MaterialInstance> CODEC = RecordCodecBuilder.create(
@@ -59,7 +60,8 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     private static final Map<Identifier, MaterialInstance> QUICK_CACHE = new HashMap<>();
 
     private final DataResource<Material> material;
-    @Nullable private final ItemStackTemplate item;
+    @Nullable
+    private final ItemStackTemplate item;
     private final List<IMaterialModifier> modifiers;
 
     private MaterialInstance(DataResource<Material> material) {
@@ -76,7 +78,9 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
         this.modifiers = modifiers;
     }
 
-    /** @noinspection OptionalUsedAsFieldOrParameterType*/
+    /**
+     * @noinspection OptionalUsedAsFieldOrParameterType
+     */
     private MaterialInstance(DataResource<Material> material, Optional<ItemStackTemplate> craftingItem, List<IMaterialModifier> modifiers) {
         this(material, craftingItem.orElse(null), modifiers);
     }
@@ -221,6 +225,10 @@ public final class MaterialInstance implements GearComponentInstance<Material> {
     public int getColor(GearType gearType, PartType partType) {
         var mat = getNullable();
         return mat != null ? mat.getColor(this, partType, gearType) : Color.VALUE_WHITE;
+    }
+
+    public int getColor(Supplier<GearType> gearType, Supplier<PartType> partType) {
+        return getColor(gearType.get(), partType.get());
     }
 
     public TextureType getMainTextureType() {
