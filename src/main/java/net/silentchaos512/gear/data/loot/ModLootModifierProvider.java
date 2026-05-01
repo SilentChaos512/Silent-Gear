@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.neoforged.neoforge.common.loot.AddTableLootModifier;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.silentchaos512.gear.SilentGear;
@@ -30,7 +31,8 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
     @Override
     protected void start() {
         add("bonus_drops_trait", new BonusDropsTraitLootModifier(
-                new LootItemCondition[]{}
+                new LootItemCondition[]{},
+                IGlobalLootModifier.DEFAULT_PRIORITY
         ));
 
         add(
@@ -38,7 +40,8 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                 new MagmaticTraitLootModifier(
                         new LootItemCondition[]{
                                 HasTraitCondition.builder(Const.Traits.MAGMATIC).build()
-                        }
+                        },
+                        IGlobalLootModifier.DEFAULT_PRIORITY
                 )
         );
 
@@ -56,6 +59,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                         })
                                 )
                         },
+                        IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_SINEW
                 )
         );
@@ -70,6 +74,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                         )
                                 )
                         },
+                        IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_FINE_SILK_LOW
                 )
         );
@@ -84,6 +89,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                         )
                                 )
                         },
+                        IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_FINE_SILK_HIGH
                 )
         );
@@ -99,6 +105,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                         )
                                 )
                         },
+                        IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_LEATHER_SCRAPS_LOW
                 )
         );
@@ -113,6 +120,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                         )
                                 )
                         },
+                        IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_LEATHER_SCRAPS_HIGH
                 )
         );

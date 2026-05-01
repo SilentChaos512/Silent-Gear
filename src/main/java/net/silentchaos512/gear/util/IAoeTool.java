@@ -18,7 +18,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.lib.util.MathUtils;
 
@@ -152,7 +152,7 @@ public interface IAoeTool {
 
         // Handles the actual breaking of multiple blocks with AOE tools
         @SubscribeEvent
-        public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
+        public static void onBlockBreakEvent(BreakBlockEvent event) {
             var player = event.getPlayer();
             if (!(player instanceof ServerPlayer)) return;
 

@@ -22,7 +22,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.property.GearProperty;
@@ -129,7 +129,7 @@ public final class Trait {
         return Optional.of(TraitInstance.of(this, traitLevel));
     }
 
-    public void onBlockBreak(TraitActionContext context, BlockEvent.BreakEvent event) {
+    public void onBlockBreak(TraitActionContext context, BreakBlockEvent event) {
         for (TraitEffect effect : this.effects) {
             effect.onBlockBreak(context, event);
         }

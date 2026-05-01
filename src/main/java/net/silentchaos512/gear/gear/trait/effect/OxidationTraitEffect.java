@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.silentchaos512.gear.api.event.GearNamePrefixesEvent;
 import net.silentchaos512.gear.api.property.ComputeContext;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
@@ -116,7 +116,7 @@ public class OxidationTraitEffect extends TraitEffect {
     }
 
     @Override
-    public void onBlockBreak(TraitActionContext context, BlockEvent.BreakEvent event) {
+    public void onBlockBreak(TraitActionContext context, BreakBlockEvent event) {
         int reductionAmount = getStageTime(context.trait(), context.traitLevel()) / 5 + 1;
         reduceOxidationCounter(reductionAmount, context.gear(), context.trait(), context.traitLevel());
     }

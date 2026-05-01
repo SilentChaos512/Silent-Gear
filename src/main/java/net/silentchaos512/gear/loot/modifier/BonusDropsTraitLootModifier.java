@@ -13,7 +13,6 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 import net.silentchaos512.gear.api.traits.TraitActionContext;
 import net.silentchaos512.gear.util.GearHelper;
 import net.silentchaos512.gear.util.TraitHelper;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -22,12 +21,12 @@ public class BonusDropsTraitLootModifier extends LootModifier {
             RecordCodecBuilder.mapCodec(inst ->
                     codecStart(inst).apply(inst, BonusDropsTraitLootModifier::new)));
 
-    public BonusDropsTraitLootModifier(LootItemCondition[] conditionsIn) {
-        super(conditionsIn);
+    public BonusDropsTraitLootModifier(LootItemCondition[] conditionsIn, int priority) {
+        super(conditionsIn, priority);
     }
 
     @Override
-    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+    protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         ObjectArrayList<ItemStack> ret = new ObjectArrayList<>(generatedLoot);
         var tool = context.getOptionalParameter(LootContextParams.TOOL);
 

@@ -47,7 +47,7 @@ import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.item.BreakEventHandler;
@@ -413,7 +413,7 @@ public final class GearEvents {
     }
 
     @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+    public static void onBlockBreak(BreakBlockEvent event) {
         var player = event.getPlayer();
         ItemStack tool = player.getMainHandItem();
         if (tool.getItem() instanceof BreakEventHandler breakEventHandler) {
