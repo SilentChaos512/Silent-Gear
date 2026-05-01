@@ -13,7 +13,7 @@ public enum TextureType {
     HIGH_CONTRAST("hc"),
     LOW_CONTRAST("lc");
 
-    private final String alias;
+    public final String alias;
     private final ResourceLocation armorTexture1;
     private final ResourceLocation armorTexture2;
 

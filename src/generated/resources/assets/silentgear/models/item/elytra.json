@@ -1,8 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "silentgear:item/elytra/main_generic_hc",
-    "layer1": "silentgear:item/elytra/_highlight",
-    "layer2": "silentgear:item/elytra/binding_generic"
-  }
+  "parent": "silentgear:item/handheld_gear"
 }

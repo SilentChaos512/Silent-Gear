@@ -1,9 +1,0 @@
-{
-  "parent": "silentgear:item/machete",
-  "textures": {
-    "layer0": "silentgear:item/machete/rod_generic_lc",
-    "layer1": "silentgear:item/machete/main_generic_hc",
-    "layer2": "silentgear:item/machete/_highlight",
-    "layer3": "silentgear:item/machete/tip_sharp"
-  }
-}
