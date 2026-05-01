@@ -3,8 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2026-04-30
+## [1.21.1-4.2.0] - 2026-04-30
 ### Added
+- New models for all gear items, which allows for unlimited layers again. Big thanks to Auseawesome for this! [#915]
+  - Currently, there are no changes to the JSON formats and custom textures are not yet allowed.
+  - Some parts that were previously invisible will now render, but for the most part everything will look very similar.
+  - This will not be ported directly to 26.1.x just yet.
 - The paint mixer and paint
   - The paint mixer makes paint from dyes, gear materials, and other paints. Mix and match!
   - Paint and dyes can be used to customize the colors of gear items, with each part being colored separately.
