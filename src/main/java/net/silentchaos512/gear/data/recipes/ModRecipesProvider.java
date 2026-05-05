@@ -28,6 +28,7 @@ import net.silentchaos512.gear.crafting.ingredient.CustomAlloyIngredient;
 import net.silentchaos512.gear.crafting.ingredient.GearPartIngredient;
 import net.silentchaos512.gear.crafting.ingredient.PartMaterialIngredient;
 import net.silentchaos512.gear.crafting.recipe.*;
+import net.silentchaos512.gear.crafting.recipe.modkit.ModKitPaintPartRecipe;
 import net.silentchaos512.gear.crafting.recipe.modkit.ModKitRemovePartRecipe;
 import net.silentchaos512.gear.crafting.recipe.press.MaterialPressingRecipe;
 import net.silentchaos512.gear.gear.material.MaterialCategories;
@@ -126,9 +127,10 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private void registerSpecialRecipes() {
         special(this.output, SgRecipes.FILL_REPAIR_KIT.get(), FillRepairKitRecipe::new);
         special(this.output, SgRecipes.SWAP_GEAR_PART.get(), GearPartSwapRecipe::new);
+        special(this.output, SgRecipes.MOD_KIT_PAINT_PART.get(), ModKitPaintPartRecipe::new);
+        special(this.output, SgRecipes.MOD_KIT_REMOVE_PART.get(), ModKitRemovePartRecipe::new);
         special(this.output, SgRecipes.QUICK_PAINT.get(), QuickPaintRecipe::new);
         special(this.output, SgRecipes.QUICK_REPAIR.get(), QuickRepairRecipe::new);
-        special(this.output, SgRecipes.MOD_KIT_REMOVE_PART.get(), ModKitRemovePartRecipe::new);
     }
 
     private void registerBooks() {

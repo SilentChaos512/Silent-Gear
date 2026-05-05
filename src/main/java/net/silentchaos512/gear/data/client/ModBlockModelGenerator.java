@@ -82,6 +82,7 @@ public class ModBlockModelGenerator extends LibBlockModelGenerators {
         orientableMachineBlock(SgBlocks.MATERIAL_GRADER, "material_grader");
         orientableMachineBlock(SgBlocks.METAL_PRESS, "metal_press");
         orientableMachineBlock(SgBlocks.SALVAGER, "salvager");
+        createTrivialCube(SgBlocks.PAINT_MIXER.get());
 
         // Alloy Makers
         orientableMachineBlock(SgBlocks.ALLOY_FORGE, "alloy_forge");

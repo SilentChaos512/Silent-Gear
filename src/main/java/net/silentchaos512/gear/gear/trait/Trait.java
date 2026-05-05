@@ -10,7 +10,6 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -44,7 +43,7 @@ import java.util.stream.Collectors;
 public final class Trait {
     public static final Codec<Trait> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    ExtraCodecs.POSITIVE_INT.fieldOf("max_level").forGetter(t -> t.maxLevel),
+                    Codec.INT.fieldOf("max_level").forGetter(t -> t.maxLevel),
                     ComponentSerialization.CODEC.fieldOf("name").forGetter(t -> t.displayName),
                     ComponentSerialization.CODEC.fieldOf("description").forGetter(t -> t.description),
                     Codec.list(TraitEffect.DISPATCH_CODEC).fieldOf("effects").forGetter(t -> t.effects),
