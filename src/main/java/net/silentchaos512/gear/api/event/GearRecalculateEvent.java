@@ -9,7 +9,10 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**
- * Fired when gear properties are recalculated using {@link net.silentchaos512.gear.util.GearData#recalculateGearData(ItemStack, Player)}
+ * Base class of the two GearRecalculateEvents
+ *
+ * @see GearRecalculateEvent.Pre
+ * @see GearRecalculateEvent.Post
  */
 public abstract class GearRecalculateEvent extends GearItemEvent {
     private final Player player;
