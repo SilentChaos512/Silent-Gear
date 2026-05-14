@@ -3,9 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [26.1.2-4.2.1]
+### Added
+- Events that fire when recalculating gear data, `GearRecaculateEvent.Pre`/`Post` (Jishuna) [#946]
+- ### Changed
+- Updated pt_br localization (PrincessStellar) [#928]
+- Quick paint recipe (paint + gear) will now paint the coating instead of the main part if present
 ### Fixed
-- Some items receiving invalid data components [#948]
+- Some items receiving invalid data components, causing serialization issues [#948]
+- Arrows only crafting one at a time [#929]
+- Seeds not having the correct localized name [#924]
+- Arrows not allowing rod swaps and fishing rods not allowing cord swaps
 
 ## [26.1.2-4.2.0] - 2026-05-11
 ### Added
