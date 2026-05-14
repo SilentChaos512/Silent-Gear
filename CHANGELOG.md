@@ -3,13 +3,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.21.1-4.2.1] - 2026-05-14
 ### Added
 - Events that fire when recalculating gear data, `GearRecaculateEvent.Pre`/`Post` (Jishuna) [#946]
 ### Changed
 - Updated pt_br localization (PrincessStellar) [#927]
+- Quick paint recipe (paint + gear) will now paint the coating instead of the main part if present
 ### Fixed
+- Crash when rendering gear items in some cases [#942]
 - Log spam issue (Jishuna) [#955, #940]
+- Missing binding textures for many gear types [#945, #941]
+- Arrows only crafting one at a time [#929]
+- Arrows not allowing rod swaps and fishing rods not allowing cord swaps
 
 ## [1.21.1-4.2.0] - 2026-04-30
 ### Added
