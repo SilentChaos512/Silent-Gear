@@ -133,7 +133,7 @@ public class MaterialManager extends DataResourceManager<Material> {
 
     @Nullable
     public Material fromItem(ItemStack stack) {
-        if (stack.isEmpty()) return null;
+        if (stack.isEmpty() || isReloading()) return null;
 
         var matches = new ArrayList<Material>();
 
