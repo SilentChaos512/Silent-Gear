@@ -27,6 +27,8 @@ import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.client.util.GearColorUtils;
+import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.gear.util.GearData;
 import net.silentchaos512.gear.util.GearHelper;
@@ -58,6 +60,20 @@ public class GearFishingRodItem extends FishingRodItem implements GearItem {
     @Override
     public Collection<PartType> getRequiredParts() {
         return REQUIRED_PARTS.get();
+    }
+
+    @Override
+    public boolean supportsPart(ItemStack gear, PartInstance part) {
+        if (part.getType().equals(PartTypes.CORD.get()) && part.isValid()) {
+            // Need a special exception for cords as they only support the RANGED_WEAPON gear type
+            return true;
+        }
+        return GearTool.super.supportsPart(gear, part);
+    }
+
+    @Override
+    public int getDamageOnHitEntity(ItemStack gear, LivingEntity target, LivingEntity attacker) {
+        return 0;
     }
 
     @Override
