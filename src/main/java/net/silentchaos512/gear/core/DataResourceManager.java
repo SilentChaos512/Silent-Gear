@@ -139,6 +139,9 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
     @NotNull
     @Override
     public Iterator<T> iterator() {
+        if (this.isReloading()) {
+            return Collections.emptyIterator();
+        }
         synchronized (this.byKey) {
             return this.byKey.values().iterator();
         }
