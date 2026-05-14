@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Events that fire when recalculating gear data, `GearRecaculateEvent.Pre`/`Post` (Jishuna) [#946]
+### Changed
+- Updated pt_br localization (PrincessStellar) [#927]
+### Fixed
+- Log spam issue (Jishuna) [#955, #940]
+
 ## [1.21.1-4.2.0] - 2026-04-30
 ### Added
 - New models for all gear items, which allows for unlimited layers again. Big thanks to Auseawesome for this! [#915]

@@ -220,8 +220,6 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
         var cast = ItemProperties.getProperty(stack, ResourceLocation.withDefaultNamespace("cast"));
         if (cast != null && cast.call(stack, mc.level, mc.player, 0) == 1.0) return;
 
-        SilentGear.LOGGER.debug(cast != null);
-
         int bobberColor =
                 (GearData.hasPartOfType(stack, PartTypes.COATING.get()))
                         ? GearColorUtils.getBlendedColorForPartInGear(stack, PartTypes.COATING.get())
