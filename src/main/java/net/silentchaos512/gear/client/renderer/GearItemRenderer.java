@@ -115,9 +115,10 @@ public class GearItemRenderer  extends BlockEntityWithoutLevelRenderer {
             }
         }
         else if (partType == PartTypes.ROD.get()) {
+            var textureType = material != null ? material.getMainTextureType() : TextureType.LOW_CONTRAST;
             return List.of(ResourceLocation.fromNamespaceAndPath(
                     SilentGear.MOD_ID,
-                    "item/%s/rod_generic_%s".formatted(gearTypeName, material.getMainTextureType().alias)
+                    "item/%s/rod_generic_%s".formatted(gearTypeName, textureType.alias)
             ));
         }
         else if (partType == PartTypes.TIP.get()) {
