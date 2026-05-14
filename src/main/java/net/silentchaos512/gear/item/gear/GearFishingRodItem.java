@@ -68,12 +68,7 @@ public class GearFishingRodItem extends FishingRodItem implements GearItem {
             // Need a special exception for cords as they only support the RANGED_WEAPON gear type
             return true;
         }
-        return GearTool.super.supportsPart(gear, part);
-    }
-
-    @Override
-    public int getDamageOnHitEntity(ItemStack gear, LivingEntity target, LivingEntity attacker) {
-        return 0;
+        return GearItem.super.supportsPart(gear, part);
     }
 
     @Override

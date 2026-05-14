@@ -34,6 +34,7 @@ import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
+import net.silentchaos512.gear.setup.gear.PartTypes;
 import net.silentchaos512.lib.util.NameUtils;
 
 import javax.annotation.Nullable;
@@ -355,6 +356,22 @@ public final class GearData {
                 );
             }
         }
+    }
+
+    @Nullable
+    public static PartInstance getCoatingOrMainPart(ItemStack gear) {
+        var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
+        if (data == null) return null;
+
+        PartInstance main = null, coating = null;
+        for (var part : data.parts()) {
+            if (part.isType(PartTypes.MAIN)) {
+                main = part;
+            } else if (part.isType(PartTypes.COATING)) {
+                coating = part;
+            }
+        }
+        return coating != null ? coating : main;
     }
 
     //region Part getters and checks
