@@ -88,6 +88,7 @@ public class GearTypes {
             () -> GearType.Builder.of(ALL)
                     .relevantPropertyGroups(
                             GearPropertyGroups.SPECIAL,
+                            GearPropertyGroups.GENERAL,
                             GearPropertyGroups.PROJECTILE
                     )
                     .build()

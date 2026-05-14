@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
@@ -32,6 +33,7 @@ import net.silentchaos512.lib.util.MathUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class GearArrowItem extends ArrowItem implements GearItem {
@@ -86,6 +88,7 @@ public class GearArrowItem extends ArrowItem implements GearItem {
         float durability = GearData.getProperties(result).getNumber(GearProperties.DURABILITY);
         int stackCount = MathUtils.clamp(Math.round(durability / 32.5f), 1, 64);
         result.setCount(stackCount);
+        GearData.recalculateGearData(result, CommonHooks.getCraftingPlayer());
         return result;
     }
 

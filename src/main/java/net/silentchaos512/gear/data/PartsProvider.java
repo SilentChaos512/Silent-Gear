@@ -121,7 +121,9 @@ public final class PartsProvider extends PartsProviderBase {
     }
 
     public static Map<GearType, Consumer<PartBuilder>> MAIN_PART_PROPERTIES = ImmutableMap.<GearType, Consumer<PartBuilder>>builder()
-            .put(GearTypes.ARROW.get(), b -> {})
+            .put(GearTypes.ARROW.get(), b -> b
+                    .numberProperty(GearProperties.ENCHANTMENT_VALUE, 0, NumberProperty.Operation.MULTIPLY_TOTAL)
+            )
             .put(GearTypes.AXE.get(), b -> b
                     .numberProperty(GearProperties.ATTACK_DAMAGE, 5, NumberProperty.Operation.ADD)
                     .numberProperty(GearProperties.ATTACK_SPEED, 1, NumberProperty.Operation.ADD)

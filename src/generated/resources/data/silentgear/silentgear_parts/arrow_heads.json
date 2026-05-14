@@ -13,5 +13,10 @@
   },
   "gear_type": "silentgear:arrow",
   "part_type": "silentgear:main",
-  "properties": {}
+  "properties": {
+    "enchantment_value": {
+      "operation": "MULTIPLY_TOTAL",
+      "value": 0.0
+    }
+  }
 }
