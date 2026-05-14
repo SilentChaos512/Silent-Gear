@@ -36,6 +36,7 @@ import net.silentchaos512.lib.util.Color;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 
 public final class PartInstance implements GearComponentInstance<GearPart> {
     public static final Codec<PartInstance> CODEC = RecordCodecBuilder.create(
@@ -206,6 +207,14 @@ public final class PartInstance implements GearComponentInstance<GearPart> {
 
     public <T, V extends GearPropertyValue<T>> Collection<V> getPropertyModifiers(PropertyKey<T, V> key) {
         return this.getPropertyModifiers(this.getType(), key);
+    }
+
+    public boolean isType(Supplier<PartType> partType) {
+        return isType(partType.get());
+    }
+
+    private boolean isType(PartType partType) {
+        return this.getType().equals(partType);
     }
 
     public boolean isCraftingAllowed(GearType gearType, @Nullable CraftingInput inventory) {

@@ -85,11 +85,11 @@ public class PaintUtils {
 
     public static ItemStack paint(ItemStack stack, int color) {
         if (GearHelper.isGear(stack)) {
-            var mainPart = GearData.getPartOfType(stack, PartTypes.MAIN.get());
-            if (mainPart == null) {
+            var coatingOrMainPart = GearData.getCoatingOrMainPart(stack);
+            if (coatingOrMainPart == null) {
                 return ItemStack.EMPTY;
             }
-            var paintedPart = paint(mainPart, color);
+            var paintedPart = paint(coatingOrMainPart, color);
             var result = stack.copy();
             GearData.addOrReplacePart(result, paintedPart);
             GearData.recalculateGearData(result, CommonHooks.getCraftingPlayer());
