@@ -265,7 +265,7 @@ public final class SgItems {
     }
 
     private static DeferredItem<BlockItem> registerSeed(String name, Supplier<? extends Block> plantBlock) {
-        return ITEMS.registerSimpleBlockItem(name, plantBlock);
+        return ITEMS.registerItem(name, props -> new BlockItem(plantBlock.get(), props), Item.Properties::useItemDescriptionPrefix);
     }
 
     private static DeferredItem<CompoundPartItem> registerCompoundPart(String name, DeferredHolder<PartType, PartType> partType) {
