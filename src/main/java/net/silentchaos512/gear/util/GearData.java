@@ -84,7 +84,9 @@ public final class GearData {
      *               player during crafting.
      */
     public static void recalculateGearData(ItemStack gear, @Nullable Player player) {
-        var gearConstructionData = gear.getOrDefault(SgDataComponents.GEAR_CONSTRUCTION, GearConstructionData.EMPTY);
+        var gearConstructionData = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
+        if (gearConstructionData == null) return;
+
         try {
             var gearType = GearHelper.getType(gear);
             tryRecalculateGearData(gear, player, gearType, gearConstructionData);
@@ -103,6 +105,7 @@ public final class GearData {
         final PartList parts = gearConstructionData.parts();
         if (parts.isEmpty() || parts.getMains().isEmpty()) {
             SilentGear.LOGGER.debug("Not recalculating stats for {}", getPlayersItemNameText(gear, player));
+            return;
         }
 
         @Nullable var oldProperties = gear.get(SgDataComponents.GEAR_PROPERTIES);
@@ -193,7 +196,10 @@ public final class GearData {
         gear.set(DataComponents.ITEM_MODEL, getModel(gear, finalProperties));
 
         // Although this component isn't normally referenced, go ahead and store the max damage value as a precaution.
-        gear.set(DataComponents.MAX_DAMAGE, gear.getMaxDamage());
+        int maxDamage = gear.getMaxDamage();
+        if (maxDamage > 0 && !gear.isStackable()) {
+            gear.set(DataComponents.MAX_DAMAGE, maxDamage);
+        }
     }
 
     private static Identifier getModel(ItemStack gear, GearPropertiesData finalProperties) {
