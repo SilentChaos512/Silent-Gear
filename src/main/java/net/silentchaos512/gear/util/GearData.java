@@ -356,6 +356,22 @@ public final class GearData {
         return stack.getOrDefault(SgDataComponents.GEAR_MODEL_INDEX, 0);
     }
 
+    @Nullable
+    public static PartInstance getCoatingOrMainPart(ItemStack gear) {
+        var data = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
+        if (data == null) return null;
+
+        PartInstance main = null, coating = null;
+        for (var part : data.parts()) {
+            if (part.isType(PartTypes.MAIN)) {
+                main = part;
+            } else if (part.isType(PartTypes.COATING)) {
+                coating = part;
+            }
+        }
+        return coating != null ? coating : main;
+    }
+
     //region Part getters and checks
 
     /**
