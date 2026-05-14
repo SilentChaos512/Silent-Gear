@@ -23,8 +23,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
-import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.client.util.GearClientHelper;
+import net.silentchaos512.gear.client.util.GearColorUtils;
 import net.silentchaos512.gear.entity.projectile.GearArrowEntity;
 import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.setup.gear.GearProperties;
@@ -44,6 +44,13 @@ public class GearArrowItem extends ArrowItem implements GearItem {
             PartTypes.MAIN.get(),
             PartTypes.ROD.get(),
             PartTypes.FLETCHING.get()
+    ));
+    private static final Supplier<Collection<PartType>> SUPPORTED_PARTS = Suppliers.memoize(() -> ImmutableList.of(
+            PartTypes.MAIN.get(),
+            PartTypes.ROD.get(),
+            PartTypes.FLETCHING.get(),
+            PartTypes.TIP.get(),
+            PartTypes.COATING.get()
     ));
 
     private final Supplier<GearType> gearType;
@@ -67,6 +74,15 @@ public class GearArrowItem extends ArrowItem implements GearItem {
     @Override
     public Collection<PartType> getRequiredParts() {
         return REQUIRED_PARTS.get();
+    }
+
+    @Override
+    public boolean supportsPart(ItemStack gear, PartInstance part) {
+        if (part.getType().equals(PartTypes.ROD.get()) && part.isValid()) {
+            // Need a special exception for rods as they only support the TOOL gear type
+            return true;
+        }
+        return GearItem.super.supportsPart(gear, part) && SUPPORTED_PARTS.get().contains(part.getType());
     }
 
     @Override
