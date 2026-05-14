@@ -10,12 +10,16 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.silentchaos512.gear.Config;
 import net.silentchaos512.gear.SilentGear;
+import net.silentchaos512.gear.api.event.GearRecalculateEvent;
 import net.silentchaos512.gear.api.item.GearTool;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.item.GearItem;
@@ -87,9 +91,20 @@ public final class GearData {
      */
     public static void recalculateGearData(ItemStack gear, @Nullable Player player) {
         var gearConstructionData = gear.get(SgDataComponents.GEAR_CONSTRUCTION);
+        if (gearConstructionData == null) {
+            //SilentGear.LOGGER.error("{}: gear item has no GearConstructionData?", getPlayersItemNameText(gear, player));
+            return;
+        }
+
         try {
             var gearType = GearHelper.getType(gear);
+            GearRecalculateEvent event = new GearRecalculateEvent.Pre(gear, gearConstructionData.parts(), player, gearType);
+            NeoForge.EVENT_BUS.post(event);
+
             tryRecalculateGearData(gear, player, gearType, gearConstructionData);
+
+            event = new GearRecalculateEvent.Post(gear, gearConstructionData.parts(), player, gearType);
+            NeoForge.EVENT_BUS.post(event);
         } catch (Throwable ex) {
             CrashReport report = CrashReport.forThrowable(ex, "Failed to recalculate gear item properties");
 
@@ -102,11 +117,6 @@ public final class GearData {
     }
 
     private static void tryRecalculateGearData(ItemStack gear, @Nullable Player player, GearType gearType, GearConstructionData gearConstructionData) {
-        if (gearConstructionData == null) {
-            //SilentGear.LOGGER.error("{}: gear item has no GearConstructionData?", getPlayersItemNameText(gear, player));
-            return;
-        }
-
         final PartList parts = gearConstructionData.parts();
         if (parts.isEmpty() || parts.getMains().isEmpty()) {
             SilentGear.LOGGER.debug("Not recalculating stats for {}", getPlayersItemNameText(gear, player));
