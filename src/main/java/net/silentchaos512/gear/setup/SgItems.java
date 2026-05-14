@@ -1,7 +1,9 @@
 package net.silentchaos512.gear.setup;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -162,9 +164,9 @@ public final class SgItems {
     public static final DeferredItem<SlingshotAmmoItem> PEBBLE = register("pebble", () -> new SlingshotAmmoItem(baseProps()));
 
     public static final DeferredItem<ItemNameBlockItem> FLAX_SEEDS = register("flax_seeds", () ->
-            new SeedItem(SgBlocks.FLAX_PLANT.get(), baseProps()));
+            new SeedItem(SgBlocks.FLAX_PLANT.get(), baseProps().setId(ResourceKey.create(Registries.ITEM, SilentGear.getId("flax_seeds")))));
     public static final DeferredItem<ItemNameBlockItem> FLUFFY_SEEDS = register("fluffy_seeds", () ->
-            new SeedItem(SgBlocks.FLUFFY_PLANT.get(), baseProps()));
+            new SeedItem(SgBlocks.FLUFFY_PLANT.get(), baseProps().setId(ResourceKey.create(Registries.ITEM, SilentGear.getId("fluffy_seeds")))));
 
     public static final DeferredItem<Item> NETHER_BANANA = register("nether_banana", () ->
             new Item(baseProps()
