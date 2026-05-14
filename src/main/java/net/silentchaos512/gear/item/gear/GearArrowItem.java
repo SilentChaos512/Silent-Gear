@@ -12,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArrowItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -20,6 +19,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.silentchaos512.gear.api.item.GearItem;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
@@ -36,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GearArrowItem extends ArrowItem implements GearItem {
@@ -91,6 +90,7 @@ public class GearArrowItem extends ArrowItem implements GearItem {
         float durability = GearData.getProperties(result).getNumber(GearProperties.DURABILITY);
         int stackCount = MathUtils.clamp(Math.round(durability / 32.5f), 1, 64);
         result.setCount(stackCount);
+        GearData.recalculateGearData(result, CommonHooks.getCraftingPlayer());
         return result;
     }
 
@@ -133,17 +133,7 @@ public class GearArrowItem extends ArrowItem implements GearItem {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return 256;
-    }
-
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return stack.getDamageValue() > 0;
-    }
-
-    @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
-        return GearHelper.damageItem(stack, amount, entity, onBroken);
+        return 0;
     }
 
     @Override
