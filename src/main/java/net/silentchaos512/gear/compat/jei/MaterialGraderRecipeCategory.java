@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
@@ -10,7 +9,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +21,6 @@ import net.silentchaos512.gear.setup.SgTags;
 import net.silentchaos512.gear.util.IngredientUtils;
 import net.silentchaos512.gear.util.TextUtil;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,7 +73,6 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
                 .addIngredients(VanillaTypes.ITEM_STACK, getCatalysts());
     }
 
-    @Nonnull
     public static List<ItemStack> getMaterials() {
         return SgRegistries.MATERIAL.getValues(true).stream()
                 .map(Material::getIngredient)
@@ -83,7 +80,6 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
                 .collect(Collectors.toList());
     }
 
-    @Nonnull
     public static List<ItemStack> getCatalysts() {
         return BuiltInRegistries.ITEM.stream()
                 .map(ItemStack::new)
@@ -92,11 +88,10 @@ public class MaterialGraderRecipeCategory implements IRecipeCategory<MaterialGra
     }
 
     @Override
-    public void draw(GraderRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(GraderRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         background.draw(guiGraphics);
     }
 
     public static class GraderRecipe {
     }
 }
-*/

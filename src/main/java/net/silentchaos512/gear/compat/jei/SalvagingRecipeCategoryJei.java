@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
@@ -11,9 +10,10 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.silentchaos512.gear.block.salvager.SalvagerScreen;
 import net.silentchaos512.gear.crafting.recipe.salvage.SalvagingRecipe;
 import net.silentchaos512.gear.setup.SgBlocks;
@@ -72,20 +72,19 @@ public class SalvagingRecipeCategoryJei implements IRecipeCategory<SalvagingReci
         builder.addSlot(RecipeIngredientRole.INPUT, 9 - GUI_START_X, 35 - GUI_START_Y)
                 .addIngredients(VanillaTypes.ITEM_STACK, IngredientUtils.getItemList(recipe.getIngredient()));
 
-        List<ItemStack> results = recipe.getPossibleResultsForDisplay();
+        List<ItemStackTemplate> results = recipe.getPossibleResultsForDisplay();
 
         for (int i = 0; i < 9 && i < results.size(); ++i) {
             int x = 18 * (i % 3) + 62 - GUI_START_X;
             int y = 18 * (i / 3) + 17 - GUI_START_Y;
             builder.addSlot(RecipeIngredientRole.OUTPUT, x, y)
-                    .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(results.get(i)));
+                    .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(results.get(i).create()));
         }
     }
 
     @Override
-    public void draw(SalvagingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(SalvagingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         background.draw(guiGraphics);
         arrow.draw(guiGraphics, 32 - GUI_START_X, 34 - GUI_START_Y);
     }
 }
-*/

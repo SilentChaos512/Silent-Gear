@@ -765,6 +765,17 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .define('b', Tags.Items.BUCKETS_EMPTY)
                 .unlockedBy("has_item", has(Tags.Items.DYES))
                 .save(this.output);
+        shaped(RecipeCategory.DECORATIONS, SgBlocks.PAINT_MIXER)
+                .pattern("sds")
+                .pattern("c/c")
+                .pattern("bbb")
+                .define('d', Items.WHITE_DYE)
+                .define('c', Tags.Items.INGOTS_COPPER)
+                .define('/', SgTags.Items.RODS_IRON)
+                .define('s', Blocks.SMOOTH_STONE)
+                .define('b', Tags.Items.INGOTS_IRON)
+                .unlockedBy("has_item", has(Tags.Items.DYES))
+                .save(this.output, "paint_mixer_alt");
 
         shaped(RecipeCategory.DECORATIONS, SgBlocks.ALLOY_FORGE)
                 .define('/', SgTags.Items.INGOTS_CRIMSON_STEEL)

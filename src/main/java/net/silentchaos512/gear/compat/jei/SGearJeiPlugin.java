@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.compat.jei;
 
 import com.google.common.collect.ImmutableList;
@@ -16,6 +15,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
@@ -93,9 +93,10 @@ public class SGearJeiPlugin implements IModPlugin {
             String itemName = NameUtils.fromItem(item).getPath();
             reg.addRecipes(RecipeTypes.CRAFTING, Collections.singletonList(new RecipeHolder<>(
                     ResourceKey.create(Registries.RECIPE, SilentGear.getId(itemName)),
-                    new ShapelessRecipe("",
-                            CraftingBookCategory.MISC,
-                            new ItemStack(item),
+                    new ShapelessRecipe(
+                            new Recipe.CommonInfo(false),
+                            new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.MISC, ""),
+                            new ItemStackTemplate(item),
                             List.of(
                                     Ingredient.of(item),
                                     new Ingredient(PartMaterialIngredient.of(PartTypes.MAIN.get())),
@@ -215,4 +216,3 @@ public class SGearJeiPlugin implements IModPlugin {
         }
     }
 }
-*/

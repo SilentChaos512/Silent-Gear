@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.gear.compat.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
@@ -13,7 +12,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -27,6 +26,7 @@ import org.joml.Matrix3x2fStack;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRecipeExtension> {
     public static final int WIDTH = 160;
@@ -70,9 +70,9 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CraftingRecipeExtension recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
-                .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultForDisplay()));
+                .addIngredients(VanillaTypes.ITEM_STACK, Collections.singletonList(recipe.getResultForDisplay().create()));
 
-        var ingredients = recipe.getIngredientsForDisplay();
+        List<Ingredient> ingredients = recipe.placementInfo().ingredients();
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 int index = x + y * 3;
@@ -85,12 +85,12 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
     }
 
     @Override
-    public void draw(CraftingRecipeExtension recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(CraftingRecipeExtension recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         background.draw(guiGraphics);
 
         Collection<Component> lines = new ArrayList<>();
 
-        var ingredients = recipe.getIngredientsForDisplay();
+        List<Ingredient> ingredients = recipe.placementInfo().ingredients();
         for (int i = 0; i < ingredients.size(); i++) {
             Ingredient ingredient = ingredients.get(i);
             if (ingredient.getCustomIngredient() instanceof IGearIngredient gearIngredient) {
@@ -111,11 +111,10 @@ public class GearCraftingRecipeCategoryJei implements IRecipeCategory<CraftingRe
         int y = (int) (56 / scale);
 
         for (Component line : lines) {
-            guiGraphics.drawString(font, line.getVisualOrderText(), 0, y, -1, true);
+            guiGraphics.text(font, line.getVisualOrderText(), 0, y, -1, true);
             y += 10;
         }
 
         matrix.popMatrix();
     }
 }
-*/

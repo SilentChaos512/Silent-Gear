@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "/": "#c:rods/iron",
+    "b": "#c:ingots/iron",
+    "c": "#c:ingots/copper",
+    "d": "minecraft:white_dye",
+    "s": "minecraft:smooth_stone"
+  },
+  "pattern": [
+    "sds",
+    "c/c",
+    "bbb"
+  ],
+  "result": {
+    "id": "silentgear:paint_mixer"
+  }
+}
