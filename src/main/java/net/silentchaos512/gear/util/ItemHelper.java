@@ -11,16 +11,23 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.silentchaos512.gear.SilentGear;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 // TODO: Maybe move this to Silent Lib?
 public class ItemHelper {
     @SuppressWarnings("deprecation")
     public static @Nullable ItemStackTemplate getAnyMatchingItem(Ingredient ingredient) {
-        var optionalItem = ingredient.items().findAny();
+        Optional<Holder<Item>> optionalItem;
+        try {
+            optionalItem = ingredient.items().findAny();
+        } catch (UnsupportedOperationException ex) {
+            SilentGear.LOGGER.warn("Could not find any matching items for {}", ingredient);
+            SilentGear.LOGGER.catching(ex);
+            return null;
+        }
         return optionalItem.map(ItemStackTemplate::new).orElse(null);
     }
 

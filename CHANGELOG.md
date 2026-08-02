@@ -3,11 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [26.1.2-4.2.2] - 2026-08-02
 ### Fixed
 - JEI support has been updated
+- Crash when salvaging some items on a server. An exception will be listed in the log and no items will be returned. [#980]
+  - I believe this only affects spawned-in gear items and not those crafted normally
 
-## [26.1.2-4.2.1]
+## [26.1.2-4.2.1] - 2026-05-14
 ### Added
 - Events that fire when recalculating gear data, `GearRecaculateEvent.Pre`/`Post` (Jishuna) [#946]
 - ### Changed
