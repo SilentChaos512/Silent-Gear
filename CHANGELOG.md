@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Machetes crashing the game the same way swords used to before #879. The fix from that issue was never applied to `GearMacheteItem`, so any machete could still crash a server/client when its Tool component had to be hashed for network sync (e.g. inventory sync after crafting).
+
 ## [26.1.2-4.2.2] - 2026-08-02
 ### Fixed
 - JEI support has been updated
