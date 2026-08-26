@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -338,7 +339,7 @@ public final class GearEvents {
         if (!level.isClientSide()) {
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
-            if (!player.isEyeInFluid(Tags.Fluids.WATER) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
+            if (!player.isEyeInFluid(FluidTags.WATER) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
                 // Vanilla duration is 200, but that causes flickering numbers/icon
                 player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 210, 0, false, false, true));
             }
