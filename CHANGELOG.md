@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [26.1.2-4.2.2.1] - 2026-08-25
 ### Fixed
 - Crash on join with recent NeoForge versions [#990]
+- Removed invalid mod compat recipes [#989]
 
 ## [26.1.2-4.2.2] - 2026-08-02
 ### Fixed
