@@ -2,7 +2,7 @@ package net.silentchaos512.gear.client.gui.book;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -72,7 +72,7 @@ public class MaterialDetailsBookScreen extends AbstractMaterialBookScreen {
     private void addDescriptionPageIfAvailable(SectionBuilder builder, Material material) {
         Identifier id = SgRegistries.MATERIAL.getKey(material);
         String key = String.format("material.%s.%s.book_desc", id.getNamespace(), id.getPath());
-        if (I18n.exists(key)) {
+        if (Language.getInstance().has(key)) {
             Component text = Component.translatable(key);
             builder.addLabel(text);
             builder.addPageBreak();

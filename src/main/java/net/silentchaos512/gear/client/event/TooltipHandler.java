@@ -40,13 +40,8 @@ public final class TooltipHandler {
     // JEI's tooltip cache. When disabled, you can search for parts with certain traits.
     private static final boolean TRAIT_DISPLAY_CYCLE = false;
 
-    static {
-        assert ChatFormatting.DARK_GRAY.getColor() != null;
-        assert ChatFormatting.GRAY.getColor() != null;
-    }
-
-    public static final Color MC_DARK_GRAY = new Color(ChatFormatting.DARK_GRAY.getColor());
-    public static final Color MC_GRAY = new Color(ChatFormatting.GRAY.getColor());
+    public static final Color MC_DARK_GRAY = new Color(0x555555);
+    public static final Color MC_GRAY = new Color(0xAAAAAA);
 
     private TooltipHandler() {
     }

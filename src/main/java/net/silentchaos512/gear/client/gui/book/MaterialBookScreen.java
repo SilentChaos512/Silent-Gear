@@ -62,7 +62,7 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
         var newScreenTitle = Component.translatable("gui.silentgear.material_book.allMaterials.byName");
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.MATERIAL_SORT_BY_DISPLAY_NAME);
         var minecraft = Minecraft.getInstance();
-        minecraft.execute(() -> minecraft.setScreen(newScreen));
+        minecraft.execute(() -> minecraft.gui.setScreen(newScreen));
     }
 
     private void onPressAllMaterialsById() {
@@ -70,7 +70,7 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
         var newScreenTitle = Component.translatable("gui.silentgear.material_book.allMaterials.byId");
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.MATERIAL_SORT_BY_ID);
         var minecraft = Minecraft.getInstance();
-        minecraft.execute(() -> minecraft.setScreen(newScreen));
+        minecraft.execute(() -> minecraft.gui.setScreen(newScreen));
     }
 
     private void onPressAllMaterialsByProperty(GearProperty<Float, NumberPropertyValue> property) {
@@ -79,7 +79,7 @@ public class MaterialBookScreen extends AbstractMaterialBookScreen {
         var newScreenTitle = Component.translatable("gui.silentgear.material_book.materialsByProperty", property.getDisplayName());
         var newScreen = new MaterialListBookScreen(this, newScreenTitle, materials, MaterialListBookScreen.compareByProperty(property));
         var minecraft = Minecraft.getInstance();
-        minecraft.execute(() -> minecraft.setScreen(newScreen));
+        minecraft.execute(() -> minecraft.gui.setScreen(newScreen));
     }
 
     private static List<Material> getValidMaterials() {

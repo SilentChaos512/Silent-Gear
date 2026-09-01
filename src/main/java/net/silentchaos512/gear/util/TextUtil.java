@@ -38,7 +38,8 @@ public final class TextUtil {
     }
 
     public static MutableComponent withColor(MutableComponent text, ChatFormatting color) {
-        int colorCode = color.getColor() != null ? color.getColor() : Color.VALUE_WHITE;
+        var textColor = net.minecraft.network.chat.TextColor.fromLegacyFormat(color);
+        int colorCode = textColor != null ? textColor.getValue() : Color.VALUE_WHITE;
         return withColor(text, colorCode);
     }
 

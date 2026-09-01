@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "silentgear:blueprints/paxel",
   "key": {
     "#": "#silentgear:template_boards",

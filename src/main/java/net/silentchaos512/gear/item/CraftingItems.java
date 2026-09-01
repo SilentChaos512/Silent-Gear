@@ -103,7 +103,7 @@ public enum CraftingItems implements ItemLike {
         @Override
         public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag) {
             String descKey = this.getDescriptionId() + ".desc";
-            if (I18n.exists(descKey)) {
+            if (!I18n.get(descKey).equals(descKey)) {
                 tooltipAdder.accept(Component.translatable(descKey).withStyle(ChatFormatting.ITALIC));
             }
         }

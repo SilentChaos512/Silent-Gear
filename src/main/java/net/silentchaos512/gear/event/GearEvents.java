@@ -6,6 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -42,6 +44,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -232,14 +235,19 @@ public final class GearEvents {
         event.setDroppedExperience(event.getDroppedExperience() + bonusXp);
     }
 
+    @SuppressWarnings("unchecked")
+    private static <T extends Entity> EntityType<T> vanillaEntityType(String name) {
+        return (EntityType<T>) BuiltInRegistries.ENTITY_TYPE.get(Identifier.withDefaultNamespace(name)).orElseThrow().value();
+    }
+
     private static final List<Function<Level, Entity>> JABBERWOCKY_MOBS = ImmutableList.of(
-            level -> new Wolf(EntityType.WOLF, level),
-            level -> new Cat(EntityType.CAT, level),
-            level -> new Rabbit(EntityType.RABBIT, level),
-            level -> new Chicken(EntityType.CHICKEN, level),
-            level -> new Cod(EntityType.COD, level),
-            level -> new Salmon(EntityType.SALMON, level),
-            level -> new Pufferfish(EntityType.PUFFERFISH, level)
+            level -> new Wolf(vanillaEntityType("wolf"), level),
+            level -> new Cat(vanillaEntityType("cat"), level),
+            level -> new Rabbit(vanillaEntityType("rabbit"), level),
+            level -> new Chicken(vanillaEntityType("chicken"), level),
+            level -> new Cod(vanillaEntityType("cod"), level),
+            level -> new Salmon(vanillaEntityType("salmon"), level),
+            level -> new Pufferfish(vanillaEntityType("pufferfish"), level)
     );
 
     @SubscribeEvent
@@ -338,7 +346,7 @@ public final class GearEvents {
         if (!level.isClientSide()) {
             // Turtle trait
             // TODO: May want to add player conditions to wielder effect traits, for more control and possibilities for pack devs.
-            if (!player.isEyeInFluid(Tags.Fluids.WATER) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
+            if (!player.isEyeInFluid(NeoForgeMod.WATER_TYPE.value()) && TraitHelper.hasTrait(player.getItemBySlot(EquipmentSlot.HEAD), Const.Traits.TURTLE)) {
                 // Vanilla duration is 200, but that causes flickering numbers/icon
                 player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 210, 0, false, false, true));
             }
@@ -406,7 +414,8 @@ public final class GearEvents {
                     SilentGear.LOGGER.debug("knockback");
                     ((LivingEntity) source).knockback(2 * bounce,
                             -Mth.sin(source.getYRot() * ((float) Math.PI / 180F)),
-                            Mth.cos(source.getYRot() * ((float) Math.PI / 180F)));
+                            Mth.cos(source.getYRot() * ((float) Math.PI / 180F)),
+                            event.getSource(), 0.0f);
                 }
             }
         }

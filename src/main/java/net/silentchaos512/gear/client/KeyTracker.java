@@ -92,7 +92,7 @@ public class KeyTracker {
     }
 
     private static ItemStack getHoveredItem() {
-        Screen currentScreen = Minecraft.getInstance().screen;
+        Screen currentScreen = Minecraft.getInstance().gui.screen();
         if (currentScreen instanceof AbstractContainerScreen<?> containerScreen) {
             Slot slot = containerScreen.getHoveredSlot();
             if (slot != null) {
@@ -108,14 +108,14 @@ public class KeyTracker {
 
         var menu = player.containerMenu;
         for (var slot : menu.slots) {
-            if (ItemStack.isSameItemSameComponents(hoveredItem, slot.getItem())) {
+            if (ItemStack.matches(hoveredItem, slot.getItem())) {
                 return menu.slots.indexOf(slot);
             }
         }
 
         // old code as fallback, should never be called
         SilentGear.LOGGER.warn("Using fallback method for KeyTracker#getHoveredSlot ({})", hoveredItem);
-        Screen currentScreen = Minecraft.getInstance().screen;
+        Screen currentScreen = Minecraft.getInstance().gui.screen();
         if (currentScreen instanceof AbstractContainerScreen<?> containerScreen) {
             Slot slot = containerScreen.getHoveredSlot();
             if (slot != null) {

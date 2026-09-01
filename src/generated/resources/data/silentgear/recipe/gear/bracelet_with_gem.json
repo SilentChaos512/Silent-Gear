@@ -1,6 +1,5 @@
 {
   "type": "silentgear:gear_crafting",
-  "category": "misc",
   "ingredients": [
     {
       "neoforge:ingredient_type": "silentgear:blueprint",

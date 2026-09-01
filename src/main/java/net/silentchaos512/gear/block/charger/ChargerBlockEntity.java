@@ -321,7 +321,7 @@ public class ChargerBlockEntity<T extends ChargedMaterialModifier> extends SgCon
         }
 
         return output.getCount() < output.getMaxStackSize()
-                && ItemStack.isSameItemSameComponents(input, output);
+                && ItemStack.matches(input, output);
     }
 
     protected boolean checkStructureLevel() {

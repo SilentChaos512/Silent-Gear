@@ -168,7 +168,7 @@ public class AbstractMaterialBookScreen extends Screen {
     protected void onPageReturn() {
         if (this.previousScreen != null) {
             var minecraft = Minecraft.getInstance();
-            minecraft.execute(() -> minecraft.setScreen(this.previousScreen));
+            minecraft.execute(() -> minecraft.gui.setScreen(this.previousScreen));
         } else {
             this.onClose();
         }

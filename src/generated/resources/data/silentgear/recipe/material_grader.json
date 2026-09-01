@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "#": "silentgear:advanced_upgrade_base",
     "G": "#c:ingots/blaze_gold",

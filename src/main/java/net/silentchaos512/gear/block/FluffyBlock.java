@@ -3,17 +3,14 @@ package net.silentchaos512.gear.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.silentchaos512.gear.setup.SgTags;
@@ -51,23 +48,6 @@ public class FluffyBlock extends Block {
         entity.causeFallDamage(newDistance, 1f, level.damageSources().fall());
     }
 
-    @Override
-    public void updateEntityMovementAfterFallOn(BlockGetter level, Entity entity) {
-        if (entity.isSuppressingBounce()) {
-            super.updateEntityMovementAfterFallOn(level, entity);
-        } else {
-            FluffyBlock.bounceEntity(entity);
-        }
-    }
-
-    private static void bounceEntity(Entity entity) {
-        Vec3 vector3d = entity.getDeltaMovement();
-        if (vector3d.y < 0.0D) {
-            double d0 = entity instanceof LivingEntity ? 1.0 : 0.8;
-            entity.setDeltaMovement(vector3d.x, -vector3d.y * (double) 0.5f * d0, vector3d.z);
-        }
-    }
-
     private static void onGetBreakSpeed(PlayerEvent.BreakSpeed event) {
         // Increase harvest speed when player is using shears
         if (event.getState().is(SgTags.Blocks.FLUFFY_BLOCKS)) {
@@ -81,4 +61,3 @@ public class FluffyBlock extends Block {
         }
     }
 }
-

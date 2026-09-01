@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "silentgear:blueprints/fishing_rod",
   "key": {
     "#": "#silentgear:blueprint_paper",

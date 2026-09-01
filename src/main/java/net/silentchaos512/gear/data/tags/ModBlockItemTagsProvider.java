@@ -1,16 +1,20 @@
 package net.silentchaos512.gear.data.tags;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.block.FluffyBlock;
 import net.silentchaos512.gear.setup.SgBlocks;
 import net.silentchaos512.gear.setup.SgTags;
-import net.silentchaos512.lib.data.tag.LibBlockItemTagsProvider;
 
-public abstract class ModBlockItemTagsProvider extends LibBlockItemTagsProvider {
-    @Override
+public abstract class ModBlockItemTagsProvider {
+    protected abstract DirectTagAppender<Block> tag(TagKey<Block> blockTag, TagKey<Item> itemTag);
+
     public void run() {
         // Common
 
@@ -56,7 +60,7 @@ public abstract class ModBlockItemTagsProvider extends LibBlockItemTagsProvider 
         tag(BlockTags.LEAVES, ItemTags.LEAVES).add(SgBlocks.NETHERWOOD_LEAVES.get());
         tag(BlockTags.LOGS, ItemTags.LOGS).addTag(SgTags.Blocks.NETHERWOOD_LOGS);
         tag(BlockTags.PLANKS, ItemTags.PLANKS).add(SgBlocks.NETHERWOOD_PLANKS.get());
-        tag(BlockTags.SAPLINGS, ItemTags.SAPLINGS).add(SgBlocks.NETHERWOOD_SAPLING.get());
+        tag(TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("saplings")), ItemTags.SAPLINGS).add(SgBlocks.NETHERWOOD_SAPLING.get());
         tag(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS).add(SgBlocks.NETHERWOOD_DOOR.get());
         tag(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES).add(SgBlocks.NETHERWOOD_FENCE.get());
         tag(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES).add(SgBlocks.NETHERWOOD_FENCE_GATE.get());

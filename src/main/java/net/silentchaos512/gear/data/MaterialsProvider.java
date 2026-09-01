@@ -3,6 +3,7 @@ package net.silentchaos512.gear.data;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -13,6 +14,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
+
+
 import net.neoforged.neoforge.common.Tags;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.api.data.material.MaterialBuilder;
@@ -844,7 +848,7 @@ public class MaterialsProvider extends MaterialsProviderBase {
         // Terracotta
         var sgTerracotta = BuiltinMaterials.TERRACOTTA.getMaterial();
         ret.add(MaterialBuilder.builtin(BuiltinMaterials.TERRACOTTA)
-                .crafting(Items.TERRACOTTA, MaterialCategories.ROCK, MaterialCategories.BASIC)
+                .crafting(Blocks.TERRACOTTA, MaterialCategories.ROCK, MaterialCategories.BASIC)
                 .displayWithDefaultName(0x985F45, TextureType.LOW_CONTRAST)
                 //main
                 .mainStatsCommon(165, 11, 9, 7, 0.8f)
@@ -861,22 +865,22 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .trait(PartTypes.ROD, Const.Traits.BRITTLE, 2)
                 .trait(PartTypes.ROD, Const.Traits.CRUSHING, 1)
         );
-        ret.add(terracotta(sgTerracotta, "black", Items.BLACK_TERRACOTTA, 0x251610));
-        ret.add(terracotta(sgTerracotta, "blue", Items.BLUE_TERRACOTTA, 0x4A3B5B));
-        ret.add(terracotta(sgTerracotta, "brown", Items.BROWN_TERRACOTTA, 0x4D3224));
-        ret.add(terracotta(sgTerracotta, "cyan", Items.CYAN_TERRACOTTA, 0xD1B1A1));
-        ret.add(terracotta(sgTerracotta, "gray", Items.GRAY_TERRACOTTA, 0xD1B1A1));
-        ret.add(terracotta(sgTerracotta, "green", Items.GREEN_TERRACOTTA, 0x4B522A));
-        ret.add(terracotta(sgTerracotta, "light_blue", Items.LIGHT_BLUE_TERRACOTTA, 0x706C8A));
-        ret.add(terracotta(sgTerracotta, "light_gray", Items.LIGHT_GRAY_TERRACOTTA, 0x876A61));
-        ret.add(terracotta(sgTerracotta, "lime", Items.LIME_TERRACOTTA, 0x677534));
-        ret.add(terracotta(sgTerracotta, "magenta", Items.MAGENTA_TERRACOTTA, 0x95576C));
-        ret.add(terracotta(sgTerracotta, "orange", Items.ORANGE_TERRACOTTA, 0xA05325));
-        ret.add(terracotta(sgTerracotta, "pink", Items.PINK_TERRACOTTA, 0xA04D4E));
-        ret.add(terracotta(sgTerracotta, "purple", Items.PURPLE_TERRACOTTA, 0x764556));
-        ret.add(terracotta(sgTerracotta, "red", Items.RED_TERRACOTTA, 0x8E3C2E));
-        ret.add(terracotta(sgTerracotta, "white", Items.WHITE_TERRACOTTA, 0xD1B1A1));
-        ret.add(terracotta(sgTerracotta, "yellow", Items.YELLOW_TERRACOTTA, 0xB98423));
+        ret.add(terracotta(sgTerracotta, "black", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("black_terracotta")).orElseThrow().value(), 0x251610));
+        ret.add(terracotta(sgTerracotta, "blue", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("blue_terracotta")).orElseThrow().value(), 0x4A3B5B));
+        ret.add(terracotta(sgTerracotta, "brown", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("brown_terracotta")).orElseThrow().value(), 0x4D3224));
+        ret.add(terracotta(sgTerracotta, "cyan", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("cyan_terracotta")).orElseThrow().value(), 0xD1B1A1));
+        ret.add(terracotta(sgTerracotta, "gray", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("gray_terracotta")).orElseThrow().value(), 0xD1B1A1));
+        ret.add(terracotta(sgTerracotta, "green", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("green_terracotta")).orElseThrow().value(), 0x4B522A));
+        ret.add(terracotta(sgTerracotta, "light_blue", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("light_blue_terracotta")).orElseThrow().value(), 0x706C8A));
+        ret.add(terracotta(sgTerracotta, "light_gray", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("light_gray_terracotta")).orElseThrow().value(), 0x876A61));
+        ret.add(terracotta(sgTerracotta, "lime", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("lime_terracotta")).orElseThrow().value(), 0x677534));
+        ret.add(terracotta(sgTerracotta, "magenta", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("magenta_terracotta")).orElseThrow().value(), 0x95576C));
+        ret.add(terracotta(sgTerracotta, "orange", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("orange_terracotta")).orElseThrow().value(), 0xA05325));
+        ret.add(terracotta(sgTerracotta, "pink", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("pink_terracotta")).orElseThrow().value(), 0xA04D4E));
+        ret.add(terracotta(sgTerracotta, "purple", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("purple_terracotta")).orElseThrow().value(), 0x764556));
+        ret.add(terracotta(sgTerracotta, "red", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("red_terracotta")).orElseThrow().value(), 0x8E3C2E));
+        ret.add(terracotta(sgTerracotta, "white", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("white_terracotta")).orElseThrow().value(), 0xD1B1A1));
+        ret.add(terracotta(sgTerracotta, "yellow", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("yellow_terracotta")).orElseThrow().value(), 0xB98423));
     }
 
     private void addWoods(Collection<MaterialBuilder<?>> ret, HolderLookup.Provider registries) {
@@ -1040,22 +1044,22 @@ public class MaterialsProvider extends MaterialsProviderBase {
                 .stat(PartTypes.LINING, GearProperties.KNOCKBACK_RESISTANCE, 0.1f, NumberProperty.Operation.ADD)
                 .trait(PartTypes.LINING, Const.Traits.FLEXIBLE, 2)
         );
-        ret.add(wool("black", Items.BLACK_WOOL, 0x141519));
-        ret.add(wool("blue", Items.BLUE_WOOL, 0x35399D));
-        ret.add(wool("brown", Items.BROWN_WOOL, 0x724728));
-        ret.add(wool("cyan", Items.CYAN_WOOL, 0x158991));
-        ret.add(wool("gray", Items.GRAY_WOOL, 0x3E4447));
-        ret.add(wool("green", Items.GREEN_WOOL, 0x546D1B));
-        ret.add(wool("light_blue", Items.LIGHT_BLUE_WOOL, 0x3AAFD9));
-        ret.add(wool("light_gray", Items.LIGHT_GRAY_WOOL, 0x8E8E86));
-        ret.add(wool("lime", Items.LIME_WOOL, 0x70B919));
-        ret.add(wool("magenta", Items.MAGENTA_WOOL, 0xBD44B3));
-        ret.add(wool("orange", Items.ORANGE_WOOL, 0xF07613));
-        ret.add(wool("pink", Items.PINK_WOOL, 0xED8DAC));
-        ret.add(wool("purple", Items.PURPLE_WOOL, 0x792AAC));
-        ret.add(wool("red", Items.RED_WOOL, 0xA12722));
-        ret.add(wool("white", Items.WHITE_WOOL, 0xE9ECEC));
-        ret.add(wool("yellow", Items.YELLOW_WOOL, 0xF8C627));
+        ret.add(wool("black", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("black_wool")).orElseThrow().value(), 0x141519));
+        ret.add(wool("blue", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("blue_wool")).orElseThrow().value(), 0x35399D));
+        ret.add(wool("brown", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("brown_wool")).orElseThrow().value(), 0x724728));
+        ret.add(wool("cyan", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("cyan_wool")).orElseThrow().value(), 0x158991));
+        ret.add(wool("gray", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("gray_wool")).orElseThrow().value(), 0x3E4447));
+        ret.add(wool("green", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("green_wool")).orElseThrow().value(), 0x546D1B));
+        ret.add(wool("light_blue", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("light_blue_wool")).orElseThrow().value(), 0x3AAFD9));
+        ret.add(wool("light_gray", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("light_gray_wool")).orElseThrow().value(), 0x8E8E86));
+        ret.add(wool("lime", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("lime_wool")).orElseThrow().value(), 0x70B919));
+        ret.add(wool("magenta", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("magenta_wool")).orElseThrow().value(), 0xBD44B3));
+        ret.add(wool("orange", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("orange_wool")).orElseThrow().value(), 0xF07613));
+        ret.add(wool("pink", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("pink_wool")).orElseThrow().value(), 0xED8DAC));
+        ret.add(wool("purple", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("purple_wool")).orElseThrow().value(), 0x792AAC));
+        ret.add(wool("red", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("red_wool")).orElseThrow().value(), 0xA12722));
+        ret.add(wool("white", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("white_wool")).orElseThrow().value(), 0xE9ECEC));
+        ret.add(wool("yellow", BuiltInRegistries.BLOCK.get(Identifier.withDefaultNamespace("yellow_wool")).orElseThrow().value(), 0xF8C627));
     }
 
     private void addStringsAndFibers(Collection<MaterialBuilder<?>> ret, HolderLookup.Provider registries) {

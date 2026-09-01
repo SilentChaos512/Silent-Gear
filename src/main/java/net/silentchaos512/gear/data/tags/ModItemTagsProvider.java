@@ -35,11 +35,19 @@ public class ModItemTagsProvider extends LibItemTagsProvider {
     }
 
     @Override
+    protected DirectTagAppender<Item> tag(TagKey<Item> tag) {
+        return new DirectTagAppender<>(super.tag(tag), item -> item.builtInRegistryHolder().key());
+    }
+
+    @Override
     protected void addTags(HolderLookup.Provider provider) {
         (new ModBlockItemTagsProvider() {
             @Override
-            protected TagAppender<Block, Block> tag(TagKey<Block> blockTag, TagKey<Item> itemTag) {
-                return new LibItemTagsProvider.BlockToItemConverter(ModItemTagsProvider.this.tag(itemTag));
+            protected DirectTagAppender<Block> tag(TagKey<Block> blockTag, TagKey<Item> itemTag) {
+                return new DirectTagAppender<>(
+                        new LibItemTagsProvider.BlockToItemConverter(ModItemTagsProvider.this.tag(itemTag)),
+                        block -> block.builtInRegistryHolder().key()
+                );
             }
         }).run();
 
@@ -390,7 +398,7 @@ public class ModItemTagsProvider extends LibItemTagsProvider {
                 .map(item -> (AbstractBlueprintItem) item)
                 .sorted(Comparator.comparing(blueprint -> blueprint.getItemTag().location()))
                 .forEach(item -> blueprints.put(item.getItemTag().location(), item));
-        TagAppender<Item, Item> blueprintsBuilder = tag(SgTags.Items.BLUEPRINTS);
+        TagAppender<Item> blueprintsBuilder = tag(SgTags.Items.BLUEPRINTS);
         blueprints.keySet().forEach(tagId -> {
             TagKey<Item> tag = ItemTags.create(tagId);
             tag(tag).add(blueprints.get(tagId).toArray(new Item[0]));

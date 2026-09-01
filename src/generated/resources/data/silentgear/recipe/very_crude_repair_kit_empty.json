@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
     "silentgear:very_crude_repair_kit",
     "#c:rods/wooden"

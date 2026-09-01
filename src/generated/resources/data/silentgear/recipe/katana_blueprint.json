@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "silentgear:blueprints/katana",
   "key": {
     "#": "#silentgear:blueprint_paper",

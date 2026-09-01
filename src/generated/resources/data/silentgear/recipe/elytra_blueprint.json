@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "#": "#silentgear:blueprint_paper",
     "/": "#c:ingots/gold",

@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "b": "silentgear:nether_banana",
     "g": "#c:ingots/gold"

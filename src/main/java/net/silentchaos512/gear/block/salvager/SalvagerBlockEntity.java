@@ -182,7 +182,7 @@ public class SalvagerBlockEntity extends SgContainerBlockEntity {
         }
 
         ItemStack current = getItem(slot);
-        if (!current.isEmpty() && !ItemStack.isSameItemSameComponents(stack, current)) {
+        if (!current.isEmpty() && !ItemStack.matches(stack, current)) {
             return false;
         }
 

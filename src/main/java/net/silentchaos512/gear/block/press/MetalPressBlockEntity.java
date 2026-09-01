@@ -99,7 +99,7 @@ public class MetalPressBlockEntity extends SgContainerBlockEntity {
         if (!current.isEmpty()) {
             int newCount = current.getCount() + output.getCount();
 
-            if (!ItemStack.isSameItemSameComponents(current, output) || newCount > output.getMaxStackSize()) {
+            if (!ItemStack.matches(current, output) || newCount > output.getMaxStackSize()) {
                 // Output items do not match or not enough room
                 stopWork();
                 return;

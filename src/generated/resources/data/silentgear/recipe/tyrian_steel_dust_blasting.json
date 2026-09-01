@@ -1,7 +1,5 @@
 {
   "type": "minecraft:blasting",
-  "category": "misc",
-  "cookingtime": 100,
   "experience": 0.75,
   "ingredient": "#c:dusts/tyrian_steel",
   "result": {

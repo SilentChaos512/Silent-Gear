@@ -1,8 +1,9 @@
 package net.silentchaos512.gear.data.recipes;
 
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.criterion.ImpossibleTrigger;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
+import net.minecraft.advancements.triggers.ImpossibleTrigger;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
@@ -769,7 +770,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .pattern("sds")
                 .pattern("c/c")
                 .pattern("bbb")
-                .define('d', Items.WHITE_DYE)
+                .define('d', BuiltInRegistries.ITEM.get(Identifier.withDefaultNamespace("white_dye")).orElseThrow().value())
                 .define('c', Tags.Items.INGOTS_COPPER)
                 .define('/', SgTags.Items.RODS_IRON)
                 .define('s', Blocks.SMOOTH_STONE)
@@ -934,7 +935,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.AZURE_SILVER_INGOT))
                 .save(this.output);
 
-        shapeless(RecipeCategory.MISC, Items.BLUE_DYE)
+        shapeless(RecipeCategory.MISC, BuiltInRegistries.ITEM.get(Identifier.withDefaultNamespace("blue_dye")).orElseThrow().value())
                 .requires(CraftingItems.FLAX_FLOWERS, 4)
                 .unlockedBy("has_item", has(CraftingItems.FLAX_FLOWERS))
                 .save(this.output, modId("blue_dye_from_flax_flowers"));
@@ -1054,7 +1055,7 @@ public class ModRecipesProvider extends LibRecipeProvider {
                 .unlockedBy("has_item", has(CraftingItems.FLUFFY_STRING))
                 .save(this.output, modId("string_from_fluffy"));
 
-        shaped(RecipeCategory.MISC, Items.WHITE_WOOL)
+        shaped(RecipeCategory.MISC, BuiltInRegistries.ITEM.get(Identifier.withDefaultNamespace("white_wool")).orElseThrow().value())
                 .pattern("###")
                 .pattern("#~#")
                 .pattern("###")

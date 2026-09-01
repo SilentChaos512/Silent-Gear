@@ -1,20 +1,58 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "silentgear:item/trident",
-    "tints": [
+    "type": "minecraft:select",
+    "cases": [
       {
-        "type": "silentgear:gear_part",
-        "part_type": "silentgear:rod"
-      },
-      {
-        "type": "silentgear:gear_part",
-        "part_type": "silentgear:main"
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -1
+        "model": {
+          "type": "minecraft:model",
+          "model": "silentgear:item/trident_icon",
+          "tints": [
+            {
+              "type": "silentgear:gear_part",
+              "part_type": "silentgear:rod"
+            },
+            {
+              "type": "silentgear:gear_part",
+              "part_type": "silentgear:main"
+            },
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            }
+          ]
+        },
+        "when": [
+          "gui",
+          "ground",
+          "fixed",
+          "on_shelf"
+        ]
       }
-    ]
+    ],
+    "fallback": {
+      "type": "minecraft:condition",
+      "on_false": {
+        "type": "minecraft:special",
+        "base": "silentgear:item/trident",
+        "model": {
+          "type": "silentgear:gear_trident"
+        }
+      },
+      "on_true": {
+        "type": "minecraft:special",
+        "base": "silentgear:item/trident_throwing",
+        "model": {
+          "type": "silentgear:gear_trident"
+        }
+      },
+      "property": "minecraft:using_item",
+      "transformation": {
+        "left_rotation": [0.0, 0.0, 0.0, 1.0],
+        "right_rotation": [0.0, 0.0, 0.0, 1.0],
+        "scale": [1.0, -1.0, -1.0],
+        "translation": [0.0, 0.0, 0.0]
+      }
+    },
+    "property": "minecraft:display_context"
   }
 }
