@@ -4,6 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.TreeConfigurati
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.ForkingTrunkPlacer;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.setup.SgBlocks;
@@ -25,8 +27,8 @@ public class NetherwoodTree {
             new ForkingTrunkPlacer(5, 2, 2),
             BlockStateProvider.simple(SgBlocks.NETHERWOOD_LEAVES.get()),
             new AcaciaFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0)),
-            new TwoLayersFeatureSize(1, 0, 2))
-            .ignoreVines()
+            new TwoLayersFeatureSize(1, 0, 2),
+            RuleBasedStateProvider.ifTrueThenProvide(TreeConfiguration.CAN_PLACE_BELOW_TREE_TRUNKS, Blocks.DIRT))
             .build();
 
     public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> TREE_CONFIGURATION_HOLDER = Holder.direct(new ConfiguredFeature<>(Feature.TREE, TREE_CONFIGURATION));

@@ -102,7 +102,7 @@ public enum BuiltinMaterials {
     }
 
     // Used by data generators
-    public void generateTag(Function<TagKey<Block>, TagAppender<Block, Block>> tagProvider) {
+    public void generateTag(Function<TagKey<Block>, TagAppender<Block>> tagProvider) {
         var intrinsicTagAppender = tagProvider.apply(this.harvestTier.incorrectForTool());
         intrinsicTagAppender.addTag(this.equivalentIncorrectForToolTag);
         if (this.additionalBlocksForTool != null) {

@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.1.21'
+    id 'net.neoforged.gradle.userdev' version '7.1.38'
     id 'com.gradleup.shadow' version '9.+'
 }
 
@@ -40,12 +40,12 @@ sourceSets.main.resources {
 repositories {
     flatDir {
         name "fileRepo"
-        dirs "repo"
+        dirs "repo", "libs"
     }
     mavenLocal()
 }
 
-// Mojang ships Java 25 to end users in 26.1, so mods should target Java 25.
+// Mojang ships Java 25 to end users in 26.2, so mods should target Java 25.
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -131,11 +131,6 @@ configurations {
 }
 
 repositories {
-    def gpr_creds = {
-        username = property('gpr.username')
-        password = property('gpr.token')
-    }
-
     mavenLocal()
     maven {
         // location of the maven that hosts JEI files
@@ -144,11 +139,21 @@ repositories {
     }
     maven {
         url = uri("https://maven.pkg.github.com/silentchaos512/silent-gear")
-        credentials gpr_creds
+        credentials {
+            if (project.hasProperty('gpr.username')) {
+                username = property('gpr.username')
+                password = property('gpr.token')
+            }
+        }
     }
     maven {
         url = uri("https://maven.pkg.github.com/silentchaos512/silentlib")
-        credentials gpr_creds
+        credentials {
+            if (project.hasProperty('gpr.username')) {
+                username = property('gpr.username')
+                password = property('gpr.token')
+            }
+        }
     }
     maven {
         // location of the maven that hosts JEI files since January 2023
@@ -178,11 +183,23 @@ dependencies {
 
     // JEI
     if (project.hasProperty("jei_version")) {
-        // compile against the JEI API but do not include it at runtime
-        compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-        compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
-        // at runtime, use the full JEI jar for NeoForge
-        localRuntime("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+        def localJeiJars = fileTree("libs") {
+            include "jei-${minecraft_version}-neoforge-*.jar"
+        }
+        if (localJeiJars.files.size() > 1) {
+            throw new GradleException("Expected at most one local JEI jar, found: ${localJeiJars.files}")
+        }
+
+        if (localJeiJars.files.isEmpty()) {
+            // Compile against JEI's API and use the Maven artifact as the dev-runtime fallback.
+            compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+            compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+            localRuntime("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+        } else {
+            // Use the supplied JEI build for both compilation and all development runs.
+            compileOnly(localJeiJars)
+            localRuntime(localJeiJars)
+        }
     }
 
     // EMI
@@ -193,7 +210,10 @@ dependencies {
 
     // Curios
     if (project.hasProperty("curios_version")) {
-        implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
+        def localCuriosJar = file("libs/curios-neoforge-${curios_version}+${minecraft_version}.jar")
+        implementation(localCuriosJar.exists()
+                ? files(localCuriosJar)
+                : "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}")
     }
 }
 
@@ -247,8 +267,10 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/silentchaos512/${project.repo_name}")
             credentials {
-                username = property('gpr.username')
-                password = property('gpr.token')
+                if (project.hasProperty('gpr.username')) {
+                    username = property('gpr.username')
+                    password = property('gpr.token')
+                }
             }
         }
     }

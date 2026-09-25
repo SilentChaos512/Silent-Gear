@@ -26,6 +26,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
     }
 
     @Override
+    protected DirectTagAppender<Block> tag(TagKey<Block> tag) {
+        return new DirectTagAppender<>(super.tag(tag), block -> block.builtInRegistryHolder().key());
+    }
+
+    @Override
     protected void addTags(HolderLookup.Provider provider) {
         // Harvesting
         tag(SgTags.Blocks.MINEABLE_WITH_MACHETE)
@@ -45,7 +50,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(BlockTags.CROPS)
                 .addTag(BlockTags.FLOWERS)
                 .addTag(BlockTags.LEAVES)
-                .addTag(BlockTags.SAPLINGS)
+                .addTag(TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("saplings")))
                 .add(
                         Blocks.SHORT_GRASS,
                         Blocks.TALL_GRASS,
@@ -190,7 +195,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(BlockTags.LEAVES, SgBlocks.NETHERWOOD_LEAVES);
         tag(BlockTags.LOGS).addTag(SgTags.Blocks.NETHERWOOD_LOGS);
         builder(BlockTags.PLANKS, SgBlocks.NETHERWOOD_PLANKS);
-        builder(BlockTags.SAPLINGS, SgBlocks.NETHERWOOD_SAPLING);
+        builder(TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("saplings")), SgBlocks.NETHERWOOD_SAPLING);
         builder(BlockTags.WOODEN_DOORS, SgBlocks.NETHERWOOD_DOOR);
         builder(BlockTags.WOODEN_FENCES, SgBlocks.NETHERWOOD_FENCE);
         builder(BlockTags.FENCE_GATES, SgBlocks.NETHERWOOD_FENCE_GATE);

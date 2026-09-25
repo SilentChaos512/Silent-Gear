@@ -1,6 +1,5 @@
 {
   "type": "silentgear:compound_part",
-  "category": "misc",
   "ingredients": [
     {
       "neoforge:ingredient_type": "silentgear:blueprint",

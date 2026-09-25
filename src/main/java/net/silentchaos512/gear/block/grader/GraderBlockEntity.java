@@ -312,7 +312,7 @@ public class GraderBlockEntity extends SgContainerBlockEntity {
         }
 
         ItemStack stackInSlot = getItem(slot);
-        if (stack.isEmpty() || (!stackInSlot.isEmpty() && !ItemStack.isSameItemSameComponents(stackInSlot, stack))) {
+        if (stack.isEmpty() || (!stackInSlot.isEmpty() && !ItemStack.matches(stackInSlot, stack))) {
             return false;
         }
 

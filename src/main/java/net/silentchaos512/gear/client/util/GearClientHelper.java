@@ -24,6 +24,6 @@ public final class GearClientHelper {
     }
 
     public static boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return !ItemStack.isSameItemSameComponents(oldStack, newStack);
+        return !ItemStack.matches(oldStack, newStack);
     }
 }

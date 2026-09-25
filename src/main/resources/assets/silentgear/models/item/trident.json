@@ -1,8 +1,7 @@
 {
-    "parent": "builtin/entity",
     "gui_light": "front",
     "textures": {
-        "particle": "silentgear:item/trident"
+        "particle": "silentgear:item/trident/model"
     },
     "display": {
         "thirdperson_righthand": {
@@ -40,13 +39,5 @@
 		    "translation": [ 8, 8, 8 ],
 		    "scale": [ 1, 1, 1 ]
 		}
-    },
-	"overrides": [
-	    {
-	        "predicate": {
-	            "throwing": 1
-	        },
-	        "model": "silentgear:item/trident_throwing"
-	    }
-	]
+    }
 }

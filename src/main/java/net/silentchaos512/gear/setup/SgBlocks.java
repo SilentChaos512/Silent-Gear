@@ -490,6 +490,7 @@ public final class SgBlocks {
                 props -> new FluffyBlock(color, props),
                 props -> props
                         .strength(0.8f, 3)
+                        .bounceRestitution(0.5f)
                         .sound(SoundType.WOOL)
         );
     }

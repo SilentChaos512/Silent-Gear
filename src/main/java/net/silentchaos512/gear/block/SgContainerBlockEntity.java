@@ -92,7 +92,7 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     @Override
     public void setItem(int pSlot, ItemStack pStack) {
         ItemStack itemstack = this.items.get(pSlot);
-        boolean itemsIdentical = !pStack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, pStack);
+        boolean itemsIdentical = !pStack.isEmpty() && ItemStack.matches(itemstack, pStack);
         this.items.set(pSlot, pStack);
         if (pStack.getCount() > this.getMaxStackSize()) {
             pStack.setCount(this.getMaxStackSize());
