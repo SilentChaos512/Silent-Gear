@@ -12,13 +12,13 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
-import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 
 import java.util.function.Supplier;
 
 public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
     protected final NonNullList<ItemStack> items;
     private final int inventorySize;
+    private ResourceHandler<ItemResource> itemHandler;
 
     protected SgContainerBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, int inventorySize) {
         super(pType, pPos, pBlockState);
@@ -58,7 +58,34 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
      * @return The item handler
      */
     public ResourceHandler<ItemResource> getItemHandler() {
-        return new ItemStacksResourceHandler(this.items);
+        if (this.itemHandler == null) {
+            this.itemHandler = new SgContainerResourceHandler(this);
+        }
+        return this.itemHandler;
+    }
+
+    /**
+     * Number of slots (from index 0) visible to automation. Override to hide trailing display-only slots.
+     */
+    public int getAutomationSlotCount() {
+        return getContainerSize();
+    }
+
+    /**
+     * Called once per slot after an automation transaction touching it has been committed.
+     * Extractable (output) slots only need to be saved. Input slots restart the current job
+     * only when the item type changed, matching {@link #setItem(int, ItemStack)}; topping up
+     * a stack just saves.
+     */
+    public void onAutomationCommit(int slot, ItemStack originalState) {
+        ItemStack current = this.items.get(slot);
+        boolean typeChanged = originalState.isEmpty() != current.isEmpty()
+                || !ItemStack.isSameItemSameComponents(originalState, current);
+        if (!canExtractItem(slot) && typeChanged) {
+            this.setChanged();
+        } else if (this.level != null) {
+            this.level.blockEntityChanged(this.worldPosition);
+        }
     }
 
     @Deprecated
@@ -91,6 +118,11 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     public void setItem(int pSlot, ItemStack pStack) {
+        setItem(pSlot, pStack, false);
+    }
+
+    @Override
+    public void setItem(int pSlot, ItemStack pStack, boolean insideTransaction) {
         ItemStack itemstack = this.items.get(pSlot);
         boolean itemsIdentical = !pStack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, pStack);
         this.items.set(pSlot, pStack);
@@ -98,7 +130,7 @@ public abstract class SgContainerBlockEntity extends BaseContainerBlockEntity {
             pStack.setCount(this.getMaxStackSize());
         }
 
-        if (pSlot < getContainerSize() - 1 && !itemsIdentical) {
+        if (!insideTransaction && pSlot < getContainerSize() - 1 && !itemsIdentical) {
             this.setChanged();
         }
     }
