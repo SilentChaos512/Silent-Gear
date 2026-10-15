@@ -50,6 +50,14 @@ public class SgContainerResourceHandler implements ResourceHandler<ItemResource>
     @Override
     public long getCapacityAsLong(int index, ItemResource resource) {
         Objects.checkIndex(index, size());
+        // Per the ResourceHandler contract, a resource the slot would reject has no capacity
+        if (!resource.isEmpty() && !isValid(index, resource)) {
+            return 0;
+        }
+        return slotLimit(resource);
+    }
+
+    private int slotLimit(ItemResource resource) {
         int slotMax = this.container.getMaxStackSize();
         return resource.isEmpty() ? slotMax : Math.min(slotMax, resource.getMaxStackSize());
     }
@@ -62,10 +70,10 @@ public class SgContainerResourceHandler implements ResourceHandler<ItemResource>
 
     @Override
     public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
-        TransferPreconditions.checkNonNegative(amount);
+        TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
         Objects.checkIndex(index, size());
 
-        if (amount == 0 || resource.isEmpty()) {
+        if (amount == 0) {
             return 0;
         }
 
@@ -75,7 +83,8 @@ public class SgContainerResourceHandler implements ResourceHandler<ItemResource>
             return 0;
         }
 
-        int space = (int) getCapacityAsLong(index, resource) - current.getCount();
+        // Computed inline rather than via getCapacityAsLong, which would call isValid a second time
+        int space = slotLimit(resource) - current.getCount();
         int toInsert = Math.min(amount, space);
         if (toInsert <= 0 || !isValid(index, resource)) {
             return 0;
@@ -90,10 +99,10 @@ public class SgContainerResourceHandler implements ResourceHandler<ItemResource>
 
     @Override
     public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
-        TransferPreconditions.checkNonNegative(amount);
+        TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
         Objects.checkIndex(index, size());
 
-        if (amount == 0 || resource.isEmpty() || !this.container.canExtractItem(index)) {
+        if (amount == 0 || !this.container.canExtractItem(index)) {
             return 0;
         }
 
