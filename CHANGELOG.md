@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- The Paint Mixer only lets pipes and logistics mods extract from its output slot
+### Fixed
+- Machines (Salvager, Material Grader, etc.) can be used with pipes and logistics mods again [#976]
+
 ## [26.1.2-4.2.3] - 2026-08-25
 ### Fixed
 - Crash on join with recent NeoForge versions [#990]

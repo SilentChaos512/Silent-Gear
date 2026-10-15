@@ -191,6 +191,11 @@ public class PaintMixerBlockEntity extends SgContainerBlockEntity {
     }
 
     @Override
+    public boolean canExtractItem(int slot) {
+        return slot == OUTPUT_SLOT_INDEX;
+    }
+
+    @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         this.progress = input.getIntOr("Progress", 0);
