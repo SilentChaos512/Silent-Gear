@@ -211,7 +211,7 @@ dependencies {
     // Curios
     if (project.hasProperty("curios_version")) {
         def localCuriosJar = file("libs/curios-neoforge-${curios_version}+${minecraft_version}.jar")
-        implementation(localCuriosJar.exists()
+        compileOnly(localCuriosJar.exists()
                 ? files(localCuriosJar)
                 : "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}")
     }
