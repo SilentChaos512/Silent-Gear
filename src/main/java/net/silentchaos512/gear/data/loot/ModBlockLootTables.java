@@ -1,6 +1,6 @@
 package net.silentchaos512.gear.data.loot;
 
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;

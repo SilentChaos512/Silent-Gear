@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "silentgear:blueprints/sword",
   "key": {
     "#": "#silentgear:blueprint_paper",

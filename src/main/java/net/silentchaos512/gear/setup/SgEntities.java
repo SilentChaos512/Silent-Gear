@@ -15,12 +15,14 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.client.renderer.SgClientItemExtensions;
+import net.silentchaos512.gear.client.renderer.GearTridentSpecialRenderer;
 import net.silentchaos512.gear.client.renderer.entity.GearArrowRenderer;
 import net.silentchaos512.gear.client.renderer.entity.GearThrownTridentRenderer;
 import net.silentchaos512.gear.entity.GearFishingHook;
@@ -99,10 +101,14 @@ public final class SgEntities {
         }
 
         @SubscribeEvent
+        public static void registerSpecialModelRenderer(RegisterSpecialModelRendererEvent event) {
+            event.register(SilentGear.getId("gear_trident"), GearTridentSpecialRenderer.Unbaked.MAP_CODEC);
+        }
+
+        @SubscribeEvent
         public static void registerAdditional(ModelEvent.RegisterStandalone event) {
             // FIXME
             //event.register(GearTridentModel.TRIDENT_ICON, StandaloneModelBaker.simpleModelWrapper());
         }
     }
 }
-

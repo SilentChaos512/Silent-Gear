@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "silentgear:blueprints/helmet",
   "key": {
     "#": "#silentgear:template_boards"

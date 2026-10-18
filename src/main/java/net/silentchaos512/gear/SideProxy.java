@@ -231,7 +231,7 @@ class SideProxy implements IProxy {
         @Override
         public void openMaterialBookScreen() {
             var minecraft = Minecraft.getInstance();
-            minecraft.execute(() -> minecraft.setScreen(new MaterialBookScreen()));
+            minecraft.execute(() -> minecraft.gui.setScreen(new MaterialBookScreen()));
         }
     }
 

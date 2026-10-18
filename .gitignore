@@ -39,6 +39,7 @@ version.properties
 *.png~
 
 todo_list\.md
+milestone.md
 src/generated/resources/.cache/
 
 logs/

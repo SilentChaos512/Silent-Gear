@@ -11,6 +11,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
@@ -173,7 +175,7 @@ public class GearThrownTrident extends AbstractArrow {
 
         this.dealtDamage = true;
         if (entity.hurtOrSimulate(damagesource, f)) {
-            if (entity.getType() == EntityType.ENDERMAN) {
+            if (entity.getType() == BuiltInRegistries.ENTITY_TYPE.get(Identifier.withDefaultNamespace("enderman")).orElseThrow().value()) {
                 return;
             }
 

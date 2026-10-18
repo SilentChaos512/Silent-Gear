@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
     "silentgear:advanced_upgrade_base",
     "minecraft:iron_shovel",

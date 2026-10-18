@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "#": "#c:obsidians",
     "/": "#c:ingots/crimson_iron",

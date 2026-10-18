@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
     "silentgear:flax_fiber",
     "silentgear:flax_fiber"

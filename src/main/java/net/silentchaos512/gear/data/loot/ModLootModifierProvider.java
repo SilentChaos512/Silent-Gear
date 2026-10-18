@@ -2,8 +2,9 @@ package net.silentchaos512.gear.data.loot;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Util;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
@@ -52,9 +53,9 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                 anyOfLootTables(
                                         Util.make(() -> {
                                             var builder = ImmutableList.<ResourceKey<LootTable>>builder()
-                                                    .add(EntityType.COW.getDefaultLootTable().get())
-                                                    .add(EntityType.PIG.getDefaultLootTable().get());
-                                            BuiltInLootTables.SHEEP_BY_DYE.values().forEach(builder::add);
+                                                    .add(entityLootTable("cow"))
+                                                    .add(entityLootTable("pig"));
+                                            BuiltInLootTables.SHEEP.asList().forEach(builder::add);
                                             return builder.build();
                                         })
                                 )
@@ -70,7 +71,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         new LootItemCondition[]{
                                 anyOfLootTables(
                                         List.of(
-                                                EntityType.SPIDER.getDefaultLootTable().get()
+                                                entityLootTable("spider")
                                         )
                                 )
                         },
@@ -85,7 +86,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         new LootItemCondition[]{
                                 anyOfLootTables(
                                         List.of(
-                                                EntityType.CAVE_SPIDER.getDefaultLootTable().get()
+                                                entityLootTable("cave_spider")
                                         )
                                 )
                         },
@@ -100,8 +101,8 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         new LootItemCondition[]{
                                 anyOfLootTables(
                                         List.of(
-                                                EntityType.HUSK.getDefaultLootTable().get(),
-                                                EntityType.ZOMBIE.getDefaultLootTable().get()
+                                                entityLootTable("husk"),
+                                                entityLootTable("zombie")
                                         )
                                 )
                         },
@@ -116,7 +117,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         new LootItemCondition[]{
                                 anyOfLootTables(
                                         List.of(
-                                                EntityType.ZOMBIE_VILLAGER.getDefaultLootTable().get()
+                                                entityLootTable("zombie_villager")
                                         )
                                 )
                         },
@@ -124,6 +125,11 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                         SgLoot.Tables.DROPS_LEATHER_SCRAPS_HIGH
                 )
         );
+    }
+
+    private static ResourceKey<LootTable> entityLootTable(String name) {
+        return BuiltInRegistries.ENTITY_TYPE.get(Identifier.withDefaultNamespace(name))
+                .orElseThrow().value().getDefaultLootTable().orElseThrow();
     }
 
     private static LootItemCondition anyOfLootTables(List<ResourceKey<LootTable>> lootTables) {

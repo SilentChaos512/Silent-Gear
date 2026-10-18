@@ -1,8 +1,7 @@
 {
-    "parent": "builtin/entity",
     "gui_light": "front",
     "textures": {
-        "particle": "silentgear:item/trident"
+        "particle": "silentgear:item/trident/model"
     },
     "display": {
         "thirdperson_righthand": {

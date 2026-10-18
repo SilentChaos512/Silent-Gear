@@ -35,6 +35,6 @@ public record MaterialEntryPageElement(Material material) implements PageElement
     private void onPress(AbstractMaterialBookScreen.ComponentAccess componentAccess, Material material) {
         var screen = new MaterialDetailsBookScreen(componentAccess.screen(), material);
         var minecraft = Minecraft.getInstance();
-        minecraft.execute(() -> minecraft.setScreen(screen));
+        minecraft.execute(() -> minecraft.gui.setScreen(screen));
     }
 }
