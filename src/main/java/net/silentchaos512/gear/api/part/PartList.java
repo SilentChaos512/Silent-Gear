@@ -247,8 +247,7 @@ public class PartList extends AbstractList<PartInstance> {
     }
 
     public static class Immutable extends PartList {
-		
-        private Immutable(Collection<PartInstance> parts) {
+		private Immutable(Collection<PartInstance> parts) {
             for (var part : parts) {
                 if (part != null) {
                     this.list.add(part);
