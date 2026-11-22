@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.core;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.mojang.datafixers.util.Pair;
@@ -27,9 +26,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -104,7 +101,6 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
         return this.byValue.get(value);
     }
 
-    @Nonnull
     public String getPackName(T value) {
         if (this.byValue.containsKey(value)) {
             return this.packNameByKey.get(getKey(value));
@@ -136,7 +132,6 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
         return this.byKey.containsKey(name);
     }
 
-    @NotNull
     @Override
     public Iterator<T> iterator() {
         if (this.isReloading()) {
@@ -147,16 +142,36 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
         }
     }
 
+    /**
+     * Removes a value that loaded successfully but was found to be invalid later, such as when it
+     * cannot be synced to clients. The key is added to the error list shown to players on login.
+     */
+    protected void removeInvalid(Identifier key) {
+        synchronized (this.byKey) {
+            T value = this.byKey.remove(key);
+            if (value != null) {
+                this.values.remove(value);
+                synchronized (this.byValue) {
+                    this.byValue.remove(value);
+                }
+            }
+            if (!this.errorList.contains(key)) {
+                this.errorList.add(key);
+            }
+        }
+    }
+
     public Collection<Component> getErrorMessages(ServerPlayer player) {
         if (!this.errorList.isEmpty()) {
             String listStr = this.errorList.stream().map(Identifier::toString).collect(Collectors.joining(", "));
-            return ImmutableList.of(
+            // Mutable, since subclasses may append their own messages
+            return new ArrayList<>(List.of(
                     Component.literal("[Silent Gear] The following " + this.typeName + "s failed to load, check your log file:")
                             .withStyle(ChatFormatting.RED),
                     Component.literal(listStr)
-            );
+            ));
         }
-        return ImmutableList.of();
+        return new ArrayList<>();
     }
 
     @Override

@@ -79,6 +79,10 @@ public abstract class AbstractMaterial implements Material {
         return !this.crafting.partSubstitutes().isEmpty();
     }
 
+    public MaterialCraftingData getCraftingData() {
+        return this.crafting;
+    }
+
     @Override
     public boolean canSalvage() {
         return this.crafting.canSalvage();

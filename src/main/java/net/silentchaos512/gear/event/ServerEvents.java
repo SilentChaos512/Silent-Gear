@@ -22,6 +22,9 @@ public final class ServerEvents {
 
     @SubscribeEvent
     public static void onDataPackSync(OnDatapackSyncEvent event) {
+        // Tags are available now, so remove any materials that would fail to decode on clients
+        SgRegistries.MATERIAL.validateForSync(event.getPlayerList().getServer().registryAccess());
+
         if (event.getPlayer() != null) {
             ServerPlayer player = event.getPlayer();
             PacketDistributor.sendToPlayer(
@@ -43,6 +46,9 @@ public final class ServerEvents {
     public static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
         if (!(player instanceof ServerPlayer serverPlayer)) return;
+
+        // Normally done during datapack sync already, but make sure errors are known before reporting them
+        SgRegistries.MATERIAL.validateForSync(serverPlayer.level().getServer().registryAccess());
 
         SgRegistries.TRAIT.getErrorMessages(serverPlayer).forEach(serverPlayer::sendSystemMessage);
         SgRegistries.MATERIAL.getErrorMessages(serverPlayer).forEach(serverPlayer::sendSystemMessage);

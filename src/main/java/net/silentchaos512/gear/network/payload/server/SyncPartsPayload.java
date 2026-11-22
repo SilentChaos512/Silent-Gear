@@ -1,7 +1,6 @@
 package net.silentchaos512.gear.network.payload.server;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
@@ -16,11 +15,7 @@ import java.util.Map;
 public record SyncPartsPayload(Map<Identifier, GearPart> parts) implements CustomPacketPayload, DataResourcesPayload<GearPart> {
     public static final Type<SyncPartsPayload> TYPE = new Type<>(SilentGear.getId("sync_parts"));
 
-    private static final StreamCodec<RegistryFriendlyByteBuf, HashMap<Identifier, GearPart>> MAP_STREAM_CODEC = ByteBufCodecs.map(
-            HashMap::new,
-            Identifier.STREAM_CODEC,
-            PartSerializers.DISPATCH_STREAM_CODEC
-    );
+    private static final StreamCodec<RegistryFriendlyByteBuf, HashMap<Identifier, GearPart>> MAP_STREAM_CODEC = DataResourcesPayload.mapStreamCodec("part", PartSerializers.DISPATCH_STREAM_CODEC);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncPartsPayload> STREAM_CODEC = StreamCodec.of(
             (buf, data) -> MAP_STREAM_CODEC.encode(buf, new HashMap<>(data.parts)),

@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Wild flax and wild fluffy plants are now tagged as small flowers (`minecraft:small_flowers` and `c:flowers/small`) for better mod compatibility
+- Materials that cannot be synced to clients (such as ingredients using tags that do not exist) are now removed and reported in the log and chat, instead of disconnecting players with a vague error
+  - Use the `silentgear:optional_tag` ingredient type for tags that might not exist
+- Errors while syncing materials, parts, and traits to clients now name the entry that failed
 ### Fixed
 - Opening the material book on a LAN world also opening it for the host [#960]
 - Stone anvil not dropping the item on top of it when broken [#996]
