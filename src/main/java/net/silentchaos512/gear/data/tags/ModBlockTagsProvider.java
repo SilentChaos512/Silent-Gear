@@ -190,8 +190,12 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         builder(SgTags.Blocks.ORES_IN_GROUND_BLACKSTONE, SgBlocks.BLACKSTONE_CRIMSON_IRON_ORE);
         builder(SgTags.Blocks.ORES_IN_GROUND_END_STONE, SgBlocks.AZURE_SILVER_ORE);
 
+        builder(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "flowers/small")),
+                SgBlocks.WILD_FLAX_PLANT, SgBlocks.WILD_FLUFFY_PLANT);
+
         // Minecraft
         builder(BlockTags.CROPS, SgBlocks.FLAX_PLANT, SgBlocks.FLUFFY_PLANT);
+        builder(BlockTags.SMALL_FLOWERS, SgBlocks.WILD_FLAX_PLANT, SgBlocks.WILD_FLUFFY_PLANT);
         builder(BlockTags.LEAVES, SgBlocks.NETHERWOOD_LEAVES);
         tag(BlockTags.LOGS).addTag(SgTags.Blocks.NETHERWOOD_LOGS);
         builder(BlockTags.PLANKS, SgBlocks.NETHERWOOD_PLANKS);

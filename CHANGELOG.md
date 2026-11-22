@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Wild flax and wild fluffy plants are now tagged as small flowers (`minecraft:small_flowers` and `c:flowers/small`) for better mod compatibility
 ### Fixed
 - Opening the material book on a LAN world also opening it for the host [#960]
 - Stone anvil not dropping the item on top of it when broken [#996]
