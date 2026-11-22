@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Opening the material book on a LAN world also opening it for the host [#960]
 - Stone anvil not dropping the item on top of it when broken [#996]
+- Phantom light breaking particles having a missing texture [#995]
 
 ## [26.2-4.3.0] - 2026-10-18
 - Ported to 26.2 by Acidglow [#997]

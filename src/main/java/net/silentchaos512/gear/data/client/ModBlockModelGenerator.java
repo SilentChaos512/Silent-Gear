@@ -5,6 +5,7 @@ import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerato
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelInstance;
+import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -105,6 +106,16 @@ public class ModBlockModelGenerator extends LibBlockModelGenerators {
     }
 
     private void createPhantomLight() {
+        // The block is invisible, but needs a model with a particle texture for breaking particles (#995)
+        var blockModel = plainVariant(
+                ModelTemplates.PARTICLE_ONLY.create(
+                        SgBlocks.PHANTOM_LIGHT.get(),
+                        TextureMapping.particle(new Material(SilentGear.getId("item/phantom_light"))),
+                        this.modelOutput
+                )
+        );
+        this.blockStateOutput.accept(createSimpleBlock(SgBlocks.PHANTOM_LIGHT.get(), blockModel));
+
         ItemModel.Unbaked itemModel = ItemModelUtils.plainModel(createFlatItemModel(SgBlocks.PHANTOM_LIGHT.asItem()));
         this.itemModelOutput.accept(SgBlocks.PHANTOM_LIGHT.asItem(), itemModel);
     }
