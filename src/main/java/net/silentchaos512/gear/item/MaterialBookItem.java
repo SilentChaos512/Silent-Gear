@@ -1,13 +1,11 @@
 package net.silentchaos512.gear.item;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.gear.SilentGear;
-import net.silentchaos512.gear.client.gui.book.MaterialBookScreen;
 
 public class MaterialBookItem extends Item {
     public MaterialBookItem(Properties properties) {
@@ -16,7 +14,11 @@ public class MaterialBookItem extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        SilentGear.PROXY.openMaterialBookScreen();
+        // use() runs on both sides. On an integrated (LAN) server, PROXY is the client proxy,
+        // so calling it server-side would open the book on the host's screen. See #960.
+        if (level.isClientSide()) {
+            SilentGear.PROXY.openMaterialBookScreen();
+        }
         return InteractionResult.SUCCESS;
     }
 }
