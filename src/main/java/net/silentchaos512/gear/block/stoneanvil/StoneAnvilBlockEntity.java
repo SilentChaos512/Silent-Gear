@@ -126,6 +126,14 @@ public class StoneAnvilBlockEntity extends BlockEntity implements Clearable {
     }
 
     @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        // Replaces the old Block#onRemove override, removed in 1.21.5. See #996.
+        if (this.level != null && !this.item.isEmpty()) {
+            Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), this.item);
+        }
+    }
+
+    @Override
     public void clearContent() {
         this.item = ItemStack.EMPTY;
     }
