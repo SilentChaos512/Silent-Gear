@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:saw_blueprint"
+        "recipes": "silentgear:saw_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

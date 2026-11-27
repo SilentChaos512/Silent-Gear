@@ -33,17 +33,17 @@ public class GearArrowRenderer extends ArrowRenderer<GearArrowEntity, GearArrowR
     /*@Override
     public void render(GearArrowRenderState renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(renderState.yRot - 90.0F));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(renderState.xRot));
+        poseStack.rotate(Axis.YP.rotationDegrees(renderState.yRot - 90.0F));
+        poseStack.rotate(Axis.ZP.rotationDegrees(renderState.xRot));
 
-        poseStack.mulPose(Axis.XP.rotationDegrees(45.0F));
+        poseStack.rotate(Axis.XP.rotationDegrees(45.0F));
         poseStack.scale(0.05625F, 0.05625F, 0.05625F);
         poseStack.translate(-4.0F, 0.0F, 0.0F);
 
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(GEAR_ARROW_LOCATION));
         if (renderState.shake > 0.0F) {
             float f10 = -Mth.sin(renderState.shake * 3.0F) * renderState.shake;
-            poseStack.mulPose(Axis.ZP.rotationDegrees(f10));
+            poseStack.rotate(Axis.ZP.rotationDegrees(f10));
         }
         PoseStack.Pose posestack$pose = poseStack.last();
         
@@ -69,7 +69,7 @@ public class GearArrowRenderer extends ArrowRenderer<GearArrowEntity, GearArrowR
         this.vertex(posestack$pose, vertexconsumer, -7, -0.4F, -0.4F, 0.0F, 0.3125F, 1, 0, 0, packedLight, renderState.rodColor);
 		
         for (int j = 0; j < 4; j++) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            poseStack.rotate(Axis.XP.rotationDegrees(90.0F));
             //rod
             this.vertex(posestack$pose, vertexconsumer, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, packedLight, renderState.rodColor);
             this.vertex(posestack$pose, vertexconsumer, 5, -2, 0, 0.40625F, 0.0F, 0, 1, 0, packedLight, renderState.rodColor);

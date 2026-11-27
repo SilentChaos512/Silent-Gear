@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:flax_string"
+        "recipes": "silentgear:flax_string"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

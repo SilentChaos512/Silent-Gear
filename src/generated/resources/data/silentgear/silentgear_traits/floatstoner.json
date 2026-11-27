@@ -11,9 +11,7 @@
   "effects": [
     {
       "type": "silentgear:block_placer",
-      "block": {
-        "Name": "minecraft:end_stone"
-      },
+      "block": "minecraft:end_stone",
       "cooldown": 0,
       "damage_on_use": 3,
       "sound": {

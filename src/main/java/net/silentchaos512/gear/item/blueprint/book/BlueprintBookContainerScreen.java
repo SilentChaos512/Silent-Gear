@@ -32,7 +32,7 @@ public class BlueprintBookContainerScreen extends AbstractContainerScreen<Bluepr
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean p_432883_) {
         if (KeyTracker.isControlDown()) {
-            Slot slot = getSlotUnderMouse();
+            Slot slot = this.hoveredSlot;
             if (slot != null && !slot.getItem().isEmpty()) {
                 this.selected = slot.index;
                 ClientPacketDistributor.sendToServer(new SelectBlueprintInBookPayload(this.menu.bookSlot, this.selected));

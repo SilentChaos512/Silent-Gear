@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:div",
+  "left": {
+    "type": "minecraft:mul",
+    "inputs": [
+      {
+        "type": "silentgear:item_max_durability"
+      },
+      4
+    ]
+  },
+  "right": {
+    "type": "minecraft:conditional",
+    "condition": "minecraft:block/fast_cooking",
+    "on_false": "minecraft:cooking/normal_burn_time_reduction_factor",
+    "on_true": "minecraft:cooking/fast_burn_time_reduction_factor"
+  }
+}

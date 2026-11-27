@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:crimson_steel_nugget"
+        "recipes": "silentgear:crimson_steel_nugget"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

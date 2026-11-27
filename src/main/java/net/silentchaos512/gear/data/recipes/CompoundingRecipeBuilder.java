@@ -105,7 +105,7 @@ public class CompoundingRecipeBuilder<R extends AlloyRecipe> implements RecipeBu
         Advancement.Builder advancement$builder = null;
         if (!this.criteria.isEmpty()) {
             advancement$builder = pRecipeOutput.advancement()
-                    .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId))
+                    .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeOutput.lookup(Registries.RECIPE).getOrThrow(pId)))
                     .rewards(AdvancementRewards.Builder.recipe(pId))
                     .requirements(AdvancementRequirements.Strategy.OR);
             this.criteria.forEach(advancement$builder::addCriterion);

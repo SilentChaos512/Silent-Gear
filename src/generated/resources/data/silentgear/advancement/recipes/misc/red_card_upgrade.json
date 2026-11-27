@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:red_card_upgrade"
+        "recipes": "silentgear:red_card_upgrade"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

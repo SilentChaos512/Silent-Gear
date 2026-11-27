@@ -110,7 +110,7 @@ public class GearShearsItem extends ShearsItem implements GearTool {
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<ItemStack> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, onBroken);
     }
 

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:shears_blueprint"
+        "recipes": "silentgear:shears_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

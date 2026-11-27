@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:dagger_blueprint"
+        "recipes": "silentgear:dagger_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

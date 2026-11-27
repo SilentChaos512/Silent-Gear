@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:netherwood_fence_gate"
+        "recipes": "silentgear:netherwood_fence_gate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

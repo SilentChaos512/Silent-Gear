@@ -11,17 +11,7 @@
   "effects": [
     {
       "type": "silentgear:block_placer",
-      "block": {
-        "Name": "minecraft:fire",
-        "Properties": {
-          "age": "0",
-          "east": "false",
-          "north": "false",
-          "south": "false",
-          "up": "false",
-          "west": "false"
-        }
-      },
+      "block": "minecraft:fire",
       "cooldown": 0,
       "damage_on_use": 1,
       "sound": {

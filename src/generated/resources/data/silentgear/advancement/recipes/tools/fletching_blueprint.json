@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:fletching_blueprint"
+        "recipes": "silentgear:fletching_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

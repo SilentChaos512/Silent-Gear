@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:prospector_hammer_blueprint"
+        "recipes": "silentgear:prospector_hammer_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

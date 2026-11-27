@@ -14,6 +14,6 @@ public class GearDaggerItem extends GearSwordItem {
 
     @Override
     public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        target.invulnerableTime = (int) (0.67f * target.invulnerableTime); // Make target vulnerable sooner
+        target.setInvulnerableTime((int) (0.67f * target.getInvulnerableTime())); // Make target vulnerable sooner
     }
 }

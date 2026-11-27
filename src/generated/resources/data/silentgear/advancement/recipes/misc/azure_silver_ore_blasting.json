@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:azure_silver_ore_blasting"
+        "recipes": "silentgear:azure_silver_ore_blasting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

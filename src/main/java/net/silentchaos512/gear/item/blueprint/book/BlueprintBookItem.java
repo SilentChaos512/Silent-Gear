@@ -12,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.silentchaos512.gear.item.ContainerItemHandler;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.api.part.PartType;
 import net.silentchaos512.gear.client.KeyTracker;
@@ -101,11 +101,11 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
     @Override
     public void onCycleKeyPress(ItemStack stack, ICycleItem.Direction direction) {
         int current = getSelectedSlot(stack);
-        IItemHandler inventory = getInventory(stack);
-        for (int i = 1; i <= inventory.getSlots(); ++i) {
+        ContainerItemHandler inventory = getInventory(stack);
+        for (int i = 1; i <= inventory.size(); ++i) {
             int index = current + (i * direction.scale);
-            if (index < 0) index += inventory.getSlots();
-            if (index >= inventory.getSlots()) index -= inventory.getSlots();
+            if (index < 0) index += inventory.size();
+            if (index >= inventory.size()) index -= inventory.size();
 
             ItemStack inSlot = inventory.getStackInSlot(index);
             if (!inSlot.isEmpty()) {
@@ -131,10 +131,10 @@ public class BlueprintBookItem extends Item implements IBlueprint, IContainerIte
 
     public ItemStack createdFullyLoadedBook() {
         ItemStack filled = new ItemStack(this);
-        IItemHandler inventory = this.getInventory(filled);
+        ContainerItemHandler inventory = this.getInventory(filled);
         List<Item> blueprints = new ArrayList<>(SgItems.getItems(item -> this.canStore(new ItemStack(item))));
         for (int i = 0; i < blueprints.size() && i < getInventorySize(filled); i++) {
-            inventory.insertItem(i, new ItemStack(blueprints.get(i)), false);
+            inventory.insertItem(i, new ItemStack(blueprints.get(i)));
         }
         filled.set(DataComponents.CUSTOM_NAME, TextUtil.translate("item", "blueprint_book.fully_loaded"));
         return filled;

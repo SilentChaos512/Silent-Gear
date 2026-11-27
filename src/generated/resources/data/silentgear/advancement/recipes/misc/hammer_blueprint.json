@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:hammer_blueprint"
+        "recipes": "silentgear:hammer_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

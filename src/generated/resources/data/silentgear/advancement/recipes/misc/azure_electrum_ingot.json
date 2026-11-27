@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:azure_electrum_ingot"
+        "recipes": "silentgear:azure_electrum_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

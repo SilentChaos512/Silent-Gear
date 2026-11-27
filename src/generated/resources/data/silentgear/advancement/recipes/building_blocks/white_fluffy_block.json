@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:white_fluffy_block"
+        "recipes": "silentgear:white_fluffy_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

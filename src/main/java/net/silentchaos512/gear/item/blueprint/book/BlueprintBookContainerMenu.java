@@ -7,8 +7,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
+import net.silentchaos512.gear.item.ContainerItemHandler;
 import net.silentchaos512.gear.item.IContainerItem;
 import net.silentchaos512.gear.setup.SgMenuTypes;
 
@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 
 public class BlueprintBookContainerMenu extends AbstractContainerMenu {
     final ItemStack item;
-    private final IItemHandler itemHandler;
+    private final ContainerItemHandler itemHandler;
     int bookSlot = -1;
 
     public BlueprintBookContainerMenu(int id, Inventory playerInventory, RegistryFriendlyByteBuf data) {
@@ -29,10 +29,10 @@ public class BlueprintBookContainerMenu extends AbstractContainerMenu {
         IContainerItem containerItem = (IContainerItem) this.item.getItem();
         this.itemHandler = containerItem.getInventory(this.item);
 
-        for (int i = 0; i < this.itemHandler.getSlots(); ++i) {
+        for (int i = 0; i < this.itemHandler.size(); ++i) {
             int x = 8 + 18 * (i % 9);
             int y = 18 + 18 * (i / 9);
-            addSlot(new SlotItemHandler(itemHandler, i, x, y) {
+            addSlot(new ResourceHandlerSlot(itemHandler, itemHandler, i, x, y) {
                 @Override
                 public boolean mayPlace(@Nonnull ItemStack stack) {
                     return containerItem.canStore(stack);
@@ -40,7 +40,7 @@ public class BlueprintBookContainerMenu extends AbstractContainerMenu {
             });
         }
 
-        final int rowCount = this.itemHandler.getSlots() / 9;
+        final int rowCount = this.itemHandler.size() / 9;
         final int yOffset = (rowCount - 4) * 18;
 
         // Player inventory
@@ -88,7 +88,7 @@ public class BlueprintBookContainerMenu extends AbstractContainerMenu {
         ItemStack stack = slot.getItem();
         ItemStack newStack = stack.copy();
 
-        int containerSlots = itemHandler.getSlots();
+        int containerSlots = itemHandler.size();
         if (index < containerSlots) {
             if (!this.moveItemStackTo(stack, containerSlots, this.slots.size(), true))
                 return ItemStack.EMPTY;
@@ -127,13 +127,13 @@ public class BlueprintBookContainerMenu extends AbstractContainerMenu {
 
         // Hotbar swapping via number keys
         if (clickType == ContainerInput.SWAP) {
-            int hotbarId = itemHandler.getSlots() + 27 + button;
+            int hotbarId = itemHandler.size() + 27 + button;
             // Block swapping with container
             if (bookSlot == hotbarId)
                 return false;
 
             Slot hotbarSlot = getSlot(hotbarId);
-            if (slotId <= itemHandler.getSlots() - 1)
+            if (slotId <= itemHandler.size() - 1)
                 return !isContainerItem(slot.getItem()) && !isContainerItem(hotbarSlot.getItem());
         }
 

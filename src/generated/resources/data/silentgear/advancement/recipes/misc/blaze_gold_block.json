@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:blaze_gold_block"
+        "recipes": "silentgear:blaze_gold_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

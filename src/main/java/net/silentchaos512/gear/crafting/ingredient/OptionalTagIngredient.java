@@ -6,8 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
@@ -36,12 +36,12 @@ public class OptionalTagIngredient implements ICustomIngredient {
                             )
                             .fieldOf("tag")
                             .forGetter(ing -> ing.tag)
-            ).apply(instance, tag -> new OptionalTagIngredient(VanillaRegistries.createLookup().lookupOrThrow(Registries.ITEM), tag))
+            ).apply(instance, tag -> new OptionalTagIngredient(BuiltInRegistries.ITEM, tag))
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, OptionalTagIngredient> STREAM_CODEC = StreamCodec.composite(
             TagKey.streamCodec(Registries.ITEM), ing -> ing.tag,
-            tag -> new OptionalTagIngredient(VanillaRegistries.createLookup().lookupOrThrow(Registries.ITEM), tag)
+            tag -> new OptionalTagIngredient(BuiltInRegistries.ITEM, tag)
     );
 
     private final TagKey<Item> tag;
@@ -49,14 +49,15 @@ public class OptionalTagIngredient implements ICustomIngredient {
 
     public OptionalTagIngredient(HolderGetter<Item> items, TagKey<Item> tag) {
         this.tag = tag;
-        var tagContents = items.getOrThrow(this.tag);
+        // The tag may not exist at all (no mod adds it), which is the point of this ingredient type
         HolderSet<Item> valuesToSet = HolderSet.empty();
         try {
-            if (tagContents.size() > 0) {
-                valuesToSet = tagContents;
+            var tagContents = items.get(this.tag);
+            if (tagContents.isPresent() && tagContents.get().size() > 0) {
+                valuesToSet = tagContents.get();
             }
         } catch (UnsupportedOperationException ex) {
-            // Ignore empty tag
+            // Ignore unbound tag
         }
         this.values = valuesToSet;
     }

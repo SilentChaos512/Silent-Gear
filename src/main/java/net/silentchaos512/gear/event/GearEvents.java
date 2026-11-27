@@ -49,7 +49,6 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -147,23 +146,12 @@ public final class GearEvents {
 
     private static void checkAndDisplayFlammableItemBroken(LivingDamageEvent.Post event, EquipmentSlot slot, ItemStack stack) {
         if (GearHelper.isBroken(stack)) {
-            event.getEntity().onEquippedItemBroken(stack.getItem(), slot);
+            event.getEntity().onEquippedItemBroken(stack.copy(), slot);
             stack.shrink(1);
             if (event.getEntity() instanceof Player player) {
                 var text = TextUtil.translate("trait", "flammable.itemDestroyed", stack.getHoverName());
                 player.sendSystemMessage(text);
             }
-        }
-    }
-
-    private static final float BURN_TICKS_PER_DURABILITY = 200f / 50f;
-
-    @SubscribeEvent
-    public static void onFurnaceFuelBurnTimeEvent(FurnaceFuelBurnTimeEvent event) {
-        ItemStack stack = event.getItemStack();
-        if (GearHelper.isGear(stack) && TraitHelper.hasTrait(stack, Const.Traits.FLAMMABLE)) {
-            float durability = stack.getMaxDamage();
-            event.setBurnTime((int) (durability * BURN_TICKS_PER_DURABILITY));
         }
     }
 

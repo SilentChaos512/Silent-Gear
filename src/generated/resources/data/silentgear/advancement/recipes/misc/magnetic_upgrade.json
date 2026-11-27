@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:magnetic_upgrade"
+        "recipes": "silentgear:magnetic_upgrade"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

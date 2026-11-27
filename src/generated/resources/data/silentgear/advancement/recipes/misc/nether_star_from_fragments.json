@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:nether_star_from_fragments"
+        "recipes": "silentgear:nether_star_from_fragments"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

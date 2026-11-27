@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:axe_blueprint"
+        "recipes": "silentgear:axe_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

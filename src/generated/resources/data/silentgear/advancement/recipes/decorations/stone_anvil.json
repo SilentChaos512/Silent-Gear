@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:stone_anvil"
+        "recipes": "silentgear:stone_anvil"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

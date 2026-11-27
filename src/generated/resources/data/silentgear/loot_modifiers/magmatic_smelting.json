@@ -1,10 +1,8 @@
 {
   "type": "silentgear:magmatic_smelting",
-  "conditions": [
-    {
-      "condition": "silentgear:has_trait",
-      "level": {},
-      "trait": "silentgear:magmatic"
-    }
-  ]
+  "condition": {
+    "type": "silentgear:has_trait",
+    "level": {},
+    "trait": "silentgear:magmatic"
+  }
 }

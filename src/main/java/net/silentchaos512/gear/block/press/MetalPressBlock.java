@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.block.press;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,19 +29,12 @@ import javax.annotation.Nullable;
 public class MetalPressBlock extends ModContainerBlock<MetalPressBlockEntity> {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    public static final MapCodec<MetalPressBlock> CODEC = simpleCodec(MetalPressBlock::new);
-
     private static final VoxelShape SHAPE = Shapes.or(
             box(0, 0, 0, 16, 15, 16),
             box(2, 15, 2, 14, 16, 14));
 
     public MetalPressBlock(Properties properties) {
         super(MetalPressBlockEntity::new, properties);
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

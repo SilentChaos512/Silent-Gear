@@ -11,12 +11,7 @@
   "effects": [
     {
       "type": "silentgear:block_placer",
-      "block": {
-        "Name": "silentgear:phantom_light",
-        "Properties": {
-          "waterlogged": "false"
-        }
-      },
+      "block": "silentgear:phantom_light",
       "cooldown": 0,
       "damage_on_use": 5,
       "sound": {

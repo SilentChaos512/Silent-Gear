@@ -188,7 +188,7 @@ public class DataResourceManager<T> implements ResourceManagerReloadListener, It
             this.packNameByKey.clear();
             this.errorList.clear();
             this.logger.info(this.logMarker, "Reloading {} files", this.typeName);
-            var ops = RegistryOps.create(JsonOps.INSTANCE, VanillaRegistries.createLookup());
+            var ops = RegistryOps.create(JsonOps.INSTANCE, VanillaRegistries.createWorldLookup());
 
             for (Identifier id : resources.keySet()) {
                 String path = id.getPath().substring(this.dataPath.length() + 1, id.getPath().length() - ".json".length());

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:crimson_iron_raw_ore_smelting"
+        "recipes": "silentgear:crimson_iron_raw_ore_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

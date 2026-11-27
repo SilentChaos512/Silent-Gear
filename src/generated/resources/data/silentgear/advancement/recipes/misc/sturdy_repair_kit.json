@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:sturdy_repair_kit"
+        "recipes": "silentgear:sturdy_repair_kit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

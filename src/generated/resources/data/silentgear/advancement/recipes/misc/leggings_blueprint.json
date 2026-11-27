@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:leggings_blueprint"
+        "recipes": "silentgear:leggings_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

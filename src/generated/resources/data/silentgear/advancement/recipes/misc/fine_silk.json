@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:fine_silk"
+        "recipes": "silentgear:fine_silk"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

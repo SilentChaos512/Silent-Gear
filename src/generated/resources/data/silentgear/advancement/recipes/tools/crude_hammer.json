@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:crude_hammer"
+        "recipes": "silentgear:crude_hammer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

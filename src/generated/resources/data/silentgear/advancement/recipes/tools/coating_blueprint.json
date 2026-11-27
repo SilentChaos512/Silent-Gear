@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:coating_blueprint"
+        "recipes": "silentgear:coating_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

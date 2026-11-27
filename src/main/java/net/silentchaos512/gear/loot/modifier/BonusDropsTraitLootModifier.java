@@ -4,6 +4,7 @@ import com.google.common.base.Suppliers;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -16,19 +17,21 @@ import net.silentchaos512.gear.util.TraitHelper;
 
 import java.util.function.Supplier;
 
+import java.util.Optional;
+
 public class BonusDropsTraitLootModifier extends LootModifier {
     public static final Supplier<MapCodec<BonusDropsTraitLootModifier>> CODEC = Suppliers.memoize(() ->
             RecordCodecBuilder.mapCodec(inst ->
                     codecStart(inst).apply(inst, BonusDropsTraitLootModifier::new)));
 
-    public BonusDropsTraitLootModifier(LootItemCondition[] conditionsIn, int priority) {
-        super(conditionsIn, priority);
+    public BonusDropsTraitLootModifier(Optional<Holder<LootItemCondition>> conditionIn, int priority) {
+        super(conditionIn, priority);
     }
 
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         ObjectArrayList<ItemStack> ret = new ObjectArrayList<>(generatedLoot);
-        var tool = context.getOptionalParameter(LootContextParams.TOOL);
+        var tool = context.getOptional(LootContextParams.TOOL);
 
         if (tool != null && GearHelper.isGear(tool) && tool instanceof ItemStack gearStack) {
             //noinspection OverlyLongLambda

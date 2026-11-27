@@ -1,10 +1,11 @@
 package net.silentchaos512.gear.setup;
 
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -22,9 +23,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -44,21 +42,16 @@ import net.silentchaos512.gear.item.block.AlloyMakerBlockItem;
 import net.silentchaos512.gear.item.block.BlockItemWithTooltip;
 import net.silentchaos512.gear.item.block.OreBlockItem;
 import net.silentchaos512.gear.util.Const;
-import net.silentchaos512.lib.util.NameUtils;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-@EventBusSubscriber(modid = SilentGear.MOD_ID)
 public final class SgBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(SilentGear.MOD_ID);
 
-    private static final Map<Block, Block> STRIPPED_WOOD = new HashMap<>();
 
     public static final DeferredBlock<DropExperienceBlock> BORT_ORE = registerDefaultProps(
             "bort_ore",
@@ -303,9 +296,9 @@ public final class SgBlocks {
                     .strength(5, 6)
     );
 
-    public static final DeferredBlock<WoodBlock> NETHERWOOD_LOG = register(
+    public static final DeferredBlock<RotatedPillarBlock> NETHERWOOD_LOG = register(
             "netherwood_log",
-            properties -> new WoodBlock(STRIPPED_WOOD::get, properties),
+            RotatedPillarBlock::new,
             netherWoodProps(2f, 2f, false)
     );
     public static final DeferredBlock<RotatedPillarBlock> STRIPPED_NETHERWOOD_LOG = register(
@@ -313,9 +306,9 @@ public final class SgBlocks {
             RotatedPillarBlock::new,
             netherWoodProps(2f, 2f, false)
     );
-    public static final DeferredBlock<WoodBlock> NETHERWOOD_WOOD = register(
+    public static final DeferredBlock<RotatedPillarBlock> NETHERWOOD_WOOD = register(
             "netherwood_wood",
-            properties -> new WoodBlock(STRIPPED_WOOD::get, properties),
+            RotatedPillarBlock::new,
             netherWoodProps(2f, 2f, false)
     );
     public static final DeferredBlock<RotatedPillarBlock> STRIPPED_NETHERWOOD_WOOD = register(
@@ -364,6 +357,7 @@ public final class SgBlocks {
             properties -> new UntintedParticleLeavesBlock(
                     0.01f,
                     ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, 0x8F005F),
+                    AmbientLeavesBlockSoundPlayer.noAmbientSound(),
                     properties
             ),
             props -> props
@@ -374,8 +368,8 @@ public final class SgBlocks {
                     .noOcclusion()
                     .isValidSpawn(Blocks::ocelotOrParrot)
                     .isSuffocating(SgBlocks::never)
-                    .isViewBlocking(SgBlocks::never)
-                    .pushReaction(PushReaction.DESTROY)
+                    .isViewBlocking(SgBlocks::neverViewBlocking)
+                    .pushReaction(PushReaction.POPPED)
                     .isRedstoneConductor(SgBlocks::never)
     );
     public static final DeferredBlock<NetherwoodSapling> NETHERWOOD_SAPLING = register(
@@ -404,12 +398,6 @@ public final class SgBlocks {
     );
 
     private SgBlocks() {
-    }
-
-    @SubscribeEvent
-    public static void onCommonSetup(FMLCommonSetupEvent event) {
-        STRIPPED_WOOD.put(NETHERWOOD_LOG.get(), STRIPPED_NETHERWOOD_LOG.get());
-        STRIPPED_WOOD.put(NETHERWOOD_WOOD.get(), STRIPPED_NETHERWOOD_WOOD.get());
     }
 
     private static DropExperienceBlock getOre(IntProvider xpDrop, SoundType soundType, BlockBehaviour.Properties properties) {
@@ -506,8 +494,7 @@ public final class SgBlocks {
     @SuppressWarnings("SameParameterValue")
     private static FlowerPotBlock makePottedPlant(Supplier<? extends Block> flower, BlockBehaviour.Properties properties) {
         FlowerPotBlock potted = new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, properties);
-        Identifier flowerId = NameUtils.fromBlock(flower.get());
-        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(flowerId, () -> potted);
+        // NeoForge maps the empty pot and flower to this pot automatically when the block is registered
         return potted;
     }
 
@@ -546,5 +533,9 @@ public final class SgBlocks {
 
     private static boolean never(BlockState state, BlockGetter level, BlockPos pos) {
         return Blocks.never(state, level, pos, null);
+    }
+
+    private static boolean neverViewBlocking(BlockState state, BlockGetter level, BlockPos pos, AABB nearPlaneBox) {
+        return false;
     }
 }

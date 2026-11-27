@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:slingshot_template"
+        "recipes": "silentgear:slingshot_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

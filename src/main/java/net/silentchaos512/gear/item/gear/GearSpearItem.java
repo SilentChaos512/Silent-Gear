@@ -51,7 +51,7 @@ public class GearSpearItem extends BasicGearItem implements GearWeapon {
         );
         gear.set(DataComponents.ATTACK_RANGE, new AttackRange(2.0F, 4.5F, 2.0F, 6.5F, 0.125F, 0.5F));
         gear.set(DataComponents.MINIMUM_ATTACK_CHARGE, 1.0F);
-        gear.set(DataComponents.SWING_ANIMATION, getSwingAnimationComponent(gear, finalProperties));
+        gear.set(DataComponents.ATTACK_ANIMATION, getAttackAnimationComponent(gear, finalProperties));
         gear.set(DataComponents.USE_EFFECTS, new UseEffects(true, false, 1.0F));
     }
 
@@ -68,7 +68,7 @@ public class GearSpearItem extends BasicGearItem implements GearWeapon {
         return GearHelper.Spear.createKineticWeapon(gear, properties);
     }
 
-    protected SwingAnimation getSwingAnimationComponent(ItemStack gear, GearPropertiesData properties) {
+    protected SwingAnimation getAttackAnimationComponent(ItemStack gear, GearPropertiesData properties) {
         // Try to get property from item
         if (properties.contains(GearProperties.SWING_ANIMATION)) {
             var swingAnimation = properties.get(GearProperties.SWING_ANIMATION);

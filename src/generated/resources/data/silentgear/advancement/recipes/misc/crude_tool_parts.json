@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:crude_tool_parts"
+        "recipes": "silentgear:crude_tool_parts"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

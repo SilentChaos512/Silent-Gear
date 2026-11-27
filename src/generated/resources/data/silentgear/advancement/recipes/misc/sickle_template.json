@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:sickle_template"
+        "recipes": "silentgear:sickle_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

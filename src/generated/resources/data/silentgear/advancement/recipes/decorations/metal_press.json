@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:metal_press"
+        "recipes": "silentgear:metal_press"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -2,8 +2,8 @@ package net.silentchaos512.gear.advancements.criterion;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.predicates.ContextAwarePredicate;
-import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -26,13 +26,13 @@ public class HasPartTrigger extends SimpleCriterionTrigger<HasPartTrigger.Instan
     }
 
     public record Instance(
-            Optional<ContextAwarePredicate> player,
+            Optional<Holder<LootItemCondition>> player,
             Optional<DataResource<GearPart>> part,
             Optional<PartType> partType
     ) implements SimpleInstance {
         public static final Codec<Instance> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                        EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+                        LootItemCondition.CODEC.optionalFieldOf("player").forGetter(Instance::player),
                         DataResource.PART_CODEC.optionalFieldOf("part").forGetter(Instance::part),
                         SgRegistries.PART_TYPE.byNameCodec().optionalFieldOf("part_type").forGetter(Instance::partType)
                 ).apply(instance, Instance::new)

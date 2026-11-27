@@ -88,7 +88,7 @@ public final class SalvagingRecipeBuilder<R extends SalvagingRecipe> implements 
         Advancement.Builder advancement$builder = null;
         if (!this.criteria.isEmpty()) {
             advancement$builder = pRecipeOutput.advancement()
-                    .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId))
+                    .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeOutput.lookup(Registries.RECIPE).getOrThrow(pId)))
                     .rewards(AdvancementRewards.Builder.recipe(pId))
                     .requirements(AdvancementRequirements.Strategy.OR);
             this.criteria.forEach(advancement$builder::addCriterion);

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:wide_plate_upgrade"
+        "recipes": "silentgear:wide_plate_upgrade"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.item.gear;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -166,7 +168,9 @@ public class GearSawItem extends GearAxeItem implements BreakEventHandler {
 
                             if (9 * xDist * xDist + yDist * yDist + 9 * zDist * zDist < 1000) {
                                 if (!result.player.getAbilities().instabuild) {
-                                    localBlock.playerDestroy(world, result.player, pos, localState, world.getBlockEntity(pos), result.tool);
+                                    if (world instanceof ServerLevel serverLevel && result.player instanceof ServerPlayer serverPlayer) {
+                                        localBlock.playerDestroy(serverLevel, serverPlayer, pos, localState, world.getBlockEntity(pos), result.tool);
+                                    }
                                     mineBlock(result.tool, world, localState, localPos, result.player);
                                     ++result.blocksBroken;
                                 }

@@ -4,6 +4,7 @@ import com.google.common.base.Suppliers;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -18,13 +19,15 @@ import java.util.function.Supplier;
  * Controls the smelting ability of the Magmatic trait. Pretty much a direct copy of the smelting
  * enchantment example provided by Forge.
  */
+import java.util.Optional;
+
 public class MagmaticTraitLootModifier extends LootModifier {
     public static final Supplier<MapCodec<MagmaticTraitLootModifier>> CODEC = Suppliers.memoize(() ->
             RecordCodecBuilder.mapCodec(inst ->
                     codecStart(inst).apply(inst, MagmaticTraitLootModifier::new)));
 
-    public MagmaticTraitLootModifier(LootItemCondition[] conditionsIn, int priority) {
-        super(conditionsIn, priority);
+    public MagmaticTraitLootModifier(Optional<Holder<LootItemCondition>> conditionIn, int priority) {
+        super(conditionIn, priority);
     }
 
     @Override

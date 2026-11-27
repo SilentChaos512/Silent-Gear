@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.block.alloymaker;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -52,13 +51,11 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
     public static final VoxelShape TALL_MACHINE = Block.box(1, 0, 1, 15, 27, 15);
     public static final VoxelShape MIXING_BOWL = Shapes.join(BOWL_CONVEX_BASE, BOWL_INSIDE, BooleanOp.ONLY_FIRST);
 
-    private final AlloyMakerInfo<R> info;
-    private final MapCodec<AlloyMakerBlock<R>> codec;
+    private final AlloyMakerInfo<R> info;
 
     public AlloyMakerBlock(AlloyMakerInfo<R> info, BlockEntityType.BlockEntitySupplier<? extends AlloyMakerBlockEntity<R>> blockEntityFactory, Properties properties) {
         super(blockEntityFactory, properties);
-        this.info = info;
-        this.codec = simpleCodec(p -> new AlloyMakerBlock<>(info, blockEntityFactory, p));
+        this.info = info;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
     }
 
@@ -125,10 +122,5 @@ public class AlloyMakerBlock<R extends AlloyRecipe> extends ModContainerBlock<Al
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         return level.isClientSide() ? null : createTickerHelper(blockEntityType, info.getBlockEntityType(), info.getServerBlockEntityTicker());
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return codec;
     }
 }

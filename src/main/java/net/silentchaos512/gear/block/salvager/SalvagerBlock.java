@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.block.salvager;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -30,16 +29,9 @@ public class SalvagerBlock extends ModContainerBlock<SalvagerBlockEntity> {
     private static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final VoxelShape SHAPE = box(1, 0, 1, 15, 16, 15);
-    public static final MapCodec<SalvagerBlock> CODEC = simpleCodec(SalvagerBlock::new);
-
     public SalvagerBlock(Properties builder) {
         super(SalvagerBlockEntity::new, builder);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH).setValue(LIT, false));
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

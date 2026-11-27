@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:helmet_blueprint"
+        "recipes": "silentgear:helmet_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

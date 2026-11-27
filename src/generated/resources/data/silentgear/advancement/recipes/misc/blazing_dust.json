@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:blazing_dust"
+        "recipes": "silentgear:blazing_dust"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

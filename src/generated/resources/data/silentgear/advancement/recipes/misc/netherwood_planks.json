@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:netherwood_planks"
+        "recipes": "silentgear:netherwood_planks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

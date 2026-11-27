@@ -58,6 +58,7 @@ class SideProxy implements IProxy {
         SgLoot.LOOT_CONDITIONS.register(modEventBus);
         SgLoot.LOOT_FUNCTIONS.register(modEventBus);
         SgLoot.LOOT_MODIFIERS.register(modEventBus);
+        SgLoot.CONTEXT_INT_PROVIDER_TYPES.register(modEventBus);
         SgMenuTypes.MENU_TYPES.register(modEventBus);
         SgVillages.POINTS_OF_INTEREST.register(modEventBus);
         SgVillages.PROFESSIONS.register(modEventBus);

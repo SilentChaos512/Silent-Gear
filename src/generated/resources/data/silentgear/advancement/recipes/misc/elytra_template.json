@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:elytra_template"
+        "recipes": "silentgear:elytra_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,8 +13,6 @@ import net.silentchaos512.gear.setup.gear.TraitEffectTypes;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class AttachDataComponentsTraitEffect extends TraitEffect {
     public static final MapCodec<AttachDataComponentsTraitEffect> CODEC = RecordCodecBuilder.mapCodec(
@@ -45,8 +43,8 @@ public class AttachDataComponentsTraitEffect extends TraitEffect {
 
     @Override
     public void onRecalculatePre(ItemStack gear, int traitLevel) {
-        for (Map.Entry<DataComponentType<?>, Optional<?>> entry : this.components.entrySet()) {
-            gear.remove(entry.getKey());
+        for (DataComponentType<?> type : this.components.keySet()) {
+            gear.remove(type);
         }
     }
 

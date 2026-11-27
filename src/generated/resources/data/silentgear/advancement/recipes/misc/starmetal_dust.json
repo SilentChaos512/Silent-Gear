@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:starmetal_dust"
+        "recipes": "silentgear:starmetal_dust"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

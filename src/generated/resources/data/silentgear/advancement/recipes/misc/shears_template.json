@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:shears_template"
+        "recipes": "silentgear:shears_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

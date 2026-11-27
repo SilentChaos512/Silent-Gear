@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:necklace_blueprint_alt"
+        "recipes": "silentgear:necklace_blueprint_alt"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:alloy_forge"
+        "recipes": "silentgear:alloy_forge"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

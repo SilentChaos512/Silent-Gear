@@ -1,5 +1,6 @@
 {
   "type": "minecraft:blasting",
+  "cookingtime": 100,
   "experience": 1.5,
   "ingredient": "#c:ores/azure_silver",
   "result": {

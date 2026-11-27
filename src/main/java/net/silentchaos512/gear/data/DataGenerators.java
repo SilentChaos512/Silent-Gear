@@ -9,7 +9,9 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Util;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.data.client.ModEquipmentAssetsProvider;
 import net.silentchaos512.gear.data.client.ModModelProvider;
@@ -21,7 +23,7 @@ import net.silentchaos512.gear.data.tags.ModDamageTypeTagsProvider;
 import net.silentchaos512.gear.data.tags.ModEntityTypeTagsProvider;
 import net.silentchaos512.gear.data.tags.ModItemTagsProvider;
 import net.silentchaos512.gear.data.trait.TraitsProvider;
-import net.silentchaos512.lib.data.recipe.LibRecipeProvider;
+import net.silentchaos512.gear.setup.ItemComponentsSetup;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,7 +40,8 @@ public final class DataGenerators {
     public static void gatherData(GatherDataEvent.Client event) {
         var generator = event.getGenerator();
         var packOutput = generator.getPackOutput();
-        var lookupProvider = event.getLookupProvider();
+        // Tags and other data providers use the world registries, like vanilla
+        var lookupProvider = event.getWorldLookupProvider();
 
         generator.addProvider(true, new ModDataMapProvider(packOutput, lookupProvider));
 
@@ -55,16 +58,26 @@ public final class DataGenerators {
         generator.addProvider(true, new PartsProvider(generator));
 
         // Others
-        generator.addProvider(true, new ModLootTables(event));
-        generator.addProvider(true, new ModLootModifierProvider(event));
-        generator.addProvider(true, LibRecipeProvider.createRunner(packOutput, lookupProvider, "Silent Gear Recipes", ModRecipesProvider::new));
-        generator.addProvider(true, new ModAdvancementProvider(packOutput, lookupProvider));
+        generator.addProvider(true, new ModLootModifierProvider(packOutput, lookupProvider));
+        // Recipes, loot tables, and advancements are datapack registries now, see gatherRegistryEntries
 //        ModWorldGen.init(generator, existingFileHelper); //FIXME
 
         // Client
         generator.addProvider(true, new ModModelProvider(packOutput));
         generator.addProvider(true, new ModSoundDefinitionsProvider(packOutput));
         generator.addProvider(true, new ModEquipmentAssetsProvider(packOutput));
+    }
+
+    /**
+     * Recipes, loot tables, and advancements became reloadable datapack registries in 26.3, so they are generated from
+     * registry bootstraps instead of standalone data providers.
+     */
+    @SubscribeEvent
+    public static void gatherRegistryEntries(GatherDataRegistryEntriesEvent event) {
+        event.recipe(ModRecipesProvider::new)
+                .advancement(ModAdvancementProvider::new)
+                .add(Registries.CONTEXT_INT_PROVIDER, ItemComponentsSetup::bootstrapContextIntProviders);
+        ModLootTables.gather(event);
     }
 
     public static CompletableFuture<?> saveStable(CachedOutput p_253653_, JsonElement p_254542_, Path p_254467_) {

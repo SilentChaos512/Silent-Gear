@@ -129,7 +129,7 @@ public class GearElytraItem extends BasicGearItem implements GearArmor {
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<ItemStack> onBroken) {
         return GearHelper.damageItem(stack, amount, entity, item -> {
             var player = entity instanceof Player ? (Player) entity : null;
             GearHelper.onBroken(stack, player, this.getEquipmentSlot(stack));

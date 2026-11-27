@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:coating_smithing_template_duplication"
+        "recipes": "silentgear:coating_smithing_template_duplication"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

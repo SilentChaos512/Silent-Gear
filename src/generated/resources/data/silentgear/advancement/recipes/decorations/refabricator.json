@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:refabricator"
+        "recipes": "silentgear:refabricator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

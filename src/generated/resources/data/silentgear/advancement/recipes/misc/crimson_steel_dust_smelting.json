@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:crimson_steel_dust_smelting"
+        "recipes": "silentgear:crimson_steel_dust_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

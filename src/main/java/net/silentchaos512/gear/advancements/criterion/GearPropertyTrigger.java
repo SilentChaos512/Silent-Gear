@@ -2,9 +2,9 @@ package net.silentchaos512.gear.advancements.criterion;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.predicates.ContextAwarePredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.advancements.predicates.MinMaxBounds;
-import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import net.silentchaos512.gear.api.property.GearProperty;
@@ -23,13 +23,13 @@ public class GearPropertyTrigger extends SimpleCriterionTrigger<GearPropertyTrig
     }
 
     public record Instance(
-            Optional<ContextAwarePredicate> player,
+            Optional<Holder<LootItemCondition>> player,
             GearProperty<?, ?> stat,
             MinMaxBounds.Doubles value
     ) implements SimpleCriterionTrigger.SimpleInstance {
         public static final Codec<Instance> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                        EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+                        LootItemCondition.CODEC.optionalFieldOf("player").forGetter(Instance::player),
                         SgRegistries.GEAR_PROPERTY.byNameCodec().fieldOf("stat").forGetter(Instance::stat),
                         MinMaxBounds.Doubles.CODEC.fieldOf("value").forGetter(Instance::value)
                 ).apply(instance, Instance::new)

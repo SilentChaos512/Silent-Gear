@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:raw_crimson_iron_from_block"
+        "recipes": "silentgear:raw_crimson_iron_from_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

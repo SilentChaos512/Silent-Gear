@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:knife_blueprint"
+        "recipes": "silentgear:knife_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

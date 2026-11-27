@@ -11,12 +11,7 @@
   "effects": [
     {
       "type": "silentgear:block_placer",
-      "block": {
-        "Name": "minecraft:basalt",
-        "Properties": {
-          "axis": "y"
-        }
-      },
+      "block": "minecraft:basalt",
       "cooldown": 0,
       "damage_on_use": 3,
       "sound": {

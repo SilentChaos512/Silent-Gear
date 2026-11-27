@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:bow_blueprint"
+        "recipes": "silentgear:bow_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -11,9 +11,7 @@
   "effects": [
     {
       "type": "silentgear:block_placer",
-      "block": {
-        "Name": "minecraft:obsidian"
-      },
+      "block": "minecraft:obsidian",
       "cooldown": 100,
       "damage_on_use": 20,
       "sound": {

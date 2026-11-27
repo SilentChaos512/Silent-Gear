@@ -36,8 +36,8 @@ public class GearThrownTridentRenderer extends EntityRenderer<GearThrownTrident,
     /*@Override
     public void render(GearTridentRenderState renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(renderState.yRot - 90.0F));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(renderState.xRot + 90.0F));
+        poseStack.rotate(Axis.YP.rotationDegrees(renderState.yRot - 90.0F));
+        poseStack.rotate(Axis.ZP.rotationDegrees(renderState.xRot + 90.0F));
         VertexConsumer vertexconsumer = ItemRenderer.getFoilBuffer(
             bufferSource, this.model.renderType(TRIDENT_LOCATION), false, Config.Client.allowEnchantedEffect.get() && renderState.isFoil
         );

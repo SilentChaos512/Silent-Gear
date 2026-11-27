@@ -1,39 +1,22 @@
 package net.silentchaos512.gear.data.loot;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.core.WritableRegistry;
-import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.data.loot.packs.VanillaLootTableProvider;
-import net.minecraft.util.ProblemReporter;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.ValidationContextSource;
+import net.minecraft.data.loot.LootTableProvider.SubProviderEntry;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.DatapackRegistryGatherer;
 
-import java.util.Collections;
-import java.util.List;
+/**
+ * Loot tables are a reloadable datapack registry as of 26.3, so they are gathered in
+ * {@link net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent} instead of being a standalone provider.
+ */
+public final class ModLootTables {
+    private ModLootTables() {}
 
-public class ModLootTables extends LootTableProvider {
-    public ModLootTables(GatherDataEvent event) {
-        super(
-                event.getGenerator().getPackOutput(),
-                Collections.emptySet(),
-                VanillaLootTableProvider.create(event.getGenerator().getPackOutput(), event.getLookupProvider()).getTables(),
-                event.getLookupProvider()
-        );
-    }
-
-    @Override
-    public List<SubProviderEntry> getTables() {
-        return ImmutableList.of(
+    public static DatapackRegistryGatherer gather(DatapackRegistryGatherer gatherer) {
+        return gatherer.lootTable(
                 new SubProviderEntry(ModBlockLootTables::new, LootContextParamSets.BLOCK),
                 new SubProviderEntry(ModChestLootTables::new, LootContextParamSets.CHEST),
                 new SubProviderEntry(ModEntityLootTables::new, LootContextParamSets.ENTITY),
                 new SubProviderEntry(ModGiftLootTables::new, LootContextParamSets.GIFT)
         );
-    }
-
-    @Override
-    protected void validate(WritableRegistry<LootTable> tables, ValidationContextSource validationContext, ProblemReporter.Collector problems) {
     }
 }

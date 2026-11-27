@@ -16,18 +16,15 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.network.payload.client.KeyPressOnItemPayload;
-import org.lwjgl.glfw.GLFW;
-
-import javax.annotation.Nonnull;
 
 @EventBusSubscriber(modid = SilentGear.MOD_ID, value = Dist.CLIENT)
 public class KeyTracker {
-    public static final KeyMapping DISPLAY_PROPERTIES = createKeyBinding("displayItemProperties", GLFW.GLFW_KEY_LEFT_CONTROL, KeyMapping.Category.INVENTORY);
-    public static final KeyMapping DISPLAY_TRAITS = createKeyBinding("displayTraitDescriptions", GLFW.GLFW_KEY_LEFT_SHIFT, KeyMapping.Category.INVENTORY);
-    public static final KeyMapping DISPLAY_CONSTRUCTION = createKeyBinding("displayItemConstruction", GLFW.GLFW_KEY_LEFT_ALT, KeyMapping.Category.INVENTORY);
-    public static final KeyMapping OPEN_ITEM = createKeyBinding("openItem", GLFW.GLFW_KEY_X, KeyMapping.Category.INVENTORY);
-    public static final KeyMapping CYCLE_BACK = createKeyBinding("cycle.back", GLFW.GLFW_KEY_Z, KeyMapping.Category.INVENTORY);
-    public static final KeyMapping CYCLE_NEXT = createKeyBinding("cycle.next", GLFW.GLFW_KEY_C, KeyMapping.Category.INVENTORY);
+    public static final KeyMapping DISPLAY_PROPERTIES = createKeyBinding("displayItemProperties", InputConstants.KEY_LCONTROL, KeyMapping.Category.INVENTORY);
+    public static final KeyMapping DISPLAY_TRAITS = createKeyBinding("displayTraitDescriptions", InputConstants.KEY_LSHIFT, KeyMapping.Category.INVENTORY);
+    public static final KeyMapping DISPLAY_CONSTRUCTION = createKeyBinding("displayItemConstruction", InputConstants.KEY_LALT, KeyMapping.Category.INVENTORY);
+    public static final KeyMapping OPEN_ITEM = createKeyBinding("openItem", InputConstants.KEY_X, KeyMapping.Category.INVENTORY);
+    public static final KeyMapping CYCLE_BACK = createKeyBinding("cycle.back", InputConstants.KEY_Z, KeyMapping.Category.INVENTORY);
+    public static final KeyMapping CYCLE_NEXT = createKeyBinding("cycle.next", InputConstants.KEY_C, KeyMapping.Category.INVENTORY);
 
     private static int materialCycleCount = 0;
 
@@ -44,12 +41,11 @@ public class KeyTracker {
         }
     }
 
-    @Nonnull
     private static KeyMapping createKeyBinding(String description, int key, KeyMapping.Category category) {
         return new KeyMapping(
                 "key.silentgear." + description,
                 KeyConflictContext.GUI,
-                InputConstants.Type.KEYSYM,
+                InputConstants.Type.KEYBOARD,
                 key,
                 category
         );
@@ -62,10 +58,10 @@ public class KeyTracker {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
-        if (event.getAction() == GLFW.GLFW_RELEASE && (event.getKey() == DISPLAY_PROPERTIES.getKey().getValue())) {
+        if (event.getAction() == InputConstants.RELEASE && (event.getKey() == DISPLAY_PROPERTIES.getKey().getValue())) {
             materialCycleCount = 0;
         }
-        if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == CYCLE_NEXT.getKey().getValue()) {
+        if (event.getAction() == InputConstants.PRESS && event.getKey() == CYCLE_NEXT.getKey().getValue()) {
             if (isDisplayPropertiesDown()) {
                 ++materialCycleCount;
             }
@@ -74,7 +70,7 @@ public class KeyTracker {
                 ClientPacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.CYCLE_NEXT, getHoveredSlot(hovered)));
             }
         }
-        if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == CYCLE_BACK.getKey().getValue()) {
+        if (event.getAction() == InputConstants.PRESS && event.getKey() == CYCLE_BACK.getKey().getValue()) {
             if (isDisplayPropertiesDown()) {
                 --materialCycleCount;
             }
@@ -83,7 +79,7 @@ public class KeyTracker {
                 ClientPacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.CYCLE_BACK, getHoveredSlot(hovered)));
             }
         }
-        if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == OPEN_ITEM.getKey().getValue()) {
+        if (event.getAction() == InputConstants.PRESS && event.getKey() == OPEN_ITEM.getKey().getValue()) {
             ItemStack hovered = getHoveredItem();
             if (!hovered.isEmpty()) {
                 ClientPacketDistributor.sendToServer(new KeyPressOnItemPayload(KeyPressOnItemPayload.KeyPressType.OPEN_ITEM, getHoveredSlot(hovered)));
@@ -127,7 +123,7 @@ public class KeyTracker {
 
     public static boolean isDisplayPropertiesDown() {
         int code = DISPLAY_PROPERTIES.getKey().getValue();
-        if (code == GLFW.GLFW_KEY_LEFT_CONTROL || code == GLFW.GLFW_KEY_RIGHT_CONTROL) {
+        if (code == InputConstants.KEY_LCONTROL || code == InputConstants.KEY_RCONTROL) {
             // Maintain old behavior of checking both ctrl keys
             return isControlDown();
         }
@@ -136,7 +132,7 @@ public class KeyTracker {
 
     public static boolean isDisplayConstructionDown() {
         int code = DISPLAY_CONSTRUCTION.getKey().getValue();
-        if (code == GLFW.GLFW_KEY_LEFT_ALT || code == GLFW.GLFW_KEY_RIGHT_ALT) {
+        if (code == InputConstants.KEY_LALT || code == InputConstants.KEY_RALT) {
             return isAltDown();
         }
         return isKeyDown(code);
@@ -144,32 +140,28 @@ public class KeyTracker {
 
     public static boolean isDisplayTraitDescriptionsDown() {
         int code = DISPLAY_TRAITS.getKey().getValue();
-        if (code == GLFW.GLFW_KEY_LEFT_SHIFT || code == GLFW.GLFW_KEY_RIGHT_SHIFT) {
+        if (code == InputConstants.KEY_LSHIFT || code == InputConstants.KEY_RSHIFT) {
             return isShiftDown();
         }
         return DISPLAY_TRAITS.isDown();
     }
 
     public static boolean isShiftDown() {
-        var window = Minecraft.getInstance().getWindow();
-        return InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
+        return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
     }
 
     public static boolean isControlDown() {
-        var window = Minecraft.getInstance().getWindow();
-        return InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_CONTROL) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
+        return InputConstants.isKeyDown(InputConstants.KEY_LCONTROL) || InputConstants.isKeyDown(InputConstants.KEY_RCONTROL);
     }
 
     public static boolean isAltDown() {
-        var window = Minecraft.getInstance().getWindow();
-        return InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_ALT) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_ALT);
+        return InputConstants.isKeyDown(InputConstants.KEY_LALT) || InputConstants.isKeyDown(InputConstants.KEY_RALT);
     }
 
     public static boolean isKeyDown(int keycode) {
         // Guard against unbound keys
-        if (keycode < 0) return false;
+        if (keycode <= 0) return false;
 
-        var window = Minecraft.getInstance().getWindow();
-        return InputConstants.isKeyDown(window, keycode);
+        return InputConstants.isKeyDown(keycode);
     }
 }

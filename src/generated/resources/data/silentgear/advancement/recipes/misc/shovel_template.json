@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:shovel_template"
+        "recipes": "silentgear:shovel_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

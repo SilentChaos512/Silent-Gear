@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:fishing_rod_blueprint"
+        "recipes": "silentgear:fishing_rod_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

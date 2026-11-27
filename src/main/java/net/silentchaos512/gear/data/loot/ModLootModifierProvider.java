@@ -13,7 +13,9 @@ import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.neoforged.neoforge.common.loot.AddTableLootModifier;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.silentchaos512.gear.SilentGear;
 import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.modifier.BonusDropsTraitLootModifier;
@@ -22,26 +24,28 @@ import net.silentchaos512.gear.setup.SgLoot;
 import net.silentchaos512.gear.util.Const;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class ModLootModifierProvider extends GlobalLootModifierProvider {
-    public ModLootModifierProvider(GatherDataEvent event) {
-        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), SilentGear.MOD_ID);
+    public ModLootModifierProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, SilentGear.MOD_ID);
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     protected void start() {
         add("bonus_drops_trait", new BonusDropsTraitLootModifier(
-                new LootItemCondition[]{},
+                Optional.empty(),
                 IGlobalLootModifier.DEFAULT_PRIORITY
         ));
 
         add(
                 "magmatic_smelting",
                 new MagmaticTraitLootModifier(
-                        new LootItemCondition[]{
+                        Optional.of(Holder.direct(
                                 HasTraitCondition.builder(Const.Traits.MAGMATIC).build()
-                        },
+                        )),
                         IGlobalLootModifier.DEFAULT_PRIORITY
                 )
         );
@@ -49,7 +53,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
         add(
                 "add_mob_drops/sinew",
                 new AddTableLootModifier(
-                        new LootItemCondition[]{
+                        Optional.of(Holder.direct(
                                 anyOfLootTables(
                                         Util.make(() -> {
                                             var builder = ImmutableList.<ResourceKey<LootTable>>builder()
@@ -59,7 +63,7 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                             return builder.build();
                                         })
                                 )
-                        },
+                        )),
                         IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_SINEW
                 )
@@ -68,13 +72,13 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
         add(
                 "add_mob_drops/fine_silk_low",
                 new AddTableLootModifier(
-                        new LootItemCondition[]{
+                        Optional.of(Holder.direct(
                                 anyOfLootTables(
                                         List.of(
                                                 entityLootTable("spider")
                                         )
                                 )
-                        },
+                        )),
                         IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_FINE_SILK_LOW
                 )
@@ -83,13 +87,13 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
         add(
                 "add_mob_drops/fine_silk_high",
                 new AddTableLootModifier(
-                        new LootItemCondition[]{
+                        Optional.of(Holder.direct(
                                 anyOfLootTables(
                                         List.of(
                                                 entityLootTable("cave_spider")
                                         )
                                 )
-                        },
+                        )),
                         IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_FINE_SILK_HIGH
                 )
@@ -98,14 +102,14 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
         add(
                 "add_mob_drops/leather_scraps_low",
                 new AddTableLootModifier(
-                        new LootItemCondition[]{
+                        Optional.of(Holder.direct(
                                 anyOfLootTables(
                                         List.of(
                                                 entityLootTable("husk"),
                                                 entityLootTable("zombie")
                                         )
                                 )
-                        },
+                        )),
                         IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_LEATHER_SCRAPS_LOW
                 )
@@ -114,13 +118,13 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
         add(
                 "add_mob_drops/leather_scraps_high",
                 new AddTableLootModifier(
-                        new LootItemCondition[]{
+                        Optional.of(Holder.direct(
                                 anyOfLootTables(
                                         List.of(
                                                 entityLootTable("zombie_villager")
                                         )
                                 )
-                        },
+                        )),
                         IGlobalLootModifier.DEFAULT_PRIORITY,
                         SgLoot.Tables.DROPS_LEATHER_SCRAPS_HIGH
                 )

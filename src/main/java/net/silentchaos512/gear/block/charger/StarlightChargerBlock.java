@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.block.charger;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -20,8 +19,6 @@ import javax.annotation.Nullable;
 
 public class StarlightChargerBlock extends ModContainerBlock<ChargerBlockEntity<StarchargedMaterialModifier>> {
     private static final VoxelShape SHAPE;
-    public static final MapCodec<StarlightChargerBlock> CODEC = simpleCodec(p -> new StarlightChargerBlock(ChargerBlockEntity::createStarlightCharger, p));
-
     static {
         VoxelShape base1 = box(3, 0, 3, 13, 2, 13);
         VoxelShape base2 = Shapes.or(base1, box(4, 2, 4, 12, 4, 12));
@@ -44,10 +41,5 @@ public class StarlightChargerBlock extends ModContainerBlock<ChargerBlockEntity<
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         return level.isClientSide() ? null : createTickerHelper(blockEntityType, SgBlockEntities.STARLIGHT_CHARGER.get(), ChargerBlockEntity::tick);
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 }

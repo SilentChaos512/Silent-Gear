@@ -1,6 +1,9 @@
 package net.silentchaos512.gear.util;
 
 import com.google.common.collect.Sets;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.component.BlockTransformer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.PlainTextContents;
@@ -232,7 +235,7 @@ public final class GearHelper {
         } else if (canBreakPermanently(stack) && stack.getDamageValue() > stack.getMaxDamage()) {
             // Item is gone forever, rest in pieces
             if (player != null) {
-                player.onEquippedItemBroken(stack.getItem(), slot);
+                player.onEquippedItemBroken(stack.copy(), slot);
             }
             stack.shrink(1);
         }
@@ -250,9 +253,20 @@ public final class GearHelper {
         GearData.incrementBrokenCount(stack);
         GearData.recalculateGearData(stack, player);
         if (player != null) {
-            player.onEquippedItemBroken(stack.getItem(), slot);
+            player.onEquippedItemBroken(stack.copy(), slot);
             notifyPlayerOfBrokenGear(stack, player);
         }
+    }
+
+    /**
+     * Runs a block transformer (axe stripping, shovel flattening, hoe tilling, etc.) from the registry, including any
+     * entries appended by the {@code neoforge:transformables} data map. This does not depend on the stack having a
+     * {@link net.minecraft.core.component.DataComponents#BLOCK_TRANSFORMER} component.
+     */
+    public static InteractionResult transformBlock(UseOnContext context, ResourceKey<BlockTransformer> transformerKey) {
+        return context.getLevel().registryAccess().lookupOrThrow(Registries.BLOCK_TRANSFORMER).get(transformerKey)
+                .map(holder -> holder.value().transformBlock(context, holder))
+                .orElse(InteractionResult.PASS);
     }
 
     public static InteractionResult useAndCheckBroken(UseOnContext context, Function<UseOnContext, InteractionResult> useFunction) {
@@ -328,7 +342,7 @@ public final class GearHelper {
         }
     }
 
-    public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+    public static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<ItemStack> onBroken) {
         if (stack.isEmpty() || !isGear(stack)) {
             return amount;
         }
@@ -352,7 +366,7 @@ public final class GearHelper {
                 // below 1 (the broken state)
                 clampedValue = Math.min(stack.getMaxDamage() - stack.getDamageValue() - 1, postTraitValue);
                 if (!isBroken(stack) && stack.getDamageValue() + preTraitValue >= stack.getMaxDamage() - 1) {
-                    onBroken.accept(stack.getItem());
+                    onBroken.accept(stack);
                     // Ensure item is not destroyed by third-party onBroken handlers
                     stack.setCount(1);
                     stack.setDamageValue(stack.getMaxDamage() - 2);
@@ -404,6 +418,8 @@ public final class GearHelper {
         return tool != null && tool.isCorrectForDrops(state);
     }
 
+    // TODO: Consider removing this method in favor of just removing/modifying the TOOL data component when the item breaks
+    @Deprecated
     public static float getDestroySpeed(ItemStack stack, BlockState state) {
         if (isBroken(stack))
             return BROKEN_DESTROY_SPEED;

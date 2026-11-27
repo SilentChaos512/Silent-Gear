@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:mod_kit"
+        "recipes": "silentgear:mod_kit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

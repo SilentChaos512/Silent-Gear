@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:starlight_charger"
+        "recipes": "silentgear:starlight_charger"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

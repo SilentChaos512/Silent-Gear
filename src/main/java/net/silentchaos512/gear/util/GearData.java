@@ -1,5 +1,7 @@
 package net.silentchaos512.gear.util;
 
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.item.component.CookingFuel;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -31,6 +33,7 @@ import net.silentchaos512.gear.compat.curios.CuriosCompat;
 import net.silentchaos512.gear.core.component.GearConstructionData;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.gear.part.PartInstance;
+import net.silentchaos512.gear.setup.ItemComponentsSetup;
 import net.silentchaos512.gear.setup.SgDataComponents;
 import net.silentchaos512.gear.setup.SgRegistries;
 import net.silentchaos512.gear.setup.gear.GearProperties;
@@ -200,6 +203,14 @@ public final class GearData {
         int maxDamage = gear.getMaxDamage();
         if (maxDamage > 0 && !gear.isStackable()) {
             gear.set(DataComponents.MAX_DAMAGE, maxDamage);
+        }
+
+        // Flammable gear can be used as furnace fuel (FurnaceFuelBurnTimeEvent was removed in 26.3). The burn time
+        // provider reads the max damage component set above, and is halved in fast furnaces like vanilla fuels.
+        if (maxDamage > 0 && TraitHelper.hasTrait(gear, Const.Traits.FLAMMABLE)) {
+            gear.set(DataComponents.COOKING_FUEL, new CookingFuel(ItemComponentsSetup.COOKING_TIME_FLAMMABLE_GEAR, ContextFloatProviders.COOKING_DEFAULT_SPEED_MULTIPLIER));
+        } else {
+            gear.remove(DataComponents.COOKING_FUEL);
         }
     }
 

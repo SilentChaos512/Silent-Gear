@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:bort_block"
+        "recipes": "silentgear:bort_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

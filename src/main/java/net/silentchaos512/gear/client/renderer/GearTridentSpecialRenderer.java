@@ -48,12 +48,10 @@ public class GearTridentSpecialRenderer implements SpecialModelRenderer<ToolColo
         color_grip = (color_grip == -1) ? color_toolrod : color_grip;
         color_tip = (color_tip) == -1 ? color_spikes : color_tip;
 
-        this.submitLayers(submitNodeCollector.order(0), poseStack, this.model.renderType(GearTridentModel.TEXTURE), lightCoords, overlayCoords, outlineColor,
+        // Glint is part of the render type as of 26.3, so there is no separate glint pass
+        var renderType = hasFoil ? RenderTypes.entitySolidGlint(GearTridentModel.TEXTURE) : this.model.renderType(GearTridentModel.TEXTURE);
+        this.submitLayers(submitNodeCollector.order(0), poseStack, renderType, lightCoords, overlayCoords, outlineColor,
                 color_toolrod, color_grip, color_spikes, color_tip);
-        if (hasFoil) {
-            this.submitLayers(submitNodeCollector.order(1), poseStack, RenderTypes.entityGlint(), lightCoords, overlayCoords, outlineColor,
-                    -1, -1, -1, -1);
-        }
     }
 
     private void submitLayers(OrderedSubmitNodeCollector submitNodeCollector, PoseStack poseStack,
@@ -67,7 +65,7 @@ public class GearTridentSpecialRenderer implements SpecialModelRenderer<ToolColo
 
     private void submitPart(OrderedSubmitNodeCollector submitNodeCollector, ModelPart part, PoseStack poseStack,
                             net.minecraft.client.renderer.rendertype.RenderType renderType, int lightCoords, int overlayCoords, int outlineColor, int color) {
-        submitNodeCollector.submitModelPart(part, poseStack, renderType, lightCoords, overlayCoords, null, color, null, outlineColor);
+        submitNodeCollector.submitModelPart(part, poseStack, renderType, lightCoords, overlayCoords, null, color, outlineColor);
     }
 
     public record Unbaked() implements SpecialModelRenderer.Unbaked<ToolColors> {

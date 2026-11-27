@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:binding_template"
+        "recipes": "silentgear:binding_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

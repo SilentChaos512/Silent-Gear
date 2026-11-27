@@ -2,7 +2,7 @@ package net.silentchaos512.gear.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.state.level.PlayerRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -25,21 +25,26 @@ public class SgClientItemExtensions implements IClientItemExtensions {
     
     //the vanilla Trident use animation has a hardcoded use time of 10 ticks, so this copy is made to circumvent that
     @Override
-    public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm humanoidarm, ItemStack stack, float partialTicks, float equippedProgress, float swingProcess) {
-    	boolean isRightHand = humanoidarm == HumanoidArm.RIGHT;
-    	boolean isMainItemItem = player.getUsedItemHand() == InteractionHand.MAIN_HAND;
-    	boolean isUsingItem = (isRightHand && isMainItemItem) || (!isRightHand && !isMainItemItem);
-    	if (!(player.isUsingItem() && player.getUseItemRemainingTicks() > 0 && isUsingItem)) {
-    		return false;
-    	}
-    	
-    	int k = isRightHand ? 1 : -1;
+    public boolean applyForgeHandTransform(PoseStack poseStack, PlayerRenderState playerRenderState, HumanoidArm humanoidarm, ItemStack stack, float partialTicks, float equippedProgress, float swingProcess) {
+        var avatar = playerRenderState.avatarRenderState;
+        if (avatar == null) {
+            return false;
+        }
+        var hands = playerRenderState.firstPersonHandsAndItems;
+        boolean isMainHand = humanoidarm == avatar.mainArm;
+        InteractionHand hand = isMainHand ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+        if (!(avatar.isUsingItem && hands.useItemRemainingTicks > 0 && avatar.useItemHand == hand)) {
+            return false;
+        }
+
+        int k = humanoidarm == HumanoidArm.RIGHT ? 1 : -1;
     	this.applyItemArmTransform(poseStack, humanoidarm, equippedProgress);
         poseStack.translate((float)k * -0.5F, 0.7F, 0.1F);
-        poseStack.mulPose(Axis.XP.rotationDegrees(-55.0F));
-        poseStack.mulPose(Axis.YP.rotationDegrees((float)k * 35.3F));
-        poseStack.mulPose(Axis.ZP.rotationDegrees((float)k * -9.785F));
-        float f7 = (float)stack.getUseDuration(player) - ((float)player.getUseItemRemainingTicks() - partialTicks + 1.0F);
+        poseStack.rotate(Axis.XP.rotationDegrees(-55.0F));
+        poseStack.rotate(Axis.YP.rotationDegrees((float)k * 35.3F));
+        poseStack.rotate(Axis.ZP.rotationDegrees((float)k * -9.785F));
+        int useDuration = isMainHand ? hands.mainHandUseDuration : hands.offHandUseDuration;
+        float f7 = (float) useDuration - ((float) hands.useItemRemainingTicks - partialTicks + 1.0F);
         float f11 = f7 / GearTridentItem.getUseTimeRequiredToThrow(stack);
         if (f11 > 1.0F) {
             f11 = 1.0F;
@@ -54,7 +59,7 @@ public class SgClientItemExtensions implements IClientItemExtensions {
 
         poseStack.translate(0.0F, 0.0F, f11 * 0.2F);
         poseStack.scale(1.0F, 1.0F, 1.0F + f11 * 0.2F);
-        poseStack.mulPose(Axis.YN.rotationDegrees((float)k * 45.0F));
+        poseStack.rotate(Axis.YN.rotationDegrees((float)k * 45.0F));
     	return true;
     }
 }

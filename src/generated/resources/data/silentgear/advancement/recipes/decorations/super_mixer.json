@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:super_mixer"
+        "recipes": "silentgear:super_mixer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

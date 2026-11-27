@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:netherwood_trapdoor"
+        "recipes": "silentgear:netherwood_trapdoor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

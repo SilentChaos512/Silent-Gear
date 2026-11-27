@@ -2,9 +2,9 @@ package net.silentchaos512.gear.advancements.criterion;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.predicates.ContextAwarePredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.advancements.predicates.MinMaxBounds;
-import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -21,13 +21,13 @@ public class GearRepairedTrigger extends SimpleCriterionTrigger<GearRepairedTrig
     }
 
     public record Instance(
-            Optional<ContextAwarePredicate> player,
+            Optional<Holder<LootItemCondition>> player,
             MinMaxBounds.Ints brokenCount,
             MinMaxBounds.Ints repairedCount
     ) implements SimpleCriterionTrigger.SimpleInstance {
         public static final Codec<Instance> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                        EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+                        LootItemCondition.CODEC.optionalFieldOf("player").forGetter(Instance::player),
                         MinMaxBounds.Ints.CODEC.optionalFieldOf("broken_count", MinMaxBounds.Ints.ANY).forGetter(Instance::brokenCount),
                         MinMaxBounds.Ints.CODEC.optionalFieldOf("repaired_count", MinMaxBounds.Ints.ANY).forGetter(Instance::repairedCount)
                 ).apply(instance, Instance::new)

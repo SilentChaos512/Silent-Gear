@@ -31,7 +31,7 @@ import java.util.Comparator;
 
 public class ModItemTagsProvider extends LibItemTagsProvider {
     public ModItemTagsProvider(GatherDataEvent event, BlockTagsProvider blocks) {
-        super(event.getGenerator().getPackOutput(), event.getLookupProvider(), SilentGear.MOD_ID);
+        super(event.getGenerator().getPackOutput(), event.getWorldLookupProvider(), SilentGear.MOD_ID);
     }
 
     @Override
@@ -209,6 +209,10 @@ public class ModItemTagsProvider extends LibItemTagsProvider {
                 GearItemSets.SHOVEL.gearItem());
         builder(SgTags.Items.TOOLS_SICKLE,
                 GearItemSets.SICKLE.gearItem());
+        builder(ItemTags.DOUSES_CAMPFIRES,
+                GearItemSets.EXCAVATOR.gearItem(),
+                GearItemSets.PAXEL.gearItem(),
+                GearItemSets.SHOVEL.gearItem());
         builder(ItemTags.SWORDS,
                 GearItemSets.KATANA.gearItem(),
                 GearItemSets.MACHETE.gearItem(),

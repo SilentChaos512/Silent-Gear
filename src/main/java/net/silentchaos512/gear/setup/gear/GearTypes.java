@@ -101,17 +101,14 @@ public class GearTypes {
     );
     public static final DeferredHolder<GearType, GearType> SHOVEL = REGISTRAR.register("shovel",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ItemAbilities.DEFAULT_SHOVEL_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> AXE = REGISTRAR.register("axe",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ItemAbilities.DEFAULT_AXE_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> HOE = REGISTRAR.register("hoe",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ItemAbilities.DEFAULT_HOE_ACTIONS)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> SHEARS = REGISTRAR.register("shears",
@@ -139,16 +136,10 @@ public class GearTypes {
     // Specialty harvest tools
     public static final DeferredHolder<GearType, GearType> MATTOCK = REGISTRAR.register("mattock",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(ItemAbilities.HOE_TILL)
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> PAXEL = REGISTRAR.register("paxel",
             () -> GearType.Builder.of(HARVEST_TOOL)
-                    .toolActions(
-                            ItemAbilities.AXE_SCRAPE,
-                            ItemAbilities.AXE_STRIP,
-                            ItemAbilities.AXE_WAX_OFF
-                    )
                     .build()
     );
     public static final DeferredHolder<GearType, GearType> PROSPECTOR_HAMMER = REGISTRAR.register("prospector_hammer",

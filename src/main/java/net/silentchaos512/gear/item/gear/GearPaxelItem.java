@@ -5,10 +5,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.ItemAbility;
+import net.minecraft.world.item.component.BlockTransformers;
 import net.silentchaos512.gear.api.item.GearType;
 import net.silentchaos512.gear.core.component.GearPropertiesData;
 import net.silentchaos512.gear.setup.SgTags;
@@ -28,7 +28,9 @@ public class GearPaxelItem extends GearPickaxeItem {
 
     @Override
     public boolean canPerformAction(ItemInstance instance, ItemAbility itemAbility) {
-        return getGearType().canPerformAction(itemAbility);
+        // Default abilities (such as dousing campfires, from the item tag) plus any from the gear type
+        return super.canPerformAction(instance, itemAbility)
+                || !GearHelper.isBroken(instance) && getGearType().canPerformAction(itemAbility);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class GearPaxelItem extends GearPickaxeItem {
         InteractionResult result = GearHelper.useOn(context);
         // Other vanilla actions (strip, scrape, wax off)
         if (result == InteractionResult.PASS) {
-            return GearHelper.useAndCheckBroken(context, Items.NETHERITE_AXE::useOn);
+            return GearHelper.useAndCheckBroken(context, ctx -> GearHelper.transformBlock(ctx, BlockTransformers.AXE));
         }
         return result;
     }

@@ -1,97 +1,83 @@
 {
   "type": "minecraft:block",
-  "functions": [
-    {
-      "function": "minecraft:explosion_decay"
-    }
-  ],
+  "modifier": {
+    "type": "minecraft:explosion_decay"
+  },
   "pools": [
     {
-      "conditions": [
-        {
-          "block": "silentgear:flax_plant",
-          "condition": "minecraft:block_state_property",
-          "properties": {
-            "age": "7"
-          }
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "silentgear:flax_plant",
+        "state": {
+          "age": "7"
         }
-      ],
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:binomial_with_bonus_count",
-              "function": "minecraft:apply_bonus",
-              "parameters": {
-                "extra": 3,
-                "probability": 0.5714286
-              }
+          "modifier": {
+            "type": "minecraft:apply_bonus",
+            "enchantment": "minecraft:fortune",
+            "formula": "minecraft:binomial_with_bonus_count",
+            "parameters": {
+              "extra": 3,
+              "probability": 0.5714286
             }
-          ],
+          },
           "name": "silentgear:flax_fiber"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
-      "conditions": [
-        {
-          "block": "silentgear:flax_plant",
-          "condition": "minecraft:block_state_property",
-          "properties": {
-            "age": "7"
-          }
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "silentgear:flax_plant",
+        "state": {
+          "age": "7"
         }
-      ],
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:binomial_with_bonus_count",
-              "function": "minecraft:apply_bonus",
-              "parameters": {
-                "extra": 3,
-                "probability": 0.5714286
-              }
+          "modifier": {
+            "type": "minecraft:apply_bonus",
+            "enchantment": "minecraft:fortune",
+            "formula": "minecraft:binomial_with_bonus_count",
+            "parameters": {
+              "extra": 3,
+              "probability": 0.5714286
             }
-          ],
+          },
           "name": "silentgear:flax_seeds"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
-      "conditions": [
-        {
-          "block": "silentgear:flax_plant",
-          "condition": "minecraft:block_state_property",
-          "properties": {
-            "age": "7"
-          }
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "silentgear:flax_plant",
+        "state": {
+          "age": "7"
         }
-      ],
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:binomial_with_bonus_count",
-              "function": "minecraft:apply_bonus",
-              "parameters": {
-                "extra": 1,
-                "probability": 0.5
-              }
+          "modifier": {
+            "type": "minecraft:apply_bonus",
+            "enchantment": "minecraft:fortune",
+            "formula": "minecraft:binomial_with_bonus_count",
+            "parameters": {
+              "extra": 1,
+              "probability": 0.5
             }
-          ],
+          },
           "name": "silentgear:flax_flowers"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "silentgear:blocks/flax_plant"

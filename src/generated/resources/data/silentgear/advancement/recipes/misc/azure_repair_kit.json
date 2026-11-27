@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:azure_repair_kit"
+        "recipes": "silentgear:azure_repair_kit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:ring_blueprint"
+        "recipes": "silentgear:ring_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

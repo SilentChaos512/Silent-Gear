@@ -3,12 +3,9 @@ package net.silentchaos512.gear.data;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.DataMapProvider;
-import net.neoforged.neoforge.registries.datamaps.builtin.Compostable;
-import net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
-import net.silentchaos512.gear.item.CraftingItems;
+import net.neoforged.neoforge.registries.datamaps.builtin.Transformable;
 import net.silentchaos512.gear.setup.SgBlocks;
-import net.silentchaos512.gear.setup.SgItems;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -19,20 +16,11 @@ public class ModDataMapProvider extends DataMapProvider {
 
     @Override
     protected void gather(HolderLookup.Provider provider) {
-        final var compostables = builder(NeoForgeDataMaps.COMPOSTABLES);
-        compostables.add(SgItems.FLAX_SEEDS, new Compostable(0.3f, true), false);
-        compostables.add(SgItems.FLUFFY_SEEDS, new Compostable(0.3f, true), false);
-        compostables.add(CraftingItems.FLAX_FIBER.asItem().builtInRegistryHolder(), new Compostable(0.5f, true), false);
-        compostables.add(CraftingItems.FLUFFY_PUFF.asItem().builtInRegistryHolder(), new Compostable(0.5f, true), false);
-        compostables.add(SgBlocks.NETHERWOOD_SAPLING.asItem().builtInRegistryHolder(), new Compostable(0.3f, true), false);
-        compostables.add(SgItems.NETHER_BANANA, new Compostable(0.85f, true), false);
-        compostables.add(SgItems.GOLDEN_NETHER_BANANA, new Compostable(1.0f, true), false);
-        compostables.build();
+        // Compostables and furnace fuels are item components as of 26.3 (see SgItemComponents)
 
-        var furnaceFuels = builder(NeoForgeDataMaps.FURNACE_FUELS);
-        furnaceFuels.add(CraftingItems.NETHERWOOD_STICK.asItem().builtInRegistryHolder(), new FurnaceFuel(150), false);
-        furnaceFuels.add(SgItems.NETHERWOOD_CHARCOAL, new FurnaceFuel(2400), false);
-        furnaceFuels.add(SgBlocks.NETHERWOOD_CHARCOAL_BLOCK.asItem().builtInRegistryHolder(), new FurnaceFuel(24_000), false);
-        furnaceFuels.build();
+        var transformables = builder(NeoForgeDataMaps.TRANSFORMABLES);
+        transformables.add(SgBlocks.NETHERWOOD_LOG, Transformable.stripping(SgBlocks.NETHERWOOD_LOG.get(), SgBlocks.STRIPPED_NETHERWOOD_LOG.get()), false);
+        transformables.add(SgBlocks.NETHERWOOD_WOOD, Transformable.stripping(SgBlocks.NETHERWOOD_WOOD.get(), SgBlocks.STRIPPED_NETHERWOOD_WOOD.get()), false);
+        transformables.build();
     }
 }

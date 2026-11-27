@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:lining_blueprint"
+        "recipes": "silentgear:lining_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

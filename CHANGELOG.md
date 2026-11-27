@@ -3,6 +3,20 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.3-4.4.0] - 2026-11-26
+### Changed
+- Ported to Minecraft 26.3 and NeoForge 26.3 (requires Silent Lib 13.0.0+)
+- Compostable and furnace fuel values are now item components instead of data maps
+  - Netherwood charcoal and its block use the new `silentgear:cooking/time_netherwood_charcoal` and `silentgear:cooking/time_netherwood_charcoal_block` burn time providers, which datapacks can override
+  - Flammable gear gets a fuel component when its properties are calculated (the old fuel event was removed). Its burn time comes from `silentgear:cooking/time_flammable_gear`, using the new `silentgear:item_max_durability` number provider
+- Flax flowers are now compostable
+- Netherwood log stripping is defined by the `neoforge:transformables` data map
+- Gear axes, shovels, hoes, paxels, and mattocks use vanilla's block transformers for stripping, path making, and tilling
+- Gear hoes now work like other gear tools: they do nothing when broken, and breaking from use is handled the same way. Crouching while using a hoe skips its traits but still tills the block
+- Gear shovels, excavators, and paxels are tagged `minecraft:douses_campfires`, which is now how campfire dousing is checked
+- Worldgen features moved from `worldgen/configured_feature` to `worldgen/feature` (new 26.3 format)
+- The common config is registered as a "local" config (FML renamed the type), but still uses `silentgear-common.toml`
+
 ## [26.2-4.3.1] - 2026-11-22
 ### Changed
 - Wild flax and wild fluffy plants are now tagged as small flowers (`minecraft:small_flowers` and `c:flowers/small`) for better mod compatibility (request from NeoForged Project Discord server)

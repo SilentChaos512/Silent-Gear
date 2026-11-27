@@ -8,7 +8,7 @@
           "name": "silentgear:rod_blueprint"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
       "entries": [
@@ -17,7 +17,7 @@
           "name": "silentgear:pickaxe_blueprint"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
       "entries": [
@@ -26,7 +26,7 @@
           "name": "silentgear:shovel_blueprint"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
       "entries": [
@@ -35,7 +35,7 @@
           "name": "silentgear:axe_blueprint"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
       "entries": [
@@ -44,7 +44,7 @@
           "name": "silentgear:hoe_blueprint"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
       "entries": [
@@ -53,7 +53,7 @@
           "name": "silentgear:sword_blueprint"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "silentgear:starter_blueprints"

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:stone_torch"
+        "recipes": "silentgear:stone_torch"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

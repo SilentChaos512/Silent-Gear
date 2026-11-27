@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:glowing_dust"
+        "recipes": "silentgear:glowing_dust"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

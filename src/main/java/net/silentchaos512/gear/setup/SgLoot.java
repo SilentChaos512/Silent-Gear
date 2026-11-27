@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
@@ -22,6 +23,7 @@ import net.silentchaos512.gear.loot.condition.HasTraitCondition;
 import net.silentchaos512.gear.loot.function.SetPartsFunction;
 import net.silentchaos512.gear.loot.modifier.BonusDropsTraitLootModifier;
 import net.silentchaos512.gear.loot.modifier.MagmaticTraitLootModifier;
+import net.silentchaos512.gear.loot.provider.ItemMaxDurability;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +34,7 @@ public final class SgLoot {
     public static final DeferredRegister<MapCodec<? extends LootItemCondition>> LOOT_CONDITIONS = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, SilentGear.MOD_ID);
     public static final DeferredRegister<MapCodec<? extends LootItemFunction>> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, SilentGear.MOD_ID);
     public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, SilentGear.MOD_ID);
+    public static final DeferredRegister<MapCodec<? extends ContextIntProvider>> CONTEXT_INT_PROVIDER_TYPES = DeferredRegister.create(Registries.CONTEXT_INT_PROVIDER_TYPE, SilentGear.MOD_ID);
 
     // Conditions
     public static final DeferredHolder<MapCodec<? extends LootItemCondition>, MapCodec<HasTraitCondition>> HAS_TRAIT =
@@ -40,6 +43,10 @@ public final class SgLoot {
     // Functions
     public static final DeferredHolder<MapCodec<? extends LootItemFunction>, MapCodec<SetPartsFunction>> SET_PARTS =
             LOOT_FUNCTIONS.register("set_parts", () -> SetPartsFunction.CODEC);
+
+    // Number providers
+    public static final DeferredHolder<MapCodec<? extends ContextIntProvider>, MapCodec<ItemMaxDurability>> ITEM_MAX_DURABILITY =
+            CONTEXT_INT_PROVIDER_TYPES.register("item_max_durability", () -> ItemMaxDurability.MAP_CODEC);
 
     // Modifiers
     public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<BonusDropsTraitLootModifier>> BONUS_DROPS_TRAIT =
@@ -95,11 +102,17 @@ public final class SgLoot {
         @SubscribeEvent
         public static void onLootTableLoad(LootTableLoadEvent event) {
             Tables.get(event.getName()).ifPresent(injectorName -> {
-                SilentGear.LOGGER.info("Injecting loot table '{}' into '{}'", injectorName, event.getName());
+                // Nested loot tables are referenced by holder as of 26.3
+                var injector = event.getRegistries().lookupOrThrow(Registries.LOOT_TABLE).get(injectorName);
+                if (injector.isEmpty()) {
+                    SilentGear.LOGGER.warn("Cannot inject missing loot table '{}' into '{}'", injectorName.identifier(), event.getName());
+                    return;
+                }
+                SilentGear.LOGGER.info("Injecting loot table '{}' into '{}'", injectorName.identifier(), event.getName());
                 event.getTable().addPool(
                         LootPool.lootPool()
                                 .name("silentgear_injected")
-                                .add(NestedLootTable.lootTableReference(injectorName))
+                                .add(NestedLootTable.lootTableReference(injector.get()))
                                 .build()
                 );
             });

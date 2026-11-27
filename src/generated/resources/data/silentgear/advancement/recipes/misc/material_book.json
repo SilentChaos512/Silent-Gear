@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:material_book"
+        "recipes": "silentgear:material_book"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

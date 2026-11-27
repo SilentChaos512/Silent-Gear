@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:emerald_shard"
+        "recipes": "silentgear:emerald_shard"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -11,9 +11,7 @@
   "effects": [
     {
       "type": "silentgear:block_placer",
-      "block": {
-        "Name": "minecraft:netherrack"
-      },
+      "block": "minecraft:netherrack",
       "cooldown": 0,
       "damage_on_use": 3,
       "sound": {

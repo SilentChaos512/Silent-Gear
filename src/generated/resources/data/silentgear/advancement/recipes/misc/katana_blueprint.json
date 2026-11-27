@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:katana_blueprint"
+        "recipes": "silentgear:katana_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

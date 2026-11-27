@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:diamond_from_shards"
+        "recipes": "silentgear:diamond_from_shards"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

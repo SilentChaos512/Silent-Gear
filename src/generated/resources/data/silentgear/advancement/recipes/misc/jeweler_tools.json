@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:jeweler_tools"
+        "recipes": "silentgear:jeweler_tools"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

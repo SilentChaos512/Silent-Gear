@@ -2,7 +2,8 @@ package net.silentchaos512.gear.data.recipes;
 
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.advancements.triggers.ImpossibleTrigger;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.Identifier;
@@ -59,8 +60,8 @@ public class ModRecipesProvider extends LibRecipeProvider {
     private static final SoundPlayback HAMMER_SOUND = new SoundPlayback(SgSounds.STONE_ANVIL_HAMMER.get(), 1f, 1f, 0.1f);
     private static final SoundPlayback KNIFE_SOUND = new SoundPlayback(SgSounds.STONE_ANVIL_KNIFE.get(), 1f, 1f, 0.1f);
 
-    public ModRecipesProvider(HolderLookup.Provider registries, RecipeOutput recipeOutput) {
-        super(registries, recipeOutput, SilentGear.MOD_ID);
+    public ModRecipesProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput, SilentGear.MOD_ID);
     }
 
     @Override

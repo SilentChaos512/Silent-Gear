@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:netherwood_charcoal_block"
+        "recipes": "silentgear:netherwood_charcoal_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

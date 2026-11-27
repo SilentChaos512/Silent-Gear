@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
@@ -63,7 +64,7 @@ public class GearSickleItem extends BasicGearItem implements GearDiggerTool, Bre
         Block block = state.getBlock();
         BonemealableBlock growable = (BonemealableBlock) block;
 
-        if (!growable.isValidBonemealTarget(level, pos, state)) {
+        if (!growable.isValidBonemealTarget(level, pos, state, BonemealSource.INTERACTION)) {
             // Fully grown crop
             if (block instanceof SweetBerryBushBlock) {
                 harvestBerryBush(level, pos, state, player);
@@ -197,7 +198,7 @@ public class GearSickleItem extends BasicGearItem implements GearDiggerTool, Bre
             if (block.onDestroyedByPlayer(state, level, pos, serverPlayer, sickle, true, state.getFluidState())) {
                 block.destroy(level, pos, state);
                 var blockEntity = level.getBlockEntity(pos);
-                block.playerDestroy(level, player, pos, state, blockEntity, sickle);
+                block.playerDestroy((ServerLevel) level, serverPlayer, pos, state, blockEntity, sickle);
                 block.popExperience((ServerLevel) level, pos, state.getExpDrop(level, pos, blockEntity, player, sickle));
             }
 

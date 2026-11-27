@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:crimson_repair_kit"
+        "recipes": "silentgear:crimson_repair_kit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

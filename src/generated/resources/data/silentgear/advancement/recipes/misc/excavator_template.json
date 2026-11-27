@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:excavator_template"
+        "recipes": "silentgear:excavator_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

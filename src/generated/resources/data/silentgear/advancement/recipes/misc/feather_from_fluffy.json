@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:feather_from_fluffy"
+        "recipes": "silentgear:feather_from_fluffy"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

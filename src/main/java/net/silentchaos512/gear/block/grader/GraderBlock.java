@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.block.grader;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -35,16 +34,9 @@ public class GraderBlock extends ModContainerBlock<GraderBlockEntity> implements
     private static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape SHAPE = Block.box(1, 0, 0, 15, 12, 16);
-    private static final MapCodec<GraderBlock> CODEC = simpleCodec(GraderBlock::new);
-
     public GraderBlock(Properties properties) {
         super(GraderBlockEntity::new, properties);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH).setValue(LIT, false).setValue(WATERLOGGED, false));
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

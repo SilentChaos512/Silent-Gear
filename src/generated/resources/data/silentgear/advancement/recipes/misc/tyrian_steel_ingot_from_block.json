@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:tyrian_steel_ingot_from_block"
+        "recipes": "silentgear:tyrian_steel_ingot_from_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

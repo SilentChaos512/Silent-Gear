@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:cobblestone_from_pebbles"
+        "recipes": "silentgear:cobblestone_from_pebbles"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

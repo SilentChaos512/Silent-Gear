@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:blaze_gold_dust_blasting"
+        "recipes": "silentgear:blaze_gold_dust_blasting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

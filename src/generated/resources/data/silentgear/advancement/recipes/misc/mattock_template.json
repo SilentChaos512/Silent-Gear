@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:mattock_template"
+        "recipes": "silentgear:mattock_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

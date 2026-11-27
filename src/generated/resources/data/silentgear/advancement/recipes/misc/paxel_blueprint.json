@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:paxel_blueprint"
+        "recipes": "silentgear:paxel_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

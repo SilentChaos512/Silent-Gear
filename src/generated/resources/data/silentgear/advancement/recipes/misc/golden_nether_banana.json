@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:golden_nether_banana"
+        "recipes": "silentgear:golden_nether_banana"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

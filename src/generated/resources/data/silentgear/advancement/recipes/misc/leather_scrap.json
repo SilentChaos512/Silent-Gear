@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:leather_scrap"
+        "recipes": "silentgear:leather_scrap"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

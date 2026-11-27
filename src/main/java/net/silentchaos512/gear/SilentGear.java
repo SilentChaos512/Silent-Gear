@@ -37,7 +37,8 @@ public final class SilentGear {
                 ? new SideProxy.Client(modEventBus, modContainer)
                 : new SideProxy.Server(modEventBus, modContainer);
 
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.Common.SPEC);
+        // COMMON was renamed to LOCAL in FML 12. Keep the old file name so existing configs are still read.
+        modContainer.registerConfig(ModConfig.Type.LOCAL, Config.Common.SPEC, MOD_ID + "-common.toml");
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.Client.SPEC);
 
         if (ModList.get().isLoaded("curios")) {

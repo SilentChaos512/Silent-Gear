@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:machete_blueprint"
+        "recipes": "silentgear:machete_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:grip_blueprint"
+        "recipes": "silentgear:grip_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

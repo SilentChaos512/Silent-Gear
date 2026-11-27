@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:tip_template"
+        "recipes": "silentgear:tip_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

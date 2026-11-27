@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:spear_blueprint"
+        "recipes": "silentgear:spear_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

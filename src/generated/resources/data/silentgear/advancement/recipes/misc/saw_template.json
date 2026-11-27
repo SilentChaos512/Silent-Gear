@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:saw_template"
+        "recipes": "silentgear:saw_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

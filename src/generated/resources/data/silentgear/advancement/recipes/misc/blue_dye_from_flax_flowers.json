@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:blue_dye_from_flax_flowers"
+        "recipes": "silentgear:blue_dye_from_flax_flowers"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

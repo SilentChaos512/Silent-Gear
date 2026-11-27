@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:stone_rod"
+        "recipes": "silentgear:stone_rod"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

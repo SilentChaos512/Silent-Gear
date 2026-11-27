@@ -3,6 +3,7 @@ package net.silentchaos512.gear.loot.function;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
@@ -12,6 +13,7 @@ import net.silentchaos512.gear.gear.part.PartInstance;
 import net.silentchaos512.gear.util.GearData;
 
 import java.util.List;
+import java.util.Optional;
 
 public final class SetPartsFunction extends LootItemConditionalFunction {
     public static final MapCodec<SetPartsFunction> CODEC = RecordCodecBuilder.mapCodec(
@@ -24,8 +26,8 @@ public final class SetPartsFunction extends LootItemConditionalFunction {
 
     private final List<PartInstance> parts;
 
-    private SetPartsFunction(List<LootItemCondition> conditions, List<PartInstance> parts) {
-        super(conditions);
+    private SetPartsFunction(Optional<Holder<LootItemCondition>> condition, List<PartInstance> parts) {
+        super(condition);
         this.parts = parts;
     }
 

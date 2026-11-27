@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:azure_silver_raw_ore_smelting"
+        "recipes": "silentgear:azure_silver_raw_ore_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

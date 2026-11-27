@@ -189,7 +189,7 @@ public interface IAoeTool {
 
                         if (extraState.onDestroyedByPlayer(level, extraPos, player, tool, true, extraState.getFluidState())) {
                             extraBlock.destroy(level, extraPos, extraState);
-                            extraBlock.playerDestroy(level, player, extraPos, extraState, blockEntity, tool);
+                            extraBlock.playerDestroy((ServerLevel) level, (ServerPlayer) player, extraPos, extraState, blockEntity, tool);
                             extraBlock.popExperience((ServerLevel) level, extraPos, xp);
                         }
                     }

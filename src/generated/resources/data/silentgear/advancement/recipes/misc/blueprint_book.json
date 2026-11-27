@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:blueprint_book"
+        "recipes": "silentgear:blueprint_book"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

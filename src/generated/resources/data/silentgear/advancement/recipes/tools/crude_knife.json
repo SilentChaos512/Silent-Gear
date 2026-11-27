@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:crude_knife"
+        "recipes": "silentgear:crude_knife"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

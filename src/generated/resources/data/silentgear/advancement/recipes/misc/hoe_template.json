@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:hoe_template"
+        "recipes": "silentgear:hoe_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

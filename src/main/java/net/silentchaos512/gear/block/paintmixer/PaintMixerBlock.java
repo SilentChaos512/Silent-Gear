@@ -1,6 +1,5 @@
 package net.silentchaos512.gear.block.paintmixer;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -12,15 +11,8 @@ import net.silentchaos512.gear.setup.SgBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
 public class PaintMixerBlock extends ModContainerBlock<PaintMixerBlockEntity> {
-    public static final MapCodec<PaintMixerBlock> CODEC = simpleCodec(PaintMixerBlock::new);
-
     public PaintMixerBlock(Properties properties) {
         super(PaintMixerBlockEntity::new, properties);
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

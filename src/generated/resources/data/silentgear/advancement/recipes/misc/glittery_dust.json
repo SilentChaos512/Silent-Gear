@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:glittery_dust"
+        "recipes": "silentgear:glittery_dust"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

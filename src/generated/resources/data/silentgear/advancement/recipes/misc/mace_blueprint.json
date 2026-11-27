@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:mace_blueprint"
+        "recipes": "silentgear:mace_blueprint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

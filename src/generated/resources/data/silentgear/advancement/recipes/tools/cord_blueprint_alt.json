@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "silentgear:cord_blueprint_alt"
+        "recipes": "silentgear:cord_blueprint_alt"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
