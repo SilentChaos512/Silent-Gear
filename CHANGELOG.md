@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- Knife textures (nepst_t) [#1014]
+
 ## [26.3-4.4.0] - 2026-11-26
 ### Changed
 - Ported to Minecraft 26.3 and NeoForge 26.3 (requires Silent Lib 13.0.0+)
